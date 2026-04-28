@@ -56,7 +56,10 @@ body {
 .CroakleMenuList button,
 .CroakleBottomNav button,
 .CroakleMoodCalendar button,
-.CroakleCheckButton {
+.CroakleCheckButton,
+.CroakleAddHabitButton,
+.CroakleAddHabitHeader button,
+.CroakleConfirmHabitButton {
   appearance: none;
   border: 0;
   color: inherit;
@@ -72,7 +75,10 @@ body {
 .CroakleMenuList button:active,
 .CroakleBottomNav button:active,
 .CroakleMoodCalendar button:active,
-.CroakleCheckButton:active {
+.CroakleCheckButton:active,
+.CroakleAddHabitButton:active,
+.CroakleAddHabitHeader button:active,
+.CroakleConfirmHabitButton:active {
   transform: scale(0.96);
 }
 
@@ -81,7 +87,13 @@ body {
 .CroakleMenuList button:focus-visible,
 .CroakleBottomNav button:focus-visible,
 .CroakleMoodCalendar button:focus-visible,
-.CroakleCheckButton:focus-visible {
+.CroakleCheckButton:focus-visible,
+.CroakleAddHabitButton:focus-visible,
+.CroakleAddHabitHeader button:focus-visible,
+.CroakleConfirmHabitButton:focus-visible,
+.CroakleField input:focus-visible,
+.CroakleField textarea:focus-visible,
+.CroaklePriorityField input:focus-visible + span {
   outline: 2px solid var(--CroakleLine);
   outline-offset: 3px;
 }
@@ -199,7 +211,8 @@ body {
 .CroakleMonthGrid::-webkit-scrollbar,
 .CroakleHabitList::-webkit-scrollbar,
 .CroakleBestList::-webkit-scrollbar,
-.CroakleMoodCalendar::-webkit-scrollbar {
+.CroakleMoodCalendar::-webkit-scrollbar,
+.CroakleAddHabitDialog::-webkit-scrollbar {
   display: none;
 }
 
@@ -302,6 +315,17 @@ body {
   height: 2px;
   background: var(--CroakleLine);
   margin: 9px 0 12px;
+  flex: 0 0 auto;
+}
+
+.CroakleAddHabitButton {
+  min-height: 42px;
+  border-radius: 999px;
+  background: var(--CroakleLine);
+  color: var(--CroakleSurface);
+  font-size: 15px;
+  font-weight: 850;
+  margin-bottom: 10px;
   flex: 0 0 auto;
 }
 
@@ -552,6 +576,141 @@ body {
   color: var(--CroakleSurface);
 }
 
+.CroakleAddHabitDialog {
+  width: min(100% - 28px, 390px);
+  max-height: min(86dvh, 680px);
+  border: 2px solid var(--CroakleLine);
+  border-radius: 28px;
+  background: var(--CroakleSurface);
+  color: var(--CroakleText);
+  padding: 0;
+  overflow: auto;
+  scrollbar-width: none;
+}
+
+.CroakleAddHabitDialog::backdrop {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.CroakleAddHabitForm {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.CroakleAddHabitHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.CroakleAddHabitHeader h2 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.CroakleAddHabitHeader button {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--CroakleSoftSurface);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.CroakleField {
+  display: grid;
+  gap: 8px;
+}
+
+.CroakleField span,
+.CroaklePriorityField legend {
+  color: var(--CroakleMuted);
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.CroakleField input,
+.CroakleField textarea {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--CroakleLine);
+  border-radius: 0;
+  background: transparent;
+  color: var(--CroakleText);
+  font: inherit;
+  font-size: 20px;
+  font-weight: 750;
+  padding: 10px 0;
+  resize: none;
+}
+
+.CroakleField input::placeholder,
+.CroakleField textarea::placeholder {
+  color: #aaaaaa;
+}
+
+.CroaklePriorityField {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.CroaklePriorityField legend {
+  padding: 0;
+  margin-right: 4px;
+}
+
+.CroaklePriorityField label {
+  position: relative;
+}
+
+.CroaklePriorityField input {
+  position: absolute;
+  opacity: 0;
+}
+
+.CroaklePriorityField span {
+  min-width: 34px;
+  height: 34px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleSoftSurface);
+  display: grid;
+  place-items: center;
+  padding: 0 10px;
+  font-size: 0;
+}
+
+.CroaklePriorityField span::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--CroakleLine);
+  opacity: 0;
+}
+
+.CroaklePriorityField input:checked + span::after {
+  opacity: 1;
+}
+
+.CroakleConfirmHabitButton {
+  min-height: 56px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 22px;
+  background: var(--CroakleSurface);
+  font-size: 24px;
+  font-weight: 850;
+}
+
 @media (max-width: 380px) {
   :root {
     --CroakleDaySize: 29px;
@@ -575,6 +734,14 @@ body {
     width: 29px;
     height: 29px;
     font-size: 17px;
+  }
+
+  .CroakleAddHabitForm {
+    padding: 18px;
+  }
+
+  .CroakleAddHabitHeader h2 {
+    font-size: 30px;
   }
 
   .CroakleTopMoodRow {
