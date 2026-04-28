@@ -148,10 +148,88 @@ function CroakleRenderProjectHeader() {
   }
 
   CroakleProjectMonth.textContent = CroakleProjectGetMonthLabel(weekDates[0]);
-  CroakleProjectDates.innerHTML = weekDates.map((date) => `<span>${date.getDate()}</span>`).join("");
-  CroakleProjectMoodPreview.innerHTML = weekDates
-    .map((date, index) => `<span class="CroakleProjectWeekBadge">${index + 1}</span>`)
-    .join("");
+  CroakleProjectDates.className = "CroakleSevenGrid CroakleDateRow CroakleWeekGrid";
+  CroakleProjectMoodPreview.className = "CroakleSevenGrid CroakleMoodPreview CroakleWeekGrid";
+  CroakleProjectDates.innerHTML = weekDates.map((date) => {
+    const dateIso = CroakleFormatDate(date);
+    const currentDayClass = CroakleGetCurrentDayClass(date);
+
+    return `<span class="CroakleDateCell${currentDayClass}" data-date-iso="${dateIso}" data-current-date="${currentDayClass ? "true" : "false"}">${date.getDate()}</span>`;
+  }).join("");
+  CroakleProjectMoodPreview.innerHTML = weekDates.map((date) => CroakleCreateProjectMoodBadge(date)).join("");
+  CroakleEnhanceProjectMoodButtons();
+}
+
+function CroakleCreateProjectMoodBadge(date) {
+  const dateIso = CroakleFormatDate(date);
+  const monthData = CroakleGetMonthDataFromDate(date);
+  return CroakleCreateMoodBadge(monthData.moods[date.getDate() - 1], CroakleGetCurrentDayClass(date), dateIso);
+}
+
+function CroakleEnhanceProjectMoodButtons() {
+  document.querySelectorAll("#CroakleProjectMoodPreview .CroakleMoodBadge").forEach((moodBadge) => {
+    const dateIso = moodBadge.dataset.dateIso;
+
+    if (!dateIso) {
+      return;
+    }
+
+    moodBadge.setAttribute("role", "button");
+    moodBadge.setAttribute("tabindex", "0");
+    moodBadge.setAttribute("aria-label", `Open mood for ${dateIso}`);
+    moodBadge.classList.add("CroakleTrackMoodLink");
+  });
+}
+
+function CroakleOpenProjectMoodDate(dateIso) {
+  const date = CroakleParseDate(dateIso);
+
+  CroakleState.moodMonth = date.getMonth();
+  CroakleState.moodYear = date.getFullYear();
+  CroakleSaveState();
+  CroakleRenderAll();
+  CroakleRenderProjectHeader();
+  CroakleSetPage("mood");
+
+  window.requestAnimationFrame(() => {
+    document
+      .querySelector(`[data-page="mood"] [data-date-iso="${dateIso}"]`)
+      ?.scrollIntoView({ block: "center", inline: "center" });
+  });
+}
+
+function CroakleHandleProjectMoodOpen(event) {
+  const moodBadge = event.target.closest("#CroakleProjectMoodPreview .CroakleMoodBadge");
+
+  if (!moodBadge?.dataset.dateIso) {
+    return;
+  }
+
+  CroakleOpenProjectMoodDate(moodBadge.dataset.dateIso);
+}
+
+function CroakleHandleProjectMoodKeyboard(event) {
+  if (event.key !== "Enter" && event.key !== " ") {
+    return;
+  }
+
+  const moodBadge = event.target.closest("#CroakleProjectMoodPreview .CroakleMoodBadge");
+
+  if (!moodBadge?.dataset.dateIso) {
+    return;
+  }
+
+  event.preventDefault();
+  CroakleOpenProjectMoodDate(moodBadge.dataset.dateIso);
+}
+
+function CroaklePatchProjectMoodSync() {
+  const originalCycleMood = CroakleCycleMood;
+
+  CroakleCycleMood = function CroakleCycleMoodWithProjectSync(event) {
+    originalCycleMood(event);
+    CroakleRenderProjectHeader();
+  };
 }
 
 function CroakleGetProjectDays(project, weekKey = CroakleProjectGetSelectedWeekKey()) {
@@ -558,6 +636,7 @@ function CroakleRenderProjects() {
   CroakleRenderProjectList();
 }
 
+CroaklePatchProjectMoodSync();
 CroakleProjectWeekButtons[0]?.addEventListener("click", () => CroakleChangeProjectWeek(-1));
 CroakleProjectWeekButtons[1]?.addEventListener("click", () => CroakleChangeProjectWeek(1));
 CroakleProjectAddButton?.addEventListener("click", CroakleOpenAddProjectDialog);
@@ -566,5 +645,7 @@ CroakleProjectDetailForm?.addEventListener("submit", CroakleHandleProjectUpdate)
 CroakleProjectDeleteButton?.addEventListener("click", CroakleHandleProjectDelete);
 CroakleProjectCloseButton?.addEventListener("click", CroakleCloseProjectDetailDialog);
 CroakleProjectCompleteButton?.addEventListener("click", CroakleHandleProjectComplete);
+document.addEventListener("click", CroakleHandleProjectMoodOpen);
+document.addEventListener("keydown", CroakleHandleProjectMoodKeyboard);
 
 CroakleRenderProjects();
