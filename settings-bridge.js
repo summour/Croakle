@@ -52,7 +52,32 @@ function CroakleSaveSettings() {
 function CroakleApplyMoodSettings() {
   Object.entries(CroakleSettings.moods).forEach(([moodValue, mood]) => {
     document.documentElement.style.setProperty(`--CroakleMood${moodValue}Bg`, mood.color);
+    document.documentElement.style.setProperty(`--CroakleMood${moodValue}Text`, CroakleGetReadableTextColor(mood.color));
   });
+}
+
+function CroakleGetReadableTextColor(hexColor) {
+  const cleanColor = String(hexColor || "").replace("#", "");
+
+  if (!/^[0-9a-fA-F]{6}$/.test(cleanColor)) {
+    return "#111111";
+  }
+
+  const red = parseInt(cleanColor.slice(0, 2), 16);
+  const green = parseInt(cleanColor.slice(2, 4), 16);
+  const blue = parseInt(cleanColor.slice(4, 6), 16);
+  const brightness = (red * 299 + green * 587 + blue * 114) / 1000;
+
+  return brightness < 145 ? "#ffffff" : "#111111";
+}
+
+function CroaklePatchMoodBadgeRenderer() {
+  CroakleCreateMoodBadge = function CroakleCreateMoodBadgeWithSettings(mood, extraClass = "", dateIso = "") {
+    const levelClass = mood ? `CroakleMoodLevel${mood}` : "CroakleMoodEmpty";
+    const moodValueAttr = mood ? ` data-mood-value="${mood}"` : "";
+
+    return `<span class="CroakleMoodBadge ${levelClass}${extraClass}" data-date-iso="${dateIso}"${moodValueAttr} title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
+  };
 }
 
 function CroakleRenderSettingsPanel() {
@@ -68,7 +93,7 @@ function CroakleRenderSettingsPanel() {
       <div class="CroakleMoodSettingsList">
         ${Object.entries(CroakleSettings.moods).map(([moodValue, mood]) => `
           <label class="CroakleMoodSettingRow">
-            <span class="CroakleMoodNumber">${moodValue}</span>
+            <span class="CroakleMoodNumber CroakleMoodLevel${moodValue}" data-mood-value="${moodValue}">${moodValue}</span>
             <input class="CroakleMoodNameInput" type="text" value="${CroakleEscapeHtml(mood.label)}" data-mood-label="${moodValue}" aria-label="Mood ${moodValue} name" />
             <input class="CroakleMoodColorInput" type="color" value="${mood.color}" data-mood-color="${moodValue}" aria-label="Mood ${moodValue} background color" />
           </label>
@@ -238,12 +263,15 @@ function CroakleCreateStatsRows() {
 
     monthData.habits.forEach((habit, habitIndex) => {
       const doneCount = CroakleCountDone(habit.days);
-      const monthlyGoalTotal = CroakleGetMonthlyGoalTotal
+      const monthlyGoalTotal = typeof CroakleGetMonthlyGoalTotal === "function"
         ? CroakleGetMonthlyGoalTotal(habit, year, monthIndex)
         : habit.days.length;
-      const percent = CroakleCalculateMonthlyGoalPercent
+      const percent = typeof CroakleCalculateMonthlyGoalPercent === "function"
         ? CroakleCalculateMonthlyGoalPercent(doneCount, monthlyGoalTotal)
         : Math.round((doneCount / habit.days.length) * 100);
+      const lifetimeDone = typeof CroakleGetHabitLifetimeDone === "function"
+        ? CroakleGetHabitLifetimeDone(habitIndex)
+        : habit.lifetime + doneCount;
 
       rows.push([
         "habit_summary",
@@ -254,7 +282,7 @@ function CroakleCreateStatsRows() {
         doneCount,
         monthlyGoalTotal,
         percent,
-        CroakleGetHabitLifetimeDone ? CroakleGetHabitLifetimeDone(habitIndex) : habit.lifetime + doneCount,
+        lifetimeDone,
         "",
         "",
       ]);
@@ -320,6 +348,7 @@ function CroakleDownloadFile(fileName, content, type) {
 }
 
 CroakleApplyMoodSettings();
+CroaklePatchMoodBadgeRenderer();
 CroaklePatchMoodLabels();
 CroaklePatchInputLock();
 CroakleApplySettingsNavigation();
