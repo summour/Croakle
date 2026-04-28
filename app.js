@@ -26,10 +26,17 @@ const CroaklePageButtons = document.querySelectorAll("[data-page-target]");
 const CroakleMonthButtons = document.querySelectorAll("[data-month-target]");
 const CroaklePages = document.querySelectorAll("[data-page]");
 const CroakleBottomNav = document.querySelector(".CroakleBottomNav");
+
 const CroakleOpenAddHabitButton = document.querySelector("#CroakleOpenAddHabit");
 const CroakleAddHabitDialog = document.querySelector("#CroakleAddHabitDialog");
 const CroakleAddHabitForm = document.querySelector("#CroakleAddHabitForm");
 const CroakleCloseAddHabitButton = document.querySelector("#CroakleCloseAddHabit");
+
+const CroakleOpenReorderHabitButton = document.querySelector("#CroakleOpenReorderHabit");
+const CroakleReorderHabitDialog = document.querySelector("#CroakleReorderHabitDialog");
+const CroakleCloseReorderHabitButton = document.querySelector("#CroakleCloseReorderHabit");
+const CroakleCloseReorderHabitDoneButton = document.querySelector("#CroakleCloseReorderHabitDone");
+const CroakleReorderList = document.querySelector("#CroakleReorderList");
 
 function CroakleLoadState() {
   const savedData = localStorage.getItem(CroakleHabitStoreKey);
@@ -152,6 +159,11 @@ function CroakleGetDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate();
 }
 
+function CroakleGetDaysInMonthFromKey(monthKey) {
+  const [yearText, monthText] = monthKey.split("-");
+  return CroakleGetDaysInMonth(Number(yearText), Number(monthText) - 1);
+}
+
 function CroakleGetMonthLabel(year, month) {
   return `${CroakleMonthNames[month]} ${year}`;
 }
@@ -189,10 +201,7 @@ function CroakleGetMonthData(year, month) {
 }
 
 function CroakleCreateMonthData(monthKey, habitTemplates = CroakleState?.habitTemplates || CroakleDefaultHabits) {
-  const [yearText, monthText] = monthKey.split("-");
-  const year = Number(yearText);
-  const month = Number(monthText) - 1;
-  const daysInMonth = CroakleGetDaysInMonth(year, month);
+  const daysInMonth = CroakleGetDaysInMonthFromKey(monthKey);
 
   return {
     habits: habitTemplates.map((habit) => ({
@@ -205,8 +214,7 @@ function CroakleCreateMonthData(monthKey, habitTemplates = CroakleState?.habitTe
 }
 
 function CroakleSyncMonthHabits(monthData, monthKey) {
-  const [yearText, monthText] = monthKey.split("-");
-  const daysInMonth = CroakleGetDaysInMonth(Number(yearText), Number(monthText) - 1);
+  const daysInMonth = CroakleGetDaysInMonthFromKey(monthKey);
 
   CroakleState.habitTemplates.forEach((template, habitIndex) => {
     const savedHabit = monthData.habits[habitIndex];
@@ -274,7 +282,6 @@ function CroakleRenderTrackHeader() {
     .map((dayIndex) => {
       const day = dayIndex + 1;
       const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
-
       return `<span class="CroakleDateCell${currentDayClass}" data-current-date="${currentDayClass ? "true" : "false"}">${day}</span>`;
     })
     .join("");
@@ -407,7 +414,6 @@ function CroakleRenderMoodCalendar() {
 
 function CroakleCreateMoodBadge(mood, extraClass = "") {
   const levelClass = mood ? `CroakleMoodLevel${mood}` : "CroakleMoodEmpty";
-
   return `<span class="CroakleMoodBadge ${levelClass}${extraClass}" title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
 }
 
@@ -430,7 +436,6 @@ function CroakleRenderTopMoods() {
     if (mood) {
       counts[mood] = (counts[mood] || 0) + 1;
     }
-
     return counts;
   }, {});
 
@@ -471,7 +476,6 @@ function CroakleHandleAddHabit(event) {
   CroakleState.habitTemplates.push(habit);
   Object.entries(CroakleState.months).forEach(([monthKey, monthData]) => {
     const daysInMonth = CroakleGetDaysInMonthFromKey(monthKey);
-
     monthData.habits.push({
       ...habit,
       days: Array.from({ length: daysInMonth }, () => false),
@@ -482,11 +486,78 @@ function CroakleHandleAddHabit(event) {
   CroakleSaveState();
   CroakleCloseAddHabitDialog();
   CroakleRenderAll();
+  CroakleRenderReorderList();
 }
 
-function CroakleGetDaysInMonthFromKey(monthKey) {
-  const [yearText, monthText] = monthKey.split("-");
-  return CroakleGetDaysInMonth(Number(yearText), Number(monthText) - 1);
+function CroakleSwapArrayItems(list, fromIndex, toIndex) {
+  const nextList = [...list];
+  const [movedItem] = nextList.splice(fromIndex, 1);
+  nextList.splice(toIndex, 0, movedItem);
+  return nextList;
+}
+
+function CroakleOpenReorderHabitDialog() {
+  if (!CroakleReorderHabitDialog) {
+    return;
+  }
+
+  CroakleRenderReorderList();
+  CroakleReorderHabitDialog.showModal();
+}
+
+function CroakleCloseReorderHabitDialog() {
+  if (!CroakleReorderHabitDialog) {
+    return;
+  }
+
+  CroakleReorderHabitDialog.close();
+}
+
+function CroakleRenderReorderList() {
+  if (!CroakleReorderList) {
+    return;
+  }
+
+  CroakleReorderList.innerHTML = CroakleState.habitTemplates
+    .map((habit, index) => {
+      const isFirst = index === 0;
+      const isLast = index === CroakleState.habitTemplates.length - 1;
+
+      return `
+        <div class="CroakleReorderRow">
+          <div class="CroakleReorderName">${habit.name}</div>
+          <div class="CroakleReorderActions">
+            <button class="CroakleReorderMoveButton" type="button" data-reorder-index="${index}" data-reorder-direction="up" aria-label="Move ${habit.name} up" ${isFirst ? "disabled" : ""}>↑</button>
+            <button class="CroakleReorderMoveButton" type="button" data-reorder-index="${index}" data-reorder-direction="down" aria-label="Move ${habit.name} down" ${isLast ? "disabled" : ""}>↓</button>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  document.querySelectorAll(".CroakleReorderMoveButton").forEach((button) => {
+    button.addEventListener("click", CroakleHandleReorderHabit);
+  });
+}
+
+function CroakleHandleReorderHabit(event) {
+  const fromIndex = Number(event.currentTarget.dataset.reorderIndex);
+  const direction = event.currentTarget.dataset.reorderDirection === "down" ? 1 : -1;
+  const toIndex = fromIndex + direction;
+
+  if (toIndex < 0 || toIndex >= CroakleState.habitTemplates.length) {
+    return;
+  }
+
+  CroakleState.habitTemplates = CroakleSwapArrayItems(CroakleState.habitTemplates, fromIndex, toIndex);
+
+  Object.values(CroakleState.months).forEach((monthData) => {
+    monthData.habits = CroakleSwapArrayItems(monthData.habits, fromIndex, toIndex);
+  });
+
+  CroakleSaveState();
+  CroakleRenderAll();
+  CroakleRenderReorderList();
 }
 
 function CroakleScrollCurrentDateIntoView() {
@@ -520,9 +591,29 @@ CroakleMonthButtons.forEach((button) => {
   });
 });
 
-CroakleOpenAddHabitButton.addEventListener("click", CroakleOpenAddHabitDialog);
-CroakleCloseAddHabitButton.addEventListener("click", CroakleCloseAddHabitDialog);
-CroakleAddHabitForm.addEventListener("submit", CroakleHandleAddHabit);
+if (CroakleOpenAddHabitButton) {
+  CroakleOpenAddHabitButton.addEventListener("click", CroakleOpenAddHabitDialog);
+}
+
+if (CroakleCloseAddHabitButton) {
+  CroakleCloseAddHabitButton.addEventListener("click", CroakleCloseAddHabitDialog);
+}
+
+if (CroakleAddHabitForm) {
+  CroakleAddHabitForm.addEventListener("submit", CroakleHandleAddHabit);
+}
+
+if (CroakleOpenReorderHabitButton) {
+  CroakleOpenReorderHabitButton.addEventListener("click", CroakleOpenReorderHabitDialog);
+}
+
+if (CroakleCloseReorderHabitButton) {
+  CroakleCloseReorderHabitButton.addEventListener("click", CroakleCloseReorderHabitDialog);
+}
+
+if (CroakleCloseReorderHabitDoneButton) {
+  CroakleCloseReorderHabitDoneButton.addEventListener("click", CroakleCloseReorderHabitDialog);
+}
 
 CroakleRenderAll();
 CroakleSetPage("menu");
