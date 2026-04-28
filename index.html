@@ -45,6 +45,7 @@
         <div class="CroakleSevenGrid CroakleDateRow" id="CroakleTrackDates" aria-hidden="true"></div>
         <div class="CroakleSevenGrid CroakleMoodPreview" id="CroakleTrackMoodPreview" aria-label="Mood preview"></div>
         <div class="CroakleDivider" aria-hidden="true"></div>
+        <button class="CroakleAddHabitButton" id="CroakleOpenAddHabit" type="button">+ Add Habit</button>
         <div class="CroakleHabitList" id="CroakleTrackList"></div>
       </article>
     </section>
@@ -95,6 +96,39 @@
       <button type="button" data-page-target="best">Best</button>
       <button type="button" data-page-target="mood">Mood</button>
     </footer>
+
+    <dialog class="CroakleAddHabitDialog" id="CroakleAddHabitDialog" aria-labelledby="CroakleAddHabitTitle">
+      <form class="CroakleAddHabitForm" id="CroakleAddHabitForm" method="dialog">
+        <header class="CroakleAddHabitHeader">
+          <h2 id="CroakleAddHabitTitle">Add Habit</h2>
+          <button type="button" id="CroakleCloseAddHabit" aria-label="ปิด">×</button>
+        </header>
+
+        <label class="CroakleField">
+          <span>New Habit</span>
+          <input id="CroakleHabitNameInput" name="habitName" type="text" placeholder="e.g., Gym" autocomplete="off" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Goal Per Week</span>
+          <input id="CroakleHabitGoalInput" name="habitGoal" type="number" min="1" max="7" inputmode="numeric" placeholder="e.g., 3" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Description</span>
+          <textarea id="CroakleHabitDescriptionInput" name="habitDescription" rows="3" placeholder="e.g., 10 push ups"></textarea>
+        </label>
+
+        <fieldset class="CroaklePriorityField">
+          <legend>Priority</legend>
+          <label><input type="radio" name="habitPriority" value="high" checked /><span>High</span></label>
+          <label><input type="radio" name="habitPriority" value="medium" /><span>Medium</span></label>
+          <label><input type="radio" name="habitPriority" value="low" /><span>Low</span></label>
+        </fieldset>
+
+        <button class="CroakleConfirmHabitButton" type="submit">Confirm</button>
+      </form>
+    </dialog>
   </main>
 
   <script src="app.js"></script>
