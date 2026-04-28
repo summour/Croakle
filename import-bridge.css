@@ -1,3 +1,8 @@
+[data-page="track"] .CroakleTrackActions {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+}
+
 .CroakleImportActionButton {
   appearance: none;
   min-height: 42px;
@@ -25,6 +30,7 @@
 
 .CroakleImportFileInput {
   position: fixed;
+  inset: auto auto 0 0;
   width: 1px;
   height: 1px;
   opacity: 0;
@@ -38,4 +44,15 @@
   font-size: 13px;
   font-weight: 750;
   line-height: 1.35;
+}
+
+@media (max-width: 380px) {
+  [data-page="track"] .CroakleTrackActions {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .CroakleImportActionButton {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
 }
