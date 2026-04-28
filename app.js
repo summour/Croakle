@@ -3,7 +3,11 @@ const STORAGE_KEY = "croakle-data";
 const sampleState = {
   habits: [
     { id: "sample-habit-1", name: "Morning reset 10 นาที", frequency: "daily", logs: [] },
-    { id: "sample-habit-2", name: "Review dashboard ก่อนนอน", frequency: "daily", logs: [] }
+    { id: "sample-habit-2", name: "ดื่มน้ำหลังตื่นนอน", frequency: "daily", logs: [] },
+    { id: "sample-habit-3", name: "อ่านหนังสือ 20 นาที", frequency: "daily", logs: [] },
+    { id: "sample-habit-4", name: "เดินหรือยืดตัว 15 นาที", frequency: "daily", logs: [] },
+    { id: "sample-habit-5", name: "Review dashboard ก่อนนอน", frequency: "daily", logs: [] },
+    { id: "sample-habit-6", name: "Weekly planning", frequency: "weekly", logs: [] }
   ],
   projects: [
     {
@@ -26,11 +30,28 @@ const sampleState = {
       description: "ทำ template สำหรับสรุปเดือน เป้าหมาย และสิ่งที่ต้องปรับปรุง",
       status: "waiting",
       progress: 10
+    },
+    {
+      id: "sample-project-4",
+      name: "Home Reset Weekend",
+      description: "จัดโต๊ะทำงาน เคลียร์ไฟล์ และวางระบบของใช้ประจำวัน",
+      status: "active",
+      progress: 30
+    },
+    {
+      id: "sample-project-5",
+      name: "Health Routine Upgrade",
+      description: "วาง routine นอน อาหาร น้ำ และการเดินให้สม่ำเสมอขึ้น",
+      status: "active",
+      progress: 55
     }
   ],
   courses: [
     { id: "sample-course-1", name: "Frontend Polish", platform: "Self Study", progress: 60 },
-    { id: "sample-course-2", name: "Productivity System", platform: "Croakle Lab", progress: 35 }
+    { id: "sample-course-2", name: "Productivity System", platform: "Croakle Lab", progress: 35 },
+    { id: "sample-course-3", name: "UX/UI Dashboard Design", platform: "Design Practice", progress: 42 },
+    { id: "sample-course-4", name: "JavaScript for Local Apps", platform: "MDN + Practice", progress: 58 },
+    { id: "sample-course-5", name: "English Daily Review", platform: "WordJar", progress: 20 }
   ]
 };
 
@@ -46,10 +67,25 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return structuredClone(sampleState);
-    return { ...structuredClone(defaultState), ...JSON.parse(raw) };
+    const savedState = { ...structuredClone(defaultState), ...JSON.parse(raw) };
+    return ensureSampleData(savedState);
   } catch {
     return structuredClone(sampleState);
   }
+}
+
+function ensureSampleData(savedState) {
+  return {
+    habits: mergeMissingSamples(savedState.habits, sampleState.habits),
+    projects: mergeMissingSamples(savedState.projects, sampleState.projects),
+    courses: mergeMissingSamples(savedState.courses, sampleState.courses)
+  };
+}
+
+function mergeMissingSamples(currentItems = [], sampleItems = []) {
+  const currentIds = new Set(currentItems.map(item => item.id));
+  const missingSamples = sampleItems.filter(item => !currentIds.has(item.id));
+  return [...currentItems, ...structuredClone(missingSamples)];
 }
 
 function saveState() {
@@ -234,7 +270,7 @@ function initExport() {
       const reader = new FileReader();
       reader.onload = () => {
         try {
-          state = { ...structuredClone(defaultState), ...JSON.parse(reader.result) };
+          state = ensureSampleData({ ...structuredClone(defaultState), ...JSON.parse(reader.result) });
           saveState();
           renderOverview();
         } catch {
