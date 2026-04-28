@@ -70,4 +70,47 @@ function CroakleRenderBestList() {
   `).join("");
 }
 
+function CroakleApplyBestCompactSpacing() {
+  if (document.querySelector("#CroakleBestCompactSpacing")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = "CroakleBestCompactSpacing";
+  style.textContent = `
+    [data-page="best"] .CroakleBestList {
+      align-content: start;
+      gap: 18px;
+      padding-top: 14px;
+      padding-bottom: 18px;
+    }
+
+    [data-page="best"] .CroakleBestRow {
+      min-height: 54px;
+      align-items: center;
+    }
+
+    [data-page="best"] .CroakleBestRow strong {
+      line-height: 1.16;
+    }
+
+    [data-page="best"] .CroaklePercentBar {
+      height: 28px;
+    }
+
+    @media (max-height: 720px) {
+      [data-page="best"] .CroakleBestList {
+        gap: 14px;
+        padding-top: 10px;
+      }
+
+      [data-page="best"] .CroakleBestRow {
+        min-height: 48px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+CroakleApplyBestCompactSpacing();
 CroakleRenderBestList();
