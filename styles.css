@@ -16,9 +16,13 @@
 
 * { box-sizing: border-box; }
 
+html { -webkit-text-size-adjust: 100%; }
+
 body {
   margin: 0;
-  min-height: 100vh;
+  min-width: 320px;
+  min-height: 100svh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(79, 157, 105, 0.18), transparent 34%),
     linear-gradient(135deg, #f8f8f5 0%, var(--wordjar-bg) 100%);
@@ -37,14 +41,15 @@ button { cursor: pointer; }
   display: grid;
   grid-template-columns: 292px minmax(0, 1fr);
   gap: 22px;
-  min-height: 100vh;
-  padding: 18px;
+  width: 100%;
+  min-height: 100svh;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
 }
 
 .wordjar-sidebar {
   position: sticky;
   top: 18px;
-  height: calc(100vh - 36px);
+  height: calc(100svh - 36px);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -68,6 +73,7 @@ button { cursor: pointer; }
 .wordjar-brand-mark {
   display: grid;
   place-items: center;
+  flex: 0 0 auto;
   width: 52px;
   height: 52px;
   border-radius: 18px;
@@ -100,6 +106,7 @@ button { cursor: pointer; }
 
 .wordjar-nav-item {
   width: 100%;
+  min-height: 44px;
   padding: 13px 14px;
   border: 0;
   border-radius: 17px;
@@ -107,6 +114,7 @@ button { cursor: pointer; }
   color: var(--wordjar-muted);
   font-weight: 700;
   text-align: left;
+  touch-action: manipulation;
 }
 
 .wordjar-nav-item:hover,
@@ -150,10 +158,12 @@ button { cursor: pointer; }
 .wordjar-primary-button,
 .wordjar-secondary-button,
 .wordjar-danger-button {
+  min-height: 44px;
   border: 0;
   border-radius: 999px;
   padding: 12px 16px;
   font-weight: 800;
+  touch-action: manipulation;
 }
 
 .wordjar-primary-button { background: var(--wordjar-text); color: #fff; }
@@ -230,6 +240,7 @@ button { cursor: pointer; }
 }
 
 .wordjar-panel-header button {
+  min-height: 38px;
   border: 0;
   border-radius: 999px;
   padding: 8px 12px;
@@ -256,6 +267,7 @@ button { cursor: pointer; }
 .wordjar-list-card span {
   display: grid;
   place-items: center;
+  flex: 0 0 auto;
   width: 34px;
   height: 34px;
   border-radius: 50%;
@@ -285,6 +297,7 @@ button { cursor: pointer; }
 .wordjar-stack-form textarea,
 .wordjar-data-preview {
   width: 100%;
+  min-height: 44px;
   border: 1px solid var(--wordjar-line);
   border-radius: 16px;
   background: #fff;
@@ -309,21 +322,153 @@ button { cursor: pointer; }
 .wordjar-dialog-card menu { display: flex; justify-content: flex-end; gap: 10px; padding: 0; margin: 6px 0 0; }
 
 @media (max-width: 920px) {
-  .wordjar-croakle-shell { grid-template-columns: 1fr; }
-  .wordjar-sidebar { position: static; height: auto; }
-  .wordjar-nav-list { grid-template-columns: repeat(5, minmax(120px, 1fr)); overflow-x: auto; }
-  .wordjar-hero-card { grid-template-columns: 1fr; }
-  .wordjar-progress-orb { justify-self: start; }
+  .wordjar-croakle-shell {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 10px;
+  }
+
+  .wordjar-sidebar {
+    position: static;
+    height: auto;
+    padding: 12px;
+    border-radius: 24px;
+  }
+
+  .wordjar-sidebar-note { display: none; }
+
+  .wordjar-brand-card {
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .wordjar-brand-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 15px;
+    font-size: 23px;
+  }
+
+  .wordjar-nav-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wordjar-nav-list::-webkit-scrollbar { display: none; }
+
+  .wordjar-nav-item {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: max-content;
+    padding: 11px 14px;
+    text-align: center;
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.54);
+  }
+
+  .wordjar-main-panel { gap: 12px; }
+
+  .wordjar-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    border-radius: 24px;
+  }
+
+  .wordjar-hero-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    border-radius: 28px;
+  }
+
+  .wordjar-progress-orb {
+    justify-self: start;
+    width: 132px;
+    height: 132px;
+  }
+
   .wordjar-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .wordjar-content-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 560px) {
-  .wordjar-croakle-shell { padding: 10px; }
-  .wordjar-topbar { align-items: flex-start; flex-direction: column; }
-  .wordjar-primary-button { width: 100%; }
+  .wordjar-croakle-shell { padding: 8px; }
+
+  .wordjar-topbar {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 14px;
+  }
+
+  .wordjar-topbar h2 { font-size: 28px; }
+  .wordjar-primary-button,
+  .wordjar-secondary-button,
+  .wordjar-danger-button { width: 100%; }
+
+  .wordjar-hero-card {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .wordjar-hero-copy h3 {
+    font-size: clamp(30px, 12vw, 44px);
+    line-height: 1;
+  }
+
+  .wordjar-hero-copy p:last-child { font-size: 15px; }
+
+  .wordjar-progress-orb {
+    width: 118px;
+    height: 118px;
+    box-shadow: inset 0 0 0 12px rgba(255,255,255,.72);
+  }
+
+  .wordjar-progress-orb strong { font-size: 30px; }
   .wordjar-stats-grid { grid-template-columns: 1fr; }
-  .wordjar-course-row { align-items: flex-start; flex-direction: column; }
+  .wordjar-stat-card { padding: 16px; }
+
+  .wordjar-panel,
+  .wordjar-form-panel {
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .wordjar-panel-header { align-items: flex-start; }
+
+  .wordjar-list-card,
+  .wordjar-project-card,
+  .wordjar-course-row {
+    padding: 13px;
+    border-radius: 15px;
+  }
+
+  .wordjar-project-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .wordjar-course-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .wordjar-course-row span { min-width: 0; }
   .wordjar-course-row div { width: 100%; }
+  .wordjar-button-row { display: grid; }
+
+  .wordjar-dialog {
+    width: calc(100vw - 16px);
+    max-width: none;
+    margin: auto 8px 8px;
+    border-radius: 24px;
+  }
+
+  .wordjar-dialog-card menu {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 }
