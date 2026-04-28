@@ -8,6 +8,7 @@
   --CroakleMuted: #666666;
   --CroakleLine: #111111;
   --CroakleSoftLine: #e5e5e5;
+  --CroakleDanger: #ff3b30;
   --CroakleShellWidth: 430px;
   --CroakleDaySize: 32px;
   --CroakleDayGap: 7px;
@@ -60,8 +61,10 @@ body {
 .CroakleAddHabitButton,
 .CroakleSecondaryActionButton,
 .CroakleAddHabitHeader button,
+.CroakleDetailHeader button,
 .CroakleConfirmHabitButton,
-.CroakleReorderMoveButton {
+.CroakleReorderMoveButton,
+.CroakleHabitNameButton {
   appearance: none;
   border: 0;
   color: inherit;
@@ -81,8 +84,10 @@ body {
 .CroakleAddHabitButton:active,
 .CroakleSecondaryActionButton:active,
 .CroakleAddHabitHeader button:active,
+.CroakleDetailHeader button:active,
 .CroakleConfirmHabitButton:active,
-.CroakleReorderMoveButton:active {
+.CroakleReorderMoveButton:active,
+.CroakleHabitNameButton:active {
   transform: scale(0.96);
 }
 
@@ -95,8 +100,10 @@ body {
 .CroakleAddHabitButton:focus-visible,
 .CroakleSecondaryActionButton:focus-visible,
 .CroakleAddHabitHeader button:focus-visible,
+.CroakleDetailHeader button:focus-visible,
 .CroakleConfirmHabitButton:focus-visible,
 .CroakleReorderMoveButton:focus-visible,
+.CroakleHabitNameButton:focus-visible,
 .CroakleField input:focus-visible,
 .CroakleField textarea:focus-visible,
 .CroaklePriorityField input:focus-visible + span {
@@ -386,11 +393,26 @@ body {
   gap: 7px;
 }
 
-.CroakleHabitTop strong {
+.CroakleHabitTop strong,
+.CroakleHabitNameButton {
   min-width: 0;
+  text-align: left;
   font-size: clamp(15px, 4.5vw, 18px);
   line-height: 1.12;
   letter-spacing: -0.035em;
+  font-weight: 850;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.CroakleHabitNameButton {
+  padding: 4px 0;
+  border-radius: 8px;
+}
+
+.CroakleHabitNameButton:active {
+  background: var(--CroakleSoftSurface);
 }
 
 .CroakleDot {
@@ -622,27 +644,38 @@ body {
   padding: 20px;
 }
 
-.CroakleAddHabitHeader {
+.CroakleAddHabitHeader,
+.CroakleDetailHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.CroakleAddHabitHeader h2 {
+.CroakleAddHabitHeader h2,
+.CroakleDetailHeader h2 {
   margin: 0;
   font-size: 34px;
   line-height: 1;
   letter-spacing: -0.05em;
+  text-align: center;
 }
 
-.CroakleAddHabitHeader button {
+.CroakleAddHabitHeader button,
+.CroakleDetailHeader button:not(.CroakleDeleteHabitButton) {
   width: 42px;
   height: 42px;
   border-radius: 999px;
   background: var(--CroakleSoftSurface);
   font-size: 30px;
   line-height: 1;
+}
+
+.CroakleDeleteHabitButton {
+  color: var(--CroakleDanger);
+  font-size: 15px;
+  font-weight: 850;
+  padding: 10px 0;
 }
 
 .CroakleField {
@@ -817,8 +850,13 @@ body {
     padding: 18px;
   }
 
-  .CroakleAddHabitHeader h2 {
+  .CroakleAddHabitHeader h2,
+  .CroakleDetailHeader h2 {
     font-size: 30px;
+  }
+
+  .CroakleDeleteHabitButton {
+    font-size: 14px;
   }
 
   .CroakleTopMoodRow {
