@@ -1,5 +1,13 @@
-const CroakleHabitStoreKey = "CroakleHabitMoodData";
-const CroakleMoodOptions = ["🙂", "😐", "😎", "😴", "😡", "😢", "😰", "😬", "😵‍💫", "🤢", "😊", "😄"];
+const CroakleHabitStoreKey = "CroakleHabitMoodDataCleanV1";
+const CroakleOldStoreKeys = ["CroakleHabitMoodData"];
+const CroakleMoodOptions = [1, 2, 3, 4, 5];
+const CroakleMoodLabels = {
+  1: "Terrible",
+  2: "Annoyed",
+  3: "Okay",
+  4: "Good",
+  5: "Excellent",
+};
 const CroakleMonthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const CroakleDefaultHabits = [
@@ -10,21 +18,7 @@ const CroakleDefaultHabits = [
   { name: "No fast food", goal: 6 },
 ];
 
-const CroakleDefaultWeek = [
-  [false, true, true, true, true, true, true],
-  [false, true, false, true, false, true, false],
-  [false, false, true, true, true, false, false],
-  [true, false, false, false, false, false, false],
-  [false, false, true, false, true, false, true],
-];
-
-const CroakleDefaultMoodDays = [
-  "😐", "🙂", "😄", "🙂", "😎", "🤢", "🤢",
-  "😴", "🙂", "😰", "😎", "😎", "😎", "😴",
-  "😎", "😬", "😵‍💫", "😢", "😴", "😎", "🙂",
-  "😰", "😐", "😐", "😎", "😎", "😡", "😢",
-  "😊", "😎", "😴", "😐", "😎", "🙂", "😄",
-];
+CroakleOldStoreKeys.forEach((key) => localStorage.removeItem(key));
 
 let CroakleState = CroakleLoadState();
 
@@ -74,20 +68,46 @@ function CroakleNormalizeState(state) {
   const cleanState = {
     ...CroakleCreateDefaultState(),
     ...state,
-    months: state.months || {},
+    months: {},
   };
+
+  Object.entries(state.months || {}).forEach(([monthKey, monthData]) => {
+    cleanState.months[monthKey] = CroakleNormalizeMonthData(monthData, monthKey);
+  });
 
   CroakleLockVisibleMonthsToCurrent(cleanState);
 
-  if (state.habits || state.moods) {
-    const legacyKey = CroakleGetMonthKey(cleanState.trackYear, cleanState.trackMonth);
-    cleanState.months[legacyKey] = {
-      habits: state.habits || CroakleCreateMonthData(legacyKey).habits,
-      moods: state.moods || CroakleCreateMonthData(legacyKey).moods,
-    };
+  return cleanState;
+}
+
+function CroakleNormalizeMonthData(monthData, monthKey) {
+  const defaultMonthData = CroakleCreateMonthData(monthKey);
+  const [yearText, monthText] = monthKey.split("-");
+  const daysInMonth = CroakleGetDaysInMonth(Number(yearText), Number(monthText) - 1);
+
+  return {
+    habits: defaultMonthData.habits.map((defaultHabit, habitIndex) => {
+      const savedHabit = monthData?.habits?.[habitIndex];
+
+      return {
+        ...defaultHabit,
+        ...savedHabit,
+        days: Array.from({ length: daysInMonth }, (_, dayIndex) => Boolean(savedHabit?.days?.[dayIndex])),
+        lifetime: Number(savedHabit?.lifetime || 0),
+      };
+    }),
+    moods: Array.from({ length: daysInMonth }, (_, dayIndex) => CroakleNormalizeMoodValue(monthData?.moods?.[dayIndex])),
+  };
+}
+
+function CroakleNormalizeMoodValue(value) {
+  const moodValue = Number(value);
+
+  if (CroakleMoodOptions.includes(moodValue)) {
+    return moodValue;
   }
 
-  return cleanState;
+  return null;
 }
 
 function CroakleLockVisibleMonthsToCurrent(state) {
@@ -116,6 +136,10 @@ function CroakleGetMonthLabel(year, month) {
   return `${CroakleMonthNames[month]} ${year}`;
 }
 
+function CroakleGetMoodLabel(value) {
+  return CroakleMoodLabels[value] || "No mood";
+}
+
 function CroakleGetMonthData(year, month) {
   const monthKey = CroakleGetMonthKey(year, month);
 
@@ -133,12 +157,12 @@ function CroakleCreateMonthData(monthKey) {
   const daysInMonth = CroakleGetDaysInMonth(year, month);
 
   return {
-    habits: CroakleDefaultHabits.map((habit, habitIndex) => ({
+    habits: CroakleDefaultHabits.map((habit) => ({
       ...habit,
-      days: Array.from({ length: daysInMonth }, (_, dayIndex) => CroakleDefaultWeek[habitIndex][dayIndex % 7]),
-      lifetime: 40 + habitIndex * 37 + month * 4,
+      days: Array.from({ length: daysInMonth }, () => false),
+      lifetime: 0,
     })),
-    moods: Array.from({ length: daysInMonth }, (_, index) => CroakleDefaultMoodDays[index % CroakleDefaultMoodDays.length]),
+    moods: Array.from({ length: daysInMonth }, () => null),
   };
 }
 
@@ -179,7 +203,7 @@ function CroakleRenderTrackHeader() {
   document.querySelector("#CroakleTrackMonth").textContent = CroakleGetMonthLabel(year, month);
   document.querySelector("#CroakleTrackDates").innerHTML = previewDates.map((date) => `<span>${date}</span>`).join("");
   document.querySelector("#CroakleTrackMoodPreview").innerHTML = previewDates
-    .map((date) => `<span>${trackData.moods[date - 1] || "🙂"}</span>`)
+    .map((date) => CroakleCreateMoodBadge(trackData.moods[date - 1]))
     .join("");
 }
 
@@ -272,9 +296,9 @@ function CroakleRenderMoodCalendar() {
 
   document.querySelector("#CroakleMoodMonth").textContent = CroakleGetMonthLabel(CroakleState.moodYear, CroakleState.moodMonth);
   calendar.innerHTML = moodData.moods.map((mood, index) => `
-    <button class="CroakleMoodButton" type="button" data-mood-index="${index}" aria-label="Day ${index + 1}, mood ${mood}">
+    <button class="CroakleMoodButton" type="button" data-mood-index="${index}" aria-label="Day ${index + 1}, mood ${CroakleGetMoodLabel(mood)}">
       <small>${index + 1}</small>
-      <span>${mood}</span>
+      ${CroakleCreateMoodBadge(mood)}
     </button>
   `).join("");
 
@@ -285,11 +309,18 @@ function CroakleRenderMoodCalendar() {
   CroakleRenderTopMoods();
 }
 
+function CroakleCreateMoodBadge(mood) {
+  const levelClass = mood ? `CroakleMoodLevel${mood}` : "CroakleMoodEmpty";
+
+  return `<span class="CroakleMoodBadge ${levelClass}" title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
+}
+
 function CroakleCycleMood(event) {
   const moodIndex = Number(event.currentTarget.dataset.moodIndex);
   const moodData = CroakleGetMonthData(CroakleState.moodYear, CroakleState.moodMonth);
   const currentMood = moodData.moods[moodIndex];
-  const nextMoodIndex = (CroakleMoodOptions.indexOf(currentMood) + 1) % CroakleMoodOptions.length;
+  const currentMoodIndex = CroakleMoodOptions.indexOf(currentMood);
+  const nextMoodIndex = (currentMoodIndex + 1) % CroakleMoodOptions.length;
 
   moodData.moods[moodIndex] = CroakleMoodOptions[nextMoodIndex];
   CroakleSaveState();
@@ -300,16 +331,19 @@ function CroakleRenderTopMoods() {
   const topMoodArea = document.querySelector(".CroakleTopMoodRow div");
   const moodData = CroakleGetMonthData(CroakleState.moodYear, CroakleState.moodMonth);
   const moodCounts = moodData.moods.reduce((counts, mood) => {
-    counts[mood] = (counts[mood] || 0) + 1;
+    if (mood) {
+      counts[mood] = (counts[mood] || 0) + 1;
+    }
+
     return counts;
   }, {});
 
   const topMoods = Object.entries(moodCounts)
     .sort((firstMood, secondMood) => secondMood[1] - firstMood[1])
     .slice(0, 3)
-    .map(([mood]) => mood);
+    .map(([mood]) => Number(mood));
 
-  topMoodArea.innerHTML = topMoods.map((mood) => `<span>${mood}</span>`).join("");
+  topMoodArea.innerHTML = topMoods.map((mood) => CroakleCreateMoodBadge(mood)).join("");
 }
 
 function CroakleRenderAll() {
