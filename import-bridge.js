@@ -1,28 +1,33 @@
 (() => {
   const CroakleImportStoreKey = "CroakleHabitMoodDataCleanV1";
   const CroakleImportSelectors = {
-    actions: ".CroakleTrackActions",
+    exportItem: ".CroakleSettingsItem:nth-of-type(2)",
     importButton: "#CroakleOpenImportHabit",
     fileInput: "#CroakleImportHabitFile",
     status: "#CroakleImportStatus",
   };
 
   function CroakleImportInit() {
-    const actionBar = document.querySelector(CroakleImportSelectors.actions);
+    const exportItem = document.querySelector(CroakleImportSelectors.exportItem);
 
-    if (!actionBar || document.querySelector(CroakleImportSelectors.importButton)) {
+    if (!exportItem || document.querySelector(CroakleImportSelectors.importButton)) {
       return;
     }
 
-    actionBar.insertAdjacentHTML(
-      "beforeend",
+    exportItem.insertAdjacentHTML(
+      "afterend",
       `
-        <button class="CroakleImportActionButton" id="CroakleOpenImportHabit" type="button">Import</button>
-        <input class="CroakleImportFileInput" id="CroakleImportHabitFile" type="file" accept=".json,.csv,application/json,text/csv" aria-label="Import habit file" />
+        <div class="CroakleSettingsItem CroakleImportSettingsItem">
+          <div class="CroakleSettingsText">
+            <strong>Import</strong>
+            <span>Import habit list from CSV / JSON.</span>
+            <span class="CroakleImportStatus" id="CroakleImportStatus" aria-live="polite"></span>
+          </div>
+          <button class="CroakleImportActionButton" id="CroakleOpenImportHabit" type="button">Import</button>
+          <input class="CroakleImportFileInput" id="CroakleImportHabitFile" type="file" accept=".json,.csv,application/json,text/csv" aria-label="Import habit file" />
+        </div>
       `
     );
-
-    actionBar.insertAdjacentHTML("afterend", `<span class="CroakleImportStatus" id="CroakleImportStatus" aria-live="polite"></span>`);
 
     document.querySelector(CroakleImportSelectors.importButton)?.addEventListener("click", CroakleImportOpenFilePicker);
     document.querySelector(CroakleImportSelectors.fileInput)?.addEventListener("change", CroakleImportHandleFileChange);
