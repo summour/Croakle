@@ -1,0 +1,131 @@
+[data-page="settings"] .CroakleSettingsHeader {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 52px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex: 0 0 auto;
+}
+
+[data-page="settings"] .CroakleSettingsHeader h2 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(30px, 8vw, 42px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+
+[data-page="settings"] .CroakleSettingsBackButton {
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--CroakleSoftSurface);
+  color: var(--CroakleText);
+  font: inherit;
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+[data-page="settings"] .CroakleSettingsBackButton:active {
+  transform: scale(0.96);
+}
+
+[data-page="settings"] .CroakleSettingsBackButton:focus-visible {
+  outline: 2px solid var(--CroakleLine);
+  outline-offset: 3px;
+}
+
+[data-page="settings"] .CroakleSettingsBody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 4px 0 12px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-page="settings"] .CroakleSettingsBody::-webkit-scrollbar {
+  display: none;
+}
+
+[data-page="settings"] .CroakleSettingsGroup {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+[data-page="settings"] .CroakleSettingsGroupTitle {
+  margin: 0 2px 2px;
+  color: var(--CroakleMuted);
+  font-size: 14px;
+  font-weight: 850;
+  letter-spacing: 0.01em;
+}
+
+[data-page="settings"] .CroakleSettingsItem {
+  min-height: 62px;
+  border-radius: 20px;
+  background: var(--CroakleSoftSurface);
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+[data-page="settings"] .CroakleSettingsText {
+  min-width: 0;
+}
+
+[data-page="settings"] .CroakleSettingsText strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+[data-page="settings"] .CroakleSettingsText span {
+  display: block;
+  margin-top: 4px;
+  color: var(--CroakleMuted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+[data-page="settings"] .CroakleSettingsValue {
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: var(--CroakleSurface);
+  font-size: 13px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+@media (max-width: 380px) {
+  [data-page="settings"] .CroakleSettingsHeader {
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+  }
+
+  [data-page="settings"] .CroakleSettingsBackButton {
+    width: 48px;
+    height: 48px;
+  }
+
+  [data-page="settings"] .CroakleSettingsItem {
+    min-height: 58px;
+    padding: 11px 14px;
+  }
+}
