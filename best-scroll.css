@@ -1,0 +1,123 @@
+[data-page="best"] .CroakleCard {
+  padding: 18px 14px 14px;
+}
+
+[data-page="best"] .CroakleMonthHeader {
+  grid-template-columns: 52px minmax(0, 1fr) 52px;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+[data-page="best"] .CroakleMonthHeader strong {
+  font-size: clamp(28px, 8vw, 38px);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+[data-page="best"] .CroakleMonthHeader button {
+  width: 52px;
+  height: 52px;
+  background: var(--CroakleSoftSurface);
+  font-size: 42px;
+  font-weight: 900;
+}
+
+[data-page="best"] .CroakleBestHeader,
+[data-page="best"] .CroakleBestRow {
+  grid-template-columns: minmax(126px, 1.32fr) minmax(104px, 0.92fr) minmax(48px, 0.45fr) minmax(66px, 0.55fr);
+  gap: 8px;
+}
+
+[data-page="best"] .CroakleBestHeader {
+  padding: 0 2px 14px;
+  margin-bottom: 0;
+  font-size: clamp(13px, 3.5vw, 18px);
+  line-height: 1.08;
+}
+
+[data-page="best"] .CroakleBestHeader span:first-child {
+  font-size: clamp(18px, 5.2vw, 29px);
+  line-height: 1;
+}
+
+[data-page="best"] .CroakleBestList {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: start;
+  gap: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 12px 2px 18px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+[data-page="best"] .CroakleBestList::-webkit-scrollbar {
+  display: none;
+}
+
+[data-page="best"] .CroakleBestRow {
+  min-height: 92px;
+  padding: 12px 0;
+  align-items: center;
+  font-weight: 900;
+}
+
+[data-page="best"] .CroakleBestRow strong {
+  font-size: clamp(20px, 5.2vw, 30px);
+  line-height: 1.12;
+  font-weight: 900;
+  word-break: break-word;
+}
+
+[data-page="best"] .CroakleBestRow > span {
+  font-size: clamp(22px, 5.8vw, 34px);
+  font-weight: 900;
+  line-height: 1;
+}
+
+[data-page="best"] .CroaklePercentBar {
+  height: 32px;
+  border-radius: 12px;
+}
+
+[data-page="best"] .CroaklePercentBar em {
+  font-size: clamp(18px, 4.8vw, 28px);
+}
+
+@media (max-width: 380px) {
+  [data-page="best"] .CroakleCard {
+    padding: 16px 12px 12px;
+  }
+
+  [data-page="best"] .CroakleMonthHeader {
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+  }
+
+  [data-page="best"] .CroakleMonthHeader button {
+    width: 48px;
+    height: 48px;
+  }
+
+  [data-page="best"] .CroakleBestHeader,
+  [data-page="best"] .CroakleBestRow {
+    grid-template-columns: minmax(112px, 1.2fr) minmax(96px, 0.9fr) minmax(42px, 0.42fr) minmax(58px, 0.5fr);
+    gap: 7px;
+  }
+
+  [data-page="best"] .CroakleBestRow {
+    min-height: 86px;
+  }
+}
+
+@media (max-height: 720px) {
+  [data-page="best"] .CroakleBestRow {
+    min-height: 78px;
+    padding: 9px 0;
+  }
+
+  [data-page="best"] .CroakleBestList {
+    padding-top: 8px;
+  }
+}
