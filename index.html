@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Croakle life dashboard สำหรับ habit, mood, project, course และ export data" />
   <title>Croakle</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -11,67 +12,163 @@
     <aside class="wordjar-sidebar">
       <div class="wordjar-brand-card">
         <div class="wordjar-brand-mark">🐸</div>
-        <div><p class="wordjar-eyebrow">Life Dashboard</p><h1>Croakle</h1></div>
+        <div>
+          <p class="wordjar-eyebrow">Life Dashboard</p>
+          <h1>Croakle</h1>
+        </div>
       </div>
-      <nav class="wordjar-nav-list">
-        <button class="wordjar-nav-item is-active" data-view="overviewView">Overview</button>
-        <button class="wordjar-nav-item" data-view="habitsView">Habits</button>
-        <button class="wordjar-nav-item" data-view="projectsView">Projects</button>
-        <button class="wordjar-nav-item" data-view="coursesView">Courses</button>
-        <button class="wordjar-nav-item" data-view="exportView">Export</button>
+
+      <nav class="wordjar-nav-list" aria-label="Croakle sections">
+        <button class="wordjar-nav-item is-active" type="button" data-view="overviewView">Overview</button>
+        <button class="wordjar-nav-item" type="button" data-view="moodView">Mood</button>
+        <button class="wordjar-nav-item" type="button" data-view="habitsView">Habits</button>
+        <button class="wordjar-nav-item" type="button" data-view="projectsView">Projects</button>
+        <button class="wordjar-nav-item" type="button" data-view="coursesView">Courses</button>
+        <button class="wordjar-nav-item" type="button" data-view="exportView">Export</button>
       </nav>
-      <div class="wordjar-sidebar-note"><span>Local-first</span><p>ข้อมูลบันทึกในเครื่องด้วย localStorage ก่อนต่อ cloud sync ภายหลัง</p></div>
+
+      <div class="wordjar-sidebar-note">
+        <span>Local-first</span>
+        <p>ข้อมูลบันทึกในเครื่องด้วย localStorage ก่อนต่อ cloud sync ภายหลัง</p>
+      </div>
     </aside>
 
     <main class="wordjar-main-panel">
       <header class="wordjar-topbar">
-        <div><p class="wordjar-eyebrow" id="todayLabel">Today</p><h2 id="pageTitle">Your Croakle</h2></div>
-        <button class="wordjar-primary-button" id="quickAddButton">+ Quick Add</button>
+        <div>
+          <p class="wordjar-eyebrow" id="todayLabel">Today</p>
+          <h2 id="pageTitle">Your Croakle</h2>
+        </div>
+        <button class="wordjar-primary-button" id="quickAddButton" type="button">+ Quick Add</button>
       </header>
 
       <section id="overviewView" class="wordjar-view is-active">
         <div class="wordjar-hero-card">
-          <div class="wordjar-hero-copy"><p class="wordjar-eyebrow">Focus</p><h3>จัดชีวิตให้อยู่ในที่เดียว</h3><p>Habit + Project + Course รวมเป็น dashboard เดียว</p></div>
-          <div class="wordjar-progress-orb" id="todayOrb"><strong id="todayScore">0%</strong><span>Today</span></div>
+          <div class="wordjar-hero-copy">
+            <p class="wordjar-eyebrow">Focus</p>
+            <h3>จัดชีวิตให้อยู่ในที่เดียว</h3>
+            <p>Habit + Mood + Project + Course รวมเป็น dashboard เดียว</p>
+          </div>
+          <div class="wordjar-progress-orb">
+            <strong id="todayScore">0%</strong>
+            <span>Today</span>
+          </div>
         </div>
+
         <div class="wordjar-stats-grid">
           <div class="wordjar-stat-card"><span id="habitCount">0</span><p>Habits</p></div>
+          <div class="wordjar-stat-card"><span id="moodCount">0</span><p>Mood Logs</p></div>
           <div class="wordjar-stat-card"><span id="projectCount">0</span><p>Projects</p></div>
-          <div class="wordjar-stat-card"><span id="courseCount">0</span><p>Courses</p></div>
           <div class="wordjar-stat-card"><span id="doneTodayCount">0</span><p>Done Today</p></div>
         </div>
+
         <div class="wordjar-content-grid">
-          <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Today Habits</h3></div><div id="todayHabitList"></div></article>
-          <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Active Projects</h3></div><div id="activeProjectList"></div></article>
+          <article class="wordjar-panel">
+            <div class="wordjar-panel-header"><h3>Today Habits</h3></div>
+            <div id="todayHabitList"></div>
+          </article>
+          <article class="wordjar-panel">
+            <div class="wordjar-panel-header"><h3>Recent Mood</h3></div>
+            <div id="recentMoodList"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="moodView" class="wordjar-view">
+        <div class="wordjar-content-grid">
+          <article class="wordjar-form-panel">
+            <div class="wordjar-panel-header"><h3>Mood Check-in</h3></div>
+            <form id="moodForm" class="wordjar-stack-form">
+              <label class="wordjar-field-label">วันที่<input name="date" type="date" required /></label>
+              <div class="wordjar-mood-grid" id="moodChoiceList" role="radiogroup" aria-label="เลือก mood วันนี้"></div>
+              <label class="wordjar-field-label">Energy <span id="energyValue">5</span><input name="energy" type="range" min="1" max="10" value="5" /></label>
+              <label class="wordjar-field-label">Stress <span id="stressValue">5</span><input name="stress" type="range" min="1" max="10" value="5" /></label>
+              <label class="wordjar-field-label">Sleep <span id="sleepValue">5</span><input name="sleep" type="range" min="1" max="10" value="5" /></label>
+              <input name="tags" placeholder="Tags เช่น work, study, health" />
+              <textarea name="note" placeholder="Note วันนี้เกิดอะไรขึ้นบ้าง"></textarea>
+              <button class="wordjar-primary-button" type="submit">Save Mood</button>
+            </form>
+          </article>
+
+          <article class="wordjar-panel">
+            <div class="wordjar-panel-header"><h3>Mood Insights</h3></div>
+            <div class="wordjar-mini-stats-grid">
+              <div class="wordjar-stat-card"><span id="moodAverage">-</span><p>7-day Avg</p></div>
+              <div class="wordjar-stat-card"><span id="moodStreak">0d</span><p>Streak</p></div>
+              <div class="wordjar-stat-card"><span id="topMood">-</span><p>Top Mood</p></div>
+              <div class="wordjar-stat-card"><span id="todayMood">-</span><p>Today</p></div>
+            </div>
+            <div class="wordjar-panel-header wordjar-panel-header--spaced"><h3>Mood Log</h3></div>
+            <div id="moodHistoryList"></div>
+          </article>
         </div>
       </section>
 
       <section id="habitsView" class="wordjar-view">
-        <div class="wordjar-form-panel"><h3>Add Habit</h3><form id="habitForm" class="wordjar-stack-form"><input name="name" placeholder="เช่น อ่านหนังสือ 20 นาที" required /><select name="frequency"><option value="daily">Daily</option><option value="weekdays">Weekdays</option><option value="weekly">Weekly</option></select><button class="wordjar-primary-button">Add Habit</button></form></div>
+        <div class="wordjar-form-panel">
+          <h3>Add Habit</h3>
+          <form id="habitForm" class="wordjar-stack-form">
+            <input name="name" placeholder="เช่น อ่านหนังสือ 20 นาที" required />
+            <select name="frequency"><option value="daily">Daily</option><option value="weekdays">Weekdays</option><option value="weekly">Weekly</option></select>
+            <button class="wordjar-primary-button" type="submit">Add Habit</button>
+          </form>
+        </div>
         <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Habit Tracker</h3></div><div id="habitList"></div></article>
       </section>
 
       <section id="projectsView" class="wordjar-view">
-        <div class="wordjar-form-panel"><h3>Add Project</h3><form id="projectForm" class="wordjar-stack-form"><input name="name" placeholder="ชื่อโปรเจกต์" required /><textarea name="description" placeholder="note / เป้าหมาย"></textarea><input name="progress" type="number" min="0" max="100" value="0" /><button class="wordjar-primary-button">Add Project</button></form></div>
+        <div class="wordjar-form-panel">
+          <h3>Add Project</h3>
+          <form id="projectForm" class="wordjar-stack-form">
+            <input name="name" placeholder="ชื่อโปรเจกต์" required />
+            <textarea name="description" placeholder="note / เป้าหมาย"></textarea>
+            <input name="progress" type="number" min="0" max="100" value="0" />
+            <button class="wordjar-primary-button" type="submit">Add Project</button>
+          </form>
+        </div>
         <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Projects</h3></div><div id="projectList"></div></article>
       </section>
 
       <section id="coursesView" class="wordjar-view">
-        <div class="wordjar-form-panel"><h3>Add Course</h3><form id="courseForm" class="wordjar-stack-form"><input name="name" placeholder="ชื่อคอร์ส" required /><input name="platform" placeholder="Platform / Teacher" /><input name="progress" type="number" min="0" max="100" value="0" /><button class="wordjar-primary-button">Add Course</button></form></div>
+        <div class="wordjar-form-panel">
+          <h3>Add Course</h3>
+          <form id="courseForm" class="wordjar-stack-form">
+            <input name="name" placeholder="ชื่อคอร์ส" required />
+            <input name="platform" placeholder="Platform / Teacher" />
+            <input name="progress" type="number" min="0" max="100" value="0" />
+            <button class="wordjar-primary-button" type="submit">Add Course</button>
+          </form>
+        </div>
         <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Courses</h3></div><div id="courseList"></div></article>
       </section>
 
       <section id="exportView" class="wordjar-view">
-        <div class="wordjar-form-panel"><h3>Export / Import</h3><div class="wordjar-button-row"><button class="wordjar-primary-button" id="exportJsonButton">Export JSON</button><label class="wordjar-secondary-button">Import JSON<input id="importJsonInput" type="file" accept="application/json" hidden /></label><button class="wordjar-danger-button" id="resetButton">Reset</button></div><textarea id="dataPreview" class="wordjar-data-preview" readonly></textarea></div>
+        <div class="wordjar-form-panel">
+          <h3>Export / Import</h3>
+          <div class="wordjar-button-row">
+            <button class="wordjar-primary-button" id="exportJsonButton" type="button">Export JSON</button>
+            <button class="wordjar-secondary-button" id="exportCsvButton" type="button">Export Mood CSV</button>
+            <label class="wordjar-secondary-button">Import JSON<input id="importJsonInput" type="file" accept="application/json,.json" hidden /></label>
+            <button class="wordjar-danger-button" id="resetButton" type="button">Reset</button>
+          </div>
+          <textarea id="dataPreview" class="wordjar-data-preview" readonly></textarea>
+        </div>
       </section>
     </main>
   </div>
 
   <dialog id="quickAddDialog" class="wordjar-dialog">
     <form method="dialog" id="quickAddForm" class="wordjar-dialog-card wordjar-stack-form">
-      <h3>Quick Add</h3><select name="type"><option value="habit">Habit</option><option value="project">Project</option><option value="course">Course</option></select><input name="name" placeholder="ชื่อรายการ" required /><menu><button value="cancel" class="wordjar-secondary-button">Cancel</button><button value="default" class="wordjar-primary-button">Add</button></menu>
+      <h3>Quick Add</h3>
+      <select name="type"><option value="habit">Habit</option><option value="mood">Mood</option><option value="project">Project</option><option value="course">Course</option></select>
+      <input name="name" placeholder="ชื่อรายการ / note สั้น ๆ" required />
+      <menu>
+        <button value="cancel" class="wordjar-secondary-button" type="button" data-action="close-dialog">Cancel</button>
+        <button value="default" class="wordjar-primary-button" type="submit">Add</button>
+      </menu>
     </form>
   </dialog>
+
   <script src="app.js"></script>
 </body>
 </html>
