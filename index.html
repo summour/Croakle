@@ -3,18 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Croakle clean workspace" />
-  <title>Croakle</title>
+  <meta name="description" content="Croakle Habit and Mood Tracker" />
+  <title>Croakle Habit & Mood</title>
   <link rel="stylesheet" href="premium.css" />
 </head>
 <body>
-  <main class="CroakleCleanPage">
-    <section class="CroakleCleanCard">
-      <p class="CroakleCleanEyebrow">Clean reset</p>
-      <h1>Croakle</h1>
-      <p>ล้างหน้าแอพออกหมดแล้ว เหลือพื้นที่เปล่าสำหรับเริ่มออกแบบใหม่</p>
+  <main class="CroakleHabitMoodShell" aria-label="Croakle Habit and Mood Tracker">
+    <header class="CroakleTopBar">
+      <button class="CroakleCloseButton" type="button" data-page-target="menu" aria-label="กลับหน้าเมนู">×</button>
+    </header>
+
+    <section class="CroaklePage CroakleMenuPage CroaklePageActive" data-page="menu">
+      <div class="CroakleHeroHeader">
+        <div>
+          <p class="CroakleEyebrow">Croakle</p>
+          <h1>Habit & Mood</h1>
+        </div>
+        <button class="CroakleRoundButton" type="button" aria-label="เมนู">☰</button>
+      </div>
+
+      <div class="CroakleEmptyPanel">
+        <p class="CroakleEmptyTitle">Choose a view</p>
+        <p class="CroakleEmptyText">Track habits, review monthly progress, and check mood patterns.</p>
+      </div>
+
+      <nav class="CroakleMenuList" aria-label="Habit mood menu">
+        <button type="button" data-page-target="track"><span>Track progress</span><span>›</span></button>
+        <button type="button" data-page-target="best"><span>Best habits</span><span>›</span></button>
+        <button type="button" data-page-target="mood"><span>Top moods</span><span>›</span></button>
+      </nav>
     </section>
+
+    <section class="CroaklePage" data-page="track">
+      <header class="CroaklePageTitle">
+        <h2>Track your progress!</h2>
+      </header>
+
+      <article class="CroakleCard" aria-label="Track progress calendar">
+        <div class="CroakleMonthHeader">
+          <button type="button" aria-label="เดือนก่อนหน้า">‹</button>
+          <strong>June 2024</strong>
+          <button type="button" aria-label="เดือนถัดไป">›</button>
+        </div>
+
+        <div class="CroakleSevenGrid CroakleWeekHeader" aria-hidden="true">
+          <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+        </div>
+
+        <div class="CroakleSevenGrid CroakleDateRow" aria-hidden="true">
+          <span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+        </div>
+
+        <div class="CroakleSevenGrid CroakleMoodPreview" aria-label="Mood preview">
+          <span>🙂</span><span>😡</span><span>😬</span><span>😐</span><span>🙂</span><span>😎</span><span>😊</span>
+        </div>
+
+        <div class="CroakleDivider" aria-hidden="true"></div>
+
+        <div class="CroakleHabitList" id="CroakleTrackList"></div>
+      </article>
+    </section>
+
+    <section class="CroaklePage" data-page="best">
+      <header class="CroaklePageTitle">
+        <h2>View your best habits!</h2>
+      </header>
+
+      <article class="CroakleCard" aria-label="Best habits summary">
+        <div class="CroakleMonthHeader">
+          <button type="button" aria-label="เดือนก่อนหน้า">‹</button>
+          <strong>May 2024</strong>
+          <button type="button" aria-label="เดือนถัดไป">›</button>
+        </div>
+
+        <div class="CroakleBestHeader" aria-hidden="true">
+          <span>Habit name</span>
+          <span>Monthly Goal %</span>
+          <span>Month</span>
+          <span>Lifetime</span>
+        </div>
+
+        <div class="CroakleBestList" id="CroakleBestList"></div>
+      </article>
+    </section>
+
+    <section class="CroaklePage" data-page="mood">
+      <header class="CroaklePageTitle">
+        <h2>See your top moods!</h2>
+      </header>
+
+      <article class="CroakleCard" aria-label="Top moods calendar">
+        <div class="CroakleMonthHeader">
+          <button type="button" aria-label="เดือนก่อนหน้า">‹</button>
+          <strong>May 2024</strong>
+          <button type="button" aria-label="เดือนถัดไป">›</button>
+        </div>
+
+        <div class="CroakleSevenGrid CroakleCalendarHeader" aria-hidden="true">
+          <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+        </div>
+
+        <div class="CroakleMoodCalendar" id="CroakleMoodCalendar"></div>
+
+        <div class="CroakleTopMoodRow">
+          <strong>Top Mood(s) of the Month:</strong>
+          <div aria-label="Top moods"><span>😎</span><span>🙂</span><span>😴</span></div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="CroakleBottomNav" aria-label="Quick navigation">
+      <button type="button" data-page-target="track">Track</button>
+      <button type="button" data-page-target="best">Best</button>
+      <button type="button" data-page-target="mood">Mood</button>
+    </footer>
   </main>
+
   <script src="app.js"></script>
 </body>
 </html>
