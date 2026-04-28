@@ -25,10 +25,24 @@ body {
     var(--CroakleBg);
 }
 
+.CroaklePremiumMode,
+.CroaklePremiumMode * {
+  max-width: 100%;
+}
+
 .CroaklePremiumMode .wordjar-croakle-shell {
   max-width: 1440px;
   margin: 0 auto;
   padding: 18px;
+}
+
+.CroaklePremiumMode .wordjar-main-panel,
+.CroaklePremiumMode .wordjar-view,
+.CroaklePremiumMode .wordjar-content-grid,
+.CroaklePremiumMode .wordjar-panel,
+.CroaklePremiumMode .wordjar-form-panel,
+.CroaklePremiumMode .wordjar-hero-card {
+  min-width: 0;
 }
 
 .CroaklePremiumMode .wordjar-sidebar,
@@ -97,14 +111,21 @@ body {
 }
 
 .CroaklePremiumMode .wordjar-hero-card {
+  position: relative;
   grid-template-columns: minmax(0, 1fr);
   min-height: unset;
   overflow: hidden;
+  padding-bottom: 150px;
 }
 
 .CroaklePremiumMode .wordjar-hero-copy h3 {
   font-size: clamp(36px, 7vw, 78px);
   line-height: 0.92;
+  overflow-wrap: anywhere;
+}
+
+.CroaklePremiumMode .wordjar-hero-copy p:last-child {
+  overflow-wrap: anywhere;
 }
 
 .CroaklePremiumMode .wordjar-progress-orb {
@@ -115,11 +136,6 @@ body {
   height: 130px;
 }
 
-.CroaklePremiumMode .wordjar-hero-card {
-  position: relative;
-  padding-bottom: 150px;
-}
-
 .CroaklePremiumCards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -128,6 +144,7 @@ body {
 }
 
 .CroaklePremiumCard {
+  min-width: 0;
   min-height: 116px;
   padding: 18px;
   border: 1px solid var(--CroakleBorder);
@@ -152,6 +169,7 @@ body {
   color: var(--CroakleText);
   font-size: 28px;
   letter-spacing: -0.06em;
+  overflow-wrap: anywhere;
 }
 
 .CroaklePremiumCard span {
@@ -163,6 +181,7 @@ body {
 .CroakleChipRow {
   display: flex;
   gap: 10px;
+  max-width: 100%;
   overflow-x: auto;
   padding: 2px 0 12px;
   scrollbar-width: none;
@@ -194,6 +213,7 @@ body {
 
 .CroakleSearchBar input {
   width: 100%;
+  min-width: 0;
   border: 0;
   outline: 0;
   background: transparent;
@@ -207,10 +227,14 @@ body {
 }
 
 @media (max-width: 920px) {
-  body { padding-bottom: 98px; }
+  body {
+    padding-bottom: 98px;
+    overflow-x: hidden;
+  }
 
   .CroaklePremiumMode .wordjar-croakle-shell {
     display: block;
+    width: 100%;
     padding: 12px;
   }
 
@@ -220,13 +244,23 @@ body {
 
   .CroaklePremiumMode .wordjar-main-panel {
     gap: 14px;
+    width: 100%;
   }
 
   .CroaklePremiumMode .wordjar-topbar {
     position: sticky;
     top: 10px;
     z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     border-radius: 28px;
+  }
+
+  .CroaklePremiumMode .wordjar-topbar h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .CroaklePremiumMode #quickAddButton {
@@ -268,12 +302,14 @@ body {
   }
 
   .CroakleBottomNav .wordjar-nav-item {
+    width: auto;
     min-width: 0;
     min-height: 54px;
-    padding: 7px 6px;
+    padding: 7px 4px;
     border-radius: 20px;
     text-align: center;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.1;
   }
 
   .CroaklePremiumCards,
@@ -283,9 +319,164 @@ body {
 }
 
 @media (max-width: 560px) {
-  .CroaklePremiumMode .wordjar-topbar h2 { font-size: 30px; }
-  .CroaklePremiumMode .wordjar-hero-card { padding: 22px 18px 148px; border-radius: 32px; }
-  .CroaklePremiumMode .wordjar-progress-orb { right: 18px; bottom: 18px; width: 116px; height: 116px; }
-  .CroaklePremiumCards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .CroaklePremiumCard { min-height: 128px; padding: 16px; }
+  .CroaklePremiumMode .wordjar-croakle-shell {
+    padding: 8px;
+  }
+
+  .CroaklePremiumMode .wordjar-topbar {
+    grid-template-columns: minmax(0, 1fr) 58px;
+    padding: 12px;
+    border-radius: 24px;
+  }
+
+  .CroaklePremiumMode .wordjar-topbar h2 {
+    font-size: 24px;
+  }
+
+  .CroaklePremiumMode .wordjar-topbar .wordjar-eyebrow {
+    margin-bottom: 2px;
+  }
+
+  .CroaklePremiumMode .wordjar-hero-card {
+    padding: 18px;
+    padding-bottom: 126px;
+    border-radius: 28px;
+  }
+
+  .CroaklePremiumMode .wordjar-hero-copy h3 {
+    font-size: clamp(28px, 10vw, 38px);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+
+  .CroaklePremiumMode .wordjar-hero-copy p:last-child {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .CroaklePremiumMode .wordjar-progress-orb {
+    right: 18px;
+    bottom: 18px;
+    width: 104px;
+    height: 104px;
+  }
+
+  .CroaklePremiumMode .wordjar-progress-orb strong {
+    font-size: 26px;
+  }
+
+  .CroaklePremiumCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .CroaklePremiumCard {
+    min-height: 104px;
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .CroaklePremiumCardIcon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 12px;
+  }
+
+  .CroaklePremiumCard strong {
+    font-size: 22px;
+  }
+
+  .CroaklePremiumCard span {
+    font-size: 12px;
+  }
+
+  .CroaklePremiumMode .wordjar-stat-card,
+  .CroaklePremiumMode .wordjar-panel,
+  .CroaklePremiumMode .wordjar-form-panel {
+    border-radius: 22px;
+  }
+
+  .CroaklePremiumMode .wordjar-stats-grid,
+  .CroaklePremiumMode .wordjar-mini-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .CroaklePremiumMode .wordjar-stat-card {
+    padding: 14px;
+  }
+
+  .CroaklePremiumMode .wordjar-stat-card span {
+    font-size: 26px;
+  }
+
+  .CroaklePremiumMode .wordjar-mood-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .CroaklePremiumMode .wordjar-list-card,
+  .CroaklePremiumMode .wordjar-project-card,
+  .CroaklePremiumMode .wordjar-course-row,
+  .CroaklePremiumMode .wordjar-mood-card {
+    padding: 12px;
+  }
+
+  .CroaklePremiumMode .wordjar-dialog {
+    width: calc(100vw - 16px);
+    margin: auto 8px 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .CroaklePremiumMode .wordjar-croakle-shell {
+    padding: 6px;
+  }
+
+  .CroaklePremiumMode .wordjar-topbar {
+    top: 6px;
+    grid-template-columns: minmax(0, 1fr) 52px;
+  }
+
+  .CroaklePremiumMode .wordjar-topbar h2 {
+    font-size: 22px;
+  }
+
+  .CroaklePremiumMode .wordjar-hero-card {
+    padding: 16px;
+    padding-bottom: 114px;
+  }
+
+  .CroaklePremiumMode .wordjar-progress-orb {
+    width: 92px;
+    height: 92px;
+  }
+
+  .CroaklePremiumCards,
+  .CroakleSummaryGrid,
+  .CroaklePremiumMode .wordjar-stats-grid,
+  .CroaklePremiumMode .wordjar-mini-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .CroakleBottomNav {
+    left: 8px;
+    right: 8px;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 24px;
+  }
+
+  .CroakleBottomNav .wordjar-nav-item {
+    min-height: 50px;
+    padding: 6px 2px;
+    border-radius: 17px;
+    font-size: 10px;
+  }
+
+  .CroaklePremiumMode #quickAddButton {
+    right: 14px;
+    bottom: 84px;
+    width: 52px;
+    height: 52px;
+  }
 }
