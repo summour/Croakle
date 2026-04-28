@@ -94,8 +94,8 @@ function CroakleRenderBestList() {
   list.innerHTML = CroakleBestHabits.map((habit) => `
     <section class="CroakleBestRow">
       <strong>${habit.name}</strong>
-      <div class="CroaklePercentBar" aria-label="${habit.percent} percent">
-        <span style="width: ${habit.percent}%"></span>
+      <div class="CroaklePercentBar CroaklePercent${habit.percent}" aria-label="${habit.percent} percent">
+        <span></span>
         <em>${habit.percent}%</em>
       </div>
       <span>${habit.month}</span>
