@@ -1,28 +1,25 @@
 :root {
-  --CroakleBg: #f6f6f4;
+  --CroakleBg: #f6f1ec;
   --CroakleSurface: #ffffff;
-  --CroakleSurfaceSoft: #f0f0ee;
-  --CroakleSurfaceHover: #e8e8e6;
-  --CroakleText: #111111;
-  --CroakleTextMuted: #666666;
-  --CroakleTextSoft: #9a9a9a;
-  --CroakleBorder: rgba(0, 0, 0, 0.08);
-  --CroakleBorderStrong: rgba(0, 0, 0, 0.18);
-  --CroakleActiveBg: #111111;
+  --CroakleSurfaceSoft: #f1ebe5;
+  --CroakleSurfaceHover: #ebe3dc;
+  --CroakleText: #151515;
+  --CroakleTextMuted: #6f6a65;
+  --CroakleTextSoft: #9b948c;
+  --CroakleBorder: rgba(40, 34, 28, 0.08);
+  --CroakleBorderStrong: rgba(40, 34, 28, 0.16);
+  --CroakleActiveBg: #151515;
   --CroakleActiveText: #ffffff;
-  --CroakleChartLine: #111111;
-  --CroakleChartFill: #e8e8e6;
-  --CroakleChartGrid: rgba(0, 0, 0, 0.12);
-  --CroakleShadow: 0 18px 54px rgba(0, 0, 0, 0.09);
-  --CroakleRadiusLg: 34px;
-  --CroakleRadiusMd: 26px;
+  --CroakleChartLine: #151515;
+  --CroakleChartFill: #ebe3dc;
+  --CroakleChartGrid: rgba(40, 34, 28, 0.12);
+  --CroakleShadow: 0 14px 38px rgba(70, 54, 40, 0.08);
+  --CroakleRadiusLg: 32px;
+  --CroakleRadiusMd: 24px;
   --CroakleRadiusSm: 18px;
 }
 
-html {
-  background: var(--CroakleBg);
-}
-
+html,
 body {
   background: var(--CroakleBg);
 }
@@ -33,7 +30,7 @@ body {
 }
 
 .CroaklePremiumMode .wordjar-croakle-shell {
-  max-width: 1440px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 18px;
 }
@@ -49,13 +46,11 @@ body {
 
 .CroaklePremiumMode .wordjar-sidebar,
 .CroaklePremiumMode .wordjar-topbar,
-.CroaklePremiumMode .wordjar-hero-card,
 .CroaklePremiumMode .wordjar-stat-card,
 .CroaklePremiumMode .wordjar-panel,
 .CroaklePremiumMode .wordjar-form-panel,
-.CroaklePremiumMode .wordjar-dialog-card,
-.CroaklePremiumCard {
-  background: rgba(255, 255, 255, 0.82);
+.CroaklePremiumMode .wordjar-dialog-card {
+  background: rgba(255, 255, 255, 0.88);
   border-color: var(--CroakleBorder);
   box-shadow: var(--CroakleShadow);
 }
@@ -113,74 +108,142 @@ body {
   border-color: var(--CroakleActiveBg);
 }
 
-.CroakleChipRow {
+.CroakleChipRow,
+.CroaklePremiumMode .wordjar-hero-card,
+.CroaklePremiumCards {
   display: none;
 }
 
-.CroaklePremiumMode .wordjar-hero-card {
-  position: relative;
-  grid-template-columns: minmax(0, 1fr);
-  min-height: unset;
-  overflow: hidden;
-  padding-bottom: 150px;
+.CroakleDailyHome {
+  gap: 16px;
 }
 
-.CroaklePremiumMode .wordjar-hero-copy h3 {
-  font-size: clamp(36px, 7vw, 78px);
-  line-height: 0.92;
-  overflow-wrap: anywhere;
-}
-
-.CroaklePremiumMode .wordjar-hero-copy p:last-child {
-  overflow-wrap: anywhere;
-}
-
-.CroaklePremiumMode .wordjar-progress-orb {
-  position: absolute;
-  right: 34px;
-  bottom: 30px;
-  width: 130px;
-  height: 130px;
-}
-
-.CroaklePremiumCards {
+.CroakleDateStrip {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 18px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
 }
 
-.CroaklePremiumCard {
+.CroakleDateStrip div {
+  display: grid;
+  gap: 8px;
+  place-items: center;
   min-width: 0;
-  min-height: 116px;
-  padding: 18px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: 28px;
 }
 
-.CroaklePremiumCardIcon {
+.CroakleDateStrip span {
+  color: var(--CroakleTextMuted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.CroakleDateStrip strong {
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  margin-bottom: 18px;
-  border: 1px solid var(--CroakleBorder);
+  width: 42px;
+  height: 42px;
   border-radius: 999px;
+  background: var(--CroakleSurface);
+  color: var(--CroakleText);
+  font-size: 14px;
+  box-shadow: 0 10px 24px rgba(70, 54, 40, 0.06);
+}
+
+.CroakleDateStrip .is-active strong {
+  background: var(--CroakleActiveBg);
+  color: var(--CroakleActiveText);
+}
+
+.CroakleReminderCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--CroakleBorder);
+  border-radius: 26px;
+  background: #f8ddc7;
+  box-shadow: var(--CroakleShadow);
+}
+
+.CroakleReminderCard h3 {
+  margin: 0 0 7px;
+  color: var(--CroakleText);
+  font-size: 20px;
+  letter-spacing: -0.04em;
+}
+
+.CroakleReminderCard p {
+  margin: 0 0 14px;
+  color: rgba(21, 21, 21, 0.68);
+  line-height: 1.45;
+}
+
+.CroakleReminderCard .wordjar-primary-button {
+  width: auto;
+  min-height: 40px;
+  padding: 9px 16px;
+  background: #5a2b0f;
+  color: #ffffff;
+  border-color: #5a2b0f;
+}
+
+.CroakleReminderIcon {
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  justify-self: end;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  color: #5a2b0f;
+  font-size: 44px;
   font-weight: 900;
 }
 
-.CroaklePremiumCard strong {
-  display: block;
-  color: var(--CroakleText);
-  font-size: 28px;
-  letter-spacing: -0.06em;
-  overflow-wrap: anywhere;
+.CroakleDailySummary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.CroaklePremiumCard span {
+.CroakleSoftStat {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--CroakleBorder);
+  border-radius: 24px;
+  background: var(--CroakleSurface);
+  box-shadow: var(--CroakleShadow);
+}
+
+.CroakleSoftStat span {
+  display: block;
+  color: var(--CroakleText);
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.055em;
+}
+
+.CroakleSoftStat p {
+  margin: 4px 0 0;
   color: var(--CroakleTextMuted);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 750;
+}
+
+.CroakleRoutinePanel {
+  box-shadow: none;
+}
+
+.CroakleTextButton {
+  border: 0;
+  background: transparent;
+  color: var(--CroakleTextMuted);
+  font-weight: 800;
+}
+
+.CroakleHiddenMetrics {
+  display: none;
 }
 
 .CroakleSearchBar {
@@ -221,7 +284,7 @@ body {
   .CroaklePremiumMode .wordjar-croakle-shell {
     display: block;
     width: 100%;
-    padding: 0 8px 8px;
+    padding: 0 12px 12px;
   }
 
   .CroaklePremiumMode .wordjar-sidebar {
@@ -229,18 +292,21 @@ body {
   }
 
   .CroaklePremiumMode .wordjar-main-panel {
-    gap: 14px;
+    gap: 16px;
     width: 100%;
   }
 
   .CroaklePremiumMode .wordjar-topbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
+    position: static;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    border-radius: 0 0 28px 28px;
+    padding: 22px 0 8px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
   .CroaklePremiumMode .wordjar-topbar h2 {
@@ -260,6 +326,7 @@ body {
     border-radius: 999px;
     font-size: 0;
     pointer-events: auto;
+    box-shadow: var(--CroakleShadow);
   }
 
   .CroaklePremiumMode #quickAddButton::after {
@@ -297,7 +364,6 @@ body {
     line-height: 1.1;
   }
 
-  .CroaklePremiumCards,
   .CroakleSummaryGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -305,74 +371,56 @@ body {
 
 @media (max-width: 560px) {
   .CroaklePremiumMode .wordjar-croakle-shell {
-    padding: 0 6px 8px;
+    padding: 0 14px 12px;
   }
 
   .CroaklePremiumMode .wordjar-topbar {
     grid-template-columns: minmax(0, 1fr) 58px;
-    padding: 12px;
-    border-radius: 0 0 24px 24px;
+    padding: 18px 0 8px;
   }
 
   .CroaklePremiumMode .wordjar-topbar h2 {
-    font-size: 24px;
-  }
-
-  .CroaklePremiumMode .wordjar-topbar .wordjar-eyebrow {
-    margin-bottom: 2px;
-  }
-
-  .CroaklePremiumMode .wordjar-hero-card {
-    padding: 18px;
-    padding-bottom: 126px;
-    border-radius: 28px;
-  }
-
-  .CroaklePremiumMode .wordjar-hero-copy h3 {
-    font-size: clamp(28px, 10vw, 38px);
-    line-height: 0.98;
+    font-size: 34px;
     letter-spacing: -0.055em;
   }
 
-  .CroaklePremiumMode .wordjar-hero-copy p:last-child {
-    font-size: 14px;
-    line-height: 1.45;
+  .CroaklePremiumMode .wordjar-topbar .wordjar-eyebrow {
+    margin-bottom: 6px;
   }
 
-  .CroaklePremiumMode .wordjar-progress-orb {
-    right: 18px;
-    bottom: 18px;
-    width: 104px;
-    height: 104px;
+  .CroakleDateStrip strong {
+    width: 38px;
+    height: 38px;
   }
 
-  .CroaklePremiumMode .wordjar-progress-orb strong {
-    font-size: 26px;
+  .CroakleReminderCard {
+    grid-template-columns: minmax(0, 1fr) 72px;
+    padding: 16px;
+    border-radius: 24px;
   }
 
-  .CroaklePremiumCards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .CroakleReminderIcon {
+    width: 66px;
+    height: 66px;
+    font-size: 36px;
+  }
+
+  .CroakleDailySummary {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
   }
 
-  .CroaklePremiumCard {
-    min-height: 104px;
+  .CroakleSoftStat {
     padding: 12px;
-    border-radius: 22px;
+    border-radius: 20px;
   }
 
-  .CroaklePremiumCardIcon {
-    width: 32px;
-    height: 32px;
-    margin-bottom: 12px;
+  .CroakleSoftStat span {
+    font-size: 21px;
   }
 
-  .CroaklePremiumCard strong {
-    font-size: 22px;
-  }
-
-  .CroaklePremiumCard span {
-    font-size: 12px;
+  .CroakleSoftStat p {
+    font-size: 11px;
   }
 
   .CroaklePremiumMode .wordjar-stat-card,
@@ -414,29 +462,23 @@ body {
 
 @media (max-width: 380px) {
   .CroaklePremiumMode .wordjar-croakle-shell {
-    padding: 0 5px 8px;
-  }
-
-  .CroaklePremiumMode .wordjar-topbar {
-    top: 0;
-    grid-template-columns: minmax(0, 1fr) 52px;
+    padding: 0 10px 10px;
   }
 
   .CroaklePremiumMode .wordjar-topbar h2 {
-    font-size: 22px;
+    font-size: 30px;
   }
 
-  .CroaklePremiumMode .wordjar-hero-card {
-    padding: 16px;
-    padding-bottom: 114px;
+  .CroakleDateStrip {
+    gap: 4px;
   }
 
-  .CroaklePremiumMode .wordjar-progress-orb {
-    width: 92px;
-    height: 92px;
+  .CroakleDateStrip strong {
+    width: 34px;
+    height: 34px;
   }
 
-  .CroaklePremiumCards,
+  .CroakleDailySummary,
   .CroakleSummaryGrid,
   .CroaklePremiumMode .wordjar-stats-grid,
   .CroaklePremiumMode .wordjar-mini-stats-grid {
