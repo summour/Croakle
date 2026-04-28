@@ -1,613 +1,324 @@
 :root {
-  --CroakleBg: #f7f7f5;
-  --CroakleSidebarBg: #fbfbfa;
+  color-scheme: light;
+  --CroakleBg: #f6f1ec;
   --CroakleSurface: #ffffff;
-  --CroakleSurfaceSoft: #f3f3f2;
-  --CroakleSurfaceHover: #ededeb;
-  --CroakleText: #191919;
-  --CroakleTextMuted: #6b6b67;
-  --CroakleTextSoft: #9b9b95;
-  --CroakleBorder: rgba(15, 15, 15, 0.09);
-  --CroakleBorderStrong: rgba(15, 15, 15, 0.16);
-  --CroakleActiveBg: #191919;
+  --CroakleSurfaceSoft: #f1ebe5;
+  --CroakleSurfaceHover: #ebe3dc;
+  --CroakleText: #151515;
+  --CroakleTextMuted: #6f6a65;
+  --CroakleTextSoft: #9b948c;
+  --CroakleBorder: rgba(40, 34, 28, 0.08);
+  --CroakleBorderStrong: rgba(40, 34, 28, 0.16);
+  --CroakleActiveBg: #151515;
   --CroakleActiveText: #ffffff;
-  --CroakleChartLine: #191919;
-  --CroakleChartFill: #efefed;
-  --CroakleChartGrid: rgba(15, 15, 15, 0.1);
-  --CroakleShadow: 0 1px 2px rgba(15, 15, 15, 0.04);
-  --CroakleRadiusLg: 16px;
-  --CroakleRadiusMd: 12px;
-  --CroakleRadiusSm: 10px;
-  --CroaklePageWidth: 1120px;
+  --CroakleChartLine: #151515;
+  --CroakleChartFill: #ebe3dc;
+  --CroakleChartGrid: rgba(40, 34, 28, 0.12);
+  --CroakleShadow: 0 14px 38px rgba(70, 54, 40, 0.08);
 }
 
-html,
+* { box-sizing: border-box; }
+html { background: var(--CroakleBg); -webkit-text-size-adjust: 100%; }
 body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100svh;
   background: var(--CroakleBg);
   color: var(--CroakleText);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, sans-serif;
 }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
 
-body {
-  margin: 0;
-}
-
-.CroaklePremiumMode,
-.CroaklePremiumMode * {
-  box-sizing: border-box;
-  max-width: 100%;
-}
-
-.CroaklePremiumMode .wordjar-croakle-shell {
-  max-width: var(--CroaklePageWidth);
+.CroakleApp {
+  width: min(1120px, 100%);
   margin: 0 auto;
-  padding: 16px;
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  gap: 16px;
+  padding: 18px;
 }
 
-.CroaklePremiumMode .wordjar-main-panel,
-.CroaklePremiumMode .wordjar-view,
-.CroaklePremiumMode .wordjar-content-grid,
-.CroaklePremiumMode .wordjar-panel,
-.CroaklePremiumMode .wordjar-form-panel,
-.CroaklePremiumMode .CroakleTableWrap,
-.CroaklePremiumMode .CroakleTrackerTable,
-.CroaklePremiumMode .CroakleChart {
-  min-width: 0;
-}
-
-.CroaklePremiumMode .wordjar-sidebar {
-  position: sticky;
-  top: 16px;
-  align-self: start;
-  padding: 12px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: var(--CroakleRadiusLg);
-  background: var(--CroakleSidebarBg);
-  box-shadow: var(--CroakleShadow);
-}
-
-.CroaklePremiumMode .wordjar-brand-card {
+.CroakleHeader {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding: 10px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: var(--CroakleRadiusMd);
-  background: var(--CroakleSurface);
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
 }
 
-.CroaklePremiumMode .wordjar-brand-mark {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: 10px;
-  background: var(--CroakleSurfaceSoft);
-  color: var(--CroakleText);
-  font-weight: 800;
-}
-
-.CroaklePremiumMode .wordjar-eyebrow {
-  margin: 0 0 4px;
-  color: var(--CroakleTextSoft);
+.CroakleEyebrow {
+  margin: 0 0 6px;
+  color: var(--CroakleTextMuted);
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.CroaklePremiumMode .wordjar-brand-card h1,
-.CroaklePremiumMode .wordjar-topbar h2,
-.CroaklePremiumMode .wordjar-panel h3,
-.CroaklePremiumMode .wordjar-form-panel h3 {
+.CroakleHeader h1 {
   margin: 0;
-  color: var(--CroakleText);
-  letter-spacing: -0.03em;
+  font-size: clamp(38px, 7vw, 76px);
+  line-height: 0.95;
+  letter-spacing: -0.07em;
 }
 
-.CroaklePremiumMode .wordjar-nav-list {
-  display: grid;
-  gap: 6px;
-}
-
-.CroaklePremiumMode .wordjar-nav-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 40px;
-  padding: 9px 12px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
+.CroakleSubtitle {
+  margin: 10px 0 0;
   color: var(--CroakleTextMuted);
-  font-size: 14px;
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.CroaklePremiumMode .wordjar-nav-item:hover {
-  background: var(--CroakleSurfaceHover);
-  color: var(--CroakleText);
-}
-
-.CroaklePremiumMode .wordjar-nav-item.is-active {
-  background: var(--CroakleSurface);
-  color: var(--CroakleText);
-  border-color: var(--CroakleBorder);
-}
-
-.CroaklePremiumMode .wordjar-sidebar-note {
-  margin-top: 12px;
-  padding: 12px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: var(--CroakleRadiusMd);
-  background: var(--CroakleSurface);
-}
-
-.CroaklePremiumMode .wordjar-sidebar-note span {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--CroakleText);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.CroaklePremiumMode .wordjar-sidebar-note p {
-  margin: 0;
-  color: var(--CroakleTextMuted);
-  font-size: 13px;
   line-height: 1.5;
 }
 
-.CroaklePremiumMode .wordjar-main-panel {
+.CroakleTabs {
   display: grid;
-  gap: 12px;
-}
-
-.CroaklePremiumMode .wordjar-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0 4px;
-  background: var(--CroakleBg);
-}
-
-.CroaklePremiumMode .wordjar-topbar h2 {
-  font-size: 32px;
-  line-height: 1.1;
-}
-
-.CroaklePremiumMode .wordjar-view {
-  display: none;
-}
-
-.CroaklePremiumMode .wordjar-view.is-active {
-  display: grid;
-  gap: 12px;
-}
-
-.CroaklePremiumMode .wordjar-panel,
-.CroaklePremiumMode .wordjar-form-panel,
-.CroaklePremiumMode .wordjar-dialog-card,
-.CroakleSoftStat,
-.CroakleSummaryCard {
+  grid-template-columns: repeat(2, minmax(96px, 1fr));
+  gap: 8px;
+  padding: 6px;
   border: 1px solid var(--CroakleBorder);
-  border-radius: var(--CroakleRadiusMd);
-  background: var(--CroakleSurface);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.68);
   box-shadow: var(--CroakleShadow);
 }
 
-.CroaklePremiumMode .wordjar-panel,
-.CroaklePremiumMode .wordjar-form-panel {
-  padding: 14px;
+.CroakleTab {
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--CroakleTextMuted);
+  font-weight: 850;
 }
 
-.CroaklePremiumMode .wordjar-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 12px;
+.CroakleTab.is-active {
+  background: var(--CroakleActiveBg);
+  color: var(--CroakleActiveText);
 }
 
-.CroaklePremiumMode .wordjar-panel-header--spaced {
-  margin-top: 16px;
+.CroaklePage { display: none; }
+.CroaklePage.is-active { display: block; }
+
+.CroakleCard,
+.CroakleMetricCard,
+.CroakleEntryCard {
+  border: 1px solid var(--CroakleBorder);
+  border-radius: 26px;
+  background: rgba(255,255,255,0.88);
+  box-shadow: var(--CroakleShadow);
 }
 
-.CroakleChipRow,
-.CroaklePremiumCards,
-.CroakleDateStrip,
-.CroakleReminderCard,
-.CroakleHiddenMetrics {
-  display: none;
+.CroakleForm {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
 }
 
-.CroakleDailyHome {
+.CroakleSectionHeader { margin-bottom: 4px; }
+.CroakleSectionHeader h2 { margin: 0; font-size: 24px; letter-spacing: -0.045em; }
+.CroakleSectionHeader p { margin: 6px 0 0; color: var(--CroakleTextMuted); line-height: 1.5; }
+
+.CroakleField,
+.CroakleFieldGroup { min-width: 0; }
+
+.CroakleField {
+  display: grid;
+  gap: 8px;
+  color: var(--CroakleTextMuted);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.CroakleFieldGroup {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.CroakleDailySummary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.CroakleSoftStat {
-  padding: 14px;
-}
-
-.CroakleSoftStat span {
-  display: block;
-  color: var(--CroakleText);
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-
-.CroakleSoftStat p {
-  margin: 4px 0 0;
-  color: var(--CroakleTextMuted);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.CroakleQuickActions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.CroakleQuickActions .wordjar-primary-button,
-.CroakleQuickActions .wordjar-secondary-button {
+.CroakleField input,
+.CroakleField select,
+.CroakleField textarea {
   width: 100%;
-}
-
-.CroakleTextButton {
-  min-height: 34px;
-  padding: 8px 12px;
+  min-height: 48px;
   border: 1px solid var(--CroakleBorder);
-  border-radius: 10px;
-  background: var(--CroakleSurfaceSoft);
-  color: var(--CroakleTextMuted);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.CroakleTextButton:hover {
-  background: var(--CroakleSurfaceHover);
-  color: var(--CroakleText);
-}
-
-.CroaklePremiumMode .wordjar-primary-button,
-.CroaklePremiumMode .wordjar-secondary-button,
-.CroaklePremiumMode .wordjar-danger-button {
-  min-height: 40px;
-  padding: 9px 14px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.CroaklePremiumMode .wordjar-primary-button {
-  background: var(--CroakleActiveBg);
-  color: var(--CroakleActiveText);
-  border-color: var(--CroakleActiveBg);
-}
-
-.CroaklePremiumMode .wordjar-primary-button:hover {
-  opacity: 0.92;
-}
-
-.CroaklePremiumMode .wordjar-secondary-button,
-.CroaklePremiumMode .wordjar-danger-button {
-  background: var(--CroakleSurface);
-  color: var(--CroakleTextMuted);
-}
-
-.CroaklePremiumMode .wordjar-secondary-button:hover,
-.CroaklePremiumMode .wordjar-danger-button:hover {
-  background: var(--CroakleSurfaceHover);
-  color: var(--CroakleText);
-}
-
-.CroaklePremiumMode .wordjar-stack-form {
-  display: grid;
-  gap: 10px;
-}
-
-.CroaklePremiumMode .wordjar-field-label {
-  display: grid;
-  gap: 6px;
-  color: var(--CroakleTextMuted);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.CroaklePremiumMode .wordjar-stack-form input,
-.CroaklePremiumMode .wordjar-stack-form select,
-.CroaklePremiumMode .wordjar-stack-form textarea,
-.CroaklePremiumMode .wordjar-data-preview {
-  width: 100%;
-  min-width: 0;
-  padding: 10px 12px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: 10px;
+  border-radius: 18px;
   background: var(--CroakleSurface);
   color: var(--CroakleText);
-  font: inherit;
+  padding: 13px 14px;
+  outline: 0;
 }
 
-.CroaklePremiumMode .wordjar-stack-form textarea,
-.CroaklePremiumMode .wordjar-data-preview {
+.CroakleField textarea {
   min-height: 120px;
   resize: vertical;
 }
 
-.CroaklePremiumMode .wordjar-stack-form input::placeholder,
-.CroaklePremiumMode .wordjar-stack-form textarea::placeholder {
-  color: var(--CroakleTextSoft);
+.CroakleField input:focus,
+.CroakleField select:focus,
+.CroakleField textarea:focus {
+  border-color: var(--CroakleBorderStrong);
+  box-shadow: 0 0 0 4px var(--CroakleSurfaceSoft);
 }
 
-.CroaklePremiumMode .wordjar-button-row {
+.CroakleActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
-.CroaklePremiumMode .wordjar-content-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 12px;
+.CroakleButtonPrimary,
+.CroakleButtonSecondary {
+  min-height: 48px;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 900;
 }
 
-.CroaklePremiumMode .wordjar-mini-stats-grid,
-.CroaklePremiumMode .wordjar-stats-grid,
-.CroakleSummaryGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+.CroakleButtonPrimary {
+  border: 1px solid var(--CroakleActiveBg);
+  background: var(--CroakleActiveBg);
+  color: var(--CroakleActiveText);
 }
 
-.CroakleSummaryCard,
-.CroaklePremiumMode .wordjar-stat-card {
-  padding: 12px;
-}
-
-.CroakleSummaryCard strong,
-.CroaklePremiumMode .wordjar-stat-card span {
-  display: block;
-  color: var(--CroakleText);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-}
-
-.CroakleSummaryCard span,
-.CroaklePremiumMode .wordjar-stat-card p {
-  margin: 4px 0 0;
-  color: var(--CroakleTextMuted);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.CroaklePremiumMode .wordjar-mood-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.CroaklePremiumMode .wordjar-mood-choice {
-  padding: 12px;
+.CroakleButtonSecondary {
   border: 1px solid var(--CroakleBorder);
-  border-radius: 10px;
   background: var(--CroakleSurface);
-}
-
-.CroaklePremiumMode .wordjar-mood-choice:hover,
-.CroaklePremiumMode .wordjar-mood-choice.is-selected {
-  background: var(--CroakleSurfaceSoft);
-  border-color: var(--CroakleBorderStrong);
   color: var(--CroakleText);
 }
 
-.CroaklePremiumMode .CroakleMonthToolbar {
-  display: flex;
-  justify-content: flex-start;
+.CroakleVisualGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
   margin-bottom: 12px;
 }
 
-.CroaklePremiumMode .CroakleTableWrap {
-  overflow: auto;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: var(--CroakleRadiusMd);
-  background: var(--CroakleSurface);
+.CroakleMetricCard {
+  min-height: 120px;
+  padding: 18px;
 }
 
-.CroaklePremiumMode .CroakleTrackerTable {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  background: var(--CroakleSurface);
+.CroakleMetricCard span {
+  display: block;
+  font-size: 36px;
+  font-weight: 950;
+  letter-spacing: -0.07em;
 }
 
-.CroaklePremiumMode .CroakleTrackerTable th,
-.CroaklePremiumMode .CroakleTrackerTable td {
-  padding: 10px 8px;
-  border-bottom: 1px solid var(--CroakleBorder);
-  border-right: 1px solid var(--CroakleBorder);
-  text-align: center;
-  white-space: nowrap;
+.CroakleMetricCard p {
+  margin: 8px 0 0;
+  color: var(--CroakleTextMuted);
+  font-weight: 800;
 }
 
-.CroaklePremiumMode .CroakleTrackerTable th:first-child,
-.CroaklePremiumMode .CroakleTrackerTable td:first-child {
-  text-align: left;
-  min-width: 160px;
-  font-weight: 600;
+.CroakleContentGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.CroaklePremiumMode .CroakleTrackerTable th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: #fafaf9;
-  color: var(--CroakleText);
+.CroakleContentGrid .CroakleCard,
+#visualPage > .CroakleCard { padding: 18px; }
+
+.CroakleBarChart {
+  display: grid;
+  gap: 16px;
+  padding-top: 10px;
 }
 
-.CroaklePremiumMode .CroakleChart {
+.CroakleBarRow { display: grid; gap: 8px; }
+.CroakleBarLabel {
+  display: flex;
+  justify-content: space-between;
+  color: var(--CroakleTextMuted);
+  font-weight: 850;
+}
+
+.CroakleBarTrack {
+  height: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--CroakleSurfaceSoft);
+}
+
+.CroakleBarTrack i {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: inherit;
+  background: var(--CroakleChartLine);
+}
+
+.CroakleLineChart {
   min-height: 240px;
-  padding: 12px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: var(--CroakleRadiusMd);
-  background: var(--CroakleSurface);
+  display: grid;
+  place-items: center;
 }
 
-.CroaklePremiumMode .wordjar-list-card,
-.CroaklePremiumMode .wordjar-project-card,
-.CroaklePremiumMode .wordjar-course-row,
-.CroaklePremiumMode .wordjar-mood-card {
-  padding: 12px;
-  border: 1px solid var(--CroakleBorder);
-  border-radius: 10px;
-  background: var(--CroakleSurface);
+.CroakleLineChart svg {
+  width: 100%;
+  min-height: 220px;
+}
+
+.CroakleLineChart line {
+  stroke: var(--CroakleChartGrid);
+  stroke-width: 2;
+}
+
+.CroakleLineChart path {
+  fill: none;
+  stroke: var(--CroakleChartLine);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.CroakleLineChart circle { fill: var(--CroakleChartLine); }
+
+.CroakleEntryList {
+  display: grid;
+  gap: 10px;
+}
+
+.CroakleEntryCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
   box-shadow: none;
 }
 
-.CroaklePremiumMode #quickAddButton {
-  position: static;
-  z-index: auto;
-  min-width: 86px;
-  min-height: 40px;
-  padding: 9px 14px;
-  font-size: 14px;
-  border-radius: 10px;
-  pointer-events: auto;
+.CroakleEntryCard h3 { margin: 0; font-size: 18px; }
+.CroakleEntryCard p { margin: 5px 0 0; color: var(--CroakleTextMuted); line-height: 1.45; }
+.CroakleEntryCard strong {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: var(--CroakleActiveBg);
+  color: var(--CroakleActiveText);
 }
 
-.CroakleBottomNav {
-  display: none;
-}
-
-.CroaklePremiumMode .wordjar-dialog {
-  width: min(460px, calc(100vw - 20px));
-  border: 0;
-  background: transparent;
-}
-
-.CroaklePremiumMode .wordjar-dialog-card {
-  padding: 16px;
-}
-
-.CroaklePremiumMode .wordjar-dialog menu {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+.CroakleEmptyText {
   margin: 0;
-  padding: 0;
+  color: var(--CroakleTextMuted);
 }
 
-@media (max-width: 920px) {
-  body {
-    padding-bottom: 84px;
-    overflow-x: hidden;
-  }
-
-  .CroaklePremiumMode .wordjar-croakle-shell {
-    display: block;
-    width: 100%;
-    padding: 12px;
-  }
-
-  .CroaklePremiumMode .wordjar-sidebar {
-    display: none;
-  }
-
-  .CroaklePremiumMode .wordjar-topbar {
-    padding: 4px 0;
-  }
-
-  .CroaklePremiumMode .wordjar-topbar h2 {
-    font-size: 28px;
-  }
-
-  .CroakleBottomNav {
-    position: fixed;
-    left: 10px;
-    right: 10px;
-    bottom: max(8px, env(safe-area-inset-bottom));
-    z-index: 30;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 6px;
-    padding: 6px;
-    border: 1px solid var(--CroakleBorder);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.96);
-    box-shadow: var(--CroakleShadow);
-    backdrop-filter: blur(14px);
-    pointer-events: auto;
-  }
-
-  .CroakleBottomNav .wordjar-nav-item {
-    justify-content: center;
-    min-height: 42px;
-    padding: 8px 6px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 11px;
-  }
-
-  .CroaklePremiumMode .wordjar-content-grid,
-  .CroaklePremiumMode .wordjar-mini-stats-grid,
-  .CroaklePremiumMode .wordjar-stats-grid,
-  .CroakleSummaryGrid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 820px) {
+  .CroakleApp { padding: 14px; }
+  .CroakleHeader { align-items: stretch; flex-direction: column; }
+  .CroakleVisualGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .CroakleContentGrid { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 560px) {
-  .CroaklePremiumMode .wordjar-croakle-shell {
-    padding: 10px;
-  }
-
-  .CroaklePremiumMode .wordjar-topbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .CroaklePremiumMode .wordjar-topbar h2 {
-    font-size: 24px;
-  }
-
-  .CroakleDailySummary {
-    grid-template-columns: 1fr;
-  }
-
-  .CroakleQuickActions {
-    grid-template-columns: 1fr;
-  }
-
-  .CroaklePremiumMode .wordjar-panel,
-  .CroaklePremiumMode .wordjar-form-panel {
-    padding: 12px;
-  }
-
-  .CroaklePremiumMode .wordjar-mood-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .CroaklePremiumMode .CroakleTrackerTable th:first-child,
-  .CroaklePremiumMode .CroakleTrackerTable td:first-child {
-    min-width: 130px;
-  }
+@media (max-width: 520px) {
+  .CroakleApp { padding: 12px; }
+  .CroakleHeader h1 { font-size: 44px; }
+  .CroakleTabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .CroakleFieldGroup,
+  .CroakleVisualGrid { grid-template-columns: 1fr; }
+  .CroakleCard,
+  .CroakleMetricCard,
+  .CroakleEntryCard { border-radius: 22px; }
+  .CroakleActions { display: grid; }
+  .CroakleButtonPrimary,
+  .CroakleButtonSecondary { width: 100%; }
 }
