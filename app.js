@@ -38,6 +38,11 @@ const CroakleCloseReorderHabitButton = document.querySelector("#CroakleCloseReor
 const CroakleCloseReorderHabitDoneButton = document.querySelector("#CroakleCloseReorderHabitDone");
 const CroakleReorderList = document.querySelector("#CroakleReorderList");
 
+const CroakleHabitDetailDialog = document.querySelector("#CroakleHabitDetailDialog");
+const CroakleHabitDetailForm = document.querySelector("#CroakleHabitDetailForm");
+const CroakleCloseHabitDetailButton = document.querySelector("#CroakleCloseHabitDetail");
+const CroakleDeleteHabitButton = document.querySelector("#CroakleDeleteHabitButton");
+
 function CroakleLoadState() {
   const savedData = localStorage.getItem(CroakleHabitStoreKey);
 
@@ -108,8 +113,7 @@ function CroakleNormalizeHabitTemplates(templates) {
 
 function CroakleNormalizeMonthData(monthData, monthKey, habitTemplates = CroakleState?.habitTemplates || CroakleDefaultHabits) {
   const defaultMonthData = CroakleCreateMonthData(monthKey, habitTemplates);
-  const [yearText, monthText] = monthKey.split("-");
-  const daysInMonth = CroakleGetDaysInMonth(Number(yearText), Number(monthText) - 1);
+  const daysInMonth = CroakleGetDaysInMonthFromKey(monthKey);
 
   return {
     habits: habitTemplates.map((template, habitIndex) => {
@@ -325,7 +329,7 @@ function CroakleRenderTrackList() {
       <section class="CroakleHabitRow">
         <div class="CroakleHabitTop">
           <span class="CroakleDot" aria-hidden="true"></span>
-          <strong title="${habit.description || ""}">${habit.name}</strong>
+          <button class="CroakleHabitNameButton" type="button" data-detail-index="${habitIndex}" title="${habit.description || ""}">${habit.name}</button>
           <span class="CroakleGoal">${current}/${habit.goal}</span>
         </div>
         <div class="CroakleCheckGrid CroakleMonthGrid ${monthGridClass}">${checks}</div>
@@ -335,6 +339,10 @@ function CroakleRenderTrackList() {
 
   document.querySelectorAll(".CroakleCheckButton").forEach((button) => {
     button.addEventListener("click", CroakleToggleHabitDay);
+  });
+
+  document.querySelectorAll(".CroakleHabitNameButton").forEach((button) => {
+    button.addEventListener("click", CroakleOpenHabitDetailDialog);
   });
 }
 
@@ -489,6 +497,84 @@ function CroakleHandleAddHabit(event) {
   CroakleRenderReorderList();
 }
 
+function CroakleOpenHabitDetailDialog(event) {
+  const habitIndex = Number(event.currentTarget.dataset.detailIndex);
+  const habit = CroakleState.habitTemplates[habitIndex];
+
+  if (!habit || !CroakleHabitDetailDialog) {
+    return;
+  }
+
+  CroakleHabitDetailForm.reset();
+  CroakleHabitDetailForm.elements.habitIndex.value = String(habitIndex);
+  CroakleHabitDetailForm.elements.habitName.value = habit.name;
+  CroakleHabitDetailForm.elements.habitGoal.value = String(habit.goal);
+  CroakleHabitDetailForm.elements.habitDescription.value = habit.description || "";
+  CroakleHabitDetailForm.elements.habitPriority.value = habit.priority || "medium";
+  CroakleHabitDetailDialog.showModal();
+  CroakleHabitDetailForm.elements.habitName.focus();
+}
+
+function CroakleCloseHabitDetailDialog() {
+  CroakleHabitDetailDialog?.close();
+}
+
+function CroakleHandleUpdateHabit(event) {
+  event.preventDefault();
+
+  const formData = new FormData(CroakleHabitDetailForm);
+  const habitIndex = Number(formData.get("habitIndex"));
+  const habit = CroakleState.habitTemplates[habitIndex];
+  const name = String(formData.get("habitName") || "").trim();
+
+  if (!habit || !name) {
+    return;
+  }
+
+  const updatedHabit = {
+    ...habit,
+    name,
+    goal: CroakleClampGoal(formData.get("habitGoal")),
+    description: String(formData.get("habitDescription") || "").trim(),
+    priority: String(formData.get("habitPriority") || "medium"),
+  };
+
+  CroakleState.habitTemplates[habitIndex] = updatedHabit;
+  Object.values(CroakleState.months).forEach((monthData) => {
+    const savedHabit = monthData.habits[habitIndex];
+
+    if (savedHabit) {
+      monthData.habits[habitIndex] = {
+        ...savedHabit,
+        ...updatedHabit,
+      };
+    }
+  });
+
+  CroakleSaveState();
+  CroakleCloseHabitDetailDialog();
+  CroakleRenderAll();
+  CroakleRenderReorderList();
+}
+
+function CroakleHandleDeleteHabit() {
+  const habitIndex = Number(CroakleHabitDetailForm.elements.habitIndex.value);
+
+  if (!CroakleState.habitTemplates[habitIndex]) {
+    return;
+  }
+
+  CroakleState.habitTemplates.splice(habitIndex, 1);
+  Object.values(CroakleState.months).forEach((monthData) => {
+    monthData.habits.splice(habitIndex, 1);
+  });
+
+  CroakleSaveState();
+  CroakleCloseHabitDetailDialog();
+  CroakleRenderAll();
+  CroakleRenderReorderList();
+}
+
 function CroakleSwapArrayItems(list, fromIndex, toIndex) {
   const nextList = [...list];
   const [movedItem] = nextList.splice(fromIndex, 1);
@@ -506,11 +592,7 @@ function CroakleOpenReorderHabitDialog() {
 }
 
 function CroakleCloseReorderHabitDialog() {
-  if (!CroakleReorderHabitDialog) {
-    return;
-  }
-
-  CroakleReorderHabitDialog.close();
+  CroakleReorderHabitDialog?.close();
 }
 
 function CroakleRenderReorderList() {
@@ -613,6 +695,18 @@ if (CroakleCloseReorderHabitButton) {
 
 if (CroakleCloseReorderHabitDoneButton) {
   CroakleCloseReorderHabitDoneButton.addEventListener("click", CroakleCloseReorderHabitDialog);
+}
+
+if (CroakleCloseHabitDetailButton) {
+  CroakleCloseHabitDetailButton.addEventListener("click", CroakleCloseHabitDetailDialog);
+}
+
+if (CroakleHabitDetailForm) {
+  CroakleHabitDetailForm.addEventListener("submit", CroakleHandleUpdateHabit);
+}
+
+if (CroakleDeleteHabitButton) {
+  CroakleDeleteHabitButton.addEventListener("click", CroakleHandleDeleteHabit);
 }
 
 CroakleRenderAll();
