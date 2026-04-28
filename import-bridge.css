@@ -1,18 +1,17 @@
-[data-page="track"] .CroakleTrackActions {
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
+.CroakleImportSettingsItem {
+  position: relative;
 }
 
 .CroakleImportActionButton {
   appearance: none;
-  min-height: 42px;
+  min-height: 36px;
   border: 2px solid var(--CroakleLine);
   border-radius: 999px;
   background: var(--CroakleSurface);
   color: var(--CroakleText);
-  padding: 0 16px;
+  padding: 0 14px;
   font: inherit;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 850;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -39,20 +38,10 @@
 
 .CroakleImportStatus {
   display: block;
-  margin-top: 8px;
+  min-height: 18px;
+  margin-top: 4px;
   color: var(--CroakleMuted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 750;
   line-height: 1.35;
-}
-
-@media (max-width: 380px) {
-  [data-page="track"] .CroakleTrackActions {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .CroakleImportActionButton {
-    grid-column: 1 / -1;
-    width: 100%;
-  }
 }
