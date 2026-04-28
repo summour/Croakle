@@ -22,6 +22,11 @@ const CroakleProjectCompleteButton = document.querySelector("#CroakleCompletePro
 let CroakleAddProjectDialog = null;
 let CroakleAddProjectForm = null;
 let CroakleCloseAddProjectButton = null;
+let CroakleProjectArchiveButton = null;
+let CroakleProjectArchiveDialog = null;
+let CroakleProjectArchiveList = null;
+let CroakleProjectCloseArchiveButton = null;
+let CroakleProjectArchiveDoneButton = null;
 
 function CroakleLoadProjectState() {
   const saved = localStorage.getItem(CroakleProjectStoreKey);
@@ -120,13 +125,21 @@ function CroakleGetVisibleProjects() {
     .filter(({ project }) => !project.completed);
 }
 
+function CroakleGetArchivedProjects() {
+  return CroakleProjectState.projects
+    .map((project, projectIndex) => ({ project, projectIndex }))
+    .filter(({ project }) => project.completed);
+}
+
 function CroakleRenderProjectList() {
   if (!CroakleProjectList) {
     return;
   }
 
-  CroakleProjectList.innerHTML = CroakleGetVisibleProjects()
-    .map(({ project, projectIndex }) => {
+  const visibleProjects = CroakleGetVisibleProjects();
+
+  CroakleProjectList.innerHTML = visibleProjects.length
+    ? visibleProjects.map(({ project, projectIndex }) => {
       const doneCount = project.days.filter(Boolean).length;
       const checks = project.days
         .map((done, dayIndex) => `
@@ -151,8 +164,8 @@ function CroakleRenderProjectList() {
           <div class="CroakleProjectCheckGrid">${checks}</div>
         </section>
       `;
-    })
-    .join("");
+    }).join("")
+    : `<p class="CroakleProjectEmptyText">No active projects. Restore from Archive or add a new project.</p>`;
 
   document.querySelectorAll(".CroakleProjectCheckButton").forEach((button) => {
     button.addEventListener("click", CroakleToggleProjectDay);
@@ -168,7 +181,7 @@ function CroakleToggleProjectDay(event) {
   const dayIndex = Number(event.currentTarget.dataset.projectDay);
   const project = CroakleProjectState.projects[projectIndex];
 
-  if (!project) {
+  if (!project || project.completed) {
     return;
   }
 
@@ -220,6 +233,42 @@ function CroakleCreateAddProjectDialog() {
   `);
 }
 
+function CroakleCreateProjectArchiveButton() {
+  if (!CroakleProjectAddButton || !CroakleProjectReorderButton || document.querySelector("#CroakleOpenProjectArchive")) {
+    return;
+  }
+
+  CroakleProjectArchiveButton = document.createElement("button");
+  CroakleProjectArchiveButton.className = "CroakleSecondaryActionButton CroakleProjectArchiveButton";
+  CroakleProjectArchiveButton.id = "CroakleOpenProjectArchive";
+  CroakleProjectArchiveButton.type = "button";
+  CroakleProjectArchiveButton.textContent = "Archive";
+  CroakleProjectReorderButton.parentNode.insertBefore(CroakleProjectArchiveButton, CroakleProjectReorderButton);
+}
+
+function CroakleCreateProjectArchiveDialog() {
+  const appShell = document.querySelector(".CroakleHabitMoodShell");
+
+  if (!appShell || document.querySelector("#CroakleProjectArchiveDialog")) {
+    return;
+  }
+
+  appShell.insertAdjacentHTML("beforeend", `
+    <dialog class="CroakleAddHabitDialog" id="CroakleProjectArchiveDialog" aria-labelledby="CroakleProjectArchiveTitle">
+      <div class="CroakleAddHabitForm">
+        <header class="CroakleAddHabitHeader">
+          <h2 id="CroakleProjectArchiveTitle">Archive</h2>
+          <button type="button" id="CroakleCloseProjectArchive" aria-label="ปิด">×</button>
+        </header>
+
+        <div class="CroakleProjectArchiveList" id="CroakleProjectArchiveList"></div>
+
+        <button class="CroakleConfirmHabitButton" id="CroakleProjectArchiveDone" type="button">Done</button>
+      </div>
+    </dialog>
+  `);
+}
+
 function CroakleBindAddProjectDialog() {
   CroakleCreateAddProjectDialog();
   CroakleAddProjectDialog = document.querySelector("#CroakleAddProjectDialog");
@@ -228,6 +277,21 @@ function CroakleBindAddProjectDialog() {
 
   CroakleAddProjectForm?.addEventListener("submit", CroakleHandleAddProject);
   CroakleCloseAddProjectButton?.addEventListener("click", CroakleCloseAddProjectDialog);
+}
+
+function CroakleBindProjectArchiveDialog() {
+  CroakleCreateProjectArchiveButton();
+  CroakleCreateProjectArchiveDialog();
+
+  CroakleProjectArchiveButton = document.querySelector("#CroakleOpenProjectArchive");
+  CroakleProjectArchiveDialog = document.querySelector("#CroakleProjectArchiveDialog");
+  CroakleProjectArchiveList = document.querySelector("#CroakleProjectArchiveList");
+  CroakleProjectCloseArchiveButton = document.querySelector("#CroakleCloseProjectArchive");
+  CroakleProjectArchiveDoneButton = document.querySelector("#CroakleProjectArchiveDone");
+
+  CroakleProjectArchiveButton?.addEventListener("click", CroakleOpenProjectArchiveDialog);
+  CroakleProjectCloseArchiveButton?.addEventListener("click", CroakleCloseProjectArchiveDialog);
+  CroakleProjectArchiveDoneButton?.addEventListener("click", CroakleCloseProjectArchiveDialog);
 }
 
 function CroakleOpenAddProjectDialog() {
@@ -261,6 +325,7 @@ function CroakleHandleAddProject(event) {
     goal: CroakleProjectClampGoal(formData.get("projectGoal")),
     description: String(formData.get("projectDescription") || "").trim(),
     priority: String(formData.get("projectPriority") || "medium"),
+    completed: false,
   }));
 
   CroakleSaveProjectState();
@@ -272,7 +337,7 @@ function CroakleOpenProjectDetailDialog(event) {
   const projectIndex = Number(event.currentTarget.dataset.projectDetailIndex);
   const project = CroakleProjectState.projects[projectIndex];
 
-  if (!project || !CroakleProjectDetailDialog || !CroakleProjectDetailForm) {
+  if (!project || project.completed || !CroakleProjectDetailDialog || !CroakleProjectDetailForm) {
     return;
   }
 
@@ -298,7 +363,7 @@ function CroakleHandleProjectUpdate(event) {
   const project = CroakleProjectState.projects[projectIndex];
   const name = String(formData.get("projectName") || "").trim();
 
-  if (!project || !name) {
+  if (!project || project.completed || !name) {
     return;
   }
 
@@ -340,16 +405,72 @@ function CroakleHandleProjectComplete() {
   CroakleSaveProjectState();
   CroakleCloseProjectDetailDialog();
   CroakleRenderProjectList();
+  CroakleRenderProjectArchiveList();
+}
+
+function CroakleRenderProjectArchiveList() {
+  if (!CroakleProjectArchiveList) {
+    return;
+  }
+
+  const archivedProjects = CroakleGetArchivedProjects();
+
+  CroakleProjectArchiveList.innerHTML = archivedProjects.length
+    ? archivedProjects.map(({ project, projectIndex }) => `
+      <section class="CroakleProjectArchiveRow">
+        <div class="CroakleProjectArchiveInfo">
+          <strong>${project.name}</strong>
+          <span>${project.days.filter(Boolean).length}/${project.goal} tracked</span>
+        </div>
+        <button class="CroakleProjectRestoreButton" type="button" data-project-restore-index="${projectIndex}">Restore</button>
+      </section>
+    `).join("")
+    : `<p class="CroakleProjectEmptyText">No archived projects yet.</p>`;
+
+  document.querySelectorAll(".CroakleProjectRestoreButton").forEach((button) => {
+    button.addEventListener("click", CroakleRestoreProjectFromArchive);
+  });
+}
+
+function CroakleOpenProjectArchiveDialog() {
+  if (!CroakleProjectArchiveDialog) {
+    return;
+  }
+
+  CroakleRenderProjectArchiveList();
+  CroakleProjectArchiveDialog.showModal();
+}
+
+function CroakleCloseProjectArchiveDialog() {
+  CroakleProjectArchiveDialog?.close();
+}
+
+function CroakleRestoreProjectFromArchive(event) {
+  const projectIndex = Number(event.currentTarget.dataset.projectRestoreIndex);
+  const project = CroakleProjectState.projects[projectIndex];
+
+  if (!project) {
+    return;
+  }
+
+  project.completed = false;
+  CroakleSaveProjectState();
+  CroakleRenderProjectList();
+  CroakleRenderProjectArchiveList();
 }
 
 function CroakleReorderProjects() {
-  CroakleProjectState.projects.reverse();
+  const activeProjects = CroakleGetVisibleProjects().map(({ project }) => project).reverse();
+  const archivedProjects = CroakleGetArchivedProjects().map(({ project }) => project);
+
+  CroakleProjectState.projects = [...activeProjects, ...archivedProjects];
   CroakleSaveProjectState();
   CroakleRenderProjectList();
 }
 
 function CroakleRenderProjects() {
   CroakleBindAddProjectDialog();
+  CroakleBindProjectArchiveDialog();
   CroakleRenderProjectHeader();
   CroakleRenderProjectList();
 }
