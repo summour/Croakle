@@ -55,9 +55,83 @@ function CroakleHandleTrackMoodKeyboard(event) {
   CroakleOpenTrackMoodDate(moodBadge.dataset.dateIso);
 }
 
+function CroakleGetWeeksInMonthForBest(year, month) {
+  const daysInMonth = CroakleGetDaysInMonth(year, month);
+  const weekStarts = new Set();
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(year, month, day);
+    const weekStart = CroakleShiftDate(date, -((date.getDay() + 6) % 7));
+    weekStarts.add(CroakleFormatDate(weekStart));
+  }
+
+  return weekStarts.size;
+}
+
+function CroakleGetHabitLifetimeDoneForBest(habitIndex) {
+  return Object.values(CroakleState.months).reduce((total, monthData) => {
+    const habit = monthData.habits[habitIndex];
+    return total + (habit ? CroakleCountDone(habit.days) : 0);
+  }, 0);
+}
+
+function CroakleGetBestPercent(doneCount, habit, year, month) {
+  const monthGoal = CroakleGetWeeksInMonthForBest(year, month) * CroakleClampGoal(habit.goal);
+
+  if (!monthGoal) {
+    return 0;
+  }
+
+  return Math.min(100, Math.round((doneCount / monthGoal) * 100));
+}
+
+function CroakleRenderBestListFromTrack() {
+  const list = document.querySelector("#CroakleBestList");
+
+  if (!list) {
+    return;
+  }
+
+  const year = CroakleState.bestYear;
+  const month = CroakleState.bestMonth;
+  const monthData = CroakleGetMonthData(year, month);
+  const rows = monthData.habits
+    .map((habit, habitIndex) => {
+      const doneCount = CroakleCountDone(habit.days);
+
+      return {
+        name: habit.name,
+        percent: CroakleGetBestPercent(doneCount, habit, year, month),
+        month: doneCount,
+        lifetime: CroakleGetHabitLifetimeDoneForBest(habitIndex),
+      };
+    })
+    .sort((firstHabit, secondHabit) => {
+      if (secondHabit.percent !== firstHabit.percent) {
+        return secondHabit.percent - firstHabit.percent;
+      }
+
+      return secondHabit.month - firstHabit.month;
+    });
+
+  document.querySelector("#CroakleBestMonth").textContent = CroakleGetMonthLabel(year, month);
+  list.innerHTML = rows.map((habit) => `
+    <section class="CroakleBestRow">
+      <strong>${habit.name}</strong>
+      <div class="CroaklePercentBar" aria-label="${habit.percent} percent">
+        <span style="width: ${habit.percent}%"></span>
+        <em>${habit.percent}%</em>
+      </div>
+      <span>${habit.month}</span>
+      <span>${habit.lifetime}</span>
+    </section>
+  `).join("");
+}
+
 function CroaklePatchMoodBridgeRenderers() {
   const originalRenderTrackHeader = CroakleRenderTrackHeader;
   const originalCycleMood = CroakleCycleMood;
+  const originalRenderBestList = CroakleRenderBestList;
 
   CroakleRenderTrackHeader = function CroakleRenderTrackHeaderWithMoodLinks() {
     originalRenderTrackHeader();
@@ -68,10 +142,16 @@ function CroaklePatchMoodBridgeRenderers() {
     originalCycleMood(event);
     CroakleRenderTrackHeader();
   };
+
+  CroakleRenderBestList = function CroakleRenderBestListWithMonthlyGoals() {
+    originalRenderBestList();
+    CroakleRenderBestListFromTrack();
+  };
 }
 
 CroaklePatchMoodBridgeRenderers();
 CroakleEnhanceTrackMoodButtons();
+CroakleRenderBestListFromTrack();
 
 document.addEventListener("click", CroakleHandleTrackMoodOpen);
 document.addEventListener("keydown", CroakleHandleTrackMoodKeyboard);
