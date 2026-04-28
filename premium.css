@@ -189,14 +189,17 @@ body {
   background: var(--CroakleSurface);
   padding: 12px;
   box-shadow: none;
-  overflow: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
 }
 
 .CroakleCard::-webkit-scrollbar,
-.CroakleMonthGrid::-webkit-scrollbar {
+.CroakleMonthGrid::-webkit-scrollbar,
+.CroakleHabitList::-webkit-scrollbar,
+.CroakleBestList::-webkit-scrollbar,
+.CroakleMoodCalendar::-webkit-scrollbar {
   display: none;
 }
 
@@ -205,6 +208,7 @@ body {
   grid-template-columns: 40px 1fr 40px;
   align-items: center;
   margin-bottom: 10px;
+  flex: 0 0 auto;
 }
 
 .CroakleMonthHeader strong {
@@ -227,6 +231,7 @@ body {
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   align-items: center;
+  flex: 0 0 auto;
 }
 
 .CroakleMonthGrid {
@@ -297,12 +302,29 @@ body {
   height: 2px;
   background: var(--CroakleLine);
   margin: 9px 0 12px;
+  flex: 0 0 auto;
 }
 
 .CroakleHabitList,
 .CroakleBestList {
   display: grid;
   gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.CroakleHabitList {
+  flex: 1 1 auto;
+  padding-bottom: 14px;
+}
+
+.CroakleBestList {
+  flex: 1 1 auto;
+  padding-bottom: 10px;
 }
 
 .CroakleHabitRow {
@@ -392,6 +414,7 @@ body {
   font-size: 11px;
   font-weight: 850;
   text-align: center;
+  flex: 0 0 auto;
 }
 
 .CroakleBestHeader span:first-child {
@@ -445,6 +468,11 @@ body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .CroakleMoodCalendar button {
@@ -493,6 +521,7 @@ body {
   margin-top: 14px;
   font-size: 14px;
   font-weight: 850;
+  flex: 0 0 auto;
 }
 
 .CroakleTopMoodRow div {
