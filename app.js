@@ -57,26 +57,17 @@ function CroakleLoadState() {
   }
 }
 
-function CroakleGetCurrentDateCursor() {
-  const today = new Date();
-
-  return {
-    date: today.getDate(),
-    month: today.getMonth(),
-    year: today.getFullYear(),
-  };
-}
-
 function CroakleCreateDefaultState() {
-  const currentDate = CroakleGetCurrentDateCursor();
+  const today = CroakleGetToday();
 
   return {
-    trackMonth: currentDate.month,
-    trackYear: currentDate.year,
-    bestMonth: currentDate.month,
-    bestYear: currentDate.year,
-    moodMonth: currentDate.month,
-    moodYear: currentDate.year,
+    trackDate: CroakleFormatDate(today),
+    trackMonth: today.getMonth(),
+    trackYear: today.getFullYear(),
+    bestMonth: today.getMonth(),
+    bestYear: today.getFullYear(),
+    moodMonth: today.getMonth(),
+    moodYear: today.getFullYear(),
     habitTemplates: CroakleDefaultHabits.map((habit) => ({ ...habit })),
     months: {},
   };
@@ -94,8 +85,7 @@ function CroakleNormalizeState(state) {
     cleanState.months[monthKey] = CroakleNormalizeMonthData(monthData, monthKey, cleanState.habitTemplates);
   });
 
-  CroakleLockVisibleMonthsToCurrent(cleanState);
-
+  CroakleLockVisibleDatesToToday(cleanState);
   return cleanState;
 }
 
@@ -133,30 +123,59 @@ function CroakleNormalizeMonthData(monthData, monthKey, habitTemplates = Croakle
 
 function CroakleNormalizeMoodValue(value) {
   const moodValue = Number(value);
-
-  if (CroakleMoodOptions.includes(moodValue)) {
-    return moodValue;
-  }
-
-  return null;
+  return CroakleMoodOptions.includes(moodValue) ? moodValue : null;
 }
 
-function CroakleLockVisibleMonthsToCurrent(state) {
-  const currentDate = CroakleGetCurrentDateCursor();
-  const pageNames = ["track", "best", "mood"];
+function CroakleLockVisibleDatesToToday(state) {
+  const today = CroakleGetToday();
 
-  pageNames.forEach((pageName) => {
-    state[`${pageName}Month`] = currentDate.month;
-    state[`${pageName}Year`] = currentDate.year;
-  });
+  state.trackDate = CroakleFormatDate(today);
+  state.trackMonth = today.getMonth();
+  state.trackYear = today.getFullYear();
+  state.bestMonth = today.getMonth();
+  state.bestYear = today.getFullYear();
+  state.moodMonth = today.getMonth();
+  state.moodYear = today.getFullYear();
 }
 
 function CroakleSaveState() {
   localStorage.setItem(CroakleHabitStoreKey, JSON.stringify(CroakleState));
 }
 
+function CroakleGetToday() {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+}
+
+function CroakleParseDate(value) {
+  const [year, month, day] = String(value).split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function CroakleFormatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function CroakleShiftDate(date, dayAmount) {
+  const nextDate = new Date(date);
+  nextDate.setDate(nextDate.getDate() + dayAmount);
+  return nextDate;
+}
+
+function CroakleGetWeekDates(anchorDate) {
+  const weekStart = CroakleShiftDate(anchorDate, -((anchorDate.getDay() + 6) % 7));
+  return Array.from({ length: 7 }, (_, index) => CroakleShiftDate(weekStart, index));
+}
+
 function CroakleGetMonthKey(year, month) {
   return `${year}-${String(month + 1).padStart(2, "0")}`;
+}
+
+function CroakleGetMonthKeyFromDate(date) {
+  return CroakleGetMonthKey(date.getFullYear(), date.getMonth());
 }
 
 function CroakleGetDaysInMonth(year, month) {
@@ -172,25 +191,29 @@ function CroakleGetMonthLabel(year, month) {
   return `${CroakleMonthNames[month]} ${year}`;
 }
 
-function CroakleGetMonthGridClass(daysInMonth) {
-  return `CroakleDays${daysInMonth}`;
+function CroakleGetWeekLabel(weekDates) {
+  const firstDate = weekDates[0];
+  const lastDate = weekDates[6];
+
+  if (firstDate.getMonth() === lastDate.getMonth() && firstDate.getFullYear() === lastDate.getFullYear()) {
+    return CroakleGetMonthLabel(firstDate.getFullYear(), firstDate.getMonth());
+  }
+
+  const firstLabel = `${CroakleMonthNames[firstDate.getMonth()]} ${firstDate.getFullYear()}`;
+  const lastLabel = `${CroakleMonthNames[lastDate.getMonth()]} ${lastDate.getFullYear()}`;
+  return `${firstLabel} - ${lastLabel}`;
 }
 
 function CroakleGetMoodLabel(value) {
   return CroakleMoodLabels[value] || "No mood";
 }
 
-function CroakleIsCurrentMonth(year, month) {
-  const currentDate = CroakleGetCurrentDateCursor();
-  return year === currentDate.year && month === currentDate.month;
+function CroakleIsToday(date) {
+  return CroakleFormatDate(date) === CroakleFormatDate(CroakleGetToday());
 }
 
-function CroakleGetCurrentDayClass(year, month, day) {
-  if (!CroakleIsCurrentMonth(year, month)) {
-    return "";
-  }
-
-  return day === CroakleGetCurrentDateCursor().date ? " CroakleCurrentDay" : "";
+function CroakleGetCurrentDayClass(date) {
+  return CroakleIsToday(date) ? " CroakleCurrentDay" : "";
 }
 
 function CroakleGetMonthData(year, month) {
@@ -202,6 +225,10 @@ function CroakleGetMonthData(year, month) {
 
   CroakleSyncMonthHabits(CroakleState.months[monthKey], monthKey);
   return CroakleState.months[monthKey];
+}
+
+function CroakleGetMonthDataFromDate(date) {
+  return CroakleGetMonthData(date.getFullYear(), date.getMonth());
 }
 
 function CroakleCreateMonthData(monthKey, habitTemplates = CroakleState?.habitTemplates || CroakleDefaultHabits) {
@@ -234,12 +261,27 @@ function CroakleSyncMonthHabits(monthData, monthKey) {
 }
 
 function CroakleShiftMonth(target, direction) {
+  if (target === "track") {
+    CroakleShiftTrackWeek(direction);
+    return;
+  }
+
   const monthKey = `${target}Month`;
   const yearKey = `${target}Year`;
   const nextDate = new Date(CroakleState[yearKey], CroakleState[monthKey] + direction, 1);
 
   CroakleState[monthKey] = nextDate.getMonth();
   CroakleState[yearKey] = nextDate.getFullYear();
+  CroakleSaveState();
+  CroakleRenderAll();
+}
+
+function CroakleShiftTrackWeek(direction) {
+  const nextDate = CroakleShiftDate(CroakleParseDate(CroakleState.trackDate), direction * 7);
+
+  CroakleState.trackDate = CroakleFormatDate(nextDate);
+  CroakleState.trackMonth = nextDate.getMonth();
+  CroakleState.trackYear = nextDate.getFullYear();
   CroakleSaveState();
   CroakleRenderAll();
 }
@@ -271,54 +313,58 @@ function CroakleClampGoal(goal) {
   return Math.min(7, Math.max(1, Math.round(cleanGoal)));
 }
 
-function CroakleRenderTrackHeader() {
-  const year = CroakleState.trackYear;
-  const month = CroakleState.trackMonth;
-  const trackData = CroakleGetMonthData(year, month);
-  const daysInMonth = CroakleGetDaysInMonth(year, month);
-  const dayIndexes = Array.from({ length: daysInMonth }, (_, index) => index);
-  const monthGridClass = CroakleGetMonthGridClass(daysInMonth);
+function CroakleGetWeeklyHabitCount(habitIndex, weekDates) {
+  return weekDates.filter((date) => {
+    const monthData = CroakleGetMonthDataFromDate(date);
+    return Boolean(monthData.habits[habitIndex]?.days[date.getDate() - 1]);
+  }).length;
+}
 
-  document.querySelector("#CroakleTrackMonth").textContent = CroakleGetMonthLabel(year, month);
-  document.querySelector("#CroakleTrackDates").className = `CroakleSevenGrid CroakleDateRow CroakleMonthGrid ${monthGridClass}`;
-  document.querySelector("#CroakleTrackMoodPreview").className = `CroakleSevenGrid CroakleMoodPreview CroakleMonthGrid ${monthGridClass}`;
-  document.querySelector("#CroakleTrackDates").innerHTML = dayIndexes
-    .map((dayIndex) => {
-      const day = dayIndex + 1;
-      const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
-      return `<span class="CroakleDateCell${currentDayClass}" data-current-date="${currentDayClass ? "true" : "false"}">${day}</span>`;
+function CroakleRenderTrackHeader() {
+  const weekDates = CroakleGetWeekDates(CroakleParseDate(CroakleState.trackDate));
+
+  document.querySelector("#CroakleTrackMonth").textContent = CroakleGetWeekLabel(weekDates);
+  document.querySelector("#CroakleTrackDates").className = "CroakleSevenGrid CroakleDateRow CroakleWeekGrid";
+  document.querySelector("#CroakleTrackMoodPreview").className = "CroakleSevenGrid CroakleMoodPreview CroakleWeekGrid";
+  document.querySelector("#CroakleTrackDates").innerHTML = weekDates
+    .map((date) => {
+      const dateIso = CroakleFormatDate(date);
+      const currentDayClass = CroakleGetCurrentDayClass(date);
+
+      return `<span class="CroakleDateCell${currentDayClass}" data-date-iso="${dateIso}" data-current-date="${currentDayClass ? "true" : "false"}">${date.getDate()}</span>`;
     })
     .join("");
-  document.querySelector("#CroakleTrackMoodPreview").innerHTML = dayIndexes
-    .map((dayIndex) => CroakleCreateMoodBadge(trackData.moods[dayIndex], CroakleGetCurrentDayClass(year, month, dayIndex + 1)))
+  document.querySelector("#CroakleTrackMoodPreview").innerHTML = weekDates
+    .map((date) => {
+      const monthData = CroakleGetMonthDataFromDate(date);
+      return CroakleCreateMoodBadge(monthData.moods[date.getDate() - 1], CroakleGetCurrentDayClass(date), CroakleFormatDate(date));
+    })
     .join("");
 }
 
 function CroakleRenderTrackList() {
   const list = document.querySelector("#CroakleTrackList");
-  const year = CroakleState.trackYear;
-  const month = CroakleState.trackMonth;
-  const trackData = CroakleGetMonthData(year, month);
-  const daysInMonth = CroakleGetDaysInMonth(year, month);
-  const dayIndexes = Array.from({ length: daysInMonth }, (_, index) => index);
-  const monthGridClass = CroakleGetMonthGridClass(daysInMonth);
+  const weekDates = CroakleGetWeekDates(CroakleParseDate(CroakleState.trackDate));
+  const trackData = CroakleGetMonthDataFromDate(CroakleParseDate(CroakleState.trackDate));
 
-  list.innerHTML = trackData.habits.map((habit, habitIndex) => {
-    const current = CroakleCountDone(habit.days);
-    const checks = dayIndexes
-      .map((dayIndex) => {
-        const done = habit.days[dayIndex];
-        const day = dayIndex + 1;
-        const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
+  list.innerHTML = CroakleState.habitTemplates.map((habit, habitIndex) => {
+    const current = CroakleGetWeeklyHabitCount(habitIndex, weekDates);
+    const checks = weekDates
+      .map((date) => {
+        const dateIso = CroakleFormatDate(date);
+        const dayIndex = date.getDate() - 1;
+        const monthData = CroakleGetMonthDataFromDate(date);
+        const done = Boolean(monthData.habits[habitIndex]?.days[dayIndex]);
+        const currentDayClass = CroakleGetCurrentDayClass(date);
 
         return `
           <button
             class="CroakleCheckButton ${done ? "CroakleCheckDone" : "CroakleCheckEmpty"}${currentDayClass}"
             type="button"
             data-habit-index="${habitIndex}"
-            data-day-index="${dayIndex}"
+            data-date-iso="${dateIso}"
             data-current-date="${currentDayClass ? "true" : "false"}"
-            aria-label="${habit.name} day ${day} ${done ? "done" : "not done"}"
+            aria-label="${habit.name} ${dateIso} ${done ? "done" : "not done"}"
             aria-pressed="${done}"
           >${done ? "✓" : ""}</button>
         `;
@@ -329,10 +375,10 @@ function CroakleRenderTrackList() {
       <section class="CroakleHabitRow">
         <div class="CroakleHabitTop">
           <span class="CroakleDot" aria-hidden="true"></span>
-          <button class="CroakleHabitNameButton" type="button" data-detail-index="${habitIndex}" title="${habit.description || ""}">${habit.name}</button>
+          <button class="CroakleHabitNameButton" type="button" data-detail-index="${habitIndex}" title="${habit.description || ""}">${trackData.habits[habitIndex]?.name || habit.name}</button>
           <span class="CroakleGoal">${current}/${habit.goal}</span>
         </div>
-        <div class="CroakleCheckGrid CroakleMonthGrid ${monthGridClass}">${checks}</div>
+        <div class="CroakleCheckGrid CroakleWeekGrid">${checks}</div>
       </section>
     `;
   }).join("");
@@ -348,8 +394,9 @@ function CroakleRenderTrackList() {
 
 function CroakleToggleHabitDay(event) {
   const habitIndex = Number(event.currentTarget.dataset.habitIndex);
-  const dayIndex = Number(event.currentTarget.dataset.dayIndex);
-  const trackData = CroakleGetMonthData(CroakleState.trackYear, CroakleState.trackMonth);
+  const date = CroakleParseDate(event.currentTarget.dataset.dateIso);
+  const trackData = CroakleGetMonthDataFromDate(date);
+  const dayIndex = date.getDate() - 1;
   const habit = trackData.habits[habitIndex];
 
   habit.days[dayIndex] = !habit.days[dayIndex];
@@ -397,7 +444,8 @@ function CroakleRenderMoodCalendar() {
   document.querySelector("#CroakleMoodMonth").textContent = CroakleGetMonthLabel(year, month);
   calendar.innerHTML = moodData.moods.map((mood, index) => {
     const day = index + 1;
-    const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
+    const date = new Date(year, month, day);
+    const currentDayClass = CroakleGetCurrentDayClass(date);
 
     return `
       <button
@@ -405,10 +453,11 @@ function CroakleRenderMoodCalendar() {
         type="button"
         data-mood-index="${index}"
         data-current-date="${currentDayClass ? "true" : "false"}"
+        data-date-iso="${CroakleFormatDate(date)}"
         aria-label="Day ${day}, mood ${CroakleGetMoodLabel(mood)}"
       >
         <small>${day}</small>
-        ${CroakleCreateMoodBadge(mood, currentDayClass)}
+        ${CroakleCreateMoodBadge(mood, currentDayClass, CroakleFormatDate(date))}
       </button>
     `;
   }).join("");
@@ -420,9 +469,9 @@ function CroakleRenderMoodCalendar() {
   CroakleRenderTopMoods();
 }
 
-function CroakleCreateMoodBadge(mood, extraClass = "") {
+function CroakleCreateMoodBadge(mood, extraClass = "", dateIso = "") {
   const levelClass = mood ? `CroakleMoodLevel${mood}` : "CroakleMoodEmpty";
-  return `<span class="CroakleMoodBadge ${levelClass}${extraClass}" title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
+  return `<span class="CroakleMoodBadge ${levelClass}${extraClass}" data-date-iso="${dateIso}" title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
 }
 
 function CroakleCycleMood(event) {
