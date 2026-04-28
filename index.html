@@ -45,7 +45,12 @@
         <div class="CroakleSevenGrid CroakleDateRow" id="CroakleTrackDates" aria-hidden="true"></div>
         <div class="CroakleSevenGrid CroakleMoodPreview" id="CroakleTrackMoodPreview" aria-label="Mood preview"></div>
         <div class="CroakleDivider" aria-hidden="true"></div>
-        <button class="CroakleAddHabitButton" id="CroakleOpenAddHabit" type="button">+ Add Habit</button>
+
+        <div class="CroakleTrackActions">
+          <button class="CroakleAddHabitButton" id="CroakleOpenAddHabit" type="button">+ Add Habit</button>
+          <button class="CroakleSecondaryActionButton" id="CroakleOpenReorderHabit" type="button">Reorder</button>
+        </div>
+
         <div class="CroakleHabitList" id="CroakleTrackList"></div>
       </article>
     </section>
@@ -85,7 +90,7 @@
 
         <div class="CroakleTopMoodRow">
           <strong>Top Mood(s) of the Month:</strong>
-          <div aria-label="Top moods"><span>😎</span><span>🙂</span><span>😴</span></div>
+          <div aria-label="Top moods"></div>
         </div>
       </article>
     </section>
@@ -128,6 +133,19 @@
 
         <button class="CroakleConfirmHabitButton" type="submit">Confirm</button>
       </form>
+    </dialog>
+
+    <dialog class="CroakleAddHabitDialog" id="CroakleReorderHabitDialog" aria-labelledby="CroakleReorderHabitTitle">
+      <div class="CroakleAddHabitForm">
+        <header class="CroakleAddHabitHeader">
+          <h2 id="CroakleReorderHabitTitle">Reorder Habits</h2>
+          <button type="button" id="CroakleCloseReorderHabit" aria-label="ปิด">×</button>
+        </header>
+
+        <div class="CroakleReorderList" id="CroakleReorderList"></div>
+
+        <button class="CroakleConfirmHabitButton" id="CroakleCloseReorderHabitDone" type="button">Done</button>
+      </div>
     </dialog>
   </main>
 
