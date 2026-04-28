@@ -1,1 +1,124 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Croakle</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
 
+<body>
+  <div class="wordjar-croakle-shell">
+
+    <!-- Sidebar -->
+    <aside class="wordjar-sidebar">
+      <div class="wordjar-brand-card">
+        <div class="wordjar-brand-mark">🐸</div>
+        <div>
+          <p class="wordjar-eyebrow">Life Dashboard</p>
+          <h1>Croakle</h1>
+        </div>
+      </div>
+
+      <nav class="wordjar-nav-list">
+        <button class="wordjar-nav-item is-active" data-view="overviewView">Overview</button>
+        <button class="wordjar-nav-item" data-view="exportView">Export</button>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="wordjar-main-panel">
+
+      <!-- Topbar -->
+      <header class="wordjar-topbar">
+        <div>
+          <p class="wordjar-eyebrow">Today</p>
+          <h2>Your Croakle</h2>
+        </div>
+        <button class="wordjar-primary-button" id="quickAddButton">
+          + Quick Add
+        </button>
+      </header>
+
+      <!-- Overview -->
+      <section id="overviewView" class="wordjar-view is-active">
+
+        <div class="wordjar-hero-card">
+          <div class="wordjar-hero-copy">
+            <p class="wordjar-eyebrow">Focus</p>
+            <h3>จัดชีวิตให้อยู่ในที่เดียว</h3>
+            <p>Habit + Project + Course รวมเป็น dashboard เดียว</p>
+          </div>
+          <div class="wordjar-progress-orb">
+            <strong>--%</strong>
+            <span>Today</span>
+          </div>
+        </div>
+
+        <div class="wordjar-stats-grid">
+          <div class="wordjar-stat-card">
+            <span id="habitCount">0</span>
+            <p>Habits</p>
+          </div>
+          <div class="wordjar-stat-card">
+            <span id="projectCount">0</span>
+            <p>Projects</p>
+          </div>
+          <div class="wordjar-stat-card">
+            <span id="courseCount">0</span>
+            <p>Courses</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Export -->
+      <section id="exportView" class="wordjar-view">
+        <div class="wordjar-form-panel">
+          <h3>Export / Import</h3>
+
+          <div class="wordjar-button-row">
+            <button class="wordjar-primary-button" id="exportJsonButton">
+              Export JSON
+            </button>
+
+            <label class="wordjar-secondary-button">
+              Import JSON
+              <input id="importJsonInput" type="file" hidden />
+            </label>
+
+            <button class="wordjar-danger-button" id="resetButton">
+              Reset
+            </button>
+          </div>
+
+          <textarea id="dataPreview" class="wordjar-data-preview"></textarea>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Quick Add -->
+  <dialog id="quickAddDialog" class="wordjar-dialog">
+    <form method="dialog" id="quickAddForm" class="wordjar-dialog-card wordjar-stack-form">
+      <h3>Quick Add</h3>
+
+      <select name="type">
+        <option value="habit">Habit</option>
+        <option value="project">Project</option>
+        <option value="course">Course</option>
+      </select>
+
+      <input name="name" placeholder="ชื่อรายการ" required />
+
+      <menu>
+        <button value="cancel" class="wordjar-secondary-button">Cancel</button>
+        <button value="default" class="wordjar-primary-button">Add</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
