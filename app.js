@@ -1,31 +1,29 @@
-const CroakleHabits = [
+const CroakleHabitStoreKey = "CroakleHabitMoodData";
+const CroakleMoodOptions = ["🙂", "😐", "😎", "😴", "😡", "😢", "😰", "😬", "😵‍💫", "🤢", "😊", "😄"];
+
+const CroakleDefaultHabits = [
   {
     name: "Study with Study Bunny",
-    current: 6,
     goal: 5,
     days: [false, true, true, true, true, true, true],
   },
   {
     name: "Exercise",
-    current: 3,
     goal: 3,
     days: [false, true, false, true, false, true, false],
   },
   {
     name: "Go to bed before 11pm",
-    current: 3,
     goal: 5,
     days: [false, false, true, true, true, false, false],
   },
   {
     name: "Clean room",
-    current: 1,
     goal: 1,
     days: [true, false, false, false, false, false, false],
   },
   {
     name: "No fast food",
-    current: 3,
     goal: 6,
     days: [false, false, true, false, true, false, true],
   },
@@ -43,7 +41,7 @@ const CroakleBestHabits = [
   { name: "Avoid sweets", percent: 11, month: 4, lifetime: 96 },
 ];
 
-const CroakleMoodDays = [
+const CroakleDefaultMoodDays = [
   "😐", "🙂", "😄", "🙂", "😎", "🤢", "🤢",
   "😴", "🙂", "😰", "😎", "😎", "😎", "😴",
   "😎", "😬", "😵‍💫", "😢", "😴", "😎", "🙂",
@@ -51,9 +49,36 @@ const CroakleMoodDays = [
   "😊", "😎", "😴", "😐", "😎", "🙂", "😄",
 ];
 
+let CroakleState = CroakleLoadState();
+
 const CroaklePageButtons = document.querySelectorAll("[data-page-target]");
 const CroaklePages = document.querySelectorAll("[data-page]");
 const CroakleBottomNav = document.querySelector(".CroakleBottomNav");
+
+function CroakleLoadState() {
+  const savedData = localStorage.getItem(CroakleHabitStoreKey);
+
+  if (!savedData) {
+    return CroakleCreateDefaultState();
+  }
+
+  try {
+    return JSON.parse(savedData);
+  } catch {
+    return CroakleCreateDefaultState();
+  }
+}
+
+function CroakleCreateDefaultState() {
+  return {
+    habits: CroakleDefaultHabits.map((habit) => ({ ...habit, days: [...habit.days] })),
+    moods: [...CroakleDefaultMoodDays],
+  };
+}
+
+function CroakleSaveState() {
+  localStorage.setItem(CroakleHabitStoreKey, JSON.stringify(CroakleState));
+}
 
 function CroakleSetPage(pageName) {
   CroaklePages.forEach((page) => {
@@ -67,12 +92,26 @@ function CroakleSetPage(pageName) {
   CroakleBottomNav.hidden = pageName === "menu";
 }
 
+function CroakleCountDone(days) {
+  return days.filter(Boolean).length;
+}
+
 function CroakleRenderTrackList() {
   const list = document.querySelector("#CroakleTrackList");
 
-  list.innerHTML = CroakleHabits.map((habit) => {
+  list.innerHTML = CroakleState.habits.map((habit, habitIndex) => {
+    const current = CroakleCountDone(habit.days);
     const checks = habit.days
-      .map((done) => `<span class="${done ? "CroakleCheckDone" : "CroakleCheckEmpty"}">${done ? "✓" : ""}</span>`)
+      .map((done, dayIndex) => `
+        <button
+          class="CroakleCheckButton ${done ? "CroakleCheckDone" : "CroakleCheckEmpty"}"
+          type="button"
+          data-habit-index="${habitIndex}"
+          data-day-index="${dayIndex}"
+          aria-label="${habit.name} day ${dayIndex + 1} ${done ? "done" : "not done"}"
+          aria-pressed="${done}"
+        >${done ? "✓" : ""}</button>
+      `)
       .join("");
 
     return `
@@ -80,12 +119,26 @@ function CroakleRenderTrackList() {
         <div class="CroakleHabitTop">
           <span class="CroakleDot" aria-hidden="true"></span>
           <strong>${habit.name}</strong>
-          <span class="CroakleGoal">${habit.current}/${habit.goal}</span>
+          <span class="CroakleGoal">${current}/${habit.goal}</span>
         </div>
         <div class="CroakleCheckGrid">${checks}</div>
       </section>
     `;
   }).join("");
+
+  document.querySelectorAll(".CroakleCheckButton").forEach((button) => {
+    button.addEventListener("click", CroakleToggleHabitDay);
+  });
+}
+
+function CroakleToggleHabitDay(event) {
+  const habitIndex = Number(event.currentTarget.dataset.habitIndex);
+  const dayIndex = Number(event.currentTarget.dataset.dayIndex);
+  const habit = CroakleState.habits[habitIndex];
+
+  habit.days[dayIndex] = !habit.days[dayIndex];
+  CroakleSaveState();
+  CroakleRenderTrackList();
 }
 
 function CroakleRenderBestList() {
@@ -107,12 +160,43 @@ function CroakleRenderBestList() {
 function CroakleRenderMoodCalendar() {
   const calendar = document.querySelector("#CroakleMoodCalendar");
 
-  calendar.innerHTML = CroakleMoodDays.map((mood, index) => `
-    <button type="button" aria-label="Day ${index + 1}, mood ${mood}">
+  calendar.innerHTML = CroakleState.moods.map((mood, index) => `
+    <button class="CroakleMoodButton" type="button" data-mood-index="${index}" aria-label="Day ${index + 1}, mood ${mood}">
       <small>${index + 1}</small>
       <span>${mood}</span>
     </button>
   `).join("");
+
+  document.querySelectorAll(".CroakleMoodButton").forEach((button) => {
+    button.addEventListener("click", CroakleCycleMood);
+  });
+
+  CroakleRenderTopMoods();
+}
+
+function CroakleCycleMood(event) {
+  const moodIndex = Number(event.currentTarget.dataset.moodIndex);
+  const currentMood = CroakleState.moods[moodIndex];
+  const nextMoodIndex = (CroakleMoodOptions.indexOf(currentMood) + 1) % CroakleMoodOptions.length;
+
+  CroakleState.moods[moodIndex] = CroakleMoodOptions[nextMoodIndex];
+  CroakleSaveState();
+  CroakleRenderMoodCalendar();
+}
+
+function CroakleRenderTopMoods() {
+  const topMoodArea = document.querySelector(".CroakleTopMoodRow div");
+  const moodCounts = CroakleState.moods.reduce((counts, mood) => {
+    counts[mood] = (counts[mood] || 0) + 1;
+    return counts;
+  }, {});
+
+  const topMoods = Object.entries(moodCounts)
+    .sort((firstMood, secondMood) => secondMood[1] - firstMood[1])
+    .slice(0, 3)
+    .map(([mood]) => mood);
+
+  topMoodArea.innerHTML = topMoods.map((mood) => `<span>${mood}</span>`).join("");
 }
 
 CroaklePageButtons.forEach((button) => {
