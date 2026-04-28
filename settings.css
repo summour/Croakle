@@ -35,7 +35,8 @@
 }
 
 [data-page="settings"] .CroakleSettingsBackButton:active,
-[data-page="settings"] .CroakleSettingsActionButton:active {
+[data-page="settings"] .CroakleSettingsActionButton:active,
+[data-page="settings"] .CroakleExportChoice:active {
   transform: scale(0.96);
 }
 
@@ -43,7 +44,8 @@
 [data-page="settings"] .CroakleSettingsActionButton:focus-visible,
 [data-page="settings"] .CroakleMoodNameInput:focus-visible,
 [data-page="settings"] .CroakleMoodColorInput:focus-visible,
-[data-page="settings"] .CroakleSettingsSwitch:focus-visible {
+[data-page="settings"] .CroakleSettingsSwitch:focus-visible,
+[data-page="settings"] .CroakleExportChoice input:focus-visible + span {
   outline: 2px solid var(--CroakleLine);
   outline-offset: 3px;
 }
@@ -131,9 +133,95 @@
   white-space: nowrap;
 }
 
-[data-page="settings"] .CroakleMoodSettingsList {
+[data-page="settings"] .CroakleMoodSettingsList,
+[data-page="settings"] .CroakleExportPanel,
+[data-page="settings"] .CroakleExportOptionGroup {
   display: grid;
   gap: 10px;
+}
+
+[data-page="settings"] .CroakleExportPanel {
+  border-radius: 22px;
+  background: var(--CroakleSoftSurface);
+  padding: 12px;
+}
+
+[data-page="settings"] .CroakleExportOptionGroup p {
+  margin: 0;
+  color: var(--CroakleMuted);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+[data-page="settings"] .CroakleExportChoice {
+  position: relative;
+  display: grid;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+[data-page="settings"] .CroakleExportChoice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-page="settings"] .CroakleExportChoice span {
+  min-height: 58px;
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: var(--CroakleSurface);
+  padding: 11px 14px;
+  display: grid;
+  gap: 3px;
+}
+
+[data-page="settings"] .CroakleExportChoice input:checked + span {
+  border-color: var(--CroakleLine);
+}
+
+[data-page="settings"] .CroakleExportChoice strong {
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+[data-page="settings"] .CroakleExportChoice small {
+  color: var(--CroakleMuted);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+[data-page="settings"] .CroakleExportPrimaryButton {
+  background: var(--CroakleLine);
+  color: var(--CroakleSurface);
+}
+
+[data-page="settings"] .CroakleExportPrimaryButton .CroakleSettingsText span {
+  color: var(--CroakleSurface);
+  opacity: 0.74;
+}
+
+[data-page="settings"] .CroakleExportPrimaryButton .CroakleSettingsValue {
+  border-color: var(--CroakleSurface);
+  background: var(--CroakleSurface);
+  color: var(--CroakleLine);
+}
+
+[data-page="settings"] .CroakleImportFileInput {
+  position: fixed;
+  inset: auto auto 0 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-page="settings"] .CroakleImportStatus {
+  min-height: 16px;
 }
 
 [data-page="settings"] .CroakleMoodSettingRow {
