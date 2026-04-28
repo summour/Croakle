@@ -309,7 +309,7 @@ body {
   border: 2px solid var(--CroakleLine);
   border-radius: 999px;
   background: var(--CroakleSoftSurface);
-  filter: grayscale(1);
+  filter: none;
 }
 
 .CroakleMoodPreview span,
