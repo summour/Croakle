@@ -14,6 +14,7 @@
   <meta name="apple-mobile-web-app-title" content="Croakle" />
   <link rel="stylesheet" href="premium.css" />
   <link rel="stylesheet" href="best-scroll.css" />
+  <link rel="stylesheet" href="settings.css" />
 </head>
 <body>
   <main class="CroakleHabitMoodShell" aria-label="Croakle Habit and Mood Tracker">
@@ -23,7 +24,7 @@
           <p class="CroakleEyebrow">Croakle</p>
           <h1>Habit & Mood</h1>
         </div>
-        <button class="CroakleRoundButton" type="button" aria-label="เมนู">☰</button>
+        <button class="CroakleRoundButton" type="button" aria-label="เปิด Settings">☰</button>
       </div>
 
       <div class="CroakleEmptyPanel">
@@ -99,6 +100,58 @@
         <div class="CroakleTopMoodRow">
           <strong>Top Mood(s) of the Month:</strong>
           <div aria-label="Top moods"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="CroaklePage" data-page="settings">
+      <article class="CroakleCard" aria-label="Settings">
+        <header class="CroakleSettingsHeader">
+          <button class="CroakleSettingsBackButton" type="button" data-page-target="menu" aria-label="กลับหน้าเมนู">‹</button>
+          <h2>Settings</h2>
+          <span aria-hidden="true"></span>
+        </header>
+
+        <div class="CroakleSettingsBody">
+          <section class="CroakleSettingsGroup" aria-label="Appearance settings">
+            <p class="CroakleSettingsGroupTitle">Appearance</p>
+
+            <div class="CroakleSettingsItem">
+              <div class="CroakleSettingsText">
+                <strong>Theme</strong>
+                <span>Clean black and white iOS style.</span>
+              </div>
+              <span class="CroakleSettingsValue">Light</span>
+            </div>
+
+            <div class="CroakleSettingsItem">
+              <div class="CroakleSettingsText">
+                <strong>Accent color</strong>
+                <span>Ready for custom colors later.</span>
+              </div>
+              <span class="CroakleSettingsValue">Mono</span>
+            </div>
+          </section>
+
+          <section class="CroakleSettingsGroup" aria-label="Data settings">
+            <p class="CroakleSettingsGroupTitle">Data</p>
+
+            <div class="CroakleSettingsItem">
+              <div class="CroakleSettingsText">
+                <strong>Storage</strong>
+                <span>Habit and mood data are saved on this device.</span>
+              </div>
+              <span class="CroakleSettingsValue">Local</span>
+            </div>
+
+            <div class="CroakleSettingsItem">
+              <div class="CroakleSettingsText">
+                <strong>Export</strong>
+                <span>CSV / JSON export can be added here.</span>
+              </div>
+              <span class="CroakleSettingsValue">Soon</span>
+            </div>
+          </section>
         </div>
       </article>
     </section>
@@ -195,5 +248,6 @@
 
   <script src="app.js"></script>
   <script src="mood-bridge.js"></script>
+  <script src="settings-bridge.js"></script>
 </body>
 </html>
