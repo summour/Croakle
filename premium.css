@@ -9,6 +9,8 @@
   --CroakleLine: #111111;
   --CroakleSoftLine: #e5e5e5;
   --CroakleShellWidth: 430px;
+  --CroakleDaySize: 32px;
+  --CroakleDayGap: 7px;
 }
 
 * {
@@ -193,7 +195,8 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-.CroakleCard::-webkit-scrollbar {
+.CroakleCard::-webkit-scrollbar,
+.CroakleMonthGrid::-webkit-scrollbar {
   display: none;
 }
 
@@ -226,6 +229,19 @@ body {
   align-items: center;
 }
 
+.CroakleMonthGrid {
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-auto-columns: var(--CroakleDaySize);
+  gap: var(--CroakleDayGap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .CroakleWeekHeader,
 .CroakleCalendarHeader {
   margin-bottom: 7px;
@@ -240,8 +256,23 @@ body {
   font-weight: 760;
 }
 
+.CroakleDateCell,
+.CroakleCurrentDay {
+  scroll-snap-align: center;
+}
+
+.CroakleCurrentDay {
+  outline: 2px solid var(--CroakleLine);
+  outline-offset: 2px;
+}
+
+.CroakleDateCell.CroakleCurrentDay {
+  border-radius: 999px;
+  background: var(--CroakleLine);
+  color: var(--CroakleSurface);
+}
+
 .CroakleMoodPreview {
-  gap: 5px;
   margin-bottom: 10px;
 }
 
@@ -257,8 +288,9 @@ body {
 }
 
 .CroakleMoodPreview span {
-  aspect-ratio: 1;
-  font-size: 19px;
+  width: var(--CroakleDaySize);
+  height: var(--CroakleDaySize);
+  font-size: 16px;
 }
 
 .CroakleDivider {
@@ -318,8 +350,8 @@ body {
 }
 
 .CroakleCheckButton {
-  min-width: 32px;
-  min-height: 32px;
+  min-width: var(--CroakleDaySize);
+  min-height: var(--CroakleDaySize);
 }
 
 .CroakleCheckDone,
@@ -409,16 +441,6 @@ body {
   text-shadow: 0 1px 2px var(--CroakleLine);
 }
 
-.CroaklePercent100 span { width: 100%; }
-.CroaklePercent80 span { width: 80%; }
-.CroaklePercent60 span { width: 60%; }
-.CroaklePercent40 span { width: 40%; }
-.CroaklePercent34 span { width: 34%; }
-.CroaklePercent30 span { width: 30%; }
-.CroaklePercent25 span { width: 25%; }
-.CroaklePercent20 span { width: 20%; }
-.CroaklePercent11 span { width: 11%; }
-
 .CroakleMoodCalendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -439,10 +461,24 @@ body {
 }
 
 .CroakleMoodCalendar span,
-.CroakleTopMoodRow span {
+.CroakleTopMoodRow span,
+.CroakleMoodBadge {
   width: 32px;
   height: 32px;
   font-size: 18px;
+}
+
+.CroakleMoodEmpty {
+  color: transparent;
+}
+
+.CroakleMoodLevel1,
+.CroakleMoodLevel2,
+.CroakleMoodLevel3,
+.CroakleMoodLevel4,
+.CroakleMoodLevel5 {
+  color: var(--CroakleText);
+  filter: none;
 }
 
 .CroakleMoodButton:active span {
@@ -488,6 +524,11 @@ body {
 }
 
 @media (max-width: 380px) {
+  :root {
+    --CroakleDaySize: 29px;
+    --CroakleDayGap: 4px;
+  }
+
   .CroakleHabitMoodShell {
     padding-left: 10px;
     padding-right: 10px;
@@ -499,18 +540,9 @@ body {
     border-radius: 22px;
   }
 
-  .CroakleCheckGrid,
-  .CroakleMoodCalendar {
-    gap: 4px;
-  }
-
-  .CroakleCheckButton,
-  .CroakleMoodCalendar button {
-    min-width: 29px;
-  }
-
   .CroakleMoodCalendar span,
-  .CroakleTopMoodRow span {
+  .CroakleTopMoodRow span,
+  .CroakleMoodBadge {
     width: 29px;
     height: 29px;
     font-size: 17px;
