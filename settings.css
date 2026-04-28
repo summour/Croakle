@@ -34,11 +34,16 @@
   touch-action: manipulation;
 }
 
-[data-page="settings"] .CroakleSettingsBackButton:active {
+[data-page="settings"] .CroakleSettingsBackButton:active,
+[data-page="settings"] .CroakleSettingsActionButton:active {
   transform: scale(0.96);
 }
 
-[data-page="settings"] .CroakleSettingsBackButton:focus-visible {
+[data-page="settings"] .CroakleSettingsBackButton:focus-visible,
+[data-page="settings"] .CroakleSettingsActionButton:focus-visible,
+[data-page="settings"] .CroakleMoodNameInput:focus-visible,
+[data-page="settings"] .CroakleMoodColorInput:focus-visible,
+[data-page="settings"] .CroakleSettingsSwitch:focus-visible {
   outline: 2px solid var(--CroakleLine);
   outline-offset: 3px;
 }
@@ -72,15 +77,27 @@
   letter-spacing: 0.01em;
 }
 
-[data-page="settings"] .CroakleSettingsItem {
+[data-page="settings"] .CroakleSettingsItem,
+[data-page="settings"] .CroakleSettingsActionButton,
+[data-page="settings"] .CroakleSettingsToggleRow {
   min-height: 62px;
+  border: 0;
   border-radius: 20px;
   background: var(--CroakleSoftSurface);
+  color: var(--CroakleText);
   padding: 12px 16px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
+  font: inherit;
+  text-align: left;
+}
+
+[data-page="settings"] .CroakleSettingsActionButton {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 [data-page="settings"] .CroakleSettingsText {
@@ -114,6 +131,89 @@
   white-space: nowrap;
 }
 
+[data-page="settings"] .CroakleMoodSettingsList {
+  display: grid;
+  gap: 10px;
+}
+
+[data-page="settings"] .CroakleMoodSettingRow {
+  min-height: 58px;
+  border-radius: 20px;
+  background: var(--CroakleSoftSurface);
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 10px;
+}
+
+[data-page="settings"] .CroakleMoodNumber {
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--CroakleSurface);
+  font-size: 17px;
+  font-weight: 900;
+}
+
+[data-page="settings"] .CroakleMoodNameInput {
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid var(--CroakleLine);
+  border-radius: 0;
+  background: transparent;
+  color: var(--CroakleText);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 850;
+  padding: 8px 0;
+}
+
+[data-page="settings"] .CroakleMoodColorInput {
+  width: 48px;
+  height: 38px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleSurface);
+  padding: 2px;
+}
+
+[data-page="settings"] .CroakleSettingsSwitch {
+  width: 54px;
+  height: 34px;
+  appearance: none;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleSurface);
+  display: grid;
+  align-items: center;
+  padding: 3px;
+  cursor: pointer;
+}
+
+[data-page="settings"] .CroakleSettingsSwitch::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--CroakleLine);
+  transition: transform 160ms ease;
+}
+
+[data-page="settings"] .CroakleSettingsSwitch:checked::before {
+  transform: translateX(20px);
+}
+
+.CroakleMoodLevel1 { background: var(--CroakleMood1Bg, var(--CroakleSoftSurface)); }
+.CroakleMoodLevel2 { background: var(--CroakleMood2Bg, var(--CroakleSoftSurface)); }
+.CroakleMoodLevel3 { background: var(--CroakleMood3Bg, var(--CroakleSoftSurface)); }
+.CroakleMoodLevel4 { background: var(--CroakleMood4Bg, var(--CroakleSoftSurface)); }
+.CroakleMoodLevel5 { background: var(--CroakleMood5Bg, var(--CroakleSoftSurface)); }
+
 @media (max-width: 380px) {
   [data-page="settings"] .CroakleSettingsHeader {
     grid-template-columns: 48px minmax(0, 1fr) 48px;
@@ -124,8 +224,24 @@
     height: 48px;
   }
 
-  [data-page="settings"] .CroakleSettingsItem {
+  [data-page="settings"] .CroakleSettingsItem,
+  [data-page="settings"] .CroakleSettingsActionButton,
+  [data-page="settings"] .CroakleSettingsToggleRow {
     min-height: 58px;
     padding: 11px 14px;
+  }
+
+  [data-page="settings"] .CroakleMoodSettingRow {
+    grid-template-columns: 34px minmax(0, 1fr) 44px;
+    gap: 8px;
+  }
+
+  [data-page="settings"] .CroakleMoodNumber {
+    width: 34px;
+    height: 34px;
+  }
+
+  [data-page="settings"] .CroakleMoodColorInput {
+    width: 44px;
   }
 }
