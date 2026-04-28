@@ -128,6 +128,38 @@ function CroakleRenderBestListFromTrack() {
   `).join("");
 }
 
+function CroakleLockMoodCircleLayout() {
+  if (document.querySelector("#CroakleMoodLockedLayout")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = "CroakleMoodLockedLayout";
+  style.textContent = `
+    [data-page="mood"] .CroakleCard {
+      overflow: hidden;
+    }
+
+    [data-page="mood"] .CroakleMoodCalendar {
+      flex: 0 0 auto;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
+      -webkit-overflow-scrolling: auto;
+    }
+
+    [data-page="mood"] .CroakleMoodCalendar button,
+    [data-page="mood"] .CroakleMoodCalendar .CroakleMoodBadge {
+      touch-action: manipulation;
+    }
+
+    [data-page="mood"] .CroakleTopMoodRow {
+      flex: 0 0 auto;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function CroaklePatchMoodBridgeRenderers() {
   const originalRenderTrackHeader = CroakleRenderTrackHeader;
   const originalCycleMood = CroakleCycleMood;
@@ -149,6 +181,7 @@ function CroaklePatchMoodBridgeRenderers() {
   };
 }
 
+CroakleLockMoodCircleLayout();
 CroaklePatchMoodBridgeRenderers();
 CroakleEnhanceTrackMoodButtons();
 CroakleRenderBestListFromTrack();
