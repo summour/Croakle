@@ -47,14 +47,25 @@ function CroakleLoadState() {
   }
 }
 
-function CroakleCreateDefaultState() {
+function CroakleGetCurrentMonthCursor() {
+  const today = new Date();
+
   return {
-    trackMonth: 5,
-    trackYear: 2024,
-    bestMonth: 4,
-    bestYear: 2024,
-    moodMonth: 4,
-    moodYear: 2024,
+    month: today.getMonth(),
+    year: today.getFullYear(),
+  };
+}
+
+function CroakleCreateDefaultState() {
+  const currentMonth = CroakleGetCurrentMonthCursor();
+
+  return {
+    trackMonth: currentMonth.month,
+    trackYear: currentMonth.year,
+    bestMonth: currentMonth.month,
+    bestYear: currentMonth.year,
+    moodMonth: currentMonth.month,
+    moodYear: currentMonth.year,
     months: {},
   };
 }
@@ -66,6 +77,8 @@ function CroakleNormalizeState(state) {
     months: state.months || {},
   };
 
+  CroakleLockVisibleMonthsToCurrent(cleanState);
+
   if (state.habits || state.moods) {
     const legacyKey = CroakleGetMonthKey(cleanState.trackYear, cleanState.trackMonth);
     cleanState.months[legacyKey] = {
@@ -75,6 +88,16 @@ function CroakleNormalizeState(state) {
   }
 
   return cleanState;
+}
+
+function CroakleLockVisibleMonthsToCurrent(state) {
+  const currentMonth = CroakleGetCurrentMonthCursor();
+  const pageNames = ["track", "best", "mood"];
+
+  pageNames.forEach((pageName) => {
+    state[`${pageName}Month`] = currentMonth.month;
+    state[`${pageName}Year`] = currentMonth.year;
+  });
 }
 
 function CroakleSaveState() {
