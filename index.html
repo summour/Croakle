@@ -6,8 +6,9 @@
   <meta name="description" content="Croakle life dashboard" />
   <title>Croakle</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="premium.css" />
 </head>
-<body>
+<body class="CroaklePremiumMode">
   <div class="wordjar-croakle-shell">
     <aside class="wordjar-sidebar">
       <div class="wordjar-brand-card">
@@ -23,28 +24,46 @@
         <button class="wordjar-nav-item" type="button" data-view="coursesView">Courses</button>
         <button class="wordjar-nav-item" type="button" data-view="exportView">Export</button>
       </nav>
-      <div class="wordjar-sidebar-note"><span>Monochrome first</span><p>ใช้ขาวดำก่อน แล้วค่อย custom สีแบบ sheet ภายหลัง</p></div>
+      <div class="wordjar-sidebar-note"><span>Premium mobile pattern</span><p>Dark card dashboard, bottom nav บนมือถือ และยังใช้ custom colors ผ่าน CSS variables ได้</p></div>
     </aside>
 
     <main class="wordjar-main-panel">
       <header class="wordjar-topbar">
-        <div><p class="wordjar-eyebrow" id="todayLabel">Today</p><h2 id="pageTitle">Your Croakle</h2></div>
+        <div><p class="wordjar-eyebrow" id="todayLabel">Today</p><h2 id="pageTitle">Welcome back</h2></div>
         <button class="wordjar-primary-button" id="quickAddButton" type="button">+ Quick Add</button>
       </header>
 
       <section id="overviewView" class="wordjar-view is-active">
-        <div class="wordjar-hero-card">
-          <div class="wordjar-hero-copy"><p class="wordjar-eyebrow">Focus</p><h3>จัดชีวิตให้อยู่ในที่เดียว</h3><p>Habit + Mood + Project + Course รวมเป็น dashboard เดียว สไตล์ iOS / ChatGPT ขาวดำ</p></div>
-          <div class="wordjar-progress-orb"><strong id="todayScore">0%</strong><span>Today</span></div>
+        <div class="CroakleChipRow" aria-label="Quick filters">
+          <button class="CroakleChip is-active" type="button">Today</button>
+          <button class="CroakleChip" type="button">Habits</button>
+          <button class="CroakleChip" type="button">Mood</button>
+          <button class="CroakleChip" type="button">Projects</button>
         </div>
+
+        <div class="wordjar-hero-card">
+          <div class="wordjar-hero-copy"><p class="wordjar-eyebrow">Croakle</p><h3>จัดชีวิตให้อยู่ในที่เดียว</h3><p>Habit + Mood + Project + Course ใน dashboard เดียว แบบ premium mobile app</p></div>
+          <div class="wordjar-progress-orb"><strong id="todayScore">0%</strong><span>Today</span></div>
+          <div class="CroaklePremiumCards">
+            <div class="CroaklePremiumCard"><div class="CroaklePremiumCardIcon">✓</div><strong id="CroakleHeroHabitDone">0/0</strong><span>Habits done</span></div>
+            <div class="CroaklePremiumCard"><div class="CroaklePremiumCardIcon">◡</div><strong id="CroakleHeroMood">-</strong><span>Today mood</span></div>
+            <div class="CroaklePremiumCard"><div class="CroaklePremiumCardIcon">↗</div><strong id="CroakleHeroStreak">0d</strong><span>Mood streak</span></div>
+          </div>
+        </div>
+
         <div class="wordjar-stats-grid">
           <div class="wordjar-stat-card"><span id="habitCount">0</span><p>Habits</p></div>
           <div class="wordjar-stat-card"><span id="moodCount">0</span><p>Mood Logs</p></div>
           <div class="wordjar-stat-card"><span id="projectCount">0</span><p>Projects</p></div>
           <div class="wordjar-stat-card"><span id="doneTodayCount">0</span><p>Done Today</p></div>
         </div>
+
         <div class="wordjar-content-grid">
-          <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Today Habits</h3></div><div id="todayHabitList"></div></article>
+          <article class="wordjar-panel">
+            <div class="wordjar-panel-header"><h3>Today Habits</h3></div>
+            <div class="CroakleSearchBar"><span>⌕</span><input type="search" placeholder="Search habits..." aria-label="Search habits" /></div>
+            <div id="todayHabitList"></div>
+          </article>
           <article class="wordjar-panel"><div class="wordjar-panel-header"><h3>Recent Mood</h3></div><div id="recentMoodList"></div></article>
         </div>
       </section>
@@ -77,6 +96,13 @@
       <section id="exportView" class="wordjar-view"><div class="wordjar-form-panel"><h3>Export / Import</h3><div class="wordjar-button-row"><button class="wordjar-primary-button" id="exportJsonButton" type="button">Export JSON</button><button class="wordjar-secondary-button" id="exportCsvButton" type="button">Export Mood CSV</button><label class="wordjar-secondary-button">Import JSON<input id="importJsonInput" type="file" accept="application/json,.json" hidden /></label><button class="wordjar-danger-button" id="resetButton" type="button">Reset</button></div><textarea id="dataPreview" class="wordjar-data-preview" readonly></textarea></div></section>
     </main>
   </div>
+
+  <nav class="CroakleBottomNav" aria-label="Mobile navigation">
+    <button class="wordjar-nav-item is-active" type="button" data-view="overviewView">Home</button>
+    <button class="wordjar-nav-item" type="button" data-view="trackerView">Tracker</button>
+    <button class="wordjar-nav-item" type="button" data-view="moodView">Mood</button>
+    <button class="wordjar-nav-item" type="button" data-view="projectsView">Projects</button>
+  </nav>
 
   <dialog id="quickAddDialog" class="wordjar-dialog"><form method="dialog" id="quickAddForm" class="wordjar-dialog-card wordjar-stack-form"><h3>Quick Add</h3><select name="type"><option value="habit">Habit</option><option value="mood">Mood</option><option value="project">Project</option><option value="course">Course</option></select><input name="name" placeholder="ชื่อรายการ / note สั้น ๆ" required /><menu><button value="cancel" class="wordjar-secondary-button" type="button" data-action="close-dialog">Cancel</button><button value="default" class="wordjar-primary-button" type="submit">Add</button></menu></form></dialog>
   <script src="app.js"></script>
