@@ -58,8 +58,10 @@ body {
 .CroakleMoodCalendar button,
 .CroakleCheckButton,
 .CroakleAddHabitButton,
+.CroakleSecondaryActionButton,
 .CroakleAddHabitHeader button,
-.CroakleConfirmHabitButton {
+.CroakleConfirmHabitButton,
+.CroakleReorderMoveButton {
   appearance: none;
   border: 0;
   color: inherit;
@@ -77,8 +79,10 @@ body {
 .CroakleMoodCalendar button:active,
 .CroakleCheckButton:active,
 .CroakleAddHabitButton:active,
+.CroakleSecondaryActionButton:active,
 .CroakleAddHabitHeader button:active,
-.CroakleConfirmHabitButton:active {
+.CroakleConfirmHabitButton:active,
+.CroakleReorderMoveButton:active {
   transform: scale(0.96);
 }
 
@@ -89,8 +93,10 @@ body {
 .CroakleMoodCalendar button:focus-visible,
 .CroakleCheckButton:focus-visible,
 .CroakleAddHabitButton:focus-visible,
+.CroakleSecondaryActionButton:focus-visible,
 .CroakleAddHabitHeader button:focus-visible,
 .CroakleConfirmHabitButton:focus-visible,
+.CroakleReorderMoveButton:focus-visible,
 .CroakleField input:focus-visible,
 .CroakleField textarea:focus-visible,
 .CroaklePriorityField input:focus-visible + span {
@@ -318,6 +324,14 @@ body {
   flex: 0 0 auto;
 }
 
+.CroakleTrackActions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
+
 .CroakleAddHabitButton {
   min-height: 42px;
   border-radius: 999px;
@@ -325,8 +339,17 @@ body {
   color: var(--CroakleSurface);
   font-size: 15px;
   font-weight: 850;
-  margin-bottom: 10px;
-  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+.CroakleSecondaryActionButton {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleSurface);
+  font-size: 15px;
+  font-weight: 850;
 }
 
 .CroakleHabitList,
@@ -711,6 +734,55 @@ body {
   font-weight: 850;
 }
 
+.CroakleReorderList {
+  display: grid;
+  gap: 10px;
+}
+
+.CroakleReorderRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--CroakleSoftLine);
+}
+
+.CroakleReorderRow:last-child {
+  border-bottom: 0;
+}
+
+.CroakleReorderName {
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.CroakleReorderActions {
+  display: flex;
+  gap: 8px;
+}
+
+.CroakleReorderMoveButton {
+  width: 42px;
+  height: 42px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 12px;
+  background: var(--CroakleSoftSurface);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 850;
+}
+
+.CroakleReorderMoveButton:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+
 @media (max-width: 380px) {
   :root {
     --CroakleDaySize: 29px;
@@ -726,6 +798,11 @@ body {
   .CroakleCard {
     padding: 10px;
     border-radius: 22px;
+  }
+
+  .CroakleSecondaryActionButton,
+  .CroakleAddHabitButton {
+    font-size: 14px;
   }
 
   .CroakleMoodCalendar span,
