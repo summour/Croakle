@@ -2,6 +2,8 @@ const CroakleSettingsStoreKey = "CroakleHabitMoodSettingsV1";
 
 const CroakleDefaultSettings = {
   lockTodayOnly: true,
+  exportScope: "stats",
+  exportFormat: "csv",
   moods: {
     1: { label: "Terrible", color: "#f2f2f2" },
     2: { label: "Annoyed", color: "#e8e8e8" },
@@ -34,6 +36,8 @@ function CroakleCloneSettings(settings) {
 function CroakleNormalizeSettings(settings) {
   const cleanSettings = CroakleCloneSettings(CroakleDefaultSettings);
   cleanSettings.lockTodayOnly = settings?.lockTodayOnly !== false;
+  cleanSettings.exportScope = ["stats", "backup"].includes(settings?.exportScope) ? settings.exportScope : cleanSettings.exportScope;
+  cleanSettings.exportFormat = ["csv", "json"].includes(settings?.exportFormat) ? settings.exportFormat : cleanSettings.exportFormat;
 
   Object.keys(cleanSettings.moods).forEach((moodValue) => {
     cleanSettings.moods[moodValue] = {
@@ -112,23 +116,64 @@ function CroakleRenderSettingsPanel() {
       </label>
     </section>
 
-    <section class="CroakleSettingsGroup" aria-label="Export settings">
+    <section class="CroakleSettingsGroup" aria-label="Export and backup settings">
       <p class="CroakleSettingsGroupTitle">Export & Backup</p>
-      <button class="CroakleSettingsActionButton" type="button" data-export-csv>
-        <span class="CroakleSettingsText">
-          <strong>Export CSV</strong>
-          <span>ดาวน์โหลดค่าสถิติ Habit และ Mood</span>
-        </span>
-        <span class="CroakleSettingsValue">CSV</span>
-      </button>
 
-      <button class="CroakleSettingsActionButton" type="button" data-export-json>
+      <div class="CroakleExportPanel" aria-label="Export options">
+        <div class="CroakleExportOptionGroup" role="radiogroup" aria-label="Export content">
+          <p>เลือกข้อมูล</p>
+          <label class="CroakleExportChoice">
+            <input type="radio" name="CroakleExportScope" value="stats" data-export-scope ${CroakleSettings.exportScope === "stats" ? "checked" : ""} />
+            <span>
+              <strong>Statistics only</strong>
+              <small>เฉพาะสถิติ Habit และ Mood</small>
+            </span>
+          </label>
+          <label class="CroakleExportChoice">
+            <input type="radio" name="CroakleExportScope" value="backup" data-export-scope ${CroakleSettings.exportScope === "backup" ? "checked" : ""} />
+            <span>
+              <strong>Full backup</strong>
+              <small>ข้อมูลทั้งหมดในแอพสำหรับกู้คืน</small>
+            </span>
+          </label>
+        </div>
+
+        <div class="CroakleExportOptionGroup" role="radiogroup" aria-label="Export file format">
+          <p>เลือกไฟล์</p>
+          <label class="CroakleExportChoice">
+            <input type="radio" name="CroakleExportFormat" value="csv" data-export-format ${CroakleSettings.exportFormat === "csv" ? "checked" : ""} />
+            <span>
+              <strong>CSV</strong>
+              <small>เปิดกับ spreadsheet ได้ง่าย</small>
+            </span>
+          </label>
+          <label class="CroakleExportChoice">
+            <input type="radio" name="CroakleExportFormat" value="json" data-export-format ${CroakleSettings.exportFormat === "json" ? "checked" : ""} />
+            <span>
+              <strong>JSON</strong>
+              <small>เหมาะสำหรับ backup / restore</small>
+            </span>
+          </label>
+        </div>
+
+        <button class="CroakleSettingsActionButton CroakleExportPrimaryButton" type="button" data-export-selected>
+          <span class="CroakleSettingsText">
+            <strong>Export selected file</strong>
+            <span>ดาวน์โหลดตามตัวเลือกด้านบน</span>
+          </span>
+          <span class="CroakleSettingsValue" data-export-selected-label>${CroakleGetExportLabel()}</span>
+        </button>
+      </div>
+
+      <button class="CroakleSettingsActionButton" type="button" data-import-backup>
         <span class="CroakleSettingsText">
-          <strong>Backup JSON</strong>
-          <span>สำรองข้อมูลทั้งหมดสำหรับกู้คืนภายหลัง</span>
+          <strong>Import backup</strong>
+          <span>นำเข้าไฟล์ backup CSV / JSON</span>
+          <span class="CroakleImportStatus" data-import-status aria-live="polite"></span>
         </span>
-        <span class="CroakleSettingsValue">JSON</span>
+        <span class="CroakleSettingsValue">Import</span>
       </button>
+      <input class="CroakleImportFileInput" type="file" accept=".json,.csv,application/json,text/csv" data-import-backup-file aria-label="Import backup file" />
     </section>
   `;
 
@@ -146,8 +191,11 @@ function CroakleBindSettingsControls() {
   });
 
   document.querySelector("[data-settings-lock]")?.addEventListener("change", CroakleHandleLockChange);
-  document.querySelector("[data-export-csv]")?.addEventListener("click", CroakleExportStatsCsv);
-  document.querySelector("[data-export-json]")?.addEventListener("click", CroakleExportBackupJson);
+  document.querySelectorAll("[data-export-scope]").forEach((input) => input.addEventListener("change", CroakleHandleExportOptionChange));
+  document.querySelectorAll("[data-export-format]").forEach((input) => input.addEventListener("change", CroakleHandleExportOptionChange));
+  document.querySelector("[data-export-selected]")?.addEventListener("click", CroakleExportSelectedFile);
+  document.querySelector("[data-import-backup]")?.addEventListener("click", CroakleOpenImportBackupFile);
+  document.querySelector("[data-import-backup-file]")?.addEventListener("change", CroakleHandleImportBackupFile);
 }
 
 function CroakleHandleMoodLabelChange(event) {
@@ -170,6 +218,31 @@ function CroakleHandleMoodColorChange(event) {
 function CroakleHandleLockChange(event) {
   CroakleSettings.lockTodayOnly = event.currentTarget.checked;
   CroakleSaveSettings();
+}
+
+function CroakleHandleExportOptionChange(event) {
+  if (event.currentTarget.dataset.exportScope !== undefined) {
+    CroakleSettings.exportScope = event.currentTarget.value;
+  }
+
+  if (event.currentTarget.dataset.exportFormat !== undefined) {
+    CroakleSettings.exportFormat = event.currentTarget.value;
+  }
+
+  CroakleSaveSettings();
+  CroakleUpdateExportLabel();
+}
+
+function CroakleGetExportLabel() {
+  return `${CroakleSettings.exportScope === "stats" ? "Stats" : "Backup"} ${CroakleSettings.exportFormat.toUpperCase()}`;
+}
+
+function CroakleUpdateExportLabel() {
+  const label = document.querySelector("[data-export-selected-label]");
+
+  if (label) {
+    label.textContent = CroakleGetExportLabel();
+  }
 }
 
 function CroakleEscapeHtml(value) {
@@ -310,28 +383,193 @@ function CroakleCreateStatsRows() {
   return rows;
 }
 
-function CroakleExportStatsCsv() {
-  const csv = CroakleCreateStatsRows()
-    .map((row) => row.map(CroakleCsvCell).join(","))
-    .join("\n");
+function CroakleCreateStatsJson() {
+  const rows = CroakleCreateStatsRows();
+  const headers = rows[0];
 
-  CroakleDownloadFile("croakle-statistics.csv", csv, "text/csv;charset=utf-8");
+  return {
+    app: "Croakle",
+    type: "statistics",
+    exportedAt: new Date().toISOString(),
+    rows: rows.slice(1).map((row) => headers.reduce((item, header, index) => ({ ...item, [header]: row[index] }), {})),
+  };
 }
 
-function CroakleExportBackupJson() {
-  const backup = {
+function CroakleCreateBackupJson() {
+  return {
     app: "Croakle",
+    type: "full_backup",
     exportedAt: new Date().toISOString(),
     state: CroakleState,
     settings: CroakleSettings,
   };
+}
 
-  CroakleDownloadFile("croakle-backup.json", JSON.stringify(backup, null, 2), "application/json;charset=utf-8");
+function CroakleCreateBackupCsv() {
+  return [
+    ["key", "value"],
+    ["app", "Croakle"],
+    ["type", "full_backup"],
+    ["exportedAt", new Date().toISOString()],
+    ["state", JSON.stringify(CroakleState)],
+    ["settings", JSON.stringify(CroakleSettings)],
+  ];
+}
+
+function CroakleExportSelectedFile() {
+  const isStats = CroakleSettings.exportScope === "stats";
+  const isCsv = CroakleSettings.exportFormat === "csv";
+
+  if (isStats && isCsv) {
+    CroakleExportRowsAsCsv("croakle-statistics.csv", CroakleCreateStatsRows());
+    return;
+  }
+
+  if (isStats) {
+    CroakleDownloadFile("croakle-statistics.json", JSON.stringify(CroakleCreateStatsJson(), null, 2), "application/json;charset=utf-8");
+    return;
+  }
+
+  if (isCsv) {
+    CroakleExportRowsAsCsv("croakle-backup.csv", CroakleCreateBackupCsv());
+    return;
+  }
+
+  CroakleDownloadFile("croakle-backup.json", JSON.stringify(CroakleCreateBackupJson(), null, 2), "application/json;charset=utf-8");
+}
+
+function CroakleExportRowsAsCsv(fileName, rows) {
+  const csv = rows.map((row) => row.map(CroakleCsvCell).join(",")).join("\n");
+  CroakleDownloadFile(fileName, csv, "text/csv;charset=utf-8");
+}
+
+function CroakleOpenImportBackupFile() {
+  document.querySelector("[data-import-backup-file]")?.click();
+}
+
+async function CroakleHandleImportBackupFile(event) {
+  const input = event.currentTarget;
+  const file = input.files?.[0];
+
+  if (!file) {
+    return;
+  }
+
+  try {
+    const text = await file.text();
+    const backup = CroakleParseBackupFile(text, file.name);
+
+    CroakleRestoreBackup(backup);
+    CroakleSetImportStatus("นำเข้า backup สำเร็จ");
+    window.location.reload();
+  } catch (error) {
+    CroakleSetImportStatus(error.message || "นำเข้า backup ไม่สำเร็จ");
+  } finally {
+    input.value = "";
+  }
+}
+
+function CroakleParseBackupFile(text, fileName) {
+  const cleanText = text.trim();
+
+  if (!cleanText) {
+    throw new Error("ไฟล์ว่าง");
+  }
+
+  if (fileName.toLowerCase().endsWith(".csv")) {
+    return CroakleParseBackupCsv(cleanText);
+  }
+
+  return CroakleParseBackupJson(cleanText);
+}
+
+function CroakleParseBackupJson(text) {
+  const data = JSON.parse(text);
+
+  if (data?.state) {
+    return data;
+  }
+
+  if (data?.habitTemplates || data?.months) {
+    return { state: data, settings: CroakleSettings };
+  }
+
+  throw new Error("ไฟล์ JSON นี้ไม่ใช่ backup ของ Croakle");
+}
+
+function CroakleParseBackupCsv(text) {
+  const rows = text.split(/\r?\n/).map(CroakleSplitCsvRow).filter((row) => row.length >= 2);
+  const backup = rows.reduce((data, row) => ({ ...data, [row[0]]: row[1] }), {});
+
+  if (!backup.state) {
+    throw new Error("ไฟล์ CSV นี้ไม่ใช่ backup ของ Croakle");
+  }
+
+  return {
+    app: backup.app,
+    type: backup.type,
+    exportedAt: backup.exportedAt,
+    state: JSON.parse(backup.state),
+    settings: backup.settings ? JSON.parse(backup.settings) : CroakleSettings,
+  };
+}
+
+function CroakleRestoreBackup(backup) {
+  if (!backup?.state) {
+    throw new Error("ไม่พบข้อมูล state ใน backup");
+  }
+
+  const nextState = CroakleNormalizeState(backup.state);
+  const nextSettings = backup.settings ? CroakleNormalizeSettings(backup.settings) : CroakleSettings;
+
+  localStorage.setItem(CroakleHabitStoreKey, JSON.stringify(nextState));
+  localStorage.setItem(CroakleSettingsStoreKey, JSON.stringify(nextSettings));
+}
+
+function CroakleSetImportStatus(message) {
+  const status = document.querySelector("[data-import-status]");
+
+  if (status) {
+    status.textContent = message;
+  }
 }
 
 function CroakleCsvCell(value) {
   const text = String(value ?? "");
   return `"${text.replaceAll('"', '""')}"`;
+}
+
+function CroakleSplitCsvRow(row) {
+  const cells = [];
+  let cell = "";
+  let insideQuote = false;
+
+  for (let index = 0; index < row.length; index += 1) {
+    const char = row[index];
+    const nextChar = row[index + 1];
+
+    if (char === '"' && nextChar === '"') {
+      cell += '"';
+      index += 1;
+      continue;
+    }
+
+    if (char === '"') {
+      insideQuote = !insideQuote;
+      continue;
+    }
+
+    if (char === "," && !insideQuote) {
+      cells.push(cell);
+      cell = "";
+      continue;
+    }
+
+    cell += char;
+  }
+
+  cells.push(cell);
+  return cells;
 }
 
 function CroakleDownloadFile(fileName, content, type) {
