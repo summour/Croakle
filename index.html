@@ -3,121 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Croakle habit input and visual progress dashboard" />
+  <meta name="description" content="Croakle clean workspace" />
   <title>Croakle</title>
   <link rel="stylesheet" href="premium.css" />
 </head>
 <body>
-  <main class="CroakleApp">
-    <header class="CroakleHeader">
-      <div>
-        <p class="CroakleEyebrow">Habit Progress</p>
-        <h1>Croakle</h1>
-        <p class="CroakleSubtitle">กรอก habit รายวัน แล้วดู Sum / Goal / Progress แบบ visual</p>
-      </div>
-      <div class="CroakleTabs" aria-label="Main navigation">
-        <button class="CroakleTab is-active" type="button" data-tab="input">Input</button>
-        <button class="CroakleTab" type="button" data-tab="visual">Visual</button>
-      </div>
-    </header>
-
-    <section id="inputPage" class="CroaklePage is-active">
-      <form id="CroakleEntryForm" class="CroakleCard CroakleForm">
-        <div class="CroakleSectionHeader">
-          <h2>กรอกข้อมูล Habit</h2>
-          <p>ใส่ชื่อ habit, วันที่, goal และสถานะ ระบบจะรวมผลเป็น progress bar ให้อัตโนมัติ</p>
-        </div>
-
-        <div class="CroakleFieldGroup">
-          <label class="CroakleField">วันที่
-            <input name="date" type="date" required />
-          </label>
-          <label class="CroakleField">Goal ต่อเดือน
-            <input name="goal" type="number" min="1" max="31" value="30" required />
-          </label>
-        </div>
-
-        <label class="CroakleField">Habit
-          <input name="habit" type="text" placeholder="เช่น Journal, 2L Water, Workout" required />
-        </label>
-
-        <div class="CroakleFieldGroup">
-          <label class="CroakleField">สถานะ
-            <select name="status">
-              <option value="done">Done</option>
-              <option value="missed">Missed</option>
-            </select>
-          </label>
-          <label class="CroakleField">Mood 1-5
-            <select name="mood">
-              <option value="1">1 - Terrible</option>
-              <option value="2">2 - Sad</option>
-              <option value="3">3 - Okay</option>
-              <option value="4">4 - Good</option>
-              <option value="5">5 - Excellent</option>
-            </select>
-          </label>
-        </div>
-
-        <label class="CroakleField">Note
-          <textarea name="note" placeholder="รายละเอียดเพิ่มเติม เช่น เหตุผลที่พลาด หรือสิ่งที่ทำได้ดี"></textarea>
-        </label>
-
-        <div class="CroakleActions">
-          <button class="CroakleButtonPrimary" type="submit">Save Entry</button>
-          <button class="CroakleButtonSecondary" id="CroakleResetButton" type="button">Reset Data</button>
-        </div>
-      </form>
-    </section>
-
-    <section id="visualPage" class="CroaklePage">
-      <div class="CroakleVisualGrid">
-        <article class="CroakleMetricCard">
-          <span id="CroakleTotalHabits">0</span>
-          <p>Total Habits</p>
-        </article>
-        <article class="CroakleMetricCard">
-          <span id="CroakleTotalDone">0</span>
-          <p>Total Done</p>
-        </article>
-        <article class="CroakleMetricCard">
-          <span id="CroakleDoneRate">0%</span>
-          <p>Done Rate</p>
-        </article>
-        <article class="CroakleMetricCard">
-          <span id="CroakleMoodAverage">-</span>
-          <p>Avg Mood</p>
-        </article>
-      </div>
-
-      <article class="CroakleCard CroakleProgressCard">
-        <div class="CroakleSectionHeader">
-          <h2>Habit Progress</h2>
-          <p>เหมือน sheet: Habit / Sum / Goal / Progress</p>
-        </div>
-        <div id="CroakleHabitProgressList" class="CroakleProgressList"></div>
-      </article>
-
-      <div class="CroakleContentGrid">
-        <article class="CroakleCard">
-          <div class="CroakleSectionHeader">
-            <h2>Mood Visual</h2>
-            <p>กราฟ mood ตามวันที่บันทึก</p>
-          </div>
-          <div id="CroakleMoodChart" class="CroakleLineChart"></div>
-        </article>
-
-        <article class="CroakleCard">
-          <div class="CroakleSectionHeader">
-            <h2>Latest Entries</h2>
-            <p>ข้อมูลล่าสุดใน LocalStorage</p>
-          </div>
-          <div id="CroakleEntryList" class="CroakleEntryList"></div>
-        </article>
-      </div>
+  <main class="CroakleCleanPage">
+    <section class="CroakleCleanCard">
+      <p class="CroakleCleanEyebrow">Clean reset</p>
+      <h1>Croakle</h1>
+      <p>ล้างหน้าแอพออกหมดแล้ว เหลือพื้นที่เปล่าสำหรับเริ่มออกแบบใหม่</p>
     </section>
   </main>
-
   <script src="app.js"></script>
 </body>
 </html>
