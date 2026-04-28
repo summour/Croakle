@@ -27,8 +27,8 @@ function CroakleTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function CroakleClampPercent(value) {
-  return Math.max(0, Math.min(100, Math.round(Number(value || 0))));
+function CroakleClampGoal(value) {
+  return Math.max(1, Math.min(31, Math.round(Number(value || 30))));
 }
 
 function CroakleEscape(value) {
@@ -77,9 +77,8 @@ function CroakleInitForm() {
       date: data.get("date") || CroakleTodayKey(),
       habit: String(data.get("habit") || "").trim(),
       status: data.get("status") || "done",
+      goal: CroakleClampGoal(data.get("goal")),
       mood: Number(data.get("mood") || 3),
-      project: String(data.get("project") || "").trim(),
-      progress: CroakleClampPercent(data.get("progress")),
       note: String(data.get("note") || "").trim(),
       createdAt: new Date().toISOString()
     });
@@ -87,6 +86,7 @@ function CroakleInitForm() {
     CroakleSaveEntries();
     form.reset();
     form.date.value = CroakleTodayKey();
+    form.goal.value = 30;
     CroakleRenderVisuals();
     CroakleSwitchTab("visual");
   });
@@ -104,44 +104,74 @@ function CroakleInitReset() {
   });
 }
 
-function CroakleRenderVisuals() {
-  const total = CroakleEntries.length;
-  const done = CroakleEntries.filter(entry => entry.status === "done").length;
-  const doneRate = total ? Math.round((done / total) * 100) : 0;
-  const moodAverage = total ? (CroakleEntries.reduce((sum, entry) => sum + Number(entry.mood || 0), 0) / total).toFixed(1) : "-";
-  const projectEntries = CroakleEntries.filter(entry => entry.project);
-  const projectAverage = projectEntries.length
-    ? Math.round(projectEntries.reduce((sum, entry) => sum + Number(entry.progress || 0), 0) / projectEntries.length)
-    : 0;
+function CroakleGetHabitSummary() {
+  return Object.values(CroakleEntries.reduce((summary, entry) => {
+    const habitName = entry.habit || "Untitled";
 
-  CroakleSetText("CroakleTotalEntries", total);
+    if (!summary[habitName]) {
+      summary[habitName] = {
+        habit: habitName,
+        sum: 0,
+        goal: CroakleClampGoal(entry.goal),
+        entries: 0
+      };
+    }
+
+    summary[habitName].entries += 1;
+    summary[habitName].goal = CroakleClampGoal(entry.goal || summary[habitName].goal);
+
+    if (entry.status === "done") {
+      summary[habitName].sum += 1;
+    }
+
+    return summary;
+  }, {})).sort((a, b) => b.sum - a.sum || a.habit.localeCompare(b.habit));
+}
+
+function CroakleRenderVisuals() {
+  const habitSummary = CroakleGetHabitSummary();
+  const totalDone = habitSummary.reduce((sum, habit) => sum + habit.sum, 0);
+  const totalGoal = habitSummary.reduce((sum, habit) => sum + habit.goal, 0);
+  const doneRate = totalGoal ? Math.round((totalDone / totalGoal) * 100) : 0;
+  const moodAverage = CroakleEntries.length
+    ? (CroakleEntries.reduce((sum, entry) => sum + Number(entry.mood || 0), 0) / CroakleEntries.length).toFixed(1)
+    : "-";
+
+  CroakleSetText("CroakleTotalHabits", habitSummary.length);
+  CroakleSetText("CroakleTotalDone", totalDone);
   CroakleSetText("CroakleDoneRate", `${doneRate}%`);
   CroakleSetText("CroakleMoodAverage", moodAverage);
-  CroakleSetText("CroakleProjectAverage", `${projectAverage}%`);
 
-  CroakleRenderHabitChart(done, total - done);
+  CroakleRenderHabitProgress(habitSummary);
   CroakleRenderMoodChart();
   CroakleRenderEntryList();
 }
 
-function CroakleRenderHabitChart(done, missed) {
-  const chart = document.getElementById("CroakleHabitChart");
-  if (!chart) return;
+function CroakleRenderHabitProgress(habits) {
+  const list = document.getElementById("CroakleHabitProgressList");
+  if (!list) return;
 
-  const total = done + missed;
-  const doneWidth = total ? Math.round((done / total) * 100) : 0;
-  const missedWidth = total ? 100 - doneWidth : 0;
+  if (!habits.length) {
+    list.innerHTML = `<p class="CroakleEmptyText">ยังไม่มีข้อมูล</p>`;
+    return;
+  }
 
-  chart.innerHTML = `
-    <div class="CroakleBarRow">
-      <div class="CroakleBarLabel"><span>Done</span><strong>${done}</strong></div>
-      <div class="CroakleBarTrack"><i style="width:${doneWidth}%"></i></div>
-    </div>
-    <div class="CroakleBarRow">
-      <div class="CroakleBarLabel"><span>Missed</span><strong>${missed}</strong></div>
-      <div class="CroakleBarTrack"><i style="width:${missedWidth}%"></i></div>
-    </div>
-  `;
+  list.innerHTML = habits.map(habit => {
+    const progress = Math.round((habit.sum / habit.goal) * 100);
+    const width = Math.min(progress, 100);
+
+    return `
+      <article class="CroakleProgressRow">
+        <div class="CroakleProgressHabit">${CroakleEscape(habit.habit)}</div>
+        <div class="CroakleProgressSum">${habit.sum}</div>
+        <div class="CroakleProgressGoal">${habit.goal}</div>
+        <div class="CroakleProgressTrack" aria-label="${CroakleEscape(habit.habit)} progress ${progress}%">
+          <i style="width:${width}%"></i>
+        </div>
+        <strong class="CroakleProgressPercent">${progress}%</strong>
+      </article>
+    `;
+  }).join("");
 }
 
 function CroakleRenderMoodChart() {
@@ -191,12 +221,11 @@ function CroakleRenderEntryList() {
     return;
   }
 
-  list.innerHTML = CroakleEntries.map(entry => `
+  list.innerHTML = CroakleEntries.slice(0, 8).map(entry => `
     <article class="CroakleEntryCard">
       <div>
         <h3>${CroakleEscape(entry.habit)}</h3>
-        <p>${CroakleEscape(entry.date)} · ${entry.status === "done" ? "Done" : "Missed"} · Mood ${entry.mood} - ${CroakleMoodLabels[entry.mood]}</p>
-        ${entry.project ? `<p>Project: ${CroakleEscape(entry.project)} · ${entry.progress}%</p>` : ""}
+        <p>${CroakleEscape(entry.date)} · ${entry.status === "done" ? "Done" : "Missed"} · Goal ${entry.goal || 30} · Mood ${entry.mood} - ${CroakleMoodLabels[entry.mood]}</p>
         ${entry.note ? `<p>${CroakleEscape(entry.note)}</p>` : ""}
       </div>
       <strong>${entry.status === "done" ? "✓" : "–"}</strong>
