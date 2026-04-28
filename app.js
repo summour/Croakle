@@ -41,25 +41,26 @@ function CroakleLoadState() {
   }
 }
 
-function CroakleGetCurrentMonthCursor() {
+function CroakleGetCurrentDateCursor() {
   const today = new Date();
 
   return {
+    date: today.getDate(),
     month: today.getMonth(),
     year: today.getFullYear(),
   };
 }
 
 function CroakleCreateDefaultState() {
-  const currentMonth = CroakleGetCurrentMonthCursor();
+  const currentDate = CroakleGetCurrentDateCursor();
 
   return {
-    trackMonth: currentMonth.month,
-    trackYear: currentMonth.year,
-    bestMonth: currentMonth.month,
-    bestYear: currentMonth.year,
-    moodMonth: currentMonth.month,
-    moodYear: currentMonth.year,
+    trackMonth: currentDate.month,
+    trackYear: currentDate.year,
+    bestMonth: currentDate.month,
+    bestYear: currentDate.year,
+    moodMonth: currentDate.month,
+    moodYear: currentDate.year,
     months: {},
   };
 }
@@ -111,12 +112,12 @@ function CroakleNormalizeMoodValue(value) {
 }
 
 function CroakleLockVisibleMonthsToCurrent(state) {
-  const currentMonth = CroakleGetCurrentMonthCursor();
+  const currentDate = CroakleGetCurrentDateCursor();
   const pageNames = ["track", "best", "mood"];
 
   pageNames.forEach((pageName) => {
-    state[`${pageName}Month`] = currentMonth.month;
-    state[`${pageName}Year`] = currentMonth.year;
+    state[`${pageName}Month`] = currentDate.month;
+    state[`${pageName}Year`] = currentDate.year;
   });
 }
 
@@ -136,8 +137,25 @@ function CroakleGetMonthLabel(year, month) {
   return `${CroakleMonthNames[month]} ${year}`;
 }
 
+function CroakleGetMonthGridClass(daysInMonth) {
+  return `CroakleDays${daysInMonth}`;
+}
+
 function CroakleGetMoodLabel(value) {
   return CroakleMoodLabels[value] || "No mood";
+}
+
+function CroakleIsCurrentMonth(year, month) {
+  const currentDate = CroakleGetCurrentDateCursor();
+  return year === currentDate.year && month === currentDate.month;
+}
+
+function CroakleGetCurrentDayClass(year, month, day) {
+  if (!CroakleIsCurrentMonth(year, month)) {
+    return "";
+  }
+
+  return day === CroakleGetCurrentDateCursor().date ? " CroakleCurrentDay" : "";
 }
 
 function CroakleGetMonthData(year, month) {
@@ -187,6 +205,7 @@ function CroakleSetPage(pageName) {
   });
 
   CroakleBottomNav.hidden = pageName === "menu";
+  CroakleScrollCurrentDateIntoView();
 }
 
 function CroakleCountDone(days) {
@@ -197,34 +216,51 @@ function CroakleRenderTrackHeader() {
   const year = CroakleState.trackYear;
   const month = CroakleState.trackMonth;
   const trackData = CroakleGetMonthData(year, month);
-  const firstMondayDate = 1 + ((8 - new Date(year, month, 1).getDay()) % 7);
-  const previewDates = Array.from({ length: 7 }, (_, index) => firstMondayDate + index);
+  const daysInMonth = CroakleGetDaysInMonth(year, month);
+  const dayIndexes = Array.from({ length: daysInMonth }, (_, index) => index);
+  const monthGridClass = CroakleGetMonthGridClass(daysInMonth);
 
   document.querySelector("#CroakleTrackMonth").textContent = CroakleGetMonthLabel(year, month);
-  document.querySelector("#CroakleTrackDates").innerHTML = previewDates.map((date) => `<span>${date}</span>`).join("");
-  document.querySelector("#CroakleTrackMoodPreview").innerHTML = previewDates
-    .map((date) => CroakleCreateMoodBadge(trackData.moods[date - 1]))
+  document.querySelector("#CroakleTrackDates").className = `CroakleSevenGrid CroakleDateRow CroakleMonthGrid ${monthGridClass}`;
+  document.querySelector("#CroakleTrackMoodPreview").className = `CroakleSevenGrid CroakleMoodPreview CroakleMonthGrid ${monthGridClass}`;
+  document.querySelector("#CroakleTrackDates").innerHTML = dayIndexes
+    .map((dayIndex) => {
+      const day = dayIndex + 1;
+      const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
+
+      return `<span class="CroakleDateCell${currentDayClass}" data-current-date="${currentDayClass ? "true" : "false"}">${day}</span>`;
+    })
+    .join("");
+  document.querySelector("#CroakleTrackMoodPreview").innerHTML = dayIndexes
+    .map((dayIndex) => CroakleCreateMoodBadge(trackData.moods[dayIndex], CroakleGetCurrentDayClass(year, month, dayIndex + 1)))
     .join("");
 }
 
 function CroakleRenderTrackList() {
   const list = document.querySelector("#CroakleTrackList");
-  const trackData = CroakleGetMonthData(CroakleState.trackYear, CroakleState.trackMonth);
-  const previewDays = Array.from({ length: 7 }, (_, index) => index);
+  const year = CroakleState.trackYear;
+  const month = CroakleState.trackMonth;
+  const trackData = CroakleGetMonthData(year, month);
+  const daysInMonth = CroakleGetDaysInMonth(year, month);
+  const dayIndexes = Array.from({ length: daysInMonth }, (_, index) => index);
+  const monthGridClass = CroakleGetMonthGridClass(daysInMonth);
 
   list.innerHTML = trackData.habits.map((habit, habitIndex) => {
     const current = CroakleCountDone(habit.days);
-    const checks = previewDays
+    const checks = dayIndexes
       .map((dayIndex) => {
         const done = habit.days[dayIndex];
+        const day = dayIndex + 1;
+        const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
 
         return `
           <button
-            class="CroakleCheckButton ${done ? "CroakleCheckDone" : "CroakleCheckEmpty"}"
+            class="CroakleCheckButton ${done ? "CroakleCheckDone" : "CroakleCheckEmpty"}${currentDayClass}"
             type="button"
             data-habit-index="${habitIndex}"
             data-day-index="${dayIndex}"
-            aria-label="${habit.name} day ${dayIndex + 1} ${done ? "done" : "not done"}"
+            data-current-date="${currentDayClass ? "true" : "false"}"
+            aria-label="${habit.name} day ${day} ${done ? "done" : "not done"}"
             aria-pressed="${done}"
           >${done ? "✓" : ""}</button>
         `;
@@ -238,7 +274,7 @@ function CroakleRenderTrackList() {
           <strong>${habit.name}</strong>
           <span class="CroakleGoal">${current}/${habit.goal}</span>
         </div>
-        <div class="CroakleCheckGrid">${checks}</div>
+        <div class="CroakleCheckGrid CroakleMonthGrid ${monthGridClass}">${checks}</div>
       </section>
     `;
   }).join("");
@@ -281,7 +317,7 @@ function CroakleRenderBestList() {
     <section class="CroakleBestRow">
       <strong>${habit.name}</strong>
       <div class="CroaklePercentBar" aria-label="${habit.percent} percent">
-        <span style="width: ${habit.percent}%"></span>
+        <span></span>
         <em>${habit.percent}%</em>
       </div>
       <span>${habit.month}</span>
@@ -292,15 +328,28 @@ function CroakleRenderBestList() {
 
 function CroakleRenderMoodCalendar() {
   const calendar = document.querySelector("#CroakleMoodCalendar");
-  const moodData = CroakleGetMonthData(CroakleState.moodYear, CroakleState.moodMonth);
+  const year = CroakleState.moodYear;
+  const month = CroakleState.moodMonth;
+  const moodData = CroakleGetMonthData(year, month);
 
-  document.querySelector("#CroakleMoodMonth").textContent = CroakleGetMonthLabel(CroakleState.moodYear, CroakleState.moodMonth);
-  calendar.innerHTML = moodData.moods.map((mood, index) => `
-    <button class="CroakleMoodButton" type="button" data-mood-index="${index}" aria-label="Day ${index + 1}, mood ${CroakleGetMoodLabel(mood)}">
-      <small>${index + 1}</small>
-      ${CroakleCreateMoodBadge(mood)}
-    </button>
-  `).join("");
+  document.querySelector("#CroakleMoodMonth").textContent = CroakleGetMonthLabel(year, month);
+  calendar.innerHTML = moodData.moods.map((mood, index) => {
+    const day = index + 1;
+    const currentDayClass = CroakleGetCurrentDayClass(year, month, day);
+
+    return `
+      <button
+        class="CroakleMoodButton${currentDayClass}"
+        type="button"
+        data-mood-index="${index}"
+        data-current-date="${currentDayClass ? "true" : "false"}"
+        aria-label="Day ${day}, mood ${CroakleGetMoodLabel(mood)}"
+      >
+        <small>${day}</small>
+        ${CroakleCreateMoodBadge(mood, currentDayClass)}
+      </button>
+    `;
+  }).join("");
 
   document.querySelectorAll(".CroakleMoodButton").forEach((button) => {
     button.addEventListener("click", CroakleCycleMood);
@@ -309,10 +358,10 @@ function CroakleRenderMoodCalendar() {
   CroakleRenderTopMoods();
 }
 
-function CroakleCreateMoodBadge(mood) {
+function CroakleCreateMoodBadge(mood, extraClass = "") {
   const levelClass = mood ? `CroakleMoodLevel${mood}` : "CroakleMoodEmpty";
 
-  return `<span class="CroakleMoodBadge ${levelClass}" title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
+  return `<span class="CroakleMoodBadge ${levelClass}${extraClass}" title="${CroakleGetMoodLabel(mood)}">${mood || ""}</span>`;
 }
 
 function CroakleCycleMood(event) {
@@ -346,11 +395,24 @@ function CroakleRenderTopMoods() {
   topMoodArea.innerHTML = topMoods.map((mood) => CroakleCreateMoodBadge(mood)).join("");
 }
 
+function CroakleScrollCurrentDateIntoView() {
+  window.requestAnimationFrame(() => {
+    const activePage = document.querySelector(".CroaklePageActive");
+    const currentDateTarget = activePage?.querySelector('[data-current-date="true"]');
+
+    currentDateTarget?.scrollIntoView({
+      block: "center",
+      inline: "center",
+    });
+  });
+}
+
 function CroakleRenderAll() {
   CroakleRenderTrackHeader();
   CroakleRenderTrackList();
   CroakleRenderBestList();
   CroakleRenderMoodCalendar();
+  CroakleScrollCurrentDateIntoView();
 }
 
 CroaklePageButtons.forEach((button) => {
