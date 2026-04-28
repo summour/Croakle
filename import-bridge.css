@@ -1,0 +1,41 @@
+.CroakleImportActionButton {
+  appearance: none;
+  min-height: 42px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleSurface);
+  color: var(--CroakleText);
+  padding: 0 16px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 850;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.CroakleImportActionButton:active {
+  transform: scale(0.96);
+}
+
+.CroakleImportActionButton:focus-visible {
+  outline: 2px solid var(--CroakleLine);
+  outline-offset: 3px;
+}
+
+.CroakleImportFileInput {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.CroakleImportStatus {
+  display: block;
+  margin-top: 8px;
+  color: var(--CroakleMuted);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.35;
+}
