@@ -147,6 +147,42 @@
         <button class="CroakleConfirmHabitButton" id="CroakleCloseReorderHabitDone" type="button">Done</button>
       </div>
     </dialog>
+
+    <dialog class="CroakleAddHabitDialog" id="CroakleHabitDetailDialog" aria-labelledby="CroakleHabitDetailTitle">
+      <form class="CroakleAddHabitForm" id="CroakleHabitDetailForm" method="dialog">
+        <header class="CroakleDetailHeader">
+          <button class="CroakleDeleteHabitButton" type="button" id="CroakleDeleteHabitButton">Delete</button>
+          <h2 id="CroakleHabitDetailTitle">Habit Details</h2>
+          <button type="button" id="CroakleCloseHabitDetail" aria-label="ปิด">×</button>
+        </header>
+
+        <input id="CroakleHabitDetailIndex" name="habitIndex" type="hidden" />
+
+        <label class="CroakleField">
+          <span>Habit name</span>
+          <input id="CroakleHabitDetailName" name="habitName" type="text" autocomplete="off" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Goal Per Week</span>
+          <input id="CroakleHabitDetailGoal" name="habitGoal" type="number" min="1" max="7" inputmode="numeric" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Description</span>
+          <textarea id="CroakleHabitDetailDescription" name="habitDescription" rows="3" placeholder="e.g., 10 push ups"></textarea>
+        </label>
+
+        <fieldset class="CroaklePriorityField">
+          <legend>Priority</legend>
+          <label><input type="radio" name="habitPriority" value="high" /><span>High</span></label>
+          <label><input type="radio" name="habitPriority" value="medium" /><span>Medium</span></label>
+          <label><input type="radio" name="habitPriority" value="low" /><span>Low</span></label>
+        </fieldset>
+
+        <button class="CroakleConfirmHabitButton" type="submit">Update</button>
+      </form>
+    </dialog>
   </main>
 
   <script src="app.js"></script>
