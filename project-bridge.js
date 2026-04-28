@@ -64,6 +64,7 @@ function CroakleCreateProject(project, index = 0) {
     description: project.description || "",
     priority: project.priority || "medium",
     completed: Boolean(project.completed),
+    completedWeekKey: project.completedWeekKey || "",
     days: Array.from({ length: 7 }, (_, dayIndex) => Boolean(project.days?.[dayIndex])),
   };
 }
@@ -100,6 +101,11 @@ function CroakleProjectGetWeekDates() {
   return Array.from({ length: 7 }, (_, index) => CroakleProjectShiftDate(monday, index));
 }
 
+function CroakleProjectGetCurrentWeekKey() {
+  const monday = CroakleProjectGetWeekDates()[0];
+  return [monday.getFullYear(), String(monday.getMonth() + 1).padStart(2, "0"), String(monday.getDate()).padStart(2, "0")].join("-");
+}
+
 function CroakleProjectGetMonthLabel(date) {
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
@@ -119,7 +125,17 @@ function CroakleRenderProjectHeader() {
     .join("");
 }
 
+function CroakleShouldShowProjectInCurrentWeek(project) {
+  return !project.completed || project.completedWeekKey === CroakleProjectGetCurrentWeekKey();
+}
+
 function CroakleGetVisibleProjects() {
+  return CroakleProjectState.projects
+    .map((project, projectIndex) => ({ project, projectIndex }))
+    .filter(({ project }) => CroakleShouldShowProjectInCurrentWeek(project));
+}
+
+function CroakleGetActiveProjects() {
   return CroakleProjectState.projects
     .map((project, projectIndex) => ({ project, projectIndex }))
     .filter(({ project }) => !project.completed);
@@ -139,32 +155,7 @@ function CroakleRenderProjectList() {
   const visibleProjects = CroakleGetVisibleProjects();
 
   CroakleProjectList.innerHTML = visibleProjects.length
-    ? visibleProjects.map(({ project, projectIndex }) => {
-      const doneCount = project.days.filter(Boolean).length;
-      const checks = project.days
-        .map((done, dayIndex) => `
-          <button
-            class="CroakleProjectCheckButton ${done ? "CroakleProjectCheckDone" : "CroakleProjectCheckEmpty"}"
-            type="button"
-            data-project-index="${projectIndex}"
-            data-project-day="${dayIndex}"
-            aria-label="${project.name} day ${dayIndex + 1} ${done ? "done" : "not done"}"
-            aria-pressed="${done}"
-          >${done ? "✓" : ""}</button>
-        `)
-        .join("");
-
-      return `
-        <section class="CroakleProjectRow">
-          <div class="CroakleProjectTop">
-            <span class="CroakleProjectDot" aria-hidden="true"></span>
-            <button class="CroakleProjectNameButton" type="button" data-project-detail-index="${projectIndex}">${project.name}</button>
-            <span class="CroakleProjectGoal">${doneCount}/${project.goal}</span>
-          </div>
-          <div class="CroakleProjectCheckGrid">${checks}</div>
-        </section>
-      `;
-    }).join("")
+    ? visibleProjects.map(({ project, projectIndex }) => CroakleProjectRowTemplate(project, projectIndex)).join("")
     : `<p class="CroakleProjectEmptyText">No active projects. Restore from Archive or add a new project.</p>`;
 
   document.querySelectorAll(".CroakleProjectCheckButton").forEach((button) => {
@@ -174,6 +165,37 @@ function CroakleRenderProjectList() {
   document.querySelectorAll(".CroakleProjectNameButton").forEach((button) => {
     button.addEventListener("click", CroakleOpenProjectDetailDialog);
   });
+}
+
+function CroakleProjectRowTemplate(project, projectIndex) {
+  const doneCount = project.days.filter(Boolean).length;
+  const archivedClass = project.completed ? " CroakleProjectRowArchived" : "";
+  const statusText = project.completed ? `<span class="CroakleProjectStatus">Archived</span>` : "";
+  const checks = project.days
+    .map((done, dayIndex) => `
+      <button
+        class="CroakleProjectCheckButton ${done ? "CroakleProjectCheckDone" : "CroakleProjectCheckEmpty"}"
+        type="button"
+        data-project-index="${projectIndex}"
+        data-project-day="${dayIndex}"
+        aria-label="${project.name} day ${dayIndex + 1} ${done ? "done" : "not done"}"
+        aria-pressed="${done}"
+        ${project.completed ? "disabled" : ""}
+      >${done ? "✓" : ""}</button>
+    `)
+    .join("");
+
+  return `
+    <section class="CroakleProjectRow${archivedClass}">
+      <div class="CroakleProjectTop">
+        <span class="CroakleProjectDot" aria-hidden="true"></span>
+        <button class="CroakleProjectNameButton" type="button" data-project-detail-index="${projectIndex}" ${project.completed ? "disabled" : ""}>${project.name}</button>
+        <span class="CroakleProjectGoal">${doneCount}/${project.goal}</span>
+      </div>
+      ${statusText}
+      <div class="CroakleProjectCheckGrid">${checks}</div>
+    </section>
+  `;
 }
 
 function CroakleToggleProjectDay(event) {
@@ -402,6 +424,7 @@ function CroakleHandleProjectComplete() {
   }
 
   project.completed = true;
+  project.completedWeekKey = CroakleProjectGetCurrentWeekKey();
   CroakleSaveProjectState();
   CroakleCloseProjectDetailDialog();
   CroakleRenderProjectList();
@@ -454,13 +477,14 @@ function CroakleRestoreProjectFromArchive(event) {
   }
 
   project.completed = false;
+  project.completedWeekKey = "";
   CroakleSaveProjectState();
   CroakleRenderProjectList();
   CroakleRenderProjectArchiveList();
 }
 
 function CroakleReorderProjects() {
-  const activeProjects = CroakleGetVisibleProjects().map(({ project }) => project).reverse();
+  const activeProjects = CroakleGetActiveProjects().map(({ project }) => project).reverse();
   const archivedProjects = CroakleGetArchivedProjects().map(({ project }) => project);
 
   CroakleProjectState.projects = [...activeProjects, ...archivedProjects];
