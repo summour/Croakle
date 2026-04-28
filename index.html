@@ -16,9 +16,10 @@
   <link rel="stylesheet" href="best-scroll.css" />
   <link rel="stylesheet" href="settings.css" />
   <link rel="stylesheet" href="import-bridge.css" />
+  <link rel="stylesheet" href="project.css" />
 </head>
 <body>
-  <main class="CroakleHabitMoodShell" aria-label="Croakle Habit and Mood Tracker">
+  <main class="CroakleHabitMoodShell" aria-label="Croakle Habit, Project, and Mood Tracker">
     <section class="CroaklePage CroakleMenuPage CroaklePageActive" data-page="menu">
       <div class="CroakleHeroHeader">
         <div>
@@ -30,11 +31,12 @@
 
       <div class="CroakleEmptyPanel">
         <p class="CroakleEmptyTitle">Choose a view</p>
-        <p class="CroakleEmptyText">Track habits, review monthly progress, and check mood patterns.</p>
+        <p class="CroakleEmptyText">Track habits, manage projects, review monthly progress, and check mood patterns.</p>
       </div>
 
       <nav class="CroakleMenuList" aria-label="Habit mood menu">
         <button type="button" data-page-target="track"><span>Track progress</span><span>›</span></button>
+        <button type="button" data-page-target="project"><span>Projects</span><span>›</span></button>
         <button type="button" data-page-target="best"><span>Best habits</span><span>›</span></button>
         <button type="button" data-page-target="mood"><span>Top moods</span><span>›</span></button>
       </nav>
@@ -62,6 +64,31 @@
         </div>
 
         <div class="CroakleHabitList" id="CroakleTrackList"></div>
+      </article>
+    </section>
+
+    <section class="CroaklePage" data-page="project">
+      <article class="CroakleCard" aria-label="Project progress calendar">
+        <div class="CroakleMonthHeader">
+          <button type="button" aria-label="โปรเจกต์สัปดาห์ก่อนหน้า">‹</button>
+          <strong id="CroakleProjectMonth">April 2026</strong>
+          <button type="button" aria-label="โปรเจกต์สัปดาห์ถัดไป">›</button>
+        </div>
+
+        <div class="CroakleSevenGrid CroakleWeekHeader" aria-hidden="true">
+          <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+        </div>
+
+        <div class="CroakleSevenGrid CroakleDateRow" id="CroakleProjectDates" aria-hidden="true"></div>
+        <div class="CroakleSevenGrid CroakleMoodPreview" id="CroakleProjectMoodPreview" aria-label="Project week preview"></div>
+        <div class="CroakleDivider" aria-hidden="true"></div>
+
+        <div class="CroakleTrackActions">
+          <button class="CroakleAddHabitButton" id="CroakleOpenAddProject" type="button">+ Add Project</button>
+          <button class="CroakleSecondaryActionButton" id="CroakleOpenReorderProject" type="button">Reorder</button>
+        </div>
+
+        <div class="CroakleProjectList" id="CroakleProjectList"></div>
       </article>
     </section>
 
@@ -140,7 +167,7 @@
             <div class="CroakleSettingsItem">
               <div class="CroakleSettingsText">
                 <strong>Storage</strong>
-                <span>Habit and mood data are saved on this device.</span>
+                <span>Habit, project, and mood data are saved on this device.</span>
               </div>
               <span class="CroakleSettingsValue">Local</span>
             </div>
@@ -157,9 +184,10 @@
       </article>
     </section>
 
-    <footer class="CroakleBottomNav" aria-label="Quick navigation">
+    <footer class="CroakleBottomNav CroakleProjectNav" aria-label="Quick navigation">
       <button type="button" data-page-target="menu">Menu</button>
       <button type="button" data-page-target="track">Track</button>
+      <button type="button" data-page-target="project">Project</button>
       <button type="button" data-page-target="best">Best</button>
       <button type="button" data-page-target="mood">Mood</button>
     </footer>
@@ -245,9 +273,49 @@
         <button class="CroakleConfirmHabitButton" type="submit">Update</button>
       </form>
     </dialog>
+
+    <dialog class="CroakleAddHabitDialog" id="CroakleProjectDetailDialog" aria-labelledby="CroakleProjectDetailTitle">
+      <form class="CroakleAddHabitForm" id="CroakleProjectDetailForm" method="dialog">
+        <header class="CroakleDetailHeader">
+          <button class="CroakleDeleteHabitButton" type="button" id="CroakleDeleteProjectButton">Delete</button>
+          <h2 id="CroakleProjectDetailTitle">Project Details</h2>
+          <button type="button" id="CroakleCloseProjectDetail" aria-label="ปิด">×</button>
+        </header>
+
+        <input id="CroakleProjectDetailIndex" name="projectIndex" type="hidden" />
+
+        <label class="CroakleField">
+          <span>Project name</span>
+          <input id="CroakleProjectDetailName" name="projectName" type="text" autocomplete="off" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Goal Per Week</span>
+          <input id="CroakleProjectDetailGoal" name="projectGoal" type="number" min="1" max="7" inputmode="numeric" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Description</span>
+          <textarea id="CroakleProjectDetailDescription" name="projectDescription" rows="3" placeholder="e.g., push code, fix bugs"></textarea>
+        </label>
+
+        <fieldset class="CroaklePriorityField">
+          <legend>Priority</legend>
+          <label><input type="radio" name="projectPriority" value="high" /><span>High</span></label>
+          <label><input type="radio" name="projectPriority" value="medium" /><span>Medium</span></label>
+          <label><input type="radio" name="projectPriority" value="low" /><span>Low</span></label>
+        </fieldset>
+
+        <div class="CroakleProjectDetailActions">
+          <button class="CroakleProjectDetailActionButton" type="submit">Update</button>
+          <button class="CroakleProjectDetailActionButton" id="CroakleCompleteProjectButton" type="button">Complete</button>
+        </div>
+      </form>
+    </dialog>
   </main>
 
   <script src="app.js"></script>
+  <script src="project-bridge.js"></script>
   <script src="mood-bridge.js"></script>
   <script src="settings-bridge.js"></script>
   <script src="import-bridge.js"></script>
