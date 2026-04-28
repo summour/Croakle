@@ -1,31 +1,31 @@
 (() => {
   const CroakleImportStoreKey = "CroakleHabitMoodDataCleanV1";
   const CroakleImportSelectors = {
-    exportItem: ".CroakleSettingsItem:nth-of-type(2)",
+    exportJsonButton: "[data-export-json]",
     importButton: "#CroakleOpenImportHabit",
     fileInput: "#CroakleImportHabitFile",
     status: "#CroakleImportStatus",
   };
 
   function CroakleImportInit() {
-    const exportItem = document.querySelector(CroakleImportSelectors.exportItem);
+    const exportJsonButton = document.querySelector(CroakleImportSelectors.exportJsonButton);
 
-    if (!exportItem || document.querySelector(CroakleImportSelectors.importButton)) {
+    if (!exportJsonButton || document.querySelector(CroakleImportSelectors.importButton)) {
       return;
     }
 
-    exportItem.insertAdjacentHTML(
+    exportJsonButton.insertAdjacentHTML(
       "afterend",
       `
-        <div class="CroakleSettingsItem CroakleImportSettingsItem">
-          <div class="CroakleSettingsText">
-            <strong>Import</strong>
-            <span>Import habit list from CSV / JSON.</span>
+        <button class="CroakleSettingsActionButton CroakleImportSettingsButton" id="CroakleOpenImportHabit" type="button">
+          <span class="CroakleSettingsText">
+            <strong>Import JSON / CSV</strong>
+            <span>กู้คืนหรือเพิ่มรายการ Habit จากไฟล์</span>
             <span class="CroakleImportStatus" id="CroakleImportStatus" aria-live="polite"></span>
-          </div>
-          <button class="CroakleImportActionButton" id="CroakleOpenImportHabit" type="button">Import</button>
-          <input class="CroakleImportFileInput" id="CroakleImportHabitFile" type="file" accept=".json,.csv,application/json,text/csv" aria-label="Import habit file" />
-        </div>
+          </span>
+          <span class="CroakleSettingsValue">Import</span>
+        </button>
+        <input class="CroakleImportFileInput" id="CroakleImportHabitFile" type="file" accept=".json,.csv,application/json,text/csv" aria-label="Import habit file" />
       `
     );
 
@@ -80,7 +80,8 @@
 
   function CroakleImportParseJson(text) {
     const data = JSON.parse(text);
-    const source = Array.isArray(data) ? data : data.habitTemplates || data.habits || [];
+    const backupState = data?.state?.habitTemplates ? data.state.habitTemplates : null;
+    const source = Array.isArray(data) ? data : backupState || data.habitTemplates || data.habits || [];
 
     return source.map(CroakleImportNormalizeHabit).filter(Boolean);
   }
@@ -193,5 +194,9 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", CroakleImportInit);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", CroakleImportInit);
+  } else {
+    CroakleImportInit();
+  }
 })();
