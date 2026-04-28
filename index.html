@@ -37,25 +37,18 @@
     <section class="CroaklePage" data-page="track">
       <article class="CroakleCard" aria-label="Track progress calendar">
         <div class="CroakleMonthHeader">
-          <button type="button" aria-label="เดือนก่อนหน้า">‹</button>
-          <strong>June 2024</strong>
-          <button type="button" aria-label="เดือนถัดไป">›</button>
+          <button type="button" data-month-target="track" data-month-action="previous" aria-label="เดือนก่อนหน้า">‹</button>
+          <strong id="CroakleTrackMonth">June 2024</strong>
+          <button type="button" data-month-target="track" data-month-action="next" aria-label="เดือนถัดไป">›</button>
         </div>
 
         <div class="CroakleSevenGrid CroakleWeekHeader" aria-hidden="true">
           <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
         </div>
 
-        <div class="CroakleSevenGrid CroakleDateRow" aria-hidden="true">
-          <span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
-        </div>
-
-        <div class="CroakleSevenGrid CroakleMoodPreview" aria-label="Mood preview">
-          <span>🙂</span><span>😡</span><span>😬</span><span>😐</span><span>🙂</span><span>😎</span><span>😊</span>
-        </div>
-
+        <div class="CroakleSevenGrid CroakleDateRow" id="CroakleTrackDates" aria-hidden="true"></div>
+        <div class="CroakleSevenGrid CroakleMoodPreview" id="CroakleTrackMoodPreview" aria-label="Mood preview"></div>
         <div class="CroakleDivider" aria-hidden="true"></div>
-
         <div class="CroakleHabitList" id="CroakleTrackList"></div>
       </article>
     </section>
@@ -63,9 +56,9 @@
     <section class="CroaklePage" data-page="best">
       <article class="CroakleCard" aria-label="Best habits summary">
         <div class="CroakleMonthHeader">
-          <button type="button" aria-label="เดือนก่อนหน้า">‹</button>
-          <strong>May 2024</strong>
-          <button type="button" aria-label="เดือนถัดไป">›</button>
+          <button type="button" data-month-target="best" data-month-action="previous" aria-label="เดือนก่อนหน้า">‹</button>
+          <strong id="CroakleBestMonth">May 2024</strong>
+          <button type="button" data-month-target="best" data-month-action="next" aria-label="เดือนถัดไป">›</button>
         </div>
 
         <div class="CroakleBestHeader" aria-hidden="true">
@@ -82,9 +75,9 @@
     <section class="CroaklePage" data-page="mood">
       <article class="CroakleCard" aria-label="Top moods calendar">
         <div class="CroakleMonthHeader">
-          <button type="button" aria-label="เดือนก่อนหน้า">‹</button>
-          <strong>May 2024</strong>
-          <button type="button" aria-label="เดือนถัดไป">›</button>
+          <button type="button" data-month-target="mood" data-month-action="previous" aria-label="เดือนก่อนหน้า">‹</button>
+          <strong id="CroakleMoodMonth">May 2024</strong>
+          <button type="button" data-month-target="mood" data-month-action="next" aria-label="เดือนถัดไป">›</button>
         </div>
 
         <div class="CroakleSevenGrid CroakleCalendarHeader" aria-hidden="true">
