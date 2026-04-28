@@ -81,7 +81,8 @@
 
 .CroakleProjectNameButton:active,
 .CroakleProjectCheckButton:active,
-.CroakleProjectDetailActionButton:active {
+.CroakleProjectDetailActionButton:active,
+.CroakleProjectRestoreButton:active {
   transform: scale(0.96);
 }
 
@@ -146,6 +147,77 @@
   touch-action: manipulation;
 }
 
+.CroakleTrackActions:has(.CroakleProjectArchiveButton) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.CroakleProjectArchiveButton {
+  padding: 0 13px;
+}
+
+.CroakleProjectArchiveList {
+  display: grid;
+  gap: 10px;
+}
+
+.CroakleProjectArchiveRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--CroakleSoftLine);
+}
+
+.CroakleProjectArchiveRow:last-child {
+  border-bottom: 0;
+}
+
+.CroakleProjectArchiveInfo {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.CroakleProjectArchiveInfo strong {
+  min-width: 0;
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.CroakleProjectArchiveInfo span,
+.CroakleProjectEmptyText {
+  color: var(--CroakleMuted);
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.CroakleProjectEmptyText {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.CroakleProjectRestoreButton {
+  appearance: none;
+  min-height: 40px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleSurface);
+  color: var(--CroakleText);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 850;
+  padding: 0 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 @media (max-width: 380px) {
   .CroakleProjectDetailActions {
     gap: 10px;
@@ -153,5 +225,14 @@
 
   .CroakleProjectDetailActionButton {
     font-size: 21px;
+  }
+
+  .CroakleTrackActions:has(.CroakleProjectArchiveButton) {
+    gap: 6px;
+  }
+
+  .CroakleProjectArchiveButton,
+  #CroakleOpenReorderProject {
+    padding: 0 10px;
   }
 }
