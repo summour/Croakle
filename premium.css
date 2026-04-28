@@ -19,10 +19,12 @@
   --CroakleRadiusSm: 18px;
 }
 
+html {
+  background: var(--CroakleBg);
+}
+
 body {
-  background:
-    radial-gradient(circle at 18% 0%, rgba(0, 0, 0, 0.045), transparent 30%),
-    linear-gradient(180deg, #ffffff 0%, var(--CroakleBg) 100%);
+  background: var(--CroakleBg);
 }
 
 .CroaklePremiumMode,
@@ -219,7 +221,7 @@ body {
   .CroaklePremiumMode .wordjar-croakle-shell {
     display: block;
     width: 100%;
-    padding: 12px;
+    padding: 0 8px 8px;
   }
 
   .CroaklePremiumMode .wordjar-sidebar {
@@ -233,12 +235,12 @@ body {
 
   .CroaklePremiumMode .wordjar-topbar {
     position: sticky;
-    top: 10px;
+    top: 0;
     z-index: 20;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    border-radius: 28px;
+    border-radius: 0 0 28px 28px;
   }
 
   .CroaklePremiumMode .wordjar-topbar h2 {
@@ -303,13 +305,13 @@ body {
 
 @media (max-width: 560px) {
   .CroaklePremiumMode .wordjar-croakle-shell {
-    padding: 8px;
+    padding: 0 6px 8px;
   }
 
   .CroaklePremiumMode .wordjar-topbar {
     grid-template-columns: minmax(0, 1fr) 58px;
     padding: 12px;
-    border-radius: 24px;
+    border-radius: 0 0 24px 24px;
   }
 
   .CroaklePremiumMode .wordjar-topbar h2 {
@@ -412,11 +414,11 @@ body {
 
 @media (max-width: 380px) {
   .CroaklePremiumMode .wordjar-croakle-shell {
-    padding: 6px;
+    padding: 0 5px 8px;
   }
 
   .CroaklePremiumMode .wordjar-topbar {
-    top: 6px;
+    top: 0;
     grid-template-columns: minmax(0, 1fr) 52px;
   }
 
