@@ -1,19 +1,19 @@
 :root {
-  --CroakleBg: #050505;
-  --CroakleSurface: #111111;
-  --CroakleSurfaceSoft: #1b1b1b;
-  --CroakleSurfaceHover: #242424;
-  --CroakleText: #f7f7f7;
-  --CroakleTextMuted: #a3a3a3;
-  --CroakleTextSoft: #737373;
-  --CroakleBorder: rgba(255, 255, 255, 0.08);
-  --CroakleBorderStrong: rgba(255, 255, 255, 0.18);
-  --CroakleActiveBg: #ffffff;
-  --CroakleActiveText: #050505;
-  --CroakleChartLine: #ffffff;
-  --CroakleChartFill: #2a2a2a;
-  --CroakleChartGrid: rgba(255, 255, 255, 0.14);
-  --CroakleShadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  --CroakleBg: #f6f6f4;
+  --CroakleSurface: #ffffff;
+  --CroakleSurfaceSoft: #f0f0ee;
+  --CroakleSurfaceHover: #e8e8e6;
+  --CroakleText: #111111;
+  --CroakleTextMuted: #666666;
+  --CroakleTextSoft: #9a9a9a;
+  --CroakleBorder: rgba(0, 0, 0, 0.08);
+  --CroakleBorderStrong: rgba(0, 0, 0, 0.18);
+  --CroakleActiveBg: #111111;
+  --CroakleActiveText: #ffffff;
+  --CroakleChartLine: #111111;
+  --CroakleChartFill: #e8e8e6;
+  --CroakleChartGrid: rgba(0, 0, 0, 0.12);
+  --CroakleShadow: 0 18px 54px rgba(0, 0, 0, 0.09);
   --CroakleRadiusLg: 34px;
   --CroakleRadiusMd: 26px;
   --CroakleRadiusSm: 18px;
@@ -21,8 +21,8 @@
 
 body {
   background:
-    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.08), transparent 28%),
-    var(--CroakleBg);
+    radial-gradient(circle at 18% 0%, rgba(0, 0, 0, 0.045), transparent 30%),
+    linear-gradient(180deg, #ffffff 0%, var(--CroakleBg) 100%);
 }
 
 .CroaklePremiumMode,
@@ -53,14 +53,15 @@ body {
 .CroaklePremiumMode .wordjar-form-panel,
 .CroaklePremiumMode .wordjar-dialog-card,
 .CroaklePremiumCard {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.035));
+  background: rgba(255, 255, 255, 0.82);
   border-color: var(--CroakleBorder);
   box-shadow: var(--CroakleShadow);
 }
 
 .CroaklePremiumMode .wordjar-sidebar,
-.CroaklePremiumMode .wordjar-topbar {
-  backdrop-filter: blur(26px);
+.CroaklePremiumMode .wordjar-topbar,
+.CroakleBottomNav {
+  backdrop-filter: blur(24px);
 }
 
 .CroaklePremiumMode .wordjar-brand-card,
@@ -76,31 +77,31 @@ body {
 .CroaklePremiumMode .wordjar-data-preview,
 .CroaklePremiumMode .CroakleTableWrap,
 .CroaklePremiumMode .CroakleTrackerTable,
-.CroaklePremiumMode .CroakleChart {
-  background: var(--CroakleSurfaceSoft);
+.CroaklePremiumMode .CroakleChart,
+.CroakleSearchBar {
+  background: var(--CroakleSurface);
   border-color: var(--CroakleBorder);
 }
 
 .CroaklePremiumMode .wordjar-brand-mark,
 .CroaklePremiumMode .wordjar-list-card span,
-.CroaklePremiumMode .wordjar-mood-icon {
-  background: var(--CroakleBg);
-  border-color: var(--CroakleBorderStrong);
+.CroaklePremiumMode .wordjar-mood-icon,
+.CroaklePremiumCardIcon {
+  background: var(--CroakleSurfaceSoft);
+  border-color: var(--CroakleBorder);
   color: var(--CroakleText);
 }
 
 .CroaklePremiumMode .wordjar-nav-item,
-.CroaklePremiumMode .CroakleChip,
 .CroaklePremiumMode .wordjar-secondary-button,
 .CroaklePremiumMode .wordjar-danger-button {
-  background: var(--CroakleSurfaceSoft);
+  background: var(--CroakleSurface);
   color: var(--CroakleTextMuted);
   border: 1px solid var(--CroakleBorder);
 }
 
 .CroaklePremiumMode .wordjar-nav-item:hover,
 .CroaklePremiumMode .wordjar-nav-item.is-active,
-.CroaklePremiumMode .CroakleChip.is-active,
 .CroaklePremiumMode .wordjar-primary-button,
 .CroaklePremiumMode .wordjar-mood-choice.is-selected,
 .CroaklePremiumMode .wordjar-mood-choice:hover,
@@ -108,6 +109,10 @@ body {
   background: var(--CroakleActiveBg);
   color: var(--CroakleActiveText);
   border-color: var(--CroakleActiveBg);
+}
+
+.CroakleChipRow {
+  display: none;
 }
 
 .CroaklePremiumMode .wordjar-hero-card {
@@ -157,10 +162,8 @@ body {
   width: 38px;
   height: 38px;
   margin-bottom: 18px;
-  border: 1px solid var(--CroakleBorderStrong);
+  border: 1px solid var(--CroakleBorder);
   border-radius: 999px;
-  background: var(--CroakleBg);
-  color: var(--CroakleText);
   font-weight: 900;
 }
 
@@ -178,26 +181,6 @@ body {
   font-weight: 700;
 }
 
-.CroakleChipRow {
-  display: flex;
-  gap: 10px;
-  max-width: 100%;
-  overflow-x: auto;
-  padding: 2px 0 12px;
-  scrollbar-width: none;
-}
-
-.CroakleChipRow::-webkit-scrollbar { display: none; }
-
-.CroakleChip {
-  flex: 0 0 auto;
-  min-height: 40px;
-  padding: 9px 14px;
-  border-radius: 999px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
 .CroakleSearchBar {
   display: flex;
   align-items: center;
@@ -207,7 +190,6 @@ body {
   padding: 0 16px;
   border: 1px solid var(--CroakleBorder);
   border-radius: 999px;
-  background: var(--CroakleSurfaceSoft);
   color: var(--CroakleTextMuted);
 }
 
@@ -220,7 +202,9 @@ body {
   color: var(--CroakleText);
 }
 
-.CroakleSearchBar input::placeholder { color: var(--CroakleTextSoft); }
+.CroakleSearchBar input::placeholder {
+  color: var(--CroakleTextSoft);
+}
 
 .CroakleBottomNav {
   display: none;
@@ -295,9 +279,8 @@ body {
     padding: 8px;
     border: 1px solid var(--CroakleBorder);
     border-radius: 28px;
-    background: rgba(17, 17, 17, 0.86);
+    background: rgba(255, 255, 255, 0.88);
     box-shadow: var(--CroakleShadow);
-    backdrop-filter: blur(26px);
     pointer-events: auto;
   }
 
