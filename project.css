@@ -1,0 +1,157 @@
+.CroakleProjectNav {
+  grid-template-columns: 0.8fr 1fr 1fr 1fr 1fr;
+}
+
+.CroakleProjectList {
+  display: grid;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  padding-bottom: 14px;
+}
+
+.CroakleProjectList::-webkit-scrollbar {
+  display: none;
+}
+
+.CroakleProjectWeekBadge,
+.CroakleProjectCheckButton {
+  width: var(--CroakleWeekCellSize);
+  height: var(--CroakleWeekCellSize);
+  min-width: var(--CroakleWeekCellSize);
+  min-height: var(--CroakleWeekCellSize);
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.CroakleProjectWeekBadge {
+  border: 2px solid var(--CroakleLine);
+  background: var(--CroakleSoftSurface);
+  font-size: 16px;
+}
+
+.CroakleProjectRow {
+  display: grid;
+  gap: 7px;
+}
+
+.CroakleProjectTop {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+}
+
+.CroakleProjectDot {
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  background: var(--CroakleLine);
+}
+
+.CroakleProjectNameButton {
+  appearance: none;
+  min-width: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: clamp(15px, 4.5vw, 18px);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  font-weight: 850;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.CroakleProjectNameButton:active,
+.CroakleProjectCheckButton:active,
+.CroakleProjectDetailActionButton:active {
+  transform: scale(0.96);
+}
+
+.CroakleProjectGoal {
+  min-width: 46px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 10px;
+  padding: 2px 7px;
+  background: var(--CroakleSoftSurface);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 850;
+}
+
+.CroakleProjectCheckGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  justify-items: center;
+  align-items: center;
+  gap: 7px;
+}
+
+.CroakleProjectCheckButton {
+  appearance: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 900;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.CroakleProjectCheckDone {
+  background: var(--CroakleLine);
+  color: var(--CroakleSurface);
+}
+
+.CroakleProjectCheckEmpty {
+  background: var(--CroakleSoftLine);
+}
+
+.CroakleProjectDetailActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.CroakleProjectDetailActionButton {
+  appearance: none;
+  min-height: 56px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 22px;
+  background: var(--CroakleSurface);
+  color: var(--CroakleText);
+  font: inherit;
+  font-size: 24px;
+  font-weight: 850;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 380px) {
+  .CroakleProjectDetailActions {
+    gap: 10px;
+  }
+
+  .CroakleProjectDetailActionButton {
+    font-size: 21px;
+  }
+}
