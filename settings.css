@@ -208,11 +208,35 @@
   transform: translateX(20px);
 }
 
-.CroakleMoodLevel1 { background: var(--CroakleMood1Bg, var(--CroakleSoftSurface)); }
-.CroakleMoodLevel2 { background: var(--CroakleMood2Bg, var(--CroakleSoftSurface)); }
-.CroakleMoodLevel3 { background: var(--CroakleMood3Bg, var(--CroakleSoftSurface)); }
-.CroakleMoodLevel4 { background: var(--CroakleMood4Bg, var(--CroakleSoftSurface)); }
-.CroakleMoodLevel5 { background: var(--CroakleMood5Bg, var(--CroakleSoftSurface)); }
+.CroakleMoodBadge[data-mood-value="1"],
+.CroakleMoodNumber[data-mood-value="1"] {
+  background: var(--CroakleMood1Bg, var(--CroakleSoftSurface));
+  color: var(--CroakleMood1Text, var(--CroakleText));
+}
+
+.CroakleMoodBadge[data-mood-value="2"],
+.CroakleMoodNumber[data-mood-value="2"] {
+  background: var(--CroakleMood2Bg, var(--CroakleSoftSurface));
+  color: var(--CroakleMood2Text, var(--CroakleText));
+}
+
+.CroakleMoodBadge[data-mood-value="3"],
+.CroakleMoodNumber[data-mood-value="3"] {
+  background: var(--CroakleMood3Bg, var(--CroakleSoftSurface));
+  color: var(--CroakleMood3Text, var(--CroakleText));
+}
+
+.CroakleMoodBadge[data-mood-value="4"],
+.CroakleMoodNumber[data-mood-value="4"] {
+  background: var(--CroakleMood4Bg, var(--CroakleSoftSurface));
+  color: var(--CroakleMood4Text, var(--CroakleText));
+}
+
+.CroakleMoodBadge[data-mood-value="5"],
+.CroakleMoodNumber[data-mood-value="5"] {
+  background: var(--CroakleMood5Bg, var(--CroakleSoftSurface));
+  color: var(--CroakleMood5Text, var(--CroakleText));
+}
 
 @media (max-width: 380px) {
   [data-page="settings"] .CroakleSettingsHeader {
