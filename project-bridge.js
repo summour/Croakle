@@ -19,6 +19,10 @@ const CroakleProjectDeleteButton = document.querySelector("#CroakleDeleteProject
 const CroakleProjectCloseButton = document.querySelector("#CroakleCloseProjectDetail");
 const CroakleProjectCompleteButton = document.querySelector("#CroakleCompleteProjectButton");
 
+let CroakleAddProjectDialog = null;
+let CroakleAddProjectForm = null;
+let CroakleCloseAddProjectButton = null;
+
 function CroakleLoadProjectState() {
   const saved = localStorage.getItem(CroakleProjectStoreKey);
 
@@ -65,9 +69,11 @@ function CroakleSaveProjectState() {
 
 function CroakleProjectClampGoal(goal) {
   const cleanGoal = Number(goal);
+
   if (!Number.isFinite(cleanGoal)) {
     return 1;
   }
+
   return Math.min(7, Math.max(1, Math.round(cleanGoal)));
 }
 
@@ -96,6 +102,7 @@ function CroakleProjectGetMonthLabel(date) {
 
 function CroakleRenderProjectHeader() {
   const weekDates = CroakleProjectGetWeekDates();
+
   if (!CroakleProjectDates || !CroakleProjectMoodPreview || !CroakleProjectMonth) {
     return;
   }
@@ -107,14 +114,19 @@ function CroakleRenderProjectHeader() {
     .join("");
 }
 
+function CroakleGetVisibleProjects() {
+  return CroakleProjectState.projects
+    .map((project, projectIndex) => ({ project, projectIndex }))
+    .filter(({ project }) => !project.completed);
+}
+
 function CroakleRenderProjectList() {
   if (!CroakleProjectList) {
     return;
   }
 
-  CroakleProjectList.innerHTML = CroakleProjectState.projects
-    .filter((project) => !project.completed)
-    .map((project, projectIndex) => {
+  CroakleProjectList.innerHTML = CroakleGetVisibleProjects()
+    .map(({ project, projectIndex }) => {
       const doneCount = project.days.filter(Boolean).length;
       const checks = project.days
         .map((done, dayIndex) => `
@@ -162,6 +174,97 @@ function CroakleToggleProjectDay(event) {
 
   project.days[dayIndex] = !project.days[dayIndex];
   CroakleSaveProjectState();
+  CroakleRenderProjectList();
+}
+
+function CroakleCreateAddProjectDialog() {
+  const appShell = document.querySelector(".CroakleHabitMoodShell");
+
+  if (!appShell || document.querySelector("#CroakleAddProjectDialog")) {
+    return;
+  }
+
+  appShell.insertAdjacentHTML("beforeend", `
+    <dialog class="CroakleAddHabitDialog" id="CroakleAddProjectDialog" aria-labelledby="CroakleAddProjectTitle">
+      <form class="CroakleAddHabitForm" id="CroakleAddProjectForm" method="dialog">
+        <header class="CroakleAddHabitHeader">
+          <h2 id="CroakleAddProjectTitle">Add Project</h2>
+          <button type="button" id="CroakleCloseAddProject" aria-label="ปิด">×</button>
+        </header>
+
+        <label class="CroakleField">
+          <span>New Project</span>
+          <input id="CroakleProjectNameInput" name="projectName" type="text" placeholder="e.g., GitHub" autocomplete="off" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Goal Per Week</span>
+          <input id="CroakleProjectGoalInput" name="projectGoal" type="number" min="1" max="7" inputmode="numeric" placeholder="e.g., 5" required />
+        </label>
+
+        <label class="CroakleField">
+          <span>Description</span>
+          <textarea id="CroakleProjectDescriptionInput" name="projectDescription" rows="3" placeholder="e.g., push code, fix bugs"></textarea>
+        </label>
+
+        <fieldset class="CroaklePriorityField">
+          <legend>Priority</legend>
+          <label><input type="radio" name="projectPriority" value="high" /><span>High</span></label>
+          <label><input type="radio" name="projectPriority" value="medium" checked /><span>Medium</span></label>
+          <label><input type="radio" name="projectPriority" value="low" /><span>Low</span></label>
+        </fieldset>
+
+        <button class="CroakleConfirmHabitButton" type="submit">Confirm</button>
+      </form>
+    </dialog>
+  `);
+}
+
+function CroakleBindAddProjectDialog() {
+  CroakleCreateAddProjectDialog();
+  CroakleAddProjectDialog = document.querySelector("#CroakleAddProjectDialog");
+  CroakleAddProjectForm = document.querySelector("#CroakleAddProjectForm");
+  CroakleCloseAddProjectButton = document.querySelector("#CroakleCloseAddProject");
+
+  CroakleAddProjectForm?.addEventListener("submit", CroakleHandleAddProject);
+  CroakleCloseAddProjectButton?.addEventListener("click", CroakleCloseAddProjectDialog);
+}
+
+function CroakleOpenAddProjectDialog() {
+  if (!CroakleAddProjectDialog || !CroakleAddProjectForm) {
+    return;
+  }
+
+  CroakleAddProjectForm.reset();
+  CroakleAddProjectForm.elements.projectPriority.value = "medium";
+  CroakleAddProjectDialog.showModal();
+  CroakleAddProjectForm.elements.projectName.focus();
+}
+
+function CroakleCloseAddProjectDialog() {
+  CroakleAddProjectDialog?.close();
+}
+
+function CroakleHandleAddProject(event) {
+  event.preventDefault();
+
+  const formData = new FormData(CroakleAddProjectForm);
+  const name = String(formData.get("projectName") || "").trim();
+
+  if (!name) {
+    return;
+  }
+
+  CroakleProjectState.projects.push(CroakleCreateProject({
+    id: `CroakleProject${Date.now()}`,
+    name,
+    goal: CroakleProjectClampGoal(formData.get("projectGoal")),
+    description: String(formData.get("projectDescription") || "").trim(),
+    priority: String(formData.get("projectPriority") || "medium"),
+  }));
+
+  CroakleSaveProjectState();
+  CroakleCloseAddProjectDialog();
   CroakleRenderProjectList();
 }
 
@@ -239,12 +342,6 @@ function CroakleHandleProjectComplete() {
   CroakleRenderProjectList();
 }
 
-function CroakleAddProject() {
-  CroakleProjectState.projects.push(CroakleCreateProject({ name: "New Project", goal: 3, priority: "medium" }));
-  CroakleSaveProjectState();
-  CroakleRenderProjectList();
-}
-
 function CroakleReorderProjects() {
   CroakleProjectState.projects.reverse();
   CroakleSaveProjectState();
@@ -252,11 +349,12 @@ function CroakleReorderProjects() {
 }
 
 function CroakleRenderProjects() {
+  CroakleBindAddProjectDialog();
   CroakleRenderProjectHeader();
   CroakleRenderProjectList();
 }
 
-CroakleProjectAddButton?.addEventListener("click", CroakleAddProject);
+CroakleProjectAddButton?.addEventListener("click", CroakleOpenAddProjectDialog);
 CroakleProjectReorderButton?.addEventListener("click", CroakleReorderProjects);
 CroakleProjectDetailForm?.addEventListener("submit", CroakleHandleProjectUpdate);
 CroakleProjectDeleteButton?.addEventListener("click", CroakleHandleProjectDelete);
