@@ -42,10 +42,20 @@
         gap: 8px;
       }
 
-      .CroakleAiSettingsField span {
+      .CroakleAiSettingsField span,
+      .CroakleAiSettingsNote {
         color: var(--CroakleMuted);
         font-size: 13px;
         font-weight: 850;
+        line-height: 1.35;
+      }
+
+      .CroakleAiSettingsNote {
+        margin: 0;
+        border: 2px solid var(--CroakleSoftLine);
+        border-radius: 16px;
+        background: var(--CroakleSoftSurface);
+        padding: 12px;
       }
 
       .CroakleAiSettingsInput,
@@ -84,6 +94,7 @@
     settingsBody.insertAdjacentHTML("beforeend", `
       <section class="CroakleSettingsGroup" id="CroakleAiSettingsGroup" aria-label="Croakle AI settings">
         <p class="CroakleSettingsGroupTitle">Croakle Recap AI</p>
+        <p class="CroakleAiSettingsNote">API key จะถูกเก็บเฉพาะในเครื่องนี้ และจะไม่ถูกรวมในไฟล์ backup หากย้ายเครื่องหรือนำเข้า backup ต้องใส่ API key ใหม่</p>
 
         <label class="CroakleAiSettingsField">
           <span>Provider</span>
