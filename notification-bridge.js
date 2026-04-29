@@ -8,34 +8,17 @@
     const style = document.createElement("style");
     style.id = "CroakleAppPopupStyles";
     style.textContent = `
-      .CroakleAppPopupOverlay:not([open]) {
-        display: none;
-      }
-
       .CroakleAppPopupOverlay {
         position: fixed;
         inset: 0;
         z-index: 9999;
         display: grid;
         place-items: center;
-        width: 100%;
-        height: 100%;
-        max-width: none;
-        max-height: none;
-        margin: 0;
-        border: 0;
         padding: 24px;
         background: rgba(255, 255, 255, 0.68);
-        color: var(--CroakleText);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         pointer-events: auto;
-      }
-
-      .CroakleAppPopupOverlay::backdrop {
-        background: rgba(255, 255, 255, 0.68);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
       }
 
       .CroakleAppPopupCard {
@@ -149,40 +132,23 @@
   }
 
   function CroakleCloseAppPopup() {
-    const popup = document.querySelector(`#${CroaklePopupId}`);
-    if (!popup) return;
-    if (typeof popup.close === "function" && popup.open) popup.close();
-    popup.remove();
+    document.querySelectorAll(`#${CroaklePopupId}`).forEach((popup) => popup.remove());
   }
 
-  function CroakleCloseProjectDialogForConfirm() {
+  function CroakleCloseProjectDetailDialog() {
     const dialog = document.querySelector("#CroakleProjectDetailDialog");
-    if (dialog?.open && typeof dialog.close === "function") dialog.close();
-  }
 
-  function CroakleOpenAppPopup(overlay) {
-    document.body.appendChild(overlay);
-
-    try {
-      if (typeof overlay.showModal === "function") {
-        overlay.showModal();
-        return;
-      }
-    } catch {
-      overlay.remove();
-      CroakleCloseProjectDialogForConfirm();
-      document.body.appendChild(overlay);
+    if (dialog?.open && typeof dialog.close === "function") {
+      dialog.close();
     }
-
-    overlay.setAttribute("open", "");
   }
 
   function CroakleCreatePopupShell(title, message, actionsMarkup) {
-    const overlay = document.createElement("dialog");
+    const overlay = document.createElement("div");
     overlay.id = CroaklePopupId;
     overlay.className = "CroakleAppPopupOverlay";
     overlay.innerHTML = `
-      <section class="CroakleAppPopupCard" role="document">
+      <section class="CroakleAppPopupCard" role="dialog" aria-modal="true">
         <header class="CroakleAppPopupHeader">
           <h2 class="CroakleAppPopupTitle">${title}</h2>
           <button class="CroakleAppPopupIconButton" type="button" data-croakle-popup-close aria-label="Close">×</button>
@@ -197,7 +163,7 @@
   function CroakleShowAppPopup(title, message) {
     CroakleInjectPopupStyles();
     CroakleCloseAppPopup();
-    CroakleOpenAppPopup(CroakleCreatePopupShell(
+    document.body.appendChild(CroakleCreatePopupShell(
       title,
       message,
       `<button class="CroakleAppPopupButton" type="button" data-croakle-popup-close>Close</button>`
@@ -220,7 +186,7 @@
       onConfirm?.();
     });
 
-    CroakleOpenAppPopup(overlay);
+    document.body.appendChild(overlay);
   }
 
   function CroakleGetActiveProjectSummary() {
@@ -307,6 +273,7 @@
   }
 
   function CroakleShowFinishedProjectConfirm() {
+    CroakleCloseProjectDetailDialog();
     CroakleShowAppConfirmPopup({
       title: "Finished?",
       message: "This project will move from Active Projects to Finished Projects. You can reopen it later from the Finished button.",
@@ -340,6 +307,7 @@
     if (event.key === "Escape") CroakleCloseAppPopup();
   });
 
+  CroakleCloseAppPopup();
   window.requestAnimationFrame(CroakleSyncMenuDashboard);
   window.requestAnimationFrame(CroakleSyncFinishedProjectButton);
 
