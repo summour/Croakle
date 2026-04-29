@@ -32,6 +32,15 @@
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
   }
 
+  function parseDate(value) {
+    if (typeof CroakleParseDate === "function") {
+      return CroakleParseDate(value);
+    }
+
+    const [year, month, day] = String(value).split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
   function shiftDate(date, amount) {
     const nextDate = new Date(date);
     nextDate.setDate(nextDate.getDate() + amount);
@@ -94,9 +103,10 @@
     const todayKey = formatDate(getToday());
 
     return getWeekDates().map((date) => {
-      const activeClass = formatDate(date) === todayKey ? " CroakleDashboardDateActive" : "";
+      const dateIso = formatDate(date);
+      const activeClass = dateIso === todayKey ? " CroakleDashboardDateActive" : "";
       return `
-        <button class="CroakleDashboardDateBox${activeClass}" type="button" data-page-target="track">
+        <button class="CroakleDashboardDateBox${activeClass}" type="button" data-dashboard-date="${dateIso}" aria-label="Open ${WeekDays[date.getDay()]} ${date.getDate()}">
           <strong>${date.getDate()}</strong>
           <span>${WeekDays[date.getDay()]}</span>
         </button>
@@ -199,6 +209,51 @@
     page.querySelector(".CroakleHeroHeader")?.insertAdjacentHTML("afterend", createPreview());
   }
 
+  function setTrackDate(dateIso) {
+    if (typeof CroakleState === "undefined") {
+      return;
+    }
+
+    const date = parseDate(dateIso);
+    CroakleState.trackDate = dateIso;
+    CroakleState.trackMonth = date.getMonth();
+    CroakleState.trackYear = date.getFullYear();
+
+    if (typeof CroakleSaveState === "function") CroakleSaveState();
+    if (typeof CroakleRenderAll === "function") CroakleRenderAll();
+  }
+
+  function highlightSelectedDate() {
+    if (typeof CroakleState === "undefined" || !CroakleState.trackDate) {
+      return;
+    }
+
+    document.querySelectorAll(".CroakleSelectedDate").forEach((node) => {
+      node.classList.remove("CroakleSelectedDate");
+    });
+
+    const activePage = document.querySelector('[data-page="track"]');
+    activePage?.querySelectorAll(`[data-date-iso="${CroakleState.trackDate}"]`).forEach((node) => {
+      node.classList.add("CroakleSelectedDate");
+    });
+  }
+
+  function openTrackDate(dateIso) {
+    setTrackDate(dateIso);
+
+    if (typeof CroakleSetPage === "function") {
+      CroakleSetPage("track");
+    }
+
+    window.requestAnimationFrame(() => {
+      highlightSelectedDate();
+      document.querySelector(`[data-page="track"] [data-date-iso="${dateIso}"]`)?.scrollIntoView({
+        block: "center",
+        inline: "center",
+      });
+    });
+  }
+
   function toggleHabit(index) {
     if (typeof CroakleGetMonthDataFromDate !== "function") {
       return;
@@ -226,6 +281,14 @@
 
     window.CroakleDashboardHomeBound = true;
     document.addEventListener("click", (event) => {
+      const dateButton = event.target.closest("[data-dashboard-date]");
+
+      if (dateButton) {
+        event.preventDefault();
+        openTrackDate(dateButton.dataset.dashboardDate);
+        return;
+      }
+
       const habitToggle = event.target.closest("[data-dashboard-habit-toggle]");
 
       if (habitToggle) {
@@ -253,6 +316,7 @@
     window[name] = function patchedCroakleDashboardFunction(...args) {
       const result = original.apply(this, args);
       renderHome();
+      window.requestAnimationFrame(highlightSelectedDate);
       return result;
     };
 
@@ -262,6 +326,7 @@
   function init() {
     renderHome();
     bindHome();
+    highlightSelectedDate();
     patchRender("CroakleRenderAll");
     patchRender("CroakleSaveState");
     patchRender("CroakleSaveProjectState");
