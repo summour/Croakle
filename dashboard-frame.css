@@ -1,5 +1,10 @@
+.CroakleHabitMoodShell {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
 .CroakleMenuPage.CroaklePageActive {
-  flex: 1 1 auto;
   min-height: 0;
   border: 2px solid var(--CroakleLine);
   border-radius: 24px;
@@ -27,16 +32,76 @@
 .CroakleDashboardDateScroller {
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: none;
 }
 
-.CroakleBottomNav {
+.CroakleDashboardDateScroller::-webkit-scrollbar {
+  display: none;
+}
+
+.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
+  position: static;
+  inset: auto;
   z-index: 20;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  overflow: hidden;
   pointer-events: auto;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav button {
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 8px;
+  border-radius: 18px;
+  background: var(--CroakleSoftSurface);
+  color: var(--CroakleLine);
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav .CroakleActiveNav {
+  background: var(--CroakleLine);
+  color: var(--CroakleSurface);
+}
+
+@media (max-width: 380px) {
+  .CroakleMenuPage.CroaklePageActive {
+    padding: 10px;
+    border-radius: 22px;
+  }
+
+  .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
+    gap: 6px;
+  }
+
+  .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav button {
+    min-height: 32px;
+    padding: 0 6px;
+    border-radius: 16px;
+    font-size: 11px;
+  }
 }
 
 @media (max-height: 760px) {
   .CroakleMenuPage.CroaklePageActive {
     padding: 10px;
-    border-radius: 22px;
+  }
+
+  .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav button {
+    min-height: 32px;
+    font-size: 11px;
   }
 }
