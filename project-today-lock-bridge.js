@@ -16,7 +16,6 @@
     style.id = "CroakleProjectTodayLockStyles";
     style.textContent = `
       .CroakleProjectList .CroakleProjectCheckLocked {
-        opacity: 0.35;
         cursor: not-allowed;
       }
     `;
@@ -44,7 +43,7 @@
     const days = CroakleGetProjectDays(project);
     const doneCount = days.filter(Boolean).length;
     const archivedClass = project.completed ? " CroakleProjectRowArchived" : "";
-    const statusText = project.completed ? `<span class="CroakleProjectStatus">Archived</span>` : "";
+    const statusText = project.completed ? `<span class="CroakleProjectStatus">Finished</span>` : "";
     const checks = days
       .map((done, dayIndex) => {
         const dateIso = CroakleGetProjectDateIso(dayIndex);
