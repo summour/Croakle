@@ -50,29 +50,34 @@
       }
 
       .CroakleAnalyticsPage .CroakleCard {
-        gap: 12px;
+        --CroakleAnalyticsGap: 16px;
+        gap: var(--CroakleAnalyticsGap);
       }
 
       .CroakleAnalyticsScroll {
         display: grid;
-        gap: 12px;
+        gap: var(--CroakleAnalyticsGap);
         min-height: 0;
         overflow-y: auto;
         overflow-x: hidden;
         overscroll-behavior: contain;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: 12px;
+        padding-bottom: var(--CroakleAnalyticsGap);
       }
 
       .CroakleAnalyticsScroll::-webkit-scrollbar {
         display: none;
       }
 
-      .CroakleAnalyticsSummary {
+      .CroakleAnalyticsSummary,
+      .CroakleAnalyticsPanels {
         display: grid;
+        gap: var(--CroakleAnalyticsGap);
+      }
+
+      .CroakleAnalyticsSummary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
       }
 
       .CroakleAnalyticsStatCard,
@@ -104,8 +109,9 @@
       .CroakleAnalyticsStatCard span,
       .CroakleAnalyticsStatCard small,
       .CroakleAnalyticsPanelHeader p,
-      .CroakleAnalyticsRowMeta,
-      .CroakleAnalyticsEmptyText {
+      .CroakleAnalyticsLegendMeta,
+      .CroakleAnalyticsEmptyText,
+      .CroakleAnalyticsAxisLabel {
         color: var(--CroakleMuted);
         font-size: 12px;
         font-weight: 800;
@@ -136,69 +142,108 @@
         letter-spacing: -0.05em;
       }
 
-      .CroakleAnalyticsPanelHeader p {
+      .CroakleAnalyticsPanelHeader p,
+      .CroakleAnalyticsEmptyText {
         margin: 0;
       }
 
-      .CroakleAnalyticsRows {
-        display: grid;
-        gap: 11px;
+      .CroakleAnalyticsLineWrap {
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.02);
+        padding: 10px 8px 6px;
       }
 
-      .CroakleAnalyticsRow {
-        display: grid;
-        gap: 7px;
+      .CroakleAnalyticsLineSvg {
+        display: block;
+        width: 100%;
+        height: auto;
       }
 
-      .CroakleAnalyticsRowTop {
+      .CroakleAnalyticsGridLine {
+        stroke: var(--CroakleSoftLine);
+        stroke-width: 1;
+      }
+
+      .CroakleAnalyticsAxisLine {
+        stroke: var(--CroakleLine);
+        stroke-width: 1.5;
+      }
+
+      .CroakleAnalyticsAxisLabel {
+        fill: var(--CroakleMuted);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .CroakleAnalyticsLineArea {
+        fill: rgba(0, 0, 0, 0.08);
+      }
+
+      .CroakleAnalyticsLinePath {
+        fill: none;
+        stroke: var(--CroakleLine);
+        stroke-width: 3.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .CroakleAnalyticsPoint {
+        fill: var(--CroakleSurface);
+        stroke: var(--CroakleLine);
+        stroke-width: 2;
+      }
+
+      .CroakleAnalyticsPointValue {
+        fill: var(--CroakleText);
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .CroakleAnalyticsLegend {
+        display: grid;
+        gap: 8px;
+      }
+
+      .CroakleAnalyticsLegendRow {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        align-items: baseline;
-        gap: 10px;
+        gap: 4px 12px;
+        align-items: start;
       }
 
-      .CroakleAnalyticsRowTop strong {
+      .CroakleAnalyticsLegendLabel {
         min-width: 0;
+        color: var(--CroakleText);
+        font-size: 14px;
+        font-weight: 900;
+        line-height: 1.2;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: 15px;
-        font-weight: 900;
-        line-height: 1.15;
       }
 
-      .CroakleAnalyticsRowValue {
+      .CroakleAnalyticsLegendValue {
+        color: var(--CroakleText);
         font-size: 13px;
         font-weight: 900;
         white-space: nowrap;
       }
 
-      .CroakleAnalyticsBarSvg {
-        width: 100%;
-        height: 12px;
-        display: block;
-      }
-
-      .CroakleAnalyticsBarTrack {
-        fill: var(--CroakleSoftLine);
-      }
-
-      .CroakleAnalyticsBarFill {
-        fill: var(--CroakleLine);
+      .CroakleAnalyticsLegendMeta {
+        grid-column: 1 / -1;
       }
 
       .CroakleAnalyticsEmptyText {
-        margin: 0;
         text-align: center;
       }
 
       @media (max-width: 380px) {
-        .CroakleAnalyticsNav button {
-          font-size: 11px;
+        .CroakleAnalyticsPage .CroakleCard {
+          --CroakleAnalyticsGap: 16px;
         }
 
-        .CroakleAnalyticsSummary {
-          gap: 7px;
+        .CroakleAnalyticsNav button {
+          font-size: 11px;
         }
 
         .CroakleAnalyticsStatCard,
@@ -353,42 +398,146 @@
     return CroakleClampGoal(template.goal || habit.goal);
   }
 
-  function CroakleCreateBarRows(rows) {
+  function CroakleCreateShortLabel(label, maxLength = 8) {
+    const cleanLabel = String(label ?? "").trim();
+    return cleanLabel.length > maxLength ? `${cleanLabel.slice(0, maxLength)}…` : cleanLabel;
+  }
+
+  function CroakleCreateSmoothPath(points) {
+    if (!points.length) {
+      return "";
+    }
+
+    if (points.length === 1) {
+      return `M ${points[0].x} ${points[0].y}`;
+    }
+
+    let path = `M ${points[0].x} ${points[0].y}`;
+
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const previous = points[index - 1] || points[index];
+      const current = points[index];
+      const next = points[index + 1];
+      const afterNext = points[index + 2] || next;
+      const controlOneX = current.x + (next.x - previous.x) / 6;
+      const controlOneY = current.y + (next.y - previous.y) / 6;
+      const controlTwoX = next.x - (afterNext.x - current.x) / 6;
+      const controlTwoY = next.y - (afterNext.y - current.y) / 6;
+
+      path += ` C ${controlOneX} ${controlOneY}, ${controlTwoX} ${controlTwoY}, ${next.x} ${next.y}`;
+    }
+
+    return path;
+  }
+
+  function CroakleCreateLineChart(rows, options = {}) {
     if (!rows.length) {
       return `<p class="CroakleAnalyticsEmptyText">No data yet.</p>`;
     }
 
-    const maxValue = Math.max(...rows.map((row) => row.value), 1);
+    const width = 340;
+    const height = 180;
+    const paddingTop = 16;
+    const paddingRight = 12;
+    const paddingBottom = 28;
+    const paddingLeft = 36;
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+    const maxValue = options.maxValue || Math.max(...rows.map((row) => row.value), 1);
+    const bottomY = height - paddingBottom;
+    const rightX = width - paddingRight;
 
-    return `<div class="CroakleAnalyticsRows">${rows.map((row) => {
-      const width = Math.max(1, Math.min(100, Math.round((row.value / maxValue) * 100)));
+    const points = rows.map((row, index) => {
+      const x = rows.length === 1 ? paddingLeft + chartWidth / 2 : paddingLeft + (chartWidth * index) / (rows.length - 1);
+      const y = paddingTop + chartHeight - (row.value / maxValue) * chartHeight;
+
+      return { ...row, x, y };
+    });
+
+    const linePath = CroakleCreateSmoothPath(points);
+    const areaPath = `${linePath} L ${points[points.length - 1].x} ${bottomY} L ${points[0].x} ${bottomY} Z`;
+    const gridValues = options.gridValues || Array.from({ length: 5 }, (_, index) => Math.round((maxValue / 4) * index));
+
+    const gridLines = gridValues.map((value) => {
+      const y = paddingTop + chartHeight - (value / maxValue) * chartHeight;
+      const label = options.ySuffix ? `${value}${options.ySuffix}` : value;
 
       return `
-        <div class="CroakleAnalyticsRow">
-          <div class="CroakleAnalyticsRowTop">
-            <strong>${CroakleEscapeHtml(row.label)}</strong>
-            <span class="CroakleAnalyticsRowValue">${CroakleEscapeHtml(row.valueLabel)}</span>
-          </div>
-          <svg class="CroakleAnalyticsBarSvg" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
-            <rect class="CroakleAnalyticsBarTrack" x="0" y="0" width="100" height="10" rx="5" ry="5"></rect>
-            <rect class="CroakleAnalyticsBarFill" x="0" y="0" width="${width}" height="10" rx="5" ry="5"></rect>
-          </svg>
-          <span class="CroakleAnalyticsRowMeta">${CroakleEscapeHtml(row.meta || "")}</span>
-        </div>
+        <line class="CroakleAnalyticsGridLine" x1="${paddingLeft}" y1="${y}" x2="${rightX}" y2="${y}"></line>
+        <text class="CroakleAnalyticsAxisLabel" x="${paddingLeft - 6}" y="${y + 3}" text-anchor="end">${label}</text>
       `;
-    }).join("")}</div>`;
+    }).join("");
+
+    const labelStep = options.labelStep || Math.max(1, Math.ceil(rows.length / 7));
+    const pointMarkup = points.map((point, index) => {
+      const showLabel = index === 0 || index === points.length - 1 || index % labelStep === 0;
+      const label = showLabel ? `<text class="CroakleAnalyticsAxisLabel" x="${point.x}" y="${height - 8}" text-anchor="middle">${CroakleEscapeHtml(CroakleCreateShortLabel(point.label, options.labelLength || 8))}</text>` : "";
+      const valueLabel = options.showPointValues ? `<text class="CroakleAnalyticsPointValue" x="${point.x}" y="${point.y - 9}" text-anchor="middle">${CroakleEscapeHtml(point.valueLabel)}</text>` : "";
+
+      return `
+        <circle class="CroakleAnalyticsPoint" cx="${point.x}" cy="${point.y}" r="3.8"></circle>
+        ${valueLabel}
+        ${label}
+      `;
+    }).join("");
+
+    return `
+      <div class="CroakleAnalyticsLineWrap">
+        <svg class="CroakleAnalyticsLineSvg" viewBox="0 0 ${width} ${height}" aria-hidden="true">
+          ${gridLines}
+          <line class="CroakleAnalyticsAxisLine" x1="${paddingLeft}" y1="${bottomY}" x2="${rightX}" y2="${bottomY}"></line>
+          <line class="CroakleAnalyticsAxisLine" x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${bottomY}"></line>
+          <path class="CroakleAnalyticsLineArea" d="${areaPath}"></path>
+          ${points.length > 1 ? `<path class="CroakleAnalyticsLinePath" d="${linePath}"></path>` : ""}
+          ${pointMarkup}
+        </svg>
+      </div>
+    `;
   }
 
-  function CroakleCreatePanel(title, subtitle, rows) {
+  function CroakleCreateLegend(rows) {
+    return `
+      <div class="CroakleAnalyticsLegend">
+        ${rows.map((row) => `
+          <div class="CroakleAnalyticsLegendRow">
+            <span class="CroakleAnalyticsLegendLabel">${CroakleEscapeHtml(row.label)}</span>
+            <span class="CroakleAnalyticsLegendValue">${CroakleEscapeHtml(row.valueLabel)}</span>
+            <span class="CroakleAnalyticsLegendMeta">${CroakleEscapeHtml(row.meta || "")}</span>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  function CroakleCreatePanel(title, subtitle, rows, chartOptions = {}) {
     return `
       <article class="CroakleAnalyticsPanel">
         <header class="CroakleAnalyticsPanelHeader">
           <h3>${CroakleEscapeHtml(title)}</h3>
           <p>${CroakleEscapeHtml(subtitle)}</p>
         </header>
-        ${CroakleCreateBarRows(rows)}
+        ${CroakleCreateLineChart(rows, chartOptions)}
+        ${CroakleCreateLegend(rows)}
       </article>
     `;
+  }
+
+  function CroakleGetDailyProductivityRows(year, month) {
+    const monthData = CroakleGetMonthData(year, month);
+    const daysInMonth = CroakleGetDaysInMonth(year, month);
+    const totalHabits = Math.max(monthData.habits.length, 1);
+
+    return Array.from({ length: daysInMonth }, (_, index) => {
+      const doneCount = monthData.habits.reduce((total, habit) => total + (habit.days[index] ? 1 : 0), 0);
+      const percent = Math.round((doneCount / totalHabits) * 100);
+
+      return {
+        label: String(index + 1),
+        value: percent,
+        valueLabel: `${percent}%`,
+        meta: `${doneCount}/${totalHabits} habits done`,
+      };
+    });
   }
 
   function CroakleGetHabitCompletionRows(year, month) {
@@ -413,15 +562,14 @@
 
   function CroakleGetWeeklyTrendRows(year, month) {
     const daysInMonth = CroakleGetDaysInMonth(year, month);
+    const monthData = CroakleGetMonthData(year, month);
     const weekMap = new Map();
 
     for (let day = 1; day <= daysInMonth; day += 1) {
       const date = new Date(year, month, day);
       const weekStart = CroakleShiftDate(date, -((date.getDay() + 6) % 7));
       const weekKey = CroakleFormatDate(weekStart);
-      const dayTotal = CroakleGetMonthData(year, month).habits.reduce((total, habit) => {
-        return total + (habit.days[day - 1] ? 1 : 0);
-      }, 0);
+      const dayTotal = monthData.habits.reduce((total, habit) => total + (habit.days[day - 1] ? 1 : 0), 0);
 
       if (!weekMap.has(weekKey)) {
         weekMap.set(weekKey, { days: [], total: 0 });
@@ -487,9 +635,7 @@
       const projects = JSON.parse(saved || "{}")?.projects || [];
       const active = projects.filter((project) => !project.completed).length;
       const done = projects.filter((project) => project.completed).length;
-      const tracked = projects.reduce((total, project) => {
-        return total + Object.values(project.weeklyDays || {}).flat().filter(Boolean).length;
-      }, 0);
+      const tracked = projects.reduce((total, project) => total + Object.values(project.weeklyDays || {}).flat().filter(Boolean).length, 0);
 
       return { active, done, tracked };
     } catch {
@@ -541,10 +687,21 @@
     monthLabel.textContent = CroakleGetMonthLabel(year, month);
     summary.innerHTML = CroakleCreateSummaryCards(CroakleGetSummaryCards(year, month));
     panels.innerHTML = [
-      CroakleCreatePanel("Habit Completion", "Done compared with this month target", CroakleGetHabitCompletionRows(year, month)),
-      CroakleCreatePanel("Weekly Trend", "Total habit check-ins by week", CroakleGetWeeklyTrendRows(year, month)),
-      CroakleCreatePanel("Mood Distribution", "Mood levels recorded this month", CroakleGetMoodRows(year, month)),
-      CroakleCreatePanel("Weekday Consistency", "Which weekdays work best", CroakleGetWeekdayRows(year, month)),
+      CroakleCreatePanel("Productivity of the day", "X = day of month, Y = daily completion rate", CroakleGetDailyProductivityRows(year, month), {
+        maxValue: 100,
+        gridValues: [0, 20, 40, 60, 80, 100],
+        ySuffix: "%",
+        labelStep: 5,
+        labelLength: 2,
+      }),
+      CroakleCreatePanel("Habit Completion", "X = habit, Y = monthly completion percent", CroakleGetHabitCompletionRows(year, month), {
+        maxValue: 100,
+        gridValues: [0, 20, 40, 60, 80, 100],
+        ySuffix: "%",
+      }),
+      CroakleCreatePanel("Weekly Trend", "X = week, Y = total habit check-ins", CroakleGetWeeklyTrendRows(year, month)),
+      CroakleCreatePanel("Mood Distribution", "X = mood level, Y = recorded days", CroakleGetMoodRows(year, month)),
+      CroakleCreatePanel("Weekday Consistency", "X = weekday, Y = habit check-ins", CroakleGetWeekdayRows(year, month)),
     ].join("");
   }
 
