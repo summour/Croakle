@@ -43,7 +43,8 @@
       }
 
       .CroakleAiSettingsField span,
-      .CroakleAiSettingsNote {
+      .CroakleAiSettingsNote,
+      .CroakleAiSettingsStatus {
         color: var(--CroakleMuted);
         font-size: 13px;
         font-weight: 850;
@@ -52,10 +53,14 @@
 
       .CroakleAiSettingsNote {
         margin: 0;
-        border: 2px solid var(--CroakleSoftLine);
+        border: 2px solid var(--CroakleSoftLine, #e7e7e7);
         border-radius: 16px;
-        background: var(--CroakleSoftSurface);
+        background: var(--CroakleSoftSurface, #f6f6f6);
         padding: 12px;
+      }
+
+      .CroakleAiSettingsStatus {
+        margin: -2px 0 0;
       }
 
       .CroakleAiSettingsInput,
@@ -71,6 +76,9 @@
         font-weight: 800;
         padding: 0 12px;
         outline: none;
+        opacity: 1;
+        pointer-events: auto;
+        -webkit-text-fill-color: var(--CroakleText);
       }
 
       .CroakleAiSettingsInput:focus,
@@ -114,8 +122,10 @@
 
         <label class="CroakleAiSettingsField">
           <span>Gemini API Key</span>
-          <input class="CroakleAiSettingsInput" type="password" autocomplete="off" placeholder="Paste Gemini API key" value="${CroakleEscapeAiSetting(settings.apiKey)}" data-croakle-ai-api-key />
+          <input class="CroakleAiSettingsInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste Gemini API key" value="${CroakleEscapeAiSetting(settings.apiKey)}" data-croakle-ai-api-key />
         </label>
+
+        <p class="CroakleAiSettingsStatus" data-croakle-ai-status>${settings.apiKey ? "API key saved on this device." : "No API key saved yet."}</p>
 
         <button class="CroakleSettingsActionButton" type="button" data-croakle-ai-clear-key>
           <span class="CroakleSettingsText">
@@ -133,16 +143,28 @@
   function CroakleBindAiSettingsControls() {
     document.querySelector("[data-croakle-ai-provider]")?.addEventListener("change", CroakleHandleAiSettingChange);
     document.querySelector("[data-croakle-ai-model]")?.addEventListener("change", CroakleHandleAiSettingChange);
+    document.querySelector("[data-croakle-ai-api-key]")?.addEventListener("input", CroakleHandleAiSettingChange);
     document.querySelector("[data-croakle-ai-api-key]")?.addEventListener("change", CroakleHandleAiSettingChange);
     document.querySelector("[data-croakle-ai-clear-key]")?.addEventListener("click", CroakleClearAiKey);
   }
 
   function CroakleHandleAiSettingChange() {
-    CroakleSaveAiSettings({
+    const settings = {
       provider: document.querySelector("[data-croakle-ai-provider]")?.value || "gemini",
       model: document.querySelector("[data-croakle-ai-model]")?.value || "gemini-2.5-flash",
       apiKey: document.querySelector("[data-croakle-ai-api-key]")?.value.trim() || "",
-    });
+    };
+
+    CroakleSaveAiSettings(settings);
+    CroakleUpdateAiStatus(settings.apiKey);
+  }
+
+  function CroakleUpdateAiStatus(apiKey) {
+    const status = document.querySelector("[data-croakle-ai-status]");
+
+    if (status) {
+      status.textContent = apiKey ? "API key saved on this device." : "No API key saved yet.";
+    }
   }
 
   function CroakleClearAiKey() {
@@ -153,7 +175,10 @@
     const input = document.querySelector("[data-croakle-ai-api-key]");
     if (input) {
       input.value = "";
+      input.focus();
     }
+
+    CroakleUpdateAiStatus("");
   }
 
   function CroaklePatchSettingsRender() {
