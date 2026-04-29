@@ -1,7 +1,7 @@
 {
-  "name": "WordJar",
-  "short_name": "WordJar",
-  "description": "WordJar",
+  "name": "Croakle Habit & Mood",
+  "short_name": "Croakle",
+  "description": "Croakle Habit and Mood Tracker",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
