@@ -289,7 +289,7 @@ function CroakleRenderProjectList() {
 
   CroakleProjectList.innerHTML = visibleProjects.length
     ? visibleProjects.map(({ project, projectIndex }) => CroakleProjectRowTemplate(project, projectIndex)).join("")
-    : `<p class="CroakleProjectEmptyText">No projects this week. Restore from Archive or add a new project.</p>`;
+    : `<p class="CroakleProjectEmptyText">No projects this week. Reopen a finished project or add a new project.</p>`;
 
   document.querySelectorAll(".CroakleProjectCheckButton").forEach((button) => {
     button.addEventListener("click", CroakleToggleProjectDay);
@@ -304,7 +304,7 @@ function CroakleProjectRowTemplate(project, projectIndex) {
   const days = CroakleGetProjectDays(project);
   const doneCount = days.filter(Boolean).length;
   const archivedClass = project.completed ? " CroakleProjectRowArchived" : "";
-  const statusText = project.completed ? `<span class="CroakleProjectStatus">Archived</span>` : "";
+  const statusText = project.completed ? `<span class="CroakleProjectStatus">Finished</span>` : "";
   const checks = days
     .map((done, dayIndex) => `
       <button
@@ -405,7 +405,7 @@ function CroakleCreateProjectArchiveButton() {
   CroakleProjectArchiveButton.className = "CroakleSecondaryActionButton CroakleProjectArchiveButton";
   CroakleProjectArchiveButton.id = "CroakleOpenProjectArchive";
   CroakleProjectArchiveButton.type = "button";
-  CroakleProjectArchiveButton.textContent = "Archive";
+  CroakleProjectArchiveButton.textContent = "Finished";
   CroakleProjectReorderButton.parentNode.insertBefore(CroakleProjectArchiveButton, CroakleProjectReorderButton);
 }
 
@@ -420,7 +420,7 @@ function CroakleCreateProjectArchiveDialog() {
     <dialog class="CroakleAddHabitDialog" id="CroakleProjectArchiveDialog" aria-labelledby="CroakleProjectArchiveTitle">
       <div class="CroakleAddHabitForm">
         <header class="CroakleAddHabitHeader">
-          <h2 id="CroakleProjectArchiveTitle">Archive</h2>
+          <h2 id="CroakleProjectArchiveTitle">Finished Projects</h2>
           <button type="button" id="CroakleCloseProjectArchive" aria-label="ปิด">×</button>
         </header>
 
@@ -625,10 +625,10 @@ function CroakleRenderProjectArchiveList() {
           <strong>${project.name}</strong>
           <span>${CroakleGetProjectTrackedTotal(project)} tracked</span>
         </div>
-        <button class="CroakleProjectRestoreButton" type="button" data-project-restore-index="${projectIndex}">Restore</button>
+        <button class="CroakleProjectRestoreButton" type="button" data-project-restore-index="${projectIndex}">Reopen</button>
       </section>
     `).join("")
-    : `<p class="CroakleProjectEmptyText">No archived projects yet.</p>`;
+    : `<p class="CroakleProjectEmptyText">No finished projects yet.</p>`;
 
   document.querySelectorAll(".CroakleProjectRestoreButton").forEach((button) => {
     button.addEventListener("click", CroakleRestoreProjectFromArchive);
