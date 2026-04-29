@@ -1,22 +1,23 @@
 :root {
-  --CroakleHomeAccent: #5855f5;
-  --CroakleHomeInk: #111111;
-  --CroakleHomeMuted: #767676;
-  --CroakleHomeSoft: #f5f5f7;
-  --CroakleHomeLine: #111111;
-  --CroakleHomeYellow: #ffd86b;
-  --CroakleHomeGreen: #b9f26d;
-  --CroakleHomeBlue: #9bc8ff;
-  --CroakleHomePink: #f584bd;
-  --CroakleHomeRadius: 24px;
-  --CroakleHomeNavHeight: 76px;
-  --CroakleDashboardGap: 10px;
+  --CroakleDashboardInk: #111111;
+  --CroakleDashboardMuted: #666666;
+  --CroakleDashboardSurface: #ffffff;
+  --CroakleDashboardSoft: #f5f5f5;
+  --CroakleDashboardPressed: #eeeeee;
+  --CroakleDashboardLine: #111111;
+  --CroakleDashboardAccent: #111111;
+  --CroakleDashboardYellow: #ffdc6a;
+  --CroakleDashboardGreen: #b7f268;
+  --CroakleDashboardBlue: #9cc8ff;
+  --CroakleDashboardPink: #ed7abc;
+  --CroakleDashboardRadiusSm: 16px;
+  --CroakleDashboardRadiusMd: 22px;
+  --CroakleDashboardRadiusLg: 28px;
+  --CroakleDashboardShadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+  --CroakleDashboardBottomSpace: 16px;
   --CroakleStroke: 2px;
-  --CroakleRadiusSm: 12px;
-  --CroakleRadiusMd: 16px;
-  --CroakleRadiusLg: 20px;
   --CroakleTitleWeight: 900;
-  --CroakleBodyWeight: 700;
+  --CroakleBodyWeight: 750;
 }
 
 html,
@@ -40,62 +41,85 @@ body {
 
 .CroakleMenuPage.CroaklePageActive {
   min-height: 0;
-  overflow: hidden;
+  gap: 14px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-bottom: var(--CroakleDashboardBottomSpace);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-.CroakleHomeScreen {
-  min-height: 0;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  background: var(--CroakleSurface);
-  color: var(--CroakleHomeInk);
-  overflow: hidden;
+.CroakleMenuPage.CroaklePageActive::-webkit-scrollbar,
+.CroakleDashboardDateScroller::-webkit-scrollbar,
+.CroakleBottomNav::-webkit-scrollbar,
+.CroakleHabitList::-webkit-scrollbar,
+.CroakleBestList::-webkit-scrollbar,
+.CroakleProjectList::-webkit-scrollbar,
+.CroakleMoodCalendar::-webkit-scrollbar {
+  display: none;
 }
 
-.CroakleHomeHeader {
-  flex: 0 0 auto;
-  display: flex;
+.CroakleMenuPage .CroakleHeroHeader {
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 6px 4px 0;
-}
-
-.CroakleHomeGreeting {
-  margin: 0 0 2px;
-  color: var(--CroakleHomeInk);
-  font-size: clamp(20px, 6.2vw, 28px);
-  font-weight: 850;
-  line-height: 1;
-  letter-spacing: -0.045em;
-}
-
-.CroakleHomeHeader h1 {
+  flex: 0 0 auto;
   margin: 0;
-  color: var(--CroakleHomeInk);
-  font-size: clamp(48px, 16vw, 68px);
+}
+
+.CroakleMenuPage .CroakleHeroHeader h1 {
+  max-width: 300px;
+  color: var(--CroakleDashboardInk);
+  font-size: clamp(54px, 18vw, 76px);
   font-weight: 950;
-  line-height: 0.88;
-  letter-spacing: -0.075em;
+  line-height: 0.86;
+  letter-spacing: -0.085em;
 }
 
-.CroakleHomeHeaderActions {
+.CroakleMenuPage .CroakleEyebrow {
+  margin-bottom: 6px;
+  color: var(--CroakleDashboardMuted);
+  font-size: 18px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.CroakleMenuPage .CroakleRoundButton {
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: var(--CroakleDashboardRadiusMd);
+  background: var(--CroakleDashboardSoft);
+  color: var(--CroakleDashboardInk);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 950;
+}
+
+.CroakleDashboardPreview {
+  flex: 0 0 auto;
+  display: grid;
+  gap: 16px;
+}
+
+.CroakleDashboardDateScroller {
   display: flex;
-  align-items: center;
   gap: 10px;
-  padding-top: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding: 2px 1px 4px;
+  scrollbar-width: none;
 }
 
-.CroakleHomeIconButton,
-.CroakleHomeDatePill,
-.CroakleHomeSummaryCard,
-.CroakleHomeSectionHeader button,
-.CroakleHomeHabitStatus,
-.CroakleHomeHabitText,
-.CroakleHomeProjectButton,
-.CroakleHomeNavButton {
+.CroakleDashboardDateBox,
+.CroakleDashboardStatBox,
+.CroakleDashboardSectionHeader button,
+.CroakleDashboardHabitBoxTop button,
+.CroakleDashboardHabitBoxText,
+.CroakleDashboardProjectBox button,
+.CroakleMenuList button,
+.CroakleBottomNav button {
   appearance: none;
   border: 0;
   color: inherit;
@@ -105,118 +129,76 @@ body {
   touch-action: manipulation;
 }
 
-.CroakleHomeIconButton:focus-visible,
-.CroakleHomeDatePill:focus-visible,
-.CroakleHomeSummaryCard:focus-visible,
-.CroakleHomeSectionHeader button:focus-visible,
-.CroakleHomeHabitStatus:focus-visible,
-.CroakleHomeHabitText:focus-visible,
-.CroakleHomeProjectButton:focus-visible,
-.CroakleHomeNavButton:focus-visible {
-  outline: 2px solid var(--CroakleHomeLine);
+.CroakleDashboardDateBox:active,
+.CroakleDashboardStatBox:active,
+.CroakleDashboardSectionHeader button:active,
+.CroakleDashboardHabitBoxTop button:active,
+.CroakleDashboardHabitBoxText:active,
+.CroakleDashboardProjectBox button:active,
+.CroakleMenuList button:active,
+.CroakleBottomNav button:active {
+  transform: scale(0.97);
+}
+
+.CroakleDashboardDateBox:focus-visible,
+.CroakleDashboardStatBox:focus-visible,
+.CroakleDashboardSectionHeader button:focus-visible,
+.CroakleDashboardHabitBoxTop button:focus-visible,
+.CroakleDashboardHabitBoxText:focus-visible,
+.CroakleDashboardProjectBox button:focus-visible,
+.CroakleMenuList button:focus-visible,
+.CroakleBottomNav button:focus-visible {
+  outline: 2px solid var(--CroakleDashboardLine);
   outline-offset: 3px;
 }
 
-.CroakleHomeIconButton {
-  position: relative;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  background: var(--CroakleHomeSoft);
-  display: grid;
-  place-items: center;
-  color: var(--CroakleHomeInk);
-  font-size: 20px;
-  font-weight: 900;
-}
-
-.CroakleHomeNotifyButton::after {
-  content: "";
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: #ff8a3d;
-}
-
-.CroakleHomeMain {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  padding: 0 2px 4px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.CroakleHomeMain::-webkit-scrollbar,
-.CroakleHomeDateScroller::-webkit-scrollbar,
-.CroakleBottomNav::-webkit-scrollbar,
-.CroakleHabitList::-webkit-scrollbar,
-.CroakleBestList::-webkit-scrollbar,
-.CroakleMoodCalendar::-webkit-scrollbar {
-  display: none;
-}
-
-.CroakleHomeDateScroller {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  padding: 2px 2px 4px;
-  scrollbar-width: none;
-}
-
-.CroakleHomeDatePill {
+.CroakleDashboardDateBox {
   flex: 0 0 58px;
-  height: 66px;
+  min-width: 58px;
+  height: 64px;
   border-radius: 20px;
-  background: var(--CroakleHomeSoft);
+  background: var(--CroakleDashboardSoft);
   display: grid;
   place-items: center;
   scroll-snap-align: start;
 }
 
-.CroakleHomeDatePill strong {
+.CroakleDashboardDateBox strong {
+  color: var(--CroakleDashboardInk);
   font-size: 20px;
   font-weight: 950;
   line-height: 1;
+  letter-spacing: -0.04em;
 }
 
-.CroakleHomeDatePill span {
-  color: var(--CroakleHomeInk);
-  font-size: 15px;
+.CroakleDashboardDateBox span {
+  color: var(--CroakleDashboardInk);
+  font-size: 14px;
   font-weight: 650;
   line-height: 1;
 }
 
-.CroakleHomeDatePillActive {
-  background: var(--CroakleHomeInk);
-  color: var(--CroakleSurface);
+.CroakleDashboardDateActive {
+  background: var(--CroakleDashboardInk);
+  color: var(--CroakleDashboardSurface);
 }
 
-.CroakleHomeDatePillActive span {
-  color: var(--CroakleSurface);
+.CroakleDashboardDateActive strong,
+.CroakleDashboardDateActive span {
+  color: var(--CroakleDashboardSurface);
 }
 
-.CroakleHomeSummaryGrid {
+.CroakleDashboardStatGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
-.CroakleHomeSummaryCard {
+.CroakleDashboardStatBox {
   min-width: 0;
   min-height: 72px;
   border-radius: 20px;
-  background: var(--CroakleHomeSoft);
+  background: var(--CroakleDashboardSoft);
   padding: 12px;
   display: grid;
   align-content: center;
@@ -224,291 +206,264 @@ body {
   text-align: left;
 }
 
-.CroakleHomeSummaryCard span {
-  color: var(--CroakleHomeMuted);
-  font-size: 12px;
-  font-weight: 800;
+.CroakleDashboardStatBox span {
+  color: var(--CroakleDashboardMuted);
+  font-size: 13px;
+  font-weight: 850;
   line-height: 1;
 }
 
-.CroakleHomeSummaryCard strong {
+.CroakleDashboardStatBox strong {
   min-width: 0;
-  color: var(--CroakleHomeInk);
-  font-size: clamp(17px, 5vw, 23px);
+  color: var(--CroakleDashboardInk);
+  font-size: clamp(20px, 6vw, 28px);
   font-weight: 950;
   line-height: 1;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.06em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.CroakleHomeSection {
-  display: grid;
-  gap: 12px;
-}
-
-.CroakleHomeSectionHeader {
+.CroakleDashboardSectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-top: 2px;
 }
 
-.CroakleHomeSectionHeader h2 {
+.CroakleDashboardSectionHeader h2 {
   margin: 0;
-  color: var(--CroakleHomeInk);
-  font-size: 19px;
+  color: var(--CroakleDashboardInk);
+  font-size: clamp(31px, 9.6vw, 44px);
   font-weight: 950;
-  line-height: 1;
-  letter-spacing: -0.045em;
+  line-height: 0.98;
+  letter-spacing: -0.07em;
 }
 
-.CroakleHomeSectionHeader button {
+.CroakleDashboardSectionHeader button {
   flex: 0 0 auto;
-  min-height: 34px;
+  min-height: 44px;
   border-radius: 999px;
-  background: var(--CroakleHomeSoft);
-  color: var(--CroakleHomeInk);
-  padding: 0 12px;
-  font-size: 13px;
-  font-weight: 850;
+  background: var(--CroakleDashboardSoft);
+  color: var(--CroakleDashboardInk);
+  padding: 0 18px;
+  font-size: 17px;
+  font-weight: 900;
 }
 
-.CroakleHomeHabitGrid {
+.CroakleDashboardHabitGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.CroakleHomeHabitCard,
-.CroakleHomeEmptyCard {
+.CroakleDashboardHabitBox,
+.CroakleDashboardEmptyBox {
   min-width: 0;
   min-height: 148px;
-  border-radius: var(--CroakleHomeRadius);
+  border-radius: var(--CroakleDashboardRadiusLg);
   padding: 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
   overflow: hidden;
+  box-shadow: none;
 }
 
-.CroakleHomeCardYellow { background: var(--CroakleHomeYellow); }
-.CroakleHomeCardGreen { background: var(--CroakleHomeGreen); }
-.CroakleHomeCardBlue { background: var(--CroakleHomeBlue); }
-.CroakleHomeCardPink { background: var(--CroakleHomePink); }
-.CroakleHomeCardMuted { background: #f1f2f4; }
+.CroakleDashboardBoxYellow { background: var(--CroakleDashboardYellow); }
+.CroakleDashboardBoxGreen { background: var(--CroakleDashboardGreen); }
+.CroakleDashboardBoxBlue { background: var(--CroakleDashboardBlue); }
+.CroakleDashboardBoxPink { background: var(--CroakleDashboardPink); }
+.CroakleDashboardBoxDone { background: #f1f2f4; }
 
-.CroakleHomeHabitTop {
+.CroakleDashboardHabitBoxTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-.CroakleHomeHabitIcon {
+.CroakleDashboardHabitBoxTop span {
   width: 30px;
   height: 30px;
+  color: var(--CroakleDashboardInk);
   display: grid;
   place-items: center;
-  color: var(--CroakleHomeInk);
-  font-size: 24px;
+  font-size: 25px;
   font-weight: 950;
   line-height: 1;
 }
 
-.CroakleHomeHabitStatus {
+.CroakleDashboardHabitBoxTop button {
   flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
-  border: 2px solid var(--CroakleHomeInk);
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--CroakleDashboardInk);
   border-radius: 999px;
   background: transparent;
   display: grid;
   place-items: center;
-  color: var(--CroakleSurface);
+  color: var(--CroakleDashboardSurface);
   font-size: 17px;
   font-weight: 950;
   line-height: 1;
 }
 
-.CroakleHomeHabitDone .CroakleHomeHabitStatus {
-  background: var(--CroakleHomeInk);
+.CroakleDashboardBoxDone .CroakleDashboardHabitBoxTop button {
+  background: var(--CroakleDashboardInk);
 }
 
-.CroakleHomeHabitText {
+.CroakleDashboardHabitBoxText {
   min-width: 0;
-  display: grid;
-  gap: 4px;
-  background: transparent;
   padding: 0;
+  background: transparent;
+  display: grid;
+  gap: 5px;
   text-align: left;
 }
 
-.CroakleHomeHabitText strong {
+.CroakleDashboardHabitBoxText strong {
   min-width: 0;
-  color: var(--CroakleHomeInk);
-  font-size: clamp(19px, 5.4vw, 24px);
+  color: var(--CroakleDashboardInk);
+  font-size: clamp(21px, 6.4vw, 30px);
   font-weight: 950;
-  line-height: 1.04;
-  letter-spacing: -0.05em;
+  line-height: 1;
+  letter-spacing: -0.06em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.CroakleHomeHabitText span {
+.CroakleDashboardHabitBoxText small {
   min-width: 0;
   color: rgba(17, 17, 17, 0.76);
   font-size: 15px;
-  font-weight: 560;
+  font-weight: 650;
   line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.CroakleHomeHabitDone .CroakleHomeHabitIcon,
-.CroakleHomeHabitDone .CroakleHomeHabitText strong,
-.CroakleHomeHabitDone .CroakleHomeHabitText span {
+.CroakleDashboardBoxDone .CroakleDashboardHabitBoxTop span,
+.CroakleDashboardBoxDone .CroakleDashboardHabitBoxText strong,
+.CroakleDashboardBoxDone .CroakleDashboardHabitBoxText small {
   color: #999999;
 }
 
-.CroakleHomeEmptyCard {
+.CroakleDashboardEmptyBox {
   grid-column: 1 / -1;
-  min-height: 120px;
-  background: var(--CroakleHomeSoft);
+  min-height: 110px;
+  background: var(--CroakleDashboardSoft);
 }
 
-.CroakleHomeEmptyCard strong {
-  font-size: 22px;
+.CroakleDashboardEmptyBox strong {
+  color: var(--CroakleDashboardInk);
+  font-size: 24px;
   font-weight: 950;
-  line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
 }
 
-.CroakleHomeEmptyCard span {
-  color: var(--CroakleHomeMuted);
+.CroakleDashboardEmptyBox span {
+  color: var(--CroakleDashboardMuted);
   font-size: 15px;
   line-height: 1.3;
 }
 
-.CroakleHomeProjectSlot {
+.CroakleDashboardProjectList {
   display: grid;
   gap: 10px;
 }
 
-.CroakleHomeProjectCard {
-  border: 2px solid var(--CroakleHomeLine);
-  border-radius: 22px;
-  background: var(--CroakleSurface);
+.CroakleDashboardProjectBox {
+  min-width: 0;
+  border: 2px solid var(--CroakleDashboardLine);
+  border-radius: var(--CroakleDashboardRadiusMd);
+  background: var(--CroakleDashboardSurface);
   padding: 14px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(132px, 0.8fr);
+  grid-template-columns: minmax(0, 1fr) minmax(132px, 0.9fr);
   align-items: center;
   gap: 12px;
 }
 
-.CroakleHomeProjectCard strong {
+.CroakleDashboardProjectBox strong {
   display: block;
   min-width: 0;
-  color: var(--CroakleHomeInk);
-  font-size: 18px;
+  color: var(--CroakleDashboardInk);
+  font-size: 20px;
   font-weight: 950;
   line-height: 1.05;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.CroakleHomeProjectCard span {
+.CroakleDashboardProjectBox span {
   display: block;
   min-width: 0;
   margin-top: 4px;
-  color: var(--CroakleHomeMuted);
+  color: var(--CroakleDashboardMuted);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 650;
   line-height: 1.25;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.CroakleHomeProjectActions {
+.CroakleDashboardProjectActions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
 
-.CroakleHomeProjectButton {
+.CroakleDashboardProjectBox button {
   min-height: 42px;
-  border: 2px solid var(--CroakleHomeLine);
+  border: 2px solid var(--CroakleDashboardLine);
   border-radius: 999px;
-  background: var(--CroakleSurface);
-  color: var(--CroakleHomeInk);
+  background: var(--CroakleDashboardSurface);
+  color: var(--CroakleDashboardInk);
   padding: 0 10px;
   font-size: 14px;
   font-weight: 900;
 }
 
-.CroakleHomeProjectButtonPrimary {
-  background: var(--CroakleHomeAccent);
-  border-color: var(--CroakleHomeAccent);
-  color: #ffffff;
+.CroakleDashboardProjectActions button:first-child {
+  background: var(--CroakleDashboardInk);
+  color: var(--CroakleDashboardSurface);
 }
 
-.CroakleHomeNav {
+.CroakleDashboardMenuList {
   flex: 0 0 auto;
-  position: relative;
-  z-index: 50;
-  min-height: var(--CroakleHomeNavHeight);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   display: grid;
-  grid-template-columns: 1.15fr 1fr 74px 1fr 1fr;
+  gap: 10px;
+  padding-bottom: 0;
+}
+
+.CroakleDashboardMenuList button {
+  min-height: 72px;
+  border-radius: var(--CroakleDashboardRadiusMd);
+  background: var(--CroakleDashboardSoft);
+  padding: 0 22px;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px;
-  pointer-events: auto;
-  backdrop-filter: blur(18px);
+  justify-content: space-between;
+  color: var(--CroakleDashboardInk);
+  font-size: clamp(22px, 6.4vw, 31px);
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  text-align: left;
 }
 
-.CroakleHomeNavButton {
-  height: 52px;
-  border-radius: 999px;
-  background: transparent;
-  display: grid;
-  place-items: center;
-  color: var(--CroakleHomeInk);
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.CroakleHomeNavActive {
-  grid-template-columns: auto auto;
-  justify-content: center;
-  gap: 8px;
-  background: var(--CroakleSurface);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
-  font-size: 19px;
-}
-
-.CroakleHomeNavActive small {
-  display: block;
-  font-size: 15px;
-  font-weight: 850;
-}
-
-.CroakleHomeNavAdd {
-  width: 62px;
-  height: 62px;
-  justify-self: center;
-  background: var(--CroakleHomeAccent);
-  color: #ffffff;
-  font-size: 34px;
+.CroakleDashboardMenuList button span:last-child {
+  flex: 0 0 auto;
+  font-size: 30px;
   line-height: 1;
 }
 
@@ -524,47 +479,6 @@ body {
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-}
-
-.CroakleMonthHeader {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 40px;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-  flex: 0 0 auto;
-}
-
-.CroakleMonthHeader strong {
-  text-align: center;
-  font-size: clamp(20px, 5.6vw, 24px);
-  letter-spacing: -0.05em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.CroakleMonthHeader button {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: var(--CroakleSoftSurface);
-  font-size: 32px;
-  line-height: 1;
-}
-
-.CroakleRoundButton,
-.CroakleMonthHeader button,
-.CroakleMenuList button,
-.CroakleBottomNav button,
-.CroakleAddHabitButton,
-.CroakleSecondaryActionButton,
-.CroakleConfirmHabitButton,
-.CroakleProjectDetailActionButton,
-.CroakleProjectRestoreButton,
-.CroakleReorderMoveButton,
-.CroaklePriorityField span {
-  border-radius: var(--CroakleRadiusMd);
 }
 
 .CroakleTrackActions {
@@ -598,13 +512,8 @@ body {
 .CroakleProjectRow {
   padding: 10px 14px;
   border: var(--CroakleStroke) solid var(--CroakleLine);
-  border-radius: var(--CroakleRadiusMd);
+  border-radius: 16px;
   background: var(--CroakleSurface);
-}
-
-.CroakleHabitTop,
-.CroakleProjectTop {
-  gap: 10px;
 }
 
 .CroakleHabitNameButton,
@@ -620,18 +529,13 @@ body {
   display: grid;
   gap: 10px;
   min-height: 0;
+  flex: 1 1 auto;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
+  padding-bottom: 14px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-}
-
-.CroakleHabitList,
-.CroakleBestList,
-.CroakleProjectList {
-  flex: 1 1 auto;
-  padding-bottom: 14px;
 }
 
 .CroakleBestHeader,
@@ -664,7 +568,7 @@ body {
 .CroaklePercentBar {
   height: 22px;
   border-width: var(--CroakleStroke);
-  border-radius: var(--CroakleRadiusSm);
+  border-radius: 12px;
 }
 
 .CroaklePercentBar em {
@@ -696,6 +600,7 @@ body {
   min-width: 0;
   padding: 0 10px;
   border-radius: 999px;
+  background: var(--CroakleSoftSurface);
   font-size: 14px;
   font-weight: var(--CroakleTitleWeight);
   white-space: nowrap;
@@ -721,26 +626,27 @@ body {
 }
 
 @media (max-width: 380px) {
-  .CroakleHomeScreen {
+  .CroakleMenuPage.CroaklePageActive {
     gap: 12px;
   }
 
-  .CroakleHomeHeader h1 {
-    font-size: clamp(44px, 15vw, 58px);
+  .CroakleMenuPage .CroakleHeroHeader h1 {
+    font-size: clamp(50px, 16.5vw, 66px);
   }
 
-  .CroakleHomeDatePill {
+  .CroakleDashboardDateBox {
     flex-basis: 54px;
-    height: 62px;
+    min-width: 54px;
+    height: 60px;
   }
 
-  .CroakleHomeHabitCard,
-  .CroakleHomeEmptyCard {
+  .CroakleDashboardHabitBox,
+  .CroakleDashboardEmptyBox {
     min-height: 136px;
     padding: 16px;
   }
 
-  .CroakleHomeProjectCard {
+  .CroakleDashboardProjectBox {
     grid-template-columns: 1fr;
   }
 
@@ -754,32 +660,25 @@ body {
 }
 
 @media (max-height: 760px) {
-  :root { --CroakleDashboardGap: 8px; }
-
-  .CroakleHomeHeader h1 {
-    font-size: clamp(42px, 14vw, 58px);
+  .CroakleMenuPage .CroakleHeroHeader h1 {
+    font-size: clamp(48px, 15vw, 62px);
   }
 
-  .CroakleHomeDatePill {
+  .CroakleDashboardPreview {
+    gap: 12px;
+  }
+
+  .CroakleDashboardDateBox {
     height: 58px;
   }
 
-  .CroakleHomeHabitCard,
-  .CroakleHomeEmptyCard {
+  .CroakleDashboardHabitBox,
+  .CroakleDashboardEmptyBox {
     min-height: 128px;
   }
 
-  .CroakleHomeNav {
-    min-height: 68px;
-  }
-
-  .CroakleHomeNavButton {
-    height: 48px;
-  }
-
-  .CroakleHomeNavAdd {
-    width: 56px;
-    height: 56px;
+  .CroakleDashboardMenuList button {
+    min-height: 64px;
   }
 }
 
