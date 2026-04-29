@@ -23,19 +23,6 @@
     localStorage.setItem(CroakleAiSettingsStoreKey, JSON.stringify(settings));
   }
 
-  function CroakleEscapeAiSetting(value) {
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;");
-  }
-
-  function CroakleMaskAiKey(apiKey) {
-    const cleanKey = String(apiKey || "").trim();
-    return cleanKey ? `Saved •••• ${cleanKey.slice(-4)}` : "No API key saved";
-  }
-
   function CroakleInjectAiSettingsStyles() {
     if (document.querySelector("#CroakleAiSettingsStyles")) {
       return;
@@ -122,7 +109,7 @@
       return `
         <label class="CroakleAiSettingsField">
           <span>Gemini API Key</span>
-          <input class="CroakleAiSettingsInput" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste Gemini API key" value="" data-croakle-ai-api-key />
+          <input class="CroakleAiSettingsInput" type="password" inputmode="text" autocomplete="new-password" autocapitalize="off" spellcheck="false" placeholder="Paste Gemini API key" value="" data-croakle-ai-api-key />
         </label>
         <p class="CroakleAiSettingsStatus" data-croakle-ai-status>${settings.apiKey && CroakleAiKeyEditMode ? "Paste a new key, then press Save key. The old key stays until saved." : "No API key saved yet."}</p>
         <div class="CroakleAiSettingsActions">
@@ -141,9 +128,9 @@
     return `
       <label class="CroakleAiSettingsField">
         <span>Gemini API Key</span>
-        <div class="CroakleAiSettingsLockedKey" role="textbox" aria-readonly="true">${CroakleEscapeAiSetting(CroakleMaskAiKey(settings.apiKey))}</div>
+        <div class="CroakleAiSettingsLockedKey" aria-label="Gemini API key saved and hidden">API key saved</div>
       </label>
-      <p class="CroakleAiSettingsStatus" data-croakle-ai-status>API key saved on this device. The full key is hidden and cannot be copied here.</p>
+      <p class="CroakleAiSettingsStatus" data-croakle-ai-status>API key is hidden. It cannot be copied from this screen.</p>
       <div class="CroakleAiSettingsActions">
         <button class="CroakleSettingsActionButton" type="button" data-croakle-ai-replace-key>
           <span class="CroakleSettingsText"><strong>Replace key</strong><span>ใส่ API key ใหม่</span></span>
