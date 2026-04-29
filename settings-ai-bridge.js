@@ -144,6 +144,17 @@
     `;
   }
 
+  function CroakleInsertAiSettingsGroup(settingsBody, markup) {
+    const exportBackupGroup = settingsBody.querySelector('[aria-label="Export and backup settings"]');
+
+    if (exportBackupGroup) {
+      exportBackupGroup.insertAdjacentHTML("beforebegin", markup);
+      return;
+    }
+
+    settingsBody.insertAdjacentHTML("beforeend", markup);
+  }
+
   function CroakleRenderAiSettingsPanel() {
     const settingsBody = document.querySelector(".CroakleSettingsBody");
 
@@ -156,7 +167,7 @@
     const settings = CroakleLoadAiSettings();
     CroakleInjectAiSettingsStyles();
 
-    settingsBody.insertAdjacentHTML("beforeend", `
+    CroakleInsertAiSettingsGroup(settingsBody, `
       <section class="CroakleSettingsGroup" id="CroakleAiSettingsGroup" aria-label="Croakle AI settings">
         <p class="CroakleSettingsGroupTitle">Croakle Recap AI</p>
         <p class="CroakleAiSettingsNote">API key จะถูกเก็บเฉพาะในเครื่องนี้ และจะไม่ถูกรวมในไฟล์ backup หากย้ายเครื่องหรือนำเข้า backup ต้องใส่ API key ใหม่</p>
