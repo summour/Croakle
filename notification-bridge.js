@@ -8,6 +8,10 @@
     const style = document.createElement("style");
     style.id = "CroakleAppPopupStyles";
     style.textContent = `
+      .CroakleAppPopupOverlay:not([open]) {
+        display: none;
+      }
+
       .CroakleAppPopupOverlay {
         position: fixed;
         inset: 0;
@@ -151,9 +155,26 @@
     popup.remove();
   }
 
+  function CroakleCloseProjectDialogForConfirm() {
+    const dialog = document.querySelector("#CroakleProjectDetailDialog");
+    if (dialog?.open && typeof dialog.close === "function") dialog.close();
+  }
+
   function CroakleOpenAppPopup(overlay) {
     document.body.appendChild(overlay);
-    if (typeof overlay.showModal === "function") overlay.showModal();
+
+    try {
+      if (typeof overlay.showModal === "function") {
+        overlay.showModal();
+        return;
+      }
+    } catch {
+      overlay.remove();
+      CroakleCloseProjectDialogForConfirm();
+      document.body.appendChild(overlay);
+    }
+
+    overlay.setAttribute("open", "");
   }
 
   function CroakleCreatePopupShell(title, message, actionsMarkup) {
