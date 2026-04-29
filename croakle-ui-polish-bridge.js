@@ -9,18 +9,12 @@
     const style = document.createElement("style");
     style.id = "CroaklePolishStyles";
     style.textContent = `
-      .CroakleBottomNav {
-        display: grid;
-      }
-
+      .CroakleBottomNav,
       .CroakleBottomNav[hidden] {
         display: grid;
       }
 
       .CroaklePolishBarChart {
-        display: flex;
-        align-items: end;
-        gap: 8px;
         min-height: 180px;
         padding: 14px;
         border: var(--CroakleStroke, 2px) solid var(--CroakleLine);
@@ -28,42 +22,89 @@
         background: var(--CroakleSoftSurface);
       }
 
-      .CroaklePolishBarItem {
-        flex: 1 1 0;
-        min-width: 0;
-        display: grid;
-        grid-template-rows: minmax(0, 1fr) auto;
-        gap: 7px;
-        height: 152px;
+      .CroaklePolishBarSvg {
+        display: block;
+        width: 100%;
+        height: auto;
       }
 
       .CroaklePolishBarFill {
-        align-self: end;
-        min-height: 8px;
-        width: 100%;
-        border: var(--CroakleStroke, 2px) solid var(--CroakleLine);
-        border-radius: var(--CroakleRadiusSm, 12px) var(--CroakleRadiusSm, 12px) 0 0;
-        background: var(--CroakleLine);
+        fill: var(--CroakleLine);
+        stroke: var(--CroakleLine);
+        stroke-width: 2;
+      }
+
+      .CroaklePolishBarAxis {
+        stroke: var(--CroakleLine);
+        stroke-width: 2;
       }
 
       .CroaklePolishBarLabel {
-        color: var(--CroakleMuted);
+        fill: var(--CroakleMuted);
         font-size: 10px;
         font-weight: 500;
-        line-height: 1.05;
-        text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
       }
     `;
     document.head.appendChild(style);
+  }
+
+  function CroakleEscapePolishText(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
   function CroakleParseChartValue(text) {
     const cleanText = String(text || "").replace(/,/g, "");
     const numberMatch = cleanText.match(/-?\d+(?:\.\d+)?/);
     return numberMatch ? Number(numberMatch[0]) : 0;
+  }
+
+  function CroakleShortBarLabel(label) {
+    const cleanLabel = String(label || "").trim();
+    return cleanLabel.length > 8 ? `${cleanLabel.slice(0, 8)}…` : cleanLabel;
+  }
+
+  function CroakleCreateBarSvg(rows) {
+    const width = 340;
+    const height = 180;
+    const paddingTop = 14;
+    const paddingRight = 10;
+    const paddingBottom = 28;
+    const paddingLeft = 10;
+    const gap = 6;
+    const chartHeight = height - paddingTop - paddingBottom;
+    const chartWidth = width - paddingLeft - paddingRight;
+    const maxValue = Math.max(...rows.map((row) => row.value), 1);
+    const barWidth = Math.max(6, (chartWidth - gap * (rows.length - 1)) / rows.length);
+    const bottomY = height - paddingBottom;
+
+    const bars = rows.map((row, index) => {
+      const safeHeight = Math.max(6, (row.value / maxValue) * chartHeight);
+      const x = paddingLeft + index * (barWidth + gap);
+      const y = bottomY - safeHeight;
+      const labelX = x + barWidth / 2;
+      const label = CroakleEscapePolishText(CroakleShortBarLabel(row.label));
+      const title = CroakleEscapePolishText(`${row.label}: ${row.value}`);
+
+      return `
+        <g>
+          <title>${title}</title>
+          <rect class="CroaklePolishBarFill" x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${barWidth.toFixed(2)}" height="${safeHeight.toFixed(2)}" rx="5"></rect>
+          <text class="CroaklePolishBarLabel" x="${labelX.toFixed(2)}" y="${height - 8}" text-anchor="middle">${label}</text>
+        </g>
+      `;
+    }).join("");
+
+    return `
+      <svg class="CroaklePolishBarSvg" viewBox="0 0 ${width} ${height}" aria-hidden="true">
+        <line class="CroaklePolishBarAxis" x1="${paddingLeft}" y1="${bottomY}" x2="${width - paddingRight}" y2="${bottomY}"></line>
+        ${bars}
+      </svg>
+    `;
   }
 
   function CroakleCreateBarsFromPanel(panel) {
@@ -77,19 +118,8 @@
       return;
     }
 
-    const maxValue = Math.max(...rows.map((row) => row.value), 1);
     chartWrap.className = CroaklePolishBarChartClass;
-    chartWrap.innerHTML = rows.map((row) => {
-      const height = Math.max(6, Math.round((row.value / maxValue) * 100));
-      const label = row.label.length > 8 ? `${row.label.slice(0, 8)}…` : row.label;
-
-      return `
-        <div class="CroaklePolishBarItem" title="${row.label}: ${row.value}">
-          <div class="CroaklePolishBarFill" style="height: ${height}%"></div>
-          <div class="CroaklePolishBarLabel">${label}</div>
-        </div>
-      `;
-    }).join("");
+    chartWrap.innerHTML = CroakleCreateBarSvg(rows);
   }
 
   function CroaklePolishAnalyticsCharts() {
