@@ -39,6 +39,10 @@
   display: none;
 }
 
+.CroakleMenuPage.CroaklePageActive > .CroakleDashboardMenuList {
+  display: none;
+}
+
 .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
   position: static;
   inset: auto;
