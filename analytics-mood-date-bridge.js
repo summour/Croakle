@@ -3,6 +3,15 @@
     return;
   }
 
+  const CroakleAnalyticsChartOrder = [
+    "Productivity of the day",
+    "Weekly Trend",
+    "Habit Completion",
+    "Weekday Consistency",
+    "Mood by Date",
+    "Mood Distribution",
+  ];
+
   function CroakleEscapeMoodDateHtml(value) {
     return String(value ?? "")
       .replaceAll("&", "&amp;")
@@ -152,21 +161,49 @@
     `;
   }
 
+  function CroakleGetPanelTitle(panel) {
+    return panel.querySelector(".CroakleAnalyticsPanelHeader h3")?.textContent?.trim() || "";
+  }
+
+  function CroakleOrderAnalyticsPanels() {
+    const panels = document.querySelector("#CroakleAnalyticsPanels");
+
+    if (!panels) {
+      return;
+    }
+
+    const sortedPanels = Array.from(panels.querySelectorAll(":scope > .CroakleAnalyticsPanel"))
+      .sort((firstPanel, secondPanel) => {
+        const firstIndex = CroakleAnalyticsChartOrder.indexOf(CroakleGetPanelTitle(firstPanel));
+        const secondIndex = CroakleAnalyticsChartOrder.indexOf(CroakleGetPanelTitle(secondPanel));
+        const safeFirstIndex = firstIndex === -1 ? CroakleAnalyticsChartOrder.length : firstIndex;
+        const safeSecondIndex = secondIndex === -1 ? CroakleAnalyticsChartOrder.length : secondIndex;
+
+        return safeFirstIndex - safeSecondIndex;
+      });
+
+    sortedPanels.forEach((panel) => panels.appendChild(panel));
+  }
+
   function CroakleRenderMoodDatePanel() {
     const panels = document.querySelector("#CroakleAnalyticsPanels");
 
-    if (!panels || document.querySelector("#CroakleMoodDateAnalyticsPanel")) {
+    if (!panels) {
       return;
     }
 
-    const year = CroakleState.analyticsYear;
-    const month = CroakleState.analyticsMonth;
+    if (!document.querySelector("#CroakleMoodDateAnalyticsPanel")) {
+      const year = CroakleState.analyticsYear;
+      const month = CroakleState.analyticsMonth;
 
-    if (!Number.isInteger(year) || !Number.isInteger(month)) {
-      return;
+      if (!Number.isInteger(year) || !Number.isInteger(month)) {
+        return;
+      }
+
+      panels.insertAdjacentHTML("beforeend", CroakleCreateMoodDatePanel(year, month));
     }
 
-    panels.insertAdjacentHTML("beforeend", CroakleCreateMoodDatePanel(year, month));
+    CroakleOrderAnalyticsPanels();
   }
 
   function CroakleBindMoodDatePanel() {
