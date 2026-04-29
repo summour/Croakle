@@ -1,4 +1,13 @@
 (() => {
+  const CroakleDashboardHabitStoreKey = "CroakleHabitMoodDataCleanV1";
+  const CroakleDashboardProjectStoreKey = "CroakleProjectDataV1";
+
+  const CroakleDashboardDefaultProjects = [
+    { completed: false },
+    { completed: false },
+    { completed: false },
+  ];
+
   const CroakleDashboardRoutes = [
     {
       page: "track",
@@ -27,19 +36,54 @@
     },
   ];
 
+  function CroakleDashboardSafeParse(value, fallback) {
+    if (!value) {
+      return fallback;
+    }
+
+    try {
+      return JSON.parse(value) || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function CroakleDashboardGetToday() {
+    return typeof CroakleGetToday === "function" ? CroakleGetToday() : new Date();
+  }
+
+  function CroakleDashboardGetMonthKey(date) {
+    return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0")].join("-");
+  }
+
+  function CroakleDashboardGetSavedHabitState() {
+    return CroakleDashboardSafeParse(localStorage.getItem(CroakleDashboardHabitStoreKey), null);
+  }
+
+  function CroakleDashboardGetSavedProjectState() {
+    return CroakleDashboardSafeParse(localStorage.getItem(CroakleDashboardProjectStoreKey), null);
+  }
+
   function CroakleDashboardGetMonthData() {
-    const today = typeof CroakleGetToday === "function" ? CroakleGetToday() : new Date();
+    const today = CroakleDashboardGetToday();
 
     if (typeof CroakleGetMonthData === "function") {
       return CroakleGetMonthData(today.getFullYear(), today.getMonth());
     }
 
-    return { habits: [], moods: [] };
+    const savedState = CroakleDashboardGetSavedHabitState();
+    const monthKey = CroakleDashboardGetMonthKey(today);
+    const savedMonth = savedState?.months?.[monthKey];
+
+    return {
+      habits: Array.isArray(savedMonth?.habits) ? savedMonth.habits : [],
+      moods: Array.isArray(savedMonth?.moods) ? savedMonth.moods : [],
+    };
   }
 
   function CroakleDashboardGetHabitSummary() {
     const monthData = CroakleDashboardGetMonthData();
-    const today = typeof CroakleGetToday === "function" ? CroakleGetToday() : new Date();
+    const today = CroakleDashboardGetToday();
     const dayIndex = today.getDate() - 1;
     const habits = Array.isArray(monthData.habits) ? monthData.habits : [];
     const done = habits.filter((habit) => Boolean(habit.days?.[dayIndex])).length;
@@ -47,12 +91,22 @@
     return `${done}/${habits.length}`;
   }
 
+  function CroakleDashboardGetProjectList() {
+    const savedState = CroakleDashboardGetSavedProjectState();
+
+    if (Array.isArray(savedState?.projects)) {
+      return savedState.projects;
+    }
+
+    if (typeof CroakleProjectState !== "undefined" && Array.isArray(CroakleProjectState.projects)) {
+      return CroakleProjectState.projects;
+    }
+
+    return CroakleDashboardDefaultProjects;
+  }
+
   function CroakleDashboardGetProjectSummary() {
-    const projects = Array.isArray(window.CroakleProjectState?.projects)
-      ? window.CroakleProjectState.projects
-      : Array.isArray(CroakleProjectState?.projects)
-        ? CroakleProjectState.projects
-        : [];
+    const projects = CroakleDashboardGetProjectList();
     const active = projects.filter((project) => !project.completed).length;
 
     return `${active} active`;
@@ -60,7 +114,7 @@
 
   function CroakleDashboardGetMoodSummary() {
     const monthData = CroakleDashboardGetMonthData();
-    const today = typeof CroakleGetToday === "function" ? CroakleGetToday() : new Date();
+    const today = CroakleDashboardGetToday();
     const mood = monthData.moods?.[today.getDate() - 1];
     const label = typeof CroakleGetMoodLabel === "function" ? CroakleGetMoodLabel(mood) : "Okay";
 
@@ -116,21 +170,34 @@
     CroakleDashboardSetText("#CroakleDashboardMoodStat", CroakleDashboardGetMoodSummary());
   }
 
-  function CroakleDashboardPatchRender() {
-    if (window.CroakleDashboardRenderPatched || typeof CroakleRenderAll !== "function") {
+  function CroakleDashboardPatchFunction(functionName) {
+    const originalFunction = window[functionName];
+
+    if (typeof originalFunction !== "function" || originalFunction.CroakleDashboardPatched) {
       return;
     }
 
-    window.CroakleDashboardRenderPatched = true;
-    const originalRenderAll = CroakleRenderAll;
-
-    CroakleRenderAll = function CroakleRenderAllWithDashboard() {
-      originalRenderAll();
+    window[functionName] = function CroakleDashboardPatchedFunction(...args) {
+      const result = originalFunction.apply(this, args);
       CroakleDashboardRenderStats();
+      return result;
     };
+
+    window[functionName].CroakleDashboardPatched = true;
+  }
+
+  function CroakleDashboardPatchRender() {
+    CroakleDashboardPatchFunction("CroakleRenderAll");
+    CroakleDashboardPatchFunction("CroakleSaveState");
+    CroakleDashboardPatchFunction("CroakleSaveProjectState");
   }
 
   function CroakleDashboardBindMenu() {
+    if (window.CroakleDashboardMenuBound) {
+      return;
+    }
+
+    window.CroakleDashboardMenuBound = true;
     document.addEventListener("click", (event) => {
       const button = event.target.closest(".CroakleDashboardMenuList [data-page-target]");
 
@@ -139,6 +206,7 @@
       }
 
       CroakleSetPage(button.dataset.pageTarget);
+      CroakleDashboardRenderStats();
     });
   }
 
@@ -146,20 +214,23 @@
     const menuPage = document.querySelector('[data-page="menu"]');
     const menuList = document.querySelector(".CroakleMenuList");
 
-    if (!menuPage || !menuList || document.querySelector(".CroakleDashboardCard")) {
+    if (!menuPage || !menuList) {
       return;
     }
 
-    menuPage.querySelector(".CroakleEmptyPanel")?.remove();
-    menuList.classList.add("CroakleDashboardMenuList");
-    menuList.innerHTML = CroakleDashboardCreateMenu();
-    menuPage.querySelector(".CroakleHeroHeader")?.insertAdjacentHTML("afterend", CroakleDashboardCreateCard());
-    menuPage.querySelector(".CroakleHeroHeader h1").textContent = "Life Dashboard";
+    if (!document.querySelector(".CroakleDashboardCard")) {
+      menuPage.querySelector(".CroakleEmptyPanel")?.remove();
+      menuList.classList.add("CroakleDashboardMenuList");
+      menuList.innerHTML = CroakleDashboardCreateMenu();
+      menuPage.querySelector(".CroakleHeroHeader")?.insertAdjacentHTML("afterend", CroakleDashboardCreateCard());
+      menuPage.querySelector(".CroakleHeroHeader h1").textContent = "Life Dashboard";
+    }
 
     CroakleDashboardPatchRender();
     CroakleDashboardBindMenu();
     CroakleDashboardRenderStats();
   }
 
+  window.addEventListener("storage", CroakleDashboardRenderStats);
   window.requestAnimationFrame(CroakleDashboardInit);
 })();
