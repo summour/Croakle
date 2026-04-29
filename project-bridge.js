@@ -252,10 +252,14 @@ function CroakleProjectHasTrackedWeek(project, weekKey = CroakleProjectGetSelect
   return Array.isArray(project.weeklyDays?.[weekKey]) && project.weeklyDays[weekKey].some(Boolean);
 }
 
-function CroakleGetProjectTrackedTotal(project) {
-  return Object.values(project.weeklyDays || {})
-    .flat()
-    .filter(Boolean).length;
+function CroakleCountProjectDays(project, weekKey = CroakleProjectGetSelectedWeekKey()) {
+  const days = Array.isArray(project.weeklyDays?.[weekKey]) ? project.weeklyDays[weekKey] : [];
+  return days.filter(Boolean).length;
+}
+
+function CroakleGetProjectArchiveTrackedCount(project) {
+  const archiveWeekKey = project.completedWeekKey || CroakleProjectGetSelectedWeekKey();
+  return CroakleCountProjectDays(project, archiveWeekKey);
 }
 
 function CroakleShouldShowProjectInSelectedWeek(project) {
@@ -623,7 +627,7 @@ function CroakleRenderProjectArchiveList() {
       <section class="CroakleProjectArchiveRow">
         <div class="CroakleProjectArchiveInfo">
           <strong>${project.name}</strong>
-          <span>${CroakleGetProjectTrackedTotal(project)} tracked</span>
+          <span>${CroakleGetProjectArchiveTrackedCount(project)} tracked</span>
         </div>
         <button class="CroakleProjectRestoreButton" type="button" data-project-restore-index="${projectIndex}">Reopen</button>
       </section>
