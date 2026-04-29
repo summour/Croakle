@@ -30,6 +30,10 @@ let CroakleProjectArchiveDialog = null;
 let CroakleProjectArchiveList = null;
 let CroakleProjectCloseArchiveButton = null;
 let CroakleProjectArchiveDoneButton = null;
+let CroakleProjectReorderDialog = null;
+let CroakleProjectReorderList = null;
+let CroakleProjectCloseReorderButton = null;
+let CroakleProjectReorderDoneButton = null;
 
 function CroakleLoadProjectState() {
   const saved = localStorage.getItem(CroakleProjectStoreKey);
@@ -428,6 +432,29 @@ function CroakleCreateProjectArchiveDialog() {
   `);
 }
 
+function CroakleCreateProjectReorderDialog() {
+  const appShell = document.querySelector(".CroakleHabitMoodShell");
+
+  if (!appShell || document.querySelector("#CroakleProjectReorderDialog")) {
+    return;
+  }
+
+  appShell.insertAdjacentHTML("beforeend", `
+    <dialog class="CroakleAddHabitDialog" id="CroakleProjectReorderDialog" aria-labelledby="CroakleProjectReorderTitle">
+      <div class="CroakleAddHabitForm">
+        <header class="CroakleAddHabitHeader">
+          <h2 id="CroakleProjectReorderTitle">Reorder Projects</h2>
+          <button type="button" id="CroakleCloseProjectReorder" aria-label="ปิด">×</button>
+        </header>
+
+        <div class="CroakleReorderList" id="CroakleProjectReorderList"></div>
+
+        <button class="CroakleConfirmHabitButton" id="CroakleProjectReorderDone" type="button">Done</button>
+      </div>
+    </dialog>
+  `);
+}
+
 function CroakleBindAddProjectDialog() {
   CroakleCreateAddProjectDialog();
   CroakleAddProjectDialog = document.querySelector("#CroakleAddProjectDialog");
@@ -451,6 +478,18 @@ function CroakleBindProjectArchiveDialog() {
   CroakleProjectArchiveButton?.addEventListener("click", CroakleOpenProjectArchiveDialog);
   CroakleProjectCloseArchiveButton?.addEventListener("click", CroakleCloseProjectArchiveDialog);
   CroakleProjectArchiveDoneButton?.addEventListener("click", CroakleCloseProjectArchiveDialog);
+}
+
+function CroakleBindProjectReorderDialog() {
+  CroakleCreateProjectReorderDialog();
+
+  CroakleProjectReorderDialog = document.querySelector("#CroakleProjectReorderDialog");
+  CroakleProjectReorderList = document.querySelector("#CroakleProjectReorderList");
+  CroakleProjectCloseReorderButton = document.querySelector("#CroakleCloseProjectReorder");
+  CroakleProjectReorderDoneButton = document.querySelector("#CroakleProjectReorderDone");
+
+  CroakleProjectCloseReorderButton?.addEventListener("click", CroakleCloseProjectReorderDialog);
+  CroakleProjectReorderDoneButton?.addEventListener("click", CroakleCloseProjectReorderDialog);
 }
 
 function CroakleOpenAddProjectDialog() {
@@ -490,6 +529,7 @@ function CroakleHandleAddProject(event) {
   CroakleSaveProjectState();
   CroakleCloseAddProjectDialog();
   CroakleRenderProjectList();
+  CroakleRenderProjectReorderList();
 }
 
 function CroakleOpenProjectDetailDialog(event) {
@@ -537,6 +577,7 @@ function CroakleHandleProjectUpdate(event) {
   CroakleSaveProjectState();
   CroakleCloseProjectDetailDialog();
   CroakleRenderProjectList();
+  CroakleRenderProjectReorderList();
 }
 
 function CroakleHandleProjectDelete() {
@@ -550,6 +591,7 @@ function CroakleHandleProjectDelete() {
   CroakleSaveProjectState();
   CroakleCloseProjectDetailDialog();
   CroakleRenderProjectList();
+  CroakleRenderProjectReorderList();
 }
 
 function CroakleHandleProjectComplete() {
@@ -566,6 +608,7 @@ function CroakleHandleProjectComplete() {
   CroakleCloseProjectDetailDialog();
   CroakleRenderProjectList();
   CroakleRenderProjectArchiveList();
+  CroakleRenderProjectReorderList();
 }
 
 function CroakleRenderProjectArchiveList() {
@@ -618,20 +661,74 @@ function CroakleRestoreProjectFromArchive(event) {
   CroakleSaveProjectState();
   CroakleRenderProjectList();
   CroakleRenderProjectArchiveList();
+  CroakleRenderProjectReorderList();
 }
 
-function CroakleReorderProjects() {
-  const activeProjects = CroakleGetActiveProjects().map(({ project }) => project).reverse();
-  const archivedProjects = CroakleGetArchivedProjects().map(({ project }) => project);
+function CroakleOpenProjectReorderDialog() {
+  if (!CroakleProjectReorderDialog) {
+    return;
+  }
 
-  CroakleProjectState.projects = [...activeProjects, ...archivedProjects];
+  CroakleRenderProjectReorderList();
+  CroakleProjectReorderDialog.showModal();
+}
+
+function CroakleCloseProjectReorderDialog() {
+  CroakleProjectReorderDialog?.close();
+}
+
+function CroakleRenderProjectReorderList() {
+  if (!CroakleProjectReorderList) {
+    return;
+  }
+
+  const activeProjects = CroakleGetActiveProjects();
+
+  CroakleProjectReorderList.innerHTML = activeProjects.length
+    ? activeProjects.map(({ project }, activeIndex) => {
+      const isFirst = activeIndex === 0;
+      const isLast = activeIndex === activeProjects.length - 1;
+
+      return `
+        <div class="CroakleReorderRow">
+          <div class="CroakleReorderName">${project.name}</div>
+          <div class="CroakleReorderActions">
+            <button class="CroakleReorderMoveButton" type="button" data-project-active-index="${activeIndex}" data-project-reorder-direction="up" aria-label="Move ${project.name} up" ${isFirst ? "disabled" : ""}>↑</button>
+            <button class="CroakleReorderMoveButton" type="button" data-project-active-index="${activeIndex}" data-project-reorder-direction="down" aria-label="Move ${project.name} down" ${isLast ? "disabled" : ""}>↓</button>
+          </div>
+        </div>
+      `;
+    }).join("")
+    : `<p class="CroakleProjectEmptyText">No active projects to reorder.</p>`;
+
+  document.querySelectorAll("#CroakleProjectReorderList .CroakleReorderMoveButton").forEach((button) => {
+    button.addEventListener("click", CroakleHandleProjectReorderMove);
+  });
+}
+
+function CroakleHandleProjectReorderMove(event) {
+  const fromIndex = Number(event.currentTarget.dataset.projectActiveIndex);
+  const direction = event.currentTarget.dataset.projectReorderDirection === "down" ? 1 : -1;
+  const toIndex = fromIndex + direction;
+  const activeProjects = CroakleGetActiveProjects().map(({ project }) => project);
+
+  if (toIndex < 0 || toIndex >= activeProjects.length) {
+    return;
+  }
+
+  const archivedProjects = CroakleGetArchivedProjects().map(({ project }) => project);
+  const reorderedProjects = CroakleSwapArrayItems(activeProjects, fromIndex, toIndex);
+
+  CroakleProjectState.projects = [...reorderedProjects, ...archivedProjects];
   CroakleSaveProjectState();
   CroakleRenderProjectList();
+  CroakleRenderProjectReorderList();
 }
 
 function CroakleRenderProjects() {
   CroakleBindAddProjectDialog();
   CroakleBindProjectArchiveDialog();
+  CroakleBindProjectReorderDialog();
   CroakleRenderProjectHeader();
   CroakleRenderProjectList();
 }
@@ -640,7 +737,7 @@ CroaklePatchProjectMoodSync();
 CroakleProjectWeekButtons[0]?.addEventListener("click", () => CroakleChangeProjectWeek(-1));
 CroakleProjectWeekButtons[1]?.addEventListener("click", () => CroakleChangeProjectWeek(1));
 CroakleProjectAddButton?.addEventListener("click", CroakleOpenAddProjectDialog);
-CroakleProjectReorderButton?.addEventListener("click", CroakleReorderProjects);
+CroakleProjectReorderButton?.addEventListener("click", CroakleOpenProjectReorderDialog);
 CroakleProjectDetailForm?.addEventListener("submit", CroakleHandleProjectUpdate);
 CroakleProjectDeleteButton?.addEventListener("click", CroakleHandleProjectDelete);
 CroakleProjectCloseButton?.addEventListener("click", CroakleCloseProjectDetailDialog);
