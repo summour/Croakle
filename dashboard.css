@@ -1,62 +1,60 @@
 :root {
-  --CroakleDashboardGap: 14px;
+  --CroakleDashboardGap: 10px;
 }
 
 html,
 body {
-  height: auto;
+  height: 100%;
   min-height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 body {
-  position: static;
-  inset: auto;
+  position: fixed;
+  inset: 0;
 }
 
 .CroakleHabitMoodShell {
-  height: auto;
-  min-height: 100dvh;
-  max-height: none;
-  overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-
-.CroakleHabitMoodShell::-webkit-scrollbar {
-  display: none;
+  height: 100dvh;
+  min-height: 0;
+  max-height: 100dvh;
+  overflow: hidden;
 }
 
 .CroakleMenuPage.CroaklePageActive {
+  min-height: 0;
   gap: var(--CroakleDashboardGap);
-  overflow: visible;
+  overflow: hidden;
 }
 
 .CroakleMenuPage .CroakleHeroHeader {
   align-items: flex-start;
+  flex: 0 0 auto;
   margin-bottom: 0;
 }
 
 .CroakleMenuPage .CroakleHeroHeader h1 {
   max-width: 300px;
+  font-size: clamp(36px, 10.8vw, 48px);
+  line-height: 0.95;
 }
 
 .CroakleDashboardCard {
   flex: 0 0 auto;
+  min-height: 0;
   border: 2px solid var(--CroakleLine);
-  border-radius: 28px;
+  border-radius: 26px;
   background: var(--CroakleSurface);
-  padding: 16px;
+  padding: 14px;
   display: grid;
-  gap: 12px;
-  overflow: visible;
+  gap: 10px;
+  overflow: hidden;
 }
 
 .CroakleDashboardLabel {
   margin: 0;
   color: var(--CroakleMuted);
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -65,7 +63,7 @@ body {
 .CroakleDashboardTitle {
   margin: 0;
   color: var(--CroakleText);
-  font-size: clamp(42px, 13vw, 54px);
+  font-size: clamp(38px, 11.5vw, 50px);
   font-weight: 950;
   line-height: 0.92;
   letter-spacing: -0.07em;
@@ -73,16 +71,16 @@ body {
 
 .CroakleDashboardStats {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .CroakleDashboardStat {
   min-width: 0;
-  min-height: 58px;
+  min-height: 52px;
   border: 2px solid var(--CroakleLine);
   border-radius: 18px;
   background: var(--CroakleSurface);
-  padding: 8px 14px;
+  padding: 7px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,7 +90,7 @@ body {
 .CroakleDashboardStat span {
   min-width: 0;
   color: var(--CroakleMuted);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 900;
   line-height: 1;
   overflow: hidden;
@@ -103,7 +101,7 @@ body {
 .CroakleDashboardStat strong {
   flex: 0 0 auto;
   color: var(--CroakleText);
-  font-size: clamp(28px, 10vw, 38px);
+  font-size: clamp(26px, 8.5vw, 36px);
   font-weight: 950;
   line-height: 0.95;
   letter-spacing: -0.07em;
@@ -111,14 +109,20 @@ body {
 }
 
 .CroakleDashboardMenuList {
-  gap: 10px;
-  padding-bottom: 4px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  padding-bottom: 0;
+  overflow: hidden;
 }
 
 .CroakleDashboardMenuList button {
-  min-height: 64px;
+  min-height: 0;
+  height: auto;
   border-radius: 20px;
-  padding: 10px 18px;
+  padding: 8px 18px;
   gap: 14px;
 }
 
@@ -131,7 +135,7 @@ body {
 
 .CroakleMenuTitle {
   color: var(--CroakleText);
-  font-size: 18px;
+  font-size: clamp(17px, 5vw, 22px);
   font-weight: 950;
   line-height: 1;
   letter-spacing: -0.055em;
@@ -139,7 +143,7 @@ body {
 
 .CroakleMenuSubtitle {
   color: var(--CroakleMuted);
-  font-size: 14px;
+  font-size: clamp(13px, 3.8vw, 15px);
   font-weight: 850;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -155,33 +159,98 @@ body {
 @media (max-width: 380px) {
   .CroakleMenuPage .CroakleHeroHeader h1 {
     max-width: 260px;
+    font-size: clamp(34px, 10.8vw, 44px);
   }
 
   .CroakleDashboardCard {
     border-radius: 24px;
-    padding: 14px;
+    padding: 12px;
+    gap: 9px;
   }
 
   .CroakleDashboardTitle {
-    font-size: clamp(38px, 13vw, 48px);
+    font-size: clamp(35px, 11.5vw, 45px);
   }
 
   .CroakleDashboardStat {
-    min-height: 54px;
+    min-height: 48px;
     border-radius: 17px;
   }
 
   .CroakleDashboardStat span {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .CroakleDashboardStat strong {
-    font-size: clamp(26px, 10vw, 34px);
+    font-size: clamp(24px, 8.5vw, 32px);
+  }
+
+  .CroakleDashboardMenuList {
+    gap: 7px;
   }
 
   .CroakleDashboardMenuList button {
-    min-height: 60px;
-    border-radius: 19px;
+    border-radius: 18px;
+    padding: 7px 16px;
+  }
+}
+
+@media (max-height: 760px) {
+  :root {
+    --CroakleDashboardGap: 8px;
+  }
+
+  .CroakleMenuPage .CroakleHeroHeader h1 {
+    font-size: clamp(32px, 9.6vw, 42px);
+  }
+
+  .CroakleRoundButton {
+    width: 40px;
+    height: 40px;
+    font-size: 21px;
+  }
+
+  .CroakleDashboardCard {
+    padding: 11px;
+    gap: 8px;
+    border-radius: 23px;
+  }
+
+  .CroakleDashboardLabel {
+    font-size: 14px;
+  }
+
+  .CroakleDashboardTitle {
+    font-size: clamp(32px, 10vw, 42px);
+  }
+
+  .CroakleDashboardStats {
+    gap: 7px;
+  }
+
+  .CroakleDashboardStat {
+    min-height: 44px;
+    padding: 6px 12px;
+  }
+
+  .CroakleDashboardStat span {
+    font-size: 15px;
+  }
+
+  .CroakleDashboardStat strong {
+    font-size: clamp(22px, 7.4vw, 30px);
+  }
+
+  .CroakleDashboardMenuList {
+    gap: 7px;
+  }
+
+  .CroakleMenuTitle {
+    font-size: clamp(16px, 4.6vw, 19px);
+  }
+
+  .CroakleMenuSubtitle {
+    font-size: 12px;
   }
 }
 
