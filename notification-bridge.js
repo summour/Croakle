@@ -1,5 +1,6 @@
 (() => {
   const CroaklePopupId = "CroakleAppPopup";
+  const CroakleMenuProjectStoreKey = "CroakleProjectDataV1";
 
   function CroakleInjectPopupStyles() {
     if (document.querySelector("#CroakleAppPopupStyles")) return;
@@ -278,6 +279,18 @@
     document.body.appendChild(overlay);
   }
 
+  function CroakleGetActiveProjectSummary() {
+    try {
+      const saved = localStorage.getItem(CroakleMenuProjectStoreKey);
+      const state = saved ? JSON.parse(saved) : {};
+      const projects = Array.isArray(state.projects) ? state.projects : [];
+      const activeCount = projects.filter((project) => !project.completed).length;
+      return `${activeCount} active`;
+    } catch {
+      return "0 active";
+    }
+  }
+
   function CroakleGetMenuDashboardTodayData() {
     try {
       const today = typeof CroakleGetToday === "function" ? CroakleGetToday() : new Date();
@@ -290,13 +303,13 @@
 
       return {
         habit: `${habitDone}/${habits.length || 0}`,
-        project: "Open Projects",
+        project: CroakleGetActiveProjectSummary(),
         mood: moodValue ? `${moodValue} ${moodLabel}` : "No mood",
       };
     } catch {
       return {
         habit: "0/0",
-        project: "Open Projects",
+        project: CroakleGetActiveProjectSummary(),
         mood: "No mood",
       };
     }
