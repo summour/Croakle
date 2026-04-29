@@ -1,7 +1,7 @@
 {
-  "name": "Croakle Habit & Mood",
-  "short_name": "Croakle",
-  "description": "Croakle Habit and Mood Tracker",
+  "name": "wordja",
+  "short_name": "wordja",
+  "description": "wordja",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
