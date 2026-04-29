@@ -32,7 +32,7 @@
     {
       page: "analysis",
       title: "Data Analysis",
-      subtitle: "",
+      subtitle: "Monthly insight charts",
     },
   ];
 
@@ -210,6 +210,17 @@
     });
   }
 
+  function CroakleDashboardLoadPolishBridge() {
+    if (document.querySelector('script[src="croakle-ui-polish-bridge.js"]')) {
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "croakle-ui-polish-bridge.js";
+    script.defer = true;
+    document.body.appendChild(script);
+  }
+
   function CroakleDashboardInit() {
     const menuPage = document.querySelector('[data-page="menu"]');
     const menuList = document.querySelector(".CroakleMenuList");
@@ -229,6 +240,7 @@
     CroakleDashboardPatchRender();
     CroakleDashboardBindMenu();
     CroakleDashboardRenderStats();
+    CroakleDashboardLoadPolishBridge();
   }
 
   window.addEventListener("storage", CroakleDashboardRenderStats);
