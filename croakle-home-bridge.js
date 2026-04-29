@@ -17,13 +17,15 @@
     style.id = "CroakleHomeTabStyles";
     style.textContent = `
       .CroakleDashboardTabList {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
-        overflow: visible;
-        padding: 4px 0 2px;
-        margin: 0 0 16px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 6px 0 8px;
+        margin: 0 0 18px;
         scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
       }
 
       .CroakleDashboardTabList::-webkit-scrollbar {
@@ -31,16 +33,17 @@
       }
 
       .CroakleDashboardTabList .CroakleDashboardQuickTab {
-        min-width: 0;
-        min-height: 54px;
+        flex: 0 0 auto;
+        min-width: 132px;
+        min-height: 72px;
         border: 0;
         border-radius: 999px;
         background: #f2f2f2;
         color: #111111;
-        padding: 0 10px;
-        font-size: clamp(13px, 3.5vw, 16px);
+        padding: 0 26px;
+        font-size: 18px;
         font-weight: 900;
-        letter-spacing: -0.035em;
+        letter-spacing: -0.03em;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -52,15 +55,16 @@
         color: #ffffff;
       }
 
-      @media (max-width: 420px) {
+      @media (max-width: 640px) {
         .CroakleDashboardTabList {
-          gap: 8px;
+          gap: 14px;
         }
 
         .CroakleDashboardTabList .CroakleDashboardQuickTab {
-          min-height: 48px;
-          padding: 0 8px;
-          font-size: clamp(12px, 3.4vw, 14px);
+          min-width: 120px;
+          min-height: 68px;
+          padding: 0 22px;
+          font-size: 17px;
         }
       }
     `;
