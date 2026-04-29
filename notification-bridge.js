@@ -86,6 +86,17 @@
         font-weight: 900;
       }
 
+      .CroakleAppPopupActions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .CroakleAppPopupSecondaryButton {
+        background: var(--CroakleSurface);
+        color: var(--CroakleText);
+      }
+
       .CroakleAppPopupIconButton:active,
       .CroakleAppPopupButton:active {
         transform: scale(0.96);
@@ -118,15 +129,91 @@
     document.body.appendChild(overlay);
   }
 
+  function CroakleShowAppConfirmPopup({ title, message, confirmLabel, cancelLabel, onConfirm }) {
+    CroakleInjectPopupStyles();
+    CroakleCloseAppPopup();
+
+    const overlay = document.createElement("div");
+    overlay.id = CroaklePopupId;
+    overlay.className = "CroakleAppPopupOverlay";
+    overlay.innerHTML = `
+      <section class="CroakleAppPopupCard" role="dialog" aria-modal="true">
+        <header class="CroakleAppPopupHeader">
+          <h2 class="CroakleAppPopupTitle">${title}</h2>
+          <button class="CroakleAppPopupIconButton" type="button" data-croakle-popup-close aria-label="Close">×</button>
+        </header>
+        <p class="CroakleAppPopupText">${message}</p>
+        <div class="CroakleAppPopupActions">
+          <button class="CroakleAppPopupButton CroakleAppPopupSecondaryButton" type="button" data-croakle-popup-close>${cancelLabel}</button>
+          <button class="CroakleAppPopupButton" type="button" data-croakle-popup-confirm>${confirmLabel}</button>
+        </div>
+      </section>
+    `;
+
+    overlay.querySelector("[data-croakle-popup-confirm]")?.addEventListener("click", () => {
+      CroakleCloseAppPopup();
+      onConfirm?.();
+    });
+
+    document.body.appendChild(overlay);
+  }
+
+  function CroakleSyncFinishedProjectButton() {
+    const button = document.querySelector("#CroakleCompleteProjectButton");
+
+    if (!button) {
+      return;
+    }
+
+    button.textContent = "Finished";
+    button.setAttribute("aria-label", "Move project to Finished Projects");
+  }
+
+  function CroakleShowFinishedProjectConfirm() {
+    CroakleShowAppConfirmPopup({
+      title: "Finished?",
+      message: "This project will move from Active Projects to Finished Projects. You can reopen it later from the Finished button.",
+      confirmLabel: "Finished",
+      cancelLabel: "Cancel",
+      onConfirm: () => {
+        if (typeof CroakleHandleProjectComplete === "function") {
+          CroakleHandleProjectComplete();
+        }
+      },
+    });
+  }
+
+  function CroakleHandleFinishedProjectClick(event) {
+    const button = event.target.closest("#CroakleCompleteProjectButton");
+
+    if (!button) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    CroakleSyncFinishedProjectButton();
+    CroakleShowFinishedProjectConfirm();
+  }
+
   document.addEventListener("click", (event) => {
     if (event.target.matches("#CroakleAppPopup") || event.target.closest("[data-croakle-popup-close]")) {
       CroakleCloseAppPopup();
     }
   });
 
+  document.addEventListener("click", CroakleHandleFinishedProjectClick, true);
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") CroakleCloseAppPopup();
   });
+
+  const CroakleFinishedProjectObserver = new MutationObserver(CroakleSyncFinishedProjectButton);
+  CroakleFinishedProjectObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+  CroakleSyncFinishedProjectButton();
 
   CroakleNotifyLockedInput = function () {
     CroakleShowAppPopup(
