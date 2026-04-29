@@ -1,7 +1,7 @@
 {
-  "name": "wordja",
-  "short_name": "wordja",
-  "description": "wordja",
+  "name": "WordJar",
+  "short_name": "WordJar",
+  "description": "WordJar",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
