@@ -1,4 +1,12 @@
 (() => {
+  function CroakleGetActivePageName() {
+    return document.querySelector(".CroaklePageActive")?.dataset.page || "menu";
+  }
+
+  function CroakleShouldHideBottomNav() {
+    return CroakleGetActivePageName() === "menu";
+  }
+
   function CroakleInjectPolishStyles() {
     if (document.querySelector("#CroaklePolishStyles")) {
       return;
@@ -7,20 +15,22 @@
     const style = document.createElement("style");
     style.id = "CroaklePolishStyles";
     style.textContent = `
-      .CroakleBottomNav,
-      .CroakleBottomNav[hidden] {
-        display: grid;
+      .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav,
+      .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav[hidden] {
+        display: none;
       }
     `;
     document.head.appendChild(style);
   }
 
-  function CroakleKeepNavVisible() {
+  function CroakleSyncBottomNavVisibility() {
     const bottomNav = document.querySelector(".CroakleBottomNav");
 
-    if (bottomNav) {
-      bottomNav.hidden = false;
+    if (!bottomNav) {
+      return;
     }
+
+    bottomNav.hidden = CroakleShouldHideBottomNav();
   }
 
   function CroaklePatchPageNavigation() {
@@ -30,8 +40,9 @@
 
     const originalSetPage = window.CroakleSetPage;
     window.CroakleSetPage = function CroaklePolishedSetPage(pageName) {
-      originalSetPage(pageName);
-      CroakleKeepNavVisible();
+      const result = originalSetPage.apply(this, arguments);
+      CroakleSyncBottomNavVisibility();
+      return result;
     };
     window.CroaklePolishNavigationPatched = true;
   }
@@ -39,14 +50,14 @@
   function CroakleInitPolishBridge() {
     CroakleInjectPolishStyles();
     CroaklePatchPageNavigation();
-    CroakleKeepNavVisible();
+    CroakleSyncBottomNavVisibility();
 
-    const observer = new MutationObserver(CroakleKeepNavVisible);
+    const observer = new MutationObserver(CroakleSyncBottomNavVisibility);
     observer.observe(document.body, {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["hidden"],
+      attributeFilter: ["class", "hidden"],
     });
   }
 
