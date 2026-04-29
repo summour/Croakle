@@ -4,6 +4,11 @@
   gap: 10px;
 }
 
+.CroaklePageActive {
+  min-height: 0;
+}
+
+.CroakleCard,
 .CroakleMenuPage.CroaklePageActive {
   min-height: 0;
   border: 2px solid var(--CroakleLine);
@@ -17,7 +22,14 @@
   scrollbar-width: none;
 }
 
-.CroakleMenuPage.CroaklePageActive::-webkit-scrollbar {
+.CroakleCard::-webkit-scrollbar,
+.CroakleMenuPage.CroaklePageActive::-webkit-scrollbar,
+.CroakleDashboardDateScroller::-webkit-scrollbar,
+.CroakleHabitList::-webkit-scrollbar,
+.CroakleBestList::-webkit-scrollbar,
+.CroakleProjectList::-webkit-scrollbar,
+.CroakleMoodCalendar::-webkit-scrollbar,
+.CroakleBottomNav::-webkit-scrollbar {
   display: none;
 }
 
@@ -35,12 +47,216 @@
   scrollbar-width: none;
 }
 
-.CroakleDashboardDateScroller::-webkit-scrollbar {
+.CroakleMenuPage.CroaklePageActive > .CroakleDashboardMenuList {
   display: none;
 }
 
-.CroakleMenuPage.CroaklePageActive > .CroakleDashboardMenuList {
-  display: none;
+.CroakleMonthHeader {
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.CroakleMonthHeader button {
+  width: 40px;
+  height: 40px;
+  border-radius: 16px;
+  background: var(--CroakleSoftSurface);
+  font-size: 26px;
+  font-weight: 950;
+}
+
+.CroakleMonthHeader strong {
+  font-size: clamp(25px, 7.2vw, 34px);
+  font-weight: 950;
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+}
+
+.CroakleWeekHeader,
+.CroakleCalendarHeader {
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.CroakleDateRow {
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.CroakleDateCell,
+.CroakleMoodBadge,
+.CroakleCheckButton,
+.CroakleCheckDone,
+.CroakleCheckEmpty {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+}
+
+.CroakleMoodPreview span,
+.CroakleMoodCalendar span,
+.CroakleTopMoodRow span {
+  border-width: 2px;
+}
+
+.CroakleMoodPreview span,
+.CroakleMoodBadge {
+  font-size: 13px;
+}
+
+.CroakleTrackActions {
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.CroakleAddHabitButton,
+.CroakleSecondaryActionButton {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.CroakleHabitList,
+.CroakleBestList,
+.CroakleProjectList {
+  gap: 8px;
+  min-height: 0;
+  padding-bottom: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.CroakleHabitRow,
+.CroakleProjectRow {
+  padding: 8px 10px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 14px;
+}
+
+.CroakleHabitTop,
+.CroakleProjectTop {
+  gap: 6px;
+}
+
+.CroakleHabitTop strong,
+.CroakleHabitNameButton,
+.CroakleProjectNameButton {
+  font-size: 14px;
+  line-height: 1.08;
+  font-weight: 900;
+}
+
+.CroakleGoal,
+.CroakleProjectGoal {
+  min-width: 40px;
+  padding: 2px 6px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.CroakleCheckGrid {
+  gap: 5px;
+}
+
+.CroakleCheckDone,
+.CroakleCheckEmpty {
+  font-size: 15px;
+}
+
+.CroakleBestHeader,
+.CroakleBestRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(86px, 0.88fr) 36px 44px;
+  gap: 6px;
+  align-items: center;
+}
+
+.CroakleBestHeader {
+  padding: 0 2px 7px;
+  margin-bottom: 4px;
+  border-bottom: 2px solid var(--CroakleLine);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.CroakleBestHeader span:first-child {
+  font-size: 12px;
+}
+
+.CroakleBestRow {
+  min-height: 42px;
+  padding: 4px 2px;
+  font-size: 13px;
+}
+
+.CroakleBestRow strong {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.08;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+}
+
+.CroakleBestRow > span {
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.CroaklePercentBar {
+  height: 17px;
+  border-width: 2px;
+  border-radius: 10px;
+}
+
+.CroaklePercentBar em {
+  font-size: 10px;
+  font-weight: 900;
+  text-shadow: none;
+}
+
+.CroakleMoodCalendar {
+  gap: 4px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.CroakleMoodCalendar button {
+  min-width: 30px;
+  gap: 2px;
+}
+
+.CroakleMoodCalendar small {
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.CroakleTopMoodRow {
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.CroakleTopMoodRow span {
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
 }
 
 .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
@@ -82,9 +298,54 @@
 }
 
 @media (max-width: 380px) {
+  .CroakleCard,
   .CroakleMenuPage.CroaklePageActive {
     padding: 10px;
     border-radius: 22px;
+  }
+
+  .CroakleMonthHeader {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .CroakleMonthHeader button {
+    width: 36px;
+    height: 36px;
+    border-radius: 14px;
+    font-size: 23px;
+  }
+
+  .CroakleMonthHeader strong {
+    font-size: clamp(23px, 6.6vw, 30px);
+  }
+
+  .CroakleDateCell,
+  .CroakleMoodBadge,
+  .CroakleCheckButton,
+  .CroakleCheckDone,
+  .CroakleCheckEmpty {
+    width: 31px;
+    height: 31px;
+    min-width: 31px;
+    min-height: 31px;
+  }
+
+  .CroakleBestHeader,
+  .CroakleBestRow {
+    grid-template-columns: minmax(0, 1.1fr) minmax(78px, 0.82fr) 32px 38px;
+    gap: 5px;
+  }
+
+  .CroakleBestHeader span:first-child,
+  .CroakleBestRow strong,
+  .CroakleBestRow > span {
+    font-size: 12px;
+  }
+
+  .CroaklePercentBar {
+    height: 16px;
   }
 
   .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
@@ -100,8 +361,34 @@
 }
 
 @media (max-height: 760px) {
+  .CroakleCard,
   .CroakleMenuPage.CroaklePageActive {
     padding: 10px;
+  }
+
+  .CroakleMonthHeader {
+    margin-bottom: 7px;
+  }
+
+  .CroakleMonthHeader button {
+    width: 36px;
+    height: 36px;
+    border-radius: 14px;
+    font-size: 23px;
+  }
+
+  .CroakleMonthHeader strong {
+    font-size: clamp(22px, 6.2vw, 30px);
+  }
+
+  .CroakleHabitList,
+  .CroakleBestList,
+  .CroakleProjectList {
+    gap: 7px;
+  }
+
+  .CroakleBestRow {
+    min-height: 38px;
   }
 
   .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav button {
