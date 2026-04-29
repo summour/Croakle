@@ -6,7 +6,8 @@
     "Habit Completion",
     "Weekday Consistency",
     "Project Weekly Trend",
-    "Project Completion",
+    "Project Focus Rate",
+    "Project Duration",
     "Project Priority",
     "Finished Projects Timeline",
     "Mood by Date",
@@ -36,6 +37,16 @@
     const nextDate = new Date(date);
     nextDate.setDate(nextDate.getDate() + amount);
     return nextDate;
+  }
+
+  function CroakleProjectAnalyticsParseDate(dateKey) {
+    const [year, month, day] = String(dateKey || "").split("-").map(Number);
+
+    if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+      return null;
+    }
+
+    return new Date(year, month - 1, day);
   }
 
   function CroakleProjectAnalyticsFormatDate(date) {
@@ -89,13 +100,17 @@
     return weekStarts;
   }
 
+  function CroakleProjectAnalyticsIsTargetMonth(date, year, month) {
+    return date.getFullYear() === year && date.getMonth() === month;
+  }
+
   function CroakleProjectAnalyticsCountWeekDone(project, weekStart, targetYear, targetMonth) {
     const weekKey = CroakleProjectAnalyticsFormatDate(weekStart);
     const days = Array.isArray(project.weeklyDays?.[weekKey]) ? project.weeklyDays[weekKey] : [];
 
     return days.reduce((total, done, dayIndex) => {
       const date = CroakleProjectAnalyticsShiftDate(weekStart, dayIndex);
-      const isTargetMonth = date.getFullYear() === targetYear && date.getMonth() === targetMonth;
+      const isTargetMonth = CroakleProjectAnalyticsIsTargetMonth(date, targetYear, targetMonth);
       return total + (done && isTargetMonth ? 1 : 0);
     }, 0);
   }
@@ -104,16 +119,6 @@
     return CroakleProjectAnalyticsGetWeekStarts(year, month).reduce((total, weekStart) => {
       return total + CroakleProjectAnalyticsCountWeekDone(project, weekStart, year, month);
     }, 0);
-  }
-
-  function CroakleProjectAnalyticsClampGoal(goal) {
-    const cleanGoal = Number(goal);
-
-    if (!Number.isFinite(cleanGoal)) {
-      return 1;
-    }
-
-    return Math.min(7, Math.max(1, Math.round(cleanGoal)));
   }
 
   function CroakleCreateProjectSmoothPath(points) {
@@ -241,6 +246,49 @@
     `;
   }
 
+  function CroakleGetProjectTrackedDates(project, options = {}) {
+    return Object.entries(project.weeklyDays || {})
+      .flatMap(([weekKey, days]) => {
+        const weekStart = CroakleProjectAnalyticsParseDate(weekKey);
+
+        if (!weekStart || !Array.isArray(days)) {
+          return [];
+        }
+
+        return days
+          .map((done, dayIndex) => done ? CroakleProjectAnalyticsShiftDate(weekStart, dayIndex) : null)
+          .filter(Boolean);
+      })
+      .filter((date) => {
+        if (!Number.isInteger(options.year) || !Number.isInteger(options.month)) {
+          return true;
+        }
+
+        return CroakleProjectAnalyticsIsTargetMonth(date, options.year, options.month);
+      })
+      .sort((firstDate, secondDate) => firstDate.getTime() - secondDate.getTime());
+  }
+
+  function CroakleGetProjectTrackedRangeDays(project, year, month) {
+    const trackedDates = CroakleGetProjectTrackedDates(project, { year, month });
+
+    if (!trackedDates.length) {
+      return 0;
+    }
+
+    const firstDate = trackedDates[0];
+    const lastDate = trackedDates[trackedDates.length - 1];
+    return Math.max(1, Math.round((lastDate.getTime() - firstDate.getTime()) / 86400000) + 1);
+  }
+
+  function CroakleShouldShowProjectAnalyticsRow(project, year, month) {
+    const monthKey = CroakleProjectAnalyticsGetMonthKey(year, month);
+    const hasMonthTracking = CroakleProjectAnalyticsCountMonthDone(project, year, month) > 0;
+    const finishedThisMonth = String(project.completedWeekKey || "").startsWith(monthKey);
+
+    return !project.completed || hasMonthTracking || finishedThisMonth;
+  }
+
   function CroakleGetProjectWeeklyRows(projects, year, month) {
     return CroakleProjectAnalyticsGetWeekStarts(year, month).map((weekStart, index) => {
       const total = projects.reduce((sum, project) => {
@@ -259,21 +307,35 @@
     });
   }
 
-  function CroakleGetProjectCompletionRows(projects, year, month) {
-    const weeksCount = CroakleProjectAnalyticsGetWeekStarts(year, month).length;
-
+  function CroakleGetProjectFocusRows(projects, year, month) {
     return projects
-      .filter((project) => !project.completed || CroakleProjectAnalyticsCountMonthDone(project, year, month) > 0)
+      .filter((project) => CroakleShouldShowProjectAnalyticsRow(project, year, month))
       .map((project) => {
-        const done = CroakleProjectAnalyticsCountMonthDone(project, year, month);
-        const goal = CroakleProjectAnalyticsClampGoal(project.goal) * weeksCount;
-        const percent = goal ? Math.min(100, Math.round((done / goal) * 100)) : 0;
+        const trackedDays = CroakleProjectAnalyticsCountMonthDone(project, year, month);
+        const activeDays = CroakleGetProjectTrackedRangeDays(project, year, month);
+        const percent = activeDays ? Math.min(100, Math.round((trackedDays / activeDays) * 100)) : 0;
 
         return {
           label: project.name || "Project",
           value: percent,
           valueLabel: `${percent}%`,
-          meta: `${done}/${goal} check-ins`,
+          meta: `${trackedDays}/${activeDays || 0} active days`,
+        };
+      });
+  }
+
+  function CroakleGetProjectDurationRows(projects, year, month) {
+    return projects
+      .filter((project) => CroakleShouldShowProjectAnalyticsRow(project, year, month))
+      .map((project) => {
+        const trackedDays = CroakleProjectAnalyticsCountMonthDone(project, year, month);
+        const activeDays = CroakleGetProjectTrackedRangeDays(project, year, month);
+
+        return {
+          label: project.name || "Project",
+          value: activeDays,
+          valueLabel: `${activeDays}d`,
+          meta: `${trackedDays} check-ins`,
         };
       });
   }
@@ -332,13 +394,21 @@
         CroakleGetProjectWeeklyRows(projects, year, month)
       ),
       CroakleCreateProjectPanel(
-        "Project Completion",
-        "X = project, Y = monthly completion percent",
-        CroakleGetProjectCompletionRows(projects, year, month),
+        "Project Focus Rate",
+        "X = project, Y = check-ins during active days",
+        CroakleGetProjectFocusRows(projects, year, month),
         {
           maxValue: 100,
           gridValues: [0, 20, 40, 60, 80, 100],
           ySuffix: "%",
+        }
+      ),
+      CroakleCreateProjectPanel(
+        "Project Duration",
+        "X = project, Y = active range days",
+        CroakleGetProjectDurationRows(projects, year, month),
+        {
+          labelLength: 9,
         }
       ),
       CroakleCreateProjectPanel(
