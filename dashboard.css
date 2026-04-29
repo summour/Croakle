@@ -49,44 +49,23 @@ body {
   line-height: 0.95;
 }
 
-.CroakleCard,
-.CroakleDashboardCard,
-.CroakleHabitRow,
-.CroakleProjectRow,
-.CroakleBestRow,
-.CroakleAnalyticsStatCard,
-.CroakleAnalyticsPanel,
-.CroakleAnalyticsLineWrap {
-  border: var(--CroakleStroke) solid var(--CroakleLine);
-  border-radius: var(--CroakleRadiusMd);
-  background: var(--CroakleSurface);
-}
-
 .CroakleDashboardCard {
   flex: 0 0 auto;
   min-height: 0;
+  border: var(--CroakleStroke) solid var(--CroakleLine);
+  border-radius: var(--CroakleRadiusMd);
+  background: var(--CroakleSurface);
   padding: var(--CroakleSpaceMd);
   display: grid;
   gap: var(--CroakleSpaceSm);
   overflow: hidden;
 }
 
-.CroakleDashboardLabel,
-.CroakleMenuSubtitle,
-.CroakleEyebrow,
-.CroakleField span,
-.CroaklePriorityField legend,
-.CroakleTopMoodRow,
-.CroakleProjectStatus,
-.CroakleProjectArchiveInfo span,
-.CroakleProjectEmptyText {
-  font-weight: var(--CroakleMutedWeight);
-}
-
 .CroakleDashboardLabel {
   margin: 0;
   color: var(--CroakleMuted);
   font-size: 15px;
+  font-weight: var(--CroakleMutedWeight);
   line-height: 1.15;
 }
 
@@ -151,6 +130,7 @@ body {
 .CroakleDashboardMenuList button {
   min-height: 0;
   height: auto;
+  border-radius: var(--CroakleRadiusMd);
   padding: 8px var(--CroakleSpaceLg);
   gap: var(--CroakleSpaceMd);
 }
@@ -173,6 +153,7 @@ body {
 .CroakleMenuSubtitle {
   color: var(--CroakleMuted);
   font-size: clamp(13px, 3.8vw, 15px);
+  font-weight: var(--CroakleMutedWeight);
   line-height: 1.2;
 }
 
@@ -194,26 +175,15 @@ body {
 .CroakleProjectRestoreButton,
 .CroakleReorderMoveButton,
 .CroaklePriorityField span {
-  border: var(--CroakleStroke) solid var(--CroakleLine);
   border-radius: var(--CroakleRadiusMd);
 }
 
-.CroakleHeroHeader h1,
-.CroakleMonthHeader strong,
-.CroakleAddHabitHeader h2,
-.CroakleDetailHeader h2,
-.CroakleSettingsHeader h2,
-.CroakleHabitNameButton,
-.CroakleProjectNameButton,
-.CroakleGoal,
-.CroakleProjectGoal {
-  font-weight: var(--CroakleTitleWeight);
-}
-
 .CroakleHabitRow,
-.CroakleProjectRow,
-.CroakleBestRow {
+.CroakleProjectRow {
   padding: var(--CroakleSpaceSm) var(--CroakleSpaceMd);
+  border: var(--CroakleStroke) solid var(--CroakleLine);
+  border-radius: var(--CroakleRadiusMd);
+  background: var(--CroakleSurface);
 }
 
 .CroakleHabitTop,
@@ -221,45 +191,48 @@ body {
   gap: var(--CroakleSpaceSm);
 }
 
-.CroakleBestHeader {
-  display: none;
-}
-
-.CroakleBestRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-areas: "name month lifetime" "bar bar bar";
-  gap: var(--CroakleSpaceSm) var(--CroakleSpaceMd);
-  align-items: center;
-}
-
-.CroakleBestRow strong {
-  grid-area: name;
-  font-size: 17px;
+.CroakleHabitNameButton,
+.CroakleProjectNameButton,
+.CroakleGoal,
+.CroakleProjectGoal {
   font-weight: var(--CroakleTitleWeight);
-  line-height: 1.15;
 }
 
-.CroakleBestRow > span:nth-of-type(1) { grid-area: month; }
-.CroakleBestRow > span:nth-of-type(2) { grid-area: lifetime; }
+.CroakleBestHeader,
+.CroakleBestRow {
+  grid-template-columns: minmax(88px, 1.18fr) minmax(120px, 1fr) 48px 56px;
+  gap: 8px;
+}
 
-.CroakleBestRow > span {
-  min-width: 42px;
-  color: var(--CroakleMuted);
-  font-size: 13px;
+.CroakleBestHeader {
+  display: grid;
   font-weight: var(--CroakleBodyWeight);
 }
 
+.CroakleBestRow {
+  min-height: 52px;
+  padding: 8px 0;
+  align-items: center;
+  font-weight: var(--CroakleBodyWeight);
+}
+
+.CroakleBestRow strong {
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.12;
+  font-weight: var(--CroakleTitleWeight);
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+}
+
 .CroaklePercentBar {
-  grid-area: bar;
-  width: 100%;
-  height: 18px;
+  height: 22px;
   border-width: var(--CroakleStroke);
   border-radius: var(--CroakleRadiusSm);
 }
 
 .CroaklePercentBar em {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--CroakleTitleWeight);
   text-shadow: none;
 }
@@ -267,15 +240,28 @@ body {
 .CroakleBottomNav {
   position: relative;
   z-index: 20;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-  gap: var(--CroakleSpaceSm);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(76px, 1fr);
+  grid-template-columns: none;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
   pointer-events: auto;
+  scrollbar-width: none;
+}
+
+.CroakleBottomNav::-webkit-scrollbar {
+  display: none;
 }
 
 .CroakleBottomNav button {
   min-height: 44px;
-  font-size: 13px;
+  min-width: 0;
+  padding: 0 10px;
+  font-size: 14px;
   font-weight: var(--CroakleTitleWeight);
+  white-space: nowrap;
 }
 
 .CroakleAnalyticsLineWrap {
@@ -298,6 +284,24 @@ body {
 
   .CroakleDashboardStat strong {
     font-size: clamp(22px, 7vw, 29px);
+  }
+
+  .CroakleBestHeader,
+  .CroakleBestRow {
+    grid-template-columns: minmax(74px, 1fr) minmax(96px, 1fr) 38px 48px;
+    gap: 6px;
+  }
+
+  .CroakleBestRow strong {
+    font-size: 14px;
+  }
+
+  .CroakleBottomNav {
+    grid-auto-columns: minmax(72px, 1fr);
+  }
+
+  .CroakleBottomNav button {
+    font-size: 13px;
   }
 }
 
