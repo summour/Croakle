@@ -1,5 +1,15 @@
 :root {
   --CroakleDashboardGap: 10px;
+  --CroakleStroke: 2px;
+  --CroakleRadiusSm: 12px;
+  --CroakleRadiusMd: 16px;
+  --CroakleRadiusLg: 20px;
+  --CroakleSpaceSm: 10px;
+  --CroakleSpaceMd: 14px;
+  --CroakleSpaceLg: 18px;
+  --CroakleTitleWeight: 800;
+  --CroakleBodyWeight: 500;
+  --CroakleMutedWeight: 450;
 }
 
 html,
@@ -39,34 +49,54 @@ body {
   line-height: 0.95;
 }
 
+.CroakleCard,
+.CroakleDashboardCard,
+.CroakleHabitRow,
+.CroakleProjectRow,
+.CroakleBestRow,
+.CroakleAnalyticsStatCard,
+.CroakleAnalyticsPanel,
+.CroakleAnalyticsLineWrap {
+  border: var(--CroakleStroke) solid var(--CroakleLine);
+  border-radius: var(--CroakleRadiusMd);
+  background: var(--CroakleSurface);
+}
+
 .CroakleDashboardCard {
   flex: 0 0 auto;
   min-height: 0;
-  border: 2px solid var(--CroakleLine);
-  border-radius: 26px;
-  background: var(--CroakleSurface);
-  padding: 14px;
+  padding: var(--CroakleSpaceMd);
   display: grid;
-  gap: 10px;
+  gap: var(--CroakleSpaceSm);
   overflow: hidden;
+}
+
+.CroakleDashboardLabel,
+.CroakleMenuSubtitle,
+.CroakleEyebrow,
+.CroakleField span,
+.CroaklePriorityField legend,
+.CroakleTopMoodRow,
+.CroakleProjectStatus,
+.CroakleProjectArchiveInfo span,
+.CroakleProjectEmptyText {
+  font-weight: var(--CroakleMutedWeight);
 }
 
 .CroakleDashboardLabel {
   margin: 0;
   color: var(--CroakleMuted);
-  font-size: 16px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.02em;
+  font-size: 15px;
+  line-height: 1.15;
 }
 
 .CroakleDashboardTitle {
   margin: 0;
   color: var(--CroakleText);
-  font-size: clamp(38px, 11.5vw, 50px);
-  font-weight: 950;
-  line-height: 0.92;
-  letter-spacing: -0.07em;
+  font-size: clamp(34px, 10vw, 46px);
+  font-weight: var(--CroakleTitleWeight);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
 }
 
 .CroakleDashboardStats {
@@ -76,23 +106,23 @@ body {
 
 .CroakleDashboardStat {
   min-width: 0;
-  min-height: 52px;
-  border: 2px solid var(--CroakleLine);
-  border-radius: 18px;
+  min-height: 58px;
+  border: var(--CroakleStroke) solid var(--CroakleLine);
+  border-radius: var(--CroakleRadiusMd);
   background: var(--CroakleSurface);
-  padding: 7px 14px;
+  padding: 9px var(--CroakleSpaceMd);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--CroakleSpaceMd);
 }
 
 .CroakleDashboardStat span {
   min-width: 0;
   color: var(--CroakleMuted);
-  font-size: 17px;
-  font-weight: 900;
-  line-height: 1;
+  font-size: 15px;
+  font-weight: var(--CroakleBodyWeight);
+  line-height: 1.1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -101,10 +131,10 @@ body {
 .CroakleDashboardStat strong {
   flex: 0 0 auto;
   color: var(--CroakleText);
-  font-size: clamp(26px, 8.5vw, 36px);
-  font-weight: 950;
-  line-height: 0.95;
-  letter-spacing: -0.07em;
+  font-size: clamp(23px, 7.2vw, 32px);
+  font-weight: var(--CroakleTitleWeight);
+  line-height: 1;
+  letter-spacing: -0.055em;
   white-space: nowrap;
 }
 
@@ -121,39 +151,135 @@ body {
 .CroakleDashboardMenuList button {
   min-height: 0;
   height: auto;
-  border-radius: 20px;
-  padding: 8px 18px;
-  gap: 14px;
+  padding: 8px var(--CroakleSpaceLg);
+  gap: var(--CroakleSpaceMd);
 }
 
 .CroakleMenuCopy {
   min-width: 0;
   display: grid;
-  gap: 2px;
+  gap: 3px;
   text-align: left;
 }
 
 .CroakleMenuTitle {
   color: var(--CroakleText);
   font-size: clamp(17px, 5vw, 22px);
-  font-weight: 950;
-  line-height: 1;
-  letter-spacing: -0.055em;
+  font-weight: var(--CroakleTitleWeight);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
 }
 
 .CroakleMenuSubtitle {
   color: var(--CroakleMuted);
   font-size: clamp(13px, 3.8vw, 15px);
-  font-weight: 850;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .CroakleMenuChevron {
   flex: 0 0 auto;
-  font-size: 34px;
-  font-weight: 900;
+  font-size: 30px;
+  font-weight: var(--CroakleTitleWeight);
   line-height: 1;
+}
+
+.CroakleRoundButton,
+.CroakleMonthHeader button,
+.CroakleMenuList button,
+.CroakleBottomNav button,
+.CroakleAddHabitButton,
+.CroakleSecondaryActionButton,
+.CroakleConfirmHabitButton,
+.CroakleProjectDetailActionButton,
+.CroakleProjectRestoreButton,
+.CroakleReorderMoveButton,
+.CroaklePriorityField span {
+  border: var(--CroakleStroke) solid var(--CroakleLine);
+  border-radius: var(--CroakleRadiusMd);
+}
+
+.CroakleHeroHeader h1,
+.CroakleMonthHeader strong,
+.CroakleAddHabitHeader h2,
+.CroakleDetailHeader h2,
+.CroakleSettingsHeader h2,
+.CroakleHabitNameButton,
+.CroakleProjectNameButton,
+.CroakleGoal,
+.CroakleProjectGoal {
+  font-weight: var(--CroakleTitleWeight);
+}
+
+.CroakleHabitRow,
+.CroakleProjectRow,
+.CroakleBestRow {
+  padding: var(--CroakleSpaceSm) var(--CroakleSpaceMd);
+}
+
+.CroakleHabitTop,
+.CroakleProjectTop {
+  gap: var(--CroakleSpaceSm);
+}
+
+.CroakleBestHeader {
+  display: none;
+}
+
+.CroakleBestRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas: "name month lifetime" "bar bar bar";
+  gap: var(--CroakleSpaceSm) var(--CroakleSpaceMd);
+  align-items: center;
+}
+
+.CroakleBestRow strong {
+  grid-area: name;
+  font-size: 17px;
+  font-weight: var(--CroakleTitleWeight);
+  line-height: 1.15;
+}
+
+.CroakleBestRow > span:nth-of-type(1) { grid-area: month; }
+.CroakleBestRow > span:nth-of-type(2) { grid-area: lifetime; }
+
+.CroakleBestRow > span {
+  min-width: 42px;
+  color: var(--CroakleMuted);
+  font-size: 13px;
+  font-weight: var(--CroakleBodyWeight);
+}
+
+.CroaklePercentBar {
+  grid-area: bar;
+  width: 100%;
+  height: 18px;
+  border-width: var(--CroakleStroke);
+  border-radius: var(--CroakleRadiusSm);
+}
+
+.CroaklePercentBar em {
+  font-size: 11px;
+  font-weight: var(--CroakleTitleWeight);
+  text-shadow: none;
+}
+
+.CroakleBottomNav {
+  position: relative;
+  z-index: 20;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: var(--CroakleSpaceSm);
+  pointer-events: auto;
+}
+
+.CroakleBottomNav button {
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: var(--CroakleTitleWeight);
+}
+
+.CroakleAnalyticsLineWrap {
+  background: var(--CroakleSoftSurface);
 }
 
 @media (max-width: 380px) {
@@ -162,95 +288,37 @@ body {
     font-size: clamp(34px, 10.8vw, 44px);
   }
 
-  .CroakleDashboardCard {
-    border-radius: 24px;
-    padding: 12px;
-    gap: 9px;
-  }
-
   .CroakleDashboardTitle {
-    font-size: clamp(35px, 11.5vw, 45px);
+    font-size: clamp(32px, 10vw, 42px);
   }
 
   .CroakleDashboardStat {
-    min-height: 48px;
-    border-radius: 17px;
-  }
-
-  .CroakleDashboardStat span {
-    font-size: 16px;
+    min-height: 52px;
   }
 
   .CroakleDashboardStat strong {
-    font-size: clamp(24px, 8.5vw, 32px);
-  }
-
-  .CroakleDashboardMenuList {
-    gap: 7px;
-  }
-
-  .CroakleDashboardMenuList button {
-    border-radius: 18px;
-    padding: 7px 16px;
+    font-size: clamp(22px, 7vw, 29px);
   }
 }
 
 @media (max-height: 760px) {
-  :root {
-    --CroakleDashboardGap: 8px;
-  }
+  :root { --CroakleDashboardGap: 8px; }
 
   .CroakleMenuPage .CroakleHeroHeader h1 {
     font-size: clamp(32px, 9.6vw, 42px);
   }
 
-  .CroakleRoundButton {
-    width: 40px;
-    height: 40px;
-    font-size: 21px;
-  }
-
-  .CroakleDashboardCard {
-    padding: 11px;
-    gap: 8px;
-    border-radius: 23px;
-  }
-
-  .CroakleDashboardLabel {
-    font-size: 14px;
-  }
-
   .CroakleDashboardTitle {
-    font-size: clamp(32px, 10vw, 42px);
-  }
-
-  .CroakleDashboardStats {
-    gap: 7px;
+    font-size: clamp(31px, 9.4vw, 40px);
   }
 
   .CroakleDashboardStat {
-    min-height: 44px;
+    min-height: 46px;
     padding: 6px 12px;
   }
 
-  .CroakleDashboardStat span {
-    font-size: 15px;
-  }
-
   .CroakleDashboardStat strong {
-    font-size: clamp(22px, 7.4vw, 30px);
-  }
-
-  .CroakleDashboardMenuList {
-    gap: 7px;
-  }
-
-  .CroakleMenuTitle {
-    font-size: clamp(16px, 4.6vw, 19px);
-  }
-
-  .CroakleMenuSubtitle {
-    font-size: 12px;
+    font-size: clamp(21px, 6.8vw, 28px);
   }
 }
 
