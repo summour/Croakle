@@ -14,6 +14,8 @@
     "Mood Distribution",
   ];
 
+  let CroakleProjectAnalyticsPending = false;
+
   function CroakleEscapeProjectAnalyticsHtml(value) {
     return String(value ?? "")
       .replaceAll("&", "&amp;")
@@ -116,9 +118,8 @@
   }
 
   function CroakleProjectAnalyticsCountMonthDone(project, year, month) {
-    return CroakleProjectAnalyticsGetWeekStarts(year, month).reduce((total, weekStart) => {
-      return total + CroakleProjectAnalyticsCountWeekDone(project, weekStart, year, month);
-    }, 0);
+    const weekStarts = CroakleProjectAnalyticsGetWeekStarts(year, month);
+    return weekStarts.reduce((total, weekStart) => total + CroakleProjectAnalyticsCountWeekDone(project, weekStart, year, month), 0);
   }
 
   function CroakleCreateProjectSmoothPath(points) {
@@ -169,47 +170,36 @@
     const maxValue = options.maxValue || Math.max(...rows.map((row) => row.value), 1);
     const bottomY = height - paddingBottom;
     const rightX = width - paddingRight;
-
     const points = rows.map((row, index) => {
       const x = rows.length === 1 ? paddingLeft + chartWidth / 2 : paddingLeft + (chartWidth * index) / (rows.length - 1);
       const y = paddingTop + chartHeight - (row.value / maxValue) * chartHeight;
-
       return { ...row, x, y };
     });
-
     const linePath = CroakleCreateProjectSmoothPath(points);
     const areaPath = `${linePath} L ${points[points.length - 1].x} ${bottomY} L ${points[0].x} ${bottomY} Z`;
     const gridValues = options.gridValues || Array.from({ length: 5 }, (_, index) => Math.round((maxValue / 4) * index));
-    const gridLines = gridValues.map((value) => {
-      const y = paddingTop + chartHeight - (value / maxValue) * chartHeight;
-      const label = options.ySuffix ? `${value}${options.ySuffix}` : value;
-
-      return `
-        <line class="CroakleAnalyticsGridLine" x1="${paddingLeft}" y1="${y}" x2="${rightX}" y2="${y}"></line>
-        <text class="CroakleAnalyticsAxisLabel" x="${paddingLeft - 6}" y="${y + 3}" text-anchor="end">${label}</text>
-      `;
-    }).join("");
-
     const labelStep = options.labelStep || Math.max(1, Math.ceil(rows.length / 7));
-    const pointMarkup = points.map((point, index) => {
-      const showLabel = index === 0 || index === points.length - 1 || index % labelStep === 0;
-      const label = showLabel ? `<text class="CroakleAnalyticsAxisLabel" x="${point.x}" y="${height - 8}" text-anchor="middle">${CroakleEscapeProjectAnalyticsHtml(CroakleCreateProjectShortLabel(point.label, options.labelLength || 8))}</text>` : "";
-
-      return `
-        <circle class="CroakleAnalyticsPoint" cx="${point.x}" cy="${point.y}" r="3.8"></circle>
-        ${label}
-      `;
-    }).join("");
 
     return `
       <div class="CroakleAnalyticsLineWrap">
         <svg class="CroakleAnalyticsLineSvg" viewBox="0 0 ${width} ${height}" aria-hidden="true">
-          ${gridLines}
+          ${gridValues.map((value) => {
+            const y = paddingTop + chartHeight - (value / maxValue) * chartHeight;
+            const label = options.ySuffix ? `${value}${options.ySuffix}` : value;
+            return `
+              <line class="CroakleAnalyticsGridLine" x1="${paddingLeft}" y1="${y}" x2="${rightX}" y2="${y}"></line>
+              <text class="CroakleAnalyticsAxisLabel" x="${paddingLeft - 6}" y="${y + 3}" text-anchor="end">${label}</text>
+            `;
+          }).join("")}
           <line class="CroakleAnalyticsAxisLine" x1="${paddingLeft}" y1="${bottomY}" x2="${rightX}" y2="${bottomY}"></line>
           <line class="CroakleAnalyticsAxisLine" x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${bottomY}"></line>
           <path class="CroakleAnalyticsLineArea" d="${areaPath}"></path>
           ${points.length > 1 ? `<path class="CroakleAnalyticsLinePath" d="${linePath}"></path>` : ""}
-          ${pointMarkup}
+          ${points.map((point, index) => {
+            const showLabel = index === 0 || index === points.length - 1 || index % labelStep === 0;
+            const label = showLabel ? `<text class="CroakleAnalyticsAxisLabel" x="${point.x}" y="${height - 8}" text-anchor="middle">${CroakleEscapeProjectAnalyticsHtml(CroakleCreateProjectShortLabel(point.label, options.labelLength || 8))}</text>` : "";
+            return `<circle class="CroakleAnalyticsPoint" cx="${point.x}" cy="${point.y}" r="3.8"></circle>${label}`;
+          }).join("")}
         </svg>
       </div>
     `;
@@ -250,60 +240,33 @@
     return Object.entries(project.weeklyDays || {})
       .flatMap(([weekKey, days]) => {
         const weekStart = CroakleProjectAnalyticsParseDate(weekKey);
-
-        if (!weekStart || !Array.isArray(days)) {
-          return [];
-        }
-
-        return days
-          .map((done, dayIndex) => done ? CroakleProjectAnalyticsShiftDate(weekStart, dayIndex) : null)
-          .filter(Boolean);
+        if (!weekStart || !Array.isArray(days)) return [];
+        return days.map((done, dayIndex) => done ? CroakleProjectAnalyticsShiftDate(weekStart, dayIndex) : null).filter(Boolean);
       })
-      .filter((date) => {
-        if (!Number.isInteger(options.year) || !Number.isInteger(options.month)) {
-          return true;
-        }
-
-        return CroakleProjectAnalyticsIsTargetMonth(date, options.year, options.month);
-      })
+      .filter((date) => !Number.isInteger(options.year) || !Number.isInteger(options.month) || CroakleProjectAnalyticsIsTargetMonth(date, options.year, options.month))
       .sort((firstDate, secondDate) => firstDate.getTime() - secondDate.getTime());
   }
 
   function CroakleGetProjectTrackedRangeDays(project, year, month) {
     const trackedDates = CroakleGetProjectTrackedDates(project, { year, month });
-
-    if (!trackedDates.length) {
-      return 0;
-    }
-
-    const firstDate = trackedDates[0];
-    const lastDate = trackedDates[trackedDates.length - 1];
-    return Math.max(1, Math.round((lastDate.getTime() - firstDate.getTime()) / 86400000) + 1);
+    if (!trackedDates.length) return 0;
+    return Math.max(1, Math.round((trackedDates.at(-1).getTime() - trackedDates[0].getTime()) / 86400000) + 1);
   }
 
   function CroakleShouldShowProjectAnalyticsRow(project, year, month) {
     const monthKey = CroakleProjectAnalyticsGetMonthKey(year, month);
     const hasMonthTracking = CroakleProjectAnalyticsCountMonthDone(project, year, month) > 0;
     const finishedThisMonth = String(project.completedWeekKey || "").startsWith(monthKey);
-
     return !project.completed || hasMonthTracking || finishedThisMonth;
   }
 
   function CroakleGetProjectWeeklyRows(projects, year, month) {
     return CroakleProjectAnalyticsGetWeekStarts(year, month).map((weekStart, index) => {
-      const total = projects.reduce((sum, project) => {
-        return sum + CroakleProjectAnalyticsCountWeekDone(project, weekStart, year, month);
-      }, 0);
+      const total = projects.reduce((sum, project) => sum + CroakleProjectAnalyticsCountWeekDone(project, weekStart, year, month), 0);
       const firstDay = new Date(Math.max(weekStart.getTime(), new Date(year, month, 1).getTime())).getDate();
       const lastWeekDay = CroakleProjectAnalyticsShiftDate(weekStart, 6);
       const lastDay = new Date(Math.min(lastWeekDay.getTime(), new Date(year, month + 1, 0).getTime())).getDate();
-
-      return {
-        label: `Week ${index + 1}`,
-        value: total,
-        valueLabel: String(total),
-        meta: `Day ${firstDay}-${lastDay}`,
-      };
+      return { label: `Week ${index + 1}`, value: total, valueLabel: String(total), meta: `Day ${firstDay}-${lastDay}` };
     });
   }
 
@@ -314,13 +277,7 @@
         const trackedDays = CroakleProjectAnalyticsCountMonthDone(project, year, month);
         const activeDays = CroakleGetProjectTrackedRangeDays(project, year, month);
         const percent = activeDays ? Math.min(100, Math.round((trackedDays / activeDays) * 100)) : 0;
-
-        return {
-          label: project.name || "Project",
-          value: percent,
-          valueLabel: `${percent}%`,
-          meta: `${trackedDays}/${activeDays || 0} active days`,
-        };
+        return { label: project.name || "Project", value: percent, valueLabel: `${percent}%`, meta: `${trackedDays}/${activeDays || 0} active days` };
       });
   }
 
@@ -330,43 +287,19 @@
       .map((project) => {
         const trackedDays = CroakleProjectAnalyticsCountMonthDone(project, year, month);
         const activeDays = CroakleGetProjectTrackedRangeDays(project, year, month);
-
-        return {
-          label: project.name || "Project",
-          value: activeDays,
-          valueLabel: `${activeDays}d`,
-          meta: `${trackedDays} check-ins`,
-        };
+        return { label: project.name || "Project", value: activeDays, valueLabel: `${activeDays}d`, meta: `${trackedDays} check-ins` };
       });
   }
 
   function CroakleGetProjectPriorityRows(projects) {
     const priorityCounts = { High: 0, Medium: 0, Low: 0 };
-
-    projects
-      .filter((project) => !project.completed)
-      .forEach((project) => {
-        const priority = String(project.priority || "medium").toLowerCase();
-
-        if (priority === "high") {
-          priorityCounts.High += 1;
-          return;
-        }
-
-        if (priority === "low") {
-          priorityCounts.Low += 1;
-          return;
-        }
-
-        priorityCounts.Medium += 1;
-      });
-
-    return Object.entries(priorityCounts).map(([label, value]) => ({
-      label,
-      value,
-      valueLabel: String(value),
-      meta: "active projects",
-    }));
+    projects.filter((project) => !project.completed).forEach((project) => {
+      const priority = String(project.priority || "medium").toLowerCase();
+      if (priority === "high") priorityCounts.High += 1;
+      else if (priority === "low") priorityCounts.Low += 1;
+      else priorityCounts.Medium += 1;
+    });
+    return Object.entries(priorityCounts).map(([label, value]) => ({ label, value, valueLabel: String(value), meta: "active projects" }));
   }
 
   function CroakleGetFinishedProjectRows(projects, year, month) {
@@ -374,53 +307,18 @@
       const date = new Date(year, month - 5 + offset, 1);
       const monthKey = CroakleProjectAnalyticsGetMonthKey(date.getFullYear(), date.getMonth());
       const value = projects.filter((project) => String(project.completedWeekKey || "").startsWith(monthKey)).length;
-
-      return {
-        label: date.toLocaleDateString("en-US", { month: "short" }),
-        value,
-        valueLabel: String(value),
-        meta: `${date.getFullYear()} finished`,
-      };
+      return { label: date.toLocaleDateString("en-US", { month: "short" }), value, valueLabel: String(value), meta: `${date.getFullYear()} finished` };
     });
   }
 
   function CroakleCreateProjectAnalyticsMarkup(year, month) {
     const projects = CroakleLoadProjectAnalyticsState();
-
     return [
-      CroakleCreateProjectPanel(
-        "Project Weekly Trend",
-        "X = week, Y = project check-ins",
-        CroakleGetProjectWeeklyRows(projects, year, month)
-      ),
-      CroakleCreateProjectPanel(
-        "Project Focus Rate",
-        "X = project, Y = check-ins during active days",
-        CroakleGetProjectFocusRows(projects, year, month),
-        {
-          maxValue: 100,
-          gridValues: [0, 20, 40, 60, 80, 100],
-          ySuffix: "%",
-        }
-      ),
-      CroakleCreateProjectPanel(
-        "Project Duration",
-        "X = project, Y = active range days",
-        CroakleGetProjectDurationRows(projects, year, month),
-        {
-          labelLength: 9,
-        }
-      ),
-      CroakleCreateProjectPanel(
-        "Project Priority",
-        "X = priority, Y = active project count",
-        CroakleGetProjectPriorityRows(projects)
-      ),
-      CroakleCreateProjectPanel(
-        "Finished Projects Timeline",
-        "X = month, Y = finished projects",
-        CroakleGetFinishedProjectRows(projects, year, month)
-      ),
+      CroakleCreateProjectPanel("Project Weekly Trend", "X = week, Y = project check-ins", CroakleGetProjectWeeklyRows(projects, year, month)),
+      CroakleCreateProjectPanel("Project Focus Rate", "X = project, Y = check-ins during active days", CroakleGetProjectFocusRows(projects, year, month), { maxValue: 100, gridValues: [0, 20, 40, 60, 80, 100], ySuffix: "%" }),
+      CroakleCreateProjectPanel("Project Duration", "X = project, Y = active range days", CroakleGetProjectDurationRows(projects, year, month), { labelLength: 9 }),
+      CroakleCreateProjectPanel("Project Priority", "X = priority, Y = active project count", CroakleGetProjectPriorityRows(projects)),
+      CroakleCreateProjectPanel("Finished Projects Timeline", "X = month, Y = finished projects", CroakleGetFinishedProjectRows(projects, year, month)),
     ].join("");
   }
 
@@ -430,81 +328,70 @@
 
   function CroakleOrderProjectAnalyticsPanels() {
     const panels = document.querySelector("#CroakleAnalyticsPanels");
-
-    if (!panels) {
-      return;
-    }
+    if (!panels) return;
 
     Array.from(panels.querySelectorAll(":scope > .CroakleAnalyticsPanel"))
       .sort((firstPanel, secondPanel) => {
         const firstIndex = CroakleProjectAnalyticsChartOrder.indexOf(CroakleGetProjectPanelTitle(firstPanel));
         const secondIndex = CroakleProjectAnalyticsChartOrder.indexOf(CroakleGetProjectPanelTitle(secondPanel));
-        const safeFirstIndex = firstIndex === -1 ? CroakleProjectAnalyticsChartOrder.length : firstIndex;
-        const safeSecondIndex = secondIndex === -1 ? CroakleProjectAnalyticsChartOrder.length : secondIndex;
-
-        return safeFirstIndex - safeSecondIndex;
+        return (firstIndex === -1 ? CroakleProjectAnalyticsChartOrder.length : firstIndex) - (secondIndex === -1 ? CroakleProjectAnalyticsChartOrder.length : secondIndex);
       })
       .forEach((panel) => panels.appendChild(panel));
   }
 
   function CroakleRenderProjectAnalyticsPanels() {
     const panels = document.querySelector("#CroakleAnalyticsPanels");
+    const isAnalysisActive = document.querySelector('[data-page="analysis"]')?.classList.contains("CroaklePageActive");
 
-    if (!panels) {
-      return;
-    }
-
-    panels.querySelectorAll('[data-project-analytics="true"]').forEach((panel) => panel.remove());
+    if (!panels || !isAnalysisActive) return;
 
     const year = CroakleState.analyticsYear;
     const month = CroakleState.analyticsMonth;
 
-    if (!Number.isInteger(year) || !Number.isInteger(month)) {
-      return;
-    }
+    if (!Number.isInteger(year) || !Number.isInteger(month)) return;
 
+    panels.querySelectorAll('[data-project-analytics="true"]').forEach((panel) => panel.remove());
     panels.insertAdjacentHTML("beforeend", CroakleCreateProjectAnalyticsMarkup(year, month));
     CroakleOrderProjectAnalyticsPanels();
   }
 
-  function CroakleBindProjectAnalytics() {
-    if (window.CroakleProjectAnalyticsBound) {
-      return;
-    }
+  function CroakleQueueProjectAnalyticsRender() {
+    if (CroakleProjectAnalyticsPending) return;
 
-    window.CroakleProjectAnalyticsBound = true;
-
-    const observer = new MutationObserver(() => {
-      window.requestAnimationFrame(CroakleRenderProjectAnalyticsPanels);
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
+    CroakleProjectAnalyticsPending = true;
+    window.requestAnimationFrame(() => {
+      CroakleProjectAnalyticsPending = false;
+      CroakleRenderProjectAnalyticsPanels();
     });
   }
 
   function CroaklePatchProjectAnalyticsSetPage() {
-    if (window.CroakleProjectAnalyticsSetPagePatched || typeof CroakleSetPage !== "function") {
-      return;
-    }
+    if (window.CroakleProjectAnalyticsSetPagePatched || typeof CroakleSetPage !== "function") return;
 
     window.CroakleProjectAnalyticsSetPagePatched = true;
     const originalSetPage = CroakleSetPage;
 
     CroakleSetPage = function CroakleSetPageWithProjectAnalytics(pageName) {
       originalSetPage(pageName);
-
-      if (pageName === "analysis") {
-        window.requestAnimationFrame(CroakleRenderProjectAnalyticsPanels);
-      }
+      if (pageName === "analysis") CroakleQueueProjectAnalyticsRender();
     };
+  }
+
+  function CroakleBindProjectAnalyticsClicks() {
+    if (window.CroakleProjectAnalyticsClicksBound) return;
+
+    window.CroakleProjectAnalyticsClicksBound = true;
+    document.addEventListener("click", (event) => {
+      if (event.target.closest('[data-page-target="analysis"], #CroakleAnalyticsPreviousMonth, #CroakleAnalyticsNextMonth')) {
+        CroakleQueueProjectAnalyticsRender();
+      }
+    });
   }
 
   function CroakleInitProjectAnalytics() {
     CroaklePatchProjectAnalyticsSetPage();
-    CroakleBindProjectAnalytics();
-    window.requestAnimationFrame(CroakleRenderProjectAnalyticsPanels);
+    CroakleBindProjectAnalyticsClicks();
+    CroakleQueueProjectAnalyticsRender();
   }
 
   CroakleInitProjectAnalytics();
