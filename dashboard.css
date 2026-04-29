@@ -1,0 +1,192 @@
+:root {
+  --CroakleDashboardGap: 14px;
+}
+
+html,
+body {
+  height: auto;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  position: static;
+  inset: auto;
+}
+
+.CroakleHabitMoodShell {
+  height: auto;
+  min-height: 100dvh;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.CroakleHabitMoodShell::-webkit-scrollbar {
+  display: none;
+}
+
+.CroakleMenuPage.CroaklePageActive {
+  gap: var(--CroakleDashboardGap);
+  overflow: visible;
+}
+
+.CroakleMenuPage .CroakleHeroHeader {
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+
+.CroakleMenuPage .CroakleHeroHeader h1 {
+  max-width: 300px;
+}
+
+.CroakleDashboardCard {
+  flex: 0 0 auto;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 28px;
+  background: var(--CroakleSurface);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  overflow: visible;
+}
+
+.CroakleDashboardLabel {
+  margin: 0;
+  color: var(--CroakleMuted);
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.CroakleDashboardTitle {
+  margin: 0;
+  color: var(--CroakleText);
+  font-size: clamp(42px, 13vw, 54px);
+  font-weight: 950;
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+}
+
+.CroakleDashboardStats {
+  display: grid;
+  gap: 10px;
+}
+
+.CroakleDashboardStat {
+  min-width: 0;
+  min-height: 58px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 18px;
+  background: var(--CroakleSurface);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.CroakleDashboardStat span {
+  min-width: 0;
+  color: var(--CroakleMuted);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.CroakleDashboardStat strong {
+  flex: 0 0 auto;
+  color: var(--CroakleText);
+  font-size: clamp(28px, 10vw, 38px);
+  font-weight: 950;
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+  white-space: nowrap;
+}
+
+.CroakleDashboardMenuList {
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.CroakleDashboardMenuList button {
+  min-height: 64px;
+  border-radius: 20px;
+  padding: 10px 18px;
+  gap: 14px;
+}
+
+.CroakleMenuCopy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  text-align: left;
+}
+
+.CroakleMenuTitle {
+  color: var(--CroakleText);
+  font-size: 18px;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.CroakleMenuSubtitle {
+  color: var(--CroakleMuted);
+  font-size: 14px;
+  font-weight: 850;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.CroakleMenuChevron {
+  flex: 0 0 auto;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+@media (max-width: 380px) {
+  .CroakleMenuPage .CroakleHeroHeader h1 {
+    max-width: 260px;
+  }
+
+  .CroakleDashboardCard {
+    border-radius: 24px;
+    padding: 14px;
+  }
+
+  .CroakleDashboardTitle {
+    font-size: clamp(38px, 13vw, 48px);
+  }
+
+  .CroakleDashboardStat {
+    min-height: 54px;
+    border-radius: 17px;
+  }
+
+  .CroakleDashboardStat span {
+    font-size: 17px;
+  }
+
+  .CroakleDashboardStat strong {
+    font-size: clamp(26px, 10vw, 34px);
+  }
+
+  .CroakleDashboardMenuList button {
+    min-height: 60px;
+    border-radius: 19px;
+  }
+}
+
+@media (min-width: 700px) {
+  .CroakleHabitMoodShell {
+    width: min(var(--CroakleShellWidth), calc(100vw - 32px));
+  }
+}
