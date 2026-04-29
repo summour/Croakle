@@ -1,0 +1,42 @@
+.CroakleMenuPage.CroaklePageActive {
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 24px;
+  background: var(--CroakleSurface);
+  padding: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.CroakleMenuPage.CroaklePageActive::-webkit-scrollbar {
+  display: none;
+}
+
+.CroakleMenuPage .CroakleHeroHeader {
+  padding: 0;
+}
+
+.CroakleDashboardPreview {
+  min-height: 0;
+}
+
+.CroakleDashboardDateScroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.CroakleBottomNav {
+  z-index: 20;
+  pointer-events: auto;
+}
+
+@media (max-height: 760px) {
+  .CroakleMenuPage.CroaklePageActive {
+    padding: 10px;
+    border-radius: 22px;
+  }
+}
