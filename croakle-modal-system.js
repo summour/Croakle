@@ -9,6 +9,15 @@
     "#CroakleHabitDetailDialog",
     "#CroakleReorderHabitDialog"
   ].join(",");
+  const CroakleGestureCloseDistance = 92;
+
+  let CroakleGestureState = null;
+
+  function CroakleHaptic(pattern = 10) {
+    if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+      navigator.vibrate(pattern);
+    }
+  }
 
   function CroakleInjectModalSystemStyles() {
     if (document.querySelector(`#${CroakleModalStyleId}`)) return;
@@ -79,6 +88,8 @@
         transform: translateY(16px) scale(0.96);
         opacity: 0;
         transition: transform 320ms var(--CroakleModalEase), opacity 220ms ease;
+        touch-action: pan-y;
+        will-change: transform;
       }
 
       .CroakleModalSystemDialog[data-croakle-modal-open="true"] > .CroakleAddHabitForm {
@@ -127,10 +138,21 @@
         scrollbar-width: none;
         box-shadow: none;
         animation: CroakleModalSpringIn 320ms var(--CroakleModalEase) both;
+        touch-action: pan-y;
+        will-change: transform;
       }
 
       .CroakleHabitNotePanel::-webkit-scrollbar,
       .CroakleAlertPanel::-webkit-scrollbar { display: none; }
+
+      .CroakleModalDragHandle {
+        width: 48px;
+        height: 5px;
+        border-radius: 999px;
+        background: #d8d8d8;
+        justify-self: center;
+        margin: -6px 0 2px;
+      }
 
       .CroakleAlertOverlay {
         position: fixed;
@@ -192,9 +214,62 @@
         color: #ffffff;
       }
 
+      .CroakleToastStack {
+        position: fixed;
+        left: 50%;
+        bottom: max(18px, env(safe-area-inset-bottom));
+        z-index: 260;
+        width: min(calc(100vw - 28px), 390px);
+        display: grid;
+        gap: 10px;
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .CroakleToast {
+        min-height: 52px;
+        border: 2px solid var(--CroakleLine, #111111);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--CroakleText, #111111);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 16px;
+        font-weight: 850;
+        line-height: 1.25;
+        backdrop-filter: blur(var(--CroakleModalBlur));
+        -webkit-backdrop-filter: blur(var(--CroakleModalBlur));
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        pointer-events: auto;
+        animation: CroakleToastIn 320ms var(--CroakleModalEase) both;
+      }
+
+      .CroakleToast[data-leaving="true"] {
+        animation: CroakleToastOut 220ms ease both;
+      }
+
+      .CroakleToast small {
+        color: #666666;
+        font-size: 13px;
+        font-weight: 850;
+      }
+
       @keyframes CroakleModalSpringIn {
         from { transform: translateY(16px) scale(0.96); opacity: 0; }
         to { transform: translateY(0) scale(1); opacity: 1; }
+      }
+
+      @keyframes CroakleToastIn {
+        from { transform: translateY(18px) scale(0.96); opacity: 0; }
+        to { transform: translateY(0) scale(1); opacity: 1; }
+      }
+
+      @keyframes CroakleToastOut {
+        from { transform: translateY(0) scale(1); opacity: 1; }
+        to { transform: translateY(14px) scale(0.98); opacity: 0; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -202,7 +277,8 @@
         .CroakleModalSystemDialog > .CroakleAddHabitForm,
         .CroakleHabitNoteModal,
         .CroakleHabitNotePanel,
-        .CroakleAlertPanel {
+        .CroakleAlertPanel,
+        .CroakleToast {
           animation: none;
           transition: none;
           transform: none;
@@ -220,6 +296,7 @@
   function CroakleOpenCustomModal(dialog) {
     dialog.setAttribute("open", "");
     dialog.dataset.croakleModalOpen = "true";
+    CroakleHaptic(8);
     CroakleSyncBodyLock();
   }
 
@@ -227,6 +304,7 @@
     dialog.removeAttribute("open");
     delete dialog.dataset.croakleModalOpen;
     dialog.dispatchEvent(new Event("close"));
+    CroakleHaptic(6);
     CroakleSyncBodyLock();
   }
 
@@ -237,6 +315,11 @@
     dialog.showModal = () => CroakleOpenCustomModal(dialog);
     dialog.show = () => CroakleOpenCustomModal(dialog);
     dialog.close = () => CroakleCloseCustomModal(dialog);
+  }
+
+  function CroakleEnsureDragHandle(panel) {
+    if (!panel || panel.querySelector(":scope > .CroakleModalDragHandle")) return;
+    panel.insertAdjacentHTML("afterbegin", `<div class="CroakleModalDragHandle" aria-hidden="true"></div>`);
   }
 
   function CroakleEnsureAlertOverlay() {
@@ -253,12 +336,18 @@
     `);
   }
 
+  function CroakleEnsureToastStack() {
+    if (document.querySelector("#CroakleToastStack")) return;
+    document.body.insertAdjacentHTML("beforeend", `<div class="CroakleToastStack" id="CroakleToastStack" aria-live="polite" aria-atomic="true"></div>`);
+  }
+
   function CroakleCloseAlert(value) {
     const overlay = document.querySelector("#CroakleAlertOverlay");
     const resolver = window.CroakleAlertResolver;
     if (!overlay) return;
     overlay.hidden = true;
     window.CroakleAlertResolver = null;
+    CroakleHaptic(value ? 8 : 4);
     CroakleSyncBodyLock();
     if (typeof resolver === "function") resolver(value);
   }
@@ -279,6 +368,7 @@
       : `<button class="CroakleAlertButton" type="button" data-primary="true" data-croakle-alert-confirm>${options.confirmText || "OK"}</button>`;
 
     overlay.hidden = false;
+    CroakleHaptic(10);
     CroakleSyncBodyLock();
 
     return new Promise((resolve) => {
@@ -287,15 +377,90 @@
     });
   }
 
+  function CroakleShowToast(message, options = {}) {
+    CroakleEnsureToastStack();
+    const toast = document.createElement("div");
+    const duration = Number(options.duration || 2200);
+    toast.className = "CroakleToast";
+    toast.innerHTML = `<span>${String(message || "")}</span>${options.detail ? `<small>${String(options.detail)}</small>` : ""}`;
+    document.querySelector("#CroakleToastStack")?.appendChild(toast);
+    CroakleHaptic(options.haptic || 6);
+
+    window.setTimeout(() => {
+      toast.dataset.leaving = "true";
+      window.setTimeout(() => toast.remove(), 240);
+    }, duration);
+  }
+
+  function CroakleGetGesturePanel(target) {
+    return target.closest?.(".CroakleModalSystemDialog > .CroakleAddHabitForm, .CroakleHabitNotePanel, .CroakleAlertPanel");
+  }
+
+  function CroakleCloseGestureTarget(panel) {
+    const dialog = panel.closest(".CroakleModalSystemDialog");
+    if (dialog) {
+      dialog.close();
+      return;
+    }
+
+    const noteModal = panel.closest(".CroakleHabitNoteModal");
+    if (noteModal) {
+      noteModal.hidden = true;
+      CroakleSyncBodyLock();
+      return;
+    }
+
+    const alertOverlay = panel.closest(".CroakleAlertOverlay");
+    if (alertOverlay) CroakleCloseAlert(false);
+  }
+
+  function CroakleStartGesture(event) {
+    const panel = CroakleGetGesturePanel(event.target);
+    if (!panel || panel.scrollTop > 0) return;
+    CroakleGestureState = { panel, startY: event.clientY, lastY: event.clientY };
+    panel.style.transition = "none";
+  }
+
+  function CroakleMoveGesture(event) {
+    if (!CroakleGestureState) return;
+    const deltaY = Math.max(0, event.clientY - CroakleGestureState.startY);
+    CroakleGestureState.lastY = event.clientY;
+    if (deltaY <= 0) return;
+    CroakleGestureState.panel.style.transform = `translateY(${deltaY}px) scale(${Math.max(0.94, 1 - deltaY / 1200)})`;
+    CroakleGestureState.panel.style.opacity = String(Math.max(0.45, 1 - deltaY / 260));
+  }
+
+  function CroakleEndGesture() {
+    if (!CroakleGestureState) return;
+    const { panel, startY, lastY } = CroakleGestureState;
+    const deltaY = Math.max(0, lastY - startY);
+    panel.style.transition = "transform 260ms var(--CroakleModalEase), opacity 220ms ease";
+    panel.style.transform = "";
+    panel.style.opacity = "";
+
+    if (deltaY > CroakleGestureCloseDistance) {
+      CroakleHaptic(12);
+      CroakleCloseGestureTarget(panel);
+    }
+
+    CroakleGestureState = null;
+  }
+
   function CroakleMarkModalSystemTargets() {
     document.querySelectorAll(CroakleModalDialogSelector).forEach(CroakleUpgradeDialog);
     document.querySelector("#CroakleHabitNoteModal")?.classList.add("CroakleModalSystemOverlay");
     document.querySelector(".CroakleHabitNotePanel")?.classList.add("CroakleModalSystemPanel");
+    document.querySelectorAll(".CroakleModalSystemDialog > .CroakleAddHabitForm, .CroakleHabitNotePanel, .CroakleAlertPanel").forEach(CroakleEnsureDragHandle);
   }
 
   function CroakleBindModalSystemEvents() {
     if (window.CroakleModalSystemBound) return;
     window.CroakleModalSystemBound = true;
+
+    document.addEventListener("pointerdown", CroakleStartGesture, true);
+    document.addEventListener("pointermove", CroakleMoveGesture, true);
+    document.addEventListener("pointerup", CroakleEndGesture, true);
+    document.addEventListener("pointercancel", CroakleEndGesture, true);
 
     document.addEventListener("click", (event) => {
       const dialog = event.target.closest?.(".CroakleModalSystemDialog");
@@ -325,11 +490,14 @@
   function CroakleInitModalSystem() {
     CroakleInjectModalSystemStyles();
     CroakleEnsureAlertOverlay();
+    CroakleEnsureToastStack();
     CroakleMarkModalSystemTargets();
     CroakleBindModalSystemEvents();
     CroakleSyncBodyLock();
   }
 
+  window.CroakleHaptic = CroakleHaptic;
+  window.CroakleToast = CroakleShowToast;
   window.CroakleAlert = (message, title = "Alert") => CroakleOpenAlert({ type: "alert", title, message });
   window.CroakleConfirm = (message, title = "Confirm") => CroakleOpenAlert({ type: "confirm", title, message, confirmText: "Confirm", cancelText: "Cancel" });
 
