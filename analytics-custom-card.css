@@ -1,0 +1,105 @@
+.CroakleAnalyticsCustomCard {
+  border: 2px solid var(--CroakleLine);
+  border-radius: 20px;
+  background: var(--CroakleSurface);
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.CroakleAnalyticsCustomHead {
+  display: grid;
+  gap: 4px;
+}
+
+.CroakleAnalyticsCustomTitle {
+  margin: 0;
+  color: var(--CroakleText);
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.CroakleAnalyticsCustomSub {
+  margin: 0;
+  color: var(--CroakleMuted);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.CroakleAnalyticsCustomControls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.CroakleAnalyticsCustomField {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.CroakleAnalyticsCustomLabel {
+  color: var(--CroakleMuted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.CroakleAnalyticsCustomSelect {
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 14px;
+  background: var(--CroakleSurface);
+  color: var(--CroakleText);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  padding: 0 10px;
+  appearance: none;
+}
+
+.CroakleAnalyticsCustomChartShell {
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 8px 6px;
+  overflow: hidden;
+}
+
+.CroakleAnalyticsCustomChart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.CroakleAnalyticsCustomEmpty {
+  padding: 18px 12px;
+  text-align: center;
+  color: var(--CroakleMuted);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+@media (max-width: 380px) {
+  .CroakleAnalyticsCustomCard {
+    border-radius: 18px;
+    padding: 11px;
+  }
+
+  .CroakleAnalyticsCustomTitle {
+    font-size: 21px;
+  }
+
+  .CroakleAnalyticsCustomControls {
+    grid-template-columns: 1fr;
+  }
+
+  .CroakleAnalyticsCustomSelect {
+    min-height: 36px;
+    font-size: 12px;
+  }
+}
