@@ -6,7 +6,8 @@
     { value: "pace", label: "Goal pace %", yLabel: "goal progress percent" },
   ];
 
-  let CroakleCustomAnalyticsBusy = false;
+  let CroakleCustomAnalyticsRenderFrame = 0;
+  let CroakleCustomAnalyticsLastKey = "";
 
   function CroakleCustomEscape(value) {
     return String(value ?? "")
@@ -20,7 +21,6 @@
   function CroakleCustomCanRender() {
     return typeof CroakleState !== "undefined"
       && typeof CroakleGetMonthData === "function"
-      && typeof CroakleGetMonthLabel === "function"
       && typeof CroakleGetDaysInMonth === "function";
   }
 
@@ -234,8 +234,8 @@
     }
   }
 
-  function CroakleCustomRender() {
-    if (CroakleCustomAnalyticsBusy || !CroakleCustomCanRender()) {
+  function CroakleCustomRenderNow() {
+    if (!CroakleCustomCanRender()) {
       return;
     }
 
@@ -244,8 +244,6 @@
     if (!card) {
       return;
     }
-
-    CroakleCustomAnalyticsBusy = true;
 
     const habitSelect = card.querySelector('[data-role="custom-habit-select"]');
     const metricSelect = card.querySelector('[data-role="custom-y-select"]');
@@ -260,7 +258,6 @@
 
     if (!habits.length) {
       chart.innerHTML = `<div class="CroakleAnalyticsCustomEmpty">No habit data yet.</div>`;
-      CroakleCustomAnalyticsBusy = false;
       return;
     }
 
@@ -270,13 +267,29 @@
     const daysInMonth = CroakleGetDaysInMonth(analyticsDate.getFullYear(), analyticsDate.getMonth());
     const dailySeries = CroakleCustomBuildDailySeries(habit, daysInMonth);
     const metricSeries = CroakleCustomBuildMetricSeries(dailySeries, metric.value, habit.goal);
+    const renderKey = [analyticsDate.getFullYear(), analyticsDate.getMonth(), habitIndex, metric.value, dailySeries.join("")].join("|");
 
+    if (renderKey === CroakleCustomAnalyticsLastKey) {
+      return;
+    }
+
+    CroakleCustomAnalyticsLastKey = renderKey;
     subtitle.textContent = `X = day of month, Y = ${metric.yLabel}`;
     chart.innerHTML = CroakleCustomCreateLineChart(metricSeries, metric.value);
-    CroakleCustomAnalyticsBusy = false;
+  }
+
+  function CroakleCustomRender() {
+    window.cancelAnimationFrame(CroakleCustomAnalyticsRenderFrame);
+    CroakleCustomAnalyticsRenderFrame = window.requestAnimationFrame(CroakleCustomRenderNow);
   }
 
   function CroakleCustomBindEvents() {
+    if (window.CroakleCustomAnalyticsBound) {
+      return;
+    }
+
+    window.CroakleCustomAnalyticsBound = true;
+
     document.addEventListener("change", (event) => {
       const target = event.target;
 
@@ -285,6 +298,7 @@
       }
 
       if (target.matches('[data-role="custom-habit-select"], [data-role="custom-y-select"]')) {
+        CroakleCustomAnalyticsLastKey = "";
         CroakleCustomRender();
       }
     });
@@ -297,21 +311,29 @@
       }
 
       if (target.closest("#CroakleAnalyticsPreviousMonth, #CroakleAnalyticsNextMonth, [data-page-target='analysis']")) {
+        CroakleCustomAnalyticsLastKey = "";
         window.requestAnimationFrame(CroakleCustomRender);
       }
     });
+  }
 
-    const observer = new MutationObserver(() => {
-      window.requestAnimationFrame(CroakleCustomRender);
-    });
+  function CroakleCustomPatchAnalyticsRender() {
+    if (window.CroakleCustomAnalyticsRenderPatched || typeof CroakleRenderAnalyticsPage !== "function") {
+      return;
+    }
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+    window.CroakleCustomAnalyticsRenderPatched = true;
+    const originalRenderAnalyticsPage = CroakleRenderAnalyticsPage;
+
+    CroakleRenderAnalyticsPage = function CroakleRenderAnalyticsPageWithCustomHabitCard() {
+      originalRenderAnalyticsPage();
+      CroakleCustomAnalyticsLastKey = "";
+      CroakleCustomRender();
+    };
   }
 
   function CroakleCustomInit() {
+    CroakleCustomPatchAnalyticsRender();
     CroakleCustomRender();
     CroakleCustomBindEvents();
   }
