@@ -259,6 +259,76 @@
   font-size: 15px;
 }
 
+.CroaklePage[data-page="best"] .CroakleCard {
+  padding: 10px;
+}
+
+.CroaklePage[data-page="best"] .CroakleMonthHeader {
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.CroaklePage[data-page="best"] .CroakleMonthHeader button {
+  width: 34px;
+  height: 34px;
+  border-radius: 13px;
+  font-size: 22px;
+}
+
+.CroaklePage[data-page="best"] .CroakleMonthHeader strong {
+  font-size: clamp(22px, 6.2vw, 30px);
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader,
+.CroaklePage[data-page="best"] .CroakleBestRow {
+  grid-template-columns: minmax(0, 1.05fr) minmax(72px, 0.78fr) 30px 36px;
+  gap: 5px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader {
+  padding: 0 0 6px;
+  margin-bottom: 2px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader span {
+  font-size: 9px;
+  line-height: 1.05;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader span:first-child {
+  font-size: 11px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestList {
+  gap: 4px;
+  padding-bottom: 4px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestRow {
+  min-height: 34px;
+  padding: 2px 0;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestRow strong {
+  font-size: 11px;
+  line-height: 1.05;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestRow > span {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.CroaklePage[data-page="best"] .CroaklePercentBar {
+  height: 14px;
+  border-radius: 9px;
+}
+
+.CroaklePage[data-page="best"] .CroaklePercentBar em {
+  font-size: 9px;
+}
+
 .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
   position: static;
   inset: auto;
@@ -348,6 +418,45 @@
     height: 16px;
   }
 
+  .CroaklePage[data-page="best"] .CroakleMonthHeader {
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleMonthHeader button {
+    width: 32px;
+    height: 32px;
+    font-size: 20px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleMonthHeader strong {
+    font-size: clamp(20px, 5.8vw, 27px);
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestHeader,
+  .CroaklePage[data-page="best"] .CroakleBestRow {
+    grid-template-columns: minmax(0, 1fr) minmax(66px, 0.72fr) 28px 34px;
+    gap: 4px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestHeader span,
+  .CroaklePage[data-page="best"] .CroaklePercentBar em {
+    font-size: 8px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestHeader span:first-child,
+  .CroaklePage[data-page="best"] .CroakleBestRow strong,
+  .CroaklePage[data-page="best"] .CroakleBestRow > span {
+    font-size: 10px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestRow {
+    min-height: 32px;
+  }
+
+  .CroaklePage[data-page="best"] .CroaklePercentBar {
+    height: 13px;
+  }
+
   .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
     gap: 6px;
   }
@@ -389,6 +498,14 @@
 
   .CroakleBestRow {
     min-height: 38px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestList {
+    gap: 3px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestRow {
+    min-height: 30px;
   }
 
   .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav button {
