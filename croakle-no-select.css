@@ -1,0 +1,24 @@
+/* Prevent accidental iOS text selection outside editable fields. */
+.CroakleHabitMoodShell,
+.CroakleHabitMoodShell * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.CroakleHabitMoodShell input,
+.CroakleHabitMoodShell textarea,
+.CroakleHabitMoodShell select,
+.CroakleHabitMoodShell [contenteditable="true"],
+.CroakleHabitMoodShell [contenteditable="true"] * {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+.CroakleHabitMoodShell button,
+.CroakleHabitMoodShell label,
+.CroakleHabitMoodShell summary {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
