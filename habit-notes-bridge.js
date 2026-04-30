@@ -264,19 +264,39 @@
         display: none;
       }
 
-      .CroakleNotesBoardHeader {
+      .CroakleNotesBoardPage .CroakleCard {
         display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-height: calc(100dvh - 148px);
+      }
+
+      .CroakleNotesBoardHeader {
+        display: grid;
+        grid-template-columns: 54px 1fr;
         align-items: center;
-        justify-content: space-between;
         gap: 12px;
       }
 
-      .CroakleNotesBoardHeader h2 {
+      .CroakleNotesBoardTitleBlock {
+        min-width: 0;
+      }
+
+      .CroakleNotesBoardTitleBlock p {
+        margin: 0 0 4px;
+        color: #666666;
+        font-size: 13px;
+        font-weight: 950;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .CroakleNotesBoardTitleBlock h2 {
         margin: 0;
-        font-size: clamp(42px, 13vw, 64px);
+        font-size: clamp(42px, 12vw, 64px);
         font-weight: 950;
         line-height: 0.9;
-        letter-spacing: -0.08em;
+        letter-spacing: -0.085em;
       }
 
       .CroakleNotesBoardBack {
@@ -290,55 +310,151 @@
         font-weight: 950;
       }
 
+      .CroakleNotesBoardToolbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .CroakleNotesBoardSummary {
+        border-radius: 22px;
+        background: #f5f5f5;
+        padding: 12px 14px;
+        color: #111111;
+        font-size: 15px;
+        font-weight: 900;
+        line-height: 1.25;
+      }
+
+      .CroakleNotesBoardCopy {
+        min-height: 46px;
+        border: 2px solid #111111;
+        border-radius: 18px;
+        background: #111111;
+        color: #ffffff;
+        padding: 0 14px;
+        font-size: 15px;
+        font-weight: 950;
+        white-space: nowrap;
+      }
+
       .CroakleNotesBoardList {
         display: grid;
-        gap: 12px;
+        gap: 14px;
         padding-bottom: 16px;
       }
 
       .CroakleNotesBoardGroup {
         border: 2px solid #111111;
-        border-radius: 24px;
+        border-radius: 26px;
         background: #ffffff;
-        padding: 16px;
+        padding: 14px;
         display: grid;
         gap: 12px;
       }
 
       .CroakleNotesBoardGroup h3 {
         margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         font-size: 24px;
         font-weight: 950;
-        letter-spacing: -0.05em;
+        letter-spacing: -0.055em;
+      }
+
+      .CroakleNotesBoardGroup h3::before {
+        content: "";
+        width: 13px;
+        height: 13px;
+        border-radius: 999px;
+        background: #111111;
+        flex: 0 0 auto;
       }
 
       .CroakleNotesBoardItem {
-        border-radius: 18px;
-        background: #f5f5f5;
+        border: 2px solid #111111;
+        border-radius: 22px;
+        background: #ffffff;
         padding: 12px;
         display: grid;
-        gap: 6px;
+        gap: 10px;
       }
 
-      .CroakleNotesBoardItem strong {
-        font-size: 15px;
+      .CroakleNotesBoardMeta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .CroakleNotesBoardMeta strong,
+      .CroakleNotesBoardMeta span {
+        border-radius: 999px;
+        background: #f2f2f2;
+        padding: 7px 10px;
+        font-size: 13px;
         font-weight: 950;
+        line-height: 1;
+        white-space: nowrap;
       }
 
-      .CroakleNotesBoardItem p {
+      .CroakleNotesBoardMeta span {
+        max-width: 52%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .CroakleNotesBoardBubble {
+        border-radius: 18px;
+        background: #f5f5f5;
+        padding: 14px;
+      }
+
+      .CroakleNotesBoardBubble p {
         margin: 0;
-        font-size: 16px;
-        font-weight: 650;
-        line-height: 1.35;
+        color: #111111;
+        font-size: 17px;
+        font-weight: 750;
+        line-height: 1.36;
         white-space: pre-wrap;
       }
 
       .CroakleNotesEmpty {
-        border-radius: 24px;
-        background: #f5f5f5;
-        padding: 18px;
-        font-size: 18px;
+        min-height: 260px;
+        border: 2px dashed #d9d9d9;
+        border-radius: 28px;
+        background: #fafafa;
+        padding: 22px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+
+      .CroakleNotesEmpty strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 24px;
+        font-weight: 950;
+        letter-spacing: -0.04em;
+      }
+
+      .CroakleNotesEmpty span {
+        color: #666666;
+        font-size: 16px;
         font-weight: 800;
+        line-height: 1.35;
+      }
+
+      @media (max-width: 390px) {
+        .CroakleNotesBoardToolbar {
+          grid-template-columns: 1fr;
+        }
+
+        .CroakleNotesBoardCopy {
+          width: 100%;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -392,8 +508,15 @@
         <article class="CroakleCard" aria-label="Monthly habit notes board">
           <header class="CroakleNotesBoardHeader">
             <button class="CroakleNotesBoardBack" type="button" data-notes-back aria-label="Back to habits">‹</button>
-            <h2>Notes Board</h2>
+            <div class="CroakleNotesBoardTitleBlock">
+              <p>Monthly Notes</p>
+              <h2>Notes Board</h2>
+            </div>
           </header>
+          <div class="CroakleNotesBoardToolbar">
+            <div class="CroakleNotesBoardSummary" id="CroakleNotesBoardSummary">No notes yet.</div>
+            <button class="CroakleNotesBoardCopy" type="button" data-copy-notes>Copy Notes</button>
+          </div>
           <div class="CroakleNotesBoardList" id="CroakleNotesBoardList"></div>
         </article>
       </section>
@@ -497,41 +620,110 @@
     });
   }
 
+  function CroakleGetBoardNotes() {
+    const monthDates = CroakleGetBoardMonthDates();
+
+    if (typeof CroakleState === "undefined") {
+      return [];
+    }
+
+    return CroakleState.habitTemplates.flatMap((template, habitIndex) => {
+      return monthDates
+        .map((dateIso) => {
+          const habit = CroakleGetHabitByDate(habitIndex, dateIso).habit || template;
+          const note = CroakleReadHabitNote(habit, habitIndex, dateIso);
+
+          return {
+            habitName: template.name || "Habit",
+            dateIso,
+            dateLabel: CroakleGetNoteDateLabel(dateIso),
+            note,
+          };
+        })
+        .filter((item) => String(item.note || "").trim());
+    });
+  }
+
+  function CroakleFormatNotesForCopy(notes = CroakleGetBoardNotes()) {
+    if (!notes.length) {
+      return "No notes yet for this month.";
+    }
+
+    return notes.map((item) => [
+      "┌──────────────────────────────",
+      `│ ${item.dateLabel}`,
+      `│ ${item.habitName}`,
+      "├──────────────────────────────",
+      ...String(item.note).split("\n").map((line) => `│ ${line}`),
+      "└──────────────────────────────",
+    ].join("\n")).join("\n\n");
+  }
+
   function CroakleRenderNotesBoard() {
     const list = document.querySelector("#CroakleNotesBoardList");
-    const monthDates = CroakleGetBoardMonthDates();
+    const summary = document.querySelector("#CroakleNotesBoardSummary");
 
     if (!list || typeof CroakleState === "undefined") {
       return;
     }
 
-    const groups = CroakleState.habitTemplates.map((template, habitIndex) => {
-      const rows = monthDates
-        .map((dateIso) => {
-          const habit = CroakleGetHabitByDate(habitIndex, dateIso).habit || template;
-          return [dateIso, CroakleReadHabitNote(habit, habitIndex, dateIso)];
-        })
-        .filter(([, note]) => String(note || "").trim());
-
+    const notes = CroakleGetBoardNotes();
+    const groups = CroakleState.habitTemplates.map((template) => {
+      const rows = notes.filter((item) => item.habitName === (template.name || "Habit"));
       return { name: template.name || "Habit", rows };
     }).filter((group) => group.rows.length);
 
+    if (summary) {
+      summary.textContent = notes.length
+        ? `${notes.length} note${notes.length > 1 ? "s" : ""} saved this month.`
+        : "Long press a check circle to add your first note.";
+    }
+
     if (!groups.length) {
-      list.innerHTML = `<div class="CroakleNotesEmpty">No notes yet for this month.</div>`;
+      list.innerHTML = `
+        <div class="CroakleNotesEmpty">
+          <div>
+            <strong>No notes yet</strong>
+            <span>Long press any habit check circle to write a daily note. Notes will appear here as message cards.</span>
+          </div>
+        </div>
+      `;
       return;
     }
 
     list.innerHTML = groups.map((group) => `
       <section class="CroakleNotesBoardGroup">
         <h3>${CroakleEscapeText(group.name)}</h3>
-        ${group.rows.map(([dateIso, note]) => `
+        ${group.rows.map((item) => `
           <article class="CroakleNotesBoardItem">
-            <strong>${CroakleEscapeText(CroakleGetNoteDateLabel(dateIso))}</strong>
-            <p>${CroakleEscapeText(note)}</p>
+            <div class="CroakleNotesBoardMeta">
+              <strong>${CroakleEscapeText(item.dateLabel)}</strong>
+              <span>${CroakleEscapeText(item.habitName)}</span>
+            </div>
+            <div class="CroakleNotesBoardBubble">
+              <p>${CroakleEscapeText(item.note)}</p>
+            </div>
           </article>
         `).join("")}
       </section>
     `).join("");
+  }
+
+  async function CroakleCopyNotesBoard() {
+    const notesText = CroakleFormatNotesForCopy();
+    const copyButton = document.querySelector("[data-copy-notes]");
+
+    try {
+      await navigator.clipboard.writeText(notesText);
+      if (copyButton) {
+        copyButton.textContent = "Copied";
+        window.setTimeout(() => {
+          copyButton.textContent = "Copy Notes";
+        }, 1200);
+      }
+    } catch {
+      window.prompt("Copy your notes:", notesText);
+    }
   }
 
   function CroakleOpenNotesBoard() {
@@ -647,6 +839,12 @@
       if (event.target.closest("[data-open-notes-board]")) {
         event.preventDefault();
         CroakleOpenNotesBoard();
+        return;
+      }
+
+      if (event.target.closest("[data-copy-notes]")) {
+        event.preventDefault();
+        CroakleCopyNotesBoard();
         return;
       }
 
