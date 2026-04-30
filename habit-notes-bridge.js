@@ -1,6 +1,9 @@
 (() => {
   const CroakleNoteStoreKey = "CroakleHabitDailyNotesV1";
   const CroakleNotePageName = "notes";
+  const CroakleLongPressMs = 520;
+  let CroakleNotePressTimer = null;
+  let CroakleNoteLongPressUsed = false;
 
   function CroakleEscapeText(value) {
     return String(value || "")
@@ -91,6 +94,9 @@
 
       .CroakleCheckButton {
         position: relative;
+        touch-action: manipulation;
+        -webkit-user-select: none;
+        user-select: none;
       }
 
       .CroakleCheckButton[data-has-note="true"]::after {
@@ -426,7 +432,7 @@
     modal.querySelector("[data-note-date]").textContent = CroakleGetNoteDateLabel(dateIso);
     modal.querySelector("[data-note-title]").textContent = habit.name || "Habit note";
     modal.querySelector("[data-note-textarea]").value = CroakleReadHabitNote(habit, habitIndex, dateIso);
-    CroakleSetNoteDoneState(!Boolean(habit.days?.[dayIndex]));
+    CroakleSetNoteDoneState(Boolean(habit.days?.[dayIndex]));
     modal.hidden = false;
   }
 
@@ -566,16 +572,44 @@
     window.CroakleHabitNotesRenderPatched = true;
   }
 
+  function CroakleClearNotePressTimer() {
+    if (CroakleNotePressTimer) {
+      window.clearTimeout(CroakleNotePressTimer);
+      CroakleNotePressTimer = null;
+    }
+  }
+
+  function CroakleHandleCheckPointerDown(event) {
+    const checkButton = event.target.closest(".CroakleCheckButton");
+    if (!checkButton) {
+      return;
+    }
+
+    CroakleClearNotePressTimer();
+    CroakleNoteLongPressUsed = false;
+    CroakleNotePressTimer = window.setTimeout(() => {
+      CroakleNoteLongPressUsed = true;
+      CroakleOpenHabitNote(Number(checkButton.dataset.habitIndex), checkButton.dataset.dateIso);
+    }, CroakleLongPressMs);
+  }
+
   function CroakleHandleCheckClick(event) {
     const checkButton = event.target.closest(".CroakleCheckButton");
     if (!checkButton) {
       return;
     }
 
-    event.preventDefault();
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    CroakleOpenHabitNote(Number(checkButton.dataset.habitIndex), checkButton.dataset.dateIso);
+    CroakleClearNotePressTimer();
+
+    if (CroakleNoteLongPressUsed) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      CroakleNoteLongPressUsed = false;
+      return;
+    }
+
+    window.requestAnimationFrame(CroakleDecorateTrackNotes);
   }
 
   function CroakleBindHabitNotes() {
@@ -584,6 +618,10 @@
     }
 
     window.CroakleHabitNotesBound = true;
+    document.addEventListener("pointerdown", CroakleHandleCheckPointerDown, true);
+    document.addEventListener("pointerup", CroakleClearNotePressTimer, true);
+    document.addEventListener("pointercancel", CroakleClearNotePressTimer, true);
+    document.addEventListener("pointerleave", CroakleClearNotePressTimer, true);
     document.addEventListener("click", CroakleHandleCheckClick, true);
 
     document.addEventListener("click", (event) => {
