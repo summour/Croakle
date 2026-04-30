@@ -1,4 +1,5 @@
 (() => {
+  const CroakleNoteStoreKey = "CroakleHabitDailyNotesV1";
   const CroakleNotePageName = "notes";
 
   function CroakleEscapeText(value) {
@@ -9,16 +10,44 @@
       .replace(/"/g, "&quot;");
   }
 
-  function CroakleGetNoteDate() {
-    if (typeof CroakleState !== "undefined" && CroakleState.trackDate) {
-      return CroakleState.trackDate;
+  function CroakleLoadNoteStore() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CroakleNoteStoreKey) || "{}");
+      return saved && typeof saved === "object" && !Array.isArray(saved) ? saved : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function CroakleSaveNoteStore(notes) {
+    localStorage.setItem(CroakleNoteStoreKey, JSON.stringify(notes));
+  }
+
+  function CroakleGetHabitNoteId(habit, habitIndex) {
+    return habit?.id || `CroakleHabitIndex${habitIndex}`;
+  }
+
+  function CroakleGetNoteKey(habit, habitIndex, dateIso) {
+    return `${CroakleGetHabitNoteId(habit, habitIndex)}::${dateIso}`;
+  }
+
+  function CroakleReadHabitNote(habit, habitIndex, dateIso) {
+    const notes = CroakleLoadNoteStore();
+    return notes[CroakleGetNoteKey(habit, habitIndex, dateIso)] || "";
+  }
+
+  function CroakleWriteHabitNote(habit, habitIndex, dateIso, note) {
+    const notes = CroakleLoadNoteStore();
+    const noteKey = CroakleGetNoteKey(habit, habitIndex, dateIso);
+    const cleanNote = String(note || "").trim();
+
+    if (cleanNote) {
+      notes[noteKey] = cleanNote;
+    } else {
+      delete notes[noteKey];
     }
 
-    if (typeof CroakleFormatDate === "function" && typeof CroakleGetToday === "function") {
-      return CroakleFormatDate(CroakleGetToday());
-    }
-
-    return new Date().toISOString().slice(0, 10);
+    CroakleSaveNoteStore(notes);
   }
 
   function CroakleGetNoteDateLabel(dateIso) {
@@ -26,28 +55,20 @@
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   }
 
-  function CroakleGetNoteMonthKey() {
-    if (typeof CroakleState === "undefined") {
-      return "";
-    }
+  function CroakleGetTrackWeekDates() {
+    const anchorDate = typeof CroakleParseDate === "function" && typeof CroakleState !== "undefined"
+      ? CroakleParseDate(CroakleState.trackDate)
+      : new Date();
 
-    return `${CroakleState.trackYear}-${String(CroakleState.trackMonth + 1).padStart(2, "0")}`;
+    return typeof CroakleGetWeekDates === "function" ? CroakleGetWeekDates(anchorDate) : [];
   }
 
-  function CroakleGetNoteMonthData() {
-    if (typeof CroakleState === "undefined" || typeof CroakleGetMonthData !== "function") {
-      return null;
-    }
+  function CroakleGetHabitByDate(habitIndex, dateIso) {
+    const date = typeof CroakleParseDate === "function" ? CroakleParseDate(dateIso) : new Date(dateIso);
+    const monthData = typeof CroakleGetMonthDataFromDate === "function" ? CroakleGetMonthDataFromDate(date) : null;
+    const habit = monthData?.habits?.[habitIndex];
 
-    return CroakleGetMonthData(CroakleState.trackYear, CroakleState.trackMonth);
-  }
-
-  function CroakleEnsureHabitNotes(habit) {
-    if (!habit.notes || typeof habit.notes !== "object" || Array.isArray(habit.notes)) {
-      habit.notes = {};
-    }
-
-    return habit.notes;
+    return { date, habit, monthData };
   }
 
   function CroakleInjectNoteStyles() {
@@ -58,37 +79,49 @@
     const style = document.createElement("style");
     style.id = "CroakleHabitNoteStyles";
     style.textContent = `
-      .CroakleHabitNoteButton,
+      .CroakleHabitNoteGrid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .CroakleHabitDailyNoteButton,
       .CroakleOpenNotesBoardButton {
         min-height: 34px;
         border: 2px solid var(--CroakleLine, #111111);
         border-radius: 999px;
         background: var(--CroakleSurface, #ffffff);
         color: var(--CroakleInk, #111111);
-        padding: 0 12px;
-        font-size: 13px;
-        font-weight: 900;
+        font-size: 12px;
+        font-weight: 950;
+        line-height: 1;
         white-space: nowrap;
+        touch-action: manipulation;
+        position: relative;
+        z-index: 2;
+        pointer-events: auto;
       }
 
-      .CroakleHabitNoteButton[data-has-note="true"] {
+      .CroakleHabitDailyNoteButton[data-has-note="true"] {
         background: var(--CroakleLine, #111111);
         color: var(--CroakleSurface, #ffffff);
+      }
+
+      .CroakleCheckButton {
+        position: relative;
       }
 
       .CroakleCheckButton[data-has-note="true"]::after {
         content: "";
         position: absolute;
-        right: 3px;
-        top: 3px;
+        right: 4px;
+        top: 4px;
         width: 7px;
         height: 7px;
         border-radius: 999px;
         background: currentColor;
-      }
-
-      .CroakleCheckButton {
-        position: relative;
+        pointer-events: none;
       }
 
       .CroakleHabitNoteModal {
@@ -371,7 +404,7 @@
       <section class="CroaklePage CroakleNotesBoardPage" data-page="notes">
         <article class="CroakleCard" aria-label="Monthly habit notes board">
           <header class="CroakleNotesBoardHeader">
-            <button class="CroakleNotesBoardBack" type="button" data-page-target="track" aria-label="Back to habits">‹</button>
+            <button class="CroakleNotesBoardBack" type="button" data-notes-back aria-label="Back to habits">‹</button>
             <h2>Notes Board</h2>
           </header>
           <div class="CroakleNotesBoardList" id="CroakleNotesBoardList"></div>
@@ -387,14 +420,18 @@
     shell?.insertAdjacentHTML("beforeend", pageHtml);
   }
 
-  function CroakleGetHabitNote(habit, dateIso) {
-    return CroakleEnsureHabitNotes(habit)[dateIso] || "";
+  function CroakleSetNoteDoneState(done) {
+    const doneButton = document.querySelector("[data-note-done]");
+    if (!doneButton) {
+      return;
+    }
+
+    doneButton.dataset.done = String(done);
+    doneButton.querySelector("strong").textContent = done ? "✓" : "○";
   }
 
   function CroakleOpenHabitNote(habitIndex, dateIso) {
-    const date = typeof CroakleParseDate === "function" ? CroakleParseDate(dateIso) : new Date(dateIso);
-    const monthData = typeof CroakleGetMonthDataFromDate === "function" ? CroakleGetMonthDataFromDate(date) : null;
-    const habit = monthData?.habits?.[habitIndex];
+    const { date, habit } = CroakleGetHabitByDate(habitIndex, dateIso);
     const dayIndex = date.getDate() - 1;
     const modal = document.querySelector("#CroakleHabitNoteModal");
     const panel = modal?.querySelector("[data-note-panel]");
@@ -407,20 +444,10 @@
     panel.dataset.dateIso = dateIso;
     modal.querySelector("[data-note-date]").textContent = CroakleGetNoteDateLabel(dateIso);
     modal.querySelector("[data-note-title]").textContent = habit.name || "Habit note";
-    modal.querySelector("[data-note-textarea]").value = CroakleGetHabitNote(habit, dateIso);
+    modal.querySelector("[data-note-textarea]").value = CroakleReadHabitNote(habit, habitIndex, dateIso);
     CroakleSetNoteDoneState(Boolean(habit.days?.[dayIndex]));
     modal.hidden = false;
     window.requestAnimationFrame(() => modal.querySelector("[data-note-textarea]")?.focus());
-  }
-
-  function CroakleSetNoteDoneState(done) {
-    const doneButton = document.querySelector("[data-note-done]");
-    if (!doneButton) {
-      return;
-    }
-
-    doneButton.dataset.done = String(done);
-    doneButton.querySelector("strong").textContent = done ? "✓" : "○";
   }
 
   function CroakleCloseHabitNote() {
@@ -435,23 +462,13 @@
     const panel = modal?.querySelector("[data-note-panel]");
     const habitIndex = Number(panel?.dataset.habitIndex);
     const dateIso = panel?.dataset.dateIso || "";
-    const date = typeof CroakleParseDate === "function" ? CroakleParseDate(dateIso) : new Date(dateIso);
-    const monthData = typeof CroakleGetMonthDataFromDate === "function" ? CroakleGetMonthDataFromDate(date) : null;
-    const habit = monthData?.habits?.[habitIndex];
+    const { date, habit } = CroakleGetHabitByDate(habitIndex, dateIso);
 
     if (!habit) {
       return;
     }
 
-    const note = String(modal.querySelector("[data-note-textarea]")?.value || "").trim();
-    const notes = CroakleEnsureHabitNotes(habit);
-
-    if (note) {
-      notes[dateIso] = note;
-    } else {
-      delete notes[dateIso];
-    }
-
+    CroakleWriteHabitNote(habit, habitIndex, dateIso, modal.querySelector("[data-note-textarea]")?.value);
     habit.days[date.getDate() - 1] = modal.querySelector("[data-note-done]")?.dataset.done === "true";
 
     if (typeof CroakleSaveState === "function") {
@@ -467,31 +484,54 @@
     window.requestAnimationFrame(CroakleDecorateTrackNotes);
   }
 
+  function CroakleCreateDailyNoteButton(habit, habitIndex, date) {
+    const dateIso = typeof CroakleFormatDate === "function" ? CroakleFormatDate(date) : date.toISOString().slice(0, 10);
+    const hasNote = Boolean(CroakleReadHabitNote(habit, habitIndex, dateIso));
+
+    return `
+      <button
+        class="CroakleHabitDailyNoteButton"
+        type="button"
+        data-note-open="${habitIndex}"
+        data-note-date="${dateIso}"
+        data-has-note="${hasNote}"
+        aria-label="Edit note for ${CroakleEscapeText(habit?.name || "habit")} on ${dateIso}"
+      >${hasNote ? "Note ✓" : "Note"}</button>
+    `;
+  }
+
   function CroakleDecorateTrackNotes() {
-    const weekDate = typeof CroakleParseDate === "function" && typeof CroakleState !== "undefined" ? CroakleParseDate(CroakleState.trackDate) : new Date();
-    const weekDates = typeof CroakleGetWeekDates === "function" ? CroakleGetWeekDates(weekDate) : [];
+    const weekDates = CroakleGetTrackWeekDates();
 
     document.querySelectorAll(".CroakleHabitRow").forEach((row, habitIndex) => {
-      const top = row.querySelector(".CroakleHabitTop");
-      if (!top || top.querySelector(".CroakleHabitNoteButton")) {
+      const checkGrid = row.querySelector(".CroakleCheckGrid");
+      const firstDate = weekDates[0];
+      const firstDateIso = firstDate && typeof CroakleFormatDate === "function" ? CroakleFormatDate(firstDate) : "";
+      const firstHabit = firstDateIso ? CroakleGetHabitByDate(habitIndex, firstDateIso).habit : null;
+      const noteGridHtml = weekDates.map((date) => {
+        const dateIso = typeof CroakleFormatDate === "function" ? CroakleFormatDate(date) : date.toISOString().slice(0, 10);
+        const habit = CroakleGetHabitByDate(habitIndex, dateIso).habit || firstHabit;
+        return CroakleCreateDailyNoteButton(habit, habitIndex, date);
+      }).join("");
+      const existingGrid = row.querySelector(".CroakleHabitNoteGrid");
+
+      if (!checkGrid) {
         return;
       }
 
-      const noteDate = CroakleGetNoteDate();
-      const monthData = typeof CroakleGetMonthDataFromDate === "function" ? CroakleGetMonthDataFromDate(typeof CroakleParseDate === "function" ? CroakleParseDate(noteDate) : new Date(noteDate)) : null;
-      const habit = monthData?.habits?.[habitIndex];
-      const hasNote = Boolean(habit && CroakleGetHabitNote(habit, noteDate));
+      if (existingGrid) {
+        existingGrid.innerHTML = noteGridHtml;
+        return;
+      }
 
-      top.insertAdjacentHTML("beforeend", `<button class="CroakleHabitNoteButton" type="button" data-note-open="${habitIndex}" data-note-date="${noteDate}" data-has-note="${hasNote}">${hasNote ? "Note ✓" : "Note"}</button>`);
+      checkGrid.insertAdjacentHTML("afterend", `<div class="CroakleHabitNoteGrid">${noteGridHtml}</div>`);
     });
 
     document.querySelectorAll(".CroakleCheckButton").forEach((button) => {
       const habitIndex = Number(button.dataset.habitIndex);
       const dateIso = button.dataset.dateIso || "";
-      const date = typeof CroakleParseDate === "function" ? CroakleParseDate(dateIso) : new Date(dateIso);
-      const monthData = typeof CroakleGetMonthDataFromDate === "function" ? CroakleGetMonthDataFromDate(date) : null;
-      const habit = monthData?.habits?.[habitIndex];
-      button.dataset.hasNote = String(Boolean(habit && CroakleGetHabitNote(habit, dateIso)));
+      const habit = CroakleGetHabitByDate(habitIndex, dateIso).habit;
+      button.dataset.hasNote = String(Boolean(habit && CroakleReadHabitNote(habit, habitIndex, dateIso)));
     });
 
     const trackActions = document.querySelector('[data-page="track"] .CroakleTrackActions');
@@ -500,22 +540,35 @@
     }
   }
 
+  function CroakleGetBoardMonthDates() {
+    if (typeof CroakleState === "undefined" || typeof CroakleGetDaysInMonth !== "function") {
+      return [];
+    }
+
+    return Array.from({ length: CroakleGetDaysInMonth(CroakleState.trackYear, CroakleState.trackMonth) }, (_, index) => {
+      const date = new Date(CroakleState.trackYear, CroakleState.trackMonth, index + 1);
+      return typeof CroakleFormatDate === "function" ? CroakleFormatDate(date) : date.toISOString().slice(0, 10);
+    });
+  }
+
   function CroakleRenderNotesBoard() {
     const list = document.querySelector("#CroakleNotesBoardList");
-    const monthData = CroakleGetNoteMonthData();
+    const monthDates = CroakleGetBoardMonthDates();
 
-    if (!list || !monthData) {
+    if (!list || typeof CroakleState === "undefined") {
       return;
     }
 
-    const groups = monthData.habits.map((habit) => {
-      const notes = CroakleEnsureHabitNotes(habit);
-      const rows = Object.entries(notes)
-        .filter(([, note]) => String(note || "").trim())
-        .sort(([firstDate], [secondDate]) => firstDate.localeCompare(secondDate));
+    const groups = CroakleState.habitTemplates.map((template, habitIndex) => {
+      const rows = monthDates
+        .map((dateIso) => {
+          const habit = CroakleGetHabitByDate(habitIndex, dateIso).habit || template;
+          return [dateIso, CroakleReadHabitNote(habit, habitIndex, dateIso)];
+        })
+        .filter(([, note]) => String(note || "").trim());
 
       return {
-        name: habit.name || "Habit",
+        name: template.name || "Habit",
         rows,
       };
     }).filter((group) => group.rows.length);
@@ -540,14 +593,21 @@
 
   function CroakleOpenNotesBoard() {
     CroakleRenderNotesBoard();
+    document.querySelectorAll("[data-page]").forEach((page) => {
+      page.classList.toggle("CroaklePageActive", page.dataset.page === CroakleNotePageName);
+    });
 
+    document.querySelector(".CroakleBottomNav")?.removeAttribute("hidden");
+  }
+
+  function CroakleBackToTrack() {
     if (typeof CroakleSetPage === "function") {
-      CroakleSetPage(CroakleNotePageName);
+      CroakleSetPage("track");
       return;
     }
 
     document.querySelectorAll("[data-page]").forEach((page) => {
-      page.classList.toggle("CroaklePageActive", page.dataset.page === CroakleNotePageName);
+      page.classList.toggle("CroaklePageActive", page.dataset.page === "track");
     });
   }
 
@@ -579,14 +639,8 @@
       const noteButton = event.target.closest("[data-note-open]");
       if (noteButton) {
         event.preventDefault();
-        CroakleOpenHabitNote(Number(noteButton.dataset.noteOpen), noteButton.dataset.noteDate || CroakleGetNoteDate());
-        return;
-      }
-
-      const checkButton = event.target.closest(".CroakleCheckButton");
-      if (checkButton && event.shiftKey) {
-        event.preventDefault();
-        CroakleOpenHabitNote(Number(checkButton.dataset.habitIndex), checkButton.dataset.dateIso);
+        event.stopPropagation();
+        CroakleOpenHabitNote(Number(noteButton.dataset.noteOpen), noteButton.dataset.noteDate);
         return;
       }
 
@@ -612,6 +666,12 @@
       if (event.target.closest("[data-open-notes-board]")) {
         event.preventDefault();
         CroakleOpenNotesBoard();
+        return;
+      }
+
+      if (event.target.closest("[data-notes-back]")) {
+        event.preventDefault();
+        CroakleBackToTrack();
       }
     });
   }
@@ -627,4 +687,5 @@
   }
 
   window.requestAnimationFrame(CroakleInitHabitNotes);
+  window.setTimeout(CroakleInitHabitNotes, 300);
 })();
