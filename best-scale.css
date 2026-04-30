@@ -1,0 +1,129 @@
+.CroaklePage[data-page="best"] .CroakleCard {
+  padding: 10px;
+}
+
+.CroaklePage[data-page="best"] .CroakleMonthHeader {
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.CroaklePage[data-page="best"] .CroakleMonthHeader button {
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  font-size: 23px;
+}
+
+.CroaklePage[data-page="best"] .CroakleMonthHeader strong {
+  font-size: clamp(22px, 6.2vw, 30px);
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader,
+.CroaklePage[data-page="best"] .CroakleBestRow {
+  grid-template-columns: minmax(0, 1.08fr) minmax(90px, 0.9fr) 40px 48px;
+  gap: 6px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader {
+  padding: 0 2px 6px;
+  margin-bottom: 4px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader span {
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestHeader span:first-child {
+  font-size: 14px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestList {
+  gap: 8px;
+  padding-bottom: 6px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestRow {
+  min-height: 42px;
+  padding: 4px 2px;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestRow strong {
+  font-size: 14px;
+  line-height: 1.08;
+  font-weight: 900;
+}
+
+.CroaklePage[data-page="best"] .CroakleBestRow > span {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.CroaklePage[data-page="best"] .CroaklePercentBar {
+  height: 16px;
+  border-radius: 10px;
+}
+
+.CroaklePage[data-page="best"] .CroaklePercentBar em {
+  font-size: 11px;
+  font-weight: 900;
+}
+
+@media (max-width: 380px) {
+  .CroaklePage[data-page="best"] .CroakleMonthHeader {
+    grid-template-columns: 34px minmax(0, 1fr) 34px;
+    gap: 5px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleMonthHeader button {
+    width: 34px;
+    height: 34px;
+    border-radius: 13px;
+    font-size: 21px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleMonthHeader strong {
+    font-size: clamp(20px, 5.8vw, 27px);
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestHeader,
+  .CroaklePage[data-page="best"] .CroakleBestRow {
+    grid-template-columns: minmax(0, 1fr) minmax(82px, 0.84fr) 36px 42px;
+    gap: 5px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestHeader span {
+    font-size: 11px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestHeader span:first-child,
+  .CroaklePage[data-page="best"] .CroakleBestRow strong,
+  .CroaklePage[data-page="best"] .CroakleBestRow > span {
+    font-size: 13px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestRow {
+    min-height: 38px;
+  }
+
+  .CroaklePage[data-page="best"] .CroaklePercentBar {
+    height: 15px;
+  }
+
+  .CroaklePage[data-page="best"] .CroaklePercentBar em {
+    font-size: 10px;
+  }
+}
+
+@media (max-height: 760px) {
+  .CroaklePage[data-page="best"] .CroakleBestList {
+    gap: 6px;
+  }
+
+  .CroaklePage[data-page="best"] .CroakleBestRow {
+    min-height: 38px;
+  }
+}
