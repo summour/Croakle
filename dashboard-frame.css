@@ -42,26 +42,37 @@
   overflow-y: hidden;
 }
 
-.CroakleMonthHeader {
-  grid-template-columns: 40px minmax(0, 1fr) 40px;
+.CroakleMonthHeader,
+.CroaklePage[data-page="best"] .CroakleMonthHeader {
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  align-items: center;
 }
 
-.CroakleMonthHeader button {
-  width: 40px;
-  height: 40px;
-  border-radius: 16px;
+.CroakleMonthHeader button,
+.CroaklePage[data-page="best"] .CroakleMonthHeader button {
+  width: 34px;
+  height: 34px;
+  border-radius: 14px;
   background: var(--CroakleSoftSurface);
-  font-size: 26px;
+  font-size: 21px;
   font-weight: 950;
+  line-height: 1;
 }
 
-.CroakleMonthHeader strong {
-  font-size: clamp(25px, 7.2vw, 34px);
+.CroakleMonthHeader strong,
+.CroaklePage[data-page="best"] .CroakleMonthHeader strong {
+  min-width: 0;
+  text-align: center;
+  color: var(--CroakleLine);
+  font-size: clamp(22px, 5.8vw, 28px);
   font-weight: 950;
   line-height: 0.95;
-  letter-spacing: -0.07em;
+  letter-spacing: -0.065em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .CroakleHabitList,
@@ -108,23 +119,6 @@
 
 .CroaklePage[data-page="best"] .CroakleCard {
   padding: 10px;
-}
-
-.CroaklePage[data-page="best"] .CroakleMonthHeader {
-  grid-template-columns: 36px minmax(0, 1fr) 36px;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.CroaklePage[data-page="best"] .CroakleMonthHeader button {
-  width: 36px;
-  height: 36px;
-  border-radius: 14px;
-  font-size: 23px;
-}
-
-.CroaklePage[data-page="best"] .CroakleMonthHeader strong {
-  font-size: clamp(22px, 6.2vw, 30px);
 }
 
 .CroaklePage[data-page="best"] .CroakleBestHeader,
@@ -201,20 +195,23 @@
     border-radius: 22px;
   }
 
+  .CroakleMonthHeader,
   .CroaklePage[data-page="best"] .CroakleMonthHeader {
-    grid-template-columns: 34px minmax(0, 1fr) 34px;
-    gap: 5px;
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
+    gap: 6px;
   }
 
+  .CroakleMonthHeader button,
   .CroaklePage[data-page="best"] .CroakleMonthHeader button {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border-radius: 13px;
-    font-size: 21px;
+    font-size: 20px;
   }
 
+  .CroakleMonthHeader strong,
   .CroaklePage[data-page="best"] .CroakleMonthHeader strong {
-    font-size: clamp(20px, 5.8vw, 27px);
+    font-size: clamp(20px, 5.4vw, 26px);
   }
 
   .CroaklePage[data-page="best"] .CroakleBestHeader,
@@ -261,6 +258,11 @@
   .CroakleCard,
   .CroakleMenuPage.CroaklePageActive {
     padding: 10px;
+  }
+
+  .CroakleMonthHeader,
+  .CroaklePage[data-page="best"] .CroakleMonthHeader {
+    margin-bottom: 6px;
   }
 
   .CroaklePage[data-page="best"] .CroakleBestList {
