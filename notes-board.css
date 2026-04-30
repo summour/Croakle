@@ -1,0 +1,447 @@
+/* Croakle Notes Board and Analysis Best Habits */
+.CroakleNotesBoardPage .CroakleCard {
+  gap: 14px;
+  overflow: hidden;
+}
+
+.CroakleNotesBoardHeader {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.CroakleNotesBoardBack,
+.CroakleNotesMonthButton,
+.CroakleNotesViewButton,
+.CroakleNotesBoardCopy,
+.CroakleNotesDayChip {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.CroakleNotesBoardBack {
+  width: 58px;
+  height: 58px;
+  border-radius: 999px;
+  background: #f2f2f2;
+  color: #111111;
+  font-size: 34px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.CroakleNotesBoardTitle p {
+  margin: 0 0 2px;
+  color: #666666;
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.CroakleNotesBoardTitle h2 {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(46px, 13vw, 66px);
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.09em;
+}
+
+.CroakleNotesViewSwitch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.CroakleNotesViewButton {
+  min-height: 48px;
+  border: 2px solid #111111;
+  border-radius: 999px;
+  background: #f2f2f2;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.CroakleNotesViewButton[data-active="true"] {
+  background: #111111;
+  color: #ffffff;
+}
+
+.CroakleNotesMonthNav {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) 54px;
+  align-items: center;
+  gap: 12px;
+}
+
+.CroakleNotesMonthButton {
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: #f2f2f2;
+  color: #111111;
+  font-size: 34px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.CroakleNotesMonthLabel {
+  min-height: 54px;
+  border: 2px solid #111111;
+  border-radius: 22px;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  padding: 0 14px;
+  color: #111111;
+  font-size: 21px;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  text-align: center;
+}
+
+.CroakleNotesBoardToolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.CroakleNotesBoardSummary {
+  min-height: 56px;
+  border-radius: 24px;
+  background: #f5f5f5;
+  color: #111111;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.CroakleNotesBoardCopy {
+  min-height: 56px;
+  border-radius: 22px;
+  background: #111111;
+  color: #ffffff;
+  padding: 0 18px;
+  font-size: 17px;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.CroakleNotesBoardList {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.CroakleNotesDayStrip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 18px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.CroakleNotesDayStrip::-webkit-scrollbar,
+.CroakleNotesCarousel::-webkit-scrollbar {
+  display: none;
+}
+
+.CroakleNotesDayChip {
+  flex: 0 0 86px;
+  min-height: 90px;
+  border: 2px solid #111111;
+  border-radius: 24px;
+  background: #ffffff;
+  color: #111111;
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 10px 8px;
+  font-weight: 950;
+}
+
+.CroakleNotesDayChip[data-active="true"] {
+  background: #111111;
+  color: #ffffff;
+}
+
+.CroakleNotesDayChip span {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.CroakleNotesDayChip strong {
+  font-size: 31px;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.CroakleNotesDayChip small {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.75;
+}
+
+.CroakleNotesCarousel {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  padding: 0 58px 18px 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.CroakleNotesCard {
+  flex: 0 0 min(78vw, 580px);
+  min-height: 350px;
+  border: 2px solid #111111;
+  border-radius: 34px;
+  background: #ffffff;
+  color: #111111;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+}
+
+.CroakleNotesCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.CroakleNotesCardDate span {
+  display: block;
+  color: #666666;
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.CroakleNotesCardDate strong {
+  display: block;
+  color: #111111;
+  font-size: clamp(42px, 11vw, 64px);
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.085em;
+  max-width: 6.8ch;
+}
+
+.CroakleNotesCardCount {
+  min-width: 58px;
+  min-height: 44px;
+  border: 2px solid #111111;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  padding: 0 12px;
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.CroakleNotesCardEntries {
+  display: grid;
+  gap: 12px;
+}
+
+.CroakleNotesEntry {
+  border-radius: 24px;
+  background: #f5f5f5;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.CroakleNotesEntryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.CroakleNotesEntryHeader strong {
+  min-width: 0;
+  color: #111111;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 20px;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+}
+
+.CroakleNotesEntryHeader span {
+  flex: 0 0 auto;
+  border: 2px solid #111111;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111111;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 950;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.CroakleNotesEntry p {
+  margin: 0;
+  color: #111111;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.32;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.CroakleNotesDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+.CroakleNotesDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #d9d9d9;
+}
+
+.CroakleNotesDot[data-active="true"] {
+  width: 28px;
+  background: #111111;
+}
+
+.CroakleNotesEmpty {
+  min-height: 280px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 30px;
+  background: #fafafa;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.CroakleNotesEmpty strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #111111;
+  font-size: 25px;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+}
+
+.CroakleNotesEmpty span {
+  color: #666666;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.CroakleMoodBadge[data-has-mood-note="true"]::after,
+.CroakleMoodButton[data-has-mood-note="true"] .CroakleMoodBadge::after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+  pointer-events: none;
+}
+
+.CroakleMoodBadge {
+  position: relative;
+}
+
+.CroakleAnalyticsBestPanel .CroakleBestHeader,
+.CroakleAnalyticsBestPanel .CroakleBestRow {
+  display: grid;
+  grid-template-columns: 1.15fr 1.2fr 0.6fr 0.6fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.CroakleAnalyticsBestPanel .CroakleBestHeader {
+  border-bottom: 2px solid #111111;
+  padding-bottom: 9px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.CroakleAnalyticsBestPanel .CroakleBestList {
+  display: grid;
+  gap: 10px;
+  overflow: visible;
+}
+
+@media (max-width: 430px) {
+  .CroakleNotesViewSwitch {
+    gap: 10px;
+  }
+
+  .CroakleNotesBoardToolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+
+  .CroakleNotesBoardSummary {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .CroakleNotesBoardCopy {
+    min-height: 52px;
+    padding: 0 16px;
+  }
+
+  .CroakleNotesCarousel {
+    padding-right: 54px;
+  }
+
+  .CroakleNotesCard {
+    flex-basis: 79vw;
+    min-height: 350px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .CroakleNotesBoardToolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .CroakleNotesBoardCopy {
+    width: 100%;
+  }
+
+  .CroakleNotesCard {
+    flex-basis: 82vw;
+  }
+}
