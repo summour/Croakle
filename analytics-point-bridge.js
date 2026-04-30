@@ -248,3 +248,37 @@
 
   window.requestAnimationFrame(CroakleInitAnalyticsPointBridge);
 })();
+
+(() => {
+  function CroakleLoadCustomAnalyticsAsset(tagName, attributes, existingSelector) {
+    if (document.querySelector(existingSelector)) {
+      return;
+    }
+
+    const element = document.createElement(tagName);
+
+    Object.entries(attributes).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
+
+    document.head.appendChild(element);
+  }
+
+  function CroakleLoadCustomHabitAnalyticsCard() {
+    CroakleLoadCustomAnalyticsAsset("link", {
+      rel: "stylesheet",
+      href: "analytics-custom-card.css",
+    }, 'link[href="analytics-custom-card.css"]');
+
+    CroakleLoadCustomAnalyticsAsset("script", {
+      src: "analytics-custom-habit-bridge.js",
+      defer: "defer",
+    }, 'script[src="analytics-custom-habit-bridge.js"]');
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", CroakleLoadCustomHabitAnalyticsCard);
+  } else {
+    CroakleLoadCustomHabitAnalyticsCard();
+  }
+})();
