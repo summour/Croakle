@@ -88,16 +88,20 @@
       }
 
       .CroakleSubWinsBadge {
-        min-width: 64px;
+        min-height: 26px;
+        min-width: 72px;
         border: 2px solid #111111;
         border-radius: 10px;
         padding: 2px 7px;
         background: #f5f5f5;
         color: #111111;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 850;
-        line-height: 1.15;
+        line-height: 1;
         white-space: nowrap;
       }
 
