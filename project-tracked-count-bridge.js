@@ -60,4 +60,14 @@ function CroakleGetProjectArchiveTrackedCount(project) {
   return CroakleGetProjectTrackedTotal(project);
 }
 
+function CroakleRemoveRetiredFeatureStorage() {
+  [
+    "CroakleProjectDailyNotesV1",
+    "CroakleNotesBoardSourceV1",
+    "CroakleHabitSmallWinsTemplatesV1",
+    "CroakleHabitSmallWinsV1",
+  ].forEach((storageKey) => localStorage.removeItem(storageKey));
+}
+
+CroakleRemoveRetiredFeatureStorage();
 CroakleRenderProjectArchiveList?.();
