@@ -115,6 +115,18 @@
     };
   }
 
+  function CroakleNotesGetMoodTarget(moodElement) {
+    const dateIso = moodElement.dataset.dateIso;
+    if (!dateIso) return null;
+
+    return {
+      type: "mood",
+      itemId: "day",
+      itemName: "Mood",
+      dateIso,
+    };
+  }
+
   function CroakleNotesUpdateCheckIndicators() {
     document.querySelectorAll(".CroakleCheckButton").forEach((button) => {
       const target = CroakleNotesGetHabitTarget(button);
@@ -124,6 +136,11 @@
     document.querySelectorAll(".CroakleProjectCheckButton").forEach((button) => {
       const target = CroakleNotesGetProjectTarget(button);
       if (target) button.dataset.hasNote = String(CroakleNotesHasNote(target.type, target.itemId, target.dateIso));
+    });
+
+    document.querySelectorAll('[data-page="mood"] [data-date-iso]').forEach((moodElement) => {
+      const target = CroakleNotesGetMoodTarget(moodElement);
+      if (target) moodElement.dataset.hasNote = String(CroakleNotesHasNote(target.type, target.itemId, target.dateIso));
     });
   }
 
@@ -214,18 +231,28 @@
     }
   }
 
+  function CroakleNotesFindLongPressTarget(event) {
+    const checkButton = event.target.closest(".CroakleCheckButton, .CroakleProjectCheckButton");
+    if (checkButton && !checkButton.disabled) {
+      return checkButton.classList.contains("CroakleProjectCheckButton")
+        ? CroakleNotesGetProjectTarget(checkButton)
+        : CroakleNotesGetHabitTarget(checkButton);
+    }
+
+    const moodElement = event.target.closest('[data-page="mood"] [data-date-iso]');
+    if (moodElement) {
+      return CroakleNotesGetMoodTarget(moodElement);
+    }
+
+    return null;
+  }
+
   function CroakleNotesBindLongPress() {
     if (window.CroakleNotesLongPressBound) return;
     window.CroakleNotesLongPressBound = true;
 
     document.addEventListener("pointerdown", (event) => {
-      const checkButton = event.target.closest(".CroakleCheckButton, .CroakleProjectCheckButton");
-      if (!checkButton || checkButton.disabled) return;
-
-      const target = checkButton.classList.contains("CroakleProjectCheckButton")
-        ? CroakleNotesGetProjectTarget(checkButton)
-        : CroakleNotesGetHabitTarget(checkButton);
-
+      const target = CroakleNotesFindLongPressTarget(event);
       if (!target) return;
 
       CroakleNotesClearLongPress();
@@ -248,8 +275,8 @@
 
     document.addEventListener("click", (event) => {
       if (!CroakleLongPressHandled) return;
-      const checkButton = event.target.closest(".CroakleCheckButton, .CroakleProjectCheckButton");
-      if (!checkButton) return;
+      const interactiveElement = event.target.closest(".CroakleCheckButton, .CroakleProjectCheckButton, [data-page='mood'] [data-date-iso]");
+      if (!interactiveElement) return;
       event.preventDefault();
       event.stopPropagation();
       CroakleLongPressHandled = false;
@@ -262,6 +289,7 @@
     CroakleNotesWrapRender("CroakleRenderMoodCalendar", () => {
       document.querySelector('[data-page="mood"] .CroakleMoodNoteBar')?.remove();
       CroakleNotesAddMoodButton();
+      CroakleNotesUpdateCheckIndicators();
     });
     CroakleNotesAttachButtons();
     CroakleNotesBindLongPress();
