@@ -40,6 +40,7 @@
       <nav class="CroakleMenuList" aria-label="Habit mood menu">
         <button type="button" data-page-target="track"><span>Track progress</span><span>›</span></button>
         <button type="button" data-page-target="project"><span>Projects</span><span>›</span></button>
+        <button type="button" data-page-target="notes"><span>Notes Board</span><span>›</span></button>
         <button type="button" data-page-target="best"><span>Best habits</span><span>›</span></button>
         <button type="button" data-page-target="mood"><span>Top moods</span><span>›</span></button>
       </nav>
@@ -135,6 +136,26 @@
       </article>
     </section>
 
+    <section class="CroaklePage CroakleNotesLitePage" data-page="notes">
+      <article class="CroakleCard" aria-label="Daily Notes Board">
+        <div class="CroakleNotesLiteHeader">
+          <div>
+            <p class="CroakleEyebrow">Daily Notes</p>
+            <h2>Notes Board</h2>
+          </div>
+          <button class="CroakleNotesLiteCopy" type="button" data-croakle-notes-copy>Copy</button>
+        </div>
+        <div class="CroakleNotesLiteTabs" aria-label="Notes type">
+          <button type="button" data-croakle-notes-filter="all">All</button>
+          <button type="button" data-croakle-notes-filter="habit">Habit</button>
+          <button type="button" data-croakle-notes-filter="project">Project</button>
+          <button type="button" data-croakle-notes-filter="mood">Mood</button>
+        </div>
+        <div class="CroakleNotesLiteSummary" id="CroakleNotesLiteSummary">No notes yet.</div>
+        <div class="CroakleNotesLiteList" id="CroakleNotesLiteList"></div>
+      </article>
+    </section>
+
     <section class="CroaklePage" data-page="settings">
       <article class="CroakleCard" aria-label="Settings">
         <header class="CroakleSettingsHeader">
@@ -152,6 +173,7 @@
       <button type="button" data-page-target="track">Habit</button>
       <button type="button" data-page-target="project">Project</button>
       <button type="button" data-page-target="best">Best</button>
+      <button type="button" data-page-target="notes">Notes</button>
       <button type="button" data-page-target="mood">Mood</button>
     </footer>
 
