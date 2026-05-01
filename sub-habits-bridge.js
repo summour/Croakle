@@ -213,98 +213,137 @@
     document.head.appendChild(style);
   }
 
-  function CroakleSubAddEditorToHabitDetail() {
-    const form = document.querySelector("#CroakleHabitDetailForm");
-    const priorityField = form?.querySelector(".CroaklePriorityField");
-    if (!form || !priorityField || form.querySelector("#CroakleSubHabitEditor")) return;
-
-    priorityField.insertAdjacentHTML("beforebegin", `
-      <section class="CroakleSubEditor" id="CroakleSubHabitEditor" aria-label="Sub-habits">
+  function CroakleSubEditorMarkup(idPrefix, title = "Sub-habits") {
+    return `
+      <section class="CroakleSubEditor" id="${idPrefix}Editor" aria-label="${title}">
         <div class="CroakleSubEditorHeader">
-          <strong>Sub-habits</strong>
+          <strong>${title}</strong>
           <span>Small wins · max ${CroakleSubHabitSoftLimit}</span>
         </div>
-        <div class="CroakleSubEditorList" id="CroakleSubHabitEditorList"></div>
-        <button class="CroakleSubEditorAdd" type="button" id="CroakleSubHabitAddButton">+ Add sub-habit</button>
+        <div class="CroakleSubEditorList" id="${idPrefix}EditorList"></div>
+        <button class="CroakleSubEditorAdd" type="button" id="${idPrefix}AddButton">+ Add sub-habit</button>
       </section>
-    `);
+    `;
   }
 
-  function CroakleSubRenderEditor(habitIndex, draftList = null) {
-    const list = document.querySelector("#CroakleSubHabitEditorList");
-    const addButton = document.querySelector("#CroakleSubHabitAddButton");
-    const habit = CroakleSubGetHabitByIndex(habitIndex);
-    if (!list || !addButton || !habit) return;
+  function CroakleSubAddEditorToForm(formId, idPrefix) {
+    const form = document.querySelector(formId);
+    const priorityField = form?.querySelector(".CroaklePriorityField");
+    if (!form || !priorityField || form.querySelector(`#${idPrefix}Editor`)) return;
+    priorityField.insertAdjacentHTML("beforebegin", CroakleSubEditorMarkup(idPrefix));
+  }
 
-    const rows = Array.isArray(draftList) ? draftList.slice(0, CroakleSubHabitSoftLimit) : habit.subHabits;
-    list.innerHTML = rows.map((text, index) => `
+  function CroakleSubRenderEditor(idPrefix, rows) {
+    const list = document.querySelector(`#${idPrefix}EditorList`);
+    const addButton = document.querySelector(`#${idPrefix}AddButton`);
+    if (!list || !addButton) return;
+
+    const safeRows = Array.isArray(rows) ? rows.slice(0, CroakleSubHabitSoftLimit) : [];
+    list.innerHTML = safeRows.map((text, index) => `
       <div class="CroakleSubEditorRow">
         <span class="CroakleSubEditorHandle">≡</span>
-        <input class="CroakleSubEditorInput" type="text" value="${CroakleSubEscape(text)}" data-sub-index="${index}" placeholder="Small win" />
-        <button class="CroakleSubEditorRemove" type="button" data-sub-remove="${index}" aria-label="Remove sub-habit">×</button>
+        <input class="CroakleSubEditorInput" type="text" value="${CroakleSubEscape(text)}" data-sub-editor="${idPrefix}" data-sub-index="${index}" placeholder="Small win" />
+        <button class="CroakleSubEditorRemove" type="button" data-sub-editor="${idPrefix}" data-sub-remove="${index}" aria-label="Remove sub-habit">×</button>
       </div>
     `).join("");
 
-    addButton.disabled = rows.length >= CroakleSubHabitSoftLimit;
+    addButton.disabled = safeRows.length >= CroakleSubHabitSoftLimit;
   }
 
-  function CroakleSubReadEditorValues(keepBlank = false) {
-    const values = [...document.querySelectorAll(".CroakleSubEditorInput")].map((input) => String(input.value || "").trim());
+  function CroakleSubReadEditorValues(idPrefix, keepBlank = false) {
+    const values = [...document.querySelectorAll(`[data-sub-editor="${idPrefix}"].CroakleSubEditorInput`)]
+      .map((input) => String(input.value || "").trim());
     return (keepBlank ? values : values.filter(Boolean)).slice(0, CroakleSubHabitSoftLimit);
+  }
+
+  function CroakleSubResetAddEditor() {
+    CroakleSubAddEditorToForm("#CroakleAddHabitForm", "CroakleSubAdd");
+    CroakleSubRenderEditor("CroakleSubAdd", []);
   }
 
   function CroakleSubOpenHabitDetailFromButton(button) {
     window.requestAnimationFrame(() => {
       const habitIndex = Number(button?.dataset.detailIndex ?? document.querySelector("#CroakleHabitDetailIndex")?.value);
-      CroakleSubAddEditorToHabitDetail();
-      CroakleSubRenderEditor(habitIndex);
+      const habit = CroakleSubGetHabitByIndex(habitIndex);
+      CroakleSubAddEditorToForm("#CroakleHabitDetailForm", "CroakleSubHabit");
+      CroakleSubRenderEditor("CroakleSubHabit", habit?.subHabits || []);
     });
   }
 
-  function CroakleSubPatchHabitDetail() {
-    if (window.CroakleSubHabitDetailPatched) return;
-    window.CroakleSubHabitDetailPatched = true;
+  function CroakleSubApplyAddEditorToNewHabit(subHabits) {
+    window.setTimeout(() => {
+      const habits = CroakleState?.habitTemplates;
+      if (!Array.isArray(habits) || !habits.length) return;
+
+      const cleanSubHabits = subHabits.map((item) => String(item || "").trim()).filter(Boolean).slice(0, CroakleSubHabitSoftLimit);
+      const habit = habits[habits.length - 1];
+      habit.subHabits = cleanSubHabits;
+      habit.subHabitWins = {};
+      CroakleSubSaveState();
+      if (typeof CroakleRenderTrackList === "function") CroakleRenderTrackList();
+      CroakleSubResetAddEditor();
+    }, 0);
+  }
+
+  function CroakleSubPatchForms() {
+    if (window.CroakleSubHabitFormsPatched) return;
+    window.CroakleSubHabitFormsPatched = true;
 
     document.addEventListener("click", (event) => {
-      const button = event.target.closest(".CroakleHabitNameButton[data-detail-index]");
-      if (button) CroakleSubOpenHabitDetailFromButton(button);
+      const detailButton = event.target.closest(".CroakleHabitNameButton[data-detail-index]");
+      if (detailButton) {
+        CroakleSubOpenHabitDetailFromButton(detailButton);
+        return;
+      }
+
+      if (event.target.closest("#CroakleOpenAddHabit")) {
+        window.requestAnimationFrame(CroakleSubResetAddEditor);
+      }
     });
 
-    const form = document.querySelector("#CroakleHabitDetailForm");
-    if (!form) return;
+    const addForm = document.querySelector("#CroakleAddHabitForm");
+    if (addForm) {
+      addForm.addEventListener("submit", () => {
+        CroakleSubApplyAddEditorToNewHabit(CroakleSubReadEditorValues("CroakleSubAdd", false));
+      }, true);
 
-    form.addEventListener("submit", () => {
-      const habitIndex = Number(form.elements.habitIndex?.value);
+      addForm.addEventListener("click", (event) => CroakleSubHandleEditorClick(event, "CroakleSubAdd"));
+    }
+
+    const detailForm = document.querySelector("#CroakleHabitDetailForm");
+    if (!detailForm) return;
+
+    detailForm.addEventListener("submit", () => {
+      const habitIndex = Number(detailForm.elements.habitIndex?.value);
       const habit = CroakleSubGetHabitByIndex(habitIndex);
       if (!habit) return;
 
       const previousWins = habit.subHabitWins || {};
-      habit.subHabits = CroakleSubReadEditorValues(false);
+      habit.subHabits = CroakleSubReadEditorValues("CroakleSubHabit", false);
       habit.subHabitWins = previousWins;
     }, true);
 
-    form.addEventListener("click", (event) => {
-      const removeButton = event.target.closest("[data-sub-remove]");
-      const addButton = event.target.closest("#CroakleSubHabitAddButton");
-      const habitIndex = Number(form.elements.habitIndex?.value);
-      const habit = CroakleSubGetHabitByIndex(habitIndex);
-      if (!habit) return;
+    detailForm.addEventListener("click", (event) => CroakleSubHandleEditorClick(event, "CroakleSubHabit"));
+  }
 
-      if (removeButton) {
-        event.preventDefault();
-        const draft = CroakleSubReadEditorValues(true);
-        draft.splice(Number(removeButton.dataset.subRemove), 1);
-        CroakleSubRenderEditor(habitIndex, draft);
-        return;
-      }
+  function CroakleSubHandleEditorClick(event, idPrefix) {
+    const removeButton = event.target.closest(`[data-sub-editor="${idPrefix}"][data-sub-remove]`);
+    const addButton = event.target.closest(`#${idPrefix}AddButton`);
 
-      if (addButton) {
-        event.preventDefault();
-        const draft = CroakleSubReadEditorValues(true);
-        if (draft.length < CroakleSubHabitSoftLimit) draft.push("");
-        CroakleSubRenderEditor(habitIndex, draft);
-      }
-    });
+    if (removeButton) {
+      event.preventDefault();
+      const draft = CroakleSubReadEditorValues(idPrefix, true);
+      draft.splice(Number(removeButton.dataset.subRemove), 1);
+      CroakleSubRenderEditor(idPrefix, draft);
+      return;
+    }
+
+    if (addButton) {
+      event.preventDefault();
+      const draft = CroakleSubReadEditorValues(idPrefix, true);
+      if (draft.length < CroakleSubHabitSoftLimit) draft.push("");
+      CroakleSubRenderEditor(idPrefix, draft);
+    }
   }
 
   function CroakleSubRenderNoteSection(type, itemId, dateIso) {
@@ -363,9 +402,9 @@
     CroakleSubSaveState();
   }
 
-  function CroakleSubBindEvents() {
-    if (window.CroakleSubHabitEventsBound) return;
-    window.CroakleSubHabitEventsBound = true;
+  function CroakleSubBindNoteEvents() {
+    if (window.CroakleSubHabitNoteEventsBound) return;
+    window.CroakleSubHabitNoteEventsBound = true;
 
     document.addEventListener("click", (event) => {
       const noteButton = event.target.closest("[data-croakle-note-type]");
@@ -396,9 +435,11 @@
   function CroakleSubInit() {
     CroakleSubMergeStoredData();
     CroakleSubInjectStyles();
-    CroakleSubAddEditorToHabitDetail();
-    CroakleSubPatchHabitDetail();
-    CroakleSubBindEvents();
+    CroakleSubAddEditorToForm("#CroakleAddHabitForm", "CroakleSubAdd");
+    CroakleSubAddEditorToForm("#CroakleHabitDetailForm", "CroakleSubHabit");
+    CroakleSubRenderEditor("CroakleSubAdd", []);
+    CroakleSubPatchForms();
+    CroakleSubBindNoteEvents();
   }
 
   window.requestAnimationFrame(CroakleSubInit);
