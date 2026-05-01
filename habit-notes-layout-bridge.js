@@ -144,6 +144,23 @@
     });
   }
 
+  function CroakleNotesInjectChipStyle() {
+    if (document.querySelector("#CroakleNotesChipOnlyDatesStyle")) return;
+
+    const style = document.createElement("style");
+    style.id = "CroakleNotesChipOnlyDatesStyle";
+    style.textContent = `
+      .CroakleNotesLiteDayChip[data-has-note="false"] {
+        display: none;
+      }
+
+      .CroakleNotesLiteDayChip[data-has-note="true"] {
+        opacity: 1;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function CroakleNotesAddHabitButtons() {
     const dateIso = CroakleNotesSelectedDate();
 
@@ -284,6 +301,7 @@
   }
 
   function CroakleNotesInitLayout() {
+    CroakleNotesInjectChipStyle();
     CroakleNotesWrapRender("CroakleRenderTrackList", CroakleNotesAddHabitButtons);
     CroakleNotesWrapRender("CroakleRenderProjectList", CroakleNotesAddProjectButtons);
     CroakleNotesWrapRender("CroakleRenderMoodCalendar", () => {
