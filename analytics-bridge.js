@@ -35,8 +35,8 @@
     const style = document.createElement("style");
     style.id = "CroakleAnalyticsStyles";
     style.textContent = `
-      .CroakleAnalyticsNav { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-      .CroakleAnalyticsNav button { font-size: 12px; }
+      .CroakleAnalyticsNav { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      .CroakleAnalyticsNav button { font-size: clamp(12px, 3vw, 14px); }
       .CroakleAnalyticsPage .CroakleCard { --CroakleAnalyticsGap: 16px; gap: var(--CroakleAnalyticsGap); }
       .CroakleAnalyticsScroll { display: grid; gap: var(--CroakleAnalyticsGap); min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: var(--CroakleAnalyticsGap); }
       .CroakleAnalyticsScroll::-webkit-scrollbar { display: none; }
@@ -76,7 +76,7 @@
       .CroakleAnalysisBestBar em { position: absolute; inset: 0; display: grid; place-items: center; color: var(--CroakleText); mix-blend-mode: difference; font-size: 13px; font-style: normal; font-weight: 900; }
       @media (max-width: 380px) {
         .CroakleAnalyticsPage .CroakleCard { --CroakleAnalyticsGap: 16px; }
-        .CroakleAnalyticsNav button { font-size: 11px; }
+        .CroakleAnalyticsNav button { font-size: 12px; }
         .CroakleAnalyticsStatCard, .CroakleAnalyticsPanel { border-radius: 18px; padding: 11px; }
         .CroakleAnalysisBestHeader, .CroakleAnalysisBestRow { grid-template-columns: minmax(0, 1fr) minmax(84px, 0.9fr) 34px 34px; gap: 6px; }
         .CroakleAnalysisBestHeader, .CroakleAnalysisBestRow strong, .CroakleAnalysisBestRow > span { font-size: 12px; }
