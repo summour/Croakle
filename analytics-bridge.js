@@ -1,7 +1,5 @@
 (() => {
-  if (typeof CroakleState === "undefined" || typeof CroakleSetPage !== "function") {
-    return;
-  }
+  if (typeof CroakleState === "undefined" || typeof CroakleSetPage !== "function") return;
 
   const CroakleAnalyticsProjectStoreKey = "CroakleProjectDataV1";
 
@@ -28,15 +26,11 @@
       changed = true;
     }
 
-    if (changed) {
-      CroakleSaveState();
-    }
+    if (changed) CroakleSaveState();
   }
 
   function CroakleInjectAnalyticsStyles() {
-    if (document.querySelector("#CroakleAnalyticsStyles")) {
-      return;
-    }
+    if (document.querySelector("#CroakleAnalyticsStyles")) return;
 
     const style = document.createElement("style");
     style.id = "CroakleAnalyticsStyles";
@@ -117,6 +111,30 @@
 
   function CroakleRemoveBestEntryPoints() {
     document.querySelectorAll('[data-page-target="best"]').forEach((button) => button.remove());
+  }
+
+  function CroakleRemoveBestPage() {
+    document.querySelector('[data-page="best"]')?.remove();
+  }
+
+  function CroaklePatchMainRenderWithoutBest() {
+    if (window.CroakleBestRetiredFromRender) return;
+    window.CroakleBestRetiredFromRender = true;
+
+    window.CroakleRenderBestList = function CroakleRetiredBestList() {};
+
+    if (typeof window.CroakleRenderAll === "function") {
+      window.CroakleRenderAll = function CroakleRenderAllWithoutBest() {
+        CroakleRenderTrackHeader?.();
+        CroakleRenderTrackList?.();
+        CroakleRenderMoodCalendar?.();
+        CroakleScrollCurrentDateIntoView?.();
+
+        if (document.querySelector('[data-page="analysis"]')?.classList.contains("CroaklePageActive")) {
+          CroakleRenderAnalyticsPage();
+        }
+      };
+    }
   }
 
   function CroakleInjectAnalyticsButtons() {
@@ -390,6 +408,8 @@
   function CroakleRenderAnalyticsPage() {
     CroakleEnsureAnalyticsMonth();
     CroakleRemoveBestEntryPoints();
+    CroakleRemoveBestPage();
+
     const summary = document.querySelector("#CroakleAnalyticsSummary");
     const panels = document.querySelector("#CroakleAnalyticsPanels");
     const monthLabel = document.querySelector("#CroakleAnalyticsMonthLabel");
@@ -413,9 +433,11 @@
     CroakleEnsureAnalyticsMonth();
     CroakleInjectAnalyticsStyles();
     CroakleInjectAnalyticsPage();
+    CroaklePatchMainRenderWithoutBest();
     CroakleInjectAnalyticsButtons();
     CroaklePatchAnalyticsNavigation();
     CroakleBindAnalyticsEvents();
+    CroakleRemoveBestPage();
     CroakleRenderAnalyticsPage();
   }
 
