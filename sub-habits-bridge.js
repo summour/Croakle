@@ -87,9 +87,9 @@
 
       .CroakleSubEditorHeader strong,
       .CroakleSubNoteHeader strong {
+        color: #111111;
         font-size: 15px;
         font-weight: 950;
-        color: #111111;
       }
 
       .CroakleSubEditorHeader span,
@@ -99,8 +99,7 @@
         font-weight: 850;
       }
 
-      .CroakleSubEditorList,
-      .CroakleSubNoteList {
+      .CroakleSubEditorList {
         display: grid;
         gap: 8px;
         max-height: 210px;
@@ -108,8 +107,7 @@
         scrollbar-width: none;
       }
 
-      .CroakleSubEditorList::-webkit-scrollbar,
-      .CroakleSubNoteList::-webkit-scrollbar { display: none; }
+      .CroakleSubEditorList::-webkit-scrollbar { display: none; }
 
       .CroakleSubEditorRow {
         display: grid;
@@ -162,33 +160,40 @@
 
       .CroakleSubNoteSection {
         display: grid;
-        gap: 10px;
-        border: 2px solid #111111;
-        border-radius: 20px;
-        background: #fafafa;
-        padding: 12px;
+        gap: 8px;
+        padding: 2px 0 12px;
+        border-bottom: 2px solid #111111;
       }
+
+      .CroakleSubNoteList {
+        display: grid;
+        gap: 4px;
+        max-height: 170px;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+
+      .CroakleSubNoteList::-webkit-scrollbar { display: none; }
 
       .CroakleSubNoteRow {
         display: grid;
-        grid-template-columns: 38px minmax(0, 1fr);
+        grid-template-columns: 34px minmax(0, 1fr);
         align-items: center;
         gap: 10px;
-        border: 2px solid #111111;
-        border-radius: 16px;
-        background: #ffffff;
-        padding: 7px 9px;
+        min-height: 40px;
+        padding: 2px 0;
       }
 
       .CroakleSubNoteRow button {
-        width: 34px;
-        height: 34px;
+        width: 30px;
+        height: 30px;
         border: 2px solid #111111;
         border-radius: 999px;
         background: #ffffff;
         color: #111111;
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 950;
+        line-height: 1;
         touch-action: manipulation;
       }
 
