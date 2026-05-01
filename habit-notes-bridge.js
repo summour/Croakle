@@ -1,7 +1,8 @@
 (() => {
   const CroakleNotesStoreKey = "CroakleDailyNotesLiteV1";
   const CroakleNotesFilterKey = "CroakleNotesLiteFilterV1";
-  const CroakleNoteTypes = ["all", "habit", "project", "mood"];
+  const CroakleNotesMonthKey = "CroakleNotesLiteMonthV1";
+  const CroakleNoteTypes = ["habit", "project", "mood"];
 
   function CroakleNotesReadStore() {
     try {
@@ -26,16 +27,54 @@
 
   function CroakleNotesGetFilter() {
     const saved = localStorage.getItem(CroakleNotesFilterKey);
-    return CroakleNoteTypes.includes(saved) ? saved : "all";
+    return CroakleNoteTypes.includes(saved) ? saved : "habit";
   }
 
   function CroakleNotesSetFilter(filter) {
-    localStorage.setItem(CroakleNotesFilterKey, CroakleNoteTypes.includes(filter) ? filter : "all");
+    localStorage.setItem(CroakleNotesFilterKey, CroakleNoteTypes.includes(filter) ? filter : "habit");
+  }
+
+  function CroakleNotesGetMonthDate() {
+    const saved = localStorage.getItem(CroakleNotesMonthKey);
+    if (saved && /^\d{4}-\d{2}$/.test(saved)) {
+      const [year, month] = saved.split("-").map(Number);
+      return new Date(year, month - 1, 1);
+    }
+
+    const baseDate = CroakleState?.trackDate && typeof CroakleParseDate === "function"
+      ? CroakleParseDate(CroakleState.trackDate)
+      : new Date();
+    return new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
+  }
+
+  function CroakleNotesSaveMonth(date) {
+    localStorage.setItem(CroakleNotesMonthKey, `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`);
+  }
+
+  function CroakleNotesShiftMonth(direction) {
+    const date = CroakleNotesGetMonthDate();
+    date.setMonth(date.getMonth() + direction);
+    CroakleNotesSaveMonth(date);
+    CroakleNotesRenderBoard();
+  }
+
+  function CroakleNotesGetMonthLabel() {
+    const date = CroakleNotesGetMonthDate();
+    if (typeof CroakleGetMonthLabel === "function") return CroakleGetMonthLabel(date.getFullYear(), date.getMonth());
+    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   }
 
   function CroakleNotesGetDateLabel(dateIso) {
     const date = typeof CroakleParseDate === "function" ? CroakleParseDate(dateIso) : new Date(dateIso);
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  function CroakleNotesGetDayChip(dateIso) {
+    const date = typeof CroakleParseDate === "function" ? CroakleParseDate(dateIso) : new Date(dateIso);
+    return {
+      weekday: date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase(),
+      day: String(date.getDate()),
+    };
   }
 
   function CroakleNotesMakeKey(type, itemId, dateIso) {
@@ -64,15 +103,15 @@
     return CroakleState?.trackDate || (typeof CroakleFormatDate === "function" ? CroakleFormatDate(new Date()) : new Date().toISOString().slice(0, 10));
   }
 
-  function CroakleNotesGetProjectWeekDate(dayIndex) {
-    if (typeof CroakleProjectGetWeekDates !== "function" || typeof CroakleFormatDate !== "function") return CroakleNotesGetSelectedDate();
-    return CroakleFormatDate(CroakleProjectGetWeekDates()[Number(dayIndex)] || new Date());
-  }
-
   function CroakleNotesGetMonthDateSet() {
-    if (!CroakleState || typeof CroakleGetDaysInMonth !== "function" || typeof CroakleFormatDate !== "function") return null;
-    return new Set(Array.from({ length: CroakleGetDaysInMonth(CroakleState.trackYear, CroakleState.trackMonth) }, (_, index) => {
-      return CroakleFormatDate(new Date(CroakleState.trackYear, CroakleState.trackMonth, index + 1));
+    const monthDate = CroakleNotesGetMonthDate();
+    const daysInMonth = typeof CroakleGetDaysInMonth === "function"
+      ? CroakleGetDaysInMonth(monthDate.getFullYear(), monthDate.getMonth())
+      : new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0).getDate();
+
+    return new Set(Array.from({ length: daysInMonth }, (_, index) => {
+      const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), index + 1);
+      return typeof CroakleFormatDate === "function" ? CroakleFormatDate(date) : date.toISOString().slice(0, 10);
     }));
   }
 
@@ -82,8 +121,8 @@
 
     return Object.values(CroakleNotesReadStore())
       .filter((row) => row?.dateIso && row?.note)
-      .filter((row) => !monthDates || monthDates.has(row.dateIso))
-      .filter((row) => filter === "all" || row.type === filter)
+      .filter((row) => monthDates.has(row.dateIso))
+      .filter((row) => row.type === filter)
       .sort((first, second) => second.dateIso.localeCompare(first.dateIso) || second.updatedAt - first.updatedAt);
   }
 
@@ -106,44 +145,285 @@
         touch-action: manipulation;
       }
 
-      .CroakleNoteButton[data-has-note="true"] {
+      .CroakleNoteButton[data-has-note="true"] { background: #111111; color: #ffffff; }
+      .CroakleHabitTop .CroakleNoteButton, .CroakleProjectTop .CroakleNoteButton { margin-left: auto; }
+      .CroakleMoodNoteBar { display: flex; justify-content: flex-end; margin: 10px 0 0; }
+
+      .CroakleNotesLitePage.CroaklePageActive {
+        overflow: hidden;
+      }
+
+      .CroakleNotesLitePage .CroakleCard {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(10px, 2.7vw, 16px);
+        min-height: calc(100dvh - 148px);
+        overflow: hidden;
+      }
+
+      .CroakleNotesLiteHeader {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        align-items: center;
+        gap: 12px;
+      }
+
+      .CroakleNotesLiteBack {
+        width: 56px;
+        height: 56px;
+        border: 0;
+        border-radius: 999px;
+        background: #f2f2f2;
+        color: #111111;
+        display: grid;
+        place-items: center;
+        font-size: 36px;
+        font-weight: 950;
+        line-height: 1;
+        touch-action: manipulation;
+      }
+
+      .CroakleNotesLiteTitleBlock { min-width: 0; }
+      .CroakleNotesLiteTitleBlock .CroakleEyebrow {
+        margin: 0 0 4px;
+        color: #666666;
+        font-size: clamp(14px, 4vw, 18px);
+        font-weight: 950;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+      }
+
+      .CroakleNotesLiteTitleBlock h2 {
+        margin: 0;
+        color: #111111;
+        font-size: clamp(48px, 13.5vw, 76px);
+        font-weight: 950;
+        line-height: 0.86;
+        letter-spacing: -0.095em;
+      }
+
+      .CroakleNotesLiteTabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .CroakleNotesLiteTabs button {
+        min-height: 48px;
+        border: 2px solid #111111;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #111111;
+        font-size: clamp(14px, 4.1vw, 18px);
+        font-weight: 950;
+        touch-action: manipulation;
+      }
+
+      .CroakleNotesLiteTabs button[data-active="true"] { background: #111111; color: #ffffff; }
+
+      .CroakleNotesLiteMonthRow {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr) 54px;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .CroakleNotesLiteMonthArrow {
+        width: 54px;
+        height: 54px;
+        border: 0;
+        border-radius: 999px;
+        background: #f2f2f2;
+        color: #111111;
+        display: grid;
+        place-items: center;
+        font-size: 34px;
+        font-weight: 950;
+        touch-action: manipulation;
+      }
+
+      .CroakleNotesLiteMonthPill {
+        min-height: 54px;
+        border: 2px solid #111111;
+        border-radius: 22px;
+        background: #ffffff;
+        display: grid;
+        place-items: center;
+        color: #111111;
+        font-size: clamp(20px, 6vw, 30px);
+        font-weight: 950;
+        letter-spacing: -0.055em;
+        text-align: center;
+      }
+
+      .CroakleNotesLiteActionRow {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .CroakleNotesLiteSummary {
+        border-radius: 22px;
+        background: #f5f5f5;
+        padding: 12px 14px;
+        color: #111111;
+        font-size: clamp(15px, 4.3vw, 20px);
+        font-weight: 950;
+        line-height: 1.12;
+      }
+
+      .CroakleNotesLiteCopy {
+        min-height: 52px;
+        border: 2px solid #111111;
+        border-radius: 18px;
         background: #111111;
         color: #ffffff;
+        padding: 0 18px;
+        font-size: clamp(15px, 4.2vw, 20px);
+        font-weight: 950;
+        touch-action: manipulation;
+        white-space: nowrap;
       }
 
-      .CroakleHabitTop .CroakleNoteButton,
-      .CroakleProjectTop .CroakleNoteButton {
-        margin-left: auto;
-      }
-
-      .CroakleMoodNoteBar {
+      .CroakleNotesLiteDayChips {
         display: flex;
-        justify-content: flex-end;
-        margin: 10px 0 0;
+        gap: 10px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px 2px 4px;
       }
 
-      .CroakleNotesLitePage.CroaklePageActive { overflow-y: auto; scrollbar-width: none; }
-      .CroakleNotesLitePage.CroaklePageActive::-webkit-scrollbar { display: none; }
-      .CroakleNotesLitePage .CroakleCard { display: grid; gap: 14px; min-height: calc(100dvh - 148px); }
-      .CroakleNotesLiteHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-      .CroakleNotesLiteHeader h2 { margin: 0; font-size: clamp(42px, 12vw, 62px); font-weight: 950; line-height: 0.9; letter-spacing: -0.085em; }
-      .CroakleNotesLiteCopy { min-height: 42px; border: 2px solid #111111; border-radius: 16px; background: #111111; color: #ffffff; padding: 0 14px; font-size: 14px; font-weight: 950; touch-action: manipulation; }
-      .CroakleNotesLiteTabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-      .CroakleNotesLiteTabs button { min-height: 38px; border: 2px solid #111111; border-radius: 14px; background: #ffffff; color: #111111; font-size: 13px; font-weight: 950; touch-action: manipulation; }
-      .CroakleNotesLiteTabs button[data-active="true"] { background: #111111; color: #ffffff; }
-      .CroakleNotesLiteSummary { border-radius: 20px; background: #f5f5f5; padding: 12px 14px; font-size: 14px; font-weight: 900; line-height: 1.25; }
-      .CroakleNotesLiteList { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(270px, 82%); gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 0 36px 12px 2px; }
+      .CroakleNotesLiteDayChips::-webkit-scrollbar { display: none; }
+
+      .CroakleNotesLiteDayChip {
+        flex: 0 0 78px;
+        min-height: 82px;
+        border: 2px solid #111111;
+        border-radius: 22px;
+        background: #ffffff;
+        color: #111111;
+        display: grid;
+        place-items: center;
+        padding: 8px 0;
+      }
+
+      .CroakleNotesLiteDayChip:first-child { background: #111111; color: #ffffff; }
+      .CroakleNotesLiteDayChip strong { font-size: 28px; font-weight: 950; line-height: 0.95; }
+      .CroakleNotesLiteDayChip span { font-size: 13px; font-weight: 950; letter-spacing: 0.12em; }
+      .CroakleNotesLiteDayChip i { width: 8px; height: 8px; border-radius: 999px; background: currentColor; opacity: 0.7; }
+
+      .CroakleNotesLiteList {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(280px, 78%);
+        gap: 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        padding: 0 46px 14px 2px;
+      }
+
       .CroakleNotesLiteList::-webkit-scrollbar { display: none; }
-      .CroakleNotesLiteCard { min-height: 300px; max-height: 52dvh; border: 2px solid #111111; border-radius: 28px; background: #ffffff; padding: 16px; display: flex; flex-direction: column; gap: 12px; scroll-snap-align: start; }
-      .CroakleNotesLiteMeta { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-      .CroakleNotesLiteMeta strong, .CroakleNotesLiteMeta span { border-radius: 999px; background: #f2f2f2; padding: 7px 10px; font-size: 13px; font-weight: 950; line-height: 1; white-space: nowrap; }
-      .CroakleNotesLiteMeta span { max-width: 55%; overflow: hidden; text-overflow: ellipsis; }
-      .CroakleNotesLiteBubble { flex: 1 1 auto; min-height: 0; border-radius: 18px; background: #f5f5f5; padding: 14px; overflow-y: auto; scrollbar-width: none; }
+
+      .CroakleNotesLiteCard {
+        min-height: 360px;
+        max-height: 51dvh;
+        border: 2px solid #111111;
+        border-radius: 32px;
+        background: #ffffff;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        scroll-snap-align: start;
+      }
+
+      .CroakleNotesLiteCardTop {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 12px;
+      }
+
+      .CroakleNotesLiteDateBlock span {
+        display: block;
+        color: #666666;
+        font-size: 18px;
+        font-weight: 950;
+        letter-spacing: 0.12em;
+      }
+
+      .CroakleNotesLiteDateBlock strong {
+        display: block;
+        margin-top: 4px;
+        color: #111111;
+        font-size: clamp(44px, 11vw, 66px);
+        font-weight: 950;
+        line-height: 0.85;
+        letter-spacing: -0.085em;
+      }
+
+      .CroakleNotesLiteCountPill {
+        min-width: 58px;
+        min-height: 42px;
+        border: 2px solid #111111;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        color: #111111;
+        font-size: 20px;
+        font-weight: 950;
+      }
+
+      .CroakleNotesLiteBubble {
+        border-radius: 24px;
+        background: #f5f5f5;
+        padding: 16px;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+
       .CroakleNotesLiteBubble::-webkit-scrollbar { display: none; }
-      .CroakleNotesLiteBubble p { margin: 0; color: #111111; font-size: 17px; font-weight: 750; line-height: 1.36; white-space: pre-wrap; }
-      .CroakleNotesLiteEmpty { min-height: 260px; border: 2px dashed #d9d9d9; border-radius: 28px; background: #fafafa; padding: 22px; display: grid; place-items: center; text-align: center; }
-      .CroakleNotesLiteEmpty strong { display: block; margin-bottom: 6px; font-size: 24px; font-weight: 950; letter-spacing: -0.04em; }
-      .CroakleNotesLiteEmpty span { color: #666666; font-size: 16px; font-weight: 800; line-height: 1.35; }
+      .CroakleNotesLiteBubbleHeader { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+      .CroakleNotesLiteBubbleHeader strong { min-width: 0; color: #111111; font-size: clamp(18px, 5vw, 25px); font-weight: 950; line-height: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .CroakleNotesLiteTag { border: 2px solid #111111; border-radius: 999px; background: #ffffff; color: #111111; padding: 5px 10px; font-size: 12px; font-weight: 950; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+      .CroakleNotesLiteBubble p { margin: 0; color: #111111; font-size: clamp(17px, 4.7vw, 22px); font-weight: 750; line-height: 1.35; white-space: pre-wrap; }
+
+      .CroakleNotesLiteEmpty {
+        grid-column: span 1;
+        min-height: 340px;
+        border: 2px dashed #d9d9d9;
+        border-radius: 32px;
+        background: #fafafa;
+        padding: 24px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+
+      .CroakleNotesLiteEmpty strong { display: block; margin-bottom: 8px; font-size: 28px; font-weight: 950; letter-spacing: -0.04em; }
+      .CroakleNotesLiteEmpty span { color: #666666; font-size: 16px; font-weight: 850; line-height: 1.35; }
+
+      @media (max-width: 390px) {
+        .CroakleNotesLitePage .CroakleCard { gap: 10px; }
+        .CroakleNotesLiteHeader { grid-template-columns: 48px minmax(0, 1fr); gap: 10px; }
+        .CroakleNotesLiteBack, .CroakleNotesLiteMonthArrow { width: 48px; height: 48px; }
+        .CroakleNotesLiteTabs { gap: 8px; }
+        .CroakleNotesLiteTabs button { min-height: 42px; }
+        .CroakleNotesLiteMonthRow { grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 8px; }
+        .CroakleNotesLiteMonthPill { min-height: 48px; }
+        .CroakleNotesLiteActionRow { grid-template-columns: 1fr; }
+        .CroakleNotesLiteCopy { width: 100%; }
+        .CroakleNotesLiteList { grid-auto-columns: minmax(270px, 82%); }
+        .CroakleNotesLiteCard { min-height: 330px; max-height: 46dvh; }
+      }
     `;
     document.head.appendChild(style);
   }
@@ -170,6 +450,38 @@
         </form>
       </dialog>
     `);
+  }
+
+  function CroakleNotesUpgradeBoardMarkup() {
+    const page = document.querySelector('[data-page="notes"] .CroakleCard');
+    if (!page || page.dataset.croakleNotesDesign === "monthly") return;
+
+    page.dataset.croakleNotesDesign = "monthly";
+    page.innerHTML = `
+      <header class="CroakleNotesLiteHeader">
+        <button class="CroakleNotesLiteBack" type="button" data-page-target="track" aria-label="Back to habits">‹</button>
+        <div class="CroakleNotesLiteTitleBlock">
+          <p class="CroakleEyebrow">Monthly Notes</p>
+          <h2>NotesBoard</h2>
+        </div>
+      </header>
+      <div class="CroakleNotesLiteTabs" aria-label="Notes type">
+        <button type="button" data-croakle-notes-filter="habit">Habit</button>
+        <button type="button" data-croakle-notes-filter="project">Project</button>
+        <button type="button" data-croakle-notes-filter="mood">Mood</button>
+      </div>
+      <div class="CroakleNotesLiteMonthRow">
+        <button class="CroakleNotesLiteMonthArrow" type="button" data-croakle-notes-month="previous" aria-label="Previous month">‹</button>
+        <div class="CroakleNotesLiteMonthPill" id="CroakleNotesLiteMonthLabel">Month</div>
+        <button class="CroakleNotesLiteMonthArrow" type="button" data-croakle-notes-month="next" aria-label="Next month">›</button>
+      </div>
+      <div class="CroakleNotesLiteActionRow">
+        <div class="CroakleNotesLiteSummary" id="CroakleNotesLiteSummary">No notes yet.</div>
+        <button class="CroakleNotesLiteCopy" type="button" data-croakle-notes-copy>Copy Notes</button>
+      </div>
+      <div class="CroakleNotesLiteDayChips" id="CroakleNotesLiteDayChips"></div>
+      <div class="CroakleNotesLiteList" id="CroakleNotesLiteList"></div>
+    `;
   }
 
   function CroakleNotesOpenEditor(type, itemId, itemName, dateIso) {
@@ -233,9 +545,23 @@
     CroakleNotesDecorateMoodPage();
   }
 
+  function CroakleNotesRenderDayChips(rows) {
+    const chipList = document.querySelector("#CroakleNotesLiteDayChips");
+    if (!chipList) return;
+
+    const uniqueDates = [...new Set(rows.map((row) => row.dateIso))];
+    chipList.innerHTML = uniqueDates.map((dateIso) => {
+      const chip = CroakleNotesGetDayChip(dateIso);
+      return `<div class="CroakleNotesLiteDayChip"><span>${chip.weekday}</span><strong>${chip.day}</strong><i></i></div>`;
+    }).join("");
+  }
+
   function CroakleNotesRenderBoard() {
+    CroakleNotesUpgradeBoardMarkup();
+
     const list = document.querySelector("#CroakleNotesLiteList");
     const summary = document.querySelector("#CroakleNotesLiteSummary");
+    const monthLabel = document.querySelector("#CroakleNotesLiteMonthLabel");
     if (!list || !summary) return;
 
     const rows = CroakleNotesGetRows();
@@ -244,19 +570,34 @@
       button.dataset.active = String(button.dataset.croakleNotesFilter === filter);
     });
 
-    summary.textContent = rows.length ? `${rows.length} note${rows.length > 1 ? "s" : ""} in this month.` : "No notes yet. Add notes from Habit, Project, or Mood pages.";
+    if (monthLabel) monthLabel.textContent = CroakleNotesGetMonthLabel();
+    const dayCount = new Set(rows.map((row) => row.dateIso)).size;
+    summary.textContent = rows.length
+      ? `${rows.length} notes across ${dayCount} days.\n${filter.charAt(0).toUpperCase()}${filter.slice(1)}.`
+      : `No ${filter} notes yet.`;
+
+    CroakleNotesRenderDayChips(rows);
 
     if (!rows.length) {
       list.innerHTML = `<div class="CroakleNotesLiteEmpty"><div><strong>No notes yet</strong><span>Use the Note button on Habit, Project, or Mood pages.</span></div></div>`;
       return;
     }
 
-    list.innerHTML = rows.map((row) => `
-      <article class="CroakleNotesLiteCard">
-        <div class="CroakleNotesLiteMeta"><strong>${CroakleNotesEscape(CroakleNotesGetDateLabel(row.dateIso))}</strong><span>${CroakleNotesEscape(row.type)} · ${CroakleNotesEscape(row.itemName)}</span></div>
-        <div class="CroakleNotesLiteBubble"><p>${CroakleNotesEscape(row.note)}</p></div>
-      </article>
-    `).join("");
+    list.innerHTML = rows.map((row) => {
+      const chip = CroakleNotesGetDayChip(row.dateIso);
+      return `
+        <article class="CroakleNotesLiteCard">
+          <div class="CroakleNotesLiteCardTop">
+            <div class="CroakleNotesLiteDateBlock"><span>${chip.weekday}</span><strong>${CroakleNotesEscape(CroakleNotesGetDateLabel(row.dateIso).replace(", ", ",\n"))}</strong></div>
+            <div class="CroakleNotesLiteCountPill">1</div>
+          </div>
+          <div class="CroakleNotesLiteBubble">
+            <div class="CroakleNotesLiteBubbleHeader"><strong>${CroakleNotesEscape(row.itemName)}</strong><span class="CroakleNotesLiteTag">${CroakleNotesEscape(row.type)}</span></div>
+            <p>${CroakleNotesEscape(row.note)}</p>
+          </div>
+        </article>
+      `;
+    }).join("");
   }
 
   function CroakleNotesCopyBoard() {
@@ -282,6 +623,13 @@
         event.preventDefault();
         CroakleNotesSetFilter(filterButton.dataset.croakleNotesFilter);
         CroakleNotesRenderBoard();
+        return;
+      }
+
+      const monthButton = event.target.closest("[data-croakle-notes-month]");
+      if (monthButton) {
+        event.preventDefault();
+        CroakleNotesShiftMonth(monthButton.dataset.croakleNotesMonth === "next" ? 1 : -1);
         return;
       }
 
@@ -312,6 +660,7 @@
   function CroakleNotesInit() {
     CroakleNotesEnsureStyles();
     CroakleNotesEnsureModal();
+    CroakleNotesUpgradeBoardMarkup();
     CroakleNotesBind();
     CroakleNotesDecorate();
     CroakleNotesRenderBoard();
@@ -319,5 +668,4 @@
 
   window.CroakleRenderNotesBoard = CroakleNotesRenderBoard;
   window.setTimeout(CroakleNotesInit, 0);
-  window.setInterval(CroakleNotesDecorate, 1200);
 })();
