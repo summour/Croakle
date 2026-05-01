@@ -11,11 +11,7 @@
       CroakleState.habitTemplates.forEach((habit, index) => {
         const savedHabit = savedHabits[index];
         if (!savedHabit) return;
-
-        if (Array.isArray(savedHabit.subHabits)) {
-          habit.subHabits = savedHabit.subHabits;
-        }
-
+        if (Array.isArray(savedHabit.subHabits)) habit.subHabits = savedHabit.subHabits;
         if (savedHabit.subHabitWins && typeof savedHabit.subHabitWins === "object" && !Array.isArray(savedHabit.subHabitWins)) {
           habit.subHabitWins = savedHabit.subHabitWins;
         }
@@ -32,13 +28,15 @@
     return habit;
   }
 
-  function CroakleSubGetHabit(habitIndex) {
+  function CroakleSubGetHabitByIndex(habitIndex) {
     const habit = CroakleState?.habitTemplates?.[habitIndex];
     return habit ? CroakleSubNormalizeList(habit) : null;
   }
 
-  function CroakleSubGetDateIso() {
-    return CroakleState?.trackDate || (typeof CroakleFormatDate === "function" ? CroakleFormatDate(new Date()) : new Date().toISOString().slice(0, 10));
+  function CroakleSubGetHabitById(itemId) {
+    const habits = CroakleState?.habitTemplates || [];
+    const habitIndex = habits.findIndex((habit, index) => (habit.id || `habit-${index}`) === itemId);
+    return habitIndex >= 0 ? { habit: CroakleSubNormalizeList(habits[habitIndex]), habitIndex } : null;
   }
 
   function CroakleSubGetWins(habit, dateIso) {
@@ -48,6 +46,7 @@
   }
 
   function CroakleSubSetWins(habit, dateIso, wins) {
+    CroakleSubNormalizeList(habit);
     habit.subHabitWins[dateIso] = habit.subHabits.map((_, index) => Boolean(wins[index]));
   }
 
@@ -69,29 +68,6 @@
     const style = document.createElement("style");
     style.id = "CroakleSubHabitStyles";
     style.textContent = `
-      .CroakleSubWinsButton {
-        min-height: 28px;
-        border: 2px solid #111111;
-        border-radius: 999px;
-        background: #ffffff;
-        color: #111111;
-        padding: 0 10px;
-        font-size: 12px;
-        font-weight: 950;
-        line-height: 1;
-        touch-action: manipulation;
-        white-space: nowrap;
-      }
-
-      .CroakleSubWinsButton[data-has-wins="true"] {
-        background: #111111;
-        color: #ffffff;
-      }
-
-      .CroakleHabitTop .CroakleSubWinsButton {
-        margin-left: 6px;
-      }
-
       .CroakleSubEditor {
         display: grid;
         gap: 10px;
@@ -101,26 +77,30 @@
         background: #fafafa;
       }
 
-      .CroakleSubEditorHeader {
+      .CroakleSubEditorHeader,
+      .CroakleSubNoteHeader {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
       }
 
-      .CroakleSubEditorHeader strong {
+      .CroakleSubEditorHeader strong,
+      .CroakleSubNoteHeader strong {
         font-size: 15px;
         font-weight: 950;
         color: #111111;
       }
 
-      .CroakleSubEditorHeader span {
+      .CroakleSubEditorHeader span,
+      .CroakleSubNoteHeader span {
         color: #666666;
         font-size: 12px;
         font-weight: 850;
       }
 
-      .CroakleSubEditorList {
+      .CroakleSubEditorList,
+      .CroakleSubNoteList {
         display: grid;
         gap: 8px;
         max-height: 210px;
@@ -128,7 +108,8 @@
         scrollbar-width: none;
       }
 
-      .CroakleSubEditorList::-webkit-scrollbar { display: none; }
+      .CroakleSubEditorList::-webkit-scrollbar,
+      .CroakleSubNoteList::-webkit-scrollbar { display: none; }
 
       .CroakleSubEditorRow {
         display: grid;
@@ -179,42 +160,47 @@
         font-size: 14px;
       }
 
-      .CroakleSubDialogBody {
+      .CroakleSubNoteSection {
         display: grid;
         gap: 10px;
+        border: 2px solid #111111;
+        border-radius: 20px;
+        background: #fafafa;
+        padding: 12px;
       }
 
-      .CroakleSubCheckRow {
+      .CroakleSubNoteRow {
         display: grid;
-        grid-template-columns: 42px minmax(0, 1fr);
+        grid-template-columns: 38px minmax(0, 1fr);
         align-items: center;
         gap: 10px;
         border: 2px solid #111111;
-        border-radius: 18px;
+        border-radius: 16px;
         background: #ffffff;
-        padding: 8px 10px;
+        padding: 7px 9px;
       }
 
-      .CroakleSubCheckRow button {
-        width: 38px;
-        height: 38px;
+      .CroakleSubNoteRow button {
+        width: 34px;
+        height: 34px;
         border: 2px solid #111111;
         border-radius: 999px;
         background: #ffffff;
         color: #111111;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 950;
         touch-action: manipulation;
       }
 
-      .CroakleSubCheckRow[data-done="true"] button {
+      .CroakleSubNoteRow[data-done="true"] button {
         background: #111111;
         color: #ffffff;
       }
 
-      .CroakleSubCheckRow span {
+      .CroakleSubNoteRow span {
+        min-width: 0;
         color: #111111;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 850;
         line-height: 1.25;
       }
@@ -242,7 +228,7 @@
   function CroakleSubRenderEditor(habitIndex, draftList = null) {
     const list = document.querySelector("#CroakleSubHabitEditorList");
     const addButton = document.querySelector("#CroakleSubHabitAddButton");
-    const habit = CroakleSubGetHabit(habitIndex);
+    const habit = CroakleSubGetHabitByIndex(habitIndex);
     if (!list || !addButton || !habit) return;
 
     const rows = Array.isArray(draftList) ? draftList.slice(0, CroakleSubHabitSoftLimit) : habit.subHabits;
@@ -258,9 +244,7 @@
   }
 
   function CroakleSubReadEditorValues(keepBlank = false) {
-    const values = [...document.querySelectorAll(".CroakleSubEditorInput")]
-      .map((input) => String(input.value || "").trim());
-
+    const values = [...document.querySelectorAll(".CroakleSubEditorInput")].map((input) => String(input.value || "").trim());
     return (keepBlank ? values : values.filter(Boolean)).slice(0, CroakleSubHabitSoftLimit);
   }
 
@@ -286,7 +270,7 @@
 
     form.addEventListener("submit", () => {
       const habitIndex = Number(form.elements.habitIndex?.value);
-      const habit = CroakleSubGetHabit(habitIndex);
+      const habit = CroakleSubGetHabitByIndex(habitIndex);
       if (!habit) return;
 
       const previousWins = habit.subHabitWins || {};
@@ -298,7 +282,7 @@
       const removeButton = event.target.closest("[data-sub-remove]");
       const addButton = event.target.closest("#CroakleSubHabitAddButton");
       const habitIndex = Number(form.elements.habitIndex?.value);
-      const habit = CroakleSubGetHabit(habitIndex);
+      const habit = CroakleSubGetHabitByIndex(habitIndex);
       if (!habit) return;
 
       if (removeButton) {
@@ -318,88 +302,60 @@
     });
   }
 
-  function CroakleSubGetSummary(habit, dateIso) {
-    CroakleSubNormalizeList(habit);
-    if (!habit.subHabits.length) return null;
+  function CroakleSubRenderNoteSection(type, itemId, dateIso) {
+    const form = document.querySelector("#CroakleNotesLiteForm");
+    if (!form) return;
 
-    const wins = CroakleSubGetWins(habit, dateIso);
-    const doneCount = wins.filter(Boolean).length;
-    return { doneCount, total: habit.subHabits.length };
-  }
+    form.querySelector("#CroakleSubNoteSection")?.remove();
+    if (type !== "habit") return;
 
-  function CroakleSubAddSummaryButtons() {
-    const dateIso = CroakleSubGetDateIso();
+    const match = CroakleSubGetHabitById(itemId);
+    if (!match || !match.habit.subHabits.length) return;
 
-    document.querySelectorAll(".CroakleHabitTop").forEach((top) => {
-      if (top.querySelector(".CroakleSubWinsButton")) return;
+    const wins = CroakleSubGetWins(match.habit, dateIso);
+    const noteLabel = form.querySelector(".CroakleField");
+    if (!noteLabel) return;
 
-      const nameButton = top.querySelector(".CroakleHabitNameButton[data-detail-index]");
-      const goal = top.querySelector(".CroakleGoal");
-      const habitIndex = Number(nameButton?.dataset.detailIndex);
-      const habit = CroakleSubGetHabit(habitIndex);
-      const summary = habit ? CroakleSubGetSummary(habit, dateIso) : null;
-
-      if (!goal || !summary) return;
-
-      goal.insertAdjacentHTML("beforebegin", `
-        <button class="CroakleSubWinsButton" type="button" data-sub-habit-index="${habitIndex}" data-sub-date="${dateIso}" data-has-wins="${summary.doneCount > 0}">
-          ${summary.doneCount}/${summary.total} wins
-        </button>
-      `);
-    });
-  }
-
-  function CroakleSubEnsureDialog() {
-    if (document.querySelector("#CroakleSubHabitDialog")) return;
-
-    document.body.insertAdjacentHTML("beforeend", `
-      <dialog class="CroakleAddHabitDialog" id="CroakleSubHabitDialog" aria-labelledby="CroakleSubHabitTitle">
-        <div class="CroakleAddHabitForm">
-          <header class="CroakleAddHabitHeader">
-            <h2 id="CroakleSubHabitTitle">Small Wins</h2>
-            <button type="button" data-sub-close aria-label="Close">×</button>
-          </header>
-          <input type="hidden" id="CroakleSubHabitIndex" />
-          <input type="hidden" id="CroakleSubHabitDate" />
-          <div class="CroakleSubDialogBody" id="CroakleSubHabitChecklist"></div>
-          <button class="CroakleConfirmHabitButton" type="button" data-sub-save>Save</button>
+    noteLabel.insertAdjacentHTML("beforebegin", `
+      <section class="CroakleSubNoteSection" id="CroakleSubNoteSection" data-sub-habit-index="${match.habitIndex}" data-sub-date="${dateIso}">
+        <div class="CroakleSubNoteHeader">
+          <strong>Small Wins</strong>
+          <span>${wins.filter(Boolean).length}/${match.habit.subHabits.length}</span>
         </div>
-      </dialog>
+        <div class="CroakleSubNoteList">
+          ${match.habit.subHabits.map((text, index) => `
+            <div class="CroakleSubNoteRow" data-sub-note-row="${index}" data-done="${wins[index]}">
+              <button type="button" data-sub-note-toggle="${index}">${wins[index] ? "✓" : ""}</button>
+              <span>${CroakleSubEscape(text)}</span>
+            </div>
+          `).join("")}
+        </div>
+      </section>
     `);
   }
 
-  function CroakleSubOpenChecklist(habitIndex, dateIso) {
-    const habit = CroakleSubGetHabit(habitIndex);
-    if (!habit || !habit.subHabits.length) return;
-
-    CroakleSubEnsureDialog();
-    const dialog = document.querySelector("#CroakleSubHabitDialog");
-    const list = document.querySelector("#CroakleSubHabitChecklist");
-    const wins = CroakleSubGetWins(habit, dateIso);
-
-    document.querySelector("#CroakleSubHabitIndex").value = String(habitIndex);
-    document.querySelector("#CroakleSubHabitDate").value = dateIso;
-    list.innerHTML = habit.subHabits.map((text, index) => `
-      <div class="CroakleSubCheckRow" data-done="${wins[index]}" data-sub-check-row="${index}">
-        <button type="button" data-sub-toggle="${index}">${wins[index] ? "✓" : ""}</button>
-        <span>${CroakleSubEscape(text)}</span>
-      </div>
-    `).join("");
-
-    dialog.showModal();
+  function CroakleSubOpenNoteSection(noteButton) {
+    window.requestAnimationFrame(() => {
+      CroakleSubRenderNoteSection(
+        noteButton.dataset.croakleNoteType,
+        noteButton.dataset.croakleNoteItemId,
+        noteButton.dataset.croakleNoteDate
+      );
+    });
   }
 
-  function CroakleSubSaveChecklist() {
-    const habitIndex = Number(document.querySelector("#CroakleSubHabitIndex")?.value);
-    const dateIso = document.querySelector("#CroakleSubHabitDate")?.value;
-    const habit = CroakleSubGetHabit(habitIndex);
+  function CroakleSubSaveNoteSection() {
+    const section = document.querySelector("#CroakleSubNoteSection");
+    if (!section) return;
+
+    const habitIndex = Number(section.dataset.subHabitIndex);
+    const dateIso = section.dataset.subDate;
+    const habit = CroakleSubGetHabitByIndex(habitIndex);
     if (!habit || !dateIso) return;
 
-    const wins = [...document.querySelectorAll("[data-sub-check-row]")].map((row) => row.dataset.done === "true");
+    const wins = [...section.querySelectorAll("[data-sub-note-row]")].map((row) => row.dataset.done === "true");
     CroakleSubSetWins(habit, dateIso, wins);
     CroakleSubSaveState();
-    document.querySelector("#CroakleSubHabitDialog")?.close();
-    if (typeof CroakleRenderTrackList === "function") CroakleRenderTrackList();
   }
 
   function CroakleSubBindEvents() {
@@ -407,58 +363,37 @@
     window.CroakleSubHabitEventsBound = true;
 
     document.addEventListener("click", (event) => {
-      const summaryButton = event.target.closest("[data-sub-habit-index]");
-      if (summaryButton) {
-        event.preventDefault();
-        event.stopPropagation();
-        CroakleSubOpenChecklist(Number(summaryButton.dataset.subHabitIndex), summaryButton.dataset.subDate);
+      const noteButton = event.target.closest("[data-croakle-note-type]");
+      if (noteButton) {
+        CroakleSubOpenNoteSection(noteButton);
         return;
       }
 
-      const toggleButton = event.target.closest("[data-sub-toggle]");
+      const toggleButton = event.target.closest("[data-sub-note-toggle]");
       if (toggleButton) {
         event.preventDefault();
-        const row = toggleButton.closest("[data-sub-check-row]");
+        const row = toggleButton.closest("[data-sub-note-row]");
         const nextDone = row.dataset.done !== "true";
         row.dataset.done = String(nextDone);
         toggleButton.textContent = nextDone ? "✓" : "";
-        return;
-      }
-
-      if (event.target.closest("[data-sub-save]")) {
-        event.preventDefault();
-        CroakleSubSaveChecklist();
-        return;
-      }
-
-      if (event.target.closest("[data-sub-close]")) {
-        event.preventDefault();
-        document.querySelector("#CroakleSubHabitDialog")?.close();
+        const headerCount = document.querySelector(".CroakleSubNoteHeader span");
+        const rows = [...document.querySelectorAll("[data-sub-note-row]")];
+        if (headerCount) headerCount.textContent = `${rows.filter((item) => item.dataset.done === "true").length}/${rows.length}`;
       }
     });
-  }
 
-  function CroakleSubPatchRenderTrackList() {
-    if (typeof window.CroakleRenderTrackList !== "function" || window.CroakleRenderTrackList.CroakleSubWrapped) return;
-
-    const originalRender = window.CroakleRenderTrackList;
-    window.CroakleRenderTrackList = function CroakleRenderTrackListWithSubHabits() {
-      const result = originalRender.apply(this, arguments);
-      CroakleSubAddSummaryButtons();
-      return result;
-    };
-    window.CroakleRenderTrackList.CroakleSubWrapped = true;
+    document.addEventListener("submit", (event) => {
+      if (event.target.id !== "CroakleNotesLiteForm") return;
+      CroakleSubSaveNoteSection();
+    }, true);
   }
 
   function CroakleSubInit() {
     CroakleSubMergeStoredData();
     CroakleSubInjectStyles();
-    CroakleSubEnsureDialog();
     CroakleSubAddEditorToHabitDetail();
     CroakleSubPatchHabitDetail();
-    CroakleSubPatchRenderTrackList();
     CroakleSubBindEvents();
-    CroakleSubAddSummaryButtons();
   }
 
   window.requestAnimationFrame(CroakleSubInit);
