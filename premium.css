@@ -583,18 +583,32 @@ body {
 
 .CroakleBottomNav {
   display: grid;
-  grid-template-columns: 0.8fr 1fr 1fr 1fr;
-  gap: 8px;
-  min-height: 48px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  min-height: 52px;
 }
 
 .CroakleBottomNav[hidden] { display: none; }
 
 .CroakleBottomNav button {
-  min-height: 46px;
-  border-radius: 999px;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  border-radius: 20px;
   background: var(--CroakleSoftSurface);
-  font-weight: 850;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--CroakleText);
+  font-size: clamp(12px, 3vw, 14px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .CroakleBottomNav .CroakleActiveNav {
@@ -817,6 +831,16 @@ body {
     align-items: flex-start;
     flex-direction: column;
   }
+
+  .CroakleBottomNav {
+    gap: 6px;
+  }
+
+  .CroakleBottomNav button {
+    min-height: 50px;
+    border-radius: 18px;
+    font-size: 12px;
+  }
 }
 
 @media (max-height: 720px) {
@@ -837,5 +861,5 @@ body {
   .CroakleHabitList,
   .CroakleBestList { gap: 8px; }
 
-  .CroakleBottomNav button { min-height: 42px; }
+  .CroakleBottomNav button { min-height: 44px; }
 }
