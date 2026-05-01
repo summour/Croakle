@@ -1,5 +1,7 @@
 const CroakleWeekBridgeSettingsKey = "CroakleHabitMoodSettingsV1";
 const CroakleWeekBridgeOptions = ["monday", "sunday"];
+const CroakleCalendarSwipeMinDistance = 50;
+const CroakleCalendarSwipeAxisRatio = 1.5;
 
 function CroakleWeekBridgeGetSavedWeekStart() {
   try {
@@ -141,10 +143,114 @@ function CroaklePatchSettingsPanelForWeekStart() {
   };
 }
 
+function CroakleAttachCalendarSwipe(zone, onPrevious, onNext) {
+  if (!zone || zone.dataset.croakleSwipeReady === "true") {
+    return;
+  }
+
+  let startX = 0;
+  let startY = 0;
+  let tracking = false;
+
+  zone.dataset.croakleSwipeReady = "true";
+
+  zone.addEventListener("pointerdown", (event) => {
+    if (event.button !== undefined && event.button !== 0) {
+      return;
+    }
+
+    startX = event.clientX;
+    startY = event.clientY;
+    tracking = true;
+  }, { passive: true });
+
+  zone.addEventListener("pointermove", (event) => {
+    if (!tracking) {
+      return;
+    }
+
+    const moveX = event.clientX - startX;
+    const moveY = event.clientY - startY;
+
+    if (Math.abs(moveY) > Math.abs(moveX) && Math.abs(moveY) > 12) {
+      tracking = false;
+    }
+  }, { passive: true });
+
+  zone.addEventListener("pointerup", (event) => {
+    if (!tracking) {
+      return;
+    }
+
+    const diffX = event.clientX - startX;
+    const diffY = event.clientY - startY;
+    const isHorizontalSwipe = Math.abs(diffX) > CroakleCalendarSwipeMinDistance
+      && Math.abs(diffX) > Math.abs(diffY) * CroakleCalendarSwipeAxisRatio;
+
+    tracking = false;
+
+    if (!isHorizontalSwipe) {
+      return;
+    }
+
+    if (diffX < 0) {
+      onNext();
+    } else {
+      onPrevious();
+    }
+  }, { passive: true });
+
+  zone.addEventListener("pointercancel", () => {
+    tracking = false;
+  }, { passive: true });
+
+  zone.addEventListener("pointerleave", () => {
+    tracking = false;
+  }, { passive: true });
+}
+
+function CroakleBindCalendarSwipeZones() {
+  const swipeGroups = [
+    {
+      selectors: [
+        '[data-page="track"] .CroakleMonthHeader',
+        '#CroakleTrackDates',
+        '#CroakleTrackMoodPreview',
+      ],
+      onPrevious: () => CroakleShiftMonth("track", -1),
+      onNext: () => CroakleShiftMonth("track", 1),
+    },
+    {
+      selectors: [
+        '[data-page="project"] .CroakleMonthHeader',
+        '#CroakleProjectDates',
+        '#CroakleProjectMoodPreview',
+      ],
+      onPrevious: () => CroakleChangeProjectWeek(-1),
+      onNext: () => CroakleChangeProjectWeek(1),
+    },
+    {
+      selectors: [
+        '[data-page="mood"] .CroakleMonthHeader',
+        '[data-page="mood"] .CroakleCalendarHeader',
+      ],
+      onPrevious: () => CroakleShiftMonth("mood", -1),
+      onNext: () => CroakleShiftMonth("mood", 1),
+    },
+  ];
+
+  swipeGroups.forEach(({ selectors, onPrevious, onNext }) => {
+    selectors.forEach((selector) => {
+      CroakleAttachCalendarSwipe(document.querySelector(selector), onPrevious, onNext);
+    });
+  });
+}
+
 function CroakleApplyWeekStartSystem() {
   CroakleRenderAll();
   CroakleRenderProjects();
   CroakleRenderWeekLabels();
+  CroakleBindCalendarSwipeZones();
 }
 
 CroakleNormalizeWeekStartSettings();
