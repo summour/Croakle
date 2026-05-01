@@ -39,6 +39,10 @@
     return habitIndex >= 0 ? { habit: CroakleSubNormalizeList(habits[habitIndex]), habitIndex } : null;
   }
 
+  function CroakleSubGetDateIso() {
+    return CroakleState?.trackDate || (typeof CroakleFormatDate === "function" ? CroakleFormatDate(new Date()) : new Date().toISOString().slice(0, 10));
+  }
+
   function CroakleSubGetWins(habit, dateIso) {
     CroakleSubNormalizeList(habit);
     const savedWins = Array.isArray(habit.subHabitWins[dateIso]) ? habit.subHabitWins[dateIso] : [];
@@ -48,6 +52,17 @@
   function CroakleSubSetWins(habit, dateIso, wins) {
     CroakleSubNormalizeList(habit);
     habit.subHabitWins[dateIso] = habit.subHabits.map((_, index) => Boolean(wins[index]));
+  }
+
+  function CroakleSubGetSummary(habit, dateIso) {
+    CroakleSubNormalizeList(habit);
+    if (!habit.subHabits.length) return null;
+
+    const wins = CroakleSubGetWins(habit, dateIso);
+    return {
+      done: wins.filter(Boolean).length,
+      total: habit.subHabits.length,
+    };
   }
 
   function CroakleSubSaveState() {
@@ -68,6 +83,24 @@
     const style = document.createElement("style");
     style.id = "CroakleSubHabitStyles";
     style.textContent = `
+      .CroakleHabitTop {
+        grid-template-columns: 12px minmax(0, 1fr) auto auto;
+      }
+
+      .CroakleSubWinsBadge {
+        min-width: 64px;
+        border: 2px solid #111111;
+        border-radius: 10px;
+        padding: 2px 7px;
+        background: #f5f5f5;
+        color: #111111;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 850;
+        line-height: 1.15;
+        white-space: nowrap;
+      }
+
       .CroakleSubEditor {
         display: grid;
         gap: 10px;
@@ -400,6 +433,37 @@
     const wins = [...section.querySelectorAll("[data-sub-note-row]")].map((row) => row.dataset.done === "true");
     CroakleSubSetWins(habit, dateIso, wins);
     CroakleSubSaveState();
+    if (typeof CroakleRenderTrackList === "function") CroakleRenderTrackList();
+  }
+
+  function CroakleSubRenderSmallWinsBadges() {
+    const dateIso = CroakleSubGetDateIso();
+
+    document.querySelectorAll(".CroakleHabitTop").forEach((top) => {
+      top.querySelector(".CroakleSubWinsBadge")?.remove();
+
+      const nameButton = top.querySelector(".CroakleHabitNameButton[data-detail-index]");
+      const goalBadge = top.querySelector(".CroakleGoal");
+      const habitIndex = Number(nameButton?.dataset.detailIndex);
+      const habit = CroakleSubGetHabitByIndex(habitIndex);
+      const summary = habit ? CroakleSubGetSummary(habit, dateIso) : null;
+
+      if (!goalBadge || !summary) return;
+
+      goalBadge.insertAdjacentHTML("beforebegin", `<span class="CroakleSubWinsBadge">${summary.done}/${summary.total} wins</span>`);
+    });
+  }
+
+  function CroakleSubPatchTrackRender() {
+    if (typeof window.CroakleRenderTrackList !== "function" || window.CroakleRenderTrackList.CroakleSubWinsWrapped) return;
+
+    const originalRenderTrackList = window.CroakleRenderTrackList;
+    window.CroakleRenderTrackList = function CroakleRenderTrackListWithSubWins(...args) {
+      const result = originalRenderTrackList.apply(this, args);
+      CroakleSubRenderSmallWinsBadges();
+      return result;
+    };
+    window.CroakleRenderTrackList.CroakleSubWinsWrapped = true;
   }
 
   function CroakleSubBindNoteEvents() {
@@ -439,7 +503,9 @@
     CroakleSubAddEditorToForm("#CroakleHabitDetailForm", "CroakleSubHabit");
     CroakleSubRenderEditor("CroakleSubAdd", []);
     CroakleSubPatchForms();
+    CroakleSubPatchTrackRender();
     CroakleSubBindNoteEvents();
+    CroakleSubRenderSmallWinsBadges();
   }
 
   window.requestAnimationFrame(CroakleSubInit);
