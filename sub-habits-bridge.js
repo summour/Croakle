@@ -1,5 +1,29 @@
 (() => {
   const CroakleSubHabitSoftLimit = 5;
+  const CroakleHabitStoreKey = "CroakleHabitMoodDataCleanV1";
+
+  function CroakleSubMergeStoredData() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CroakleHabitStoreKey) || "{}");
+      const savedHabits = Array.isArray(saved.habitTemplates) ? saved.habitTemplates : [];
+      if (!Array.isArray(CroakleState?.habitTemplates)) return;
+
+      CroakleState.habitTemplates.forEach((habit, index) => {
+        const savedHabit = savedHabits[index];
+        if (!savedHabit) return;
+
+        if (Array.isArray(savedHabit.subHabits)) {
+          habit.subHabits = savedHabit.subHabits;
+        }
+
+        if (savedHabit.subHabitWins && typeof savedHabit.subHabitWins === "object" && !Array.isArray(savedHabit.subHabitWins)) {
+          habit.subHabitWins = savedHabit.subHabitWins;
+        }
+      });
+    } catch {
+      // Keep app usable if old storage is malformed.
+    }
+  }
 
   function CroakleSubNormalizeList(habit) {
     if (!Array.isArray(habit.subHabits)) habit.subHabits = [];
@@ -215,13 +239,14 @@
     `);
   }
 
-  function CroakleSubRenderEditor(habitIndex) {
+  function CroakleSubRenderEditor(habitIndex, draftList = null) {
     const list = document.querySelector("#CroakleSubHabitEditorList");
     const addButton = document.querySelector("#CroakleSubHabitAddButton");
     const habit = CroakleSubGetHabit(habitIndex);
     if (!list || !addButton || !habit) return;
 
-    list.innerHTML = habit.subHabits.map((text, index) => `
+    const rows = Array.isArray(draftList) ? draftList.slice(0, CroakleSubHabitSoftLimit) : habit.subHabits;
+    list.innerHTML = rows.map((text, index) => `
       <div class="CroakleSubEditorRow">
         <span class="CroakleSubEditorHandle">≡</span>
         <input class="CroakleSubEditorInput" type="text" value="${CroakleSubEscape(text)}" data-sub-index="${index}" placeholder="Small win" />
@@ -229,19 +254,19 @@
       </div>
     `).join("");
 
-    addButton.disabled = habit.subHabits.length >= CroakleSubHabitSoftLimit;
+    addButton.disabled = rows.length >= CroakleSubHabitSoftLimit;
   }
 
-  function CroakleSubReadEditorValues() {
-    return [...document.querySelectorAll(".CroakleSubEditorInput")]
-      .map((input) => String(input.value || "").trim())
-      .filter(Boolean)
-      .slice(0, CroakleSubHabitSoftLimit);
+  function CroakleSubReadEditorValues(keepBlank = false) {
+    const values = [...document.querySelectorAll(".CroakleSubEditorInput")]
+      .map((input) => String(input.value || "").trim());
+
+    return (keepBlank ? values : values.filter(Boolean)).slice(0, CroakleSubHabitSoftLimit);
   }
 
-  function CroakleSubOpenHabitDetail(event) {
+  function CroakleSubOpenHabitDetailFromButton(button) {
     window.requestAnimationFrame(() => {
-      const habitIndex = Number(event.currentTarget?.dataset.detailIndex ?? document.querySelector("#CroakleHabitDetailIndex")?.value);
+      const habitIndex = Number(button?.dataset.detailIndex ?? document.querySelector("#CroakleHabitDetailIndex")?.value);
       CroakleSubAddEditorToHabitDetail();
       CroakleSubRenderEditor(habitIndex);
     });
@@ -251,14 +276,10 @@
     if (window.CroakleSubHabitDetailPatched) return;
     window.CroakleSubHabitDetailPatched = true;
 
-    if (typeof window.CroakleOpenHabitDetailDialog === "function") {
-      const originalOpen = window.CroakleOpenHabitDetailDialog;
-      window.CroakleOpenHabitDetailDialog = function CroakleOpenHabitDetailDialogWithSubHabits(event) {
-        const result = originalOpen.apply(this, arguments);
-        CroakleSubOpenHabitDetail(event);
-        return result;
-      };
-    }
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest(".CroakleHabitNameButton[data-detail-index]");
+      if (button) CroakleSubOpenHabitDetailFromButton(button);
+    });
 
     const form = document.querySelector("#CroakleHabitDetailForm");
     if (!form) return;
@@ -269,7 +290,7 @@
       if (!habit) return;
 
       const previousWins = habit.subHabitWins || {};
-      habit.subHabits = CroakleSubReadEditorValues();
+      habit.subHabits = CroakleSubReadEditorValues(false);
       habit.subHabitWins = previousWins;
     }, true);
 
@@ -282,17 +303,17 @@
 
       if (removeButton) {
         event.preventDefault();
-        habit.subHabits = CroakleSubReadEditorValues();
-        habit.subHabits.splice(Number(removeButton.dataset.subRemove), 1);
-        CroakleSubRenderEditor(habitIndex);
+        const draft = CroakleSubReadEditorValues(true);
+        draft.splice(Number(removeButton.dataset.subRemove), 1);
+        CroakleSubRenderEditor(habitIndex, draft);
         return;
       }
 
       if (addButton) {
         event.preventDefault();
-        habit.subHabits = CroakleSubReadEditorValues();
-        if (habit.subHabits.length < CroakleSubHabitSoftLimit) habit.subHabits.push("");
-        CroakleSubRenderEditor(habitIndex);
+        const draft = CroakleSubReadEditorValues(true);
+        if (draft.length < CroakleSubHabitSoftLimit) draft.push("");
+        CroakleSubRenderEditor(habitIndex, draft);
       }
     });
   }
@@ -430,6 +451,7 @@
   }
 
   function CroakleSubInit() {
+    CroakleSubMergeStoredData();
     CroakleSubInjectStyles();
     CroakleSubEnsureDialog();
     CroakleSubAddEditorToHabitDetail();
