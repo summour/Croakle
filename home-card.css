@@ -9,6 +9,11 @@
   overflow: hidden;
 }
 
+.CroakleHabitMoodShell .CroakleBottomNav #CroakleOpenAnalyticsFromNav,
+.CroakleHabitMoodShell .CroakleBottomNav button[data-page-target="analysis"] {
+  display: none;
+}
+
 .CroakleHabitMoodShell .CroakleBottomNav button {
   width: 100%;
   min-width: 0;
