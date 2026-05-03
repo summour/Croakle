@@ -121,7 +121,8 @@
   scrollbar-width: none;
 }
 
-.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
+.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav,
+.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav[hidden] {
   position: static;
   z-index: 20;
   display: grid;
@@ -132,6 +133,10 @@
   background: transparent;
   border: 0;
   box-shadow: none;
+}
+
+.CroaklePage[data-page="settings"].CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav {
+  display: none;
 }
 
 .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav button {
@@ -153,7 +158,8 @@
   text-overflow: ellipsis;
 }
 
-.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav .CroakleActiveNav {
+.CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav .CroakleActiveNav,
+.CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="menu"] {
   background: var(--CroakleLine);
   color: var(--CroakleSurface);
 }
@@ -299,7 +305,8 @@
     font-size: 10px;
   }
 
-  .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav {
+  .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav,
+  .CroakleHabitMoodShell > .CroakleBottomNav.CroakleProjectNav[hidden] {
     gap: 6px;
   }
 
