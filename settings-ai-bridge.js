@@ -9,6 +9,7 @@
   };
 
   let CroakleAiKeyEditMode = false;
+  let CroakleActivityLogOpen = false;
 
   function CroakleLoadAiSettings() {
     try {
@@ -395,6 +396,68 @@
         line-height: 1.35;
       }
 
+      .CroakleActivityLogEntryButton,
+      .CroakleActivityLogBackButton {
+        width: 100%;
+        border: 2px solid var(--CroakleLine);
+        border-radius: 16px;
+        background: var(--CroakleSurface);
+        color: var(--CroakleText);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .CroakleActivityLogEntryButton {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 12px;
+      }
+
+      .CroakleActivityLogEntryText,
+      .CroakleActivityLogEntryMeta {
+        display: grid;
+        gap: 3px;
+        min-width: 0;
+      }
+
+      .CroakleActivityLogEntryText strong {
+        color: var(--CroakleText);
+        font-size: 15px;
+        font-weight: 900;
+        line-height: 1.2;
+      }
+
+      .CroakleActivityLogEntryText span,
+      .CroakleActivityLogEntryMeta span {
+        color: var(--CroakleMuted);
+        font-size: 12px;
+        font-weight: 850;
+        line-height: 1.25;
+      }
+
+      .CroakleActivityLogEntryArrow {
+        color: var(--CroakleText);
+        font-size: 22px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .CroakleActivityLogHeader {
+        display: grid;
+        gap: 10px;
+      }
+
+      .CroakleActivityLogBackButton {
+        min-height: 44px;
+        padding: 0 12px;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
       .CroakleActivityLogDateTitle {
         margin: 4px 0 0;
         color: var(--CroakleMuted);
@@ -529,13 +592,11 @@
     CroakleInjectAiSettingsStyles();
 
     const logs = CroakleLoadActivityLogs();
-    const visibleLogs = logs.slice(0, 30);
     const markup = `
       <section class="CroakleSettingsGroup" id="CroakleActivityLogGroup" aria-label="Activity log">
         <p class="CroakleSettingsGroupTitle">Activity Log</p>
         <div class="CroakleActivityLogPanel">
-          <p class="CroakleActivityLogSummary">Read-only history of recent create, update, delete, complete, mood, and project changes.</p>
-          ${visibleLogs.length ? CroakleCreateActivityLogListMarkup(visibleLogs) : "<p class=\"CroakleActivityLogEmpty\">No activity yet.</p>"}
+          ${CroakleActivityLogOpen ? CroakleCreateActivityLogDetailMarkup(logs) : CroakleCreateActivityLogEntryMarkup(logs)}
         </div>
       </section>
     `;
@@ -543,10 +604,57 @@
 
     if (exportBackupGroup) {
       exportBackupGroup.insertAdjacentHTML("afterend", markup);
-      return;
+    } else {
+      settingsBody.insertAdjacentHTML("beforeend", markup);
     }
 
-    settingsBody.insertAdjacentHTML("beforeend", markup);
+    CroakleBindActivityLogControls();
+  }
+
+  function CroakleCreateActivityLogEntryMarkup(logs) {
+    const latestLog = logs[0] || null;
+    const countLabel = `${logs.length} recent ${logs.length === 1 ? "change" : "changes"}`;
+    const latestLabel = latestLog
+      ? `${CroakleFormatActivityTime(latestLog.createdAt)} · ${CroakleEscapeActivityText(latestLog.targetType)}`
+      : "No activity yet";
+
+    return `
+      <button class="CroakleActivityLogEntryButton" type="button" data-croakle-open-activity-log aria-label="Open activity log">
+        <span class="CroakleActivityLogEntryText">
+          <strong>Activity Log</strong>
+          <span>Read-only history of app changes</span>
+        </span>
+        <span class="CroakleActivityLogEntryMeta" aria-hidden="true">
+          <span>${CroakleEscapeActivityText(countLabel)}</span>
+          <span>${latestLabel}</span>
+        </span>
+        <span class="CroakleActivityLogEntryArrow" aria-hidden="true">›</span>
+      </button>
+    `;
+  }
+
+  function CroakleCreateActivityLogDetailMarkup(logs) {
+    const visibleLogs = logs.slice(0, 30);
+
+    return `
+      <div class="CroakleActivityLogHeader">
+        <button class="CroakleActivityLogBackButton" type="button" data-croakle-close-activity-log>‹ Back to Settings</button>
+        <p class="CroakleActivityLogSummary">Read-only history of recent create, update, delete, complete, mood, and project changes.</p>
+      </div>
+      ${visibleLogs.length ? CroakleCreateActivityLogListMarkup(visibleLogs) : "<p class=\"CroakleActivityLogEmpty\">No activity yet.</p>"}
+    `;
+  }
+
+  function CroakleBindActivityLogControls() {
+    document.querySelector("[data-croakle-open-activity-log]")?.addEventListener("click", () => {
+      CroakleActivityLogOpen = true;
+      CroakleRenderActivityLogPanel();
+    });
+
+    document.querySelector("[data-croakle-close-activity-log]")?.addEventListener("click", () => {
+      CroakleActivityLogOpen = false;
+      CroakleRenderActivityLogPanel();
+    });
   }
 
   function CroakleCreateActivityLogListMarkup(logs) {
