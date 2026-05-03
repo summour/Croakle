@@ -165,7 +165,9 @@
   color: var(--CroakleSurface);
 }
 
-.CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="best"] {
+.CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="best"],
+.CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="stats"],
+.CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button:nth-child(6) {
   position: absolute;
   top: 24px;
   right: 72px;
@@ -272,7 +274,9 @@
     font-size: 20px;
   }
 
-  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="best"] {
+  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="best"],
+  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="stats"],
+  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button:nth-child(6) {
     top: 22px;
     right: 66px;
     width: 44px;
@@ -345,7 +349,9 @@
     padding: 10px;
   }
 
-  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="best"] {
+  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="best"],
+  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button[data-page-target="stats"],
+  .CroakleMenuPage.CroaklePageActive ~ .CroakleBottomNav.CroakleProjectNav button:nth-child(6) {
     top: 20px;
   }
 
