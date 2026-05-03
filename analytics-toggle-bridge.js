@@ -1,42 +1,22 @@
 (() => {
-  const CroakleAnalyticsToggleStoreKey = "CroakleAnalyticsNumbersHiddenV1";
+  const CroakleAnalyticsRawDataHiddenStoreKey = "CroakleAnalyticsNumbersHiddenV1";
 
-  function CroakleGetNumbersHidden() {
-    return localStorage.getItem(CroakleAnalyticsToggleStoreKey) === "true";
+  function CroakleGetRawDataHidden() {
+    return localStorage.getItem(CroakleAnalyticsRawDataHiddenStoreKey) === "true";
   }
 
-  function CroakleSaveNumbersHidden(hidden) {
-    localStorage.setItem(CroakleAnalyticsToggleStoreKey, String(hidden));
+  function CroakleSaveRawDataHidden(hidden) {
+    localStorage.setItem(CroakleAnalyticsRawDataHiddenStoreKey, String(hidden));
   }
 
-  function CroakleInjectAnalyticsToggleStyles() {
-    if (document.querySelector("#CroakleAnalyticsToggleStyles")) {
+  function CroakleInjectAnalyticsRawDataStyles() {
+    if (document.querySelector("#CroakleAnalyticsRawDataStyles")) {
       return;
     }
 
     const style = document.createElement("style");
-    style.id = "CroakleAnalyticsToggleStyles";
+    style.id = "CroakleAnalyticsRawDataStyles";
     style.textContent = `
-      .CroakleAnalyticsToggleButton {
-        appearance: none;
-        width: 100%;
-        min-height: 42px;
-        border: 2px solid var(--CroakleLine);
-        border-radius: 999px;
-        background: var(--CroakleSurface);
-        color: var(--CroakleText);
-        font: inherit;
-        font-size: 15px;
-        font-weight: 850;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        touch-action: manipulation;
-      }
-
-      .CroakleAnalyticsToggleButton:active {
-        transform: scale(0.96);
-      }
-
       .CroakleAnalyticsNumbersHidden .CroakleAnalyticsLegend,
       .CroakleAnalyticsNumbersHidden .CroakleAnalyticsPointValue {
         display: none;
@@ -49,85 +29,121 @@
     return document.querySelector('[data-page="analysis"] .CroakleCard');
   }
 
-  function CroakleGetAnalyticsToggleButton() {
-    return document.querySelector("#CroakleAnalyticsToggleNumbers");
+  function CroakleRemoveOldAnalyticsPageToggle() {
+    document.querySelector("#CroakleAnalyticsToggleNumbers")?.remove();
   }
 
-  function CroakleUpdateAnalyticsToggleUi() {
-    const card = CroakleGetAnalyticsCard();
-    const button = CroakleGetAnalyticsToggleButton();
-    const hidden = CroakleGetNumbersHidden();
+  function CroakleApplyRawDataVisibility() {
+    const hidden = CroakleGetRawDataHidden();
+    CroakleGetAnalyticsCard()?.classList.toggle("CroakleAnalyticsNumbersHidden", hidden);
 
-    card?.classList.toggle("CroakleAnalyticsNumbersHidden", hidden);
-
-    if (!button) {
-      return;
-    }
-
-    button.textContent = hidden ? "Show Numbers" : "Hide Numbers";
-    button.setAttribute("aria-pressed", String(hidden));
-  }
-
-  function CroakleInjectAnalyticsToggleButton() {
-    const card = CroakleGetAnalyticsCard();
-    const monthHeader = card?.querySelector(".CroakleMonthHeader");
-
-    if (!card || !monthHeader || CroakleGetAnalyticsToggleButton()) {
-      return;
-    }
-
-    monthHeader.insertAdjacentHTML("afterend", `
-      <button
-        class="CroakleAnalyticsToggleButton"
-        id="CroakleAnalyticsToggleNumbers"
-        type="button"
-        aria-pressed="false"
-      >Hide Numbers</button>
-    `);
-  }
-
-  function CroakleToggleAnalyticsNumbers() {
-    CroakleSaveNumbersHidden(!CroakleGetNumbersHidden());
-    CroakleUpdateAnalyticsToggleUi();
-  }
-
-  function CroakleBindAnalyticsToggle() {
-    if (window.CroakleAnalyticsToggleBound) {
-      return;
-    }
-
-    window.CroakleAnalyticsToggleBound = true;
-
-    document.addEventListener("click", (event) => {
-      if (!event.target.closest("#CroakleAnalyticsToggleNumbers")) {
-        return;
-      }
-
-      event.preventDefault();
-      CroakleToggleAnalyticsNumbers();
+    document.querySelectorAll("[data-settings-raw-data]").forEach((input) => {
+      input.checked = !hidden;
     });
   }
 
-  function CroakleInitAnalyticsToggle() {
-    CroakleInjectAnalyticsToggleStyles();
-    CroakleInjectAnalyticsToggleButton();
-    CroakleUpdateAnalyticsToggleUi();
-    CroakleBindAnalyticsToggle();
+  function CroakleCreateRawDataSettingsGroup() {
+    return `
+      <section class="CroakleSettingsGroup" aria-label="Stats display settings" data-raw-data-settings-group>
+        <p class="CroakleSettingsGroupTitle">Stats</p>
+        <label class="CroakleSettingsToggleRow">
+          <span class="CroakleSettingsText">
+            <strong>Raw Data</strong>
+            <span>เปิด = แสดงข้อมูลดิบใน Stats, ปิด = ซ่อนรายการข้อมูลดิบ</span>
+          </span>
+          <input class="CroakleSettingsSwitch" type="checkbox" data-settings-raw-data ${CroakleGetRawDataHidden() ? "" : "checked"} />
+        </label>
+      </section>
+    `;
   }
 
-  const CroakleOriginalSetPageForToggle = window.CroakleSetPage || CroakleSetPage;
+  function CroakleInjectRawDataSettings() {
+    const settingsBody = document.querySelector(".CroakleSettingsBody");
 
-  if (typeof CroakleOriginalSetPageForToggle === "function" && !window.CroakleAnalyticsToggleSetPagePatched) {
-    window.CroakleAnalyticsToggleSetPagePatched = true;
+    if (!settingsBody || settingsBody.querySelector("[data-raw-data-settings-group]")) {
+      return;
+    }
 
-    CroakleSetPage = function CroakleSetPageWithAnalyticsToggle(pageName) {
-      CroakleOriginalSetPageForToggle(pageName);
+    const exportGroup = settingsBody.querySelector('[aria-label="Export and backup settings"]');
 
-      if (pageName === "analysis") {
-        CroakleInitAnalyticsToggle();
-      }
+    if (exportGroup) {
+      exportGroup.insertAdjacentHTML("beforebegin", CroakleCreateRawDataSettingsGroup());
+    } else {
+      settingsBody.insertAdjacentHTML("beforeend", CroakleCreateRawDataSettingsGroup());
+    }
+
+    CroakleApplyRawDataVisibility();
+  }
+
+  function CroakleHandleRawDataSettingChange(event) {
+    const input = event.target.closest("[data-settings-raw-data]");
+
+    if (!input) {
+      return;
+    }
+
+    CroakleSaveRawDataHidden(!input.checked);
+    CroakleApplyRawDataVisibility();
+  }
+
+  function CroaklePatchSettingsRenderer() {
+    if (window.CroakleRawDataSettingsRendererPatched || typeof window.CroakleRenderSettingsPanel !== "function") {
+      return;
+    }
+
+    window.CroakleRawDataSettingsRendererPatched = true;
+    const originalRenderSettingsPanel = window.CroakleRenderSettingsPanel;
+
+    window.CroakleRenderSettingsPanel = function CroakleRenderSettingsPanelWithRawData(...args) {
+      const result = originalRenderSettingsPanel.apply(this, args);
+      CroakleInjectRawDataSettings();
+      return result;
     };
   }
 
-  window.requestAnimationFrame(CroakleInitAnalyticsToggle);
+  function CroaklePatchPageNavigation() {
+    if (window.CroakleRawDataNavigationPatched || typeof window.CroakleSetPage !== "function") {
+      return;
+    }
+
+    window.CroakleRawDataNavigationPatched = true;
+    const originalSetPage = window.CroakleSetPage;
+
+    window.CroakleSetPage = function CroakleSetPageWithRawDataSettings(pageName) {
+      const result = originalSetPage.apply(this, arguments);
+
+      if (pageName === "analysis") {
+        CroakleRemoveOldAnalyticsPageToggle();
+        CroakleApplyRawDataVisibility();
+      }
+
+      if (pageName === "settings") {
+        CroakleInjectRawDataSettings();
+      }
+
+      return result;
+    };
+  }
+
+  function CroakleBindRawDataSetting() {
+    if (window.CroakleRawDataSettingBound) {
+      return;
+    }
+
+    window.CroakleRawDataSettingBound = true;
+    document.addEventListener("change", CroakleHandleRawDataSettingChange);
+  }
+
+  function CroakleInitRawDataSetting() {
+    CroakleInjectAnalyticsRawDataStyles();
+    CroakleRemoveOldAnalyticsPageToggle();
+    CroaklePatchSettingsRenderer();
+    CroaklePatchPageNavigation();
+    CroakleInjectRawDataSettings();
+    CroakleApplyRawDataVisibility();
+    CroakleBindRawDataSetting();
+  }
+
+  window.CroakleApplyRawDataVisibility = CroakleApplyRawDataVisibility;
+  window.requestAnimationFrame(CroakleInitRawDataSetting);
 })();
