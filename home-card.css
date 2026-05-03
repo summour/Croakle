@@ -1,5 +1,9 @@
 @import url("croakle-no-select.css");
 
+.CroakleMenuPage.CroaklePageActive:not(:has(.CroakleDashboardPreview)) {
+  visibility: hidden;
+}
+
 .CroakleHabitMoodShell .CroakleBottomNav {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
