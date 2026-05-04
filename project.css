@@ -133,6 +133,7 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  position: relative;
 }
 
 .CroakleProjectCheckDone {
@@ -142,6 +143,24 @@
 
 .CroakleProjectCheckEmpty {
   background: var(--CroakleSoftLine);
+}
+
+.CroakleProjectCheckButton.CroakleCurrentDay {
+  border: 2px solid var(--CroakleLine);
+}
+
+.CroakleProjectCheckButton.CroakleCurrentDay::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 2px solid var(--CroakleLine);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.CroakleProjectCheckButton.CroakleProjectCheckDone.CroakleCurrentDay {
+  background: var(--CroakleLine);
+  color: var(--CroakleSurface);
 }
 
 .CroakleProjectDetailActions {
