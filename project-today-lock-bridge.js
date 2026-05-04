@@ -41,22 +41,30 @@
 
   CroakleProjectRowTemplate = function CroakleProjectRowTemplateWithTodayLock(project, projectIndex) {
     const days = CroakleGetProjectDays(project);
+    const weekDates = CroakleProjectGetWeekDates();
     const doneCount = days.filter(Boolean).length;
     const archivedClass = project.completed ? " CroakleProjectRowArchived" : "";
     const statusText = project.completed ? `<span class="CroakleProjectStatus">Finished</span>` : "";
     const checks = days
       .map((done, dayIndex) => {
-        const dateIso = CroakleGetProjectDateIso(dayIndex);
+        const date = weekDates[dayIndex];
+        const dateIso = typeof CroakleFormatDate === "function"
+          ? CroakleFormatDate(date)
+          : CroakleProjectFormatWeekKey(date);
         const canEdit = CroakleCanEditProjectDate(dateIso);
         const lockedClass = canEdit ? "" : " CroakleProjectCheckLocked";
+        const currentDayClass = typeof CroakleGetCurrentDayClass === "function"
+          ? CroakleGetCurrentDayClass(date)
+          : "";
 
         return `
           <button
-            class="CroakleProjectCheckButton ${done ? "CroakleProjectCheckDone" : "CroakleProjectCheckEmpty"}${lockedClass}"
+            class="CroakleProjectCheckButton ${done ? "CroakleProjectCheckDone" : "CroakleProjectCheckEmpty"}${lockedClass}${currentDayClass}"
             type="button"
             data-project-index="${projectIndex}"
             data-project-day="${dayIndex}"
             data-date-iso="${dateIso}"
+            data-current-date="${currentDayClass ? "true" : "false"}"
             aria-label="${project.name} ${dateIso} ${done ? "done" : "not done"}"
             aria-pressed="${done}"
             aria-disabled="${canEdit ? "false" : "true"}"
