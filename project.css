@@ -145,14 +145,10 @@
   background: var(--CroakleSoftLine);
 }
 
-.CroakleProjectCheckButton.CroakleCurrentDay {
-  border: 2px solid var(--CroakleLine);
-}
-
 .CroakleProjectCheckButton.CroakleCurrentDay::after {
   content: "";
   position: absolute;
-  inset: -6px;
+  inset: -4px;
   border: 2px solid var(--CroakleLine);
   border-radius: 999px;
   pointer-events: none;
