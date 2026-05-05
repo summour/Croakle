@@ -13,6 +13,19 @@ function CroakleEnhanceTrackMoodButtons() {
   });
 }
 
+function CroakleResetMoodCalendarScroll() {
+  const calendar = document.querySelector("#CroakleMoodCalendar");
+  const moodCard = document.querySelector('[data-page="mood"] .CroakleCard');
+
+  if (calendar) {
+    calendar.scrollLeft = 0;
+  }
+
+  if (moodCard) {
+    moodCard.scrollLeft = 0;
+  }
+}
+
 function CroakleOpenTrackMoodDate(dateIso) {
   const date = CroakleParseDate(dateIso);
 
@@ -24,9 +37,11 @@ function CroakleOpenTrackMoodDate(dateIso) {
   CroakleSetPage("mood");
 
   window.requestAnimationFrame(() => {
+    CroakleResetMoodCalendarScroll();
     document
       .querySelector(`[data-page="mood"] [data-date-iso="${dateIso}"]`)
-      ?.scrollIntoView({ block: "center", inline: "center" });
+      ?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    CroakleResetMoodCalendarScroll();
   });
 }
 
@@ -137,14 +152,16 @@ function CroakleLockMoodCircleLayout() {
   style.id = "CroakleMoodLockedLayout";
   style.textContent = `
     [data-page="mood"] .CroakleCard {
-      overflow: hidden;
+      overflow-x: clip;
+      overflow-y: hidden;
     }
 
     [data-page="mood"] .CroakleMoodCalendar {
       flex: 0 0 auto;
-      overflow: hidden;
+      overflow-x: clip;
+      overflow-y: hidden;
       overscroll-behavior: none;
-      touch-action: none;
+      touch-action: manipulation;
       -webkit-overflow-scrolling: auto;
     }
 
@@ -164,6 +181,7 @@ function CroaklePatchMoodBridgeRenderers() {
   const originalRenderTrackHeader = CroakleRenderTrackHeader;
   const originalCycleMood = CroakleCycleMood;
   const originalRenderBestList = CroakleRenderBestList;
+  const originalRenderMoodCalendar = CroakleRenderMoodCalendar;
 
   CroakleRenderTrackHeader = function CroakleRenderTrackHeaderWithMoodLinks() {
     originalRenderTrackHeader();
@@ -178,6 +196,11 @@ function CroaklePatchMoodBridgeRenderers() {
   CroakleRenderBestList = function CroakleRenderBestListWithMonthlyGoals() {
     originalRenderBestList();
     CroakleRenderBestListFromTrack();
+  };
+
+  CroakleRenderMoodCalendar = function CroakleRenderMoodCalendarWithSafeScroll() {
+    originalRenderMoodCalendar();
+    CroakleResetMoodCalendarScroll();
   };
 }
 
