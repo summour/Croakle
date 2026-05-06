@@ -1,0 +1,19 @@
+#CroakleMoodCalendar {
+  padding: 4px;
+  overflow-x: hidden !important;
+  width: 100%;
+}
+
+#CroakleMoodCalendar .CroakleMoodButton {
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+#CroakleMoodCalendar .CroakleMoodBadge {
+  margin: 2px;
+}
+
+[data-page="mood"] .CroakleCard {
+  overflow-x: hidden !important;
+}
