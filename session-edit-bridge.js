@@ -30,6 +30,45 @@
     });
   }
 
+  function setFormValue(form, name, value) {
+    if (!form.elements[name]) return;
+    form.elements[name].value = value;
+  }
+
+  function ensureSourceFields(form) {
+    if (typeof window.CroakleEnsureSessionSourceFields === "function") {
+      window.CroakleEnsureSessionSourceFields(form);
+      return;
+    }
+
+    ["sourceType", "sourceId", "sourceName"].forEach((name) => {
+      if (form.elements[name]) return;
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      form.appendChild(input);
+    });
+  }
+
+  function applySubjectLock(form, block) {
+    if (typeof window.CroakleApplySessionSubjectLock === "function") {
+      window.CroakleApplySessionSubjectLock(
+        form,
+        block.sourceType || "",
+        block.sourceName || block.subject || ""
+      );
+      return;
+    }
+
+    const input = form.elements.subject;
+    if (!input) return;
+    const isLocked = block.sourceType === "habit" || block.sourceType === "project";
+    input.readOnly = isLocked;
+    input.classList.toggle("CroakleLockedField", isLocked);
+    input.setAttribute("aria-readonly", isLocked ? "true" : "false");
+    if (isLocked) input.value = block.sourceName || block.subject || "";
+  }
+
   function getEditButton(event) {
     const pathButton = event.composedPath?.().find((node) => {
       return node?.nodeType === 1 && node.matches?.("[data-session-edit]");
@@ -45,14 +84,19 @@
     const form = document.querySelector("#CroakleSessionForm");
     if (!dialog || !form || !block) return false;
 
+    ensureSourceFields(form);
     form.reset();
-    form.elements.id.value = block.id || "";
-    form.elements.subject.value = block.subject || "";
-    form.elements.date.value = block.date || "";
-    form.elements.start.value = formatTime(block.startMinute || 9 * 60);
-    form.elements.duration.value = String(Number(block.duration || 60));
-    form.elements.type.value = block.type || "focus";
-    form.elements.color.value = block.color || "#60a3ff";
+    setFormValue(form, "id", block.id || "");
+    setFormValue(form, "subject", block.subject || "");
+    setFormValue(form, "date", block.date || "");
+    setFormValue(form, "start", formatTime(block.startMinute || 9 * 60));
+    setFormValue(form, "duration", String(Number(block.duration || 60)));
+    setFormValue(form, "type", block.type || "focus");
+    setFormValue(form, "color", block.color || "#60a3ff");
+    setFormValue(form, "sourceType", block.sourceType || "");
+    setFormValue(form, "sourceId", block.sourceId || "");
+    setFormValue(form, "sourceName", block.sourceName || block.subject || "");
+    applySubjectLock(form, block);
 
     const deleteButton = form.querySelector("[data-session-delete]");
     if (deleteButton) deleteButton.hidden = false;
@@ -60,7 +104,10 @@
     syncColorOptions(form);
 
     if (!dialog.open) dialog.showModal();
-    window.requestAnimationFrame(() => form.elements.subject?.focus());
+    window.requestAnimationFrame(() => {
+      const focusTarget = form.elements.start || form.elements.subject;
+      focusTarget?.focus();
+    });
     return true;
   }
 
