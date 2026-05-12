@@ -10,14 +10,6 @@
     }
   }
 
-  function escapeText(value) {
-    return String(value || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/\"/g, "&quot;");
-  }
-
   function getForm() {
     return document.querySelector("#CroakleNotesLiteForm");
   }
@@ -26,7 +18,11 @@
     return document.querySelector("#CroakleNotesLiteDialog");
   }
 
-  function getSessionState() {
+  function isDialogOpen() {
+    return Boolean(getDialog()?.open);
+  }
+
+  function getSessionBlocks() {
     const state = parseJson(localStorage.getItem(SessionKey), {});
     return Array.isArray(state.blocks) ? state.blocks : [];
   }
@@ -72,7 +68,7 @@
   function getLinkedBlocks(draft) {
     if (!isUsableDraft(draft)) return [];
 
-    return getSessionState()
+    return getSessionBlocks()
       .filter((block) => block.sourceType === draft.type)
       .filter((block) => block.sourceId === draft.itemId)
       .filter((block) => block.date === draft.dateIso)
@@ -145,9 +141,17 @@
     document.head.appendChild(style);
   }
 
+  function ensureListHost(section) {
+    let listHost = section.querySelector("[data-note-time-list]");
+    if (listHost) return listHost;
+
+    section.insertAdjacentHTML("beforeend", `<div data-note-time-list></div>`);
+    return section.querySelector("[data-note-time-list]");
+  }
+
   function ensureSection(draft = readDraftFromForm()) {
     const form = getForm();
-    if (!form || !isUsableDraft(draft)) return;
+    if (!form || !isDialogOpen() || !isUsableDraft(draft)) return;
 
     let section = form.querySelector("#CroakleNoteTimeSection");
     const anchor = form.querySelector(".CroakleField");
@@ -170,17 +174,16 @@
 
     const blocks = getLinkedBlocks(draft);
     const headerText = section.querySelector(".CroakleNoteTimeHeader span");
-    const listHost = section.querySelector("[data-note-time-list]") || section;
+    const listHost = ensureListHost(section);
 
     if (headerText) {
       headerText.textContent = blocks.length ? `${blocks.length} time block${blocks.length > 1 ? "s" : ""}` : "ผู้กดเวลาของโน้ตวันนี้";
     }
 
-    listHost.innerHTML = createListMarkup(draft);
+    if (listHost) listHost.innerHTML = createListMarkup(draft);
   }
 
-  function reopenNoteAfterSessionSave() {
-    const draft = getDraft();
+  function restoreDraftToNoteForm(draft) {
     const form = getForm();
     const dialog = getDialog();
     if (!isUsableDraft(draft) || !form || !dialog) return;
@@ -192,24 +195,15 @@
     form.elements.note.value = draft.note || form.elements.note.value || "";
 
     if (!dialog.open) dialog.showModal();
-
     ensureSection(draft);
-    clearDraft();
   }
 
-  function patchStorage() {
-    if (window.CroakleNoteTimeListStoragePatched) return;
-    window.CroakleNoteTimeListStoragePatched = true;
+  function reopenNoteAfterSessionSave() {
+    const draft = getDraft();
+    if (!isUsableDraft(draft)) return;
 
-    const previousSetItem = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = function setItemWithNoteTimeList(key, value) {
-      previousSetItem(key, value);
-      if (key !== SessionKey) return;
-      window.requestAnimationFrame(() => {
-        reopenNoteAfterSessionSave();
-        ensureSection();
-      });
-    };
+    restoreDraftToNoteForm(draft);
+    clearDraft();
   }
 
   function bind() {
@@ -222,21 +216,27 @@
     }, true);
 
     document.addEventListener("click", (event) => {
-      if (event.target.closest?.("[data-croakle-note-type]")) {
-        window.requestAnimationFrame(() => ensureSection());
-        window.setTimeout(() => ensureSection(), 120);
+      if (event.target.closest?.("#CroakleNoteAddTimeButton")) {
+        saveDraft();
         return;
       }
 
-      if (event.target.closest?.("#CroakleNoteAddTimeButton")) {
-        saveDraft();
+      if (event.target.closest?.("[data-croakle-note-type]")) {
+        window.requestAnimationFrame(() => ensureSection());
+        window.setTimeout(() => ensureSection(), 120);
       }
-    }, true);
+    });
+
+    document.addEventListener("submit", (event) => {
+      if (event.target.matches?.("#CroakleSessionForm")) {
+        window.setTimeout(reopenNoteAfterSessionSave, 0);
+        window.setTimeout(() => ensureSection(), 80);
+      }
+    });
   }
 
   function init() {
     injectStyles();
-    patchStorage();
     bind();
     ensureSection();
   }
