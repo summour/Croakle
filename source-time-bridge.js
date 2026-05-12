@@ -280,6 +280,10 @@
     return document.querySelector("#CroakleNotesLiteForm");
   }
 
+  function isNotesDialogOpen() {
+    return Boolean(document.querySelector("#CroakleNotesLiteDialog")?.open);
+  }
+
   function removeLegacyDetailButtons() {
     document.querySelector("#CroakleHabitAddTimeButton")?.remove();
     document.querySelector("#CroakleProjectAddTimeButton")?.remove();
@@ -291,7 +295,7 @@
 
   function ensureNoteTimeSection() {
     const form = getNotesForm();
-    if (!form) return;
+    if (!form || !isNotesDialogOpen()) return;
 
     removeNoteTimeSection();
 
@@ -376,7 +380,6 @@
     window.CroakleSourceTimeObserverReady = true;
     new MutationObserver(() => {
       removeLegacyDetailButtons();
-      ensureNoteTimeSection();
       lockCurrentSessionForm();
     }).observe(shell, {
       childList: true,
