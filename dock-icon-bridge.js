@@ -58,14 +58,14 @@
     style.id = "CroakleIconDockStyles";
     style.textContent = `
       .CroakleHabitMoodShell {
-        padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+        padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
       }
 
       .CroakleBottomNav {
         position: fixed !important;
         left: 50% !important;
         right: auto !important;
-        bottom: max(12px, env(safe-area-inset-bottom)) !important;
+        bottom: max(18px, calc(env(safe-area-inset-bottom) + 6px)) !important;
         transform: translateX(-50%) !important;
         z-index: 1000 !important;
         display: grid !important;
@@ -74,7 +74,7 @@
         grid-auto-columns: minmax(0, 1fr) !important;
         align-items: center !important;
         width: min(calc(100vw - 24px), calc(var(--CroakleShellWidth, 430px) - 24px)) !important;
-        min-height: 54px !important;
+        min-height: 52px !important;
         gap: 2px !important;
         padding: 4px !important;
         border: 2px solid var(--CroakleLine, #111111) !important;
@@ -87,9 +87,9 @@
       .CroakleBottomNav button {
         position: relative !important;
         min-width: 0 !important;
-        min-height: 46px !important;
+        min-height: 42px !important;
         width: 100% !important;
-        height: 46px !important;
+        height: 42px !important;
         padding: 0 !important;
         border: 0 !important;
         border-radius: 18px !important;
@@ -133,15 +133,15 @@
       @media (max-width: 380px) {
         .CroakleBottomNav {
           width: calc(100vw - 24px) !important;
-          min-height: 50px !important;
+          min-height: 48px !important;
           border-radius: 20px !important;
           gap: 1px !important;
           padding: 3px !important;
         }
 
         .CroakleBottomNav button {
-          min-height: 44px !important;
-          height: 44px !important;
+          min-height: 40px !important;
+          height: 40px !important;
           border-radius: 16px !important;
         }
 
