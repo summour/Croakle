@@ -154,6 +154,12 @@
     document.head.appendChild(style);
   }
 
+  function removeStatsFromDock(nav) {
+    nav.querySelectorAll('[data-page-target="analysis"]').forEach((button) => {
+      button.remove();
+    });
+  }
+
   function getNavKey(button) {
     if (button.dataset.sessionNav !== undefined) {
       return "sessions";
@@ -169,6 +175,7 @@
     }
 
     nav.classList.add("CroakleIconDock");
+    removeStatsFromDock(nav);
 
     nav.querySelectorAll("button").forEach((button) => {
       const key = getNavKey(button);
