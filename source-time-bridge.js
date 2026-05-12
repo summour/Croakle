@@ -4,6 +4,8 @@
   const HabitKey = "CroakleHabitMoodDataCleanV1";
   const ProjectKey = "CroakleProjectDataV1";
 
+  let CroaklePendingNoteTimeSource = null;
+
   function parseJson(value, fallback) {
     try {
       return value ? JSON.parse(value) : fallback;
@@ -23,52 +25,56 @@
     return formatDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
   }
 
-  function getCurrentTrackDate() {
-    const state = parseJson(localStorage.getItem(HabitKey), {});
-    return state.trackDate || getTodayIso();
-  }
-
-  function getProjectDate() {
+  function getProjectDateFromUi() {
     return document.querySelector("#CroakleProjectDates [data-current-date='true']")?.dataset.dateIso || getTodayIso();
   }
 
-  function getHabitSource() {
-    const form = document.querySelector("#CroakleHabitDetailForm");
-    if (!form) return null;
-
-    const index = Number(form.elements.habitIndex?.value);
-    const saved = parseJson(localStorage.getItem(HabitKey), {});
-    const template = saved.habitTemplates?.[index];
-    const name = String(form.elements.habitName?.value || template?.name || "Habit").trim();
-    if (!name) return null;
-
-    return {
-      sourceType: "habit",
-      sourceId: template?.id || `habit:${index}`,
-      sourceName: name,
-      subject: name,
-      type: "study",
-      date: saved.trackDate || getCurrentTrackDate(),
-    };
+  function getHabitNameById(itemId) {
+    const state = parseJson(localStorage.getItem(HabitKey), {});
+    const habits = Array.isArray(state.habitTemplates) ? state.habitTemplates : [];
+    const match = habits.find((habit, index) => (habit.id || `habit-${index}`) === itemId);
+    return String(match?.name || "").trim();
   }
 
-  function getProjectSource() {
-    const form = document.querySelector("#CroakleProjectDetailForm");
-    if (!form) return null;
+  function getProjectNameById(itemId) {
+    const state = parseJson(localStorage.getItem(ProjectKey), {});
+    const projects = Array.isArray(state.projects) ? state.projects : [];
+    const match = projects.find((project, index) => (project.id || `project-${index}`) === itemId);
+    return String(match?.name || "").trim();
+  }
 
-    const index = Number(form.elements.projectIndex?.value);
-    const saved = parseJson(localStorage.getItem(ProjectKey), {});
-    const project = saved.projects?.[index];
-    const name = String(form.elements.projectName?.value || project?.name || "Project").trim();
-    if (!name) return null;
+  function getSourceNameFromNoteButton(button, sourceType, sourceId) {
+    const datasetName = button.dataset.croakleNoteItemLabel
+      || button.dataset.croakleNoteTitle
+      || button.dataset.croakleNoteName;
+
+    if (datasetName) return String(datasetName).trim();
+    if (sourceType === "habit") return getHabitNameById(sourceId) || "Habit";
+    if (sourceType === "project") return getProjectNameById(sourceId) || "Project";
+    return "Session";
+  }
+
+  function getSourceDateFromNoteButton(button, sourceType) {
+    if (button.dataset.croakleNoteDate) return button.dataset.croakleNoteDate;
+    if (sourceType === "project") return getProjectDateFromUi();
+    const habitState = parseJson(localStorage.getItem(HabitKey), {});
+    return habitState.trackDate || getTodayIso();
+  }
+
+  function buildSourceFromNoteButton(button) {
+    const sourceType = String(button.dataset.croakleNoteType || "").toLowerCase();
+    if (sourceType !== "habit" && sourceType !== "project") return null;
+
+    const sourceId = button.dataset.croakleNoteItemId || `${sourceType}:${Date.now()}`;
+    const sourceName = getSourceNameFromNoteButton(button, sourceType, sourceId);
 
     return {
-      sourceType: "project",
-      sourceId: project?.id || `project:${index}`,
-      sourceName: name,
-      subject: name,
-      type: "focus",
-      date: getProjectDate(),
+      sourceType,
+      sourceId,
+      sourceName,
+      subject: sourceName,
+      type: sourceType === "project" ? "focus" : "study",
+      date: getSourceDateFromNoteButton(button, sourceType),
     };
   }
 
@@ -181,63 +187,114 @@
     const style = document.createElement("style");
     style.id = "CroakleSourceTimeStyles";
     style.textContent = `
-      .CroakleAddHabitForm .CroakleSourceTimeButton {
+      #CroakleHabitAddTimeButton,
+      #CroakleProjectAddTimeButton {
+        display: none !important;
+      }
+
+      .CroakleNoteTimeSection {
+        display: grid;
+        gap: 10px;
+        padding: 0 0 12px;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #111111;
+      }
+
+      .CroakleNoteTimeHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .CroakleNoteTimeHeader strong {
+        color: #111111;
+        font-size: 15px;
+        font-weight: 950;
+      }
+
+      .CroakleNoteTimeHeader span {
+        color: #666666;
+        font-size: 12px;
+        font-weight: 850;
+      }
+
+      .CroakleNoteTimeButton {
         width: 100%;
         min-height: 44px;
-        border: 2px solid var(--CroakleLine, #111111);
+        border: 2px solid #111111;
         border-radius: 999px;
-        background: var(--CroakleSurface, #ffffff);
-        color: var(--CroakleInk, #111111);
+        background: #ffffff;
+        color: #111111;
         font: inherit;
         font-size: 15px;
         font-weight: 900;
       }
 
-      .CroakleAddHabitForm .CroakleSourceTimeButton:active {
-        background: var(--CroakleSoftSurface, #f2f2f2);
+      .CroakleNoteTimeButton:active {
+        background: #f2f2f2;
       }
     `;
     document.head.appendChild(style);
   }
 
-  function ensureButton(formSelector, buttonId, label, beforeSelector) {
-    const form = document.querySelector(formSelector);
-    if (!form || form.querySelector(`#${buttonId}`)) return;
+  function getNotesForm() {
+    return document.querySelector("#CroakleNotesLiteForm");
+  }
 
-    const button = document.createElement("button");
-    button.className = "CroakleSourceTimeButton";
-    button.id = buttonId;
-    button.type = "button";
-    button.textContent = label;
+  function removeLegacyDetailButtons() {
+    document.querySelector("#CroakleHabitAddTimeButton")?.remove();
+    document.querySelector("#CroakleProjectAddTimeButton")?.remove();
+  }
 
-    const anchor = form.querySelector(beforeSelector);
-    if (anchor) {
-      anchor.insertAdjacentElement("beforebegin", button);
+  function removeNoteTimeSection() {
+    getNotesForm()?.querySelector("#CroakleNoteTimeSection")?.remove();
+  }
+
+  function ensureNoteTimeSection() {
+    const form = getNotesForm();
+    if (!form) return;
+
+    removeNoteTimeSection();
+
+    if (!CroaklePendingNoteTimeSource || !["habit", "project"].includes(CroaklePendingNoteTimeSource.sourceType)) {
       return;
     }
 
-    form.appendChild(button);
+    const anchor = form.querySelector(".CroakleField");
+    if (!anchor) return;
+
+    anchor.insertAdjacentHTML("beforebegin", `
+      <section class="CroakleNoteTimeSection" id="CroakleNoteTimeSection" aria-label="Time link">
+        <div class="CroakleNoteTimeHeader">
+          <strong>Time</strong>
+          <span>ผูกเวลาของโน้ตวันนี้</span>
+        </div>
+        <button class="CroakleNoteTimeButton" id="CroakleNoteAddTimeButton" type="button">Add time</button>
+      </section>
+    `);
   }
 
-  function ensureButtons() {
-    ensureButton("#CroakleHabitDetailForm", "CroakleHabitAddTimeButton", "Add time", ".CroakleConfirmHabitButton");
-    ensureButton("#CroakleProjectDetailForm", "CroakleProjectAddTimeButton", "Add time", ".CroakleProjectDetailActions");
+  function handleNoteOpen(event) {
+    const noteButton = event.target.closest?.("[data-croakle-note-type]");
+    if (!noteButton) return;
+
+    CroaklePendingNoteTimeSource = buildSourceFromNoteButton(noteButton);
+    window.requestAnimationFrame(ensureNoteTimeSection);
+    window.setTimeout(ensureNoteTimeSection, 80);
   }
 
-  function handleAddTimeClick(event) {
-    const habitButton = event.target.closest?.("#CroakleHabitAddTimeButton");
-    const projectButton = event.target.closest?.("#CroakleProjectAddTimeButton");
-    if (!habitButton && !projectButton) return;
+  function handleNoteAddTime(event) {
+    const button = event.target.closest?.("#CroakleNoteAddTimeButton");
+    if (!button) return;
 
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    const source = habitButton ? getHabitSource() : getProjectSource();
-    if (!source) return;
+    if (!CroaklePendingNoteTimeSource) return;
 
-    document.querySelector("#CroakleHabitDetailDialog")?.close();
-    document.querySelector("#CroakleProjectDetailDialog")?.close();
-    openSessionDialogWithSource(source);
+    document.querySelector("#CroakleNotesLiteDialog")?.close();
+    openSessionDialogWithSource(CroaklePendingNoteTimeSource);
   }
 
   function mergePendingSourceAfterSubmit(event) {
@@ -254,14 +311,17 @@
     }, 0);
   }
 
-  function observeDetailForms() {
+  function observeNotesDialog() {
     if (window.CroakleSourceTimeObserverReady) return;
 
     const shell = document.querySelector(".CroakleHabitMoodShell");
     if (!shell) return;
 
     window.CroakleSourceTimeObserverReady = true;
-    new MutationObserver(() => ensureButtons()).observe(shell, {
+    new MutationObserver(() => {
+      removeLegacyDetailButtons();
+      ensureNoteTimeSection();
+    }).observe(shell, {
       childList: true,
       subtree: true,
     });
@@ -269,15 +329,16 @@
 
   function init() {
     injectStyles();
-    ensureButtons();
-    observeDetailForms();
     installSessionSourcePatch();
+    removeLegacyDetailButtons();
+    observeNotesDialog();
     window.CroakleOpenSessionDialogWithSource = openSessionDialogWithSource;
   }
 
   if (!window.CroakleSourceTimeEventsBound) {
     window.CroakleSourceTimeEventsBound = true;
-    document.addEventListener("click", handleAddTimeClick, true);
+    document.addEventListener("click", handleNoteOpen, true);
+    document.addEventListener("click", handleNoteAddTime, true);
     document.addEventListener("submit", mergePendingSourceAfterSubmit, true);
   }
 
@@ -285,7 +346,5 @@
     document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
     init();
-    window.requestAnimationFrame(ensureButtons);
-    window.setTimeout(ensureButtons, 250);
   }
 })();
