@@ -59,19 +59,16 @@
   };
 
   function injectDockStyles() {
-    document.querySelector("#CroakleIconDockStyles")?.remove();
+    if (document.querySelector("#CroakleIconDockStyles")) return;
 
     const style = document.createElement("style");
     style.id = "CroakleIconDockStyles";
     style.textContent = `
       .CroakleHabitMoodShell {
         padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
-        grid-template-rows: minmax(0, 1fr) auto !important;
       }
 
-      .CroakleBottomNav,
-      .CroakleBottomNav.CroakleIconDock,
-      footer.CroakleBottomNav {
+      .CroakleBottomNav {
         position: fixed !important;
         left: 50% !important;
         right: auto !important;
@@ -83,7 +80,6 @@
         grid-auto-flow: column !important;
         grid-auto-columns: minmax(0, 1fr) !important;
         align-items: center !important;
-        justify-items: stretch !important;
         width: min(calc(100vw - 24px), calc(var(--CroakleShellWidth, 430px) - 24px)) !important;
         min-height: 52px !important;
         gap: 2px !important;
@@ -99,16 +95,13 @@
         display: grid !important;
       }
 
-      .CroakleBottomNav > button,
-      .CroakleBottomNav.CroakleIconDock > button,
-      footer.CroakleBottomNav > button {
+      .CroakleBottomNav button {
         position: relative !important;
         min-width: 0 !important;
         min-height: 42px !important;
         width: 100% !important;
         height: 42px !important;
         padding: 0 !important;
-        margin: 0 !important;
         border: 0 !important;
         border-radius: 18px !important;
         background: transparent !important;
@@ -118,11 +111,14 @@
         font-size: 0 !important;
         line-height: 0 !important;
         white-space: nowrap !important;
-        text-indent: -9999px !important;
-        overflow: hidden !important;
       }
 
-      .CroakleBottomNav > button svg {
+      .CroakleBottomNav button:first-child,
+      .CroakleBottomNav button:last-child {
+        border-radius: 18px !important;
+      }
+
+      .CroakleBottomNav svg {
         width: 28px !important;
         height: 28px !important;
         fill: none !important;
@@ -130,26 +126,23 @@
         stroke-width: 2.2 !important;
         stroke-linecap: round !important;
         stroke-linejoin: round !important;
-        text-indent: 0 !important;
       }
 
-      .CroakleBottomNav > button.CroakleActiveNav {
+      .CroakleBottomNav .CroakleActiveNav {
         background: var(--CroakleInk, #111111) !important;
         color: var(--CroakleSurface, #ffffff) !important;
       }
 
-      .CroakleBottomNav > button:active {
+      .CroakleBottomNav button:active {
         background: #eeeeee !important;
       }
 
-      .CroakleBottomNav > button.CroakleActiveNav:active {
+      .CroakleBottomNav .CroakleActiveNav:active {
         background: var(--CroakleInk, #111111) !important;
       }
 
       @media (max-width: 380px) {
-        .CroakleBottomNav,
-        .CroakleBottomNav.CroakleIconDock,
-        footer.CroakleBottomNav {
+        .CroakleBottomNav {
           width: calc(100vw - 24px) !important;
           min-height: 48px !important;
           border-radius: 20px !important;
@@ -157,15 +150,13 @@
           padding: 3px !important;
         }
 
-        .CroakleBottomNav > button,
-        .CroakleBottomNav.CroakleIconDock > button,
-        footer.CroakleBottomNav > button {
+        .CroakleBottomNav button {
           min-height: 40px !important;
           height: 40px !important;
           border-radius: 16px !important;
         }
 
-        .CroakleBottomNav > button svg {
+        .CroakleBottomNav svg {
           width: 25px !important;
           height: 25px !important;
         }
@@ -211,21 +202,6 @@
     nav.removeAttribute("hidden");
   }
 
-  function normalizeDockItems(nav) {
-    const orderedButtons = ITEMS.map((item) => {
-      const selector = item.key === "sessions" ? "[data-session-nav]" : `[data-page-target="${item.key}"]`;
-      const existing = nav.querySelector(selector);
-
-      if (existing) return existing;
-
-      const wrapper = document.createElement("div");
-      wrapper.innerHTML = `<button type="button" ${item.attr} aria-label="${LABELS[item.key]}"></button>`;
-      return wrapper.firstElementChild;
-    });
-
-    nav.replaceChildren(...orderedButtons);
-  }
-
   function decorateDock() {
     const nav = ensureDock();
     if (!nav) return;
@@ -233,7 +209,25 @@
     nav.className = "CroakleBottomNav CroakleIconDock";
     nav.setAttribute("data-current-dock", "");
     forceDockVisible(nav);
-    normalizeDockItems(nav);
+
+    const buttons = Array.from(nav.querySelectorAll("button"));
+    const seenKeys = new Set();
+
+    buttons.forEach((button) => {
+      const key = getNavKey(button);
+      if (!LABELS[key] || seenKeys.has(key) || key === "best" || key === "analysis") {
+        button.remove();
+        return;
+      }
+      seenKeys.add(key);
+    });
+
+    ITEMS.forEach((item) => {
+      const selector = item.key === "sessions" ? "[data-session-nav]" : `[data-page-target="${item.key}"]`;
+      if (!nav.querySelector(selector)) {
+        nav.insertAdjacentHTML("beforeend", `<button type="button" ${item.attr} aria-label="${LABELS[item.key]}"></button>`);
+      }
+    });
 
     nav.querySelectorAll("button").forEach((button) => {
       const key = getNavKey(button);
@@ -254,14 +248,16 @@
     const button = event.target.closest(".CroakleBottomNav button");
     if (!button) return;
 
-    if (button.dataset.sessionNav !== undefined) return;
+    if (button.dataset.sessionNav !== undefined) {
+      return;
+    }
 
     const pageName = button.dataset.pageTarget;
     if (!pageName || typeof window.CroakleSetPage !== "function") return;
 
     event.preventDefault();
     window.CroakleSetPage(pageName);
-    requestAnimationFrame(decorateDock);
+    requestAnimationFrame(() => decorateDock());
   }
 
   function bindDockNavigation() {
@@ -271,10 +267,33 @@
     document.addEventListener("click", navigateDock);
   }
 
+  function observeDockContainer() {
+    if (window.CroakleIconDockObserverReady) return;
+
+    const shell = getShell();
+    if (!shell) return;
+
+    window.CroakleIconDockObserverReady = true;
+    new MutationObserver((mutations) => {
+      const shouldRepair = mutations.some((mutation) => {
+        return Array.from(mutation.addedNodes).some((node) => {
+          return node.nodeType === 1 && (
+            node.matches?.(".CroakleBottomNav") || node.matches?.(".CroakleBottomNav button")
+          );
+        });
+      });
+
+      if (shouldRepair || document.querySelectorAll(".CroakleBottomNav").length > 1) {
+        decorateDock();
+      }
+    }).observe(shell, { childList: true, subtree: true });
+  }
+
   function initIconDock() {
     injectDockStyles();
     decorateDock();
     bindDockNavigation();
+    observeDockContainer();
   }
 
   window.CroakleDecorateIconDock = decorateDock;
