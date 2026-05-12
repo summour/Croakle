@@ -235,6 +235,10 @@
         z-index: 30 !important;
       }
 
+      .CroakleSessionBlock span {
+        display: none !important;
+      }
+
       .CroakleSessionColumn::before {
         pointer-events: none !important;
         z-index: 0 !important;
@@ -342,9 +346,8 @@
         .sort((a, b) => Number(a.startMinute) - Number(b.startMinute));
 
       column?.insertAdjacentHTML("beforeend", blocks.map((block) => `
-        <button class="CroakleSessionBlock" type="button" data-session-edit="${block.id}" style="${getBlockStyle(block, range)}">
+        <button class="CroakleSessionBlock" type="button" data-session-edit="${block.id}" style="${getBlockStyle(block, range)}" aria-label="${escapeText(block.subject || "Session")}">
           <strong>${escapeText(block.subject || "Session")}</strong>
-          <span>${formatTime(block.startMinute)} · ${Number(block.duration || 60)}m</span>
         </button>
       `).join(""));
     });
