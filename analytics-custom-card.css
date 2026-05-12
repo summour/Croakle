@@ -84,6 +84,34 @@
   line-height: 1.35;
 }
 
+.CroakleSessionGridScroll {
+  background: var(--CroakleSurface, #ffffff) !important;
+}
+
+.CroakleSessionGrid {
+  background: var(--CroakleSurface, #ffffff) !important;
+}
+
+.CroakleSessionTimeCell {
+  background: var(--CroakleSurface, #ffffff) !important;
+  border-top-color: rgba(17, 17, 17, 0.12) !important;
+}
+
+.CroakleSessionColumn {
+  background: transparent !important;
+  border-left-color: rgba(17, 17, 17, 0.12) !important;
+}
+
+.CroakleSessionColumn::before {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 27.8px,
+    rgba(17, 17, 17, 0.12) 27.8px,
+    rgba(17, 17, 17, 0.12) 28.8px
+  ) !important;
+}
+
 @media (max-width: 380px) {
   .CroakleAnalyticsCustomCard {
     border-radius: 18px;
