@@ -33,7 +33,6 @@
   function normalizeRange(state) {
     const startHour = clamp(Math.floor(Number(state.startHour)), 0, 23);
     const endHour = clamp(Math.ceil(Number(state.endHour)), startHour + 1, 24);
-
     return { startHour, endHour };
   }
 
@@ -55,8 +54,8 @@
   }
 
   function formatTime(minutes) {
-    const hour = Math.floor(minutes / 60);
-    const minute = String(minutes % 60).padStart(2, "0");
+    const hour = Math.floor(Number(minutes || 0) / 60);
+    const minute = String(Number(minutes || 0) % 60).padStart(2, "0");
     return `${String(hour).padStart(2, "0")}:${minute}`;
   }
 
@@ -225,7 +224,6 @@
     const top = (start - rangeStart) * MinuteHeight;
     const height = Math.max(30, duration * MinuteHeight);
     const color = block.color || "#60a3ff";
-
     return `top:${top}px;height:${height}px;background:${color};`;
   }
 
@@ -265,7 +263,6 @@
   }
 
   function renderRangeSoon() {
-    renderRange();
     window.requestAnimationFrame(renderRange);
     window.setTimeout(renderRange, 80);
   }
@@ -350,6 +347,24 @@
     saveRangeFromForm(form);
   }
 
+  function handleExternalSessionChange(event) {
+    if (!event.target.matches?.("#CroakleSessionForm")) return;
+    renderRangeSoon();
+  }
+
+  function patchPageNavigation() {
+    if (window.CroakleSessionRangePagePatched || typeof window.CroakleSetPage !== "function") return;
+
+    window.CroakleSessionRangePagePatched = true;
+    const originalSetPage = window.CroakleSetPage;
+
+    window.CroakleSetPage = function CroakleSetPageWithSessionRange(pageName) {
+      const result = originalSetPage.apply(this, arguments);
+      if (pageName === "sessions") renderRangeSoon();
+      return result;
+    };
+  }
+
   function bindEvents() {
     if (window.CroakleSessionRangeEventsBound) return;
     window.CroakleSessionRangeEventsBound = true;
@@ -369,20 +384,10 @@
     });
 
     document.addEventListener("click", handleSaveClick, true);
+    document.addEventListener("submit", handleExternalSessionChange);
     document.addEventListener("submit", (event) => {
       if (event.target.matches("#CroakleSessionRangeForm")) saveRange(event);
     }, true);
-  }
-
-  function observeGrid() {
-    if (window.CroakleSessionRangeObserverReady) return;
-    const grid = document.querySelector("#CroakleSessionGrid");
-    if (!grid) return;
-
-    window.CroakleSessionRangeObserverReady = true;
-    new MutationObserver(() => {
-      if (!isRenderingRange) window.requestAnimationFrame(renderRange);
-    }).observe(grid, { childList: true });
   }
 
   function init() {
@@ -391,8 +396,8 @@
     ensureDialog();
     updateRangeButton();
     bindEvents();
-    renderRange();
-    observeGrid();
+    patchPageNavigation();
+    renderRangeSoon();
   }
 
   window.CroakleRenderSessionRange = renderRange;
