@@ -134,6 +134,16 @@
         line-height: 1.3;
       }
 
+      .CroakleSessionBlock {
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 3 !important;
+      }
+
+      .CroakleSessionColumn::before {
+        z-index: 0 !important;
+      }
+
       @media (max-width: 380px) {
         .CroakleSessionToolbar {
           grid-template-columns: 1fr;
@@ -260,6 +270,44 @@
     window.setTimeout(renderRange, 80);
   }
 
+  function syncColorOptions(form) {
+    const selectedColor = form.elements.color?.value;
+    form.querySelectorAll("[data-session-color]").forEach((button) => {
+      button.classList.toggle("CroakleSessionColorOptionActive", button.dataset.sessionColor === selectedColor);
+    });
+  }
+
+  function openSessionDialog(block) {
+    const dialog = document.querySelector("#CroakleSessionDialog");
+    const form = document.querySelector("#CroakleSessionForm");
+    if (!dialog || !form || !block) return;
+
+    form.reset();
+    form.elements.id.value = block.id || "";
+    form.elements.subject.value = block.subject || "";
+    form.elements.date.value = block.date || "";
+    form.elements.start.value = formatTime(Number(block.startMinute || 9 * 60));
+    form.elements.duration.value = String(Number(block.duration || 60));
+    form.elements.type.value = block.type || "focus";
+    form.elements.color.value = block.color || "#60a3ff";
+    form.querySelector("[data-session-delete]").hidden = false;
+    syncColorOptions(form);
+    dialog.showModal();
+    form.elements.subject.focus();
+  }
+
+  function handleSessionEditClick(event) {
+    const editButton = event.target.closest?.("[data-session-edit]");
+    if (!editButton) return;
+
+    const block = getState().blocks.find((item) => item.id === editButton.dataset.sessionEdit);
+    if (!block) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    openSessionDialog(block);
+  }
+
   function openRangeDialog() {
     const dialog = document.querySelector("#CroakleSessionRangeDialog");
     const form = document.querySelector("#CroakleSessionRangeForm");
@@ -306,6 +354,7 @@
     if (window.CroakleSessionRangeEventsBound) return;
     window.CroakleSessionRangeEventsBound = true;
 
+    document.addEventListener("click", handleSessionEditClick, true);
     document.addEventListener("click", (event) => {
       if (event.target.closest("[data-session-range]")) {
         event.preventDefault();
