@@ -157,9 +157,9 @@
     "#4151ff", "#60a3ff", "#19d8dc", "#78f28a", "#b8d2b4",
     "#007019", "#e9ffc4", "#ffc978", "#ca6a00", "#ff6262",
   ];
-  const StartHour = 6;
-  const EndHour = 22;
-  const MinuteHeight = 0.82;
+  const StartHour = 0;
+  const EndHour = 24;
+  const MinuteHeight = 0.48;
 
   function parseJson(value, fallback) {
     try {
@@ -174,7 +174,7 @@
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
+      .replace(/\"/g, "&quot;");
   }
 
   function getState() {
@@ -225,6 +225,12 @@
     return `${String(hour).padStart(2, "0")}:${minute}`;
   }
 
+  function formatHourLabel(hour) {
+    if (hour === 0) return "12 AM";
+    if (hour === 12) return "12 PM";
+    return hour < 12 ? `${hour} AM` : `${hour - 12} PM`;
+  }
+
   function parseTime(value) {
     const [hour, minute] = String(value || "09:00").split(":").map(Number);
     return Math.max(StartHour * 60, Math.min(EndHour * 60 - 15, hour * 60 + minute));
@@ -242,6 +248,15 @@
     const style = document.createElement("style");
     style.id = "CroakleSessionBlocksStyles";
     style.textContent = `
+      body.CroakleSessionsActive,
+      body.CroakleSessionsActive .CroakleHabitMoodShell {
+        background: #ffffff !important;
+      }
+
+      body.CroakleSessionsActive .CroakleBottomNav {
+        background: #ffffff !important;
+      }
+
       .CroakleBottomNav {
         display: grid !important;
         grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
@@ -262,6 +277,7 @@
       .CroakleSessionCard {
         gap: 10px;
         padding: 12px;
+        background: #ffffff;
       }
 
       .CroakleSessionSubhead {
@@ -279,7 +295,7 @@
       }
 
       .CroakleSessionDayHead {
-        min-height: 58px;
+        min-height: 50px;
         border: 0;
         border-radius: 16px;
         background: var(--CroakleSoftSurface, #f5f5f5);
@@ -293,13 +309,13 @@
 
       .CroakleSessionDayHead strong {
         display: block;
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .CroakleSessionDayHead span {
         display: block;
         color: var(--CroakleMuted, #666666);
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .CroakleSessionGridScroll {
@@ -327,11 +343,12 @@
 
       .CroakleSessionTimeCell {
         height: ${60 * MinuteHeight}px;
-        border-top: 2px dotted rgba(17, 17, 17, 0.22);
-        padding: 5px 4px 0 8px;
+        border-top: 1px solid rgba(17, 17, 17, 0.16);
+        padding: 3px 4px 0 8px;
         color: #111111;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 900;
+        line-height: 1;
       }
 
       .CroakleSessionColumn {
@@ -346,9 +363,9 @@
         background: repeating-linear-gradient(
           to bottom,
           transparent 0,
-          transparent ${60 * MinuteHeight - 2}px,
-          rgba(17, 17, 17, 0.18) ${60 * MinuteHeight - 2}px,
-          rgba(17, 17, 17, 0.18) ${60 * MinuteHeight}px
+          transparent ${60 * MinuteHeight - 1}px,
+          rgba(17, 17, 17, 0.16) ${60 * MinuteHeight - 1}px,
+          rgba(17, 17, 17, 0.16) ${60 * MinuteHeight}px
         );
         pointer-events: none;
       }
@@ -488,7 +505,7 @@
             </label>
             <label class="CroakleField">
               <span>Start</span>
-              <input name="start" type="time" min="06:00" max="21:45" step="900" required />
+              <input name="start" type="time" min="00:00" max="23:45" step="900" required />
             </label>
             <label class="CroakleField">
               <span>Minutes</span>
@@ -531,8 +548,7 @@
   function createTimeCells() {
     return Array.from({ length: EndHour - StartHour }, (_, index) => {
       const hour = StartHour + index;
-      const label = hour === 12 ? "12 PM" : hour < 12 ? `${hour} AM` : `${hour - 12} PM`;
-      return `<div class="CroakleSessionTimeCell" style="grid-column:1;grid-row:${index + 1};">${label}</div>`;
+      return `<div class="CroakleSessionTimeCell" style="grid-column:1;grid-row:${index + 1};">${formatHourLabel(hour)}</div>`;
     }).join("");
   }
 
@@ -581,6 +597,10 @@
     renderBlocks(weekDates);
   }
 
+  function setSessionsActive(active) {
+    document.body.classList.toggle("CroakleSessionsActive", active);
+  }
+
   function setPage(pageName) {
     document.querySelectorAll("[data-page]").forEach((page) => {
       page.classList.toggle("CroaklePageActive", page.dataset.page === pageName);
@@ -594,6 +614,7 @@
     const bottomNav = document.querySelector(".CroakleBottomNav");
     if (bottomNav) bottomNav.hidden = pageName === "menu";
 
+    setSessionsActive(pageName === PageName);
     if (pageName === PageName) renderSessions();
   }
 
@@ -610,6 +631,7 @@
       }
 
       document.querySelector(`[data-page="${PageName}"]`)?.classList.remove("CroaklePageActive");
+      setSessionsActive(false);
       const result = originalSetPage.apply(this, arguments);
       document.querySelector("[data-session-nav]")?.classList.remove("CroakleActiveNav");
       return result;
