@@ -154,8 +154,15 @@
     document.head.appendChild(style);
   }
 
-  function removeStatsFromDock(nav) {
-    nav.querySelectorAll('[data-page-target="analysis"]').forEach((button) => {
+  function removeDuplicateDocks() {
+    const docks = Array.from(document.querySelectorAll(".CroakleBottomNav"));
+    docks.slice(1).forEach((dock) => dock.remove());
+    return docks[0] || null;
+  }
+
+  function removeLegacyDockArtifacts(nav) {
+    nav.classList.remove("CroakleProjectNav", "CroakleAnalyticsNav");
+    nav.querySelectorAll('[data-page-target="analysis"], [data-page-target="best"]').forEach((button) => {
       button.remove();
     });
   }
@@ -169,13 +176,13 @@
   }
 
   function decorateDock() {
-    const nav = document.querySelector(".CroakleBottomNav");
+    const nav = removeDuplicateDocks();
     if (!nav) {
       return;
     }
 
     nav.classList.add("CroakleIconDock");
-    removeStatsFromDock(nav);
+    removeLegacyDockArtifacts(nav);
 
     nav.querySelectorAll("button").forEach((button) => {
       const key = getNavKey(button);
