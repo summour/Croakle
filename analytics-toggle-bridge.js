@@ -243,9 +243,20 @@
     style.id = "CroakleSessionBlocksStyles";
     style.textContent = `
       .CroakleBottomNav {
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
+        display: grid !important;
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+        grid-auto-flow: row !important;
+        grid-auto-columns: auto !important;
+        gap: 6px !important;
+        overflow: hidden !important;
+      }
+
+      .CroakleBottomNav button {
+        min-width: 0 !important;
+        min-height: 32px !important;
+        padding: 0 4px !important;
+        font-size: 12px !important;
+        white-space: nowrap;
       }
 
       .CroakleSessionCard {
@@ -439,7 +450,7 @@
     const footer = document.querySelector(".CroakleBottomNav");
     if (!shell || !footer) return;
 
-    footer.insertAdjacentHTML("beforeend", `<button type="button" data-session-nav>Stats</button>`);
+    footer.insertAdjacentHTML("beforeend", `<button type="button" data-session-nav>Time</button>`);
     footer.querySelector("[data-page-target='notes']")?.setAttribute("title", "Notes");
 
     footer.insertAdjacentHTML("beforebegin", `
@@ -546,7 +557,7 @@
 
     grid.innerHTML = createTimeCells() + createColumns(weekDates);
 
-    weekDates.forEach((date, index) => {
+    weekDates.forEach((date) => {
       const dateIso = formatDate(date);
       const column = grid.querySelector(`[data-session-date="${dateIso}"]`);
       const blocks = state.blocks
