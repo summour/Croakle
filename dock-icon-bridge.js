@@ -58,7 +58,7 @@
     style.id = "CroakleIconDockStyles";
     style.textContent = `
       .CroakleHabitMoodShell {
-        padding-bottom: calc(94px + env(safe-area-inset-bottom)) !important;
+        padding-bottom: calc(88px + env(safe-area-inset-bottom)) !important;
       }
 
       .CroakleBottomNav {
@@ -70,10 +70,13 @@
         z-index: 1000 !important;
         display: grid !important;
         grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
-        width: min(92vw, 388px) !important;
-        min-height: 56px !important;
-        gap: 0 !important;
-        padding: 0 !important;
+        grid-auto-flow: column !important;
+        grid-auto-columns: minmax(0, 1fr) !important;
+        align-items: center !important;
+        width: min(88vw, 344px) !important;
+        min-height: 54px !important;
+        gap: 2px !important;
+        padding: 4px !important;
         border: 2px solid var(--CroakleLine, #111111) !important;
         border-radius: 22px !important;
         background: var(--CroakleSurface, #ffffff) !important;
@@ -84,13 +87,12 @@
       .CroakleBottomNav button {
         position: relative !important;
         min-width: 0 !important;
-        min-height: 56px !important;
-        width: auto !important;
-        height: 56px !important;
+        min-height: 46px !important;
+        width: 100% !important;
+        height: 46px !important;
         padding: 0 !important;
         border: 0 !important;
-        border-right: 1.5px solid var(--CroakleLine, #111111) !important;
-        border-radius: 0 !important;
+        border-radius: 18px !important;
         background: transparent !important;
         color: var(--CroakleInk, #111111) !important;
         display: grid !important;
@@ -100,20 +102,14 @@
         white-space: nowrap !important;
       }
 
-      .CroakleBottomNav button:first-child {
-        border-top-left-radius: 20px !important;
-        border-bottom-left-radius: 20px !important;
-      }
-
+      .CroakleBottomNav button:first-child,
       .CroakleBottomNav button:last-child {
-        border-right: 0 !important;
-        border-top-right-radius: 20px !important;
-        border-bottom-right-radius: 20px !important;
+        border-radius: 18px !important;
       }
 
       .CroakleBottomNav svg {
-        width: 29px !important;
-        height: 29px !important;
+        width: 28px !important;
+        height: 28px !important;
         fill: none !important;
         stroke: currentColor !important;
         stroke-width: 2.2 !important;
@@ -126,10 +122,6 @@
         color: var(--CroakleSurface, #ffffff) !important;
       }
 
-      .CroakleBottomNav .CroakleActiveNav + button {
-        border-left-color: transparent !important;
-      }
-
       .CroakleBottomNav button:active {
         background: #eeeeee !important;
       }
@@ -140,19 +132,22 @@
 
       @media (max-width: 380px) {
         .CroakleBottomNav {
-          width: calc(100vw - 24px) !important;
-          min-height: 52px !important;
+          width: calc(100vw - 28px) !important;
+          min-height: 50px !important;
           border-radius: 20px !important;
+          gap: 1px !important;
+          padding: 3px !important;
         }
 
         .CroakleBottomNav button {
-          min-height: 52px !important;
-          height: 52px !important;
+          min-height: 44px !important;
+          height: 44px !important;
+          border-radius: 16px !important;
         }
 
         .CroakleBottomNav svg {
-          width: 26px !important;
-          height: 26px !important;
+          width: 25px !important;
+          height: 25px !important;
         }
       }
     `;
