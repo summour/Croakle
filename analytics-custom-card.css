@@ -88,6 +88,12 @@
   background: var(--CroakleSurface, #ffffff) !important;
 }
 
+.CroakleSessionWeekHead,
+.CroakleSessionGrid {
+  grid-template-columns: 64px repeat(7, minmax(54px, 1fr)) !important;
+  min-width: 486px !important;
+}
+
 .CroakleSessionGrid {
   background: var(--CroakleSurface, #ffffff) !important;
   isolation: isolate !important;
@@ -107,6 +113,8 @@
   background: var(--CroakleSurface, #ffffff) !important;
   border-top-color: rgba(17, 17, 17, 0.12) !important;
   border-right: 1px solid rgba(17, 17, 17, 0.12) !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
 }
 
 .CroakleSessionColumn {
@@ -141,5 +149,11 @@
   .CroakleAnalyticsCustomSelect {
     min-height: 36px;
     font-size: 12px;
+  }
+
+  .CroakleSessionWeekHead,
+  .CroakleSessionGrid {
+    grid-template-columns: 60px repeat(7, minmax(50px, 1fr)) !important;
+    min-width: 460px !important;
   }
 }
