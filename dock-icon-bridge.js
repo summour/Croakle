@@ -91,6 +91,10 @@
         overflow: hidden !important;
       }
 
+      .CroakleBottomNav[hidden] {
+        display: grid !important;
+      }
+
       .CroakleBottomNav button {
         position: relative !important;
         min-width: 0 !important;
@@ -193,13 +197,37 @@
     return button.dataset.pageTarget || "menu";
   }
 
+  function forceDockVisible(nav) {
+    nav.hidden = false;
+    nav.removeAttribute("hidden");
+  }
+
   function decorateDock() {
     const nav = ensureDock();
     if (!nav) return;
 
     nav.className = "CroakleBottomNav CroakleIconDock";
     nav.setAttribute("data-current-dock", "");
-    nav.querySelectorAll('[data-page-target="analysis"], [data-page-target="best"]').forEach((button) => button.remove());
+    forceDockVisible(nav);
+
+    const buttons = Array.from(nav.querySelectorAll("button"));
+    const seenKeys = new Set();
+
+    buttons.forEach((button) => {
+      const key = getNavKey(button);
+      if (!LABELS[key] || seenKeys.has(key) || key === "best" || key === "analysis") {
+        button.remove();
+        return;
+      }
+      seenKeys.add(key);
+    });
+
+    ITEMS.forEach((item) => {
+      const selector = item.key === "sessions" ? "[data-session-nav]" : `[data-page-target="${item.key}"]`;
+      if (!nav.querySelector(selector)) {
+        nav.insertAdjacentHTML("beforeend", `<button type="button" ${item.attr} aria-label="${LABELS[item.key]}"></button>`);
+      }
+    });
 
     nav.querySelectorAll("button").forEach((button) => {
       const key = getNavKey(button);
@@ -216,6 +244,29 @@
     });
   }
 
+  function navigateDock(event) {
+    const button = event.target.closest(".CroakleBottomNav button");
+    if (!button) return;
+
+    if (button.dataset.sessionNav !== undefined) {
+      return;
+    }
+
+    const pageName = button.dataset.pageTarget;
+    if (!pageName || typeof window.CroakleSetPage !== "function") return;
+
+    event.preventDefault();
+    window.CroakleSetPage(pageName);
+    requestAnimationFrame(() => decorateDock());
+  }
+
+  function bindDockNavigation() {
+    if (window.CroakleIconDockNavigationBound) return;
+
+    window.CroakleIconDockNavigationBound = true;
+    document.addEventListener("click", navigateDock);
+  }
+
   function observeDockContainer() {
     if (window.CroakleIconDockObserverReady) return;
 
@@ -226,19 +277,22 @@
     new MutationObserver((mutations) => {
       const shouldRepair = mutations.some((mutation) => {
         return Array.from(mutation.addedNodes).some((node) => {
-          return node.nodeType === 1 && node.matches?.(".CroakleBottomNav");
+          return node.nodeType === 1 && (
+            node.matches?.(".CroakleBottomNav") || node.matches?.(".CroakleBottomNav button")
+          );
         });
       });
 
       if (shouldRepair || document.querySelectorAll(".CroakleBottomNav").length > 1) {
         decorateDock();
       }
-    }).observe(shell, { childList: true });
+    }).observe(shell, { childList: true, subtree: true });
   }
 
   function initIconDock() {
     injectDockStyles();
     decorateDock();
+    bindDockNavigation();
     observeDockContainer();
   }
 
