@@ -86,12 +86,17 @@
 
 .CroakleSessionGridScroll {
   background: var(--CroakleSurface, #ffffff) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-x: none !important;
+  touch-action: pan-y !important;
 }
 
 .CroakleSessionWeekHead,
 .CroakleSessionGrid {
-  grid-template-columns: 64px repeat(7, minmax(54px, 1fr)) !important;
-  min-width: 486px !important;
+  grid-template-columns: 64px repeat(7, minmax(0, 1fr)) !important;
+  min-width: 0 !important;
+  width: 100% !important;
 }
 
 .CroakleSessionGrid {
@@ -153,7 +158,8 @@
 
   .CroakleSessionWeekHead,
   .CroakleSessionGrid {
-    grid-template-columns: 60px repeat(7, minmax(50px, 1fr)) !important;
-    min-width: 460px !important;
+    grid-template-columns: 60px repeat(7, minmax(0, 1fr)) !important;
+    min-width: 0 !important;
+    width: 100% !important;
   }
 }
