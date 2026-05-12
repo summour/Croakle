@@ -40,6 +40,15 @@
     `,
   };
 
+  const ITEMS = [
+    { key: "menu", attr: 'data-page-target="menu"' },
+    { key: "track", attr: 'data-page-target="track"' },
+    { key: "project", attr: 'data-page-target="project"' },
+    { key: "mood", attr: 'data-page-target="mood"' },
+    { key: "notes", attr: 'data-page-target="notes"' },
+    { key: "sessions", attr: "data-session-nav" },
+  ];
+
   const LABELS = {
     menu: "Home",
     track: "Habit",
@@ -154,17 +163,23 @@
     document.head.appendChild(style);
   }
 
-  function removeDuplicateDocks() {
-    const docks = Array.from(document.querySelectorAll(".CroakleBottomNav"));
-    docks.slice(1).forEach((dock) => dock.remove());
-    return docks[0] || null;
+  function removeAllDocks() {
+    document.querySelectorAll(".CroakleBottomNav").forEach((dock) => dock.remove());
   }
 
-  function removeLegacyDockArtifacts(nav) {
-    nav.classList.remove("CroakleProjectNav", "CroakleAnalyticsNav");
-    nav.querySelectorAll('[data-page-target="analysis"], [data-page-target="best"]').forEach((button) => {
-      button.remove();
-    });
+  function createCurrentDock() {
+    const shell = document.querySelector(".CroakleHabitMoodShell");
+    if (!shell) {
+      return null;
+    }
+
+    removeAllDocks();
+    shell.insertAdjacentHTML("beforeend", `
+      <footer class="CroakleBottomNav CroakleIconDock" aria-label="Quick navigation" data-current-dock>
+        ${ITEMS.map((item) => `<button type="button" ${item.attr} aria-label="${LABELS[item.key]}"></button>`).join("")}
+      </footer>
+    `);
+    return shell.querySelector(".CroakleBottomNav");
   }
 
   function getNavKey(button) {
@@ -176,13 +191,15 @@
   }
 
   function decorateDock() {
-    const nav = removeDuplicateDocks();
+    const nav = document.querySelector(".CroakleBottomNav") || createCurrentDock();
     if (!nav) {
       return;
     }
 
-    nav.classList.add("CroakleIconDock");
-    removeLegacyDockArtifacts(nav);
+    nav.className = "CroakleBottomNav CroakleIconDock";
+    nav.querySelectorAll('[data-page-target="analysis"], [data-page-target="best"]').forEach((button) => {
+      button.remove();
+    });
 
     nav.querySelectorAll("button").forEach((button) => {
       const key = getNavKey(button);
@@ -192,14 +209,24 @@
     });
   }
 
-  function observeDock() {
-    const nav = document.querySelector(".CroakleBottomNav");
-    if (!nav || window.CroakleIconDockObserverReady) {
+  function observePageShell() {
+    if (window.CroakleIconDockObserverReady) {
+      return;
+    }
+
+    const shell = document.querySelector(".CroakleHabitMoodShell");
+    if (!shell) {
       return;
     }
 
     window.CroakleIconDockObserverReady = true;
-    new MutationObserver(decorateDock).observe(nav, {
+    new MutationObserver(() => {
+      const docks = document.querySelectorAll(".CroakleBottomNav");
+      if (docks.length > 1 || !document.querySelector("[data-current-dock]")) {
+        createCurrentDock();
+      }
+      decorateDock();
+    }).observe(shell, {
       childList: true,
       subtree: true,
     });
@@ -207,8 +234,9 @@
 
   function initIconDock() {
     injectDockStyles();
+    createCurrentDock();
     decorateDock();
-    observeDock();
+    observePageShell();
   }
 
   window.CroakleDecorateIconDock = decorateDock;
