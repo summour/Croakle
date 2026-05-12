@@ -1,8 +1,9 @@
 (() => {
-  const StoreKey = "CroakleSessionBlocksV1";
-  const WeekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const SessionKey = "CroakleSessionBlocksV1";
+  const ActivityKey = "CroakleActivityLogsV1";
   const MinuteHeight = 0.48;
-  let isRenderingRange = false;
+  const WeekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  let isRendering = false;
 
   function parseJson(value, fallback) {
     try {
@@ -12,8 +13,12 @@
     }
   }
 
-  function getState() {
-    const saved = parseJson(localStorage.getItem(StoreKey), {});
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function readSessionState() {
+    const saved = parseJson(localStorage.getItem(SessionKey), {});
     return {
       weekOffset: Number(saved.weekOffset || 0),
       blocks: Array.isArray(saved.blocks) ? saved.blocks : [],
@@ -22,31 +27,120 @@
     };
   }
 
-  function saveState(state) {
-    localStorage.setItem(StoreKey, JSON.stringify(state));
-  }
-
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
-
   function normalizeRange(state) {
     const startHour = clamp(Math.floor(Number(state.startHour)), 0, 23);
     const endHour = clamp(Math.ceil(Number(state.endHour)), startHour + 1, 24);
     return { startHour, endHour };
   }
 
+  function saveSessionState(nextState) {
+    const previous = readSessionState();
+    const range = normalizeRange({
+      startHour: Number.isFinite(Number(nextState.startHour)) ? nextState.startHour : previous.startHour,
+      endHour: Number.isFinite(Number(nextState.endHour)) ? nextState.endHour : previous.endHour,
+    });
+    const state = {
+      ...previous,
+      ...nextState,
+      startHour: range.startHour,
+      endHour: range.endHour,
+      blocks: Array.isArray(nextState.blocks) ? nextState.blocks : previous.blocks,
+    };
+    localStorage.setItem(SessionKey, JSON.stringify(state));
+    syncSessionBlocksToActivityLogs(state.blocks);
+  }
+
+  function getActivityLogs() {
+    const logs = parseJson(localStorage.getItem(ActivityKey), []);
+    return Array.isArray(logs) ? logs : [];
+  }
+
+  function saveActivityLogs(logs) {
+    localStorage.setItem(ActivityKey, JSON.stringify(logs));
+  }
+
+  function blockToLog(block) {
+    const now = Date.now();
+    return {
+      id: `session:${block.id}`,
+      sessionId: block.id,
+      date: block.date,
+      sourceType: block.sourceType || block.type || "manual",
+      sourceId: block.sourceId || block.id,
+      sourceName: block.sourceName || block.subject || "Session",
+      status: "done",
+      startMinute: Number(block.startMinute || 0),
+      duration: Number(block.duration || 0),
+      note: block.note || "",
+      color: block.color || "#60a3ff",
+      createdAt: Number(block.createdAt || now),
+      updatedAt: now,
+    };
+  }
+
+  function syncSessionBlocksToActivityLogs(blocks) {
+    const logs = getActivityLogs();
+    const sessionIds = new Set(blocks.map((block) => block.id));
+    const nonSessionLogs = logs.filter((log) => {
+      return !String(log.id || "").startsWith("session:") || sessionIds.has(log.sessionId);
+    });
+    const sessionLogsById = new Map(
+      nonSessionLogs
+        .filter((log) => String(log.id || "").startsWith("session:"))
+        .map((log) => [log.sessionId, log])
+    );
+
+    blocks.forEach((block) => {
+      const oldLog = sessionLogsById.get(block.id) || {};
+      const nextLog = { ...oldLog, ...blockToLog(block) };
+      const index = nonSessionLogs.findIndex((log) => log.id === nextLog.id);
+      if (index >= 0) {
+        nonSessionLogs[index] = nextLog;
+        return;
+      }
+      nonSessionLogs.push(nextLog);
+    });
+
+    saveActivityLogs(nonSessionLogs);
+  }
+
+  function installSessionStoragePatch() {
+    if (window.CroakleActivityLogStoragePatched) return;
+    window.CroakleActivityLogStoragePatched = true;
+
+    const nativeSetItem = localStorage.setItem.bind(localStorage);
+    localStorage.setItem = function setItemWithActivityLogs(key, value) {
+      if (key !== SessionKey) {
+        nativeSetItem(key, value);
+        return;
+      }
+
+      const previous = readSessionState();
+      const incoming = parseJson(value, {});
+      const range = normalizeRange({
+        startHour: Number.isFinite(Number(incoming.startHour)) ? incoming.startHour : previous.startHour,
+        endHour: Number.isFinite(Number(incoming.endHour)) ? incoming.endHour : previous.endHour,
+      });
+      const nextState = {
+        ...previous,
+        ...incoming,
+        startHour: range.startHour,
+        endHour: range.endHour,
+        blocks: Array.isArray(incoming.blocks) ? incoming.blocks : previous.blocks,
+      };
+
+      nativeSetItem(key, JSON.stringify(nextState));
+      syncSessionBlocksToActivityLogs(nextState.blocks);
+    };
+  }
+
   function parseHour(value, fallback, isEnd = false) {
     const rawValue = String(value || "").trim().toLowerCase();
     if (!rawValue) return fallback;
     if (isEnd && (rawValue === "24" || rawValue === "24:00")) return 24;
-
     const match = rawValue.match(/^(\d{1,2})(?::\d{1,2})?$/);
     if (!match) return fallback;
-
-    const hour = Number(match[1]);
-    const max = isEnd ? 24 : 23;
-    return clamp(hour, 0, max);
+    return clamp(Number(match[1]), 0, isEnd ? 24 : 23);
   }
 
   function formatHourInput(hour) {
@@ -54,8 +148,9 @@
   }
 
   function formatTime(minutes) {
-    const hour = Math.floor(Number(minutes || 0) / 60);
-    const minute = String(Number(minutes || 0) % 60).padStart(2, "0");
+    const safeMinutes = Number(minutes || 0);
+    const hour = Math.floor(safeMinutes / 60);
+    const minute = String(safeMinutes % 60).padStart(2, "0");
     return `${String(hour).padStart(2, "0")}:${minute}`;
   }
 
@@ -135,11 +230,13 @@
 
       .CroakleSessionBlock {
         cursor: pointer;
-        pointer-events: auto;
-        z-index: 3 !important;
+        pointer-events: auto !important;
+        touch-action: manipulation;
+        z-index: 30 !important;
       }
 
       .CroakleSessionColumn::before {
+        pointer-events: none !important;
         z-index: 0 !important;
       }
 
@@ -174,9 +271,7 @@
             <h2 id="CroakleSessionRangeTitle">Time range</h2>
             <button type="button" data-session-range-close aria-label="Close">×</button>
           </header>
-          <p class="CroakleSessionRangeHint">
-            ใส่เวลาได้อิสระ เช่น 8, 08:00, 18:00, 24:00
-          </p>
+          <p class="CroakleSessionRangeHint">ใส่เวลาได้อิสระ เช่น 8, 08:00, 18:00, 24:00</p>
           <div class="CroakleSessionFormGrid">
             <label class="CroakleField">
               <span>Show from</span>
@@ -194,11 +289,9 @@
   }
 
   function updateRangeButton() {
-    const state = getState();
-    const range = normalizeRange(state);
+    const range = normalizeRange(readSessionState());
     const button = document.querySelector("[data-session-range]");
     if (!button) return;
-
     button.textContent = `${formatHourInput(range.startHour)}-${formatHourInput(range.endHour)}`;
   }
 
@@ -211,7 +304,6 @@
 
   function createColumns(weekDates, range) {
     const rowEnd = range.endHour - range.startHour + 1;
-
     return weekDates.map((date, index) => `
       <div class="CroakleSessionColumn" data-session-date="${formatDate(date)}" style="grid-column:${index + 2};grid-row:1/${rowEnd};"></div>
     `).join("");
@@ -229,11 +321,10 @@
 
   function renderRange() {
     const grid = document.querySelector("#CroakleSessionGrid");
-    if (!grid || isRenderingRange) return;
+    if (!grid || isRendering) return;
 
-    isRenderingRange = true;
-
-    const state = getState();
+    isRendering = true;
+    const state = readSessionState();
     const range = normalizeRange(state);
     const weekDates = getWeekDates(state);
     const visibleStart = range.startHour * 60;
@@ -253,13 +344,13 @@
       column?.insertAdjacentHTML("beforeend", blocks.map((block) => `
         <button class="CroakleSessionBlock" type="button" data-session-edit="${block.id}" style="${getBlockStyle(block, range)}">
           <strong>${escapeText(block.subject || "Session")}</strong>
-          <span>${formatTime(Number(block.startMinute || 0))} · ${Number(block.duration || 60)}m</span>
+          <span>${formatTime(block.startMinute)} · ${Number(block.duration || 60)}m</span>
         </button>
       `).join(""));
     });
 
     updateRangeButton();
-    isRenderingRange = false;
+    isRendering = false;
   }
 
   function renderRangeSoon() {
@@ -283,7 +374,7 @@
     form.elements.id.value = block.id || "";
     form.elements.subject.value = block.subject || "";
     form.elements.date.value = block.date || "";
-    form.elements.start.value = formatTime(Number(block.startMinute || 9 * 60));
+    form.elements.start.value = formatTime(block.startMinute || 9 * 60);
     form.elements.duration.value = String(Number(block.duration || 60));
     form.elements.type.value = block.type || "focus";
     form.elements.color.value = block.color || "#60a3ff";
@@ -293,24 +384,12 @@
     form.elements.subject.focus();
   }
 
-  function handleSessionEditClick(event) {
-    const editButton = event.target.closest?.("[data-session-edit]");
-    if (!editButton) return;
-
-    const block = getState().blocks.find((item) => item.id === editButton.dataset.sessionEdit);
-    if (!block) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    openSessionDialog(block);
-  }
-
   function openRangeDialog() {
     const dialog = document.querySelector("#CroakleSessionRangeDialog");
     const form = document.querySelector("#CroakleSessionRangeForm");
     if (!dialog || !form) return;
 
-    const range = normalizeRange(getState());
+    const range = normalizeRange(readSessionState());
     form.elements.startHour.value = formatHourInput(range.startHour);
     form.elements.endHour.value = formatHourInput(range.endHour);
     dialog.showModal();
@@ -318,46 +397,74 @@
   }
 
   function saveRangeFromForm(form) {
-    const state = getState();
+    const state = readSessionState();
     const startHour = parseHour(form.elements.startHour.value, state.startHour, false);
     const endHour = parseHour(form.elements.endHour.value, state.endHour, true);
-
-    state.startHour = startHour;
-    state.endHour = Math.max(startHour + 1, endHour);
-    saveState(state);
+    saveSessionState({ ...state, startHour, endHour: Math.max(startHour + 1, endHour) });
     document.querySelector("#CroakleSessionRangeDialog")?.close();
     renderRangeSoon();
   }
 
-  function saveRange(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    saveRangeFromForm(event.currentTarget);
+  function getEditButton(event) {
+    return event.composedPath?.().find((node) => node?.nodeType === 1 && node.matches?.("[data-session-edit]"))
+      || event.target.closest?.("[data-session-edit]");
   }
 
-  function handleSaveClick(event) {
-    const button = event.target.closest?.("#CroakleSessionRangeForm .CroakleConfirmHabitButton");
+  function handleSessionEdit(event) {
+    const button = getEditButton(event);
     if (!button) return;
-
-    const form = button.closest("#CroakleSessionRangeForm");
-    if (!form) return;
-
+    const block = readSessionState().blocks.find((item) => item.id === button.dataset.sessionEdit);
+    if (!block) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    saveRangeFromForm(form);
+    openSessionDialog(block);
   }
 
-  function handleExternalSessionChange(event) {
-    if (!event.target.matches?.("#CroakleSessionForm")) return;
-    renderRangeSoon();
+  function bindEvents() {
+    if (window.CroakleSessionRangeEventsBound) return;
+    window.CroakleSessionRangeEventsBound = true;
+
+    document.addEventListener("pointerup", handleSessionEdit, true);
+    document.addEventListener("click", handleSessionEdit, true);
+    document.addEventListener("touchend", handleSessionEdit, true);
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest("[data-session-range]")) {
+        event.preventDefault();
+        openRangeDialog();
+        return;
+      }
+      if (event.target.closest("[data-session-range-close]")) {
+        event.preventDefault();
+        document.querySelector("#CroakleSessionRangeDialog")?.close();
+      }
+    }, true);
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest?.("#CroakleSessionRangeForm .CroakleConfirmHabitButton");
+      if (!button) return;
+      const form = button.closest("#CroakleSessionRangeForm");
+      if (!form) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      saveRangeFromForm(form);
+    }, true);
+
+    document.addEventListener("submit", (event) => {
+      if (event.target.matches("#CroakleSessionRangeForm")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        saveRangeFromForm(event.target);
+        return;
+      }
+      if (event.target.matches("#CroakleSessionForm")) renderRangeSoon();
+    }, true);
   }
 
   function patchPageNavigation() {
     if (window.CroakleSessionRangePagePatched || typeof window.CroakleSetPage !== "function") return;
-
     window.CroakleSessionRangePagePatched = true;
     const originalSetPage = window.CroakleSetPage;
-
     window.CroakleSetPage = function CroakleSetPageWithSessionRange(pageName) {
       const result = originalSetPage.apply(this, arguments);
       if (pageName === "sessions") renderRangeSoon();
@@ -365,41 +472,35 @@
     };
   }
 
-  function bindEvents() {
-    if (window.CroakleSessionRangeEventsBound) return;
-    window.CroakleSessionRangeEventsBound = true;
-
-    document.addEventListener("click", handleSessionEditClick, true);
-    document.addEventListener("click", (event) => {
-      if (event.target.closest("[data-session-range]")) {
-        event.preventDefault();
-        openRangeDialog();
-        return;
-      }
-
-      if (event.target.closest("[data-session-range-close]")) {
-        event.preventDefault();
-        document.querySelector("#CroakleSessionRangeDialog")?.close();
-      }
-    });
-
-    document.addEventListener("click", handleSaveClick, true);
-    document.addEventListener("submit", handleExternalSessionChange);
-    document.addEventListener("submit", (event) => {
-      if (event.target.matches("#CroakleSessionRangeForm")) saveRange(event);
-    }, true);
-  }
-
   function init() {
+    installSessionStoragePatch();
     injectStyles();
     ensureToolbar();
     ensureDialog();
-    updateRangeButton();
     bindEvents();
     patchPageNavigation();
+    syncSessionBlocksToActivityLogs(readSessionState().blocks);
+    updateRangeButton();
     renderRangeSoon();
   }
 
+  window.CroakleActivityLogStore = {
+    getLogs: getActivityLogs,
+    saveLog(log) {
+      const logs = getActivityLogs().filter((item) => item.id !== log.id);
+      logs.push({ ...log, updatedAt: Date.now() });
+      saveActivityLogs(logs);
+    },
+    deleteLog(id) {
+      saveActivityLogs(getActivityLogs().filter((log) => log.id !== id));
+    },
+    getLogsBySource(sourceType, sourceId) {
+      return getActivityLogs().filter((log) => log.sourceType === sourceType && log.sourceId === sourceId);
+    },
+    getLogsByDate(date) {
+      return getActivityLogs().filter((log) => log.date === date);
+    },
+  };
   window.CroakleRenderSessionRange = renderRange;
   window.requestAnimationFrame(init);
 })();
