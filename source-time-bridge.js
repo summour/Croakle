@@ -47,7 +47,7 @@
       sourceId: template?.id || `habit:${index}`,
       sourceName: name,
       subject: name,
-      type: "habit",
+      type: "study",
       date: saved.trackDate || getCurrentTrackDate(),
     };
   }
@@ -94,6 +94,11 @@
     localStorage.removeItem(SourceDraftKey);
   }
 
+  function setFormValue(form, name, value) {
+    if (!form.elements[name]) return;
+    form.elements[name].value = value;
+  }
+
   function openSessionDialogWithSource(source) {
     const dialog = document.querySelector("#CroakleSessionDialog");
     const form = document.querySelector("#CroakleSessionForm");
@@ -101,27 +106,26 @@
 
     const sessionId = `CroakleSession${Date.now()}`;
     const payload = { ...source, id: sessionId };
+    const color = source.sourceType === "project" ? "#ffc978" : "#78f28a";
+
     ensureSourceFields(form);
     savePendingSource(payload);
-
     form.reset();
-    form.elements.id.value = sessionId;
-    form.elements.subject.value = source.subject || source.sourceName || "Session";
-    form.elements.date.value = source.date || getTodayIso();
-    form.elements.start.value = "09:00";
-    form.elements.duration.value = "60";
-    form.elements.type.value = source.type || source.sourceType || "focus";
-    form.elements.color.value = source.sourceType === "project" ? "#ffc978" : "#78f28a";
-    form.elements.sourceType.value = source.sourceType || "manual";
-    form.elements.sourceId.value = source.sourceId || sessionId;
-    form.elements.sourceName.value = source.sourceName || form.elements.subject.value;
+
+    setFormValue(form, "id", sessionId);
+    setFormValue(form, "subject", source.subject || source.sourceName || "Session");
+    setFormValue(form, "date", source.date || getTodayIso());
+    setFormValue(form, "start", "09:00");
+    setFormValue(form, "duration", "60");
+    setFormValue(form, "type", source.type || "focus");
+    setFormValue(form, "color", color);
+    setFormValue(form, "sourceType", source.sourceType || "manual");
+    setFormValue(form, "sourceId", source.sourceId || sessionId);
+    setFormValue(form, "sourceName", source.sourceName || source.subject || "Session");
 
     form.querySelector("[data-session-delete]")?.setAttribute("hidden", "");
     form.querySelectorAll("[data-session-color]").forEach((button) => {
-      button.classList.toggle(
-        "CroakleSessionColorOptionActive",
-        button.dataset.sessionColor === form.elements.color.value
-      );
+      button.classList.toggle("CroakleSessionColorOptionActive", button.dataset.sessionColor === color);
     });
 
     dialog.showModal();
@@ -129,42 +133,46 @@
     return true;
   }
 
+  function patchSessionBlock(state, pending) {
+    if (!Array.isArray(state.blocks)) return state;
+
+    state.blocks = state.blocks.map((block) => {
+      if (block.id !== pending.id) return block;
+      return {
+        ...block,
+        sourceType: pending.sourceType,
+        sourceId: pending.sourceId,
+        sourceName: pending.sourceName,
+      };
+    });
+
+    return state;
+  }
+
   function installSessionSourcePatch() {
     if (window.CroakleSourceTimeStoragePatched) return;
     window.CroakleSourceTimeStoragePatched = true;
 
     const nativeSetItem = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = function setItemWithSessionSource(key, value) {
-      if (key !== SessionKey) {
-        nativeSetItem(key, value);
-        return;
-      }
+    try {
+      localStorage.setItem = function setItemWithSessionSource(key, value) {
+        if (key !== SessionKey) {
+          nativeSetItem(key, value);
+          return;
+        }
 
-      const pending = getPendingSource();
-      if (!pending) {
-        nativeSetItem(key, value);
-        return;
-      }
+        const pending = getPendingSource();
+        if (!pending) {
+          nativeSetItem(key, value);
+          return;
+        }
 
-      const state = parseJson(value, {});
-      if (!Array.isArray(state.blocks)) {
-        nativeSetItem(key, value);
-        return;
-      }
-
-      state.blocks = state.blocks.map((block) => {
-        if (block.id !== pending.id) return block;
-        return {
-          ...block,
-          sourceType: pending.sourceType,
-          sourceId: pending.sourceId,
-          sourceName: pending.sourceName,
-        };
-      });
-
-      nativeSetItem(key, JSON.stringify(state));
-      clearPendingSource();
-    };
+        nativeSetItem(key, JSON.stringify(patchSessionBlock(parseJson(value, {}), pending)));
+        clearPendingSource();
+      };
+    } catch {
+      window.CroakleSourceTimeStoragePatched = false;
+    }
   }
 
   function injectStyles() {
@@ -173,7 +181,8 @@
     const style = document.createElement("style");
     style.id = "CroakleSourceTimeStyles";
     style.textContent = `
-      .CroakleSourceTimeButton {
+      .CroakleAddHabitForm .CroakleSourceTimeButton {
+        width: 100%;
         min-height: 44px;
         border: 2px solid var(--CroakleLine, #111111);
         border-radius: 999px;
@@ -184,7 +193,7 @@
         font-weight: 900;
       }
 
-      .CroakleSourceTimeButton:active {
+      .CroakleAddHabitForm .CroakleSourceTimeButton:active {
         background: var(--CroakleSoftSurface, #f2f2f2);
       }
     `;
@@ -231,24 +240,52 @@
     openSessionDialogWithSource(source);
   }
 
-  function patchSessionDialogOpen() {
-    if (window.CroakleSourceTimeDialogPatched) return;
-    window.CroakleSourceTimeDialogPatched = true;
+  function mergePendingSourceAfterSubmit(event) {
+    if (!event.target.matches?.("#CroakleSessionForm")) return;
 
-    window.CroakleOpenSessionDialogWithSource = openSessionDialogWithSource;
+    const pending = getPendingSource();
+    if (!pending) return;
+
+    window.setTimeout(() => {
+      const state = parseJson(localStorage.getItem(SessionKey), {});
+      localStorage.setItem(SessionKey, JSON.stringify(patchSessionBlock(state, pending)));
+      clearPendingSource();
+      window.CroakleRenderSessionRange?.();
+    }, 0);
+  }
+
+  function observeDetailForms() {
+    if (window.CroakleSourceTimeObserverReady) return;
+
+    const shell = document.querySelector(".CroakleHabitMoodShell");
+    if (!shell) return;
+
+    window.CroakleSourceTimeObserverReady = true;
+    new MutationObserver(() => ensureButtons()).observe(shell, {
+      childList: true,
+      subtree: true,
+    });
   }
 
   function init() {
-    installSessionSourcePatch();
     injectStyles();
     ensureButtons();
-    patchSessionDialogOpen();
+    observeDetailForms();
+    installSessionSourcePatch();
+    window.CroakleOpenSessionDialogWithSource = openSessionDialogWithSource;
+  }
+
+  if (!window.CroakleSourceTimeEventsBound) {
+    window.CroakleSourceTimeEventsBound = true;
     document.addEventListener("click", handleAddTimeClick, true);
+    document.addEventListener("submit", mergePendingSourceAfterSubmit, true);
   }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
-    window.requestAnimationFrame(init);
+    init();
+    window.requestAnimationFrame(ensureButtons);
+    window.setTimeout(ensureButtons, 250);
   }
 })();
