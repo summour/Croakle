@@ -1,4 +1,6 @@
 const CroakleBackupProjectStoreKey = "CroakleProjectDataV1";
+const CroakleBackupHabitStoreKey = "CroakleHabitMoodDataCleanV1";
+const CroakleBackupHabitExtraKeys = ["subHabits", "subHabitWins", "subHabitNotes"];
 
 function CroakleGetBackupLocalStorage() {
   return Object.fromEntries(
@@ -8,16 +10,82 @@ function CroakleGetBackupLocalStorage() {
   );
 }
 
-function CroakleGetProjectBackupState() {
+function CroakleParseBackupLocalStorageJson(key) {
   try {
-    return JSON.parse(localStorage.getItem(CroakleBackupProjectStoreKey) || "null");
+    return JSON.parse(localStorage.getItem(key) || "null");
   } catch {
     return null;
   }
 }
 
+function CroakleGetProjectBackupState() {
+  return CroakleParseBackupLocalStorageJson(CroakleBackupProjectStoreKey);
+}
+
+function CroakleGetHabitBackupState() {
+  return CroakleParseBackupLocalStorageJson(CroakleBackupHabitStoreKey);
+}
+
+function CroakleIsPlainBackupObject(value) {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+function CroakleCopyHabitExtras(targetHabit, sourceHabit) {
+  if (!targetHabit || !sourceHabit) return targetHabit;
+
+  CroakleBackupHabitExtraKeys.forEach((key) => {
+    const value = sourceHabit[key];
+    if (Array.isArray(value) || CroakleIsPlainBackupObject(value)) {
+      targetHabit[key] = JSON.parse(JSON.stringify(value));
+    }
+  });
+
+  return targetHabit;
+}
+
+function CroakleFindHabitBackupSource(sourceHabits, targetHabit, index) {
+  if (!Array.isArray(sourceHabits)) return null;
+
+  return sourceHabits.find((habit) => habit?.id && habit.id === targetHabit?.id)
+    || sourceHabits[index]
+    || null;
+}
+
+function CroaklePreserveHabitExtras(normalizedState, sourceState) {
+  if (!normalizedState || !sourceState) return normalizedState;
+
+  const sourceTemplates = Array.isArray(sourceState.habitTemplates) ? sourceState.habitTemplates : [];
+
+  if (Array.isArray(normalizedState.habitTemplates)) {
+    normalizedState.habitTemplates.forEach((habit, index) => {
+      CroakleCopyHabitExtras(habit, CroakleFindHabitBackupSource(sourceTemplates, habit, index));
+    });
+  }
+
+  Object.entries(normalizedState.months || {}).forEach(([monthKey, monthData]) => {
+    const sourceMonthHabits = sourceState.months?.[monthKey]?.habits || sourceTemplates;
+
+    if (!Array.isArray(monthData.habits)) return;
+
+    monthData.habits.forEach((habit, index) => {
+      const sourceHabit = CroakleFindHabitBackupSource(sourceMonthHabits, habit, index)
+        || CroakleFindHabitBackupSource(sourceTemplates, habit, index);
+      CroakleCopyHabitExtras(habit, sourceHabit);
+    });
+  });
+
+  return normalizedState;
+}
+
+function CroakleNormalizeBackupHabitState(state) {
+  const normalizedState = CroakleNormalizeState(state);
+  return CroaklePreserveHabitExtras(normalizedState, state);
+}
+
 function CroakleCreateFullBackupData() {
   const projectState = typeof CroakleProjectState !== "undefined" ? CroakleProjectState : CroakleGetProjectBackupState();
+  const savedHabitState = CroakleGetHabitBackupState();
+  const state = savedHabitState ? CroaklePreserveHabitExtras(CroakleState, savedHabitState) : CroakleState;
   const settings = {
     ...CroakleSettings,
     weekStart: CroakleSettings.weekStart === "sunday" ? "sunday" : "monday",
@@ -26,9 +94,9 @@ function CroakleCreateFullBackupData() {
   return {
     app: "Croakle",
     type: "full_backup",
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
-    state: CroakleState,
+    state,
     projectState,
     settings,
     localStorage: CroakleGetBackupLocalStorage(),
@@ -101,7 +169,7 @@ function CroakleRestoreBackup(backup) {
   });
 
   if (backup.state) {
-    localStorage.setItem(CroakleHabitStoreKey, JSON.stringify(CroakleNormalizeState(backup.state)));
+    localStorage.setItem(CroakleHabitStoreKey, JSON.stringify(CroakleNormalizeBackupHabitState(backup.state)));
   }
 
   if (backup.projectState) {
