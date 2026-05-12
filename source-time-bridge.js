@@ -78,6 +78,24 @@
     };
   }
 
+  function isLockedSessionSource(sourceType) {
+    return sourceType === "habit" || sourceType === "project";
+  }
+
+  function applySessionSubjectLock(form, sourceType, sourceName) {
+    const subjectInput = form?.elements?.subject;
+    if (!subjectInput) return;
+
+    const isLocked = isLockedSessionSource(sourceType);
+    subjectInput.readOnly = isLocked;
+    subjectInput.classList.toggle("CroakleLockedField", isLocked);
+    subjectInput.setAttribute("aria-readonly", isLocked ? "true" : "false");
+
+    if (isLocked && sourceName) {
+      subjectInput.value = sourceName;
+    }
+  }
+
   function ensureSourceFields(form) {
     ["sourceType", "sourceId", "sourceName"].forEach((name) => {
       if (form.elements[name]) return;
@@ -128,6 +146,7 @@
     setFormValue(form, "sourceType", source.sourceType || "manual");
     setFormValue(form, "sourceId", source.sourceId || sessionId);
     setFormValue(form, "sourceName", source.sourceName || source.subject || "Session");
+    applySessionSubjectLock(form, source.sourceType, source.sourceName || source.subject);
 
     form.querySelector("[data-session-delete]")?.setAttribute("hidden", "");
     form.querySelectorAll("[data-session-color]").forEach((button) => {
@@ -143,15 +162,29 @@
     if (!Array.isArray(state.blocks)) return state;
 
     state.blocks = state.blocks.map((block) => {
-      if (block.id !== pending.id) return block;
-      return {
+      if (block.id !== pending.id) return normalizeLinkedSubject(block);
+      return normalizeLinkedSubject({
         ...block,
         sourceType: pending.sourceType,
         sourceId: pending.sourceId,
         sourceName: pending.sourceName,
-      };
+      });
     });
 
+    return state;
+  }
+
+  function normalizeLinkedSubject(block) {
+    if (!isLockedSessionSource(block?.sourceType)) return block;
+    return {
+      ...block,
+      subject: block.sourceName || block.subject || "Session",
+    };
+  }
+
+  function normalizeLinkedSubjectsInState(state) {
+    if (!Array.isArray(state.blocks)) return state;
+    state.blocks = state.blocks.map(normalizeLinkedSubject);
     return state;
   }
 
@@ -168,13 +201,12 @@
         }
 
         const pending = getPendingSource();
-        if (!pending) {
-          nativeSetItem(key, value);
-          return;
-        }
+        const state = pending
+          ? patchSessionBlock(parseJson(value, {}), pending)
+          : normalizeLinkedSubjectsInState(parseJson(value, {}));
 
-        nativeSetItem(key, JSON.stringify(patchSessionBlock(parseJson(value, {}), pending)));
-        clearPendingSource();
+        nativeSetItem(key, JSON.stringify(state));
+        if (pending) clearPendingSource();
       };
     } catch {
       window.CroakleSourceTimeStoragePatched = false;
@@ -190,6 +222,12 @@
       #CroakleHabitAddTimeButton,
       #CroakleProjectAddTimeButton {
         display: none !important;
+      }
+
+      .CroakleLockedField {
+        background: #f3f3f3 !important;
+        color: #666666 !important;
+        cursor: not-allowed !important;
       }
 
       .CroakleNoteTimeSection {
@@ -297,8 +335,26 @@
     openSessionDialogWithSource(CroaklePendingNoteTimeSource);
   }
 
+  function lockCurrentSessionForm() {
+    const form = document.querySelector("#CroakleSessionForm");
+    if (!form) return;
+
+    ensureSourceFields(form);
+    const sourceType = form.elements.sourceType?.value || "";
+    const sourceName = form.elements.sourceName?.value || form.elements.subject?.value || "";
+    applySessionSubjectLock(form, sourceType, sourceName);
+  }
+
   function mergePendingSourceAfterSubmit(event) {
     if (!event.target.matches?.("#CroakleSessionForm")) return;
+
+    const form = event.target;
+    const sourceType = form.elements.sourceType?.value || "";
+    const sourceName = form.elements.sourceName?.value || "";
+
+    if (isLockedSessionSource(sourceType) && sourceName) {
+      form.elements.subject.value = sourceName;
+    }
 
     const pending = getPendingSource();
     if (!pending) return;
@@ -321,6 +377,7 @@
     new MutationObserver(() => {
       removeLegacyDetailButtons();
       ensureNoteTimeSection();
+      lockCurrentSessionForm();
     }).observe(shell, {
       childList: true,
       subtree: true,
@@ -333,6 +390,9 @@
     removeLegacyDetailButtons();
     observeNotesDialog();
     window.CroakleOpenSessionDialogWithSource = openSessionDialogWithSource;
+    window.CroakleApplySessionSubjectLock = applySessionSubjectLock;
+    window.CroakleEnsureSessionSourceFields = ensureSourceFields;
+    window.CroakleIsLockedSessionSource = isLockedSessionSource;
   }
 
   if (!window.CroakleSourceTimeEventsBound) {
