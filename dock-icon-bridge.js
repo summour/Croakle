@@ -73,7 +73,7 @@
         grid-auto-flow: column !important;
         grid-auto-columns: minmax(0, 1fr) !important;
         align-items: center !important;
-        width: min(88vw, 344px) !important;
+        width: min(calc(100vw - 24px), calc(var(--CroakleShellWidth, 430px) - 24px)) !important;
         min-height: 54px !important;
         gap: 2px !important;
         padding: 4px !important;
@@ -132,7 +132,7 @@
 
       @media (max-width: 380px) {
         .CroakleBottomNav {
-          width: calc(100vw - 28px) !important;
+          width: calc(100vw - 24px) !important;
           min-height: 50px !important;
           border-radius: 20px !important;
           gap: 1px !important;
