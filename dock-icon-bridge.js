@@ -59,9 +59,7 @@
   };
 
   function injectDockStyles() {
-    if (document.querySelector("#CroakleIconDockStyles")) {
-      return;
-    }
+    if (document.querySelector("#CroakleIconDockStyles")) return;
 
     const style = document.createElement("style");
     style.id = "CroakleIconDockStyles";
@@ -163,80 +161,85 @@
     document.head.appendChild(style);
   }
 
-  function removeAllDocks() {
-    document.querySelectorAll(".CroakleBottomNav").forEach((dock) => dock.remove());
+  function getShell() {
+    return document.querySelector(".CroakleHabitMoodShell");
   }
 
-  function createCurrentDock() {
-    const shell = document.querySelector(".CroakleHabitMoodShell");
-    if (!shell) {
-      return null;
-    }
+  function removeExtraDocks() {
+    const docks = Array.from(document.querySelectorAll(".CroakleBottomNav"));
+    docks.slice(1).forEach((dock) => dock.remove());
+    return docks[0] || null;
+  }
 
-    removeAllDocks();
+  function createDock() {
+    const shell = getShell();
+    if (!shell) return null;
+
     shell.insertAdjacentHTML("beforeend", `
       <footer class="CroakleBottomNav CroakleIconDock" aria-label="Quick navigation" data-current-dock>
         ${ITEMS.map((item) => `<button type="button" ${item.attr} aria-label="${LABELS[item.key]}"></button>`).join("")}
       </footer>
     `);
+
     return shell.querySelector(".CroakleBottomNav");
   }
 
-  function getNavKey(button) {
-    if (button.dataset.sessionNav !== undefined) {
-      return "sessions";
-    }
+  function ensureDock() {
+    return removeExtraDocks() || createDock();
+  }
 
+  function getNavKey(button) {
+    if (button.dataset.sessionNav !== undefined) return "sessions";
     return button.dataset.pageTarget || "menu";
   }
 
   function decorateDock() {
-    const nav = document.querySelector(".CroakleBottomNav") || createCurrentDock();
-    if (!nav) {
-      return;
-    }
+    const nav = ensureDock();
+    if (!nav) return;
 
     nav.className = "CroakleBottomNav CroakleIconDock";
-    nav.querySelectorAll('[data-page-target="analysis"], [data-page-target="best"]').forEach((button) => {
-      button.remove();
-    });
+    nav.setAttribute("data-current-dock", "");
+    nav.querySelectorAll('[data-page-target="analysis"], [data-page-target="best"]').forEach((button) => button.remove());
 
     nav.querySelectorAll("button").forEach((button) => {
       const key = getNavKey(button);
-      button.innerHTML = ICONS[key] || ICONS.menu;
-      button.setAttribute("aria-label", LABELS[key] || "Navigate");
-      button.setAttribute("title", LABELS[key] || "Navigate");
+      const label = LABELS[key] || "Navigate";
+      const icon = ICONS[key] || ICONS.menu;
+
+      if (button.dataset.iconDockKey !== key) {
+        button.innerHTML = icon;
+        button.dataset.iconDockKey = key;
+      }
+
+      button.setAttribute("aria-label", label);
+      button.setAttribute("title", label);
     });
   }
 
-  function observePageShell() {
-    if (window.CroakleIconDockObserverReady) {
-      return;
-    }
+  function observeDockContainer() {
+    if (window.CroakleIconDockObserverReady) return;
 
-    const shell = document.querySelector(".CroakleHabitMoodShell");
-    if (!shell) {
-      return;
-    }
+    const shell = getShell();
+    if (!shell) return;
 
     window.CroakleIconDockObserverReady = true;
-    new MutationObserver(() => {
-      const docks = document.querySelectorAll(".CroakleBottomNav");
-      if (docks.length > 1 || !document.querySelector("[data-current-dock]")) {
-        createCurrentDock();
+    new MutationObserver((mutations) => {
+      const shouldRepair = mutations.some((mutation) => {
+        return Array.from(mutation.addedNodes).some((node) => {
+          return node.nodeType === 1 && node.matches?.(".CroakleBottomNav");
+        });
+      });
+
+      if (shouldRepair || document.querySelectorAll(".CroakleBottomNav").length > 1) {
+        decorateDock();
       }
-      decorateDock();
-    }).observe(shell, {
-      childList: true,
-      subtree: true,
-    });
+    }).observe(shell, { childList: true });
   }
 
   function initIconDock() {
     injectDockStyles();
-    createCurrentDock();
     decorateDock();
-    observePageShell();
+    observeDockContainer();
   }
 
   window.CroakleDecorateIconDock = decorateDock;
