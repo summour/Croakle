@@ -1,7 +1,8 @@
 (() => {
   const StoreKey = "CroakleSessionBlocksV1";
-  const StartHour = 6;
-  const MinuteHeight = 0.82;
+  const DefaultStartHour = 0;
+  const DefaultEndHour = 24;
+  const MinuteHeight = 0.48;
 
   function parseJson(value, fallback) {
     try {
@@ -11,15 +12,28 @@
     }
   }
 
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
   function getState() {
     const saved = parseJson(localStorage.getItem(StoreKey), {});
+    const startHour = Number.isFinite(Number(saved.startHour))
+      ? clamp(Math.floor(Number(saved.startHour)), 0, 23)
+      : DefaultStartHour;
+    const endHour = Number.isFinite(Number(saved.endHour))
+      ? clamp(Math.ceil(Number(saved.endHour)), startHour + 1, 24)
+      : DefaultEndHour;
+
     return {
+      startHour,
+      endHour,
       blocks: Array.isArray(saved.blocks) ? saved.blocks : [],
     };
   }
 
   function getBlockStart(block) {
-    return Number(block?.startMinute || StartHour * 60);
+    return Number(block?.startMinute || getState().startHour * 60);
   }
 
   function getBlockDuration(block) {
@@ -30,9 +44,10 @@
     return getBlockStart(block) + getBlockDuration(block);
   }
 
-  function hasOverlap(firstBlock, secondBlock) {
-    return getBlockStart(firstBlock) < getBlockEnd(secondBlock)
-      && getBlockStart(secondBlock) < getBlockEnd(firstBlock);
+  function blockIntersectsRange(block, state) {
+    const visibleStart = state.startHour * 60;
+    const visibleEnd = state.endHour * 60;
+    return getBlockStart(block) < visibleEnd && getBlockEnd(block) > visibleStart;
   }
 
   function createOverlapGroups(blocks) {
@@ -55,10 +70,7 @@
       currentGroupEnd = getBlockEnd(block);
     });
 
-    if (currentGroup.length) {
-      groups.push(currentGroup);
-    }
-
+    if (currentGroup.length) groups.push(currentGroup);
     return groups;
   }
 
@@ -85,8 +97,10 @@
     return createOverlapGroups(blocks).flatMap(layoutGroup);
   }
 
-  function getColumnBlocks(dateIso) {
-    return getState().blocks.filter((block) => block.date === dateIso);
+  function getColumnBlocks(dateIso, state) {
+    return state.blocks
+      .filter((block) => block.date === dateIso)
+      .filter((block) => blockIntersectsRange(block, state));
   }
 
   function getDisplayName(block) {
@@ -101,9 +115,13 @@
     return compact || subject.slice(0, 3) || "S";
   }
 
-  function applyBlockLayout(blockNode, block) {
+  function applyBlockLayout(blockNode, block, state) {
     const laneCount = Math.max(1, Number(block.laneCount || 1));
     const laneIndex = Math.max(0, Number(block.laneIndex || 0));
+    const visibleStart = state.startHour * 60;
+    const visibleEnd = state.endHour * 60;
+    const blockStart = clamp(getBlockStart(block), visibleStart, visibleEnd);
+    const blockEnd = clamp(getBlockEnd(block), visibleStart, visibleEnd);
     const gap = laneCount > 1 ? 3 : 0;
     const width = laneCount > 1
       ? `calc(${100 / laneCount}% - ${gap}px)`
@@ -111,8 +129,8 @@
     const left = laneCount > 1
       ? `calc(${(100 / laneCount) * laneIndex}% + ${gap / 2}px)`
       : "5px";
-    const top = (getBlockStart(block) - StartHour * 60) * MinuteHeight;
-    const height = Math.max(30, getBlockDuration(block) * MinuteHeight);
+    const top = (blockStart - visibleStart) * MinuteHeight;
+    const height = Math.max(30, (blockEnd - blockStart) * MinuteHeight);
 
     blockNode.style.setProperty("left", left, "important");
     blockNode.style.setProperty("right", "auto", "important");
@@ -122,22 +140,21 @@
     blockNode.classList.toggle("CroakleSessionBlockCompact", laneCount > 1);
 
     const title = blockNode.querySelector("strong");
-    if (title && laneCount > 1) {
-      title.textContent = getDisplayName(block);
-    }
+    if (title && laneCount > 1) title.textContent = getDisplayName(block);
   }
 
   function applyColumnLayout(column) {
     const dateIso = column?.dataset.sessionDate;
     if (!dateIso) return;
 
-    const layoutBlocks = getLayoutBlocks(getColumnBlocks(dateIso));
+    const state = getState();
+    const layoutBlocks = getLayoutBlocks(getColumnBlocks(dateIso, state));
     const layoutById = new Map(layoutBlocks.map((block) => [block.id, block]));
 
     column.querySelectorAll("[data-session-edit]").forEach((blockNode) => {
       const block = layoutById.get(blockNode.dataset.sessionEdit);
       if (!block) return;
-      applyBlockLayout(blockNode, block);
+      applyBlockLayout(blockNode, block, state);
     });
   }
 
@@ -181,12 +198,6 @@
     observer.observe(grid, { childList: true, subtree: true });
   }
 
-  function patchStorageUpdates() {
-    window.addEventListener("storage", () => {
-      window.requestAnimationFrame(applyOverlapLayout);
-    });
-  }
-
   function init() {
     injectStyles();
     observeGrid();
@@ -199,6 +210,6 @@
       applyOverlapLayout();
     });
   });
-  patchStorageUpdates();
+  window.addEventListener("storage", () => window.requestAnimationFrame(applyOverlapLayout));
   window.requestAnimationFrame(init);
 })();
