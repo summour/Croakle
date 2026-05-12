@@ -254,6 +254,12 @@
     isRenderingRange = false;
   }
 
+  function renderRangeSoon() {
+    renderRange();
+    window.requestAnimationFrame(renderRange);
+    window.setTimeout(renderRange, 80);
+  }
+
   function openRangeDialog() {
     const dialog = document.querySelector("#CroakleSessionRangeDialog");
     const form = document.querySelector("#CroakleSessionRangeForm");
@@ -266,10 +272,7 @@
     form.elements.startHour.focus();
   }
 
-  function saveRange(event) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
+  function saveRangeFromForm(form) {
     const state = getState();
     const startHour = parseHour(form.elements.startHour.value, state.startHour, false);
     const endHour = parseHour(form.elements.endHour.value, state.endHour, true);
@@ -278,7 +281,25 @@
     state.endHour = Math.max(startHour + 1, endHour);
     saveState(state);
     document.querySelector("#CroakleSessionRangeDialog")?.close();
-    renderRange();
+    renderRangeSoon();
+  }
+
+  function saveRange(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    saveRangeFromForm(event.currentTarget);
+  }
+
+  function handleSaveClick(event) {
+    const button = event.target.closest?.("#CroakleSessionRangeForm .CroakleConfirmHabitButton");
+    if (!button) return;
+
+    const form = button.closest("#CroakleSessionRangeForm");
+    if (!form) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    saveRangeFromForm(form);
   }
 
   function bindEvents() {
@@ -298,9 +319,10 @@
       }
     });
 
+    document.addEventListener("click", handleSaveClick, true);
     document.addEventListener("submit", (event) => {
       if (event.target.matches("#CroakleSessionRangeForm")) saveRange(event);
-    });
+    }, true);
   }
 
   function observeGrid() {
