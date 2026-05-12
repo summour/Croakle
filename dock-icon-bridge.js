@@ -299,3 +299,158 @@
   window.CroakleDecorateIconDock = decorateDock;
   window.requestAnimationFrame(initIconDock);
 })();
+
+(() => {
+  const StoreKey = "CroakleSessionBlocksV1";
+
+  function parseJson(value, fallback) {
+    try {
+      return value ? JSON.parse(value) : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function saveState(state) {
+    localStorage.setItem(StoreKey, JSON.stringify(state));
+  }
+
+  function getState() {
+    const state = parseJson(localStorage.getItem(StoreKey), {});
+    return {
+      weekOffset: Number(state.weekOffset || 0),
+      blocks: Array.isArray(state.blocks) ? state.blocks : [],
+    };
+  }
+
+  function parseDate(value) {
+    const [year, month, day] = String(value || "").split("-").map(Number);
+    if (!year || !month || !day) return null;
+    return new Date(year, month - 1, day);
+  }
+
+  function getToday() {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  }
+
+  function getMonday(date) {
+    const monday = new Date(date);
+    monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+    monday.setHours(0, 0, 0, 0);
+    return monday;
+  }
+
+  function getWeekOffset(dateIso) {
+    const date = parseDate(dateIso);
+    if (!date) return 0;
+
+    const baseMonday = getMonday(getToday());
+    const blockMonday = getMonday(date);
+    const diffMs = blockMonday.getTime() - baseMonday.getTime();
+    return Math.round(diffMs / (7 * 24 * 60 * 60 * 1000));
+  }
+
+  function parseTime(value) {
+    const [hour, minute] = String(value || "09:00").split(":").map(Number);
+    const total = (Number.isFinite(hour) ? hour : 9) * 60 + (Number.isFinite(minute) ? minute : 0);
+    return Math.max(0, Math.min(1425, total));
+  }
+
+  function getFormValue(form, name, fallback = "") {
+    return String(form.elements[name]?.value || fallback).trim();
+  }
+
+  function saveSessionForm(form) {
+    const subject = getFormValue(form, "subject", "Session");
+    const date = getFormValue(form, "date");
+    if (!subject || !date) return false;
+
+    const id = getFormValue(form, "id") || `CroakleSession${Date.now()}`;
+    const state = getState();
+    const nextBlock = {
+      id,
+      subject,
+      date,
+      startMinute: parseTime(getFormValue(form, "start", "09:00")),
+      duration: Math.max(15, Math.min(240, Number(getFormValue(form, "duration", "60")) || 60)),
+      type: getFormValue(form, "type", "focus"),
+      color: getFormValue(form, "color", "#60a3ff"),
+    };
+
+    state.weekOffset = getWeekOffset(date);
+    state.blocks = state.blocks.filter((block) => block.id !== id).concat(nextBlock);
+    saveState(state);
+    return true;
+  }
+
+  function reopenSessionsPage() {
+    if (typeof window.CroakleSetPage === "function") {
+      window.CroakleSetPage("sessions");
+    }
+
+    window.requestAnimationFrame(() => {
+      if (typeof window.CroakleSetPage === "function") {
+        window.CroakleSetPage("sessions");
+      }
+    });
+  }
+
+  function handleSessionSubmit(event) {
+    const form = event.target.closest?.("#CroakleSessionForm");
+    if (!form) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    if (!saveSessionForm(form)) return;
+
+    document.querySelector("#CroakleSessionDialog")?.close();
+    reopenSessionsPage();
+  }
+
+  function handleSaveClick(event) {
+    const saveButton = event.target.closest?.("#CroakleSessionForm .CroakleConfirmHabitButton");
+    if (!saveButton) return;
+
+    const form = saveButton.closest("#CroakleSessionForm");
+    if (!form) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    if (!saveSessionForm(form)) return;
+
+    document.querySelector("#CroakleSessionDialog")?.close();
+    reopenSessionsPage();
+  }
+
+  function injectSessionSaveStyles() {
+    if (document.querySelector("#CroakleSessionSaveFixStyles")) return;
+
+    const style = document.createElement("style");
+    style.id = "CroakleSessionSaveFixStyles";
+    style.textContent = `
+      .CroakleSessionBlock {
+        z-index: 2 !important;
+      }
+
+      .CroakleSessionColumn::before {
+        z-index: 0 !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function initSessionSaveFix() {
+    injectSessionSaveStyles();
+    document.addEventListener("submit", handleSessionSubmit, true);
+    document.addEventListener("click", handleSaveClick, true);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSessionSaveFix, { once: true });
+  } else {
+    initSessionSaveFix();
+  }
+})();
