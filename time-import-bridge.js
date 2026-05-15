@@ -1,6 +1,6 @@
 (() => {
   const SessionKey = "CroakleSessionBlocksV1";
-  const RequiredColumns = ["date", "start_time", "end_time", "title"];
+  const RequiredColumns = ["date", "start_time", "end_time", "type"];
   const TypeColors = {
     law: "#9578f4",
     ram: "#9578f4",
@@ -147,9 +147,7 @@
   }
 
   function createStableId(row) {
-    const end = row.end_time || "";
-    const title = row.title || row.subject || "Session";
-    return `import:${slug(row.date)}:${slug(row.start_time)}:${slug(end)}:${slug(title)}`;
+    return `import:${slug(row.date)}:${slug(row.start_time)}:${slug(row.end_time)}:${slug(row.type)}`;
   }
 
   function normalizeBlock(row) {
@@ -157,16 +155,16 @@
     const startMinute = parseTimeToMinute(row.start_time || row.start || "");
     const endMinute = parseTimeToMinute(row.end_time || row.end || "");
     const type = String(row.type || "focus").trim() || "focus";
-    const title = type;
 
-    if (!date || startMinute === null || !title) return null;
+    if (!date || startMinute === null || !type) return null;
 
     const note = String(row.note || "").trim();
     const status = String(row.status || "Planned").trim() || "Planned";
+    const id = createStableId({ ...row, type });
 
     return {
-      id: createStableId({ ...row, title }),
-      subject: title,
+      id,
+      subject: type,
       date,
       startMinute,
       duration: parseDurationMinutes(row, startMinute, endMinute),
@@ -175,9 +173,354 @@
       note,
       status,
       sourceType: "import",
-      sourceId: createStableId({ ...row, title }),
-      sourceName: title,
+      sourceId: id,
+      sourceName: type,
       importedAt: Date.now(),
     };
   }
+
+  function validateColumns(rows) {
+    const headers = (rows[0] || []).map(normalizeHeader);
+    return RequiredColumns.filter((column) => !headers.includes(column));
+  }
+
+  function summarizeImport(blocks) {
+    const state = readState();
+    const existingIds = new Set(state.blocks.map((block) => block.id));
+    const duplicateCount = blocks.filter((block) => existingIds.has(block.id)).length;
+    const newCount = blocks.length - duplicateCount;
+    const firstDate = blocks[0]?.date || "-";
+    const lastDate = blocks[blocks.length - 1]?.date || "-";
+    return { duplicateCount, firstDate, lastDate, newCount, total: blocks.length };
+  }
+
+  function setStatus(message, tone = "") {
+    const status = document.querySelector("[data-time-import-status]");
+    if (!status) return;
+    status.textContent = message;
+    status.dataset.tone = tone;
+  }
+
+  function formatStartMinute(minutes) {
+    return `${Math.floor(minutes / 60).toString().padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`;
+  }
+
+  function renderPreview(blocks) {
+    const preview = document.querySelector("[data-time-import-preview]");
+    const confirm = document.querySelector("[data-time-import-confirm]");
+    if (!preview || !confirm) return;
+
+    if (!blocks.length) {
+      preview.innerHTML = "";
+      confirm.disabled = true;
+      setStatus("ไม่พบรายการเวลาที่นำเข้าได้", "error");
+      return;
+    }
+
+    const summary = summarizeImport(blocks);
+    preview.innerHTML = `
+      <div class="CroakleTimeImportSummary">
+        <strong>${summary.total} blocks</strong>
+        <span>ใหม่ ${summary.newCount} · ซ้ำ ${summary.duplicateCount}</span>
+        <span>${escapeText(summary.firstDate)} → ${escapeText(summary.lastDate)}</span>
+      </div>
+      <div class="CroakleTimeImportList">
+        ${blocks.slice(0, 6).map((block) => `
+          <div class="CroakleTimeImportItem">
+            <strong>${escapeText(block.type)}</strong>
+            <span>${escapeText(block.date)} · ${formatStartMinute(block.startMinute)} · ${block.duration}m</span>
+          </div>
+        `).join("")}
+      </div>
+    `;
+    confirm.disabled = summary.newCount <= 0;
+    setStatus("ตรวจไฟล์แล้ว กด Import เพื่อบันทึกลง Time", "ready");
+  }
+
+  function mergeBlocks(blocks) {
+    const state = readState();
+    const existingIds = new Set(state.blocks.map((block) => block.id));
+    const incoming = blocks.filter((block) => !existingIds.has(block.id));
+
+    saveState({
+      ...state,
+      blocks: state.blocks.concat(incoming),
+    });
+
+    return { imported: incoming.length, skipped: blocks.length - incoming.length };
+  }
+
+  function clearImportedBlocks() {
+    const state = readState();
+    const before = state.blocks.length;
+    const blocks = state.blocks.filter((block) => {
+      return !String(block.id || "").startsWith("import:")
+        && block.sourceType !== "import";
+    });
+
+    saveState({ ...state, blocks });
+    return before - blocks.length;
+  }
+
+  function injectStyles() {
+    if (document.querySelector("#CroakleTimeImportStyles")) return;
+
+    const style = document.createElement("style");
+    style.id = "CroakleTimeImportStyles";
+    style.textContent = `
+      .CroakleSessionToolbar {
+        grid-template-columns: 1fr auto auto auto;
+      }
+
+      .CroakleTimeImportButton,
+      .CroakleTimeClearButton {
+        min-height: 42px;
+        padding: 0 12px;
+        border: 2px solid var(--CroakleLine, #111111);
+        border-radius: 999px;
+        background: var(--CroakleSurface, #ffffff);
+        color: var(--CroakleInk, #111111);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .CroakleTimeClearButton {
+        color: #d70015;
+      }
+
+      .CroakleTimeImportButton:active,
+      .CroakleTimeClearButton:active {
+        background: #f2f2f2;
+      }
+
+      .CroakleTimeImportHelp,
+      .CroakleTimeImportStatus {
+        color: var(--CroakleMuted, #666666);
+        font-size: 12px;
+        font-weight: 750;
+        line-height: 1.35;
+      }
+
+      .CroakleTimeImportStatus[data-tone="error"] {
+        color: #d70015;
+      }
+
+      .CroakleTimeImportStatus[data-tone="ready"] {
+        color: #007019;
+      }
+
+      .CroakleTimeImportSummary,
+      .CroakleTimeImportItem {
+        display: grid;
+        gap: 4px;
+        padding: 10px 12px;
+        border: 2px solid var(--CroakleLine, #111111);
+        border-radius: 16px;
+        background: #ffffff;
+      }
+
+      .CroakleTimeImportSummary span,
+      .CroakleTimeImportItem span {
+        color: var(--CroakleMuted, #666666);
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .CroakleTimeImportList {
+        display: grid;
+        gap: 8px;
+        max-height: 230px;
+        overflow: auto;
+      }
+
+      .CroakleTimeImportActions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .CroakleTimeImportGhostButton {
+        min-height: 48px;
+        border: 2px solid var(--CroakleLine, #111111);
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--CroakleInk, #111111);
+        font: inherit;
+        font-size: 15px;
+        font-weight: 900;
+      }
+
+      @media (max-width: 430px) {
+        .CroakleSessionToolbar {
+          grid-template-columns: 1fr auto;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureButton() {
+    const toolbar = document.querySelector("[data-session-toolbar]");
+    if (!toolbar) return;
+
+    if (!toolbar.querySelector("[data-time-import-open]")) {
+      toolbar.insertAdjacentHTML("beforeend", `
+        <button class="CroakleTimeImportButton" type="button" data-time-import-open>Import</button>
+      `);
+    }
+
+    if (!toolbar.querySelector("[data-time-clear-imported]")) {
+      toolbar.insertAdjacentHTML("beforeend", `
+        <button class="CroakleTimeClearButton" type="button" data-time-clear-imported>Clear</button>
+      `);
+    }
+  }
+
+  function ensureDialog() {
+    if (document.querySelector("#CroakleTimeImportDialog")) return;
+
+    document.querySelector(".CroakleHabitMoodShell")?.insertAdjacentHTML("beforeend", `
+      <dialog class="CroakleAddHabitDialog" id="CroakleTimeImportDialog" aria-labelledby="CroakleTimeImportTitle">
+        <div class="CroakleAddHabitForm">
+          <header class="CroakleAddHabitHeader">
+            <h2 id="CroakleTimeImportTitle">Import Time</h2>
+            <button type="button" data-time-import-close aria-label="Close">×</button>
+          </header>
+          <p class="CroakleTimeImportHelp">รองรับ CSV จากชีท Croakle Time Blocks: date, start_time, end_time, duration_hours, type, title, note, status</p>
+          <label class="CroakleField">
+            <span>CSV file</span>
+            <input type="file" accept=".csv,text/csv" data-time-import-file />
+          </label>
+          <div class="CroakleTimeImportStatus" data-time-import-status>เลือกไฟล์ CSV เพื่อ preview ก่อนบันทึก</div>
+          <div data-time-import-preview></div>
+          <div class="CroakleTimeImportActions">
+            <button class="CroakleTimeImportGhostButton" type="button" data-time-import-close>Cancel</button>
+            <button class="CroakleConfirmHabitButton" type="button" data-time-import-confirm disabled>Import</button>
+          </div>
+        </div>
+      </dialog>
+    `);
+  }
+
+  function getPendingBlocks() {
+    return window.CroaklePendingTimeImportBlocks || [];
+  }
+
+  function setPendingBlocks(blocks) {
+    window.CroaklePendingTimeImportBlocks = blocks;
+  }
+
+  async function handleFile(file) {
+    if (!file) return;
+
+    const text = await file.text();
+    const rows = parseCsv(text.replace(/^\uFEFF/, ""));
+    const missing = validateColumns(rows);
+
+    if (missing.length) {
+      setPendingBlocks([]);
+      renderPreview([]);
+      setStatus(`ไฟล์ขาดคอลัมน์: ${missing.join(", ")}`, "error");
+      return;
+    }
+
+    const blocks = rowsToObjects(rows).map(normalizeBlock).filter(Boolean);
+    setPendingBlocks(blocks);
+    renderPreview(blocks);
+  }
+
+  function openDialog() {
+    ensureDialog();
+    setPendingBlocks([]);
+    document.querySelector("[data-time-import-preview]").innerHTML = "";
+    document.querySelector("[data-time-import-confirm]").disabled = true;
+    setStatus("เลือกไฟล์ CSV เพื่อ preview ก่อนบันทึก");
+    document.querySelector("#CroakleTimeImportDialog")?.showModal();
+  }
+
+  function confirmImport() {
+    const blocks = getPendingBlocks();
+    if (!blocks.length) return;
+
+    const result = mergeBlocks(blocks);
+    setPendingBlocks([]);
+    setStatus(`Import แล้ว ${result.imported} รายการ · ข้ามซ้ำ ${result.skipped} รายการ`, "ready");
+    document.querySelector("[data-time-import-confirm]").disabled = true;
+  }
+
+  function confirmClearImported() {
+    const count = readState().blocks.filter((block) => {
+      return String(block.id || "").startsWith("import:") || block.sourceType === "import";
+    }).length;
+
+    if (!count) return;
+    if (!window.confirm(`ลบรายการ import ทั้งหมด ${count} รายการ?`)) return;
+
+    const removed = clearImportedBlocks();
+    window.alert(`ลบรายการ import แล้ว ${removed} รายการ`);
+  }
+
+  function bindEvents() {
+    if (window.CroakleTimeImportEventsBound) return;
+    window.CroakleTimeImportEventsBound = true;
+
+    document.addEventListener("click", (event) => {
+      if (event.target.closest("[data-time-import-open]")) {
+        event.preventDefault();
+        openDialog();
+        return;
+      }
+
+      if (event.target.closest("[data-time-clear-imported]")) {
+        event.preventDefault();
+        confirmClearImported();
+        return;
+      }
+
+      if (event.target.closest("[data-time-import-close]")) {
+        event.preventDefault();
+        document.querySelector("#CroakleTimeImportDialog")?.close();
+        return;
+      }
+
+      if (event.target.closest("[data-time-import-confirm]")) {
+        event.preventDefault();
+        confirmImport();
+      }
+    }, true);
+
+    document.addEventListener("change", (event) => {
+      const input = event.target.closest?.("[data-time-import-file]");
+      if (!input) return;
+      handleFile(input.files?.[0]);
+    });
+  }
+
+  function patchNavigation() {
+    if (window.CroakleTimeImportNavigationPatched || typeof window.CroakleSetPage !== "function") return;
+    window.CroakleTimeImportNavigationPatched = true;
+
+    const originalSetPage = window.CroakleSetPage;
+    window.CroakleSetPage = function CroakleSetPageWithTimeImport(pageName) {
+      const result = originalSetPage.apply(this, arguments);
+      if (pageName === "sessions") {
+        window.requestAnimationFrame(ensureButton);
+        window.setTimeout(ensureButton, 80);
+      }
+      return result;
+    };
+  }
+
+  function init() {
+    injectStyles();
+    ensureDialog();
+    ensureButton();
+    bindEvents();
+    patchNavigation();
+  }
+
+  window.requestAnimationFrame(init);
+  window.setTimeout(init, 120);
 })();
