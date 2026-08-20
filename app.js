@@ -410,13 +410,13 @@ function CroakleRenderBestList() {
   const rows = monthData.habits
     .map((habit) => {
       const doneCount = CroakleCountDone(habit.days);
-      const percent = Math.round((doneCount / habit.days.length) * 100);
+      const percent = Math.round((doneCount / Math.max(habit.days.length, 1)) * 100);
 
       return {
-        name: habit.name.replace(" with Study Bunny", ""),
+        name: habit.name,
         percent,
         month: doneCount,
-        lifetime: habit.lifetime + doneCount,
+        lifetime: Number(habit.lifetime || 0) + doneCount,
       };
     })
     .sort((firstHabit, secondHabit) => secondHabit.percent - firstHabit.percent);

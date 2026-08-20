@@ -301,7 +301,7 @@
     return monthData.habits.map((habit) => {
       const doneCount = CroakleCountDone(habit.days);
       const percent = Math.round((doneCount / Math.max(habit.days.length, 1)) * 100);
-      return { name: habit.name.replace(" with Study Bunny", ""), percent, month: doneCount, lifetime: Number(habit.lifetime || 0) + doneCount };
+      return { name: habit.name, percent, month: doneCount, lifetime: Number(habit.lifetime || 0) + doneCount };
     }).sort((first, second) => second.percent - first.percent);
   }
 
