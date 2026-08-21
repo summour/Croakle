@@ -29,21 +29,29 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
   const weeksInMonth = Math.ceil(daysInMonth / 7);
 
   // Calculate monthly goal and percentage for each habit
-  const habitStats = habits.map((habit, idx) => {
-    const monthHabit = monthData.habits[idx];
-    const monthChecks = monthHabit?.days.reduce((acc, d) => acc + (d ? 1 : 0), 0) || 0;
-    const monthlyTarget = Math.min(daysInMonth, habit.goal * weeksInMonth);
-    const goalPercent = monthlyTarget > 0 ? Math.round((monthChecks / monthlyTarget) * 100) : 0;
-    const lifetime = (monthHabit?.lifetime || 0) + monthChecks;
+  const habitStats = habits
+    .map((habit, idx) => {
+      const monthHabit = monthData.habits[idx];
+      const monthChecks = monthHabit?.days ? monthHabit.days.reduce((acc, d) => acc + (d ? 1 : 0), 0) : 0;
+      const monthlyTarget = Math.min(daysInMonth, habit.goal * weeksInMonth);
+      const goalPercent = monthlyTarget > 0 ? Math.round((monthChecks / monthlyTarget) * 100) : 0;
+      const lifetime = (monthHabit?.lifetime || 0) + monthChecks;
 
-    return {
-      habit,
-      monthChecks,
-      monthlyTarget,
-      goalPercent,
-      lifetime,
-    };
-  });
+      return {
+        habit,
+        monthChecks,
+        monthlyTarget,
+        goalPercent,
+        lifetime,
+      };
+    })
+    .filter((stat) => {
+      // If habit is marked as completed (Done) and has 0 activity in this specific month, hide it
+      if (stat.habit.completed && stat.monthChecks === 0) {
+        return false;
+      }
+      return true;
+    });
 
   // Sort by goal percentage descending
   habitStats.sort((a, b) => b.goalPercent - a.goalPercent);
@@ -117,46 +125,62 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
 
         {/* Habits List */}
         <div className="space-y-2.5">
-          {habitStats.map((stat, idx) => {
-            const isTop = idx === 0 && stat.goalPercent > 0;
-            return (
-              <div
-                key={stat.habit.id}
-                className={`grid grid-cols-12 gap-2 items-center p-3 rounded-[18px] border transition ${
-                  isTop
-                    ? 'border-[#5f7a61]/30 bg-[#5f7a61]/10 dark:bg-[#5f7a61]/15 shadow-2xs'
-                    : 'border-black/[0.04] dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.03]'
-                }`}
-              >
-                <div className="col-span-5 min-w-0 flex items-center gap-1.5">
-                  {isTop && <Sparkles size={14} className="text-[#5f7a61] shrink-0" />}
-                  <span className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8] truncate">
-                    {stat.habit.name}
-                  </span>
-                </div>
-
-                <div className="col-span-3 flex flex-col items-center">
-                  <div className="w-full bg-black/[0.06] dark:bg-white/[0.08] h-2 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-full transition-all duration-500"
-                      style={{ width: `${Math.min(100, stat.goalPercent)}%` }}
-                    />
+          {habitStats.length === 0 ? (
+            <div className="py-8 text-center text-[#8c7e70] dark:text-[#a89b8d] space-y-1">
+              <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">
+                No active habit data for this month
+              </p>
+              <p className="text-xs">
+                Active habits or habits logged during {MONTH_NAMES[monthIndex]} {year} will appear here
+              </p>
+            </div>
+          ) : (
+            habitStats.map((stat, idx) => {
+              const isTop = idx === 0 && stat.goalPercent > 0;
+              return (
+                <div
+                  key={stat.habit.id}
+                  className={`grid grid-cols-12 gap-2 items-center p-3 rounded-[18px] border transition ${
+                    isTop
+                      ? 'border-[#5f7a61]/30 bg-[#5f7a61]/10 dark:bg-[#5f7a61]/15 shadow-2xs'
+                      : 'border-black/[0.04] dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.03]'
+                  }`}
+                >
+                  <div className="col-span-5 min-w-0 flex items-center gap-1.5">
+                    {isTop && <Sparkles size={14} className="text-[#5f7a61] shrink-0" />}
+                    <span className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8] truncate">
+                      {stat.habit.name}
+                    </span>
+                    {stat.habit.completed && (
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-black/[0.05] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d] shrink-0">
+                        Done
+                      </span>
+                    )}
                   </div>
-                  <span className="text-[10px] font-black mt-1 text-[#4a4036] dark:text-[#d4c8bc]">
-                    {stat.goalPercent}%
-                  </span>
-                </div>
 
-                <div className="col-span-2 text-center font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">
-                  {stat.monthChecks}
-                </div>
+                  <div className="col-span-3 flex flex-col items-center">
+                    <div className="w-full bg-black/[0.06] dark:bg-white/[0.08] h-2 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(100, stat.goalPercent)}%` }}
+                      />
+                    </div>
+                    <span className="text-[10px] font-black mt-1 text-[#4a4036] dark:text-[#d4c8bc]">
+                      {stat.goalPercent}%
+                    </span>
+                  </div>
 
-                <div className="col-span-2 text-center font-bold text-xs text-[#8c7e70] dark:text-[#a89b8d]">
-                  {stat.lifetime}
+                  <div className="col-span-2 text-center font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">
+                    {stat.monthChecks}
+                  </div>
+
+                  <div className="col-span-2 text-center font-bold text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+                    {stat.lifetime}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
     </div>
