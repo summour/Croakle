@@ -36,16 +36,16 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
       icon: HabitCloverDockIcon,
     },
     {
+      id: 'mood',
+      activeKeys: ['mood', 'notes'],
+      label: 'Journal',
+      icon: WashiJournalDockIcon,
+    },
+    {
       id: 'time',
       activeKeys: ['time'],
       label: 'Focus',
       icon: PocketTimerDockIcon,
-    },
-    {
-      id: 'notes',
-      activeKeys: ['notes', 'mood'],
-      label: 'Journal',
-      icon: WashiJournalDockIcon,
     },
     {
       id: 'analysis',

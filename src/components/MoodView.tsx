@@ -78,38 +78,35 @@ export const MoodView: React.FC<MoodViewProps> = ({
           activePage="mood"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'notes', label: 'Journal & Notes', icon: <WashiJournalDockIcon size={15} /> },
             { id: 'mood', label: 'Mood Tracker', icon: <FrogFaceDockIcon size={15} /> },
+            { id: 'notes', label: 'Journal & Notes', icon: <WashiJournalDockIcon size={15} /> },
           ]}
         />
       )}
 
       {/* Month Header (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-xl pt-1 pb-1">
-        <div className="ios-glass-card p-4 sm:p-5 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-2xl pt-1 pb-1">
+        <div className="ios-glass-card p-3.5 sm:p-4 flex items-center justify-between">
           <button
             type="button"
             onClick={onPrevMonth}
-            className="w-9 h-9 rounded-full bg-white/80 hover:bg-white dark:bg-white/[0.08] dark:hover:bg-white/[0.15] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition border border-black/[0.06] dark:border-white/[0.1] shadow-2xs ios-tap"
+            className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
             aria-label="Previous Month"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
           <div className="text-center">
-            <p className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d] uppercase tracking-wider">
-              Daily Feelings & Reflection
-            </p>
-            <strong id="CroakleMoodMonth" className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+            <strong id="CroakleMoodMonth" className="text-base sm:text-lg font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
               {MONTH_NAMES[monthIndex]} {year}
             </strong>
           </div>
           <button
             type="button"
             onClick={onNextMonth}
-            className="w-9 h-9 rounded-full bg-white/80 hover:bg-white dark:bg-white/[0.08] dark:hover:bg-white/[0.15] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition border border-black/[0.06] dark:border-white/[0.1] shadow-2xs ios-tap"
+            className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
             aria-label="Next Month"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>

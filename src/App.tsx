@@ -23,7 +23,7 @@ import {
   loadSettingsState,
   saveSettingsState,
 } from './utils/storage';
-import { getTodayIso } from './utils/dateUtils';
+import { getTodayIso, getDaysInMonth } from './utils/dateUtils';
 import { BottomDock } from './components/BottomDock';
 import { HomeDashboard } from './components/HomeDashboard';
 import { HabitsView } from './components/HabitsView';
@@ -88,35 +88,57 @@ export function App() {
   // Ensure current month data is initialized
   const currentMonthData = getOrCreateMonthData(habitStore, trackYear, trackMonth);
 
-  // Month navigation handlers
+  // Month navigation handlers (fully synchronized with selectedDate)
   const handlePrevMonth = () => {
-    if (trackMonth === 0) {
-      setTrackMonth(11);
-      setTrackYear((y) => y - 1);
-    } else {
-      setTrackMonth((m) => m - 1);
+    let newM = trackMonth - 1;
+    let newY = trackYear;
+    if (newM < 0) {
+      newM = 11;
+      newY = trackYear - 1;
     }
+    setTrackMonth(newM);
+    setTrackYear(newY);
+    setSelectedDate((prev) => {
+      const maxDays = getDaysInMonth(newY, newM);
+      const day = Math.min(prev.getDate(), maxDays);
+      return new Date(newY, newM, day);
+    });
   };
 
   const handleNextMonth = () => {
-    if (trackMonth === 11) {
-      setTrackMonth(0);
-      setTrackYear((y) => y + 1);
-    } else {
-      setTrackMonth((m) => m + 1);
+    let newM = trackMonth + 1;
+    let newY = trackYear;
+    if (newM > 11) {
+      newM = 0;
+      newY = trackYear + 1;
+    }
+    setTrackMonth(newM);
+    setTrackYear(newY);
+    setSelectedDate((prev) => {
+      const maxDays = getDaysInMonth(newY, newM);
+      const day = Math.min(prev.getDate(), maxDays);
+      return new Date(newY, newM, day);
+    });
+  };
+
+  const handleSelectDate = (date: Date) => {
+    setSelectedDate(date);
+    if (date.getMonth() !== trackMonth || date.getFullYear() !== trackYear) {
+      setTrackMonth(date.getMonth());
+      setTrackYear(date.getFullYear());
     }
   };
 
   const handlePrevWeek = () => {
     const d = new Date(selectedDate);
     d.setDate(d.getDate() - 7);
-    setSelectedDate(d);
+    handleSelectDate(d);
   };
 
   const handleNextWeek = () => {
     const d = new Date(selectedDate);
     d.setDate(d.getDate() + 7);
-    setSelectedDate(d);
+    handleSelectDate(d);
   };
 
   // Habit Actions
@@ -429,7 +451,7 @@ export function App() {
               year={trackYear}
               monthIndex={trackMonth}
               selectedDate={selectedDate}
-              onSelectDate={setSelectedDate}
+              onSelectDate={handleSelectDate}
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
               onToggleHabitDay={handleToggleHabitDay}
@@ -444,8 +466,12 @@ export function App() {
           {activePage === 'project' && (
             <ProjectsView
               projects={projects}
+              year={trackYear}
+              monthIndex={trackMonth}
               selectedDate={selectedDate}
-              onSelectDate={setSelectedDate}
+              onSelectDate={handleSelectDate}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
               onPrevWeek={handlePrevWeek}
               onNextWeek={handleNextWeek}
               onToggleProjectDay={handleToggleProjectDay}
@@ -487,6 +513,10 @@ export function App() {
               notes={notes}
               habits={habitStore.habitTemplates}
               projects={projects}
+              year={trackYear}
+              monthIndex={trackMonth}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
               onAddNote={handleAddNote}
               onUpdateNote={handleUpdateNote}
               onDeleteNote={handleDeleteNote}
@@ -510,6 +540,8 @@ export function App() {
               habits={habitStore.habitTemplates}
               monthData={currentMonthData}
               projects={projects}
+              notes={notes}
+              sessions={sessions}
               year={trackYear}
               monthIndex={trackMonth}
               onPrevMonth={handlePrevMonth}

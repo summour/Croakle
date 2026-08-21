@@ -237,68 +237,6 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         </div>
       </div>
 
-      {/* Navigation Quick Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <button
-          id="home-nav-track"
-          type="button"
-          onClick={() => onNavigate('track')}
-          className="ios-glass-card p-4 hover:scale-[1.02] transition text-left flex flex-col justify-between h-28 shadow-xs group ios-tap"
-        >
-          <div className="w-10 h-10 rounded-[20px] bg-[#eef3ee] dark:bg-[#273229] flex items-center justify-center shadow-2xs">
-            <HabitCloverDockIcon size={24} />
-          </div>
-          <div>
-            <strong className="block font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Habits</strong>
-            <span className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d]">{habits.length} habits</span>
-          </div>
-        </button>
-
-        <button
-          id="home-nav-project"
-          type="button"
-          onClick={() => onNavigate('project')}
-          className="ios-glass-card p-4 hover:scale-[1.02] transition text-left flex flex-col justify-between h-28 shadow-xs group ios-tap"
-        >
-          <div className="w-10 h-10 rounded-[20px] bg-[#f8efe8] dark:bg-[#342721] flex items-center justify-center shadow-2xs">
-            <BambooScrollDockIcon size={24} className="text-[#b86f52]" />
-          </div>
-          <div>
-            <strong className="block font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Projects</strong>
-            <span className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d]">{activeProjectsCount} active</span>
-          </div>
-        </button>
-
-        <button
-          id="home-nav-mood"
-          type="button"
-          onClick={() => onNavigate('mood')}
-          className="ios-glass-card p-4 hover:scale-[1.02] transition text-left flex flex-col justify-between h-28 shadow-xs group ios-tap"
-        >
-          <div className="w-10 h-10 rounded-[20px] bg-[#eef4ec] dark:bg-[#273325] flex items-center justify-center shadow-2xs">
-            <FrogFaceDockIcon size={24} />
-          </div>
-          <div>
-            <strong className="block font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Mood</strong>
-            <span className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d]">Daily Tracker</span>
-          </div>
-        </button>
-
-        <button
-          id="home-nav-time"
-          type="button"
-          onClick={() => onNavigate('time')}
-          className="ios-glass-card p-4 hover:scale-[1.02] transition text-left flex flex-col justify-between h-28 shadow-xs group ios-tap"
-        >
-          <div className="w-10 h-10 rounded-[20px] bg-[#fdf5e8] dark:bg-[#362f22] flex items-center justify-center shadow-2xs">
-            <PocketTimerDockIcon size={24} className="text-[#c28f3a]" />
-          </div>
-          <div>
-            <strong className="block font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Focus Timer</strong>
-            <span className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d]">Time Sessions</span>
-          </div>
-        </button>
-      </div>
     </div>
   );
 };

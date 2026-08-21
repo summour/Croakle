@@ -73,3 +73,81 @@ export function formatTimeMinutes(minutes: number): string {
   const m = minutes % 60;
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
+
+export interface MonthWeekDay {
+  date: Date;
+  iso: string;
+  dayIndex: number;
+  isCurrentDay: boolean;
+  inMonth: boolean;
+  dayOfMonth: number;
+}
+
+export interface MonthWeek {
+  weekNumber: number;
+  label: string;
+  rangeLabel: string;
+  startDate: Date;
+  endDate: Date;
+  days: MonthWeekDay[];
+  weekKey: string;
+}
+
+/**
+ * Returns all weeks spanning the given month (Monday-to-Sunday weeks)
+ */
+export function getMonthWeeks(year: number, monthIndex: number): MonthWeek[] {
+  const daysCount = getDaysInMonth(year, monthIndex);
+  const weeks: MonthWeek[] = [];
+  const processedIso = new Set<string>();
+
+  for (let day = 1; day <= daysCount; day++) {
+    const d = new Date(year, monthIndex, day);
+    
+    // Find the Monday of this date's week
+    const dayOfWeek = d.getDay();
+    const diffToMonday = (dayOfWeek + 6) % 7;
+    const monday = new Date(year, monthIndex, day);
+    monday.setDate(d.getDate() - diffToMonday);
+    const mondayIso = formatIsoDate(monday);
+
+    if (processedIso.has(mondayIso)) {
+      continue;
+    }
+    processedIso.add(mondayIso);
+
+    const todayIso = getTodayIso();
+    const weekDays: MonthWeekDay[] = [];
+    for (let i = 0; i < 7; i++) {
+      const current = new Date(monday);
+      current.setDate(monday.getDate() + i);
+      const currentIso = formatIsoDate(current);
+      weekDays.push({
+        date: current,
+        iso: currentIso,
+        dayIndex: i,
+        isCurrentDay: currentIso === todayIso,
+        inMonth: current.getMonth() === monthIndex && current.getFullYear() === year,
+        dayOfMonth: current.getDate(),
+      });
+    }
+
+    const weekNum = weeks.length + 1;
+    const monthDaysInWeek = weekDays.filter((w) => w.inMonth);
+    const firstInMonth = monthDaysInWeek[0]?.dayOfMonth ?? weekDays[0].dayOfMonth;
+    const lastInMonth = monthDaysInWeek[monthDaysInWeek.length - 1]?.dayOfMonth ?? weekDays[6].dayOfMonth;
+    const rangeLabel = `${firstInMonth}-${lastInMonth}`;
+
+    weeks.push({
+      weekNumber: weekNum,
+      label: `W${weekNum}`,
+      rangeLabel,
+      startDate: weekDays[0].date,
+      endDate: weekDays[6].date,
+      days: weekDays,
+      weekKey: getWeekKey(weekDays[0].date),
+    });
+  }
+
+  return weeks;
+}

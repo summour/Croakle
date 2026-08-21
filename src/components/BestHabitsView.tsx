@@ -73,9 +73,14 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
           >
             <ChevronLeft size={20} />
           </button>
-          <strong id="CroakleBestMonth" className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-            {MONTH_NAMES[monthIndex]} {year}
-          </strong>
+          <div className="text-center">
+            <p className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d] uppercase tracking-wider">
+              Leaderboard & Rankings
+            </p>
+            <strong id="CroakleBestMonth" className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              {MONTH_NAMES[monthIndex]} {year}
+            </strong>
+          </div>
           <button
             type="button"
             onClick={onNextMonth}

@@ -69,21 +69,29 @@
   * {
     scrollbar-width: none;
     -webkit-font-smoothing: antialiased;
+    touch-action: manipulation;
   }
+}
+
+/* Instant touch response & performance optimizations */
+button, input, select, a, [role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 /* iOS 26 Squircle & Glassmorphic Utilities */
 .ios-glass-card {
   background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: 
     0 12px 32px -8px rgba(45, 40, 35, 0.05),
     0 4px 12px -2px rgba(45, 40, 35, 0.03),
     inset 0 1px 1.5px rgba(255, 255, 255, 0.95);
   border-radius: 28px;
-  transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, opacity;
 }
 
 .dark .ios-glass-card {
@@ -97,14 +105,15 @@
 
 .ios-glass-dock {
   background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
   border: 1.5px solid rgba(255, 255, 255, 0.85);
   box-shadow: 
     0 24px 48px -12px rgba(35, 30, 25, 0.16),
     0 8px 20px -4px rgba(35, 30, 25, 0.08),
     inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
   border-radius: 36px;
+  will-change: transform;
 }
 
 .dark .ios-glass-dock {
@@ -117,11 +126,13 @@
 }
 
 .ios-tap {
-  transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s ease;
+  transform: translateZ(0);
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  will-change: transform, opacity;
 }
 
 .ios-tap:active {
-  transform: scale(0.95);
+  transform: scale(0.96) translateZ(0);
   opacity: 0.88;
 }
 
