@@ -3,7 +3,7 @@
 @layer base {
   :root {
     color-scheme: light;
-    --bg-color: #f7f3eb;
+    --bg-color: #fbf9f5;
     --bg-pattern-color: #ede5d8;
     --card-bg: #ffffff;
     --card-warm: #fcf9f2;
@@ -17,7 +17,7 @@
 
   .dark {
     color-scheme: dark;
-    --bg-color: #151311;
+    --bg-color: #161311;
     --bg-pattern-color: #231f1c;
     --card-bg: #1f1c19;
     --card-warm: #26221e;
@@ -45,11 +45,6 @@
 
   body {
     background-color: var(--bg-color);
-    background-image: 
-      radial-gradient(var(--bg-pattern-color) 1.2px, transparent 1.2px),
-      radial-gradient(rgba(95, 122, 97, 0.04) 2px, transparent 2px);
-    background-size: 24px 24px, 48px 48px;
-    background-position: 0 0, 12px 12px;
     color: var(--text-color);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;

@@ -4,6 +4,7 @@ import { MONTH_NAMES, getDaysInMonth } from '../utils/dateUtils';
 import { ChevronLeft, ChevronRight, Trophy, Sparkles } from 'lucide-react';
 import { HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 
 interface BestHabitsViewProps {
   habits: HabitTemplate[];
@@ -47,8 +48,13 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
   // Sort by goal percentage descending
   habitStats.sort((a, b) => b.goalPercent - a.goalPercent);
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth,
+    onNextMonth,
+  });
+
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4 pb-24" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Habits/Projects/Rankings */}
       {onNavigate && (
         <SubNavTabs

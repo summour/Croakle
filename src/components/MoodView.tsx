@@ -4,6 +4,7 @@ import { MONTH_NAMES, CALENDAR_HEADER_DAYS, getDaysInMonth, formatIsoDate } from
 import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react';
 import { FrogMoodIcon, FrogMoodRad, FrogFaceDockIcon, WashiJournalDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
 
 interface MoodViewProps {
@@ -70,8 +71,13 @@ export const MoodView: React.FC<MoodViewProps> = ({
   const today = new Date();
   const isCurrentMonth = today.getFullYear() === year && today.getMonth() === monthIndex;
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth,
+    onNextMonth,
+  });
+
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4 pb-24" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Journal/Mood */}
       {onNavigate && (
         <SubNavTabs
@@ -112,7 +118,7 @@ export const MoodView: React.FC<MoodViewProps> = ({
       </div>
 
       {/* Calendar Grid Card */}
-      <div className="ios-glass-card p-5 space-y-3">
+      <div className="ios-glass-card p-5 space-y-3 touch-pan-y select-none">
         {/* Day Headers (Su Mo Tu We Th Fr Sa) */}
         <div className="grid grid-cols-7 gap-1 text-center font-bold text-xs text-[#8c7e70] dark:text-[#a89b8d] uppercase tracking-wider">
           {CALENDAR_HEADER_DAYS.map((d) => (

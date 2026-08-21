@@ -23,6 +23,7 @@ import {
   FrogMoodIcon,
 } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import { getTodayIso, MONTH_NAMES, formatFriendlyDate } from '../utils/dateUtils';
 
 interface NotesViewProps {
@@ -253,8 +254,13 @@ export const NotesView: React.FC<NotesViewProps> = ({
     return 'Daily journal reflection note';
   };
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth: onPrevMonth || (() => {}),
+    onNextMonth: onNextMonth || (() => {}),
+  });
+
   return (
-    <div className="space-y-3 pb-24">
+    <div className="space-y-3 pb-24" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Journal/Mood */}
       {onNavigate && (
         <SubNavTabs

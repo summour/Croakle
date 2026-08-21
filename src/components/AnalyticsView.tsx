@@ -16,6 +16,7 @@ import {
   WashiJournalDockIcon,
 } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 
 interface AnalyticsViewProps {
   habits: HabitTemplate[];
@@ -228,8 +229,13 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
     ? `${linePath} L ${points[points.length - 1].x} ${svgHeight - paddingY} L ${points[0].x} ${svgHeight - paddingY} Z`
     : '';
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth,
+    onNextMonth,
+  });
+
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4 pb-24" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Analytics/Settings */}
       {onNavigate && (
         <SubNavTabs

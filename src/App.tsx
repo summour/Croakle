@@ -408,29 +408,17 @@ export function App() {
   return (
     <main
       id="croakle-app"
-      className="h-[100dvh] h-screen w-screen bg-[var(--bg-color)] text-[#2e271f] dark:text-[#f4efe8] transition-colors font-sans selection:bg-[#5f7a61]/20 relative overflow-hidden flex flex-col items-center justify-center p-0 sm:p-2.5 md:p-3.5"
+      className="h-[100dvh] h-screen w-screen bg-[var(--bg-color)] text-[#2e271f] dark:text-[#f4efe8] transition-colors font-sans selection:bg-[#5f7a61]/20 relative overflow-hidden flex flex-col items-center justify-center p-0"
     >
-      {/* Soft atmospheric background gradient accents */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#5f7a61]/8 dark:bg-[#5f7a61]/5 blur-[120px]" />
-        <div className="absolute top-1/3 -left-32 w-96 h-96 rounded-full bg-[#b86f52]/6 dark:bg-[#b86f52]/4 blur-[100px]" />
-        <div className="absolute bottom-10 right-0 w-96 h-96 rounded-full bg-[#7d9d80]/7 dark:bg-[#7d9d80]/4 blur-[110px]" />
-      </div>
-
-      {/* MASTER UNIFIED CONTAINER: iOS 26 Squircle Device Shell */}
+      {/* MASTER UNIFIED CONTAINER */}
       <div
         id="croakle-master-frame"
-        className="relative z-10 w-full max-w-xl h-full sm:h-[calc(100dvh-1.5rem)] flex flex-col bg-[#fdfbf7]/95 dark:bg-[#161311]/95 backdrop-blur-3xl border-0 sm:border-[2px] sm:border-white/80 dark:sm:border-white/10 sm:rounded-[40px] sm:shadow-[0_25px_70px_-15px_rgba(20,15,10,0.15),inset_0_1px_2px_rgba(255,255,255,0.9)] dark:sm:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8),inset_0_1px_1.5px_rgba(255,255,255,0.12)] overflow-hidden transition-all duration-300"
+        className="relative z-10 w-full max-w-xl h-full flex flex-col bg-[var(--bg-color)] overflow-hidden transition-all duration-300"
       >
-        {/* iOS 26 Dynamic Top Island Pill Accent */}
-        <div className="w-full flex justify-center pt-2 pb-0.5 select-none pointer-events-none">
-          <div className="h-1.5 w-24 bg-black/10 dark:bg-white/15 rounded-full backdrop-blur-md transition-all duration-300" />
-        </div>
-
         {/* Scrollable Viewport Container: Locked inside master box, only this container scrolls */}
         <div
           id="croakle-scroll-area"
-          className="flex-1 w-full px-4 pt-1 pb-24 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="flex-1 w-full px-4 pt-4 pb-24 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {activePage === 'menu' && (
             <HomeDashboard

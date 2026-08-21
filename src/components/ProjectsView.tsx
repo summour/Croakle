@@ -4,6 +4,7 @@ import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, 
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Archive, CheckCircle, Trophy } from 'lucide-react';
 import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
 
 interface ProjectsViewProps {
@@ -140,8 +141,13 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
     onReorderProjects(copy);
   };
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth,
+    onNextMonth,
+  });
+
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4 pb-24" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Habits/Projects/Rankings */}
       {onNavigate && (
         <SubNavTabs

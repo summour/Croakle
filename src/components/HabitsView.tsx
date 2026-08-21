@@ -4,6 +4,7 @@ import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWee
 import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
 
 interface HabitsViewProps {
@@ -141,8 +142,13 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
     onReorderHabits(copy);
   };
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth,
+    onNextMonth,
+  });
+
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-4 pb-24" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Habits/Projects/Rankings */}
       {onNavigate && (
         <SubNavTabs
