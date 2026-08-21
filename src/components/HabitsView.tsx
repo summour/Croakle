@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, PriorityType, MOOD_LEVELS } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
 import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid } from 'lucide-react';
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, CheckCircle, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
@@ -20,6 +20,7 @@ interface HabitsViewProps {
   onAddHabit: (habit: Omit<HabitTemplate, 'id'>) => void;
   onUpdateHabit: (index: number, habit: HabitTemplate) => void;
   onDeleteHabit: (index: number) => void;
+  onToggleCompleteHabit?: (index: number) => void;
   onReorderHabits: (habits: HabitTemplate[]) => void;
   onNavigate?: (page: PageType) => void;
 }
@@ -37,11 +38,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
   onAddHabit,
   onUpdateHabit,
   onDeleteHabit,
+  onToggleCompleteHabit,
   onReorderHabits,
   onNavigate,
 }) => {
+  const [showArchived, setShowArchived] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
+  const [draggedHabitIdx, setDraggedHabitIdx] = useState<number | null>(null);
+  const [dragOverHabitIdx, setDragOverHabitIdx] = useState<number | null>(null);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
@@ -69,6 +74,10 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
   const weekDays = currentWeek?.days || [];
   const daysInCurrentMonth = getDaysInMonth(year, monthIndex);
 
+  const activeHabits = habits.filter((h) => !h.completed);
+  const archivedHabits = habits.filter((h) => h.completed);
+  const displayedHabits = showArchived ? archivedHabits : activeHabits;
+
   const handleOpenAdd = () => {
     setNewName('');
     setNewGoal(3);
@@ -87,6 +96,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
       description: newDesc.trim(),
       priority: newPriority,
       subHabits: newSubHabits,
+      completed: false,
     });
     setIsAddOpen(false);
   };
@@ -135,11 +145,30 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
   };
 
   const handleMoveHabit = (fromIndex: number, toIndex: number) => {
-    if (toIndex < 0 || toIndex >= habits.length) return;
+    if (toIndex < 0 || toIndex >= habits.length || fromIndex === toIndex) return;
     const copy = [...habits];
     const [moved] = copy.splice(fromIndex, 1);
     copy.splice(toIndex, 0, moved);
     onReorderHabits(copy);
+  };
+
+  const handleMoveHabitToTop = (index: number) => {
+    handleMoveHabit(index, 0);
+  };
+
+  const handleMoveHabitToBottom = (index: number) => {
+    handleMoveHabit(index, habits.length - 1);
+  };
+
+  const handleSortHabitsAZ = () => {
+    const sorted = [...habits].sort((a, b) => a.name.localeCompare(b.name));
+    onReorderHabits(sorted);
+  };
+
+  const handleSortHabitsByPriority = () => {
+    const priorityWeight: Record<PriorityType, number> = { high: 1, medium: 2, low: 3 };
+    const sorted = [...habits].sort((a, b) => (priorityWeight[a.priority] || 2) - (priorityWeight[b.priority] || 2));
+    onReorderHabits(sorted);
   };
 
   const swipeHandlers = useSwipeMonth({
@@ -252,7 +281,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           </div>
         </div>
 
-        {/* Action Bar: Add Habit & Reorder */}
+        {/* Action Bar: Add Habit, Done & Reorder (Locked on a single line) */}
         <div className="flex items-center gap-2">
           <button
             id="CroakleOpenAddHabit"
@@ -260,36 +289,55 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             onClick={handleOpenAdd}
             className="flex-1 py-2.5 px-4 rounded-[20px] bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(95,122,97,0.25)] transition-all ios-tap"
           >
-            <Plus size={16} /> Add Habit
+            <Plus size={16} className="shrink-0" />
+            <span>Add Habit</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowArchived(!showArchived)}
+            className={`py-2.5 px-3 rounded-[20px] border font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-all shrink-0 whitespace-nowrap ios-tap ${
+              showArchived
+                ? 'bg-[#28231d] text-[#fbf8f5] border-[#3d362e]'
+                : 'bg-white/80 dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb] border-black/[0.06] dark:border-white/[0.1] hover:bg-white dark:hover:bg-white/[0.14]'
+            }`}
+          >
+            <Archive size={14} className="shrink-0" />
+            <span>{showArchived ? 'Active' : `Done (${archivedHabits.length})`}</span>
           </button>
           <button
             id="CroakleOpenReorderHabit"
             type="button"
             onClick={() => setIsReorderOpen(true)}
-            className="py-2.5 px-3.5 rounded-[20px] bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] border border-black/[0.06] dark:border-white/[0.1] font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all ios-tap"
+            className="py-2.5 px-3 rounded-[20px] bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] border border-black/[0.06] dark:border-white/[0.1] font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
             title="Reorder Habits"
           >
-            <ArrowUpDown size={15} /> Reorder
+            <ArrowUpDown size={14} />
+            <span>Reorder</span>
           </button>
         </div>
       </div>
 
       {/* Main Habits List Container */}
       <div className="ios-glass-card p-4 sm:p-5 space-y-4">
-        {habits.length === 0 ? (
+        {displayedHabits.length === 0 ? (
           <div className="text-center py-8 text-[#8c7e70] dark:text-[#a89b8d] space-y-3">
             <div className="w-16 h-16 mx-auto rounded-[24px] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center p-2 shadow-2xs">
               <CloverIcon size={36} />
             </div>
             <div>
-              <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">No habits created yet</p>
-              <p className="text-xs mt-0.5">Tap "+ Add New Habit" to begin your daily rhythm</p>
+              <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">
+                {showArchived ? 'No completed habits yet' : 'No active habits right now'}
+              </p>
+              <p className="text-xs mt-0.5">
+                {showArchived ? 'Finished habits will be archived here' : 'Tap "+ Add Habit" to begin your daily rhythm'}
+              </p>
             </div>
           </div>
         ) : (
           <div className="space-y-3.5">
-            {habits.map((habit, hIdx) => {
-              const monthHabit = monthData.habits[hIdx];
+            {displayedHabits.map((habit) => {
+              const originalIndex = habits.findIndex((h) => h.id === habit.id);
+              const monthHabit = monthData.habits[originalIndex];
               // calculate this week's completed count
               const completedThisWeek = weekDays.reduce((acc, wd) => {
                 if (wd.inMonth) {
@@ -304,16 +352,20 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
               return (
                 <div
-                  key={habit.id || hIdx}
-                  className="p-4 rounded-[24px] border border-black/[0.05] dark:border-white/[0.08] bg-white/70 dark:bg-white/[0.04] space-y-3 shadow-xs"
+                  key={habit.id || originalIndex}
+                  className={`p-4 rounded-[24px] border ${
+                    habit.completed
+                      ? 'border-black/[0.04] dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.02] opacity-70'
+                      : 'border-black/[0.05] dark:border-white/[0.08] bg-white/70 dark:bg-white/[0.04]'
+                  } space-y-3 shadow-xs`}
                 >
                   <div className="flex items-center justify-between">
                     <button
                       type="button"
-                      onClick={() => handleOpenEdit(hIdx)}
+                      onClick={() => handleOpenEdit(originalIndex)}
                       className="text-left group flex items-center gap-2 min-w-0"
                     >
-                      <span className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8] group-hover:underline truncate">
+                      <span className={`font-black text-sm text-[#2d2823] dark:text-[#f4efe8] group-hover:underline truncate ${habit.completed ? 'line-through text-[#8c7e70]' : ''}`}>
                         {habit.name}
                       </span>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb]">
@@ -343,12 +395,12 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                         <button
                           key={`${habit.id}-${wd.iso}`}
                           type="button"
-                          disabled={!isCurrentMonthDay}
-                          onClick={() => handleToggleDay(hIdx, wd.date)}
+                          disabled={!isCurrentMonthDay || habit.completed}
+                          onClick={() => handleToggleDay(originalIndex, wd.date)}
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
                           className={`h-11 rounded-[16px] flex items-center justify-center transition-all duration-200 ios-tap ${
-                            !isCurrentMonthDay
-                              ? 'opacity-20 cursor-not-allowed bg-black/[0.02] dark:bg-white/[0.02]'
+                            !isCurrentMonthDay || habit.completed
+                              ? 'opacity-25 cursor-not-allowed bg-black/[0.02] dark:bg-white/[0.02]'
                               : isDone
                               ? 'bg-[#5f7a61] text-white dark:bg-[#7d9d80] dark:text-[#171513] shadow-[0_4px_12px_rgba(95,122,97,0.3)] scale-[0.98] font-black'
                               : 'bg-white/80 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] hover:border-[#5f7a61] dark:hover:border-[#7d9d80]'
@@ -565,12 +617,28 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] text-white font-extrabold text-sm shadow-md transition"
-              >
-                Update Habit
-              </button>
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button
+                  type="submit"
+                  className="py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] text-white font-extrabold text-sm shadow-md transition"
+                >
+                  Update
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onToggleCompleteHabit) {
+                      onToggleCompleteHabit(editingIndex);
+                    }
+                    setEditingIndex(null);
+                    setDeleteConfirm(false);
+                  }}
+                  className="py-3 rounded-2xl bg-[#eee5d8] hover:bg-[#e1d5c4] dark:bg-[#383129] dark:hover:bg-[#473e35] text-[#2d2823] dark:text-[#f2eee9] font-bold text-sm transition flex items-center justify-center gap-1.5"
+                >
+                  <CheckCircle size={16} />
+                  {habits[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -578,52 +646,192 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
       {/* Reorder Habits Dialog */}
       {isReorderOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9]">Reorder Habits</h2>
+        <div 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsReorderOpen(false);
+          }}
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+        >
+          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9] flex items-center gap-2">
+                  <ArrowUpDown size={20} className="text-[#5f7a61] dark:text-[#7d9d80]" />
+                  Reorder Habits
+                </h2>
+                <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] mt-0.5">
+                  Drag items or use the quick buttons to customize order
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setIsReorderOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white"
+                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white transition"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-              {habits.map((habit, idx) => (
-                <div
-                  key={habit.id || idx}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026]"
-                >
-                  <span className="font-bold text-sm text-[#2d2823] dark:text-[#f2eee9] truncate">{habit.name}</span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      disabled={idx === 0}
-                      onClick={() => handleMoveHabit(idx, idx - 1)}
-                      className="w-8 h-8 rounded-lg bg-[#f5efe6] dark:bg-[#383129] disabled:opacity-30 flex items-center justify-center font-bold"
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      disabled={idx === habits.length - 1}
-                      onClick={() => handleMoveHabit(idx, idx + 1)}
-                      className="w-8 h-8 rounded-lg bg-[#f5efe6] dark:bg-[#383129] disabled:opacity-30 flex items-center justify-center font-bold"
-                    >
-                      ↓
-                    </button>
+            {/* Quick Sort Helpers */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] font-bold">
+              <span className="text-[#8c7e70] dark:text-[#a89b8d] text-[10px] uppercase tracking-wider font-extrabold shrink-0 mr-1">
+                Quick Sort:
+              </span>
+              <button
+                type="button"
+                onClick={handleSortHabitsAZ}
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#5f7a61] dark:hover:border-[#7d9d80] transition flex items-center gap-1 shrink-0 ios-tap"
+              >
+                <ArrowDownAZ size={12} />
+                <span>A → Z</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleSortHabitsByPriority}
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#5f7a61] dark:hover:border-[#7d9d80] transition flex items-center gap-1 shrink-0 ios-tap"
+              >
+                <Sparkles size={12} className="text-[#d98236]" />
+                <span>By Priority</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onReorderHabits([...habits].reverse())}
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#5f7a61] dark:hover:border-[#7d9d80] transition shrink-0 ios-tap"
+              >
+                Reverse
+              </button>
+            </div>
+
+            {/* Habits Reorder List with Drag and Drop */}
+            <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+              {habits.map((habit, idx) => {
+                const isDragging = draggedHabitIdx === idx;
+                const isDragOver = dragOverHabitIdx === idx && draggedHabitIdx !== idx;
+
+                return (
+                  <div
+                    key={habit.id || idx}
+                    draggable
+                    onDragStart={() => setDraggedHabitIdx(idx)}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragOverHabitIdx(idx);
+                    }}
+                    onDragLeave={() => {
+                      if (dragOverHabitIdx === idx) setDragOverHabitIdx(null);
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (draggedHabitIdx !== null && draggedHabitIdx !== idx) {
+                        handleMoveHabit(draggedHabitIdx, idx);
+                      }
+                      setDraggedHabitIdx(null);
+                      setDragOverHabitIdx(null);
+                    }}
+                    onDragEnd={() => {
+                      setDraggedHabitIdx(null);
+                      setDragOverHabitIdx(null);
+                    }}
+                    className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border transition-all duration-150 select-none ${
+                      isDragging
+                        ? 'opacity-40 scale-[0.98] border-[#5f7a61] dark:border-[#7d9d80] bg-[#5f7a61]/10'
+                        : isDragOver
+                        ? 'border-2 border-[#5f7a61] dark:border-[#7d9d80] bg-[#5f7a61]/5 shadow-md'
+                        : 'bg-white dark:bg-[#2a221b] border-[#ebdccb] dark:border-[#3a3026] hover:border-[#cfbdab] shadow-2xs'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      {/* Drag Handle */}
+                      <div 
+                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-[#a89b8d] hover:text-[#5f7a61] dark:hover:text-[#7d9d80] transition"
+                        title="Drag to reorder"
+                      >
+                        <GripVertical size={16} />
+                      </div>
+
+                      {/* Number Position Badge */}
+                      <span className="w-6 h-6 rounded-full bg-[#f4ece1] dark:bg-[#383027] text-[#5c5042] dark:text-[#d1c5b8] font-black text-[11px] flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+
+                      <div className="min-w-0">
+                        <p className={`font-bold text-sm text-[#2d2823] dark:text-[#f2eee9] truncate ${habit.completed ? 'line-through text-[#8c7e70]' : ''}`}>
+                          {habit.name}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span
+                            className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-md ${
+                              habit.priority === 'high'
+                                ? 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300'
+                                : habit.priority === 'medium'
+                                ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300'
+                                : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                            }`}
+                          >
+                            {habit.priority}
+                          </span>
+                          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                            {habit.goalDaysPerWeek}d/wk
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Move Buttons */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      {/* Send to Top */}
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => handleMoveHabitToTop(idx)}
+                        title="Move to top"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronsUp size={13} />
+                      </button>
+
+                      {/* Move Up 1 */}
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => handleMoveHabit(idx, idx - 1)}
+                        title="Move up"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronUp size={14} />
+                      </button>
+
+                      {/* Move Down 1 */}
+                      <button
+                        type="button"
+                        disabled={idx === habits.length - 1}
+                        onClick={() => handleMoveHabit(idx, idx + 1)}
+                        title="Move down"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronDown size={14} />
+                      </button>
+
+                      {/* Send to Bottom */}
+                      <button
+                        type="button"
+                        disabled={idx === habits.length - 1}
+                        onClick={() => handleMoveHabitToBottom(idx)}
+                        title="Move to bottom"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronsDown size={13} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <button
               type="button"
               onClick={() => setIsReorderOpen(false)}
-              className="w-full py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] text-white font-extrabold text-sm shadow-md transition"
+              className="w-full py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-black text-sm shadow-md transition ios-tap"
             >
               Done
             </button>

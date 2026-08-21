@@ -40,6 +40,7 @@ export function loadHabitsState(): HabitStoreState {
           priority: h.priority || 'medium',
           subHabits: Array.isArray(h.subHabits) ? h.subHabits : [],
           color: h.color || '#111111',
+          completed: Boolean(h.completed),
         }))
       : [...DEFAULT_HABITS];
 

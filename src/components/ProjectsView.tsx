@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, Project, PriorityType } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, formatIsoDate } from '../utils/dateUtils';
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Archive, CheckCircle, Trophy } from 'lucide-react';
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Archive, CheckCircle, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
 import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
@@ -46,6 +46,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 }) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
+  const [draggedProjectIdx, setDraggedProjectIdx] = useState<number | null>(null);
+  const [dragOverProjectIdx, setDragOverProjectIdx] = useState<number | null>(null);
   const [showArchived, setShowArchived] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
@@ -134,11 +136,30 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   };
 
   const handleMoveProject = (fromIdx: number, toIdx: number) => {
-    if (toIdx < 0 || toIdx >= projects.length) return;
+    if (toIdx < 0 || toIdx >= projects.length || fromIdx === toIdx) return;
     const copy = [...projects];
     const [moved] = copy.splice(fromIdx, 1);
     copy.splice(toIdx, 0, moved);
     onReorderProjects(copy);
+  };
+
+  const handleMoveProjectToTop = (index: number) => {
+    handleMoveProject(index, 0);
+  };
+
+  const handleMoveProjectToBottom = (index: number) => {
+    handleMoveProject(index, projects.length - 1);
+  };
+
+  const handleSortProjectsAZ = () => {
+    const sorted = [...projects].sort((a, b) => a.name.localeCompare(b.name));
+    onReorderProjects(sorted);
+  };
+
+  const handleSortProjectsByPriority = () => {
+    const priorityWeight: Record<PriorityType, number> = { high: 1, medium: 2, low: 3 };
+    const sorted = [...projects].sort((a, b) => (priorityWeight[a.priority] || 2) - (priorityWeight[b.priority] || 2));
+    onReorderProjects(sorted);
   };
 
   const swipeHandlers = useSwipeMonth({
@@ -600,52 +621,192 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
       {/* Reorder Projects Modal */}
       {isReorderOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9]">Reorder Projects</h2>
+        <div 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsReorderOpen(false);
+          }}
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+        >
+          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9] flex items-center gap-2">
+                  <ArrowUpDown size={20} className="text-[#b86f52] dark:text-[#d98236]" />
+                  Reorder Projects
+                </h2>
+                <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] mt-0.5">
+                  Drag items or use the quick buttons to customize order
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setIsReorderOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white"
+                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white transition"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-              {projects.map((proj, idx) => (
-                <div
-                  key={proj.id || idx}
-                  className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026]"
-                >
-                  <span className="font-bold text-sm text-[#2d2823] dark:text-[#f2eee9] truncate">{proj.name}</span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      disabled={idx === 0}
-                      onClick={() => handleMoveProject(idx, idx - 1)}
-                      className="w-8 h-8 rounded-lg bg-[#f5efe6] dark:bg-[#383129] disabled:opacity-30 flex items-center justify-center font-bold"
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      disabled={idx === projects.length - 1}
-                      onClick={() => handleMoveProject(idx, idx + 1)}
-                      className="w-8 h-8 rounded-lg bg-[#f5efe6] dark:bg-[#383129] disabled:opacity-30 flex items-center justify-center font-bold"
-                    >
-                      ↓
-                    </button>
+            {/* Quick Sort Helpers */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] font-bold">
+              <span className="text-[#8c7e70] dark:text-[#a89b8d] text-[10px] uppercase tracking-wider font-extrabold shrink-0 mr-1">
+                Quick Sort:
+              </span>
+              <button
+                type="button"
+                onClick={handleSortProjectsAZ}
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#b86f52] dark:hover:border-[#d98236] transition flex items-center gap-1 shrink-0 ios-tap"
+              >
+                <ArrowDownAZ size={12} />
+                <span>A → Z</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleSortProjectsByPriority}
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#b86f52] dark:hover:border-[#d98236] transition flex items-center gap-1 shrink-0 ios-tap"
+              >
+                <Sparkles size={12} className="text-[#d98236]" />
+                <span>By Priority</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onReorderProjects([...projects].reverse())}
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#b86f52] dark:hover:border-[#d98236] transition shrink-0 ios-tap"
+              >
+                Reverse
+              </button>
+            </div>
+
+            {/* Projects Reorder List with Drag and Drop */}
+            <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+              {projects.map((proj, idx) => {
+                const isDragging = draggedProjectIdx === idx;
+                const isDragOver = dragOverProjectIdx === idx && draggedProjectIdx !== idx;
+
+                return (
+                  <div
+                    key={proj.id || idx}
+                    draggable
+                    onDragStart={() => setDraggedProjectIdx(idx)}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragOverProjectIdx(idx);
+                    }}
+                    onDragLeave={() => {
+                      if (dragOverProjectIdx === idx) setDragOverProjectIdx(null);
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (draggedProjectIdx !== null && draggedProjectIdx !== idx) {
+                        handleMoveProject(draggedProjectIdx, idx);
+                      }
+                      setDraggedProjectIdx(null);
+                      setDragOverProjectIdx(null);
+                    }}
+                    onDragEnd={() => {
+                      setDraggedProjectIdx(null);
+                      setDragOverProjectIdx(null);
+                    }}
+                    className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border transition-all duration-150 select-none ${
+                      isDragging
+                        ? 'opacity-40 scale-[0.98] border-[#b86f52] dark:border-[#d98236] bg-[#b86f52]/10'
+                        : isDragOver
+                        ? 'border-2 border-[#b86f52] dark:border-[#d98236] bg-[#b86f52]/5 shadow-md'
+                        : 'bg-white dark:bg-[#2a221b] border-[#ebdccb] dark:border-[#3a3026] hover:border-[#cfbdab] shadow-2xs'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                      {/* Drag Handle */}
+                      <div 
+                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-[#a89b8d] hover:text-[#b86f52] dark:hover:text-[#d98236] transition"
+                        title="Drag to reorder"
+                      >
+                        <GripVertical size={16} />
+                      </div>
+
+                      {/* Number Position Badge */}
+                      <span className="w-6 h-6 rounded-full bg-[#f4ece1] dark:bg-[#383027] text-[#5c5042] dark:text-[#d1c5b8] font-black text-[11px] flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+
+                      <div className="min-w-0">
+                        <p className={`font-bold text-sm text-[#2d2823] dark:text-[#f2eee9] truncate ${proj.completed ? 'line-through text-[#8c7e70]' : ''}`}>
+                          {proj.name}
+                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span
+                            className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-md ${
+                              proj.priority === 'high'
+                                ? 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300'
+                                : proj.priority === 'medium'
+                                ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300'
+                                : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                            }`}
+                          >
+                            {proj.priority}
+                          </span>
+                          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                            {proj.targetWeeklyDays}d/wk
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Quick Move Buttons */}
+                    <div className="flex items-center gap-1 shrink-0">
+                      {/* Send to Top */}
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => handleMoveProjectToTop(idx)}
+                        title="Move to top"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronsUp size={13} />
+                      </button>
+
+                      {/* Move Up 1 */}
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => handleMoveProject(idx, idx - 1)}
+                        title="Move up"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronUp size={14} />
+                      </button>
+
+                      {/* Move Down 1 */}
+                      <button
+                        type="button"
+                        disabled={idx === projects.length - 1}
+                        onClick={() => handleMoveProject(idx, idx + 1)}
+                        title="Move down"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronDown size={14} />
+                      </button>
+
+                      {/* Send to Bottom */}
+                      <button
+                        type="button"
+                        disabled={idx === projects.length - 1}
+                        onClick={() => handleMoveProjectToBottom(idx)}
+                        title="Move to bottom"
+                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                      >
+                        <ChevronsDown size={13} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             <button
               type="button"
               onClick={() => setIsReorderOpen(false)}
-              className="w-full py-3 rounded-2xl bg-[#b86f52] hover:bg-[#a25d43] text-white font-extrabold text-sm shadow-md transition"
+              className="w-full py-3 rounded-2xl bg-[#b86f52] hover:bg-[#a25d43] dark:bg-[#d98236] dark:hover:bg-[#c27028] text-white dark:text-[#171513] font-black text-sm shadow-md transition ios-tap"
             >
               Done
             </button>

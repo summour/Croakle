@@ -44,9 +44,13 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   const dayOfMonth = todayDate.getDate();
   const dayIndex = dayOfMonth - 1;
 
-  // Calculate today's habit completion
-  const totalHabits = habits.length;
-  const completedToday = monthData.habits.reduce((acc, h) => acc + (h.days[dayIndex] ? 1 : 0), 0);
+  // Calculate today's habit completion (Active habits)
+  const activeHabits = habits.filter((h) => !h.completed);
+  const totalHabits = activeHabits.length;
+  const completedToday = activeHabits.reduce((acc, h) => {
+    const origIdx = habits.findIndex((orig) => orig.id === h.id);
+    return acc + (monthData.habits[origIdx]?.days[dayIndex] ? 1 : 0);
+  }, 0);
   const completionPercent = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
 
   // Active projects count
@@ -198,16 +202,17 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         </div>
 
         <div className="divide-y divide-[#f3ede3] dark:divide-[#2d2823]">
-          {habits.length === 0 ? (
+          {activeHabits.length === 0 ? (
             <div className="py-6 text-center text-[#8c7e70] dark:text-[#a89b8d]">
-              <p className="text-xs font-medium">No habits yet. Start by creating your first habit!</p>
+              <p className="text-xs font-medium">No active habits right now. Start by creating a habit!</p>
             </div>
           ) : (
-            habits.map((habit, idx) => {
-              const isDone = Boolean(monthData.habits[idx]?.days[dayIndex]);
+            activeHabits.map((habit) => {
+              const origIdx = habits.findIndex((orig) => orig.id === habit.id);
+              const isDone = Boolean(monthData.habits[origIdx]?.days[dayIndex]);
               return (
                 <div
-                  key={habit.id || idx}
+                  key={habit.id || origIdx}
                   className="py-3 flex items-center justify-between gap-3 group transition-colors"
                 >
                   <div className="min-w-0">
@@ -227,9 +232,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                     )}
                   </div>
                   <button
-                    id={`home-toggle-habit-${idx}`}
+                    id={`home-toggle-habit-${origIdx}`}
                     type="button"
-                    onClick={() => handleToggle(idx)}
+                    onClick={() => handleToggle(origIdx)}
                     className={`w-9 h-9 rounded-[18px] flex items-center justify-center transition-all ios-tap ${
                       isDone
                         ? 'bg-[#5f7a61] dark:bg-[#7d9d80] text-white dark:text-[#171513] shadow-[0_4px_12px_rgba(95,122,97,0.3)]'

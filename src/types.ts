@@ -10,6 +10,7 @@ export interface HabitTemplate {
   priority: PriorityType;
   subHabits?: string[];
   color?: string;
+  completed?: boolean;
 }
 
 export interface HabitMonthData {
@@ -21,6 +22,7 @@ export interface HabitMonthData {
   days: boolean[]; // 1..daysInMonth
   lifetime: number;
   subHabits?: string[];
+  completed?: boolean;
 }
 
 export interface MonthData {

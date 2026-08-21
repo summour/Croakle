@@ -196,6 +196,16 @@ export function App() {
     });
   };
 
+  const handleToggleCompleteHabit = (index: number) => {
+    setHabitStore((prev) => {
+      const templates = [...prev.habitTemplates];
+      if (templates[index]) {
+        templates[index] = { ...templates[index], completed: !templates[index].completed };
+      }
+      return { ...prev, habitTemplates: templates };
+    });
+  };
+
   const handleReorderHabits = (reordered: HabitTemplate[]) => {
     setHabitStore((prev) => ({ ...prev, habitTemplates: reordered }));
   };
@@ -446,6 +456,7 @@ export function App() {
               onAddHabit={handleAddHabit}
               onUpdateHabit={handleUpdateHabit}
               onDeleteHabit={handleDeleteHabit}
+              onToggleCompleteHabit={handleToggleCompleteHabit}
               onReorderHabits={handleReorderHabits}
               onNavigate={setActivePage}
             />
