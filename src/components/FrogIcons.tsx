@@ -7,7 +7,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 
 // ----------------- CROAKLE MOOD ICONS (5-tier) -----------------
 
-/** 5 - Rad / Excited: Frog happily eating meal with chopsticks and sparkles */
+/** 5 - Rad / Excited (Yellow / Golden Theme): Frog happily eating meal with golden sparkles and warm bowl */
 export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -18,9 +18,9 @@ export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ..
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Glow / Sparkle */}
-    <path d="M52 14L54 8L56 14L62 16L56 18L54 24L52 18L46 16L52 14Z" fill="#F4B840" />
-    <path d="M12 20L13.5 16L15 20L19 21.5L15 23L13.5 27L12 23L8 21.5L12 20Z" fill="#F4B840" />
+    {/* Golden Glow / Sparkles */}
+    <path d="M52 14L54 8L56 14L62 16L56 18L54 24L52 18L46 16L52 14Z" fill="#FACC15" />
+    <path d="M12 20L13.5 16L15 20L19 21.5L15 23L13.5 27L12 23L8 21.5L12 20Z" fill="#EAB308" />
 
     {/* Frog Head & Body */}
     <path
@@ -34,34 +34,34 @@ export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ..
     {/* White Belly */}
     <path
       d="M24 38C24 30 28 26 34 26C40 26 44 30 44 38C44 44 40 48 34 48C28 48 24 44 24 38Z"
-      fill="#F5F7EC"
+      fill="#FEF9C3"
     />
 
     {/* Eyes - Joyful determined squint */}
     <path d="M22 24L30 28" stroke="#2D3A20" strokeWidth="2.5" strokeLinecap="round" />
     <path d="M46 24L38 28" stroke="#2D3A20" strokeWidth="2.5" strokeLinecap="round" />
 
-    {/* Rosy Cheeks */}
-    <ellipse cx="21" cy="33" rx="3" ry="2" fill="#E88B8B" fillOpacity="0.8" />
-    <ellipse cx="47" cy="33" rx="3" ry="2" fill="#E88B8B" fillOpacity="0.8" />
+    {/* Rosy Warm Cheeks */}
+    <ellipse cx="21" cy="33" rx="3.5" ry="2.5" fill="#EAB308" fillOpacity="0.9" />
+    <ellipse cx="47" cy="33" rx="3.5" ry="2.5" fill="#EAB308" fillOpacity="0.9" />
 
-    {/* Smiling Mouth with delicious grain */}
+    {/* Smiling Mouth */}
     <path d="M30 35Q34 39 38 35" stroke="#2D3A20" strokeWidth="2" strokeLinecap="round" fill="none" />
 
-    {/* Wooden Bowl & Rice */}
-    <ellipse cx="34" cy="52" rx="14" ry="6" fill="#8C5832" stroke="#2D3A20" strokeWidth="2" />
+    {/* Golden Yellow Bowl & Rice */}
+    <ellipse cx="34" cy="52" rx="14" ry="6" fill="#EAB308" stroke="#854D0E" strokeWidth="2" />
     <ellipse cx="34" cy="49" rx="11" ry="4" fill="#FFFFFF" />
     {/* Side Dish Plate */}
-    <ellipse cx="14" cy="54" rx="8" ry="3.5" fill="#C5966B" stroke="#2D3A20" strokeWidth="1.5" />
-    <ellipse cx="14" cy="53" rx="6" ry="2" fill="#699B52" />
+    <ellipse cx="14" cy="54" rx="8" ry="3.5" fill="#FDE047" stroke="#854D0E" strokeWidth="1.5" />
+    <ellipse cx="14" cy="53" rx="6" ry="2" fill="#CA8A04" />
 
     {/* Chopsticks */}
-    <line x1="42" y1="42" x2="28" y2="48" stroke="#B87333" strokeWidth="2" strokeLinecap="round" />
-    <line x1="44" y1="44" x2="30" y2="50" stroke="#B87333" strokeWidth="2" strokeLinecap="round" />
+    <line x1="42" y1="42" x2="28" y2="48" stroke="#A16207" strokeWidth="2" strokeLinecap="round" />
+    <line x1="44" y1="44" x2="30" y2="50" stroke="#A16207" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 
-/** 4 - Good / Content: Frog sitting peacefully reading a little red book */
+/** 4 - Good / Content (Sakura Pink Theme): Frog sitting peacefully reading a bright sakura pink book */
 export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -72,6 +72,10 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
+    {/* Sakura Pink sparkles */}
+    <circle cx="10" cy="18" r="2" fill="#F472B6" />
+    <circle cx="54" cy="16" r="2.5" fill="#EC4899" />
+
     {/* Frog Head & Body */}
     <path
       d="M16 34C16 20 23 13 33 13C43 13 50 20 50 34C50 44 45 49 33 49C21 49 16 44 16 34Z"
@@ -84,8 +88,12 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
     {/* White Belly */}
     <path
       d="M23 35C23 27 27 24 33 24C39 24 43 27 43 35C43 43 39 46 33 46C27 46 23 43 23 35Z"
-      fill="#F5F7EC"
+      fill="#FDF2F8"
     />
+
+    {/* Cheeks - Sweet sakura pink */}
+    <ellipse cx="20" cy="32" rx="3.5" ry="2" fill="#EC4899" fillOpacity="0.8" />
+    <ellipse cx="46" cy="32" rx="3.5" ry="2" fill="#EC4899" fillOpacity="0.8" />
 
     {/* Eyes - Calm, peaceful curve */}
     <path d="M22 26Q27 23 29 27" stroke="#2D3A20" strokeWidth="2.5" strokeLinecap="round" fill="none" />
@@ -94,20 +102,20 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
     {/* Soft smile */}
     <path d="M30 33Q33 36 36 33" stroke="#2D3A20" strokeWidth="2" strokeLinecap="round" fill="none" />
 
-    {/* Red Book Opened in Hands */}
+    {/* Bright Sakura Pink Book Opened in Hands */}
     <path
       d="M22 41L33 46L44 41L44 54L33 58L22 54Z"
-      fill="#C8483B"
-      stroke="#2D3A20"
+      fill="#EC4899"
+      stroke="#BE185D"
       strokeWidth="2"
       strokeLinejoin="round"
     />
     <path
       d="M24 43L33 47L42 43L42 53L33 56L24 53Z"
-      fill="#FFFBF2"
+      fill="#FDF2F8"
     />
     {/* Spine line */}
-    <line x1="33" y1="46" x2="33" y2="57" stroke="#8A2E24" strokeWidth="1.5" />
+    <line x1="33" y1="46" x2="33" y2="57" stroke="#DB2777" strokeWidth="1.5" />
 
     {/* Cute little green hands holding book */}
     <circle cx="21" cy="44" r="3.5" fill="#88B868" stroke="#2D3A20" strokeWidth="1.5" />
@@ -115,7 +123,7 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
   </svg>
 );
 
-/** 3 - Meh / Pensive: Frog with folded arms wearing leaf hat, thinking quietly */
+/** 3 - Meh / Pensive (Green Theme): Frog with folded arms wearing green lotus leaf hat, thinking quietly */
 export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -151,7 +159,7 @@ export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ..
     {/* Belly */}
     <path
       d="M24 37C24 30 27 27 32 27C37 27 40 30 40 37C40 44 37 48 32 48C27 48 24 44 24 37Z"
-      fill="#F5F7EC"
+      fill="#DCFCE7"
     />
 
     {/* Classic Straight-line squint eyes */}
@@ -169,13 +177,13 @@ export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ..
       strokeLinecap="round"
       fill="#88B868"
     />
-    {/* Steaming Tea Cup beside */}
-    <rect x="46" y="44" width="8" height="9" rx="2" fill="#E8DED1" stroke="#2D3A20" strokeWidth="1.5" />
-    <path d="M49 41Q50 39 49 37" stroke="#B87333" strokeWidth="1.5" strokeLinecap="round" />
+    {/* Steaming Green Matcha Tea Cup beside */}
+    <rect x="46" y="44" width="8" height="9" rx="2" fill="#BBF7D0" stroke="#166534" strokeWidth="1.5" />
+    <path d="M49 41Q50 39 49 37" stroke="#15803D" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 
-/** 2 - Bad / Weary: Frog resting under warm quilt blanket with ice pack / tea */
+/** 2 - Bad / Weary (Blue Theme): Frog resting under cozy ocean blue blanket with ice pack */
 export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -187,7 +195,7 @@ export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ..
     {...props}
   >
     {/* Pillow */}
-    <rect x="14" y="24" width="36" height="18" rx="8" fill="#F0EAE1" stroke="#2D3A20" strokeWidth="2" />
+    <rect x="14" y="24" width="36" height="18" rx="8" fill="#E0F2FE" stroke="#0369A1" strokeWidth="2" />
 
     {/* Frog Head on Pillow */}
     <ellipse cx="32" cy="29" rx="14" ry="11" fill="#88B868" stroke="#2D3A20" strokeWidth="2.5" />
@@ -195,12 +203,12 @@ export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ..
     {/* Ice pack or cloth on head */}
     <path
       d="M26 21C28 17 36 17 38 21C35 22 29 22 26 21Z"
-      fill="#8DB4D0"
-      stroke="#2D3A20"
+      fill="#38BDF8"
+      stroke="#0284C7"
       strokeWidth="1.5"
     />
     {/* Ribbon tie */}
-    <circle cx="32" cy="18" r="1.5" fill="#6590B2" />
+    <circle cx="32" cy="18" r="1.5" fill="#0284C7" />
 
     {/* Tired sleepy eyes */}
     <path d="M24 28Q27 30 29 28" stroke="#2D3A20" strokeWidth="2.5" strokeLinecap="round" fill="none" />
@@ -209,22 +217,22 @@ export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ..
     {/* Subtle weary mouth */}
     <path d="M30 34Q32 32 34 34" stroke="#2D3A20" strokeWidth="1.5" strokeLinecap="round" fill="none" />
 
-    {/* Cozy Blue Futon Blanket */}
+    {/* Bright Blue Quilt Blanket */}
     <path
       d="M10 36C18 34 46 34 54 36L56 55C56 57 54 59 52 59H12C10 59 8 57 8 55L10 36Z"
-      fill="#5A819E"
-      stroke="#2D3A20"
+      fill="#0284C7"
+      stroke="#0369A1"
       strokeWidth="2.5"
       strokeLinejoin="round"
     />
     {/* Quilt Pattern Lines */}
-    <line x1="12" y1="46" x2="52" y2="46" stroke="#486C88" strokeWidth="2" strokeDasharray="3 3" />
-    <path d="M22 36L20 59" stroke="#486C88" strokeWidth="1.5" />
-    <path d="M42 36L44 59" stroke="#486C88" strokeWidth="1.5" />
+    <line x1="12" y1="46" x2="52" y2="46" stroke="#38BDF8" strokeWidth="2" strokeDasharray="3 3" />
+    <path d="M22 36L20 59" stroke="#38BDF8" strokeWidth="1.5" />
+    <path d="M42 36L44 59" stroke="#38BDF8" strokeWidth="1.5" />
   </svg>
 );
 
-/** 1 - Awful / Overwhelmed: Frog sheltering under lotus in gentle rain */
+/** 1 - Awful / Overwhelmed (Black / Charcoal Theme): Frog sheltering under dark obsidian umbrella with dark stormy rain drops */
 export const FrogMoodAwful: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -236,33 +244,33 @@ export const FrogMoodAwful: React.FC<IconProps> = ({ size = 32, className = '', 
     {...props}
   >
     {/* Rain drops */}
-    <path d="M12 12L10 17" stroke="#7BA6C8" strokeWidth="2" strokeLinecap="round" />
-    <path d="M52 10L50 16" stroke="#7BA6C8" strokeWidth="2" strokeLinecap="round" />
-    <path d="M20 6L18 11" stroke="#7BA6C8" strokeWidth="2" strokeLinecap="round" />
-    <path d="M46 22L44 27" stroke="#7BA6C8" strokeWidth="2" strokeLinecap="round" />
+    <path d="M12 12L10 17" stroke="#52525B" strokeWidth="2" strokeLinecap="round" />
+    <path d="M52 10L50 16" stroke="#52525B" strokeWidth="2" strokeLinecap="round" />
+    <path d="M20 6L18 11" stroke="#52525B" strokeWidth="2" strokeLinecap="round" />
+    <path d="M46 22L44 27" stroke="#52525B" strokeWidth="2" strokeLinecap="round" />
 
-    {/* Big drooping leaf */}
+    {/* Dark Obsidian / Charcoal Umbrella Leaf */}
     <path
       d="M8 24C16 14 42 16 56 26C44 28 20 28 8 24Z"
-      fill="#587A46"
-      stroke="#2D3A20"
+      fill="#27272A"
+      stroke="#09090B"
       strokeWidth="2"
     />
-    <path d="M30 18L32 50" stroke="#3F5A31" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M30 18L32 50" stroke="#18181B" strokeWidth="2.5" strokeLinecap="round" />
 
     {/* Little Frog Crouched */}
-    <ellipse cx="28" cy="44" rx="12" ry="9" fill="#789F5B" stroke="#2D3A20" strokeWidth="2.5" />
-    <ellipse cx="26" cy="45" rx="7" ry="5" fill="#E8ECD8" />
+    <ellipse cx="28" cy="44" rx="12" ry="9" fill="#88B868" stroke="#2D3A20" strokeWidth="2.5" />
+    <ellipse cx="26" cy="45" rx="7" ry="5" fill="#E4E4E7" />
 
     {/* Sad / gentle drooping eyes */}
     <path d="M22 41L26 43" stroke="#2D3A20" strokeWidth="2" strokeLinecap="round" />
     <path d="M30 43L34 41" stroke="#2D3A20" strokeWidth="2" strokeLinecap="round" />
 
     {/* Small tear / droplet */}
-    <circle cx="21" cy="46" r="1.5" fill="#7BA6C8" />
+    <circle cx="21" cy="46" r="1.5" fill="#71717A" />
 
-    {/* Puddle */}
-    <ellipse cx="32" cy="56" rx="20" ry="4" fill="#A4C2DC" fillOpacity="0.6" />
+    {/* Charcoal Puddle */}
+    <ellipse cx="32" cy="56" rx="20" ry="4" fill="#71717A" fillOpacity="0.5" />
   </svg>
 );
 

@@ -20,6 +20,7 @@ import {
   HabitCloverDockIcon,
   BambooProjectDockIcon,
   FrogFaceDockIcon,
+  FrogMoodIcon,
 } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { getTodayIso, MONTH_NAMES, formatFriendlyDate } from '../utils/dateUtils';
@@ -517,12 +518,16 @@ export const NotesView: React.FC<NotesViewProps> = ({
                               </span>
                             )}
 
-                            {note.moodValue && (
-                              <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[#d98236]/10 text-[#d98236] border border-[#d98236]/20 flex items-center gap-1">
-                                <span>{MOOD_LEVELS.find((m) => m.value === note.moodValue)?.emoji}</span>
-                                <span>{MOOD_LEVELS.find((m) => m.value === note.moodValue)?.label}</span>
-                              </span>
-                            )}
+                            {note.moodValue && (() => {
+                              const moodObj = MOOD_LEVELS.find((m) => m.value === note.moodValue);
+                              if (!moodObj) return null;
+                              return (
+                                <span className={`text-[10.5px] font-black px-2.5 py-0.5 rounded-full border flex items-center gap-1 shadow-2xs ${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} ${moodObj.textColorLight} ${moodObj.textColorDark}`}>
+                                  <FrogMoodIcon value={moodObj.value} size={14} />
+                                  <span>{moodObj.label}</span>
+                                </span>
+                              );
+                            })()}
                           </div>
 
                           {/* Actions */}
@@ -727,21 +732,28 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 <div>
                   <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1.5">Mood Rating</label>
                   <div className="grid grid-cols-5 gap-1.5">
-                    {MOOD_LEVELS.map((m) => (
-                      <button
-                        key={m.value}
-                        type="button"
-                        onClick={() => setFormMoodValue(m.value)}
-                        className={`py-2 rounded-xl border flex flex-col items-center gap-1 transition ${
-                          formMoodValue === m.value
-                            ? 'border-[#5f7a61] bg-[#5f7a61]/15 font-black text-[#5f7a61] scale-105'
-                            : 'border-[#e5d8c5] dark:border-[#383129] hover:bg-[#f5efe6] dark:hover:bg-[#282420]'
-                        }`}
-                      >
-                        <span className="text-xl">{m.emoji}</span>
-                        <span className="text-[10px] font-bold">{m.label}</span>
-                      </button>
-                    ))}
+                    {MOOD_LEVELS.map((m) => {
+                      const isSelected = formMoodValue === m.value;
+                      return (
+                        <button
+                          key={m.value}
+                          type="button"
+                          onClick={() => setFormMoodValue(m.value)}
+                          className={`py-2 px-1 rounded-xl border flex flex-col items-center gap-1 transition-all ios-tap ${
+                            m.bgLight
+                          } ${m.bgDark} ${
+                            isSelected
+                              ? `ring-2 ring-offset-1 ring-offset-white dark:ring-offset-[#211e1b] ${m.borderLight} ${m.borderDark} scale-105 shadow-xs`
+                              : `${m.borderLight} ${m.borderDark} hover:scale-102`
+                          }`}
+                        >
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center ${m.iconBgLight} ${m.iconBgDark}`}>
+                            <FrogMoodIcon value={m.value} size={16} />
+                          </div>
+                          <span className={`text-[10px] font-black ${m.textColorLight} ${m.textColorDark}`}>{m.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}

@@ -676,11 +676,15 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
             <div className="ios-glass-card p-3.5 space-y-1">
               <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Dominant Mood</span>
-              <div className="flex items-center gap-1 mt-1">
-                <span className="text-xl">{dominantMoodObj ? dominantMoodObj.emoji : '—'}</span>
-                <strong className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8] truncate">
-                  {dominantMoodObj ? dominantMoodObj.label : 'None'}
-                </strong>
+              <div className="flex items-center gap-1.5 mt-1">
+                {dominantMoodObj ? (
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black border ${dominantMoodObj.bgLight} ${dominantMoodObj.bgDark} ${dominantMoodObj.borderLight} ${dominantMoodObj.borderDark} ${dominantMoodObj.textColorLight} ${dominantMoodObj.textColorDark}`}>
+                    <FrogMoodIcon value={dominantMoodObj.value} size={15} />
+                    <span>{dominantMoodObj.label}</span>
+                  </span>
+                ) : (
+                  <strong className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">None</strong>
+                )}
               </div>
               <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
                 {maxMoodCount > 0 ? `${maxMoodCount} days` : 'No logs'}
@@ -704,17 +708,19 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                 const count = moodCounts[ml.value] || 0;
                 const percent = recordedMoodsCount > 0 ? Math.round((count / recordedMoodsCount) * 100) : 0;
                 return (
-                  <div key={ml.value} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs font-bold">
-                      <div className="flex items-center gap-1.5">
-                        <span>{ml.emoji}</span>
-                        <span className="text-[#2d2823] dark:text-[#f4efe8]">{ml.label}</span>
+                  <div key={ml.value} className={`p-2 rounded-xl border space-y-1.5 ${ml.bgLight} ${ml.bgDark} ${ml.borderLight} ${ml.borderDark}`}>
+                    <div className="flex items-center justify-between text-xs font-black">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${ml.iconBgLight} ${ml.iconBgDark}`}>
+                          <FrogMoodIcon value={ml.value} size={16} />
+                        </div>
+                        <span className={`${ml.textColorLight} ${ml.textColorDark}`}>{ml.label}</span>
                       </div>
-                      <span className="text-[#8c7e70] dark:text-[#a89b8d]">
+                      <span className={`text-[11px] font-black ${ml.textColorLight} ${ml.textColorDark}`}>
                         {count} days ({percent}%)
                       </span>
                     </div>
-                    <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
+                    <div className="w-full bg-white/60 dark:bg-black/20 h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{
@@ -760,18 +766,18 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                 return (
                   <div
                     key={dayNum}
-                    className={`h-8 rounded-xl flex items-center justify-center text-xs font-bold transition-all border ${
+                    className={`h-8 rounded-xl flex items-center justify-center text-xs font-black transition-all border ${
                       moodObj
-                        ? 'bg-white dark:bg-[#28231d] border-[#ebdccb] dark:border-[#383129] shadow-2xs'
+                        ? `${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} shadow-2xs`
                         : 'bg-black/[0.02] dark:bg-white/[0.02] border-transparent text-[#8c7e70] dark:text-[#a89b8d]'
                     }`}
                   >
                     {moodObj ? (
-                      <span className="text-base" title={`Day ${dayNum}: ${moodObj.label}`}>
-                        {moodObj.emoji}
-                      </span>
+                      <div className="flex items-center justify-center" title={`Day ${dayNum}: ${moodObj.label}`}>
+                        <FrogMoodIcon value={moodObj.value} size={18} />
+                      </div>
                     ) : (
-                      <span className="text-[10px] opacity-60">{dayNum}</span>
+                      <span className="text-[10px] opacity-60 font-medium">{dayNum}</span>
                     )}
                   </div>
                 );

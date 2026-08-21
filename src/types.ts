@@ -86,12 +86,97 @@ export const DEFAULT_PROJECTS: Project[] = [
   { id: 'p3', name: 'Daily Reflection Journal', goal: 5, description: 'Write gratitude and evening thoughts every night', priority: 'low', completed: false, weeklyDays: {} },
 ];
 
-export const MOOD_LEVELS = [
-  { value: 5, label: 'Rad', emoji: '🐸', color: '#5f7a61' },
-  { value: 4, label: 'Good', emoji: '🍀', color: '#7d9d80' },
-  { value: 3, label: 'Meh', emoji: '🍵', color: '#d98236' },
-  { value: 2, label: 'Bad', emoji: '🍂', color: '#b86f52' },
-  { value: 1, label: 'Awful', emoji: '🌧️', color: '#7b90a7' },
+export interface MoodConfig {
+  value: number;
+  label: string;
+  emoji: string;
+  color: string;
+  bgLight: string;
+  bgDark: string;
+  borderLight: string;
+  borderDark: string;
+  iconBgLight: string;
+  iconBgDark: string;
+  textColorLight: string;
+  textColorDark: string;
+}
+
+export const MOOD_LEVELS: MoodConfig[] = [
+  {
+    value: 5,
+    label: 'Rad',
+    emoji: '✨',
+    color: '#eab308',
+    bgLight: 'bg-[#fef9c3]',
+    bgDark: 'dark:bg-[#342a0a]',
+    borderLight: 'border-[#facc15]',
+    borderDark: 'dark:border-[#a16207]',
+    iconBgLight: 'bg-[#fef08a]',
+    iconBgDark: 'dark:bg-[#4a3b0e]',
+    textColorLight: 'text-[#a16207]',
+    textColorDark: 'dark:text-[#fde047]',
+  },
+  {
+    value: 4,
+    label: 'Good',
+    emoji: '🌸',
+    color: '#ec4899',
+    bgLight: 'bg-[#fce7f3]',
+    bgDark: 'dark:bg-[#381024]',
+    borderLight: 'border-[#f472b6]',
+    borderDark: 'dark:border-[#be185d]',
+    iconBgLight: 'bg-[#fbcfe8]',
+    iconBgDark: 'dark:bg-[#5b1444]',
+    textColorLight: 'text-[#db2777]',
+    textColorDark: 'dark:text-[#f472b6]',
+  },
+  {
+    value: 3,
+    label: 'Meh',
+    emoji: '🍀',
+    color: '#16a34a',
+    bgLight: 'bg-[#dcfce7]',
+    bgDark: 'dark:bg-[#0f2e1b]',
+    borderLight: 'border-[#86efac]',
+    borderDark: 'dark:border-[#166534]',
+    iconBgLight: 'bg-[#bbf7d0]',
+    iconBgDark: 'dark:bg-[#144626]',
+    textColorLight: 'text-[#15803d]',
+    textColorDark: 'dark:text-[#86efac]',
+  },
+  {
+    value: 2,
+    label: 'Bad',
+    emoji: '🌊',
+    color: '#0284c7',
+    bgLight: 'bg-[#e0f2fe]',
+    bgDark: 'dark:bg-[#0c2438]',
+    borderLight: 'border-[#7dd3fc]',
+    borderDark: 'dark:border-[#0369a1]',
+    iconBgLight: 'bg-[#bae6fd]',
+    iconBgDark: 'dark:bg-[#0e3552]',
+    textColorLight: 'text-[#0369a1]',
+    textColorDark: 'dark:text-[#7dd3fc]',
+  },
+  {
+    value: 1,
+    label: 'Awful',
+    emoji: '🖤',
+    color: '#18181b',
+    bgLight: 'bg-[#e4e4e7]',
+    bgDark: 'dark:bg-[#18181b]',
+    borderLight: 'border-[#71717a]',
+    borderDark: 'dark:border-[#52525b]',
+    iconBgLight: 'bg-[#d4d4d8]',
+    iconBgDark: 'dark:bg-[#27272a]',
+    textColorLight: 'text-[#18181b]',
+    textColorDark: 'dark:text-[#f4f4f5]',
+  },
 ];
+
+export function getMoodConfig(value: number | null | undefined): MoodConfig | undefined {
+  if (!value) return undefined;
+  return MOOD_LEVELS.find((m) => m.value === value);
+}
 
 

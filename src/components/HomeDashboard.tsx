@@ -140,8 +140,10 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             </h3>
           </div>
           {currentMoodObj && (
-            <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#f5efe6] dark:bg-[#2c2722] text-[#5f7a61] dark:text-[#8cb88f] border border-[#e8ded1] dark:border-[#383129] flex items-center gap-1.5 shadow-2xs">
-              <FrogMoodIcon value={currentMoodObj.value} size={18} />
+            <span className={`text-xs font-black px-3 py-1 rounded-full border flex items-center gap-1.5 shadow-2xs ${currentMoodObj.bgLight} ${currentMoodObj.bgDark} ${currentMoodObj.borderLight} ${currentMoodObj.borderDark} ${currentMoodObj.textColorLight} ${currentMoodObj.textColorDark}`}>
+              <div className={`w-4 h-4 rounded-full flex items-center justify-center ${currentMoodObj.iconBgLight} ${currentMoodObj.iconBgDark}`}>
+                <FrogMoodIcon value={currentMoodObj.value} size={14} />
+              </div>
               <span>{currentMoodObj.label}</span>
             </span>
           )}
@@ -156,14 +158,20 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 id={`home-mood-btn-${mood.value}`}
                 type="button"
                 onClick={() => onSelectMoodToday(mood.value)}
-                className={`py-3 rounded-[20px] border flex flex-col items-center gap-1 transition-all ios-tap ${
+                className={`py-2.5 px-1 rounded-[18px] border flex flex-col items-center gap-1 transition-all ios-tap ${
+                  mood.bgLight
+                } ${mood.bgDark} ${
                   isSelected
-                    ? 'border-[#5f7a61] dark:border-[#7d9d80] bg-[#eef4ec] dark:bg-[#263324] text-[#2d2823] dark:text-[#f4efe8] font-bold scale-[1.04] shadow-[0_6px_16px_rgba(95,122,97,0.2)]'
-                    : 'border-black/[0.05] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.04] hover:bg-white dark:hover:bg-white/[0.08] text-[#574d42] dark:text-[#d4c8bc]'
+                    ? `ring-2 ring-offset-1 ring-offset-white dark:ring-offset-[#161311] ${mood.borderLight} ${mood.borderDark} shadow-md scale-[1.02]`
+                    : `${mood.borderLight} ${mood.borderDark} hover:scale-[1.02]`
                 }`}
               >
-                <FrogMoodIcon value={mood.value} size={28} />
-                <span className="text-[10px] font-bold">{mood.label}</span>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shadow-2xs ${mood.iconBgLight} ${mood.iconBgDark}`}>
+                  <FrogMoodIcon value={mood.value} size={22} />
+                </div>
+                <span className={`text-[10.5px] font-black ${mood.textColorLight} ${mood.textColorDark}`}>
+                  {mood.label}
+                </span>
               </button>
             );
           })}

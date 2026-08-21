@@ -141,15 +141,23 @@ export const MoodView: React.FC<MoodViewProps> = ({
                 onClick={() => setSelectedDay(dayNum)}
                 className={`h-14 rounded-[16px] flex flex-col items-center justify-between p-1.5 border transition-all ios-tap ${
                   moodObj
-                    ? 'border-[#5f7a61]/40 dark:border-[#7d9d80]/40 bg-white/80 dark:bg-white/[0.08] shadow-2xs'
+                    ? `${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} shadow-xs`
                     : 'border-black/[0.05] dark:border-white/[0.06] hover:border-[#5f7a61]/40 bg-white/40 dark:bg-white/[0.02]'
                 } ${isToday ? 'ring-2 ring-[#5f7a61] dark:ring-[#7d9d80] font-black' : ''}`}
               >
-                <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] self-start leading-none">
+                <span className={`text-[10px] font-black self-start leading-none ${
+                  moodObj ? `${moodObj.textColorLight} ${moodObj.textColorDark}` : 'text-[#8c7e70] dark:text-[#a89b8d]'
+                }`}>
                   {dayNum}
                 </span>
                 <div className="my-auto">
-                  {moodValue ? <FrogMoodIcon value={moodValue} size={26} /> : <div className="w-5 h-5" />}
+                  {moodValue ? (
+                    <div className={`p-1 rounded-full ${moodObj?.iconBgLight || ''} ${moodObj?.iconBgDark || ''}`}>
+                      <FrogMoodIcon value={moodValue} size={22} />
+                    </div>
+                  ) : (
+                    <div className="w-5 h-5" />
+                  )}
                 </div>
                 <div className="w-1 h-1" />
               </button>
@@ -173,27 +181,34 @@ export const MoodView: React.FC<MoodViewProps> = ({
               topMoods.map((tm) => (
                 <span
                   key={tm.value}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white/80 dark:bg-white/[0.08] text-[#2d2823] dark:text-[#f4efe8] border border-black/[0.06] dark:border-white/[0.1] shadow-2xs"
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border shadow-xs ${tm.bgLight} ${tm.bgDark} ${tm.borderLight} ${tm.borderDark} ${tm.textColorLight} ${tm.textColorDark}`}
                 >
-                  <FrogMoodIcon value={tm.value} size={20} />
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center ${tm.iconBgLight} ${tm.iconBgDark}`}>
+                    <FrogMoodIcon value={tm.value} size={15} />
+                  </div>
                   <span>{tm.label}</span>
-                  <span className="text-[#8c7e70]">({maxCount} {maxCount === 1 ? 'day' : 'days'})</span>
+                  <span className="opacity-75 font-bold">({maxCount} {maxCount === 1 ? 'day' : 'days'})</span>
                 </span>
               ))
             )}
           </div>
         </div>
 
-        {/* Mood Breakdown Row */}
+        {/* Mood Breakdown Row - Colored Background Cards for Clear Differentiation */}
         <div className="grid grid-cols-5 gap-2 pt-2">
           {MOOD_LEVELS.map((m) => (
             <div
               key={m.value}
-              className="p-2.5 rounded-[18px] bg-white/60 dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08] text-center flex flex-col items-center shadow-2xs"
+              className={`p-2.5 rounded-[18px] border text-center flex flex-col items-center shadow-xs transition-all ${m.bgLight} ${m.bgDark} ${m.borderLight} ${m.borderDark}`}
             >
-              <FrogMoodIcon value={m.value} size={24} className="mb-1" />
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block">{m.label}</span>
-              <strong className="text-xs font-black text-[#2d2823] dark:text-[#f2eee9] block mt-0.5">
+              {/* Circular Themed Icon Backdrop */}
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center mb-1.5 shadow-2xs ${m.iconBgLight} ${m.iconBgDark}`}>
+                <FrogMoodIcon value={m.value} size={22} />
+              </div>
+              <span className={`text-[10.5px] font-black block tracking-tight ${m.textColorLight} ${m.textColorDark}`}>
+                {m.label}
+              </span>
+              <strong className={`text-xs sm:text-sm font-black block mt-0.5 ${m.textColorLight} ${m.textColorDark}`}>
                 {moodCounts[m.value] || 0}
               </strong>
             </div>
@@ -226,14 +241,20 @@ export const MoodView: React.FC<MoodViewProps> = ({
                     key={mood.value}
                     type="button"
                     onClick={() => handleSelectMood(mood.value)}
-                    className={`py-3 rounded-2xl border flex flex-col items-center gap-1.5 transition ${
+                    className={`py-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ios-tap ${
+                      mood.bgLight
+                    } ${mood.bgDark} ${
                       isSelected
-                        ? 'border-[#5f7a61] bg-[#eef4ec] dark:bg-[#263324] text-[#2d2823] dark:text-[#f2eee9] font-bold scale-105 shadow-md'
-                        : 'border-[#eee5d8] dark:border-[#2f2a24] bg-[#faf7f2] dark:bg-[#282420] hover:bg-[#f5efe6] dark:hover:bg-[#342d26] text-[#4a4036] dark:text-[#d6cbbe]'
+                        ? `ring-2 ring-offset-1 ring-offset-white dark:ring-offset-[#211e1b] ${mood.borderLight} ${mood.borderDark} scale-105 shadow-md`
+                        : `${mood.borderLight} ${mood.borderDark} hover:scale-102`
                     }`}
                   >
-                    <FrogMoodIcon value={mood.value} size={30} />
-                    <span className="text-[10px] font-black">{mood.label}</span>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${mood.iconBgLight} ${mood.iconBgDark}`}>
+                      <FrogMoodIcon value={mood.value} size={22} />
+                    </div>
+                    <span className={`text-[10px] font-black ${mood.textColorLight} ${mood.textColorDark}`}>
+                      {mood.label}
+                    </span>
                   </button>
                 );
               })}
