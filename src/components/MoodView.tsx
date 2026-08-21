@@ -171,37 +171,8 @@ export const MoodView: React.FC<MoodViewProps> = ({
           })}
         </div>
 
-        {/* Top Moods Summary */}
-        <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Sparkles size={16} className="text-[#b86f52] dark:text-[#d68767]" />
-            <strong className="text-xs font-black uppercase tracking-wider text-[#4a4036] dark:text-[#e0d6cb]">
-              Most Frequent Mood:
-            </strong>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {topMoods.length === 0 ? (
-              <span className="text-xs font-medium text-[#8c7e70]">No mood entries recorded yet</span>
-            ) : (
-              topMoods.map((tm) => (
-                <span
-                  key={tm.value}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black border shadow-xs ${tm.bgLight} ${tm.bgDark} ${tm.borderLight} ${tm.borderDark} ${tm.textColorLight} ${tm.textColorDark}`}
-                >
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center ${tm.iconBgLight} ${tm.iconBgDark}`}>
-                    <FrogMoodIcon value={tm.value} size={15} />
-                  </div>
-                  <span>{tm.label}</span>
-                  <span className="opacity-75 font-bold">({maxCount} {maxCount === 1 ? 'day' : 'days'})</span>
-                </span>
-              ))
-            )}
-          </div>
-        </div>
-
         {/* Mood Breakdown Row - Colored Background Cards for Clear Differentiation */}
-        <div className="grid grid-cols-5 gap-2 pt-2">
+        <div className="grid grid-cols-5 gap-2 pt-4 border-t border-black/[0.06] dark:border-white/[0.08]">
           {MOOD_LEVELS.map((m) => (
             <div
               key={m.value}

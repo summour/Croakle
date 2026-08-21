@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageType, HabitTemplate, MonthData, Project, MOOD_LEVELS } from '../types';
+import { PageType, HabitTemplate, MonthData, Project, MOOD_LEVELS, PixelSceneConfig } from '../types';
 import {
   FrogMoodIcon,
   FrogMoodRad,
@@ -11,6 +11,7 @@ import {
   WoodGearDockIcon,
   FrogFaceDockIcon,
 } from './FrogIcons';
+import { PixelFrogScene } from './PixelFrogScene';
 import {
   CheckCircle2,
   ArrowRight,
@@ -28,6 +29,10 @@ interface HomeDashboardProps {
   monthData: MonthData;
   projects: Project[];
   todayDate: Date;
+  pixelScene: PixelSceneConfig;
+  onUpdatePixelScene: (patch: Partial<PixelSceneConfig>) => void;
+  soundEnabled?: boolean;
+  hapticEnabled?: boolean;
   onToggleHabitToday: (habitIndex: number) => void;
   onSelectMoodToday: (moodValue: number) => void;
 }
@@ -38,6 +43,10 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   monthData,
   projects,
   todayDate,
+  pixelScene,
+  onUpdatePixelScene,
+  soundEnabled = true,
+  hapticEnabled = true,
   onToggleHabitToday,
   onSelectMoodToday,
 }) => {
@@ -93,8 +102,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
   return (
     <div className="space-y-4 pb-24">
-      {/* Cozy Header (Sticky Locked with iOS 26 glass) */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-xl pt-1 pb-1">
+      {/* Cozy Header (Non-sticky, fluid natural scroll matching app background) */}
+      <div className="pt-1 pb-1">
         <header className="flex items-center justify-between p-2">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-[22px] bg-[#eef4ec] dark:bg-[#273325] border border-[#d2e2d0] dark:border-[#384a35] flex items-center justify-center p-1 shadow-[0_4px_12px_rgba(95,122,97,0.15)]">
@@ -133,6 +142,15 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           </div>
         </header>
       </div>
+
+      {/* Dynamic Pixel Sanctuary Frog & Habitat Diorama */}
+      <PixelFrogScene
+        config={pixelScene}
+        onUpdateConfig={onUpdatePixelScene}
+        currentMoodValue={currentMoodValue}
+        soundEnabled={soundEnabled}
+        hapticEnabled={hapticEnabled}
+      />
 
       {/* Quick Mood Log Row */}
       <div className="ios-glass-card p-5 space-y-3">
@@ -181,75 +199,6 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           })}
         </div>
       </div>
-
-      {/* Today's Habit Quick Checklist */}
-      <div className="ios-glass-card p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <HabitCloverDockIcon size={19} />
-            <h3 className="font-extrabold text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-              Today's Habits
-            </h3>
-          </div>
-          <button
-            id="home-view-all-habits"
-            type="button"
-            onClick={() => onNavigate('track')}
-            className="text-xs font-bold text-[#8c7e70] hover:text-[#2d2823] dark:text-[#a89b8d] dark:hover:text-[#f4efe8] flex items-center gap-1 transition ios-tap"
-          >
-            Full Calendar <ArrowRight size={13} />
-          </button>
-        </div>
-
-        <div className="divide-y divide-[#f3ede3] dark:divide-[#2d2823]">
-          {activeHabits.length === 0 ? (
-            <div className="py-6 text-center text-[#8c7e70] dark:text-[#a89b8d]">
-              <p className="text-xs font-medium">No active habits right now. Start by creating a habit!</p>
-            </div>
-          ) : (
-            activeHabits.map((habit) => {
-              const origIdx = habits.findIndex((orig) => orig.id === habit.id);
-              const isDone = Boolean(monthData.habits[origIdx]?.days[dayIndex]);
-              return (
-                <div
-                  key={habit.id || origIdx}
-                  className="py-3 flex items-center justify-between gap-3 group transition-colors"
-                >
-                  <div className="min-w-0">
-                    <p
-                      className={`font-bold text-sm truncate ${
-                        isDone
-                          ? 'line-through text-[#a89b8d] dark:text-[#6e6358]'
-                          : 'text-[#2d2823] dark:text-[#f4efe8]'
-                      }`}
-                    >
-                      {habit.name}
-                    </p>
-                    {habit.description && (
-                      <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] truncate mt-0.5">
-                        {habit.description}
-                      </p>
-                    )}
-                  </div>
-                  <button
-                    id={`home-toggle-habit-${origIdx}`}
-                    type="button"
-                    onClick={() => handleToggle(origIdx)}
-                    className={`w-9 h-9 rounded-[18px] flex items-center justify-center transition-all ios-tap ${
-                      isDone
-                        ? 'bg-[#5f7a61] dark:bg-[#7d9d80] text-white dark:text-[#171513] shadow-[0_4px_12px_rgba(95,122,97,0.3)]'
-                        : 'border-2 border-[#d6cbbe] dark:border-[#423930] hover:border-[#5f7a61] text-transparent'
-                    }`}
-                  >
-                    <CheckCircle2 size={18} className={isDone ? 'opacity-100' : 'opacity-0'} />
-                  </button>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-
     </div>
   );
 };

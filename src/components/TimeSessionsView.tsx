@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { TimeSession, HabitTemplate, Project } from '../types';
-import { Play, Pause, RotateCcw, Plus, Trash2, Edit3, X, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { TimeSession, HabitTemplate, Project, ActiveTimerState } from '../types';
+import { Play, Pause, RotateCcw, Plus, Trash2, Edit3, X, Check, Sparkles, Target, Flame } from 'lucide-react';
 import { PocketTimerDockIcon, LanternToolIcon } from './FrogIcons';
 import { getTodayIso, formatTimeMinutes } from '../utils/dateUtils';
-import confetti from 'canvas-confetti';
 
 interface TimeSessionsViewProps {
   sessions: TimeSession[];
   habits: HabitTemplate[];
   projects: Project[];
+  activeTimer: ActiveTimerState;
+  elapsedSeconds: number;
+  onStartTimer: () => void;
+  onPauseTimer: () => void;
+  onResumeTimer: () => void;
+  onResetTimer: () => void;
+  onFinishTimer: () => void;
+  onUpdateTimerConfig: (patch: Partial<ActiveTimerState>) => void;
   onAddSession: (session: Omit<TimeSession, 'id'>) => void;
   onUpdateSession: (id: string, session: Partial<TimeSession>) => void;
   onDeleteSession: (id: string) => void;
@@ -18,6 +25,14 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   sessions,
   habits,
   projects,
+  activeTimer,
+  elapsedSeconds,
+  onStartTimer,
+  onPauseTimer,
+  onResumeTimer,
+  onResetTimer,
+  onFinishTimer,
+  onUpdateTimerConfig,
   onAddSession,
   onUpdateSession,
   onDeleteSession,
@@ -27,13 +42,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   const [editingSession, setEditingSession] = useState<TimeSession | null>(null);
   const [deletingSessionId, setDeletingSessionId] = useState<string | null>(null);
 
-  // Live Timer State
-  const [timerRunning, setTimerRunning] = useState(false);
-  const [timerSeconds, setTimerSeconds] = useState(0);
-  const [timerSubject, setTimerSubject] = useState('Deep Work');
-  const [timerType, setTimerType] = useState<'focus' | 'study' | 'break' | 'work'>('focus');
-
-  // Form state
+  // Form state for manual add / edit
   const [formSubject, setFormSubject] = useState('');
   const [formDate, setFormDate] = useState(getTodayIso());
   const [formStartTime, setFormStartTime] = useState('09:00');
@@ -43,46 +52,14 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   const [formSourceId, setFormSourceId] = useState('');
   const [formNotes, setFormNotes] = useState('');
 
-  // Live Timer tick
-  useEffect(() => {
-    let interval: any = null;
-    if (timerRunning) {
-      interval = setInterval(() => {
-        setTimerSeconds((prev) => prev + 1);
-      }, 1000);
+  const formatTimerDisplay = (sec: number) => {
+    const hours = Math.floor(sec / 3600);
+    const mins = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    if (hours > 0) {
+      return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
-    return () => clearInterval(interval);
-  }, [timerRunning]);
-
-  const handleFinishTimer = () => {
-    if (timerSeconds < 30) {
-      alert('Session too short to record (less than 30s).');
-      setTimerRunning(false);
-      setTimerSeconds(0);
-      return;
-    }
-
-    const durationMinutes = Math.max(1, Math.round(timerSeconds / 60));
-    const now = new Date();
-    const startMinutes = now.getHours() * 60 + now.getMinutes() - durationMinutes;
-
-    onAddSession({
-      subject: timerSubject || 'Focus Session',
-      date: getTodayIso(),
-      startMinute: Math.max(0, startMinutes),
-      duration: durationMinutes,
-      type: timerType,
-      notes: `Recorded with Croakle Focus Timer (${durationMinutes} mins)`,
-    });
-
-    confetti({
-      particleCount: 40,
-      spread: 60,
-      origin: { y: 0.7 },
-    });
-
-    setTimerRunning(false);
-    setTimerSeconds(0);
+    return `${String(mins).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
 
   const handleOpenAdd = () => {
@@ -158,78 +135,157 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
   const totalMinutes = daySessions.reduce((acc, s) => acc + s.duration, 0);
 
-  const formatTimerDisplay = (sec: number) => {
-    const mins = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${String(mins).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-  };
+  // Target duration calculation for progress ring if set
+  const targetSecs = (activeTimer.targetDurationMinutes || 0) * 60;
+  const progressPercent = targetSecs > 0 ? Math.min(100, Math.round((elapsedSeconds / targetSecs) * 100)) : 0;
+
+  const timerPresets = [
+    { label: '15m Short', mins: 15 },
+    { label: '25m Pomodoro', mins: 25 },
+    { label: '45m Deep Work', mins: 45 },
+    { label: '60m Flow', mins: 60 },
+    { label: 'Stopwatch', mins: 0 },
+  ];
 
   return (
-    <div className="space-y-5 pb-24">
-      {/* Live Focus Timer Card (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-xl pt-1 pb-1">
-        <div className="relative overflow-hidden bg-[#1c1916]/90 dark:bg-black/70 text-[#fbf8f5] rounded-[32px] p-5 sm:p-6 shadow-[0_12px_40px_rgba(0,0,0,0.18)] border border-white/10 space-y-3 sm:space-y-4 backdrop-blur-2xl">
+    <div className="space-y-5 pb-28">
+      {/* Live Focus Timer Card - Naturally Scrolling & Styled in App's Warm Sage Aesthetic */}
+      <div className="pt-1 pb-1">
+        <div className="relative overflow-hidden bg-white/80 dark:bg-[#201c18]/90 text-[#2d2823] dark:text-[#f4efe8] rounded-[36px] p-5 sm:p-6 shadow-[0_14px_40px_rgba(95,122,97,0.12),0_2px_8px_rgba(0,0,0,0.04)] border border-[#5f7a61]/20 dark:border-[#5f7a61]/30 space-y-4 backdrop-blur-2xl transition-colors">
+          
+          {/* Header Row */}
           <div className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <PocketTimerDockIcon size={20} className="text-[#8fc493]" />
-              <h2 className="font-bold text-xs uppercase tracking-wider text-[#d4c8bc]">Focus Timer</h2>
+              <div className="w-8 h-8 rounded-xl bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 flex items-center justify-center border border-[#5f7a61]/20 text-[#5f7a61] dark:text-[#8fc493]">
+                <PocketTimerDockIcon size={18} />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <h2 className="font-black text-xs uppercase tracking-wider text-[#5f7a61] dark:text-[#8fc493]">Continuous Focus Timer</h2>
+                {activeTimer.isRunning && (
+                  <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                )}
+              </div>
             </div>
+
+            {/* Type Selector */}
             <select
-              value={timerType}
-              onChange={(e) => setTimerType(e.target.value as any)}
-              className="bg-white/10 text-xs font-bold text-[#e0d6cb] px-3.5 py-1.5 rounded-full border border-white/15 focus:outline-none backdrop-blur-md"
+              value={activeTimer.type}
+              onChange={(e) => onUpdateTimerConfig({ type: e.target.value as any })}
+              className="bg-[#5f7a61]/10 dark:bg-white/[0.08] text-xs font-black text-[#3b332a] dark:text-[#e8ded1] px-3 py-1.5 rounded-full border border-[#5f7a61]/20 dark:border-white/15 focus:outline-none backdrop-blur-md transition hover:bg-[#5f7a61]/15 cursor-pointer"
             >
-              <option value="focus" className="bg-[#24201c] text-white">Focus</option>
-              <option value="study" className="bg-[#24201c] text-white">Study</option>
-              <option value="work" className="bg-[#24201c] text-white">Work</option>
-              <option value="break" className="bg-[#24201c] text-white">Break</option>
+              <option value="focus" className="bg-[#fdfbf7] dark:bg-[#24201c] text-[#2d2823] dark:text-white">Focus</option>
+              <option value="study" className="bg-[#fdfbf7] dark:bg-[#24201c] text-[#2d2823] dark:text-white">Study</option>
+              <option value="work" className="bg-[#fdfbf7] dark:bg-[#24201c] text-[#2d2823] dark:text-white">Work</option>
+              <option value="break" className="bg-[#fdfbf7] dark:bg-[#24201c] text-[#2d2823] dark:text-white">Break</option>
             </select>
           </div>
 
-          <div className="relative z-10 text-center py-1 sm:py-2 space-y-1.5 sm:space-y-2">
-            <input
-              type="text"
-              placeholder="What are you focusing on?"
-              value={timerSubject}
-              onChange={(e) => setTimerSubject(e.target.value)}
-              className="text-center bg-transparent text-sm font-semibold text-[#e0d6cb] placeholder-[#8c7e70] border-b border-white/15 pb-1 focus:outline-none focus:border-white/40 w-full max-w-xs mx-auto transition"
-            />
-            <div className="text-4xl sm:text-5xl md:text-6xl font-black font-mono tracking-tighter text-[#fbf8f5] drop-shadow-sm">
-              {formatTimerDisplay(timerSeconds)}
-            </div>
+          {/* Preset Buttons */}
+          <div className="relative z-10 flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            {timerPresets.map((p) => {
+              const isSelected = activeTimer.targetDurationMinutes === p.mins;
+              return (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => onUpdateTimerConfig({ targetDurationMinutes: p.mins })}
+                  className={`text-[11px] font-black px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ios-tap ${
+                    isSelected
+                      ? 'bg-[#5f7a61] text-white shadow-[0_4px_12px_rgba(95,122,97,0.3)] scale-[1.02]'
+                      : 'bg-black/[0.04] dark:bg-white/[0.06] text-[#6e6052] dark:text-[#c2b5a5] border border-black/[0.05] dark:border-white/[0.08] hover:bg-[#5f7a61]/10'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
           </div>
 
-          <div className="relative z-10 flex items-center justify-center gap-2.5 sm:gap-3">
-            <button
-              type="button"
-              onClick={() => setTimerRunning(!timerRunning)}
-              className="px-6 py-2.5 rounded-full bg-white text-[#1c1916] hover:bg-white/90 font-black text-xs sm:text-sm flex items-center gap-2 shadow-[0_4px_16px_rgba(255,255,255,0.2)] transition ios-tap"
-            >
-              {timerRunning ? <Pause size={16} /> : <Play size={16} />}
-              {timerRunning ? 'Pause' : 'Start Focus'}
-            </button>
-            {timerSeconds > 0 && (
+          {/* Subject Input & Giant Timer Display */}
+          <div className="relative z-10 text-center py-2 space-y-2">
+            <div className="flex items-center justify-center gap-1.5 max-w-xs mx-auto">
+              <input
+                type="text"
+                placeholder="What are you focusing on?"
+                value={activeTimer.subject}
+                onChange={(e) => onUpdateTimerConfig({ subject: e.target.value })}
+                className="text-center bg-transparent text-sm font-bold text-[#2d2823] dark:text-[#f5eee6] placeholder-[#8c7e70] dark:placeholder-[#8c7e70] border-b border-[#5f7a61]/25 pb-1 focus:outline-none focus:border-[#5f7a61] w-full transition"
+              />
+            </div>
+
+            <div className="relative inline-block py-1">
+              <div className="text-5xl sm:text-6xl md:text-7xl font-black font-mono tracking-tighter text-[#2d2823] dark:text-[#fbf8f5] tabular-nums">
+                {formatTimerDisplay(elapsedSeconds)}
+              </div>
+              {targetSecs > 0 && (
+                <p className="text-[11px] font-bold text-[#8c7e70] dark:text-[#c9bfae] mt-1">
+                  Target: {activeTimer.targetDurationMinutes} mins ({progressPercent}%)
+                </p>
+              )}
+            </div>
+
+            {/* Target Progress Bar */}
+            {targetSecs > 0 && (
+              <div className="w-full max-w-xs mx-auto h-2 bg-black/[0.06] dark:bg-white/10 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/10">
+                <div
+                  className="h-full bg-gradient-to-r from-[#5f7a61] to-[#8fc493] rounded-full transition-all duration-300 shadow-xs"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Controls Bar */}
+          <div className="relative z-10 flex items-center justify-center gap-3">
+            {!activeTimer.isRunning ? (
+              <button
+                type="button"
+                onClick={elapsedSeconds > 0 ? onResumeTimer : onStartTimer}
+                className="px-7 py-3 rounded-full bg-[#5f7a61] hover:bg-[#4f6751] text-white font-black text-sm flex items-center gap-2 shadow-[0_8px_24px_rgba(95,122,97,0.35)] transition-all transform active:scale-95 ios-tap"
+              >
+                <Play size={17} className="fill-current ml-0.5" />
+                <span>{elapsedSeconds > 0 ? 'Resume Focus' : 'Start Focus'}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onPauseTimer}
+                className="px-7 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-white font-black text-sm flex items-center gap-2 shadow-[0_8px_24px_rgba(245,158,11,0.35)] transition-all transform active:scale-95 ios-tap"
+              >
+                <Pause size={17} className="fill-current" />
+                <span>Pause</span>
+              </button>
+            )}
+
+            {elapsedSeconds > 0 && (
               <>
                 <button
                   type="button"
-                  onClick={handleFinishTimer}
-                  className="px-4 py-2.5 rounded-full bg-[#5f7a61] hover:bg-[#4f6751] text-white font-black text-xs flex items-center gap-1.5 transition shadow-[0_4px_16px_rgba(95,122,97,0.3)] ios-tap"
+                  onClick={onFinishTimer}
+                  className="px-5 py-3 rounded-full bg-[#4a6b4d] hover:bg-[#3d5940] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition shadow-[0_6px_20px_rgba(74,107,77,0.35)] ios-tap"
+                  title="Finish and log session"
                 >
-                  <Check size={16} /> Save
+                  <Check size={17} /> <span>Save</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    setTimerRunning(false);
-                    setTimerSeconds(0);
-                  }}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-[#c9bea7] hover:text-white transition ios-tap"
-                  title="Reset"
+                  onClick={onResetTimer}
+                  className="p-3 rounded-full bg-black/[0.05] dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 text-[#6e6052] dark:text-[#c9bea7] transition ios-tap"
+                  title="Reset Timer"
                 >
                   <RotateCcw size={16} />
                 </button>
               </>
             )}
+          </div>
+
+          <div className="relative z-10 text-center">
+            <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] font-medium">
+              💡 Continuous background timer tracks accurately even when switching to other pages
+            </p>
           </div>
         </div>
       </div>

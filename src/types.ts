@@ -67,6 +67,28 @@ export interface TimeSession {
   notes?: string;
 }
 
+export interface ActiveTimerState {
+  isRunning: boolean;
+  subject: string;
+  type: 'focus' | 'study' | 'break' | 'work';
+  startedAt: number | null; // Date.now() timestamp when resumed/started
+  accumulatedSeconds: number; // seconds elapsed prior to current run
+  targetDurationMinutes?: number; // optional target duration e.g. 25
+  sourceType?: 'habit' | 'project' | '';
+  sourceId?: string;
+}
+
+export const DEFAULT_ACTIVE_TIMER: ActiveTimerState = {
+  isRunning: false,
+  subject: 'Deep Work',
+  type: 'focus',
+  startedAt: null,
+  accumulatedSeconds: 0,
+  targetDurationMinutes: 25,
+  sourceType: '',
+  sourceId: '',
+};
+
 export interface AppSettings {
   theme: 'light' | 'dark' | 'dim';
   soundEnabled: boolean;
@@ -180,5 +202,96 @@ export function getMoodConfig(value: number | null | undefined): MoodConfig | un
   if (!value) return undefined;
   return MOOD_LEVELS.find((m) => m.value === value);
 }
+
+// -------------------------------------------------------------
+// DYNAMIC PIXEL ART SCENE & FROG HABITAT TYPES
+// -------------------------------------------------------------
+
+export type SceneLocationId = 'zen_pond' | 'treehouse' | 'sakura_shrine' | 'rainy_meadow' | 'onsen' | 'night_camp' | 'tearoom';
+
+export type FrogActivityId = 'relaxing' | 'reading' | 'tea' | 'eating' | 'meditating' | 'guitar' | 'sleeping';
+
+export type FrogHatId = 'none' | 'lotus' | 'straw' | 'sakura' | 'wizard' | 'bandana' | 'beanie';
+
+export type FrogCompanionId = 'none' | 'snail' | 'crab' | 'fireflies' | 'butterfly' | 'koi';
+
+export type FrogWeatherId = 'auto' | 'sunny' | 'golden' | 'starry' | 'rainy' | 'petals';
+
+export interface PixelSceneConfig {
+  sceneId: SceneLocationId;
+  activityId: FrogActivityId;
+  hatId: FrogHatId;
+  companionId: FrogCompanionId;
+  weatherId: FrogWeatherId;
+  isAnimated: boolean;
+  syncWithMood: boolean;
+}
+
+export const DEFAULT_PIXEL_SCENE: PixelSceneConfig = {
+  sceneId: 'zen_pond',
+  activityId: 'relaxing',
+  hatId: 'lotus',
+  companionId: 'snail',
+  weatherId: 'auto',
+  isAnimated: true,
+  syncWithMood: true,
+};
+
+export interface SceneOptionInfo<T> {
+  id: T;
+  name: string;
+  emoji: string;
+  desc: string;
+  tag: string;
+}
+
+export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
+  { id: 'zen_pond', name: 'Zen Lotus Pond', emoji: '🪷', desc: 'Lily pads, ripples & stone lantern', tag: 'Outdoor' },
+  { id: 'treehouse', name: 'Cozy Treehouse', emoji: '🏡', desc: 'Warm fireplace, books & herbal kettle', tag: 'Indoor' },
+  { id: 'sakura_shrine', name: 'Sakura Shrine', emoji: '🌸', desc: 'Red torii gate & floating cherry petals', tag: 'Outdoor' },
+  { id: 'rainy_meadow', name: 'Rainy Mushroom Meadow', emoji: '🍄', desc: 'Gentle raindrops & giant polka-dot mushrooms', tag: 'Nature' },
+  { id: 'onsen', name: 'Mountain Hot Spring', emoji: '♨️', desc: 'Steaming onsen baths & bamboo water spout', tag: 'Relax' },
+  { id: 'night_camp', name: 'Starry Campfire Haven', emoji: '🌌', desc: 'Crackling campfire & glowing fireflies', tag: 'Night' },
+  { id: 'tearoom', name: 'Washi Tearoom Loft', emoji: '🍵', desc: 'Tatami mats, bonsai & matcha tea set', tag: 'Indoor' },
+];
+
+export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
+  { id: 'relaxing', name: 'Peaceful Chilling', emoji: '🐸', desc: 'Smiling cute with warm rosy cheeks', tag: 'Rest' },
+  { id: 'reading', name: 'Reading Journal', emoji: '📖', desc: 'Immersed in an aesthetic leather book', tag: 'Study' },
+  { id: 'tea', name: 'Sipping Green Tea', emoji: '🍵', desc: 'Warm ceramic cup of frothy matcha', tag: 'Zen' },
+  { id: 'eating', name: 'Enjoying Treats', emoji: '🍙', desc: 'Feasting on fresh onigiri & baked scone', tag: 'Food' },
+  { id: 'meditating', name: 'Mindful Meditation', emoji: '🧘', desc: 'Deep breathing with floating aura sparkles', tag: 'Focus' },
+  { id: 'guitar', name: 'Plucking Lute', emoji: '🎸', desc: 'Strumming soothing ambient melodies', tag: 'Music' },
+  { id: 'sleeping', name: 'Cozy Napping', emoji: '💤', desc: 'Tucked in blanket with sweet Zzz dreams', tag: 'Sleep' },
+];
+
+export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
+  { id: 'none', name: 'Natural (No Hat)', emoji: '✨', desc: 'Classic cute frog head', tag: 'Simple' },
+  { id: 'lotus', name: 'Lotus Leaf Hat', emoji: '🍃', desc: 'Fresh green lily leaf umbrella', tag: 'Nature' },
+  { id: 'straw', name: 'Straw Travel Hat', emoji: '👒', desc: 'Traditional woven kasa sun hat', tag: 'Travel' },
+  { id: 'sakura', name: 'Sakura Crown', emoji: '🌸', desc: 'Handcrafted cherry blossom garland', tag: 'Floral' },
+  { id: 'wizard', name: 'Mystic Star Hat', emoji: '🧙‍♂️', desc: 'Deep navy hat with gold stars', tag: 'Magic' },
+  { id: 'bandana', name: 'Red Bandana', emoji: '🧣', desc: 'Bold adventurer crimson scarf', tag: 'Adventure' },
+  { id: 'beanie', name: 'Winter Beanie', emoji: '🧶', desc: 'Warm cozy woven bobble hat', tag: 'Cozy' },
+];
+
+export const FROG_COMPANIONS: SceneOptionInfo<FrogCompanionId>[] = [
+  { id: 'none', name: 'Solo Time', emoji: '🌱', desc: 'Quiet peaceful sanctuary alone', tag: 'Solitude' },
+  { id: 'snail', name: 'Maimai the Snail', emoji: '🐌', desc: 'Whimsical slow traveler with spiral shell', tag: 'Friend' },
+  { id: 'crab', name: 'Kani the Crab', emoji: '🦀', desc: 'Cheerful little crab with waving pinchers', tag: 'Friend' },
+  { id: 'fireflies', name: 'Hotaru Fireflies', emoji: '✨', desc: 'Dancing glowing light particles', tag: 'Atmosphere' },
+  { id: 'butterfly', name: 'Flutter Butterfly', emoji: '🦋', desc: 'Delicate pastel blue winged visitor', tag: 'Wildlife' },
+  { id: 'koi', name: 'Nishikigoi Carp', emoji: '🎏', desc: 'Swimming red & white lucky carp', tag: 'Water' },
+];
+
+export const FROG_WEATHERS: SceneOptionInfo<FrogWeatherId>[] = [
+  { id: 'auto', name: 'Auto Real-Time', emoji: '⏰', desc: 'Syncs with real clock & your mood', tag: 'Smart' },
+  { id: 'sunny', name: 'Sunny Morning', emoji: '☀️', desc: 'Clear vibrant daylight with sun rays', tag: 'Day' },
+  { id: 'golden', name: 'Golden Hour Dusk', emoji: '🌅', desc: 'Warm amber sunset glow', tag: 'Evening' },
+  { id: 'starry', name: 'Starry Midnight', emoji: '🌙', desc: 'Deep indigo night sky & twinkling stars', tag: 'Night' },
+  { id: 'rainy', name: 'Gentle Rain', emoji: '🌧️', desc: 'Calming pixel rainfall ripples', tag: 'Calm' },
+  { id: 'petals', name: 'Petal Shower', emoji: '🌸', desc: 'Drifting sakura petals breeze', tag: 'Peaceful' },
+];
+
 
 

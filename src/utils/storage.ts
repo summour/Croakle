@@ -5,8 +5,12 @@ import {
   NoteItem,
   TimeSession,
   AppSettings,
+  ActiveTimerState,
+  PixelSceneConfig,
   DEFAULT_HABITS,
   DEFAULT_PROJECTS,
+  DEFAULT_ACTIVE_TIMER,
+  DEFAULT_PIXEL_SCENE,
 } from '../types';
 import { getDaysInMonth, getMonthKey, formatIsoDate, getWeekKey } from './dateUtils';
 
@@ -15,6 +19,8 @@ export const PROJECT_STORAGE_KEY = 'CroakleProjectDataV1';
 export const NOTES_STORAGE_KEY = 'CroakleDailyNotesLiteV1';
 export const SESSIONS_STORAGE_KEY = 'CroakleSessionBlocksV1';
 export const SETTINGS_STORAGE_KEY = 'CroakleSettingsV1';
+export const ACTIVE_TIMER_STORAGE_KEY = 'CroakleActiveTimerV1';
+export const PIXEL_SCENE_STORAGE_KEY = 'CroaklePixelSceneConfigV1';
 
 export interface HabitStoreState {
   habitTemplates: HabitTemplate[];
@@ -251,6 +257,61 @@ export function saveSettingsState(settings: AppSettings) {
   }
 }
 
+export function loadActiveTimerState(): ActiveTimerState {
+  try {
+    const raw = localStorage.getItem(ACTIVE_TIMER_STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_ACTIVE_TIMER };
+    const parsed = JSON.parse(raw);
+    return {
+      isRunning: Boolean(parsed.isRunning),
+      subject: parsed.subject || 'Deep Work',
+      type: parsed.type || 'focus',
+      startedAt: typeof parsed.startedAt === 'number' ? parsed.startedAt : null,
+      accumulatedSeconds: Number(parsed.accumulatedSeconds) || 0,
+      targetDurationMinutes: Number(parsed.targetDurationMinutes) || 25,
+      sourceType: parsed.sourceType || '',
+      sourceId: parsed.sourceId || '',
+    };
+  } catch {
+    return { ...DEFAULT_ACTIVE_TIMER };
+  }
+}
+
+export function saveActiveTimerState(timer: ActiveTimerState) {
+  try {
+    localStorage.setItem(ACTIVE_TIMER_STORAGE_KEY, JSON.stringify(timer));
+  } catch (e) {
+    console.error('Failed to save active timer state', e);
+  }
+}
+
+export function loadPixelSceneState(): PixelSceneConfig {
+  try {
+    const raw = localStorage.getItem(PIXEL_SCENE_STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_PIXEL_SCENE };
+    const parsed = JSON.parse(raw);
+    return {
+      sceneId: parsed.sceneId || 'zen_pond',
+      activityId: parsed.activityId || 'relaxing',
+      hatId: parsed.hatId || 'lotus',
+      companionId: parsed.companionId || 'snail',
+      weatherId: parsed.weatherId || 'auto',
+      isAnimated: parsed.isAnimated !== undefined ? Boolean(parsed.isAnimated) : true,
+      syncWithMood: parsed.syncWithMood !== undefined ? Boolean(parsed.syncWithMood) : true,
+    };
+  } catch {
+    return { ...DEFAULT_PIXEL_SCENE };
+  }
+}
+
+export function savePixelSceneState(config: PixelSceneConfig) {
+  try {
+    localStorage.setItem(PIXEL_SCENE_STORAGE_KEY, JSON.stringify(config));
+  } catch (e) {
+    console.error('Failed to save pixel scene state', e);
+  }
+}
+
 export function exportFullBackup(): string {
   const data = {
     version: '1.0',
@@ -260,6 +321,7 @@ export function exportFullBackup(): string {
     notes: loadNotesState(),
     sessions: loadSessionsState(),
     settings: loadSettingsState(),
+    pixelScene: loadPixelSceneState(),
   };
   return JSON.stringify(data, null, 2);
 }
@@ -272,6 +334,7 @@ export function importFullBackup(jsonString: string): boolean {
     if (parsed.notes) saveNotesState(parsed.notes);
     if (parsed.sessions) saveSessionsState(parsed.sessions);
     if (parsed.settings) saveSettingsState(parsed.settings);
+    if (parsed.pixelScene) savePixelSceneState(parsed.pixelScene);
     return true;
   } catch (e) {
     console.error('Import failed', e);

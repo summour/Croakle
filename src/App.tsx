@@ -7,8 +7,12 @@ import {
   NoteItem,
   TimeSession,
   AppSettings,
+  ActiveTimerState,
+  PixelSceneConfig,
   DEFAULT_HABITS,
   DEFAULT_PROJECTS,
+  DEFAULT_ACTIVE_TIMER,
+  DEFAULT_PIXEL_SCENE,
 } from './types';
 import {
   loadHabitsState,
@@ -22,6 +26,10 @@ import {
   saveSessionsState,
   loadSettingsState,
   saveSettingsState,
+  loadActiveTimerState,
+  saveActiveTimerState,
+  loadPixelSceneState,
+  savePixelSceneState,
 } from './utils/storage';
 import { getTodayIso, getDaysInMonth } from './utils/dateUtils';
 import { BottomDock } from './components/BottomDock';
@@ -34,6 +42,9 @@ import { NotesView } from './components/NotesView';
 import { TimeSessionsView } from './components/TimeSessionsView';
 import { AnalyticsView } from './components/AnalyticsView';
 import { SettingsView } from './components/SettingsView';
+import { LiveTimerBar } from './components/LiveTimerBar';
+import { soundEngine, triggerHaptic } from './utils/audioUtils';
+import confetti from 'canvas-confetti';
 
 export function App() {
   const [activePage, setActivePage] = useState<PageType>('menu');
@@ -50,6 +61,46 @@ export function App() {
   const [notes, setNotes] = useState<NoteItem[]>(loadNotesState);
   const [sessions, setSessions] = useState<TimeSession[]>(loadSessionsState);
   const [settings, setSettings] = useState<AppSettings>(loadSettingsState);
+  const [pixelScene, setPixelScene] = useState<PixelSceneConfig>(loadPixelSceneState);
+
+  // Persist Pixel Scene Config whenever changed
+  useEffect(() => {
+    savePixelSceneState(pixelScene);
+  }, [pixelScene]);
+
+  const handleUpdatePixelScene = (patch: Partial<PixelSceneConfig>) => {
+    setPixelScene((prev) => ({
+      ...prev,
+      ...patch,
+    }));
+  };
+
+  // Persistent Live Focus Timer State
+  const [activeTimer, setActiveTimer] = useState<ActiveTimerState>(loadActiveTimerState);
+  const [nowTimestamp, setNowTimestamp] = useState(Date.now());
+
+  // Continuous accurate background ticker
+  useEffect(() => {
+    let interval: any = null;
+    if (activeTimer.isRunning) {
+      interval = setInterval(() => {
+        setNowTimestamp(Date.now());
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [activeTimer.isRunning]);
+
+  // Persist Active Timer whenever it changes
+  useEffect(() => {
+    saveActiveTimerState(activeTimer);
+  }, [activeTimer]);
+
+  // Calculate live elapsed seconds based on timestamp diff + previous accumulated time
+  const elapsedSeconds = activeTimer.accumulatedSeconds + (
+    activeTimer.isRunning && activeTimer.startedAt
+      ? Math.max(0, Math.floor((nowTimestamp - activeTimer.startedAt) / 1000))
+      : 0
+  );
 
   // Sync theme to root html element
   useEffect(() => {
@@ -400,12 +451,107 @@ export function App() {
     setSessions((prev) => prev.filter((s) => s.id !== id));
   };
 
+  // Continuous Live Focus Timer Handlers
+  const handleStartTimer = () => {
+    if (settings.soundEnabled) soundEngine.playTapSound();
+    if (settings.hapticEnabled) triggerHaptic();
+    setActiveTimer((prev) => ({
+      ...prev,
+      isRunning: true,
+      startedAt: Date.now(),
+      accumulatedSeconds: 0,
+    }));
+  };
+
+  const handlePauseTimer = () => {
+    if (settings.soundEnabled) soundEngine.playTapSound();
+    if (settings.hapticEnabled) triggerHaptic();
+    setActiveTimer((prev) => {
+      if (!prev.isRunning || !prev.startedAt) return prev;
+      const additional = Math.max(0, Math.floor((Date.now() - prev.startedAt) / 1000));
+      return {
+        ...prev,
+        isRunning: false,
+        startedAt: null,
+        accumulatedSeconds: prev.accumulatedSeconds + additional,
+      };
+    });
+  };
+
+  const handleResumeTimer = () => {
+    if (settings.soundEnabled) soundEngine.playTapSound();
+    if (settings.hapticEnabled) triggerHaptic();
+    setActiveTimer((prev) => ({
+      ...prev,
+      isRunning: true,
+      startedAt: Date.now(),
+    }));
+  };
+
+  const handleResetTimer = () => {
+    if (settings.hapticEnabled) triggerHaptic();
+    setActiveTimer((prev) => ({
+      ...prev,
+      isRunning: false,
+      startedAt: null,
+      accumulatedSeconds: 0,
+    }));
+  };
+
+  const handleFinishTimer = () => {
+    const totalSecs = activeTimer.accumulatedSeconds + (
+      activeTimer.isRunning && activeTimer.startedAt
+        ? Math.max(0, Math.floor((Date.now() - activeTimer.startedAt) / 1000))
+        : 0
+    );
+
+    if (totalSecs < 10) {
+      alert('Focus session was less than 10 seconds. Not recorded.');
+      handleResetTimer();
+      return;
+    }
+
+    const durationMinutes = Math.max(1, Math.round(totalSecs / 60));
+    const now = new Date();
+    const startMinutes = now.getHours() * 60 + now.getMinutes() - durationMinutes;
+
+    handleAddSession({
+      subject: activeTimer.subject.trim() || 'Focus Session',
+      date: getTodayIso(),
+      startMinute: Math.max(0, startMinutes),
+      duration: durationMinutes,
+      type: activeTimer.type,
+      sourceType: activeTimer.sourceType,
+      sourceId: activeTimer.sourceId,
+      notes: `Recorded with Continuous Timer (${durationMinutes}m)`,
+    });
+
+    if (settings.soundEnabled) soundEngine.playCompletionChime();
+    if (settings.hapticEnabled) triggerHaptic();
+
+    confetti({
+      particleCount: 45,
+      spread: 60,
+      origin: { y: 0.65 },
+    });
+
+    handleResetTimer();
+  };
+
+  const handleUpdateTimerConfig = (patch: Partial<ActiveTimerState>) => {
+    setActiveTimer((prev) => ({
+      ...prev,
+      ...patch,
+    }));
+  };
+
   const handleDataImported = () => {
     setHabitStore(loadHabitsState());
     setProjects(loadProjectsState());
     setNotes(loadNotesState());
     setSessions(loadSessionsState());
     setSettings(loadSettingsState());
+    setPixelScene(loadPixelSceneState());
   };
 
   const handleResetData = () => {
@@ -413,6 +559,7 @@ export function App() {
     setProjects([...DEFAULT_PROJECTS]);
     setNotes([]);
     setSessions([]);
+    setPixelScene({ ...DEFAULT_PIXEL_SCENE });
   };
 
   return (
@@ -437,6 +584,10 @@ export function App() {
               monthData={currentMonthData}
               projects={projects}
               todayDate={todayDate}
+              pixelScene={pixelScene}
+              onUpdatePixelScene={handleUpdatePixelScene}
+              soundEnabled={settings.soundEnabled}
+              hapticEnabled={settings.hapticEnabled}
               onToggleHabitToday={handleToggleHabitToday}
               onSelectMoodToday={handleSelectMoodToday}
             />
@@ -530,6 +681,14 @@ export function App() {
               sessions={sessions}
               habits={habitStore.habitTemplates}
               projects={projects}
+              activeTimer={activeTimer}
+              elapsedSeconds={elapsedSeconds}
+              onStartTimer={handleStartTimer}
+              onPauseTimer={handlePauseTimer}
+              onResumeTimer={handleResumeTimer}
+              onResetTimer={handleResetTimer}
+              onFinishTimer={handleFinishTimer}
+              onUpdateTimerConfig={handleUpdateTimerConfig}
               onAddSession={handleAddSession}
               onUpdateSession={handleUpdateSession}
               onDeleteSession={handleDeleteSession}
@@ -558,6 +717,8 @@ export function App() {
               habits={habitStore.habitTemplates}
               monthData={currentMonthData}
               projects={projects}
+              pixelScene={pixelScene}
+              onUpdatePixelScene={handleUpdatePixelScene}
               onDataImported={handleDataImported}
               onResetData={handleResetData}
               onNavigate={setActivePage}
@@ -565,8 +726,29 @@ export function App() {
           )}
         </div>
 
+        {/* Floating Continuous Live Activity Island (Visible on all tabs when timer is running/paused, except when inside Focus tab) */}
+        {activePage !== 'time' && (
+          <LiveTimerBar
+            activeTimer={activeTimer}
+            elapsedSeconds={elapsedSeconds}
+            onTogglePlayPause={() => {
+              if (activeTimer.isRunning) {
+                handlePauseTimer();
+              } else {
+                handleResumeTimer();
+              }
+            }}
+            onFinishSession={handleFinishTimer}
+            onOpenTimer={() => setActivePage('time')}
+          />
+        )}
+
         {/* Floating Modern Bottom Navigation Dock anchored inside master frame */}
-        <BottomDock activePage={activePage} onSelectPage={setActivePage} />
+        <BottomDock
+          activePage={activePage}
+          onSelectPage={setActivePage}
+          isTimerRunning={activeTimer.isRunning}
+        />
       </div>
     </main>
   );

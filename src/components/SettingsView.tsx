@@ -1,7 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { PageType, AppSettings, HabitTemplate, MonthData, Project } from '../types';
+import {
+  PageType,
+  AppSettings,
+  HabitTemplate,
+  MonthData,
+  Project,
+  PixelSceneConfig,
+  SCENE_LOCATIONS,
+  FROG_ACTIVITIES,
+  FROG_HATS,
+  FROG_COMPANIONS,
+  FROG_WEATHERS,
+} from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
-import { Download, Upload, Trash2, Moon, Sun, RefreshCw } from 'lucide-react';
+import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Sparkles, Sliders, Volume2, VolumeX } from 'lucide-react';
 import { WoodGearDockIcon, CloverIcon, BambooScrollDockIcon, FrogFaceDockIcon, ToriiStatsDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 
@@ -11,6 +23,8 @@ interface SettingsViewProps {
   habits: HabitTemplate[];
   monthData: MonthData;
   projects: Project[];
+  pixelScene?: PixelSceneConfig;
+  onUpdatePixelScene?: (patch: Partial<PixelSceneConfig>) => void;
   onDataImported: () => void;
   onResetData: () => void;
   onNavigate?: (page: PageType) => void;
@@ -22,6 +36,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   habits,
   monthData,
   projects,
+  pixelScene,
+  onUpdatePixelScene,
   onDataImported,
   onResetData,
   onNavigate,
@@ -137,27 +153,67 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         )}
       </div>
 
-      {/* Appearance Theme */}
-      <div className="ios-glass-card p-5 space-y-3">
-        <h2 className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Appearance Theme</h2>
-        <div className="grid grid-cols-3 gap-2">
-          {(['light', 'dark', 'dim'] as const).map((t) => (
+      {/* Pixel Sanctuary Habitat Preferences */}
+      {pixelScene && onUpdatePixelScene && (
+        <div className="ios-glass-card p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-[14px] bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border border-[#5f7a61]/20 flex items-center justify-center text-sm shadow-2xs">
+                🪷
+              </div>
+              <div>
+                <h2 className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Pixel Sanctuary Habitat</h2>
+                <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+                  Customize your retro frog diorama, companions and animation effects.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Toggles */}
+          <div className="grid grid-cols-2 gap-2.5 pt-1">
             <button
-              key={t}
               type="button"
-              onClick={() => onUpdateSettings({ ...settings, theme: t })}
-              className={`py-3 rounded-[20px] border text-xs font-black capitalize flex items-center justify-center gap-2 transition ios-tap ${
-                settings.theme === t
-                  ? 'border-[#5f7a61] bg-[#5f7a61] text-white shadow-[0_4px_16px_rgba(95,122,97,0.3)]'
-                  : 'border-black/[0.06] dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.04] text-[#4a4036] dark:text-[#d4c8bc]'
+              onClick={() => onUpdatePixelScene({ isAnimated: !pixelScene.isAnimated })}
+              className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition ios-tap ${
+                pixelScene.isAnimated
+                  ? 'bg-[#5f7a61]/10 border-[#5f7a61] text-[#2d2823] dark:text-[#f4efe8]'
+                  : 'bg-white/60 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-[#8c7e70]'
               }`}
             >
-              {t === 'light' ? <Sun size={15} /> : <Moon size={15} />}
-              {t === 'light' ? 'Warm Light' : t === 'dark' ? 'Night Dark' : 'Soft Dim'}
+              <div className="flex items-center gap-2">
+                <Sparkles size={14} className="text-[#5f7a61]" />
+                <span>Pixel Animation</span>
+              </div>
+              <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
+                pixelScene.isAnimated ? 'bg-[#5f7a61] text-white' : 'bg-black/10 dark:bg-white/10'
+              }`}>
+                {pixelScene.isAnimated ? 'ON' : 'OFF'}
+              </span>
             </button>
-          ))}
+
+            <button
+              type="button"
+              onClick={() => onUpdatePixelScene({ syncWithMood: !pixelScene.syncWithMood })}
+              className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition ios-tap ${
+                pixelScene.syncWithMood
+                  ? 'bg-[#5f7a61]/10 border-[#5f7a61] text-[#2d2823] dark:text-[#f4efe8]'
+                  : 'bg-white/60 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-[#8c7e70]'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span>🐸</span>
+                <span>Mood Reaction</span>
+              </div>
+              <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
+                pixelScene.syncWithMood ? 'bg-[#5f7a61] text-white' : 'bg-black/10 dark:bg-white/10'
+              }`}>
+                {pixelScene.syncWithMood ? 'ON' : 'OFF'}
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Backup & Restore Card */}
       <div className="ios-glass-card p-5 space-y-4">
