@@ -16,6 +16,8 @@ interface HabitsViewProps {
   onSelectDate: (date: Date) => void;
   onPrevMonth: () => void;
   onNextMonth: () => void;
+  onPrevWeek?: () => void;
+  onNextWeek?: () => void;
   onToggleHabitDay: (habitIndex: number, dayOfMonth: number) => void;
   onAddHabit: (habit: Omit<HabitTemplate, 'id'>) => void;
   onUpdateHabit: (index: number, habit: HabitTemplate) => void;
@@ -34,6 +36,8 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
   onSelectDate,
   onPrevMonth,
   onNextMonth,
+  onPrevWeek,
+  onNextWeek,
   onToggleHabitDay,
   onAddHabit,
   onUpdateHabit,
@@ -171,9 +175,29 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
     onReorderHabits(sorted);
   };
 
+  const handleGoPrevWeek = () => {
+    if (onPrevWeek) {
+      onPrevWeek();
+    } else {
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate() - 7);
+      onSelectDate(d);
+    }
+  };
+
+  const handleGoNextWeek = () => {
+    if (onNextWeek) {
+      onNextWeek();
+    } else {
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate() + 7);
+      onSelectDate(d);
+    }
+  };
+
   const swipeHandlers = useSwipeMonth({
-    onPrevMonth,
-    onNextMonth,
+    onPrevMonth: handleGoPrevWeek,
+    onNextMonth: handleGoNextWeek,
   });
 
   return (
@@ -194,14 +218,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
       {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
       <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
         <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
-          {/* Top Row: Month Navigation */}
+          {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
-              id="habit-prev-month"
+              id="habit-prev-week"
               type="button"
-              onClick={onPrevMonth}
+              onClick={handleGoPrevWeek}
               className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
-              aria-label="Previous Month"
+              aria-label="Previous Week"
+              title="Previous Week"
             >
               <ChevronLeft size={18} />
             </button>
@@ -216,11 +241,12 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             </div>
 
             <button
-              id="habit-next-month"
+              id="habit-next-week"
               type="button"
-              onClick={onNextMonth}
+              onClick={handleGoNextWeek}
               className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
-              aria-label="Next Month"
+              aria-label="Next Week"
+              title="Next Week"
             >
               <ChevronRight size={18} />
             </button>

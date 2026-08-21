@@ -452,6 +452,8 @@ export function App() {
               onSelectDate={handleSelectDate}
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
+              onPrevWeek={handlePrevWeek}
+              onNextWeek={handleNextWeek}
               onToggleHabitDay={handleToggleHabitDay}
               onAddHabit={handleAddHabit}
               onUpdateHabit={handleUpdateHabit}
