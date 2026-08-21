@@ -1,6 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { PageType, NoteItem, HabitTemplate, Project, MOOD_LEVELS } from '../types';
-import { Plus, Trash2, Edit3, X, ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Edit3,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  ChevronDown,
+  ChevronUp,
+  LayoutList,
+  Layers,
+  Sparkles,
+  Calendar,
+} from 'lucide-react';
 import {
   WashiJournalDockIcon,
   HabitCloverDockIcon,
@@ -8,7 +22,7 @@ import {
   FrogFaceDockIcon,
 } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
-import { getTodayIso, MONTH_NAMES } from '../utils/dateUtils';
+import { getTodayIso, MONTH_NAMES, formatFriendlyDate } from '../utils/dateUtils';
 
 interface NotesViewProps {
   notes: NoteItem[];
@@ -39,7 +53,12 @@ export const NotesView: React.FC<NotesViewProps> = ({
 }) => {
   const [filterType, setFilterType] = useState<'all' | 'habit' | 'project' | 'mood'>('all');
   const [scopeMode, setScopeMode] = useState<'month' | 'all'>('month');
+  const [selectedDayFilter, setSelectedDayFilter] = useState<string>('all');
+  const [viewDensity, setViewDensity] = useState<'comfortable' | 'compact'>('comfortable');
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedNoteIds, setExpandedNoteIds] = useState<Record<string, boolean>>({});
+  const [visibleLimit, setVisibleLimit] = useState<number>(35);
+
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<NoteItem | null>(null);
   const [deletingNoteId, setDeletingNoteId] = useState<string | null>(null);
@@ -55,27 +74,72 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
   const currentMonthPrefix = `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
 
-  const filteredNotes = notes.filter((n) => {
-    // Month scope filter
-    if (scopeMode === 'month' && !n.date.startsWith(currentMonthPrefix)) {
-      return false;
-    }
-    // Category filter
-    if (filterType !== 'all' && n.type !== filterType) {
-      return false;
-    }
-    // Search query
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      return (
-        n.text.toLowerCase().includes(q) ||
-        (n.title && n.title.toLowerCase().includes(q)) ||
-        (n.sourceName && n.sourceName.toLowerCase().includes(q)) ||
-        n.date.includes(q)
-      );
-    }
-    return true;
-  });
+  // Filter notes
+  const filteredNotes = useMemo(() => {
+    return notes.filter((n) => {
+      // Month scope filter
+      if (scopeMode === 'month' && !n.date.startsWith(currentMonthPrefix)) {
+        return false;
+      }
+      // Specific day chip filter
+      if (selectedDayFilter !== 'all' && n.date !== selectedDayFilter) {
+        return false;
+      }
+      // Category filter
+      if (filterType !== 'all' && n.type !== filterType) {
+        return false;
+      }
+      // Search query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        return (
+          n.text.toLowerCase().includes(q) ||
+          (n.title && n.title.toLowerCase().includes(q)) ||
+          (n.sourceName && n.sourceName.toLowerCase().includes(q)) ||
+          n.date.includes(q)
+        );
+      }
+      return true;
+    });
+  }, [notes, scopeMode, currentMonthPrefix, selectedDayFilter, filterType, searchQuery]);
+
+  // Extract unique active days for horizontal quick picker
+  const monthAvailableDays = useMemo(() => {
+    const dayCounts: Record<string, number> = {};
+    notes.forEach((n) => {
+      if (scopeMode === 'month' && !n.date.startsWith(currentMonthPrefix)) return;
+      dayCounts[n.date] = (dayCounts[n.date] || 0) + 1;
+    });
+    return Object.entries(dayCounts)
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .map(([date, count]) => ({ date, count }));
+  }, [notes, scopeMode, currentMonthPrefix]);
+
+  // Group filtered notes by date
+  const groupedNotes = useMemo(() => {
+    const groups: { date: string; items: NoteItem[] }[] = [];
+    const map = new Map<string, NoteItem[]>();
+
+    const sliced = filteredNotes.slice(0, visibleLimit);
+    sliced.forEach((note) => {
+      const list = map.get(note.date) || [];
+      list.push(note);
+      map.set(note.date, list);
+    });
+
+    // Keep chronological desc
+    Array.from(map.entries())
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .forEach(([date, items]) => {
+        groups.push({ date, items });
+      });
+
+    return groups;
+  }, [filteredNotes, visibleLimit]);
+
+  const toggleExpand = (id: string) => {
+    setExpandedNoteIds((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const handleOpenAdd = () => {
     const initialType = filterType === 'all' ? 'habit' : filterType;
@@ -85,7 +149,6 @@ export const NotesView: React.FC<NotesViewProps> = ({
     setFormMoodValue(undefined);
     setFormTitle('');
     setFormText('');
-    // Default to today if in active month, else 1st of active month
     const today = getTodayIso();
     if (today.startsWith(currentMonthPrefix)) {
       setFormDate(today);
@@ -162,8 +225,35 @@ export const NotesView: React.FC<NotesViewProps> = ({
     }
   };
 
+  const getResolvedContent = (note: NoteItem) => {
+    if (note.text && note.text.trim().length > 0) {
+      return note.text;
+    }
+    if (note.title && note.title.trim().length > 0) {
+      return note.title;
+    }
+    // Informative contextual fallback
+    if (note.type === 'habit') {
+      return note.sourceName
+        ? `Completed habit: "${note.sourceName}"`
+        : 'Daily habit check-in recorded';
+    }
+    if (note.type === 'mood') {
+      const mObj = MOOD_LEVELS.find((m) => m.value === note.moodValue);
+      return mObj
+        ? `Mood recorded: ${mObj.emoji} ${mObj.label} (${mObj.value}/5)`
+        : 'Daily mood rating logged';
+    }
+    if (note.type === 'project') {
+      return note.sourceName
+        ? `Project milestone update: "${note.sourceName}"`
+        : 'Project task progression logged';
+    }
+    return 'Daily journal reflection note';
+  };
+
   return (
-    <div className="space-y-3.5 pb-24">
+    <div className="space-y-3 pb-24">
       {/* Top Segmented Sub-Navigation for Journal/Mood */}
       {onNavigate && (
         <SubNavTabs
@@ -176,10 +266,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
         />
       )}
 
-      {/* Month Header Navigation (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
-        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
-          {/* Top Row: Month Navigation */}
+      {/* Top Controls Header (Sticky Locked) */}
+      <div className="sticky top-0 z-20 bg-[#fdfbf7]/95 dark:bg-[#161311]/95 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
+        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 shadow-xs">
+          {/* Top Row: Month Navigation & Scope Toggle */}
           <div className="flex items-center justify-between">
             <button
               type="button"
@@ -197,7 +287,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
               <div className="flex items-center p-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-full">
                 <button
                   type="button"
-                  onClick={() => setScopeMode('month')}
+                  onClick={() => {
+                    setScopeMode('month');
+                    setSelectedDayFilter('all');
+                  }}
                   className={`px-2 py-0.5 rounded-full text-[10px] font-black transition-all ios-tap ${
                     scopeMode === 'month'
                       ? 'bg-white dark:bg-[#28231d] text-[#2d2823] dark:text-[#f4efe8] shadow-2xs'
@@ -208,7 +301,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setScopeMode('all')}
+                  onClick={() => {
+                    setScopeMode('all');
+                    setSelectedDayFilter('all');
+                  }}
                   className={`px-2 py-0.5 rounded-full text-[10px] font-black transition-all ios-tap ${
                     scopeMode === 'all'
                       ? 'bg-white dark:bg-[#28231d] text-[#2d2823] dark:text-[#f4efe8] shadow-2xs'
@@ -230,7 +326,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
             </button>
           </div>
 
-          {/* Filter Tabs (iOS 26 Segmented Control) */}
+          {/* Category Filter Tabs */}
           <div className="grid grid-cols-4 gap-1 p-1 bg-black/[0.03] dark:bg-white/[0.05] rounded-[18px]">
             {(['all', 'habit', 'project', 'mood'] as const).map((tab) => {
               const tabConfig: Record<string, { label: string; icon: React.ReactNode }> = {
@@ -259,34 +355,108 @@ export const NotesView: React.FC<NotesViewProps> = ({
             })}
           </div>
 
-          {/* Search / Summary Strip */}
-          <div className="flex items-center justify-between text-xs text-[#8c7e70] dark:text-[#a89b8d] font-bold pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
-            <span>
-              {filteredNotes.length} {filteredNotes.length === 1 ? 'Entry' : 'Entries'}
-              {scopeMode === 'month' ? ` in ${MONTH_NAMES[monthIndex]}` : ' total'}
-            </span>
-            <input
-              type="text"
-              placeholder="Search notes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-3 py-1 rounded-[12px] bg-white/70 dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.1] text-xs text-[#2d2823] dark:text-[#f4efe8] focus:outline-none focus:border-[#5f7a61]"
-            />
+          {/* Search & Layout Density Toggle Bar */}
+          <div className="flex items-center justify-between gap-2 pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
+            <div className="relative flex-1">
+              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#8c7e70] pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search notes, habits, moods..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 rounded-[14px] bg-white/80 dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.1] text-xs text-[#2d2823] dark:text-[#f4efe8] placeholder:text-[#8c7e70] focus:outline-none focus:border-[#5f7a61]"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-[#8c7e70] hover:text-[#2d2823]"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* Density switch: Comfortable vs Compact */}
+            <div className="flex items-center p-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-[12px] shrink-0">
+              <button
+                type="button"
+                onClick={() => setViewDensity('comfortable')}
+                title="Comfortable Reading Mode"
+                className={`p-1.5 rounded-[10px] transition-all ios-tap ${
+                  viewDensity === 'comfortable'
+                    ? 'bg-white dark:bg-[#28231d] text-[#5f7a61] shadow-2xs'
+                    : 'text-[#8c7e70] hover:text-[#2d2823]'
+                }`}
+              >
+                <Layers size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewDensity('compact')}
+                title="Compact List Mode"
+                className={`p-1.5 rounded-[10px] transition-all ios-tap ${
+                  viewDensity === 'compact'
+                    ? 'bg-white dark:bg-[#28231d] text-[#5f7a61] shadow-2xs'
+                    : 'text-[#8c7e70] hover:text-[#2d2823]'
+                }`}
+              >
+                <LayoutList size={14} />
+              </button>
+            </div>
           </div>
+
+          {/* Quick Date Picker Chips (Horizontal Scroll for Effortless Browsing) */}
+          {monthAvailableDays.length > 1 && (
+            <div className="flex items-center gap-1.5 overflow-x-auto py-1 no-scrollbar border-t border-black/[0.03] dark:border-white/[0.04]">
+              <button
+                type="button"
+                onClick={() => setSelectedDayFilter('all')}
+                className={`px-2.5 py-1 rounded-full text-[10.5px] font-black shrink-0 transition-all ios-tap flex items-center gap-1 ${
+                  selectedDayFilter === 'all'
+                    ? 'bg-[#5f7a61] text-white dark:bg-[#7d9d80] dark:text-[#161311] shadow-xs'
+                    : 'bg-black/[0.03] dark:bg-white/[0.05] text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823]'
+                }`}
+              >
+                <span>All Days</span>
+                <span className="opacity-80">({filteredNotes.length})</span>
+              </button>
+
+              {monthAvailableDays.map(({ date, count }) => {
+                const isSelected = selectedDayFilter === date;
+                const dNum = date.split('-')[2];
+                return (
+                  <button
+                    key={date}
+                    type="button"
+                    onClick={() => setSelectedDayFilter(isSelected ? 'all' : date)}
+                    className={`px-2.5 py-1 rounded-full text-[10.5px] font-black shrink-0 transition-all ios-tap flex items-center gap-1 ${
+                      isSelected
+                        ? 'bg-[#5f7a61] text-white dark:bg-[#7d9d80] dark:text-[#161311] shadow-xs'
+                        : 'bg-black/[0.03] dark:bg-white/[0.05] text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823]'
+                    }`}
+                  >
+                    <span>Day {dNum}</span>
+                    <span className="opacity-80 font-normal">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Action Button: Add Note */}
         <button
           type="button"
           onClick={handleOpenAdd}
-          className="w-full py-2.5 px-4 rounded-[20px] bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(95,122,97,0.25)] transition-all ios-tap"
+          className="w-full py-2.5 px-4 rounded-[20px] bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(95,122,97,0.22)] transition-all ios-tap"
         >
           <Plus size={16} /> New Journal Entry
         </button>
       </div>
 
-      {/* Notes List */}
-      <div className="space-y-2.5">
+      {/* Date-Grouped Notes Timeline */}
+      <div className="space-y-4 pt-1">
         {filteredNotes.length === 0 ? (
           <div className="ios-glass-card p-8 text-center text-[#8c7e70] dark:text-[#a89b8d] space-y-3">
             <div className="flex justify-center opacity-60">
@@ -294,88 +464,159 @@ export const NotesView: React.FC<NotesViewProps> = ({
             </div>
             <div>
               <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">No entries found</p>
-              <p className="text-xs mt-0.5">
+              <p className="text-xs mt-0.5 text-[#8c7e70] dark:text-[#a89b8d]">
                 {scopeMode === 'month'
-                  ? `No journal entries for ${MONTH_NAMES[monthIndex]} ${year}.`
+                  ? `No journal entries matching filter for ${MONTH_NAMES[monthIndex]} ${year}.`
                   : 'Begin writing your thoughts, daily observations, or reflections.'}
               </p>
             </div>
           </div>
         ) : (
-          filteredNotes.map((note) => (
-            <div
-              key={note.id}
-              className="ios-glass-card p-4 space-y-2 relative group"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#f5efe6] dark:bg-[#282420] text-[#4a3f33] dark:text-[#d6c9bb] border border-[#e8ded1] dark:border-[#383129] flex items-center gap-1">
-                    {getCategoryIcon(note.type)}
-                    <span>{note.type}</span>
+          groupedNotes.map((group) => {
+            const friendlyHeader = formatFriendlyDate(group.date);
+            return (
+              <div key={group.date} className="space-y-2">
+                {/* Date Group Header */}
+                <div className="flex items-center justify-between px-1">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#5f7a61]" />
+                    <strong className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8] tracking-tight">
+                      {friendlyHeader}
+                    </strong>
+                  </div>
+                  <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] px-2 py-0.5 rounded-full bg-black/[0.03] dark:bg-white/[0.05]">
+                    {group.items.length} {group.items.length === 1 ? 'entry' : 'entries'}
                   </span>
-                  {note.sourceName && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#5f7a61]/10 text-[#5f7a61] dark:bg-[#7d9d80]/20 dark:text-[#a1c4a4] border border-[#5f7a61]/20 truncate max-w-[140px]">
-                      {note.sourceName}
-                    </span>
-                  )}
-                  {note.moodValue && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#d98236]/10 text-[#d98236] border border-[#d98236]/20 flex items-center gap-1">
-                      <span>{MOOD_LEVELS.find((m) => m.value === note.moodValue)?.emoji}</span>
-                      <span>{MOOD_LEVELS.find((m) => m.value === note.moodValue)?.label}</span>
-                    </span>
-                  )}
-                  <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d] ml-1">{note.date}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => handleOpenEdit(note)}
-                    className="p-1.5 rounded-lg text-[#8c7e70] hover:text-[#2d2823] dark:hover:text-[#f2eee9] transition-all ios-tap"
-                    title="Edit"
-                  >
-                    <Edit3 size={15} />
-                  </button>
-                  {deletingNoteId === note.id ? (
-                    <div className="flex items-center gap-1">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          onDeleteNote(note.id);
-                          setDeletingNoteId(null);
-                        }}
-                        className="px-2 py-0.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[11px] font-black transition-all ios-tap"
+
+                {/* Group Items */}
+                <div className="space-y-2">
+                  {group.items.map((note) => {
+                    const isExpanded = !!expandedNoteIds[note.id];
+                    const content = getResolvedContent(note);
+                    const isLong = content.length > 120 || content.includes('\n');
+
+                    return (
+                      <div
+                        key={note.id}
+                        className={`ios-glass-card transition-all relative group border border-[#ebdccb]/60 dark:border-[#383129]/60 hover:border-[#5f7a61]/40 ${
+                          viewDensity === 'compact' ? 'p-3' : 'p-3.5 sm:p-4 space-y-2.5'
+                        }`}
                       >
-                        Delete
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setDeletingNoteId(null)}
-                        className="px-1.5 py-0.5 rounded-lg bg-[#eee5d8] dark:bg-[#383129] text-[11px] font-bold transition-all ios-tap"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setDeletingNoteId(note.id)}
-                      className="p-1.5 rounded-lg text-[#8c7e70] hover:text-[#b86f52] transition-all ios-tap"
-                      title="Delete"
-                    >
-                      <Trash2 size={15} />
-                    </button>
-                  )}
+                        {/* Header info row */}
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f5efe6] dark:bg-[#282420] text-[#4a3f33] dark:text-[#d6c9bb] border border-[#e8ded1] dark:border-[#383129] flex items-center gap-1">
+                              {getCategoryIcon(note.type)}
+                              <span>{note.type}</span>
+                            </span>
+
+                            {note.sourceName && (
+                              <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[#5f7a61]/10 text-[#5f7a61] dark:bg-[#7d9d80]/20 dark:text-[#a1c4a4] border border-[#5f7a61]/20 truncate max-w-[150px]">
+                                {note.sourceName}
+                              </span>
+                            )}
+
+                            {note.moodValue && (
+                              <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[#d98236]/10 text-[#d98236] border border-[#d98236]/20 flex items-center gap-1">
+                                <span>{MOOD_LEVELS.find((m) => m.value === note.moodValue)?.emoji}</span>
+                                <span>{MOOD_LEVELS.find((m) => m.value === note.moodValue)?.label}</span>
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEdit(note)}
+                              className="p-1 rounded-lg text-[#8c7e70] hover:text-[#2d2823] dark:hover:text-[#f2eee9] transition-all ios-tap"
+                              title="Edit"
+                            >
+                              <Edit3 size={14} />
+                            </button>
+                            {deletingNoteId === note.id ? (
+                              <div className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    onDeleteNote(note.id);
+                                    setDeletingNoteId(null);
+                                  }}
+                                  className="px-2 py-0.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-black transition-all ios-tap"
+                                >
+                                  Delete
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setDeletingNoteId(null)}
+                                  className="px-1.5 py-0.5 rounded-lg bg-[#eee5d8] dark:bg-[#383129] text-[10px] font-bold transition-all ios-tap"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => setDeletingNoteId(note.id)}
+                                className="p-1 rounded-lg text-[#8c7e70] hover:text-[#b86f52] transition-all ios-tap"
+                                title="Delete"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Title if present */}
+                        {note.title && (
+                          <h3 className="font-black text-sm text-[#2d2823] dark:text-[#f2eee9] tracking-tight">
+                            {note.title}
+                          </h3>
+                        )}
+
+                        {/* Body Text / Content */}
+                        <div className="pt-0.5">
+                          <p
+                            className={`text-xs sm:text-[13.5px] leading-relaxed text-[#3d332a] dark:text-[#dfd3c6] font-medium whitespace-pre-wrap ${
+                              viewDensity === 'compact' && !isExpanded ? 'line-clamp-1' : ''
+                            } ${!isExpanded && isLong && viewDensity === 'comfortable' ? 'line-clamp-3' : ''}`}
+                          >
+                            {content}
+                          </p>
+
+                          {/* Read More / Show Less Toggle */}
+                          {isLong && (
+                            <button
+                              type="button"
+                              onClick={() => toggleExpand(note.id)}
+                              className="mt-1 text-[11px] font-bold text-[#5f7a61] dark:text-[#7d9d80] hover:underline flex items-center gap-0.5 ios-tap"
+                            >
+                              <span>{isExpanded ? 'Show less' : 'Read more'}</span>
+                              {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
+            );
+          })
+        )}
 
-              {note.title && (
-                <h3 className="font-black text-sm text-[#2d2823] dark:text-[#f2eee9]">{note.title}</h3>
-              )}
-              <p className="text-xs sm:text-sm text-[#4a4036] dark:text-[#d4c8bc] whitespace-pre-wrap leading-relaxed">
-                {note.text}
-              </p>
-            </div>
-          ))
+        {/* Load More Pagination Button */}
+        {filteredNotes.length > visibleLimit && (
+          <div className="pt-2 text-center">
+            <button
+              type="button"
+              onClick={() => setVisibleLimit((prev) => prev + 35)}
+              className="py-2.5 px-6 rounded-full bg-white dark:bg-[#28231d] border border-[#ebdccb] dark:border-[#383129] text-xs font-black text-[#4a3f33] dark:text-[#e0d6cb] hover:border-[#5f7a61] shadow-xs transition-all ios-tap"
+            >
+              Load More Entries ({visibleLimit} of {filteredNotes.length})
+            </button>
+          </div>
         )}
       </div>
 
@@ -557,4 +798,3 @@ export const NotesView: React.FC<NotesViewProps> = ({
     </div>
   );
 };
-

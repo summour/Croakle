@@ -30,6 +30,32 @@ export function getDaysInMonth(year: number, monthIndex: number): number {
   return new Date(year, monthIndex + 1, 0).getDate();
 }
 
+export function formatFriendlyDate(iso: string): string {
+  try {
+    const [y, m, d] = iso.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    const todayIso = getTodayIso();
+    
+    // Check yesterday
+    const yest = new Date();
+    yest.setDate(yest.getDate() - 1);
+    const yestIso = formatIsoDate(yest);
+
+    const monthShort = MONTH_NAMES[m - 1]?.slice(0, 3) || '';
+    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+
+    if (iso === todayIso) {
+      return `Today · ${dayOfWeek}, ${d} ${monthShort}`;
+    }
+    if (iso === yestIso) {
+      return `Yesterday · ${dayOfWeek}, ${d} ${monthShort}`;
+    }
+    return `${dayOfWeek}, ${d} ${monthShort} ${y}`;
+  } catch {
+    return iso;
+  }
+}
+
 /**
  * Returns 7 dates (Monday to Sunday) containing target date
  */
