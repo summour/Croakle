@@ -273,13 +273,13 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           </div>
 
           {/* Segmented Filter Navigation Tabs */}
-          <div className="grid grid-cols-4 gap-1 p-1 bg-black/[0.03] dark:bg-white/[0.05] rounded-[18px]">
+          <div className="grid grid-cols-4 gap-1 p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-[18px] border border-black/[0.03] dark:border-white/[0.04]">
             {(
               [
-                { id: 'overview', label: 'Overview', icon: <ToriiStatsDockIcon size={13} /> },
-                { id: 'habits', label: 'Habits', icon: <HabitCloverDockIcon size={13} /> },
-                { id: 'moods', label: 'Moods', icon: <FrogFaceDockIcon size={13} /> },
-                { id: 'projects', label: 'Projects', icon: <BambooProjectDockIcon size={13} /> },
+                { id: 'overview', label: 'Overview', icon: <ToriiStatsDockIcon size={13} className="shrink-0" /> },
+                { id: 'habits', label: 'Habits', icon: <HabitCloverDockIcon size={13} className="shrink-0" /> },
+                { id: 'moods', label: 'Moods', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
+                { id: 'projects', label: 'Projects', icon: <BambooProjectDockIcon size={13} className="shrink-0" /> },
               ] as const
             ).map((tab) => {
               const isActive = activeTab === tab.id;
@@ -288,14 +288,14 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-1.5 px-1 rounded-[14px] text-xs font-black capitalize transition-all ios-tap flex items-center justify-center gap-1 ${
+                  className={`min-w-0 py-1.5 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center gap-1 ${
                     isActive
-                      ? 'bg-white dark:bg-[#28231d] text-[#2d2823] dark:text-[#f4efe8] shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
+                      ? 'bg-white dark:bg-[#28231d] text-[#2d2823] dark:text-[#f4efe8] shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
                       : 'text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] dark:hover:text-[#f4efe8]'
                   }`}
                 >
                   {tab.icon}
-                  <span>{tab.label}</span>
+                  <span className="truncate">{tab.label}</span>
                 </button>
               );
             })}
