@@ -21,7 +21,7 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
   // -------------------------------------------------------------
   if (
     category === 'skins' ||
-    ['classic', 'golden', 'sakura_pink', 'twilight_blue', 'matcha', 'albino_white', 'ember_orange'].includes(id)
+    ['classic', 'golden', 'sakura_pink', 'twilight_blue', 'matcha', 'albino_white', 'ember_orange', 'wasabi_green', 'salmon_peach', 'fairytale_rose', 'timber_wolf_grey'].includes(id)
   ) {
     const pal = getSkinColors(id as any);
     return (
@@ -300,6 +300,127 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'sushi_salmon':
+    case 'hat_sushi_salmon':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Salmon Nigiri Hat with Nori Belt */}
+          {/* Fresh Salmon Slab with Marbling */}
+          <rect x="4" y="6" width="16" height="5" fill="#FB923C" />
+          <rect x="5" y="5" width="14" height="2" fill="#F97316" />
+          <rect x="7" y="7" width="2" height="3" fill="#FED7AA" />
+          <rect x="12" y="6" width="2" height="4" fill="#FED7AA" />
+          <rect x="17" y="7" width="2" height="3" fill="#FED7AA" />
+          {/* Rice Ball Bed */}
+          <rect x="5" y="11" width="14" height="5" fill="#FFFFFF" />
+          <rect x="6" y="16" width="12" height="2" fill="#F1F5F9" />
+          {/* Dark Nori Seaweed Ribbon */}
+          <rect x="11" y="5" width="3" height="13" fill="#18181B" />
+          <rect x="12" y="6" width="1" height="11" fill="#27272A" />
+        </svg>
+      );
+
+    case 'sushi_maguro':
+    case 'hat_sushi_maguro':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Maguro Otoro Tuna Nigiri Hat */}
+          <rect x="4" y="6" width="16" height="5" fill="#E11D48" />
+          <rect x="5" y="5" width="14" height="2" fill="#BE123C" />
+          <rect x="7" y="7" width="2" height="3" fill="#FDA4AF" />
+          <rect x="13" y="6" width="2" height="4" fill="#FDA4AF" />
+          {/* Rice Ball Bed */}
+          <rect x="5" y="11" width="14" height="5" fill="#FFFFFF" />
+          <rect x="6" y="16" width="12" height="2" fill="#F1F5F9" />
+        </svg>
+      );
+
+    case 'sushi_ebi':
+    case 'hat_sushi_ebi':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ebi Shrimp Nigiri with Tail */}
+          <rect x="4" y="6" width="14" height="5" fill="#F43F5E" />
+          <rect x="6" y="7" width="2" height="3" fill="#FFFFFF" />
+          <rect x="10" y="6" width="2" height="4" fill="#FFFFFF" />
+          <rect x="14" y="7" width="2" height="3" fill="#FFFFFF" />
+          {/* Red Shrimp Tail fan */}
+          <polygon points="18,5 22,3 20,8" fill="#E11D48" />
+          <polygon points="18,9 22,11 19,7" fill="#E11D48" />
+          {/* Rice */}
+          <rect x="5" y="11" width="13" height="5" fill="#FFFFFF" />
+          <rect x="6" y="16" width="11" height="2" fill="#F1F5F9" />
+        </svg>
+      );
+
+    case 'sushi_chef_headband':
+    case 'hat_sushi_chef_headband':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Traditional Edo Chef Twisted Headband (Hachimaki) */}
+          <rect x="3" y="9" width="18" height="5" fill="#FFFFFF" />
+          <rect x="2" y="10" width="20" height="3" fill="#F8FAFC" />
+          {/* Crimson Sun Rising Crest in Center */}
+          <circle cx="12" cy="11.5" r="2" fill="#DC2626" />
+          {/* Tied tails hanging at back */}
+          <rect x="18" y="14" width="3" height="6" fill="#FFFFFF" />
+          <rect x="20" y="16" width="2" height="5" fill="#E2E8F0" />
+        </svg>
+      );
+
+    case 'red_riding_hood':
+    case 'hat_red_riding_hood':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Crimson Velvet Hood Capelet & Ribbon Bow */}
+          <rect x="6" y="3" width="12" height="4" fill="#991B1B" />
+          <rect x="4" y="6" width="16" height="8" fill="#DC2626" />
+          <rect x="3" y="10" width="18" height="6" fill="#EF4444" />
+          {/* Hood peak curve */}
+          <rect x="10" y="2" width="4" height="2" fill="#7F1D1D" />
+          {/* Inner Hood Shadow */}
+          <rect x="7" y="9" width="10" height="5" fill="#991B1B" />
+          {/* Golden/White Lace Trim Edge */}
+          <rect x="3" y="15" width="18" height="1" fill="#FEF08A" />
+          {/* Crimson Satin Ribbon Bow */}
+          <rect x="10" y="16" width="4" height="3" fill="#B91C1C" />
+          <rect x="9" y="18" width="2" height="4" fill="#DC2626" />
+          <rect x="13" y="18" width="2" height="4" fill="#DC2626" />
+        </svg>
+      );
+
+    case 'wolf_ears_hood':
+    case 'hat_wolf_ears_hood':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Big Bad Wolf Fur Hood & Pointy Ears */}
+          <polygon points="5,2 9,7 5,7" fill="#4B5563" />
+          <polygon points="6,3 8,6 6,6" fill="#FCA5A5" />
+          <polygon points="19,2 15,7 19,7" fill="#4B5563" />
+          <polygon points="18,3 16,6 18,6" fill="#FCA5A5" />
+          {/* Shaggy Head Pelt */}
+          <rect x="5" y="6" width="14" height="8" fill="#374151" />
+          <rect x="4" y="9" width="16" height="6" fill="#4B5563" />
+          {/* Tuft highlights */}
+          <rect x="9" y="5" width="6" height="2" fill="#6B7280" />
+        </svg>
+      );
+
+    case 'granny_nightcap':
+    case 'hat_granny_nightcap':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fairytale Grandma Frilled Nightcap with Rosette */}
+          <ellipse cx="12" cy="9" rx="8" ry="6" fill="#F1F5F9" />
+          <rect x="4" y="11" width="16" height="5" fill="#E2E8F0" />
+          {/* Frilled Ruffled Rim */}
+          <rect x="2" y="15" width="20" height="2" fill="#FFFFFF" />
+          <rect x="1" y="16" width="22" height="2" fill="#CBD5E1" />
+          {/* Pink Ribbon Rosette */}
+          <circle cx="6" cy="14" r="2" fill="#F472B6" />
+        </svg>
+      );
+
     // -------------------------------------------------------------
     // 3. OUTFITS
     // -------------------------------------------------------------
@@ -310,6 +431,61 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           <rect x="8" y="6" width="8" height="2" fill="#A3E635" />
           <rect x="6" y="8" width="12" height="10" fill="#75A65A" />
           <rect x="8" y="11" width="8" height="6" fill="#FEF9C3" />
+        </svg>
+      );
+
+    case 'red_riding_dress':
+    case 'outfit_red_riding_dress':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Little Red Folk Dirndl Dress + White Lace Apron + Black Corset */}
+          {/* White Blouse Puff Shoulders */}
+          <rect x="4" y="6" width="4" height="4" fill="#FFFFFF" />
+          <rect x="16" y="6" width="4" height="4" fill="#FFFFFF" />
+          {/* Black Ribbon Corset Vest */}
+          <rect x="7" y="7" width="10" height="7" fill="#18181B" />
+          <rect x="10" y="8" width="4" height="5" fill="#EF4444" />
+          <line x1="9" y1="9" x2="15" y2="12" stroke="#DC2626" strokeWidth="1" />
+          <line x1="15" y1="9" x2="9" y2="12" stroke="#DC2626" strokeWidth="1" />
+          {/* Flared Crimson Skirt */}
+          <rect x="3" y="14" width="18" height="7" fill="#DC2626" />
+          {/* White Embroidered Apron */}
+          <rect x="8" y="13" width="8" height="7" fill="#FFFFFF" />
+          <rect x="9" y="19" width="6" height="1" fill="#E2E8F0" />
+        </svg>
+      );
+
+    case 'wolf_fur_cloak':
+    case 'outfit_wolf_fur_cloak':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Shaggy Charcoal Wolf Pelt Cloak & Buckles */}
+          <rect x="6" y="5" width="12" height="4" fill="#1F2937" />
+          <rect x="4" y="8" width="16" height="13" fill="#374151" />
+          <rect x="2" y="9" width="4" height="8" fill="#4B5563" />
+          <rect x="18" y="9" width="4" height="8" fill="#4B5563" />
+          {/* Leather Belt & Brass Buckle */}
+          <rect x="6" y="13" width="12" height="2" fill="#78350F" />
+          <rect x="11" y="13" width="2" height="2" fill="#FACC15" />
+          {/* Shaggy Trim */}
+          <rect x="5" y="19" width="14" height="2" fill="#1F2937" />
+        </svg>
+      );
+
+    case 'hunter_woodsman':
+    case 'outfit_hunter_woodsman':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Forest Green Woodsman Jacket with Plaid & Belt */}
+          <rect x="7" y="5" width="10" height="3" fill="#14532D" />
+          <rect x="4" y="8" width="16" height="12" fill="#166534" />
+          {/* Plaid lapels */}
+          <rect x="8" y="7" width="2" height="6" fill="#DC2626" />
+          <rect x="14" y="7" width="2" height="6" fill="#DC2626" />
+          {/* Brown Cross-chest Quiver Strap & Belt */}
+          <line x1="5" y1="8" x2="17" y2="15" stroke="#78350F" strokeWidth="2" />
+          <rect x="5" y="14" width="14" height="2" fill="#78350F" />
+          <rect x="11" y="14" width="2" height="2" fill="#FACC15" />
         </svg>
       );
 
@@ -462,6 +638,41 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'sushi_chef_happi':
+    case 'outfit_sushi_chef_happi':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Edo Navy Blue Sushi Happi Coat */}
+          <rect x="7" y="5" width="10" height="3" fill="#1E293B" />
+          <rect x="4" y="8" width="16" height="12" fill="#0F172A" />
+          <rect x="2" y="9" width="4" height="7" fill="#1E293B" />
+          <rect x="18" y="9" width="4" height="7" fill="#1E293B" />
+          {/* White Lapel & Collar (Eri) */}
+          <rect x="8" y="7" width="2" height="13" fill="#FFFFFF" />
+          <rect x="14" y="7" width="2" height="13" fill="#FFFFFF" />
+          {/* Crimson Waist Rope Sash */}
+          <rect x="5" y="13" width="14" height="2" fill="#DC2626" />
+          <rect x="10" y="14" width="4" height="4" fill="#B91C1C" />
+          {/* Back Crest Mini */}
+          <rect x="11" y="9" width="2" height="3" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'sushi_kimono_waiter':
+    case 'outfit_sushi_kimono_waiter':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Elegant Matcha-green & Cream Waiter Kimono */}
+          <rect x="7" y="5" width="10" height="3" fill="#15803D" />
+          <rect x="4" y="8" width="16" height="12" fill="#16A34A" />
+          <rect x="2" y="9" width="4" height="7" fill="#15803D" />
+          <rect x="18" y="9" width="4" height="7" fill="#15803D" />
+          {/* Gold & Cream Obi Sash */}
+          <rect x="6" y="12" width="12" height="3" fill="#FACC15" />
+          <rect x="9" y="11" width="6" height="5" fill="#FEF08A" />
+        </svg>
+      );
+
     // -------------------------------------------------------------
     // 4. GLASSES & ACCESSORIES
     // -------------------------------------------------------------
@@ -547,9 +758,100 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'wasabi_sparkle':
+    case 'glasses_wasabi_sparkle':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Wasabi Green Sparkling Star & Spicy Cheek Blush */}
+          <rect x="3" y="12" width="5" height="4" fill="#84CC16" />
+          <rect x="16" y="12" width="5" height="4" fill="#84CC16" />
+          {/* Green Sparkles */}
+          <rect x="11" y="4" width="2" height="6" fill="#A3E635" />
+          <rect x="9" y="6" width="6" height="2" fill="#A3E635" />
+          <rect x="11" y="6" width="2" height="2" fill="#FEF08A" />
+          <rect x="4" y="8" width="2" height="2" fill="#BEF264" />
+          <rect x="18" y="8" width="2" height="2" fill="#BEF264" />
+        </svg>
+      );
+
+    case 'forest_blush_freckles':
+    case 'glasses_forest_blush_freckles':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fairytale Rosy Blush with Golden Sun Freckles */}
+          <rect x="3" y="11" width="6" height="5" fill="#F43F5E" opacity="0.8" />
+          <rect x="15" y="11" width="6" height="5" fill="#F43F5E" opacity="0.8" />
+          {/* Freckle dots */}
+          <rect x="5" y="12" width="1" height="1" fill="#78350F" />
+          <rect x="7" y="13" width="1" height="1" fill="#78350F" />
+          <rect x="4" y="14" width="1" height="1" fill="#78350F" />
+          <rect x="16" y="12" width="1" height="1" fill="#78350F" />
+          <rect x="18" y="13" width="1" height="1" fill="#78350F" />
+          <rect x="17" y="14" width="1" height="1" fill="#78350F" />
+          {/* Golden berry sparkle */}
+          <rect x="11" y="7" width="2" height="2" fill="#FDE047" />
+        </svg>
+      );
+
+    case 'wolf_snarl_fangs':
+    case 'glasses_wolf_snarl_fangs':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Playful Wolf Snarl & White Fangs */}
+          <rect x="8" y="11" width="8" height="4" fill="#18181B" />
+          {/* White Fangs */}
+          <polygon points="9,11 11,11 10,14" fill="#FFFFFF" />
+          <polygon points="13,11 15,11 14,14" fill="#FFFFFF" />
+          {/* Pink Tongue */}
+          <rect x="11" y="13" width="2" height="2" fill="#FB7185" />
+          {/* Whisker dots */}
+          <rect x="4" y="12" width="1" height="1" fill="#4B5563" />
+          <rect x="5" y="14" width="1" height="1" fill="#4B5563" />
+          <rect x="19" y="12" width="1" height="1" fill="#4B5563" />
+          <rect x="18" y="14" width="1" height="1" fill="#4B5563" />
+        </svg>
+      );
+
     // -------------------------------------------------------------
     // 5. PROPS & ACTIVITIES
     // -------------------------------------------------------------
+    case 'picnic_basket':
+    case 'prop_picnic_basket':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fairytale Woven Picnic Basket + Red Gingham Cloth & Warm Pie */}
+          {/* Basket Handle */}
+          <path d="M7 11 C7 4, 17 4, 17 11" stroke="#92400E" strokeWidth="2" fill="none" />
+          {/* Woven Basket Base */}
+          <rect x="4" y="11" width="16" height="10" fill="#B45309" />
+          <rect x="5" y="12" width="14" height="2" fill="#D97706" />
+          <rect x="5" y="16" width="14" height="2" fill="#D97706" />
+          {/* Red Gingham Napkin / Cloth hanging out */}
+          <polygon points="4,11 11,11 7,16" fill="#DC2626" />
+          <polygon points="6,11 9,11 7,14" fill="#FFFFFF" />
+          {/* Apple / Jam pot top */}
+          <circle cx="15" cy="10" r="2.5" fill="#EF4444" />
+          <rect x="15" y="7" width="1" height="2" fill="#15803D" />
+        </svg>
+      );
+
+    case 'woodcutter_axe':
+    case 'prop_woodcutter_axe':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Huntsman Timber Axe & Forest Flower Bouquet */}
+          {/* Wooden Shaft */}
+          <line x1="6" y1="20" x2="16" y2="5" stroke="#78350F" strokeWidth="2.5" />
+          {/* Iron Axe Blade */}
+          <polygon points="14,4 20,2 18,10 13,8" fill="#94A3B8" />
+          <polygon points="15,5 19,3 17,9 14,8" fill="#E2E8F0" />
+          {/* Bluebell & Daisy Wildflowers */}
+          <circle cx="7" cy="14" r="2" fill="#3B82F6" />
+          <circle cx="9" cy="16" r="2" fill="#FEF08A" />
+          <circle cx="5" cy="17" r="1.5" fill="#FFFFFF" />
+        </svg>
+      );
+
     case 'tea':
     case 'prop_tea':
       return (
@@ -684,6 +986,68 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'eating_sushi':
+    case 'prop_eating_sushi':
+    case 'sushi_platter':
+    case 'prop_sushi_platter':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Wooden Geta Sushi Board with 3 Nigiri (Salmon, Tuna, Tamago) + Chopsticks */}
+          {/* Wooden Geta Platter */}
+          <rect x="2" y="14" width="20" height="4" fill="#D97706" />
+          <rect x="4" y="18" width="3" height="2" fill="#92400E" />
+          <rect x="17" y="18" width="3" height="2" fill="#92400E" />
+          {/* Salmon Nigiri */}
+          <rect x="3" y="11" width="5" height="2" fill="#FB923C" />
+          <rect x="3" y="13" width="5" height="2" fill="#FFFFFF" />
+          {/* Tuna Nigiri */}
+          <rect x="9" y="11" width="5" height="2" fill="#E11D48" />
+          <rect x="9" y="13" width="5" height="2" fill="#FFFFFF" />
+          {/* Tamago Egg Nigiri */}
+          <rect x="15" y="11" width="5" height="2" fill="#FACC15" />
+          <rect x="17" y="11" width="1" height="4" fill="#18181B" />
+          <rect x="15" y="13" width="5" height="2" fill="#FFFFFF" />
+          {/* Wasabi dollop */}
+          <rect x="20" y="13" width="2" height="2" fill="#84CC16" />
+          {/* Chopsticks */}
+          <line x1="2" y1="8" x2="16" y2="5" stroke="#78350F" strokeWidth="1.2" />
+        </svg>
+      );
+
+    case 'tea_whisk':
+    case 'prop_tea_whisk':
+    case 'matcha_whisk':
+    case 'prop_matcha_whisk':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Bamboo Chasen Matcha Whisk & Black Tea Bowl */}
+          <rect x="4" y="13" width="16" height="8" fill="#1E293B" rx="1" />
+          <rect x="6" y="14" width="12" height="4" fill="#84CC16" />
+          <line x1="15" y1="6" x2="10" y2="14" stroke="#FDE68A" strokeWidth="2.5" />
+          <polygon points="9,14 13,14 11,18" fill="#FDE68A" />
+        </svg>
+      );
+
+    case 'sushi_crafting':
+    case 'prop_sushi_crafting':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Bamboo Rolling Mat & Master Yanagiba Knife */}
+          {/* Green Bamboo Mat */}
+          <rect x="3" y="9" width="18" height="10" fill="#65A30D" />
+          <rect x="3" y="11" width="18" height="1" fill="#365314" />
+          <rect x="3" y="14" width="18" height="1" fill="#365314" />
+          <rect x="3" y="17" width="18" height="1" fill="#365314" />
+          {/* Half-rolled Nori Maki */}
+          <rect x="5" y="12" width="14" height="4" fill="#18181B" />
+          <circle cx="7" cy="14" r="1" fill="#FB923C" />
+          <circle cx="17" cy="14" r="1" fill="#22C55E" />
+          {/* Steel Sashimi Knife (Yanagiba) */}
+          <line x1="2" y1="4" x2="15" y2="7" stroke="#CBD5E1" strokeWidth="2" />
+          <line x1="14" y1="7" x2="21" y2="8" stroke="#78350F" strokeWidth="2.5" />
+        </svg>
+      );
+
     // -------------------------------------------------------------
     // 6. PETS & COMPANIONS
     // -------------------------------------------------------------
@@ -796,9 +1160,153 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'sushi_apprentice_cat':
+    case 'companion_sushi_apprentice_cat':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Cute Calico Cat with miniature Sushi Chef Headband holding salmon roll */}
+          {/* Cat Ears */}
+          <polygon points="6,5 9,9 6,9" fill="#EA580C" />
+          <polygon points="18,5 15,9 18,9" fill="#18181B" />
+          {/* Head */}
+          <circle cx="12" cy="10" r="5" fill="#FFFFFF" />
+          {/* Headband */}
+          <rect x="8" y="7" width="8" height="2" fill="#FFFFFF" />
+          <rect x="11" y="7" width="2" height="2" fill="#DC2626" />
+          {/* Eyes & Whiskers */}
+          <circle cx="10" cy="10" r="1" fill="#18181B" />
+          <circle cx="14" cy="10" r="1" fill="#18181B" />
+          <rect x="11" y="11" width="2" height="1" fill="#FB7185" />
+          {/* Body */}
+          <rect x="8" y="14" width="8" height="6" fill="#F8FAFC" />
+          <rect x="7" y="15" width="2" height="3" fill="#EA580C" />
+          {/* Tiny Salmon Maki roll held in paws */}
+          <rect x="10" y="15" width="4" height="4" fill="#18181B" />
+          <circle cx="12" cy="17" r="1" fill="#FB923C" />
+        </svg>
+      );
+
+    case 'mini_ebi_shrimp':
+    case 'companion_mini_ebi_shrimp':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Cute Mini Tempura / Ebi Shrimp Mascot with blushing eyes */}
+          <ellipse cx="12" cy="13" rx="6" ry="4" fill="#F97316" />
+          <ellipse cx="11" cy="12" rx="4" ry="3" fill="#FED7AA" />
+          <polygon points="17,12 22,8 21,15" fill="#EF4444" />
+          {/* Eyes & blush */}
+          <circle cx="9" cy="12" r="1" fill="#18181B" />
+          <rect x="8" y="14" width="2" height="1" fill="#FB7185" />
+          {/* Tiny sparkles */}
+          <rect x="5" y="6" width="2" height="2" fill="#FDE047" />
+          <rect x="18" y="5" width="2" height="2" fill="#FDE047" />
+        </svg>
+      );
+
+    case 'chibi_wolf_pup':
+    case 'companion_chibi_wolf_pup':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Lupo the Baby Wolf Pup with Red Scarf & Fluffy Tail */}
+          {/* Pointy Ears */}
+          <polygon points="5,4 8,8 5,8" fill="#4B5563" />
+          <polygon points="6,5 7,7 6,7" fill="#FCA5A5" />
+          <polygon points="19,4 16,8 19,8" fill="#4B5563" />
+          <polygon points="18,5 17,7 18,7" fill="#FCA5A5" />
+          {/* Head */}
+          <circle cx="12" cy="9" r="5" fill="#6B7280" />
+          <ellipse cx="12" cy="11" rx="3.5" ry="2.5" fill="#E5E7EB" />
+          {/* Glossy Amber Eyes */}
+          <circle cx="9" cy="9" r="1.5" fill="#D97706" />
+          <circle cx="9" cy="9" r="0.5" fill="#FFFFFF" />
+          <circle cx="15" cy="9" r="1.5" fill="#D97706" />
+          <circle cx="15" cy="9" r="0.5" fill="#FFFFFF" />
+          {/* Cute Nose */}
+          <rect x="11" y="10" width="2" height="1" fill="#18181B" />
+          {/* Red Bandana Scarf */}
+          <rect x="8" y="13" width="8" height="2" fill="#DC2626" />
+          <polygon points="11,15 13,15 12,17" fill="#DC2626" />
+          {/* Fluffy Body & Tail */}
+          <rect x="7" y="14" width="10" height="6" fill="#4B5563" />
+          <rect x="16" y="15" width="4" height="4" fill="#9CA3AF" />
+        </svg>
+      );
+
+    case 'forest_hedgehog':
+    case 'companion_forest_hedgehog':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Pippin the Apple Hedgehog */}
+          {/* Spiky Quills */}
+          <polygon points="4,10 8,14 4,16" fill="#78350F" />
+          <polygon points="6,6 10,12 8,15" fill="#92400E" />
+          <polygon points="11,4 14,10 12,14" fill="#78350F" />
+          <rect x="7" y="11" width="11" height="8" fill="#92400E" />
+          {/* Soft Beige Face & Snout */}
+          <ellipse cx="18" cy="15" rx="3.5" ry="2.5" fill="#FED7AA" />
+          <circle cx="21" cy="14" r="1" fill="#18181B" />
+          <circle cx="18" cy="14" r="1" fill="#18181B" />
+          <rect x="17" y="16" width="1" height="1" fill="#FB7185" />
+          {/* Shiny Red Forest Apple on Back */}
+          <circle cx="11" cy="9" r="3.5" fill="#DC2626" />
+          <circle cx="10" cy="8" r="1" fill="#FEF08A" />
+          <rect x="11" y="5" width="1" height="2" fill="#15803D" />
+        </svg>
+      );
+
     // -------------------------------------------------------------
     // 7. HABITATS & SCENES
     // -------------------------------------------------------------
+    case 'red_riding_forest':
+    case 'scene_red_riding_forest':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fairytale Granny's Forest Cottage Scene */}
+          {/* Deep Forest Pine Canopy */}
+          <rect x="2" y="2" width="20" height="20" fill="#064E3B" />
+          {/* Pine Trees */}
+          <polygon points="5,2 2,7 8,7" fill="#047857" />
+          <polygon points="19,2 16,7 22,7" fill="#047857" />
+          {/* Cottage Roof & Stone Wall */}
+          <polygon points="12,6 6,12 18,12" fill="#991B1B" />
+          <rect x="7" y="12" width="10" height="8" fill="#78350F" />
+          {/* Stone Chimney with Smoke */}
+          <rect x="14" y="5" width="3" height="4" fill="#64748B" />
+          <circle cx="16" cy="3" r="1" fill="#E2E8F0" opacity="0.8" />
+          {/* Glowing Window */}
+          <rect x="9" y="14" width="3" height="3" fill="#FEF08A" />
+          {/* Cobblestone Path */}
+          <path d="M12 20 Q11 16 13 12" stroke="#CBD5E1" strokeWidth="2" fill="none" />
+          {/* Red Amanita Mushroom */}
+          <circle cx="5" cy="18" r="2" fill="#EF4444" />
+          <rect x="5" y="18" width="1" height="3" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'sushi_bar':
+    case 'scene_sushi_bar':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Edo Sushi Restaurant: Wooden Cypress Bar, Red Lanterns & Noren Curtain */}
+          {/* Dark wooden interior wall */}
+          <rect x="2" y="2" width="20" height="20" fill="#3E2723" />
+          {/* Top Wooden Beam & Noren Curtains */}
+          <rect x="2" y="2" width="20" height="3" fill="#5D4037" />
+          <rect x="4" y="5" width="4" height="4" fill="#1E293B" />
+          <rect x="10" y="5" width="4" height="4" fill="#1E293B" />
+          <rect x="16" y="5" width="4" height="4" fill="#1E293B" />
+          {/* Red Lantern on Right */}
+          <rect x="18" y="9" width="4" height="5" fill="#DC2626" />
+          <rect x="19" y="10" width="2" height="3" fill="#FEF08A" />
+          {/* Cypress Sushi Counter */}
+          <rect x="2" y="14" width="20" height="4" fill="#D97706" />
+          <rect x="2" y="17" width="20" height="5" fill="#92400E" />
+          {/* Glass Display Case with Salmon & Maguro */}
+          <rect x="5" y="12" width="10" height="3" fill="#38BDF8" opacity="0.8" />
+          <rect x="6" y="13" width="3" height="1.5" fill="#FB923C" />
+          <rect x="10" y="13" width="3" height="1.5" fill="#E11D48" />
+        </svg>
+      );
     case 'zen_pond':
     case 'scene_zen_pond':
       return (

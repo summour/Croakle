@@ -15,7 +15,7 @@ import {
   FrogCompanionId,
   FrogWeatherId,
   ThemedFrogSet,
-  FROG_WEATHERS,
+  WEATHER_ITEMS,
 } from '../types';
 import { SHOP_CATALOG } from '../data/shopCatalog';
 import { THEMED_FROG_SETS } from '../data/themedSets';
@@ -63,19 +63,6 @@ const WARDROBE_CATEGORIES: ExtendedCategory[] = [
   { id: 'weather', label: 'Sky', icon: '☀️' },
   { id: 'sets', label: 'Sets', icon: '🎁' },
 ];
-
-const WEATHER_ITEMS: ShopItem[] = FROG_WEATHERS.map((w) => ({
-  id: `weather_${w.id}`,
-  slot: 'activityId' as any,
-  name: w.name,
-  desc: w.desc,
-  category: 'scenes',
-  rarity: 'rare',
-  price: 0,
-  defaultUnlocked: true,
-  value: w.id,
-  previewBg: '#e0f2fe',
-}));
 
 export function getGachaGrade(item: ShopItem): GachaGrade {
   if (

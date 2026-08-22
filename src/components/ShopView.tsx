@@ -12,7 +12,7 @@ import {
   SceneLocationId,
   FrogCompanionId,
   FrogWeatherId,
-  FROG_WEATHERS,
+  WEATHER_ITEMS,
   SCENE_LOCATIONS,
   FROG_ACTIVITIES,
   FROG_HATS,
@@ -62,20 +62,6 @@ const CATEGORIES: ExtendedCategory[] = [
   { id: 'scenes', label: 'Habitats', icon: '🏞️' },
   { id: 'weather', label: 'Sky & Weather', icon: '☀️' },
 ];
-
-// Weather items mapped to virtual shop items for unified experience
-const WEATHER_ITEMS: ShopItem[] = FROG_WEATHERS.map((w) => ({
-  id: `weather_${w.id}`,
-  slot: 'activityId' as any,
-  value: w.id,
-  category: 'scenes',
-  name: w.name,
-  desc: w.desc,
-  price: 0,
-  emoji: w.emoji,
-  rarity: 'common',
-  defaultUnlocked: true,
-}));
 
 interface ShopViewProps {
   config: PixelSceneConfig;

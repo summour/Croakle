@@ -1,77 +1,79 @@
-import React from 'react';
-import { PageType, HabitTemplate, MonthData, Project, MOOD_LEVELS, PixelSceneConfig } from '../types';
+import React, { useState } from 'react';
 import {
-  FrogMoodIcon,
+  PageType,
+  PixelSceneConfig,
+  FrogShopState,
+  SCENE_LOCATIONS,
+  FROG_ACTIVITIES,
+  FROG_HATS,
+  FROG_COMPANIONS,
+  FROG_WEATHERS,
+} from '../types';
+import {
   FrogMoodRad,
-  HabitCloverDockIcon,
-  WashiJournalDockIcon,
-  PocketTimerDockIcon,
-  ToriiStatsDockIcon,
+  LilyCoinIcon,
   WoodGearDockIcon,
-  FrogFaceDockIcon,
+  PixelGachaMachineIcon,
+  PixelWardrobeClosetIcon,
+  PixelMagicMixIcon,
+  PixelHeartPetIcon,
+  PixelSnackDangoIcon,
+  PixelFurinChimeIcon,
+  PixelDialogueBox,
 } from './FrogIcons';
 import { PixelFrogScene } from './PixelFrogScene';
 import {
-  ArrowRight,
-  Sparkles,
-  Coffee,
   Sun,
+  Coffee,
+  Sparkles,
   Moon,
-  CheckCircle2,
-  Circle,
-  Timer,
-  BookOpen,
-  TrendingUp,
+  Plus,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { soundEngine, triggerHaptic } from '../utils/audioUtils';
 
 interface HomeDashboardProps {
   onNavigate: (page: PageType) => void;
-  habits: HabitTemplate[];
-  monthData: MonthData;
-  projects: Project[];
-  todayDate: Date;
   pixelScene: PixelSceneConfig;
   onUpdatePixelScene: (patch: Partial<PixelSceneConfig>) => void;
+  shopState: FrogShopState;
+  onEarnCoins: (amount: number, reason: string) => void;
+  todayDate?: Date;
   soundEnabled?: boolean;
   hapticEnabled?: boolean;
-  onToggleHabitToday: (habitIndex: number) => void;
-  onSelectMoodToday: (moodValue: number) => void;
+  onGachaPullResults?: (results: any[]) => void;
+  onToggleWishlist?: (itemId: string) => void;
 }
+
+const FROG_DIALOGUES = [
+  'Ribbit! Welcome home~ 🍵',
+  'So warm & cozy in here ✨',
+  'Did you drink water today? 💧',
+  'Let’s relax and focus together 🌿',
+  'Feeling peaceful today~ 🌸',
+  'Croak! Loving this room 🪵',
+  'Take a deep breath and smile 💚',
+];
 
 export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   onNavigate,
-  habits,
-  monthData,
-  projects,
-  todayDate,
   pixelScene,
   onUpdatePixelScene,
+  shopState,
+  onEarnCoins,
+  todayDate = new Date(),
   soundEnabled = true,
   hapticEnabled = true,
-  onToggleHabitToday,
-  onSelectMoodToday,
 }) => {
-  const dayOfMonth = todayDate.getDate();
-  const dayIndex = dayOfMonth - 1;
+  const [petCount, setPetCount] = useState(0);
+  const [heartsFloat, setHeartsFloat] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [treatFedRecently, setTreatFedRecently] = useState(false);
+  const [dialogueIndex, setDialogueIndex] = useState(0);
+  const [speechVisible, setSpeechVisible] = useState(true);
 
-  // Calculate today's habit completion (Active habits)
-  const activeHabits = habits.filter((h) => !h.completed);
-  const totalHabits = activeHabits.length;
-  const completedToday = activeHabits.reduce((acc, h) => {
-    const origIdx = habits.findIndex((orig) => orig.id === h.id);
-    return acc + (monthData.habits[origIdx]?.days[dayIndex] ? 1 : 0);
-  }, 0);
-  const completionPercent = totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0;
-
-  // Active projects count
-  const activeProjectsCount = projects.filter((p) => !p.completed).length;
-
-  // Today's mood
-  const currentMoodValue = monthData.moods[dayIndex];
-  const currentMoodObj = MOOD_LEVELS.find((m) => m.value === currentMoodValue);
-
-  // Time-of-day greeting
+  // Time greeting
   const hours = todayDate.getHours();
   let timeGreeting = 'Good morning';
   let GreetingIcon = Sun;
@@ -80,248 +82,335 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
     GreetingIcon = Coffee;
   } else if (hours >= 17 && hours < 21) {
     timeGreeting = 'Peaceful evening';
-    GreetingIcon = SunsetIcon;
+    GreetingIcon = Sparkles;
   } else if (hours >= 21 || hours < 5) {
     timeGreeting = 'Restful night';
     GreetingIcon = Moon;
   }
 
-  function SunsetIcon(props: any) {
-    return <Sparkles {...props} />;
-  }
+  // Tap background/frog to pet & interact
+  const handleStageTap = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest('button')) return;
 
-  const handleToggle = (idx: number) => {
-    onToggleHabitToday(idx);
-    if (!monthData.habits[idx]?.days[dayIndex]) {
+    if (soundEnabled) soundEngine.playTapSound();
+    if (hapticEnabled) triggerHaptic();
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setPetCount((prev) => prev + 1);
+    const newHeart = { id: Date.now(), x, y };
+    setHeartsFloat((prev) => [...prev, newHeart]);
+
+    // Next speech bubble
+    setDialogueIndex((prev) => (prev + 1) % FROG_DIALOGUES.length);
+    setSpeechVisible(true);
+
+    setTimeout(() => {
+      setHeartsFloat((prev) => prev.filter((h) => h.id !== newHeart.id));
+    }, 1400);
+
+    if ((petCount + 1) % 5 === 0) {
+      onEarnCoins(15, 'Affection bonus');
       confetti({
-        particleCount: 30,
+        particleCount: 24,
         spread: 55,
-        origin: { y: 0.8 },
-        colors: ['#5f7a61', '#b86f52', '#d4af37', '#e8ded1'],
+        origin: { y: 0.45 },
+        colors: ['#f43f5e', '#ec4899', '#5f7a61', '#facc15'],
       });
     }
   };
 
+  const handlePetBtnClick = () => {
+    if (soundEnabled) soundEngine.playTapSound();
+    if (hapticEnabled) triggerHaptic();
+
+    setPetCount((prev) => prev + 1);
+    const newHeart = {
+      id: Date.now(),
+      x: window.innerWidth * 0.5,
+      y: window.innerHeight * 0.42,
+    };
+    setHeartsFloat((prev) => [...prev, newHeart]);
+    setDialogueIndex((prev) => (prev + 1) % FROG_DIALOGUES.length);
+
+    setTimeout(() => {
+      setHeartsFloat((prev) => prev.filter((h) => h.id !== newHeart.id));
+    }, 1400);
+
+    if ((petCount + 1) % 5 === 0) {
+      onEarnCoins(15, 'Affection bonus');
+      confetti({
+        particleCount: 20,
+        spread: 45,
+        origin: { y: 0.42 },
+        colors: ['#f43f5e', '#ec4899', '#5f7a61', '#facc15'],
+      });
+    }
+  };
+
+  // Feed treat
+  const handleFeedTreat = () => {
+    if (treatFedRecently) return;
+    if (soundEnabled) soundEngine.playCompleteSound();
+    if (hapticEnabled) triggerHaptic();
+
+    setTreatFedRecently(true);
+    onEarnCoins(10, 'Fed snack');
+
+    confetti({
+      particleCount: 20,
+      spread: 45,
+      origin: { y: 0.42 },
+      colors: ['#5f7a61', '#d4af37', '#b86f52'],
+    });
+
+    setTimeout(() => {
+      setTreatFedRecently(false);
+    }, 12000);
+  };
+
+  // Play chime
+  const handlePlayMusic = () => {
+    if (soundEnabled) soundEngine.playTapSound();
+    if (hapticEnabled) triggerHaptic();
+    confetti({
+      particleCount: 16,
+      spread: 40,
+      origin: { y: 0.42 },
+      colors: ['#a855f7', '#ec4899', '#38bdf8'],
+    });
+  };
+
+  // Surprise mix look
+  const handleSurpriseMix = () => {
+    if (soundEnabled) soundEngine.playTapSound();
+    if (hapticEnabled) triggerHaptic();
+
+    const randomScene = SCENE_LOCATIONS[Math.floor(Math.random() * SCENE_LOCATIONS.length)].id;
+    const randomActivity = FROG_ACTIVITIES[Math.floor(Math.random() * FROG_ACTIVITIES.length)].id;
+    const randomHat = FROG_HATS[Math.floor(Math.random() * FROG_HATS.length)].id;
+    const randomCompanion = FROG_COMPANIONS[Math.floor(Math.random() * FROG_COMPANIONS.length)].id;
+    const randomWeather = FROG_WEATHERS[Math.floor(Math.random() * FROG_WEATHERS.length)].id;
+
+    onUpdatePixelScene({
+      sceneId: randomScene,
+      activityId: randomActivity,
+      hatId: randomHat,
+      companionId: randomCompanion,
+      weatherId: randomWeather,
+    });
+  };
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const isDailyFreeAvailable = shopState.lastFreeGachaDate !== todayStr;
+
   return (
-    <div className="space-y-4 pb-28">
-      {/* Cozy Header */}
-      <div className="pt-1 pb-1">
-        <header className="flex items-center justify-between p-2">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-[22px] bg-[#eef4ec] dark:bg-[#273325] border border-[#d2e2d0] dark:border-[#384a35] flex items-center justify-center p-1 shadow-[0_4px_12px_rgba(95,122,97,0.15)]">
-              <FrogMoodRad size={30} />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-[#8c7e70] dark:text-[#a89b8d]">
-                <GreetingIcon size={13} className="text-[#b86f52] dark:text-[#d68767]" />
-                <span>{timeGreeting}</span>
-              </div>
-              <h1 className="text-2xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-                Croakle
-              </h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <button
-              id="home-gacha-btn"
-              type="button"
-              onClick={() => onNavigate('shop')}
-              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#c47069]/15 hover:bg-[#c47069]/25 active:scale-95 text-[#9e433b] dark:text-[#f2a8a2] transition-all flex items-center gap-1.5 border border-[#c47069]/30 shadow-xs ios-tap"
-              title="Gacha Sanctuary"
-            >
-              <span>🎁</span>
-              <span>Gacha</span>
-            </button>
-            <button
-              id="home-wardrobe-btn"
-              type="button"
-              onClick={() => onNavigate('dressup')}
-              className="px-3 py-1.5 rounded-full text-xs font-bold bg-[#5f7a61]/15 hover:bg-[#5f7a61]/25 active:scale-95 text-[#425744] dark:text-[#9bc29e] transition-all flex items-center gap-1.5 border border-[#5f7a61]/30 shadow-xs ios-tap"
-              title="Frog Wardrobe"
-            >
-              <span>👗</span>
-              <span>Wardrobe</span>
-            </button>
-            <button
-              id="home-stats-btn"
-              type="button"
-              onClick={() => onNavigate('analysis')}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.12] text-[#4a4036] dark:text-[#e0d6cb] font-bold flex items-center justify-center transition-all border border-black/[0.06] dark:border-white/[0.1] shadow-xs ios-tap"
-              title="Insights"
-            >
-              <ToriiStatsDockIcon size={16} className="text-[#5f7a61] dark:text-[#8cb88f]" />
-            </button>
-            <button
-              id="home-settings-btn"
-              type="button"
-              onClick={() => onNavigate('settings')}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.12] text-[#4a4036] dark:text-[#e0d6cb] font-bold flex items-center justify-center transition-all border border-black/[0.06] dark:border-white/[0.1] shadow-xs ios-tap"
-              title="Settings"
-            >
-              <WoodGearDockIcon size={16} />
-            </button>
-          </div>
-        </header>
-      </div>
-
-      {/* Dynamic Pixel Sanctuary Frog & Habitat Diorama */}
+    <div
+      id="pokecolo-home-stage"
+      onClick={handleStageTap}
+      className="relative w-full h-full flex flex-col justify-between overflow-hidden select-none px-4 pt-3.5 pb-24 cursor-pointer"
+    >
+      {/* 1. FULLSCREEN 3D POKECOLO ROOM HABITAT BACKGROUND */}
       <PixelFrogScene
         config={pixelScene}
         onUpdateConfig={onUpdatePixelScene}
-        currentMoodValue={currentMoodValue}
         soundEnabled={soundEnabled}
         hapticEnabled={hapticEnabled}
-        onOpenShop={() => onNavigate('dressup')}
+        fullscreen={true}
       />
 
-      {/* Quick Mood Log Row */}
-      <div className="ios-glass-card p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <FrogFaceDockIcon size={19} />
-            <h3 className="font-extrabold text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-              Daily Mood
-            </h3>
+      {/* Floating Pet Hearts Particles */}
+      {heartsFloat.map((heart) => (
+        <div
+          key={heart.id}
+          style={{ left: `${heart.x}px`, top: `${heart.y}px` }}
+          className="absolute z-50 -translate-x-1/2 -translate-y-1/2 text-rose-500 animate-bounce pointer-events-none text-2xl font-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+        >
+          ♥
+        </div>
+      ))}
+
+      {/* 2. TOP FLOATING PIXEL HUD (NO CLUNKY BOXES) */}
+      <header className="relative z-20 w-full flex items-center justify-between pointer-events-auto px-1">
+        {/* Left Profile: Pixel Frog Face + Pixel Name/Greeting */}
+        <div className="flex items-center gap-2 select-none">
+          <div className="w-8 h-8 flex items-center justify-center filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] active:scale-95 transition-transform">
+            <FrogMoodRad size={28} />
           </div>
-          {currentMoodObj && (
-            <span className={`text-xs font-black px-3 py-1 rounded-full border flex items-center gap-1.5 shadow-2xs ${currentMoodObj.bgLight} ${currentMoodObj.bgDark} ${currentMoodObj.borderLight} ${currentMoodObj.borderDark} ${currentMoodObj.textColorLight} ${currentMoodObj.textColorDark}`}>
-              <div className={`w-4 h-4 rounded-full flex items-center justify-center ${currentMoodObj.iconBgLight} ${currentMoodObj.iconBgDark}`}>
-                <FrogMoodIcon value={currentMoodObj.value} size={14} />
-              </div>
-              <span>{currentMoodObj.label}</span>
-            </span>
-          )}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1 text-[10.5px] font-black text-amber-200 dark:text-amber-300 drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+              <GreetingIcon size={11} className="text-amber-300 dark:text-amber-200" />
+              <span>{timeGreeting}</span>
+            </div>
+            <h1 className="text-sm font-black tracking-wide text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] leading-tight">
+              Croakle
+            </h1>
+          </div>
         </div>
 
-        <div className="grid grid-cols-5 gap-2">
-          {MOOD_LEVELS.map((mood) => {
-            const isSelected = currentMoodValue === mood.value;
-            return (
-              <button
-                key={mood.value}
-                id={`home-mood-btn-${mood.value}`}
-                type="button"
-                onClick={() => onSelectMoodToday(mood.value)}
-                className={`py-2.5 px-1 rounded-[18px] border flex flex-col items-center gap-1 transition-all ios-tap ${
-                  mood.bgLight
-                } ${mood.bgDark} ${
-                  isSelected
-                    ? `ring-2 ring-offset-1 ring-offset-white dark:ring-offset-[#161311] ${mood.borderLight} ${mood.borderDark} shadow-md scale-[1.02]`
-                    : `${mood.borderLight} ${mood.borderDark} hover:scale-[1.02]`
-                }`}
-              >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shadow-2xs ${mood.iconBgLight} ${mood.iconBgDark}`}>
-                  <FrogMoodIcon value={mood.value} size={22} />
-                </div>
-                <span className={`text-[10.5px] font-black ${mood.textColorLight} ${mood.textColorDark}`}>
-                  {mood.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Today's Habits Quick Tracker Card */}
-      <div className="ios-glass-card p-5 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <HabitCloverDockIcon size={19} />
-            <h3 className="font-extrabold text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-              Today's Habits
-            </h3>
-          </div>
+        {/* Right Action: Pixel Coin Counter & Pixel Settings */}
+        <div className="flex items-center gap-3">
           <button
+            id="home-coins-btn"
             type="button"
-            onClick={() => onNavigate('track')}
-            className="text-xs font-black text-[#5f7a61] dark:text-[#8cb88f] hover:underline flex items-center gap-1"
+            onClick={() => onNavigate('coins')}
+            className="group flex items-center gap-1.5 active:scale-90 hover:scale-105 transition-all ios-tap cursor-pointer"
+            title="Coins Store"
           >
-            <span>{completedToday}/{totalHabits} Done ({completionPercent}%)</span>
-            <ArrowRight size={13} />
+            <LilyCoinIcon size={20} className="filter drop-shadow-[0_2px_3px_rgba(0,0,0,0.6)] group-hover:scale-110 transition-transform" />
+            <span className="text-sm font-black text-amber-300 drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)] tracking-wider">
+              {shopState.coins.toLocaleString()}
+            </span>
+            <span className="w-4 h-4 bg-amber-400 hover:bg-amber-300 text-amber-950 text-[10px] font-black flex items-center justify-center rounded-xs shadow-[0_1.5px_0_#92400e] border border-amber-300 leading-none">
+              +
+            </span>
+          </button>
+
+          <button
+            id="home-settings-btn"
+            type="button"
+            onClick={() => onNavigate('settings')}
+            className="text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.9)] active:scale-90 hover:scale-110 transition-transform duration-150 ios-tap"
+            title="Settings"
+          >
+            <WoodGearDockIcon size={22} />
           </button>
         </div>
+      </header>
 
-        {activeHabits.length === 0 ? (
-          <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] italic py-2 text-center">
-            No active habits yet. Create some in the Habits tab!
-          </p>
-        ) : (
-          <div className="space-y-2">
-            {activeHabits.slice(0, 4).map((h) => {
-              const origIdx = habits.findIndex((orig) => orig.id === h.id);
-              const isDone = Boolean(monthData.habits[origIdx]?.days[dayIndex]);
-
-              return (
-                <div
-                  key={h.id}
-                  onClick={() => handleToggle(origIdx)}
-                  className={`p-2.5 rounded-[16px] border flex items-center justify-between gap-3 cursor-pointer transition-all ${
-                    isDone
-                      ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-900 dark:text-emerald-200'
-                      : 'bg-white/60 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-[#2d2823] dark:text-[#f4efe8] hover:bg-white/90 dark:hover:bg-white/[0.08]'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    {isDone ? (
-                      <CheckCircle2 size={20} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    ) : (
-                      <Circle size={20} className="text-[#8c7e70]/50 shrink-0" />
-                    )}
-                    <span className={`text-xs font-bold truncate ${isDone ? 'line-through opacity-80' : ''}`}>
-                      {h.name}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d]">
-                    Goal: {h.goal}d/wk
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+      {/* 3. CENTER RETRO PIXEL SPEECH BUBBLE (Unobstructed in Upper-Middle) */}
+      <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none mt-4">
+        {speechVisible && (
+          <PixelDialogueBox
+            text={FROG_DIALOGUES[dialogueIndex]}
+            onClick={(e) => {
+              e.stopPropagation();
+              setDialogueIndex((prev) => (prev + 1) % FROG_DIALOGUES.length);
+              if (soundEnabled) soundEngine.playTapSound();
+            }}
+            className="pointer-events-auto animate-fade-in"
+          />
         )}
       </div>
 
-      {/* Quick Launchpad: Focus, Journal & Insights */}
-      <div className="grid grid-cols-3 gap-2.5">
-        <button
-          type="button"
-          onClick={() => onNavigate('time')}
-          className="ios-glass-card p-3.5 flex flex-col items-center justify-center gap-1.5 text-center hover:scale-[1.02] active:scale-98 transition-all ios-tap group border border-black/[0.06] dark:border-white/[0.08]"
-        >
-          <div className="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-700 dark:text-amber-300 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
-            <PocketTimerDockIcon size={22} />
-          </div>
-          <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">Focus Timer</span>
-          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">Deep work</span>
-        </button>
+      {/* Spacer pushing controls down without blocking midground floor */}
+      <div className="flex-1 w-full" />
 
-        <button
-          type="button"
-          onClick={() => onNavigate('notes')}
-          className="ios-glass-card p-3.5 flex flex-col items-center justify-center gap-1.5 text-center hover:scale-[1.02] active:scale-98 transition-all ios-tap group border border-black/[0.06] dark:border-white/[0.08]"
-        >
-          <div className="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-700 dark:text-blue-300 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
-            <WashiJournalDockIcon size={22} />
-          </div>
-          <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">Journal</span>
-          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">Daily thoughts</span>
-        </button>
+      {/* 4. PURE PIXEL ART FLOATING ACTIONS (NO CLUNKY BOXES) */}
+      <div className="relative z-20 w-full space-y-3.5 pb-2 pointer-events-auto">
+        {/* Top Row: Gacha Capsule, Wardrobe Closet, Magic Mix */}
+        <div className="flex items-end justify-between px-2">
+          {/* Left: Gacha Machine & Wardrobe Closet */}
+          <div className="flex items-center gap-4">
+            {/* Theme Gacha Capsule Button */}
+            <button
+              id="home-floating-gacha-btn"
+              type="button"
+              onClick={() => {
+                if (soundEnabled) soundEngine.playTapSound();
+                if (hapticEnabled) triggerHaptic();
+                onNavigate('shop');
+              }}
+              className="group relative flex flex-col items-center gap-0.5 active:scale-90 hover:scale-110 transition-transform duration-150 ios-tap"
+              title="Gacha Summon"
+            >
+              {isDailyFreeAvailable && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-md bg-amber-400 text-amber-950 text-[8px] font-black uppercase tracking-wider animate-bounce shadow-md border border-amber-300 z-10">
+                  FREE
+                </span>
+              )}
+              <PixelGachaMachineIcon size={42} className="group-hover:-translate-y-1 transition-transform" />
+              <span className="text-[10px] font-black text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)] tracking-wide">
+                Gacha
+              </span>
+            </button>
 
-        <button
-          type="button"
-          onClick={() => onNavigate('analysis')}
-          className="ios-glass-card p-3.5 flex flex-col items-center justify-center gap-1.5 text-center hover:scale-[1.02] active:scale-98 transition-all ios-tap group border border-black/[0.06] dark:border-white/[0.08]"
-        >
-          <div className="w-10 h-10 rounded-2xl bg-purple-500/15 text-purple-700 dark:text-purple-300 flex items-center justify-center shadow-2xs group-hover:scale-110 transition-transform">
-            <ToriiStatsDockIcon size={22} />
+            {/* Wardrobe Customization Button */}
+            <button
+              id="home-floating-wardrobe-btn"
+              type="button"
+              onClick={() => {
+                if (soundEnabled) soundEngine.playTapSound();
+                if (hapticEnabled) triggerHaptic();
+                onNavigate('dressup');
+              }}
+              className="group flex flex-col items-center gap-0.5 active:scale-90 hover:scale-110 transition-transform duration-150 ios-tap"
+              title="Wardrobe Dress-Up"
+            >
+              <PixelWardrobeClosetIcon size={40} className="group-hover:-translate-y-1 transition-transform" />
+              <span className="text-[10px] font-black text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)] tracking-wide">
+                Custom
+              </span>
+            </button>
           </div>
-          <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">Insights</span>
-          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">Stats & trends</span>
-        </button>
+
+          {/* Right: Magic Surprise Mix */}
+          <button
+            id="home-floating-mix-btn"
+            type="button"
+            onClick={handleSurpriseMix}
+            title="Surprise Mix Outfit"
+            className="group flex flex-col items-center gap-0.5 active:scale-90 hover:scale-110 transition-transform duration-150 ios-tap"
+          >
+            <PixelMagicMixIcon size={40} className="group-hover:rotate-12 transition-transform" />
+            <span className="text-[10px] font-black text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)] tracking-wide">
+              Mix
+            </span>
+          </button>
+        </div>
+
+        {/* Bottom Row: Pure Pixel Interactive Items (Pet, Snack, Chime - No Container Boxes) */}
+        <div className="flex items-center justify-around px-4">
+          {/* Pet Heart Interaction */}
+          <button
+            id="home-interactive-pet-btn"
+            type="button"
+            onClick={handlePetBtnClick}
+            className="group flex flex-col items-center gap-0.5 active:scale-85 hover:scale-110 transition-transform duration-150 ios-tap"
+            title="Pet Frog"
+          >
+            <PixelHeartPetIcon size={30} className="group-hover:scale-115 transition-transform" />
+            <span className="text-[10px] font-black text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+              Pet
+            </span>
+          </button>
+
+          {/* Feed Snack Dango Interaction */}
+          <button
+            id="home-interactive-snack-btn"
+            type="button"
+            onClick={handleFeedTreat}
+            disabled={treatFedRecently}
+            className={`group flex flex-col items-center gap-0.5 transition-all duration-150 ios-tap ${
+              treatFedRecently
+                ? 'opacity-40 grayscale cursor-not-allowed'
+                : 'active:scale-85 hover:scale-110'
+            }`}
+            title="Feed Treat"
+          >
+            <PixelSnackDangoIcon size={30} className="group-hover:scale-115 transition-transform" />
+            <span className="text-[10px] font-black text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+              {treatFedRecently ? 'Full' : 'Snack'}
+            </span>
+          </button>
+
+          {/* Wind Chime / Furin Bell Music Interaction */}
+          <button
+            id="home-interactive-chime-btn"
+            type="button"
+            onClick={handlePlayMusic}
+            className="group flex flex-col items-center gap-0.5 active:scale-85 hover:scale-110 transition-transform duration-150 ios-tap"
+            title="Ring Wind Chime"
+          >
+            <PixelFurinChimeIcon size={30} className="group-hover:scale-115 transition-transform" />
+            <span className="text-[10px] font-black text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.9)]">
+              Chime
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-
-

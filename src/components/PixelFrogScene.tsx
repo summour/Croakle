@@ -46,8 +46,9 @@ import {
   PixelCheckIcon,
 } from './FrogIcons';
 
-export const getSkinColors = (skinId?: FrogSkinId) => {
-  switch (skinId) {
+export const getSkinColors = (skinId?: FrogSkinId | string) => {
+  const cleanId = (skinId || '').replace(/^skin_/, '');
+  switch (cleanId) {
     case 'golden':
       return {
         main: '#F59E0B',
@@ -106,6 +107,46 @@ export const getSkinColors = (skinId?: FrogSkinId) => {
         belly: '#FFEDD5',
         cheeks: '#C2410C',
         legs: '#C2410C',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'fairytale_rose':
+      return {
+        main: '#F43F5E',
+        dark: '#BE123C',
+        outline: '#881337',
+        belly: '#FFF1F2',
+        cheeks: '#E11D48',
+        legs: '#BE123C',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'timber_wolf_grey':
+      return {
+        main: '#64748B',
+        dark: '#475569',
+        outline: '#1E293B',
+        belly: '#F1F5F9',
+        cheeks: '#94A3B8',
+        legs: '#334155',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'wasabi_green':
+      return {
+        main: '#84CC16',
+        dark: '#65A30D',
+        outline: '#365314',
+        belly: '#F7FEE7',
+        cheeks: '#A3E635',
+        legs: '#4D7C0F',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'salmon_peach':
+      return {
+        main: '#FB923C',
+        dark: '#F97316',
+        outline: '#9A3412',
+        belly: '#FFEDD5',
+        cheeks: '#FB7185',
+        legs: '#EA580C',
         eyeHighlight: '#FFFFFF',
       };
     case 'classic':
@@ -266,6 +307,58 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {config.outfitId === 'red_riding_dress' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#BE123C" />
+          <rect x={frogX + 1} y={frogY + 10} width="14" height="9" fill="#991B1B" />
+          <rect x={frogX + 3} y={frogY + 11} width="10" height="8" fill="#FFFFFF" />
+          <line x1={frogX + 6} y1={frogY + 12} x2={frogX + 10} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
+          <line x1={frogX + 10} y1={frogY + 12} x2={frogX + 6} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
+          <line x1={frogX + 6} y1={frogY + 14} x2={frogX + 10} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
+          <line x1={frogX + 10} y1={frogY + 14} x2={frogX + 6} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
+        </g>
+      )}
+
+      {config.outfitId === 'wolf_fur_cloak' && (
+        <g>
+          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#334155" rx="2" />
+          <rect x={frogX - 2} y={frogY + 9} width="20" height="3" fill="#64748B" />
+          <rect x={frogX + 2} y={frogY + 12} width="12" height="9" fill="#1E293B" />
+          <polygon points={`${frogX + 6},${frogY + 10} ${frogX + 8},${frogY + 13} ${frogX + 10},${frogY + 10}`} fill="#FEF08A" />
+          <circle cx={frogX + 8} cy={frogY + 10} r="1" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.outfitId === 'hunter_woodsman' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 10} width="18" height="10" fill="#15803D" />
+          <rect x={frogX + 1} y={frogY + 10} width="14" height="10" fill="#166534" />
+          <rect x={frogX - 1} y={frogY + 14} width="18" height="2" fill="#78350F" />
+          <rect x={frogX + 6} y={frogY + 13} width="4" height="4" fill="#FACC15" />
+          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#78350F" />
+        </g>
+      )}
+
+      {config.outfitId === 'sushi_chef_happi' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#FFFFFF" />
+          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#F8FAFC" />
+          <rect x={frogX - 2} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
+          <rect x={frogX + 15} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
+          <rect x={frogX + 1} y={frogY + 15} width="14" height="2" fill="#1E3A8A" />
+          <circle cx={frogX + 8} cy={frogY + 13} r="2" fill="#2563EB" />
+        </g>
+      )}
+
+      {config.outfitId === 'sushi_kimono_waiter' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#312E81" />
+          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#3730A3" />
+          <rect x={frogX - 1} y={frogY + 13} width="18" height="3" fill="#DC2626" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="5" fill="#FACC15" />
+        </g>
+      )}
+
       {/* GLASSES / FACE ACCESSORY */}
       {config.glassesId === 'reading' && (
         <g>
@@ -320,7 +413,106 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {config.glassesId === 'forest_blush_freckles' && (
+        <g>
+          <circle cx={frogX} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
+          <circle cx={frogX + 2} cy={frogY + 11} r="0.8" fill="#78350F" />
+          <circle cx={frogX + 14} cy={frogY + 11} r="0.8" fill="#78350F" />
+          <circle cx={frogX + 16} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
+        </g>
+      )}
+
+      {config.glassesId === 'wolf_snarl_fangs' && (
+        <g>
+          <polygon points={`${frogX + 5},${frogY + 10} ${frogX + 6},${frogY + 13} ${frogX + 7},${frogY + 10}`} fill="#FFFFFF" />
+          <polygon points={`${frogX + 9},${frogY + 10} ${frogX + 10},${frogY + 13} ${frogX + 11},${frogY + 10}`} fill="#FFFFFF" />
+        </g>
+      )}
+
+      {config.glassesId === 'wasabi_sparkle' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#84CC16" />
+          <rect x={frogX + 15} y={frogY + 9} width="2" height="2" fill="#84CC16" />
+          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#A3E635" />
+        </g>
+      )}
+
       {/* HAT LAYER */}
+      {config.hatId === 'red_riding_hood' && (
+        <g>
+          <rect x={frogX - 3} y={frogY - 4} width="22" height="16" fill="#DC2626" rx="2" />
+          <rect x={frogX - 1} y={frogY - 6} width="18" height="3" fill="#B91C1C" />
+          <rect x={frogX + 1} y={frogY - 2} width="14" height="2" fill="#FEF2F2" />
+          <polygon points={`${frogX + 5},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 5},${frogY + 15}`} fill="#991B1B" />
+          <polygon points={`${frogX + 11},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 11},${frogY + 15}`} fill="#991B1B" />
+          <circle cx={frogX + 8} cy={frogY + 13} r="1.5" fill="#EF4444" />
+        </g>
+      )}
+
+      {config.hatId === 'wolf_ears_hood' && (
+        <g>
+          <polygon points={`${frogX - 2},${frogY + 2} ${frogX + 2},${frogY - 8} ${frogX + 6},${frogY + 2}`} fill="#334155" />
+          <polygon points={`${frogX},${frogY + 1} ${frogX + 2},${frogY - 6} ${frogX + 4},${frogY + 1}`} fill="#F472B6" />
+          <polygon points={`${frogX + 10},${frogY + 2} ${frogX + 14},${frogY - 8} ${frogX + 18},${frogY + 2}`} fill="#334155" />
+          <polygon points={`${frogX + 12},${frogY + 1} ${frogX + 14},${frogY - 6} ${frogX + 16},${frogY + 1}`} fill="#F472B6" />
+          <rect x={frogX + 2} y={frogY - 1} width="12" height="3" fill="#475569" />
+          <rect x={frogX + 6} y={frogY - 3} width="4" height="2" fill="#F1F5F9" />
+        </g>
+      )}
+
+      {config.hatId === 'granny_nightcap' && (
+        <g>
+          <ellipse cx={frogX + 8} cy={frogY - 2} rx="12" ry="7" fill="#F8FAFC" />
+          <ellipse cx={frogX + 8} cy={frogY - 2} rx="10" ry="5" fill="#F1F5F9" />
+          <rect x={frogX - 3} y={frogY + 2} width="22" height="2" fill="#FBCFE8" />
+          <circle cx={frogX + 8} cy={frogY + 3} r="1.5" fill="#EC4899" />
+        </g>
+      )}
+
+      {config.hatId === 'sushi_salmon' && (
+        <g>
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
+          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#FB923C" rx="2" />
+          <line x1={frogX} y1={frogY - 6} x2={frogX + 4} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+          <line x1={frogX + 6} y1={frogY - 6} x2={frogX + 10} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+          <line x1={frogX + 12} y1={frogY - 6} x2={frogX + 16} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+          <rect x={frogX + 7} y={frogY - 6} width="2" height="8" fill="#14532D" />
+        </g>
+      )}
+
+      {config.hatId === 'sushi_maguro' && (
+        <g>
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
+          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#BE123C" rx="2" />
+          <rect x={frogX} y={frogY - 5} width="16" height="2" fill="#E11D48" />
+          <rect x={frogX + 2} y={frogY - 5} width="4" height="1" fill="#FFFFFF" opacity="0.6" />
+          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#84CC16" />
+        </g>
+      )}
+
+      {config.hatId === 'sushi_ebi' && (
+        <g>
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
+          <rect x={frogX - 2} y={frogY - 6} width="18" height="5" fill="#EA580C" rx="2" />
+          <rect x={frogX + 1} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
+          <rect x={frogX + 5} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
+          <rect x={frogX + 9} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
+          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY - 7} ${frogX + 20},${frogY - 1}`} fill="#DC2626" />
+          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY + 1} ${frogX + 20},${frogY - 1}`} fill="#EA580C" />
+        </g>
+      )}
+
+      {config.hatId === 'sushi_chef_headband' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 2} width="20" height="3" fill="#FFFFFF" />
+          <rect x={frogX - 1} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+          <rect x={frogX + 4} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+          <rect x={frogX + 9} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+          <rect x={frogX + 14} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+          <circle cx={frogX + 8} cy={frogY + 3.5} r="2" fill="#DC2626" />
+        </g>
+      )}
+
       {config.hatId === 'lotus' && (
         <g>
           <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#1E3A14" />
@@ -504,6 +696,37 @@ export const PixelFrogSolo: React.FC<{
           <circle cx={frogX + 26} cy={frogY + 18} r="1.5" fill="#EF4444" />
         </g>
       )}
+
+      {config.activityId === 'picnic_basket' && (
+        <g>
+          <rect x={frogX + 5} y={frogY + 13} width="10" height="7" fill="#D97706" rx="1" />
+          <polygon points={`${frogX + 4},${frogY + 13} ${frogX + 10},${frogY + 11} ${frogX + 8},${frogY + 16}`} fill="#EF4444" />
+          <rect x={frogX + 5} y={frogY + 12} width="2" height="2" fill="#FFFFFF" />
+        </g>
+      )}
+
+      {config.activityId === 'woodcutter_axe' && (
+        <g>
+          <line x1={frogX + 11} y1={frogY + 18} x2={frogX + 18} y2={frogY + 5} stroke="#78350F" strokeWidth="1.5" />
+          <polygon points={`${frogX + 16},${frogY + 5} ${frogX + 22},${frogY + 3} ${frogX + 20},${frogY + 9}`} fill="#94A3B8" />
+        </g>
+      )}
+
+      {config.activityId === 'sushi_platter' && (
+        <g>
+          <rect x={frogX + 4} y={frogY + 14} width="12" height="5" fill="#D97706" rx="1" />
+          <rect x={frogX + 5} y={frogY + 13} width="4" height="2" fill="#FB923C" />
+          <rect x={frogX + 10} y={frogY + 13} width="4" height="2" fill="#BE123C" />
+        </g>
+      )}
+
+      {config.activityId === 'tea_whisk' && (
+        <g>
+          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#1E293B" rx="1" />
+          <rect x={frogX + 5} y={frogY + 14} width="6" height="3" fill="#84CC16" />
+          <line x1={frogX + 12} y1={frogY + 10} x2={frogX + 8} y2={frogY + 14} stroke="#FDE68A" strokeWidth="1.5" />
+        </g>
+      )}
     </svg>
   );
 };
@@ -519,6 +742,7 @@ interface PixelFrogSceneProps {
   showInfoBar?: boolean;
   size?: 'compact' | 'medium' | 'large';
   onOpenShop?: () => void;
+  fullscreen?: boolean;
 }
 
 export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
@@ -532,6 +756,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   showInfoBar,
   size = 'medium',
   onOpenShop,
+  fullscreen = false,
 }) => {
   // Animation frame ticker for pixel effects
   const [animTick, setAnimTick] = useState(0);
@@ -589,7 +814,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   };
 
   // -------------------------------------------------------------
-  // PIXEL ART RENDERERS (Crisp SVG 160x100 Grid)
+  // PIXEL ART RENDERERS (Crisp SVG 160x100 Grid - Cozy Minimal Style)
   // -------------------------------------------------------------
 
   // Sky & Lighting colors based on weather
@@ -597,470 +822,637 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
     switch (effectiveWeather) {
       case 'starry':
         return {
-          top: '#0F172A',
-          bottom: '#1E293B',
-          ambient: 'rgba(15, 23, 42, 0.35)',
+          top: '#0b132b',
+          mid: '#1c2541',
+          bottom: '#223052',
+          ambient: 'rgba(11, 19, 43, 0.4)',
         };
       case 'golden':
         return {
-          top: '#7C2D12',
-          mid: '#C2410C',
-          bottom: '#FDBA74',
-          ambient: 'rgba(251, 146, 60, 0.15)',
+          top: '#431407',
+          mid: '#7c2d12',
+          bottom: '#d97706',
+          ambient: 'rgba(217, 119, 6, 0.15)',
         };
       case 'rainy':
         return {
-          top: '#334155',
-          bottom: '#64748B',
-          ambient: 'rgba(51, 65, 85, 0.25)',
+          top: '#1e293b',
+          mid: '#334155',
+          bottom: '#475569',
+          ambient: 'rgba(30, 41, 59, 0.3)',
         };
       case 'petals':
         return {
-          top: '#FCE7F3',
-          bottom: '#FBCFE8',
+          top: '#fdf2f8',
+          mid: '#fce7f3',
+          bottom: '#fbcfe8',
           ambient: 'rgba(244, 114, 182, 0.12)',
         };
       case 'sunny':
       default:
         return {
-          top: '#7DD3FC',
-          bottom: '#BAE6FD',
+          top: '#7dd3fc',
+          mid: '#bae6fd',
+          bottom: '#e0f2fe',
           ambient: 'rgba(125, 211, 252, 0.1)',
         };
     }
   };
 
   const sky = getSkyGradient();
+  const viewBoxHeight = fullscreen ? 280 : 100;
+  const yShift = fullscreen ? 48 : 0;
 
-  return (
-    <div className={`space-y-3 ${className}`}>
-      {/* Diorama Display Card */}
-      <div className="relative rounded-[26px] overflow-hidden border border-black/[0.08] dark:border-white/[0.12] bg-[#f8f5ee] dark:bg-[#191613] shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
-        {/* Main Pixel Canvas (160x100 viewBox) */}
-        <div className="relative w-full aspect-[16/10] max-h-[300px] select-none overflow-hidden bg-black">
-          <svg
-            viewBox="0 0 160 100"
-            className="w-full h-full object-cover"
-            shapeRendering="crispEdges"
-          >
-            <defs>
-              <linearGradient id="skyGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={sky.top} />
-                <stop offset="100%" stopColor={sky.bottom} />
-              </linearGradient>
-            </defs>
+  // Ground base color to fill lower canvas in fullscreen
+  const getGroundColor = () => {
+    switch (config.sceneId) {
+      case 'sauna_bathhouse':
+        return '#dfc09c';
+      case 'treehouse':
+        return '#784a28';
+      case 'sakura_shrine':
+        return '#475569';
+      case 'rainy_meadow':
+        return '#166534';
+      case 'onsen':
+        return '#3f3f46';
+      case 'night_camp':
+        return '#0f172a';
+      case 'tearoom':
+        return '#d9f99d';
+      case 'cloud_palace':
+        return '#ede9fe';
+      case 'bamboo_grove':
+        return '#14532d';
+      case 'zen_pond':
+      default:
+        return '#0c4a6e';
+    }
+  };
 
-            {/* 1. SKY BACKGROUND */}
-            <rect x="0" y="0" width="160" height="100" fill="url(#skyGradient)" />
+  const svgContent = (
+    <>
+      <defs>
+        <linearGradient id="skyGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={sky.top} />
+          {sky.mid && <stop offset="60%" stopColor={sky.mid} />}
+          <stop offset="100%" stopColor={sky.bottom} />
+        </linearGradient>
+      </defs>
 
-            {/* Weather Elements: Sun, Moon, Clouds, Stars */}
-            {effectiveWeather === 'sunny' && (
-              <g>
-                <rect x="130" y="10" width="16" height="16" fill="#FDE047" />
-                <rect x="132" y="8" width="12" height="2" fill="#FACC15" />
-                <rect x="132" y="26" width="12" height="2" fill="#FACC15" />
-                <rect x="128" y="12" width="2" height="12" fill="#FACC15" />
-                <rect x="146" y="12" width="2" height="12" fill="#FACC15" />
-                <rect x="134" y="12" width="8" height="8" fill="#FEF08A" />
-                {/* Fluffy Pixel Cloud */}
-                <rect x="16" y="18" width="30" height="8" fill="#FFFFFF" opacity="0.9" />
-                <rect x="22" y="14" width="18" height="4" fill="#FFFFFF" opacity="0.9" />
-              </g>
-            )}
+      {/* 1. SKY BACKGROUND (Cozy Minimal Gradient) */}
+      <rect x="0" y="0" width="160" height={viewBoxHeight} fill="url(#skyGradient)" />
 
-            {effectiveWeather === 'golden' && (
-              <g>
-                <rect x="70" y="22" width="20" height="18" fill="#FB923C" />
-                <rect x="74" y="18" width="12" height="4" fill="#FDE047" />
-                <rect x="72" y="22" width="16" height="10" fill="#FEF08A" />
-                {/* Warm Sunset Horizon Clouds */}
-                <rect x="0" y="38" width="160" height="6" fill="#EA580C" opacity="0.6" />
-                <rect x="20" y="32" width="45" height="4" fill="#F97316" opacity="0.7" />
-                <rect x="95" y="28" width="50" height="4" fill="#F97316" opacity="0.7" />
-              </g>
-            )}
+      {/* Fullscreen Ground Extension */}
+      {fullscreen && (
+        <rect x="0" y="210" width="160" height="50" fill={getGroundColor()} />
+      )}
 
-            {effectiveWeather === 'starry' && (
-              <g>
-                {/* Crescent Golden Moon */}
-                <rect x="132" y="10" width="12" height="12" fill="#FEF08A" />
-                <rect x="136" y="8" width="8" height="2" fill="#FEF08A" />
-                <rect x="136" y="22" width="8" height="2" fill="#FEF08A" />
-                <rect x="128" y="10" width="8" height="12" fill={sky.top} />
-                {/* Twinkling Pixel Stars */}
-                <rect x="14" y="12" width="2" height="2" fill="#FFFFFF" />
-                <rect x="42" y="8" width="1" height="1" fill="#FEF08A" />
-                <rect x="75" y="16" width="2" height="2" fill="#FFFFFF" />
-                <rect x="105" y="10" width="1" height="1" fill="#FEF08A" />
-                <rect x="28" y="28" width="2" height="2" fill="#FFFFFF" />
-                <rect x="118" y="24" width="1" height="1" fill="#FFFFFF" />
-                <rect x="58" y="22" width="1" height="1" fill="#FEF08A" />
-              </g>
-            )}
+      {/* Weather Elements: Sun, Moon, Clouds, Stars (Minimalist & Clean) */}
+      {effectiveWeather === 'sunny' && (
+        <g transform={fullscreen ? 'translate(0, 20)' : undefined}>
+          {/* Minimalist Warm Sun */}
+          <rect x="134" y="14" width="10" height="10" fill="#fde047" />
+          <rect x="136" y="12" width="6" height="14" fill="#fde047" />
+          <rect x="132" y="16" width="14" height="6" fill="#fde047" />
+          <rect x="136" y="16" width="6" height="6" fill="#fef08a" />
+          
+          {/* Authentic Crisp Pixel Cloud 1 */}
+          <g opacity="0.85">
+            <rect x="24" y="28" width="28" height="6" fill="#ffffff" />
+            <rect x="28" y="24" width="18" height="4" fill="#ffffff" />
+            <rect x="32" y="22" width="10" height="2" fill="#ffffff" />
+            <rect x="26" y="34" width="22" height="1" fill="#e0f2fe" />
+          </g>
 
-            {/* 2. SCENE LOCATION BACKGROUND LAYERS */}
+          {/* Authentic Crisp Pixel Cloud 2 */}
+          <g opacity="0.75">
+            <rect x="100" y="38" width="22" height="5" fill="#ffffff" />
+            <rect x="104" y="35" width="14" height="3" fill="#ffffff" />
+            <rect x="102" y="43" width="18" height="1" fill="#e0f2fe" />
+          </g>
+        </g>
+      )}
 
-            {/* A. ZEN LOTUS POND SCENE */}
-            {config.sceneId === 'zen_pond' && (
-              <g>
-                {/* Distant Hills */}
-                <rect x="0" y="44" width="160" height="20" fill="#2E4A28" />
-                <rect x="10" y="38" width="60" height="8" fill="#3D5F34" />
-                <rect x="90" y="36" width="70" height="10" fill="#3D5F34" />
+      {effectiveWeather === 'golden' && (
+        <g transform={fullscreen ? 'translate(0, 30)' : undefined}>
+          {/* Cozy Amber Horizon Sun */}
+          <circle cx="80" cy="38" r="10" fill="#fef08a" />
+          <circle cx="80" cy="38" r="14" fill="#fb923c" opacity="0.4" />
+          {/* Minimalist Dusk Cloud Streaks */}
+          <rect x="15" y="32" width="35" height="2" fill="#fb923c" opacity="0.6" />
+          <rect x="110" y="28" width="38" height="2" fill="#fb923c" opacity="0.6" />
+        </g>
+      )}
 
-                {/* Stone Lantern on Left Bank */}
-                <rect x="16" y="38" width="8" height="2" fill="#52525B" />
-                <rect x="18" y="40" width="4" height="6" fill="#71717A" />
-                <rect x="19" y="42" width="2" height="2" fill="#FEF08A" />
-                <rect x="15" y="46" width="10" height="2" fill="#3F3F46" />
-                <rect x="18" y="48" width="4" height="10" fill="#71717A" />
-                <rect x="16" y="58" width="8" height="4" fill="#3F3F46" />
+      {effectiveWeather === 'starry' && (
+        <g transform={fullscreen ? 'translate(0, 15)' : undefined}>
+          {/* Cozy Golden Crescent Moon */}
+          <rect x="132" y="10" width="10" height="10" fill="#fef08a" />
+          <rect x="135" y="8" width="6" height="2" fill="#fef08a" />
+          <rect x="135" y="20" width="6" height="2" fill="#fef08a" />
+          <rect x="129" y="10" width="7" height="10" fill={sky.top} />
+          {/* Soft Minimalist Stars */}
+          <rect x="18" y="12" width="1" height="1" fill="#ffffff" opacity="0.9" />
+          <rect x="45" y="8" width="2" height="2" fill="#fef08a" opacity="0.8" />
+          <rect x="75" y="14" width="1" height="1" fill="#ffffff" opacity="0.9" />
+          <rect x="108" y="10" width="2" height="2" fill="#fef08a" opacity="0.8" />
+          <rect x="28" y="24" width="1" height="1" fill="#ffffff" opacity="0.7" />
+          <rect x="118" y="22" width="1" height="1" fill="#ffffff" opacity="0.8" />
+          <rect x="60" y="20" width="1" height="1" fill="#fef08a" opacity="0.7" />
+          {fullscreen && (
+            <>
+              <rect x="22" y="60" width="1" height="1" fill="#ffffff" opacity="0.8" />
+              <rect x="85" y="55" width="2" height="2" fill="#fef08a" opacity="0.7" />
+              <rect x="140" y="70" width="1" height="1" fill="#ffffff" opacity="0.8" />
+            </>
+          )}
+        </g>
+      )}
 
-                {/* Bamboo Reeds */}
-                <rect x="138" y="30" width="2" height="30" fill="#4D7C36" />
-                <rect x="144" y="34" width="2" height="26" fill="#5F9744" />
-                <rect x="150" y="28" width="2" height="32" fill="#3E652B" />
-                <rect x="135" y="36" width="6" height="2" fill="#5F9744" />
-                <rect x="146" y="40" width="6" height="2" fill="#5F9744" />
+      {effectiveWeather === 'rainy' && (
+        <g opacity="0.7">
+          {/* Gentle Pixel Rain Streaks */}
+          <line x1="20" y1="10" x2="16" y2="22" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+          <line x1="50" y1="8" x2="46" y2="20" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+          <line x1="90" y1="12" x2="86" y2="24" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+          <line x1="130" y1="6" x2="126" y2="18" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+          <line x1="35" y1="28" x2="31" y2="40" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+          <line x1="110" y1="26" x2="106" y2="38" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+        </g>
+      )}
 
-                {/* River Grass Banks */}
-                <rect x="0" y="54" width="45" height="46" fill="#4B6E38" />
-                <rect x="120" y="52" width="40" height="48" fill="#4B6E38" />
-                <rect x="35" y="60" width="15" height="40" fill="#3A562A" />
-                <rect x="110" y="58" width="15" height="42" fill="#3A562A" />
+      {/* 2. SCENE LOCATION BACKGROUND LAYERS & FROG CHARACTER */}
+      <g transform={yShift ? `translate(0, ${yShift})` : undefined}>
+      {/* 0. COZY BATHHOUSE & SAUNA ROOM (Pokecolo 3D Architecture) */}
+      {config.sceneId === 'sauna_bathhouse' && (
+        <g>
+          {/* Ceiling with 3D Perspective Tiles & Recessed Lighting (Fullscreen) */}
+          {fullscreen ? (
+            <g>
+              <rect x="0" y="-48" width="160" height="68" fill="#e7d7c1" />
+              {/* Perspective Ceiling Beams */}
+              <line x1="0" y1="-48" x2="25" y2="20" stroke="#cbb497" strokeWidth="1" />
+              <line x1="160" y1="-48" x2="135" y2="20" stroke="#cbb497" strokeWidth="1" />
+              <line x1="45" y1="-48" x2="55" y2="20" stroke="#cbb497" strokeWidth="0.8" />
+              <line x1="115" y1="-48" x2="105" y2="20" stroke="#cbb497" strokeWidth="0.8" />
+              <line x1="15" y1="-25" x2="145" y2="-25" stroke="#cbb497" strokeWidth="0.8" />
+              <line x1="20" y1="-2" x2="140" y2="-2" stroke="#cbb497" strokeWidth="0.8" />
 
-                {/* Pond Water Basin */}
-                <rect x="25" y="62" width="110" height="38" fill="#0284C7" />
-                <rect x="30" y="66" width="100" height="34" fill="#0369A1" />
-                <rect x="40" y="74" width="80" height="26" fill="#075985" />
+              {/* Glowing Circular Recessed Lights */}
+              <circle cx="45" cy="-16" r="4" fill="#fef08a" opacity="0.9" />
+              <circle cx="45" cy="-16" r="7" fill="#fde047" opacity="0.35" />
+              <circle cx="115" cy="-16" r="4" fill="#fef08a" opacity="0.9" />
+              <circle cx="115" cy="-16" r="7" fill="#fde047" opacity="0.35" />
+              <circle cx="55" cy="8" r="4" fill="#fef08a" opacity="0.9" />
+              <circle cx="55" cy="8" r="6.5" fill="#fde047" opacity="0.35" />
+              <circle cx="105" cy="8" r="4" fill="#fef08a" opacity="0.9" />
+              <circle cx="105" cy="8" r="6.5" fill="#fde047" opacity="0.35" />
+            </g>
+          ) : (
+            <rect x="0" y="0" width="160" height="20" fill="#e7d7c1" />
+          )}
 
-                {/* Water Shimmer Waves */}
-                <rect x="45" y={(animTick % 2 === 0 ? 68 : 69)} width="16" height="1" fill="#7DD3FC" opacity="0.8" />
-                <rect x="95" y={(animTick % 2 === 0 ? 76 : 75)} width="18" height="1" fill="#7DD3FC" opacity="0.8" />
-                <rect x="65" y={(animTick % 2 === 0 ? 84 : 85)} width="24" height="1" fill="#BAE6FD" opacity="0.7" />
+          {/* Crown Molding Trim */}
+          <rect x="0" y="18" width="160" height="4" fill="#8c6a48" />
+          <rect x="0" y="20" width="160" height="1.5" fill="#b08b64" />
 
-                {/* Floating Lily Pads */}
-                <rect x="34" y="72" width="18" height="6" fill="#65A30D" />
-                <rect x="38" y="70" width="10" height="2" fill="#4D7C0F" />
-                <rect x="44" y="72" width="2" height="6" fill="#0369A1" /> {/* Notch */}
-                
-                <rect x="108" y="70" width="18" height="6" fill="#65A30D" />
-                <rect x="112" y="68" width="10" height="2" fill="#4D7C0F" />
-                {/* Blooming Pink Lotus */}
-                <rect x="115" y="64" width="6" height="4" fill="#F472B6" />
-                <rect x="117" y="62" width="2" height="2" fill="#FDF2F8" />
+          {/* Back Wall with Warm Stone Bricks */}
+          <rect x="0" y="22" width="160" height="48" fill="#d4be9c" />
+          <line x1="0" y1="30" x2="160" y2="30" stroke="#bfa682" strokeWidth="0.75" />
+          <line x1="0" y1="38" x2="160" y2="38" stroke="#bfa682" strokeWidth="0.75" />
+          <line x1="0" y1="46" x2="160" y2="46" stroke="#bfa682" strokeWidth="0.75" />
+          <line x1="0" y1="54" x2="160" y2="54" stroke="#bfa682" strokeWidth="0.75" />
+          <line x1="0" y1="62" x2="160" y2="62" stroke="#bfa682" strokeWidth="0.75" />
 
-                {/* Big Central Island Lily Pad (Frog's Stage) */}
-                <rect x="62" y="70" width="36" height="14" fill="#4D7C0F" />
-                <rect x="64" y="68" width="32" height="16" fill="#65A30D" />
-                <rect x="68" y="66" width="24" height="18" fill="#84CC16" />
-                <rect x="74" y="68" width="12" height="14" fill="#A3E635" />
-              </g>
-            )}
+          <line x1="20" y1="22" x2="20" y2="30" stroke="#bfa682" strokeWidth="0.6" />
+          <line x1="40" y1="30" x2="40" y2="38" stroke="#bfa682" strokeWidth="0.6" />
+          <line x1="25" y1="38" x2="25" y2="46" stroke="#bfa682" strokeWidth="0.6" />
+          <line x1="140" y1="22" x2="140" y2="30" stroke="#bfa682" strokeWidth="0.6" />
+          <line x1="125" y1="30" x2="125" y2="38" stroke="#bfa682" strokeWidth="0.6" />
+          <line x1="135" y1="38" x2="135" y2="46" stroke="#bfa682" strokeWidth="0.6" />
 
-            {/* B. COZY TREEHOUSE SCENE */}
-            {config.sceneId === 'treehouse' && (
-              <g>
-                {/* Wooden Plank Wall */}
-                <rect x="0" y="0" width="160" height="70" fill="#784A28" />
-                <rect x="0" y="16" width="160" height="2" fill="#523218" />
-                <rect x="0" y="34" width="160" height="2" fill="#523218" />
-                <rect x="0" y="52" width="160" height="2" fill="#523218" />
+          {/* Perspective Side Walls */}
+          <polygon points="0,18 20,22 20,70 0,90" fill="#c4ad8a" />
+          <polygon points="160,18 140,22 140,70 160,90" fill="#bfa682" />
 
-                {/* Treehouse Window Looking Outside */}
-                <rect x="102" y="10" width="46" height="36" fill="#382110" />
-                <rect x="104" y="12" width="42" height="32" fill="#60A5FA" />
-                <rect x="104" y="28" width="42" height="16" fill="#4B6E38" /> {/* Tree canopy view */}
-                <rect x="124" y="12" width="2" height="32" fill="#382110" />
-                <rect x="104" y="26" width="42" height="2" fill="#382110" />
+          {/* Right Wall Decor: Framed Anime Art & Vending Machine */}
+          <rect x="143" y="28" width="14" height="18" fill="#fdf2f8" stroke="#78350f" strokeWidth="0.8" />
+          <circle cx="150" cy="37" r="4" fill="#f472b6" opacity="0.6" />
 
-                {/* Bookshelf with Colorful Books */}
-                <rect x="12" y="14" width="34" height="42" fill="#523218" />
-                <rect x="14" y="16" width="30" height="10" fill="#382110" />
-                <rect x="14" y="28" width="30" height="10" fill="#382110" />
-                <rect x="14" y="40" width="30" height="14" fill="#382110" />
-                {/* Books on shelf */}
-                <rect x="16" y="18" width="4" height="8" fill="#DC2626" />
-                <rect x="21" y="19" width="3" height="7" fill="#2563EB" />
-                <rect x="25" y="17" width="5" height="9" fill="#16A34A" />
-                <rect x="31" y="20" width="4" height="6" fill="#EAB308" />
-                <rect x="36" y="18" width="5" height="8" fill="#9333EA" />
+          <rect x="118" y="34" width="18" height="34" fill="#f8fafc" rx="1.5" stroke="#64748b" strokeWidth="0.7" />
+          <rect x="120" y="37" width="14" height="14" fill="#0284c7" opacity="0.8" rx="1" />
+          <circle cx="123" cy="42" r="1.5" fill="#22c55e" />
+          <circle cx="127" cy="42" r="1.5" fill="#ef4444" />
+          <circle cx="131" cy="42" r="1.5" fill="#f59e0b" />
+          <circle cx="123" cy="47" r="1.5" fill="#38bdf8" />
+          <circle cx="127" cy="47" r="1.5" fill="#eab308" />
+          <circle cx="131" cy="47" r="1.5" fill="#ec4899" />
+          <rect x="122" y="56" width="10" height="4" fill="#334155" rx="0.5" />
 
-                <rect x="16" y="30" width="6" height="8" fill="#EA580C" />
-                <rect x="23" y="32" width="4" height="6" fill="#0891B2" />
-                <rect x="28" y="29" width="6" height="9" fill="#CA8A04" />
-                <rect x="35" y="31" width="7" height="7" fill="#4F46E5" />
+          {/* Trash Bin */}
+          <polygon points="137,56 143,56 142,67 138,67" fill="#71717a" />
 
-                {/* Cozy Stone Fireplace on Left */}
-                <rect x="10" y="56" width="38" height="32" fill="#4B5563" />
-                <rect x="16" y="64" width="26" height="22" fill="#1F2937" />
-                {/* Animated Fire Flame */}
-                <rect x="22" y={(animTick % 2 === 0 ? 70 : 72)} width="14" height="12" fill="#EA580C" />
-                <rect x="25" y={(animTick % 2 === 0 ? 68 : 69)} width="8" height="10" fill="#FACC15" />
-                <rect x="27" y={(animTick % 2 === 0 ? 66 : 67)} width="4" height="6" fill="#FEF08A" />
+          {/* Left Wall Decor: Potted Green Plant */}
+          <polygon points="12,56 18,56 17,66 13,66" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.5" />
+          <ellipse cx="15" cy="48" rx="6" ry="8" fill="#15803d" />
+          <ellipse cx="12" cy="51" rx="4" ry="5" fill="#16a34a" />
+          <ellipse cx="18" cy="51" rx="4" ry="5" fill="#22c55e" />
 
-                {/* Polished Hardwood Floor */}
-                <rect x="0" y="70" width="160" height="30" fill="#A16207" />
-                <rect x="0" y="78" width="160" height="2" fill="#713F12" />
-                <rect x="0" y="88" width="160" height="2" fill="#713F12" />
-                <rect x="0" y="96" width="160" height="2" fill="#713F12" />
+          {/* Center Grand Romanesque Arched Sauna Doorway */}
+          <path d="M 52 70 L 52 38 A 28 28 0 0 1 108 38 L 108 70 Z" fill="#85532a" stroke="#542e12" strokeWidth="1.5" />
+          {/* Inner Arch Window / Sauna View */}
+          <path d="M 58 66 L 58 40 A 22 22 0 0 1 102 40 L 102 66 Z" fill="#693b16" />
+          {/* Warm Interior Glow & Sauna Benches */}
+          <path d="M 62 52 L 62 42 A 18 18 0 0 1 98 42 L 98 52 Z" fill="#fef3c7" opacity="0.95" />
+          <rect x="65" y="46" width="30" height="4" fill="#b45309" rx="0.5" />
+          <rect x="68" y="42" width="8" height="4" fill="#d97706" rx="0.5" />
+          <rect x="85" y="44" width="7" height="4" fill="#475569" rx="0.5" />
 
-                {/* Woven Round Rug (Frog Stage) */}
-                <rect x="58" y="72" width="46" height="20" fill="#D97706" />
-                <rect x="62" y="74" width="38" height="16" fill="#FDE68A" />
-                <rect x="66" y="76" width="30" height="12" fill="#F59E0B" />
-              </g>
-            )}
+          {/* Digital LED Sign: 38.0°C */}
+          <rect x="70" y="24" width="20" height="6" fill="#18181b" rx="1" stroke="#3f3f46" strokeWidth="0.5" />
+          <text x="80" y="28.5" fill="#ef4444" fontSize="4" fontFamily="monospace" textAnchor="middle" fontWeight="bold">38.0°C</text>
 
-            {/* C. SAKURA BLOSSOM SHRINE SCENE */}
-            {config.sceneId === 'sakura_shrine' && (
-              <g>
-                {/* Mount Fuji Silhouette */}
-                <polygon points="50,48 80,24 110,48" fill="#475569" />
-                <polygon points="72,30 80,24 88,30" fill="#F8FAFC" /> {/* Snowcap */}
+          {/* Wooden Door Panels & Details */}
+          <rect x="64" y="55" width="32" height="12" fill="#522a0e" rx="1" />
+          <line x1="68" y1="57" x2="92" y2="57" stroke="#fef08a" strokeWidth="0.8" opacity="0.8" />
+          <line x1="68" y1="60" x2="88" y2="60" stroke="#fef08a" strokeWidth="0.6" opacity="0.6" />
+          <line x1="68" y1="63" x2="84" y2="63" stroke="#fef08a" strokeWidth="0.6" opacity="0.6" />
 
-                {/* Distant Cherry Blossom Trees */}
-                <rect x="0" y="36" width="50" height="20" fill="#F472B6" />
-                <rect x="110" y="34" width="50" height="22" fill="#F472B6" />
-                <rect x="5" y="32" width="40" height="10" fill="#FBCFE8" />
-                <rect x="115" y="30" width="40" height="10" fill="#FBCFE8" />
+          {/* 3D Perspective Warm Tiled Floor */}
+          <polygon points="0,70 160,70 160,280 0,280" fill="#dfc09c" />
+          {/* Radial Floor Lines */}
+          <line x1="20" y1="70" x2="-10" y2="280" stroke="#c9a780" strokeWidth="1" />
+          <line x1="50" y1="70" x2="30" y2="280" stroke="#c9a780" strokeWidth="1" />
+          <line x1="80" y1="70" x2="80" y2="280" stroke="#c9a780" strokeWidth="1" />
+          <line x1="110" y1="70" x2="130" y2="280" stroke="#c9a780" strokeWidth="1" />
+          <line x1="140" y1="70" x2="170" y2="280" stroke="#c9a780" strokeWidth="1" />
+          {/* Horizontal Floor Tile Lines */}
+          <line x1="0" y1="78" x2="160" y2="78" stroke="#c9a780" strokeWidth="0.8" />
+          <line x1="0" y1="90" x2="160" y2="90" stroke="#c9a780" strokeWidth="1" />
+          <line x1="0" y1="108" x2="160" y2="108" stroke="#c9a780" strokeWidth="1.2" />
+          <line x1="0" y1="135" x2="160" y2="135" stroke="#c9a780" strokeWidth="1.4" />
+          <line x1="0" y1="175" x2="160" y2="175" stroke="#c9a780" strokeWidth="1.6" />
 
-                {/* Shrine Stone Steps & Ground */}
-                <rect x="0" y="56" width="160" height="44" fill="#4D7C36" />
-                <rect x="52" y="56" width="56" height="44" fill="#94A3B8" />
-                <rect x="56" y="56" width="48" height="44" fill="#CBD5E1" />
-                <rect x="60" y="60" width="40" height="4" fill="#64748B" />
-                <rect x="60" y="72" width="40" height="4" fill="#64748B" />
-                <rect x="60" y="84" width="40" height="4" fill="#64748B" />
+          {/* Midground Furniture: Sleeping Mats */}
+          <g>
+            {/* Orange Futon Mat 1 */}
+            <polygon points="36,78 58,78 50,88 28,88" fill="#fb923c" />
+            <polygon points="28,88 50,88 49,90 27,90" fill="#c2410c" />
+            <rect x="49" y="77" width="7" height="3" fill="#78350f" rx="1" />
 
-                {/* Vermillion Red Torii Gate */}
-                <rect x="42" y="24" width="76" height="6" fill="#DC2626" />
-                <rect x="40" y="22" width="80" height="3" fill="#18181B" /> {/* Black roof top */}
-                <rect x="48" y="34" width="64" height="4" fill="#DC2626" />
-                {/* Torii Pillars */}
-                <rect x="50" y="24" width="8" height="44" fill="#DC2626" />
-                <rect x="102" y="24" width="8" height="44" fill="#DC2626" />
-                <rect x="49" y="64" width="10" height="4" fill="#18181B" />
-                <rect x="101" y="64" width="10" height="4" fill="#18181B" />
+            {/* Orange Futon Mat 2 */}
+            <polygon points="64,80 86,80 78,90 56,90" fill="#fb923c" />
+            <polygon points="56,90 78,90 77,92 55,92" fill="#c2410c" />
+            <rect x="77" y="79" width="7" height="3" fill="#78350f" rx="1" />
+          </g>
 
-                {/* Stone Lanterns */}
-                <rect x="28" y="52" width="8" height="18" fill="#64748B" />
-                <rect x="30" y="56" width="4" height="4" fill="#FEF08A" />
-                <rect x="124" y="52" width="8" height="18" fill="#64748B" />
-                <rect x="126" y="56" width="4" height="4" fill="#FEF08A" />
-              </g>
-            )}
+          {/* Foreground Tea Table on Right */}
+          <g transform="translate(102, 78)">
+            <polygon points="8,8 30,8 24,18 2,18" fill="#78350f" />
+            <polygon points="2,18 24,18 23,21 1,21" fill="#451a03" />
+            {/* Green Floor Cushion */}
+            <polygon points="24,14 34,14 30,22 20,22" fill="#15803d" />
+            <circle cx="27" cy="18" r="2.5" fill="#ca8a04" opacity="0.8" />
+            {/* Steaming Bowl of Ramen / Matcha */}
+            <ellipse cx="14" cy="12" rx="4" ry="2.5" fill="#f8fafc" />
+            <circle cx="14" cy="11.5" r="2" fill="#eab308" />
+          </g>
 
-            {/* D. RAINY MUSHROOM MEADOW SCENE */}
-            {config.sceneId === 'rainy_meadow' && (
-              <g>
-                {/* Deep Forest Background Trees */}
-                <rect x="0" y="28" width="160" height="30" fill="#14532D" />
-                <rect x="10" y="22" width="28" height="16" fill="#166534" />
-                <rect x="60" y="20" width="34" height="18" fill="#166534" />
-                <rect x="120" y="24" width="30" height="16" fill="#166534" />
+          {/* Mini Pedestal Table with Succulent in Center */}
+          <ellipse cx="80" cy="98" rx="8" ry="3" fill="#93c5fd" opacity="0.4" />
+          <ellipse cx="80" cy="96" rx="6" ry="2" fill="#a16207" />
+          <rect x="79" y="96" width="2" height="4" fill="#78350f" />
+          <ellipse cx="80" cy="93" rx="2.5" ry="1.5" fill="#ffffff" />
+          <circle cx="80" cy="91" r="1.8" fill="#16a34a" />
+        </g>
+      )}
 
-                {/* Meadow Ground */}
-                <rect x="0" y="50" width="160" height="50" fill="#15803D" />
-                <rect x="0" y="60" width="160" height="40" fill="#166534" />
+      {/* A. ZEN LOTUS POND SCENE */}
+      {config.sceneId === 'zen_pond' && (
+        <g>
+          {/* Distant Soft Mountain Silhouette */}
+          <polygon points="0,50 35,36 80,52" fill="#1e293b" opacity="0.45" />
+          <polygon points="65,52 110,34 160,50" fill="#1e293b" opacity="0.45" />
 
-                {/* Giant Red Polka-Dot Mushroom on Left */}
-                <rect x="18" y="44" width="8" height="26" fill="#F5F5F4" />
-                <rect x="6" y="32" width="32" height="16" fill="#DC2626" />
-                <rect x="10" y="28" width="24" height="8" fill="#B91C1C" />
-                <rect x="10" y="34" width="4" height="4" fill="#FFFFFF" />
-                <rect x="22" y="32" width="6" height="5" fill="#FFFFFF" />
-                <rect x="16" y="40" width="4" height="4" fill="#FFFFFF" />
-                <rect x="28" y="38" width="4" height="4" fill="#FFFFFF" />
+          {/* Minimalist Stone Lantern on Left */}
+          <rect x="20" y="44" width="8" height="2" fill="#475569" />
+          <rect x="22" y="46" width="4" height="6" fill="#64748b" />
+          <rect x="23" y="48" width="2" height="2" fill="#fef08a" /> {/* Warm lantern glow */}
+          <rect x="19" y="52" width="10" height="2" fill="#334155" />
+          <rect x="22" y="54" width="4" height="8" fill="#64748b" />
+          <rect x="20" y="62" width="8" height="3" fill="#334155" />
 
-                {/* Small Mushrooms on Right */}
-                <rect x="128" y="54" width="4" height="14" fill="#F5F5F4" />
-                <rect x="122" y="48" width="16" height="8" fill="#EA580C" />
-                <rect x="126" y="50" width="3" height="3" fill="#FFFFFF" />
+          {/* Minimalist Bamboo Reeds on Right */}
+          <rect x="138" y="32" width="2" height="28" fill="#4d7c36" />
+          <rect x="144" y="26" width="2" height="34" fill="#5f9744" />
+          <rect x="135" y="38" width="5" height="2" fill="#5f9744" />
+          <rect x="146" y="34" width="5" height="2" fill="#5f9744" />
 
-                <rect x="140" y="60" width="4" height="12" fill="#F5F5F4" />
-                <rect x="136" y="54" width="12" height="8" fill="#FACC15" />
+          {/* Calming Water Basin */}
+          <rect x="0" y="58" width="160" height="42" fill="#0369a1" />
+          <rect x="0" y="64" width="160" height="36" fill="#075985" />
+          <rect x="0" y="76" width="160" height="24" fill="#0c4a6e" />
 
-                {/* Mossy Log / Stone Frog Stage */}
-                <rect x="56" y="66" width="48" height="18" fill="#523218" />
-                <rect x="58" y="64" width="44" height="6" fill="#65A30D" /> {/* Moss top */}
-                <rect x="62" y="62" width="36" height="4" fill="#84CC16" />
-              </g>
-            )}
+          {/* Gentle Water Shimmers */}
+          <rect x="40" y={animTick % 2 === 0 ? 68 : 69} width="16" height="1" fill="#7dd3fc" opacity="0.6" />
+          <rect x="105" y={animTick % 2 === 0 ? 74 : 73} width="20" height="1" fill="#7dd3fc" opacity="0.6" />
 
-            {/* E. MOUNTAIN HOT SPRING (ONSEN) */}
-            {config.sceneId === 'onsen' && (
-              <g>
-                {/* Pine Mountains & Mist */}
-                <polygon points="10,50 45,26 80,50" fill="#334155" />
-                <polygon points="75,50 110,22 145,50" fill="#334155" />
-                <rect x="0" y="44" width="160" height="8" fill="#CBD5E1" opacity="0.6" />
+          {/* Minimalist Accent Lily Pad & Tiny Lotus */}
+          <rect x="30" y="70" width="14" height="5" fill="#4d7c0f" />
+          <rect x="32" y="69" width="10" height="1" fill="#65a30d" />
+          <rect x="116" y="68" width="16" height="5" fill="#4d7c0f" />
+          <rect x="122" y="64" width="4" height="4" fill="#f472b6" />
+          <rect x="123" y="63" width="2" height="1" fill="#fdf2f8" />
 
-                {/* Bamboo Water Spout */}
-                <rect x="20" y="48" width="6" height="24" fill="#65A30D" />
-                <rect x="20" y="54" width="22" height="4" fill="#84CC16" />
-                <rect x="38" y="58" width="2" height="18" fill="#38BDF8" /> {/* Stream */}
+          {/* Central Island Lily Pad (Frog's Stage) */}
+          <rect x="62" y="70" width="36" height="13" fill="#3f6212" />
+          <rect x="64" y="68" width="32" height="15" fill="#4d7c0f" />
+          <rect x="68" y="66" width="24" height="17" fill="#65a30d" />
+          <rect x="74" y="68" width="12" height="13" fill="#84cc16" />
+        </g>
+      )}
 
-                {/* Volcanic Rock Onsen Wall */}
-                <rect x="0" y="58" width="160" height="42" fill="#3F3F46" />
-                <rect x="10" y="54" width="140" height="6" fill="#52525B" />
+      {/* B. COZY TREEHOUSE SCENE */}
+      {config.sceneId === 'treehouse' && (
+        <g>
+          {/* Warm Wood Wall */}
+          <rect x="0" y="0" width="160" height="68" fill="#523218" />
+          <rect x="0" y="22" width="160" height="1" fill="#382110" opacity="0.5" />
+          <rect x="0" y="44" width="160" height="1" fill="#382110" opacity="0.5" />
 
-                {/* Steaming Thermal Turquoise Water Basin */}
-                <rect x="16" y="62" width="128" height="34" fill="#06B6D4" />
-                <rect x="20" y="66" width="120" height="28" fill="#0891B2" />
+          {/* Cozy Window Looking Out to Nature */}
+          <rect x="106" y="12" width="40" height="34" fill="#382110" rx="4" />
+          <rect x="108" y="14" width="36" height="30" fill="#60a5fa" rx="2" />
+          <rect x="108" y="30" width="36" height="14" fill="#4b6e38" />
+          <rect x="125" y="14" width="2" height="30" fill="#382110" />
 
-                {/* Steam Clouds Rising */}
-                <rect x="40" y={(animTick % 2 === 0 ? 50 : 48)} width="18" height="4" fill="#FFFFFF" opacity="0.5" />
-                <rect x="85" y={(animTick % 2 === 0 ? 46 : 44)} width="24" height="5" fill="#FFFFFF" opacity="0.5" />
-                <rect x="115" y={(animTick % 2 === 0 ? 52 : 50)} width="16" height="4" fill="#FFFFFF" opacity="0.5" />
+          {/* Minimalist Bookshelf on Left */}
+          <rect x="16" y="18" width="28" height="36" fill="#382110" rx="2" />
+          <rect x="18" y="20" width="24" height="8" fill="#29180c" />
+          <rect x="18" y="32" width="24" height="10" fill="#29180c" />
+          {/* Books & Succulent */}
+          <rect x="20" y="22" width="4" height="6" fill="#dc2626" />
+          <rect x="25" y="23" width="3" height="5" fill="#2563eb" />
+          <rect x="29" y="21" width="4" height="7" fill="#16a34a" />
+          <rect x="22" y="34" width="6" height="6" fill="#d97706" />
+          <rect x="30" y="34" width="5" height="4" fill="#84cc16" />
 
-                {/* Onsen Bath Wooden Bucket */}
-                <rect x="124" y="60" width="14" height="10" fill="#D97706" />
-                <rect x="128" y="56" width="6" height="4" fill="#FFFFFF" /> {/* Wash towel */}
+          {/* Polished Warm Wood Floor */}
+          <rect x="0" y="68" width="160" height="32" fill="#784a28" />
+          <rect x="0" y="78" width="160" height="1" fill="#523218" />
+          <rect x="0" y="88" width="160" height="1" fill="#523218" />
 
-                {/* Onsen Flat Warm Rock (Frog Stage) */}
-                <rect x="60" y="66" width="40" height="18" fill="#71717A" />
-                <rect x="64" y="64" width="32" height="4" fill="#A1A1AA" />
-              </g>
-            )}
+          {/* Minimalist Round Rug (Frog Stage) */}
+          <ellipse cx="80" cy="78" rx="26" ry="10" fill="#d97706" />
+          <ellipse cx="80" cy="78" rx="22" ry="8" fill="#fde68a" />
+        </g>
+      )}
 
-            {/* F. STARRY CAMPFIRE HAVEN */}
-            {config.sceneId === 'night_camp' && (
-              <g>
-                {/* Distant Pine Trees in Moonlight */}
-                <polygon points="0,52 14,28 28,52" fill="#0F172A" />
-                <polygon points="20,54 36,32 52,54" fill="#0F172A" />
-                <polygon points="110,54 126,30 142,54" fill="#0F172A" />
-                <polygon points="130,52 145,34 160,52" fill="#0F172A" />
+      {/* C. SAKURA BLOSSOM SHRINE SCENE */}
+      {config.sceneId === 'sakura_shrine' && (
+        <g>
+          {/* Mount Fuji Silhouette */}
+          <polygon points="52,46 80,26 108,46" fill="#475569" opacity="0.6" />
+          <polygon points="72,32 80,26 88,32" fill="#f8fafc" />
 
-                {/* Forest Ground */}
-                <rect x="0" y="52" width="160" height="48" fill="#1E293B" />
-                <rect x="0" y="62" width="160" height="38" fill="#0F172A" />
+          {/* Minimalist Soft Sakura Canopy */}
+          <rect x="0" y="30" width="48" height="24" fill="#f472b6" opacity="0.75" rx="6" />
+          <rect x="112" y="28" width="48" height="26" fill="#f472b6" opacity="0.75" rx="6" />
 
-                {/* Cozy Canvas A-Frame Tent on Right */}
-                <polygon points="106,80 130,42 154,80" fill="#0284C7" />
-                <polygon points="120,80 130,54 140,80" fill="#0F172A" /> {/* Tent door */}
-                <polygon points="106,80 130,42 118,80" fill="#0369A1" />
+          {/* Minimalist Vermillion Torii Silhouette */}
+          <rect x="50" y="24" width="60" height="4" fill="#dc2626" />
+          <rect x="48" y="22" width="64" height="2" fill="#18181b" />
+          <rect x="56" y="28" width="4" height="38" fill="#dc2626" />
+          <rect x="100" y="28" width="4" height="38" fill="#dc2626" />
 
-                {/* Crackling Campfire on Left */}
-                {/* Firewood */}
-                <rect x="22" y="76" width="22" height="4" fill="#78350F" />
-                <rect x="26" y="74" width="14" height="4" fill="#92400E" />
-                {/* Glowing Embers and Flames */}
-                <rect x="26" y={(animTick % 2 === 0 ? 62 : 64)} width="14" height="12" fill="#EA580C" />
-                <rect x="29" y={(animTick % 2 === 0 ? 58 : 60)} width="8" height="10" fill="#FACC15" />
-                <rect x="31" y={(animTick % 2 === 0 ? 56 : 58)} width="4" height="6" fill="#FEF08A" />
-                {/* Rising Sparks */}
-                <rect x="30" y={(animTick % 2 === 0 ? 50 : 48)} width="2" height="2" fill="#FDE047" />
-                <rect x="36" y={(animTick % 2 === 0 ? 44 : 46)} width="1" height="1" fill="#F97316" />
+          {/* Stone Pathway & Courtyard */}
+          <rect x="0" y="60" width="160" height="40" fill="#475569" />
+          <rect x="0" y="66" width="160" height="34" fill="#64748b" />
+          <rect x="56" y="64" width="48" height="36" fill="#cbd5e1" />
+        </g>
+      )}
 
-                {/* Camp Blanket / Mat (Frog Stage) */}
-                <rect x="58" y="66" width="44" height="20" fill="#B91C1C" />
-                <rect x="62" y="68" width="36" height="16" fill="#DC2626" />
-                <rect x="66" y="70" width="28" height="12" fill="#F87171" />
-              </g>
-            )}
+      {/* D. RAINY MUSHROOM MEADOW SCENE */}
+      {config.sceneId === 'rainy_meadow' && (
+        <g>
+          {/* Misty Evergreen Trees */}
+          <polygon points="10,50 25,28 40,50" fill="#14532d" opacity="0.5" />
+          <polygon points="120,50 135,26 150,50" fill="#14532d" opacity="0.5" />
 
-            {/* G. WASHI TEAROOM LOFT */}
-            {config.sceneId === 'tearoom' && (
-              <g>
-                {/* Shoji Washi Paper Grid Screen Wall */}
-                <rect x="0" y="0" width="160" height="62" fill="#FEF3C7" />
-                <rect x="0" y="0" width="160" height="4" fill="#523218" />
-                <rect x="0" y="20" width="160" height="2" fill="#523218" />
-                <rect x="0" y="40" width="160" height="2" fill="#523218" />
-                <rect x="0" y="60" width="160" height="4" fill="#523218" />
-                {/* Vertical wood struts */}
-                <rect x="20" y="0" width="2" height="62" fill="#523218" />
-                <rect x="40" y="0" width="2" height="62" fill="#523218" />
-                <rect x="60" y="0" width="2" height="62" fill="#523218" />
-                <rect x="80" y="0" width="2" height="62" fill="#523218" />
-                <rect x="100" y="0" width="2" height="62" fill="#523218" />
-                <rect x="120" y="0" width="2" height="62" fill="#523218" />
-                <rect x="140" y="0" width="2" height="62" fill="#523218" />
+          {/* Meadow Ground */}
+          <rect x="0" y="52" width="160" height="48" fill="#15803d" />
+          <rect x="0" y="62" width="160" height="38" fill="#166534" />
 
-                {/* Mini Bonsai Tree on Stand on Right */}
-                <rect x="124" y="42" width="24" height="4" fill="#451A03" />
-                <rect x="128" y="46" width="16" height="16" fill="#78350F" />
-                <rect x="130" y="38" width="12" height="6" fill="#1C1917" /> {/* Pot */}
-                <rect x="132" y="28" width="4" height="10" fill="#78350F" /> {/* Trunk */}
-                <rect x="124" y="20" width="18" height="10" fill="#15803D" /> {/* Foliage */}
-                <rect x="126" y="16" width="12" height="6" fill="#22C55E" />
+          {/* Minimalist Red Polka-Dot Mushroom on Left */}
+          <rect x="22" y="48" width="6" height="22" fill="#f5f5f4" />
+          <rect x="12" y="36" width="26" height="14" fill="#dc2626" rx="4" />
+          <circle cx="18" cy="42" r="2" fill="#ffffff" />
+          <circle cx="28" cy="40" r="2" fill="#ffffff" />
 
-                {/* Traditional Tatami Straw Mat Flooring */}
-                <rect x="0" y="62" width="160" height="38" fill="#D9F99D" />
-                <rect x="0" y="74" width="160" height="4" fill="#365314" /> {/* Dark borders */}
-                <rect x="0" y="88" width="160" height="4" fill="#365314" />
+          {/* Small Mushroom on Right */}
+          <rect x="132" y="56" width="4" height="12" fill="#f5f5f4" />
+          <rect x="126" y="50" width="16" height="8" fill="#ea580c" rx="2" />
+          <circle cx="134" cy="53" r="1.5" fill="#ffffff" />
 
-                {/* Low Chabudai Wooden Table (Frog Stage) */}
-                <rect x="56" y="66" width="48" height="16" fill="#78350F" />
-                <rect x="60" y="64" width="40" height="4" fill="#B45309" />
-                <rect x="62" y="80" width="4" height="8" fill="#451A03" />
-                <rect x="94" y="80" width="4" height="8" fill="#451A03" />
+          {/* Cozy Mossy Stone Platform (Frog Stage) */}
+          <rect x="58" y="66" width="44" height="16" fill="#3f3f46" rx="4" />
+          <rect x="62" y="64" width="36" height="6" fill="#65a30d" rx="2" />
+        </g>
+      )}
 
-                {/* Matcha Whisk and Ceramic Bowl on Table */}
-                <rect x="90" y="60" width="6" height="4" fill="#14532D" />
-                <rect x="91" y="58" width="4" height="2" fill="#86EFAC" />
-              </g>
-            )}
+      {/* E. MOUNTAIN HOT SPRING (ONSEN) */}
+      {config.sceneId === 'onsen' && (
+        <g>
+          {/* Distant Mountain Peak */}
+          <polygon points="20,50 60,26 100,50" fill="#334155" opacity="0.4" />
+          <polygon points="80,50 120,24 160,50" fill="#334155" opacity="0.4" />
 
-            {/* H. CELESTIAL CLOUD PALACE */}
-            {config.sceneId === 'cloud_palace' && (
-              <g>
-                {/* Rainbow Arch */}
-                <path d="M 10 70 Q 80 5 150 70" stroke="#F472B6" strokeWidth="3" fill="none" opacity="0.8" />
-                <path d="M 14 70 Q 80 11 146 70" stroke="#FBBF24" strokeWidth="3" fill="none" opacity="0.8" />
-                <path d="M 18 70 Q 80 17 142 70" stroke="#60A5FA" strokeWidth="3" fill="none" opacity="0.8" />
+          {/* Steaming Mineral Water Basin */}
+          <rect x="0" y="56" width="160" height="44" fill="#3f3f46" />
+          <rect x="16" y="62" width="128" height="34" fill="#06b6d4" rx="4" />
+          <rect x="20" y="66" width="120" height="28" fill="#0891b2" rx="2" />
 
-                {/* Floating Starlight Particles */}
-                <circle cx="25" cy="25" r="2" fill="#FEF08A" className="animate-pulse" />
-                <circle cx="135" cy="22" r="2" fill="#FEF08A" className="animate-pulse" />
-                <circle cx="80" cy="18" r="2.5" fill="#FACC15" className="animate-pulse" />
+          {/* Soothing Steam Puffs */}
+          <ellipse cx="45" cy={animTick % 2 === 0 ? 52 : 50} rx="8" ry="3" fill="#ffffff" opacity="0.4" />
+          <ellipse cx="115" cy={animTick % 2 === 0 ? 50 : 48} rx="10" ry="3" fill="#ffffff" opacity="0.4" />
 
-                {/* Fluffy Pastel Clouds Platform */}
-                <rect x="0" y="68" width="160" height="32" fill="#EDE9FE" />
-                {/* Cloud Puffs */}
-                <circle cx="30" cy="68" r="16" fill="#F5F3FF" />
-                <circle cx="60" cy="65" r="18" fill="#FFFFFF" />
-                <circle cx="80" cy="64" r="20" fill="#FFFFFF" />
-                <circle cx="100" cy="65" r="18" fill="#FFFFFF" />
-                <circle cx="130" cy="68" r="16" fill="#F5F3FF" />
-                {/* Golden Cloud Trim */}
-                <rect x="0" y="78" width="160" height="2" fill="#FDE047" opacity="0.6" />
-              </g>
-            )}
+          {/* Wooden Bucket on Right */}
+          <rect x="124" y="60" width="12" height="8" fill="#d97706" rx="1" />
+          <rect x="126" y="58" width="6" height="3" fill="#ffffff" />
 
-            {/* I. MISTY EMERALD BAMBOO GROVE */}
-            {config.sceneId === 'bamboo_grove' && (
-              <g>
-                {/* Background Stalks */}
-                <rect x="15" y="0" width="8" height="75" fill="#14532D" opacity="0.6" />
-                <rect x="35" y="0" width="7" height="75" fill="#166534" opacity="0.6" />
-                <rect x="120" y="0" width="8" height="75" fill="#14532D" opacity="0.6" />
-                <rect x="140" y="0" width="7" height="75" fill="#166534" opacity="0.6" />
+          {/* Smooth Warm River Rock (Frog Stage) */}
+          <ellipse cx="80" cy="76" rx="20" ry="8" fill="#71717a" />
+          <ellipse cx="80" cy="74" rx="16" ry="6" fill="#a1a1aa" />
+        </g>
+      )}
 
-                {/* Foreground Bamboo Stalks */}
-                <rect x="25" y="0" width="10" height="78" fill="#15803D" />
-                <rect x="25" y="20" width="10" height="2" fill="#14532D" />
-                <rect x="25" y="45" width="10" height="2" fill="#14532D" />
+      {/* F. STARRY CAMPFIRE HAVEN */}
+      {config.sceneId === 'night_camp' && (
+        <g>
+          {/* Distant Pine Trees in Night */}
+          <polygon points="10,50 25,28 40,50" fill="#0f172a" />
+          <polygon points="120,50 135,26 150,50" fill="#0f172a" />
 
-                <rect x="130" y="0" width="10" height="78" fill="#15803D" />
-                <rect x="130" y="25" width="10" height="2" fill="#14532D" />
-                <rect x="130" y="50" width="10" height="2" fill="#14532D" />
+          {/* Forest Ground */}
+          <rect x="0" y="52" width="160" height="48" fill="#1e293b" />
+          <rect x="0" y="62" width="160" height="38" fill="#0f172a" />
 
-                {/* Hanging Paper Lantern */}
-                <line x1="30" y1="20" x2="45" y2="35" stroke="#78350F" strokeWidth="1" />
-                <rect x="42" y="35" width="8" height="12" fill="#DC2626" />
-                <rect x="44" y="38" width="4" height="6" fill="#FEF08A" />
-                <rect x="45" y="47" width="2" height="3" fill="#D97706" />
+          {/* Minimalist A-Frame Tent on Right */}
+          <polygon points="112,78 132,46 152,78" fill="#0284c7" />
+          <polygon points="124,78 132,58 140,78" fill="#0f172a" />
 
-                {/* Mossy Forest Stone Pathway Floor */}
-                <rect x="0" y="68" width="160" height="32" fill="#14532D" />
-                <rect x="0" y="74" width="160" height="26" fill="#166534" />
-                <ellipse cx="80" cy="80" rx="30" ry="10" fill="#475569" />
-                <ellipse cx="80" cy="80" rx="26" ry="8" fill="#64748B" />
-              </g>
-            )}
+          {/* Minimalist Crackling Campfire on Left */}
+          <rect x="22" y="74" width="16" height="3" fill="#78350f" />
+          <polygon points="26,74 30,60 34,74" fill="#ea580c" />
+          <polygon points="28,74 30,64 32,74" fill="#facc15" />
+
+          {/* Cozy Camp Mat (Frog Stage) */}
+          <rect x="60" y="68" width="40" height="16" fill="#dc2626" rx="3" />
+          <rect x="64" y="70" width="32" height="12" fill="#f87171" rx="2" />
+        </g>
+      )}
+
+      {/* G. WASHI TEAROOM LOFT */}
+      {config.sceneId === 'tearoom' && (
+        <g>
+          {/* Shoji Paper Wall */}
+          <rect x="0" y="0" width="160" height="62" fill="#fef3c7" />
+          <rect x="0" y="0" width="160" height="3" fill="#523218" />
+          <rect x="0" y="20" width="160" height="1" fill="#523218" opacity="0.6" />
+          <rect x="0" y="40" width="160" height="1" fill="#523218" opacity="0.6" />
+          <rect x="0" y="60" width="160" height="3" fill="#523218" />
+          <rect x="40" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
+          <rect x="80" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
+          <rect x="120" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
+
+          {/* Bonsai Plant on Right */}
+          <rect x="130" y="40" width="12" height="6" fill="#1c1917" rx="1" />
+          <rect x="134" y="32" width="3" height="8" fill="#78350f" />
+          <circle cx="135" cy="28" r="7" fill="#15803d" />
+
+          {/* Tatami Mats */}
+          <rect x="0" y="62" width="160" height="38" fill="#d9f99d" />
+          <rect x="0" y="76" width="160" height="2" fill="#365314" />
+
+          {/* Low Wooden Table (Frog Stage) */}
+          <rect x="58" y="66" width="44" height="14" fill="#78350f" rx="2" />
+          <rect x="62" y="64" width="36" height="3" fill="#b45309" rx="1" />
+        </g>
+      )}
+
+      {/* H. CELESTIAL CLOUD PALACE */}
+      {config.sceneId === 'cloud_palace' && (
+        <g>
+          {/* Golden Starlight Particles */}
+          <circle cx="28" cy="24" r="1.5" fill="#fef08a" />
+          <circle cx="132" cy="20" r="1.5" fill="#fef08a" />
+          <circle cx="80" cy="16" r="2" fill="#facc15" />
+
+          {/* Dreamy Cloud Platform */}
+          <rect x="0" y="66" width="160" height="34" fill="#ede9fe" />
+          <circle cx="35" cy="66" r="14" fill="#ffffff" />
+          <circle cx="65" cy="64" r="16" fill="#ffffff" />
+          <circle cx="95" cy="64" r="16" fill="#ffffff" />
+          <circle cx="125" cy="66" r="14" fill="#ffffff" />
+        </g>
+      )}
+
+      {/* I. MISTY EMERALD BAMBOO GROVE */}
+      {config.sceneId === 'bamboo_grove' && (
+        <g>
+          {/* Bamboo Stalks */}
+          <rect x="20" y="0" width="6" height="74" fill="#15803d" />
+          <rect x="35" y="0" width="4" height="74" fill="#166534" opacity="0.6" />
+          <rect x="125" y="0" width="6" height="74" fill="#15803d" />
+          <rect x="140" y="0" width="4" height="74" fill="#166534" opacity="0.6" />
+
+          {/* Soft Paper Lantern */}
+          <line x1="26" y1="20" x2="38" y2="30" stroke="#78350f" strokeWidth="1" />
+          <rect x="35" y="30" width="8" height="10" fill="#dc2626" rx="2" />
+          <rect x="37" y="33" width="4" height="4" fill="#fef08a" />
+
+          {/* Mossy Stepping Stone Pathway */}
+          <rect x="0" y="66" width="160" height="34" fill="#14532d" />
+          <ellipse cx="80" cy="78" rx="26" ry="9" fill="#475569" />
+          <ellipse cx="80" cy="78" rx="22" ry="7" fill="#64748b" />
+        </g>
+      )}
+
+      {/* J. FAIRYTALE RED RIDING FOREST */}
+      {config.sceneId === 'red_riding_forest' && (
+        <g>
+          {/* Deep Evergreen Forest Trees */}
+          <polygon points="10,54 28,18 46,54" fill="#064e3b" />
+          <polygon points="26,50 42,22 58,50" fill="#065f46" opacity="0.8" />
+          <polygon points="114,52 132,20 150,52" fill="#064e3b" />
+          <polygon points="100,54 116,24 132,54" fill="#065f46" opacity="0.8" />
+
+          {/* Cozy Thatched Cottage in Deep Background */}
+          <polygon points="70,36 85,22 100,36" fill="#78350f" />
+          <rect x="73" y="36" width="24" height="18" fill="#fde68a" />
+          <rect x="78" y="42" width="6" height="12" fill="#92400e" />
+          <rect x="88" y="39" width="6" height="6" fill="#f59e0b" />
+          {/* Stone Chimney & Smoke Puff */}
+          <rect x="91" y="24" width="4" height="8" fill="#64748b" />
+          <circle cx="93" cy={animTick % 2 === 0 ? 18 : 16} r="2.5" fill="#ffffff" opacity="0.5" />
+
+          {/* Forest Moss Ground & Trail */}
+          <rect x="0" y="54" width="160" height="46" fill="#14532d" />
+          <rect x="0" y="66" width="160" height="34" fill="#166534" />
+          {/* Winding Cobblestone Trail */}
+          <polygon points="40,100 68,54 92,54 120,100" fill="#78716c" opacity="0.5" />
+
+          {/* Fairytale Red Toadstool Mushrooms */}
+          <rect x="24" y="66" width="4" height="12" fill="#f5f5f4" />
+          <rect x="18" y="58" width="16" height="9" fill="#dc2626" rx="3" />
+          <circle cx="22" cy="62" r="1.5" fill="#ffffff" />
+          <circle cx="30" cy="61" r="1.5" fill="#ffffff" />
+
+          {/* Mossy Wood Log Bench (Frog Stage) */}
+          <rect x="58" y="68" width="44" height="14" fill="#523218" rx="3" />
+          <rect x="60" y="66" width="40" height="4" fill="#784a28" rx="2" />
+          <rect x="64" y="65" width="8" height="2" fill="#84cc16" />
+          <rect x="88" y="65" width="6" height="2" fill="#84cc16" />
+        </g>
+      )}
+
+      {/* K. EDOMAE SUSHI BAR */}
+      {config.sceneId === 'sushi_bar' && (
+        <g>
+          {/* Dark Navy Izakaya Wall with Noren Curtains */}
+          <rect x="0" y="0" width="160" height="58" fill="#0f172a" />
+          {/* Wooden Beam Ceiling */}
+          <rect x="0" y="0" width="160" height="6" fill="#78350f" />
+          <rect x="0" y="16" width="160" height="2" fill="#451a03" opacity="0.6" />
+
+          {/* Indigo Noren Curtain with Split */}
+          <rect x="12" y="6" width="40" height="22" fill="#1e3a8a" rx="1" />
+          <rect x="56" y="6" width="48" height="22" fill="#1e3a8a" rx="1" />
+          <rect x="108" y="6" width="40" height="22" fill="#1e3a8a" rx="1" />
+          {/* White Emblem Pattern on Noren */}
+          <circle cx="32" cy="17" r="4" fill="#ffffff" opacity="0.9" />
+          <circle cx="80" cy="17" r="4" fill="#ffffff" opacity="0.9" />
+          <circle cx="128" cy="17" r="4" fill="#ffffff" opacity="0.9" />
+
+          {/* Warm Red Paper Izakaya Lanterns */}
+          <rect x="18" y="30" width="10" height="14" fill="#dc2626" rx="3" />
+          <rect x="21" y="33" width="4" height="8" fill="#fef08a" />
+          <rect x="132" y="30" width="10" height="14" fill="#dc2626" rx="3" />
+          <rect x="135" y="33" width="4" height="8" fill="#fef08a" />
+
+          {/* Polished Hinoki Wood Counter (Frog Stage) */}
+          <rect x="0" y="58" width="160" height="42" fill="#78350f" />
+          <rect x="0" y="58" width="160" height="10" fill="#d97706" />
+          <rect x="0" y="68" width="160" height="2" fill="#92400e" />
+
+          {/* Wooden Nigiri Cutting Board Platform */}
+          <rect x="56" y="64" width="48" height="16" fill="#fde68a" rx="2" />
+          <rect x="58" y="66" width="44" height="12" fill="#fef3c7" rx="1" />
+          <rect x="60" y="78" width="4" height="3" fill="#b45309" />
+          <rect x="96" y="78" width="4" height="3" fill="#b45309" />
+        </g>
+      )}
 
             {/* 3. FROG CHARACTER (CENTERED AT X=70..90, Y=56..80) */}
             {/* Dynamic gentle breathing offset */}
@@ -1243,6 +1635,58 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {config.outfitId === 'red_riding_dress' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#BE123C" />
+                          <rect x={frogX + 1} y={frogY + 10} width="14" height="9" fill="#991B1B" />
+                          <rect x={frogX + 3} y={frogY + 11} width="10" height="8" fill="#FFFFFF" />
+                          <line x1={frogX + 6} y1={frogY + 12} x2={frogX + 10} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
+                          <line x1={frogX + 10} y1={frogY + 12} x2={frogX + 6} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
+                          <line x1={frogX + 6} y1={frogY + 14} x2={frogX + 10} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
+                          <line x1={frogX + 10} y1={frogY + 14} x2={frogX + 6} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'wolf_fur_cloak' && (
+                        <g>
+                          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#334155" rx="2" />
+                          <rect x={frogX - 2} y={frogY + 9} width="20" height="3" fill="#64748B" />
+                          <rect x={frogX + 2} y={frogY + 12} width="12" height="9" fill="#1E293B" />
+                          <polygon points={`${frogX + 6},${frogY + 10} ${frogX + 8},${frogY + 13} ${frogX + 10},${frogY + 10}`} fill="#FEF08A" />
+                          <circle cx={frogX + 8} cy={frogY + 10} r="1" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'hunter_woodsman' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY + 10} width="18" height="10" fill="#15803D" />
+                          <rect x={frogX + 1} y={frogY + 10} width="14" height="10" fill="#166534" />
+                          <rect x={frogX - 1} y={frogY + 14} width="18" height="2" fill="#78350F" />
+                          <rect x={frogX + 6} y={frogY + 13} width="4" height="4" fill="#FACC15" />
+                          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#78350F" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'sushi_chef_happi' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#FFFFFF" />
+                          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#F8FAFC" />
+                          <rect x={frogX - 2} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
+                          <rect x={frogX + 15} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
+                          <rect x={frogX + 1} y={frogY + 15} width="14" height="2" fill="#1E3A8A" />
+                          <circle cx={frogX + 8} cy={frogY + 13} r="2" fill="#2563EB" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'sushi_kimono_waiter' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#312E81" />
+                          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#3730A3" />
+                          <rect x={frogX - 1} y={frogY + 13} width="18" height="3" fill="#DC2626" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="5" fill="#FACC15" />
+                        </g>
+                      )}
+
                       {/* GLASSES / FACE ACCESSORY LAYER */}
                       {config.glassesId === 'reading' && (
                         <g>
@@ -1294,6 +1738,30 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         <g>
                           <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#1C1917" />
                           <line x1={frogX - 2} y1={frogY + 5} x2={frogX + 18} y2={frogY + 11} stroke="#1C1917" strokeWidth="1" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'forest_blush_freckles' && (
+                        <g>
+                          <circle cx={frogX} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
+                          <circle cx={frogX + 2} cy={frogY + 11} r="0.8" fill="#78350F" />
+                          <circle cx={frogX + 14} cy={frogY + 11} r="0.8" fill="#78350F" />
+                          <circle cx={frogX + 16} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'wolf_snarl_fangs' && (
+                        <g>
+                          <polygon points={`${frogX + 5},${frogY + 10} ${frogX + 6},${frogY + 13} ${frogX + 7},${frogY + 10}`} fill="#FFFFFF" />
+                          <polygon points={`${frogX + 9},${frogY + 10} ${frogX + 10},${frogY + 13} ${frogX + 11},${frogY + 10}`} fill="#FFFFFF" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'wasabi_sparkle' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#84CC16" />
+                          <rect x={frogX + 15} y={frogY + 9} width="2" height="2" fill="#84CC16" />
+                          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#A3E635" />
                         </g>
                       )}
 
@@ -1432,7 +1900,131 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {/* 11. Picnic Basket */}
+                      {config.activityId === 'picnic_basket' && (
+                        <g>
+                          <rect x={frogX + 5} y={frogY + 13} width="10" height="7" fill="#D97706" rx="1" />
+                          <polygon points={`${frogX + 4},${frogY + 13} ${frogX + 10},${frogY + 11} ${frogX + 8},${frogY + 16}`} fill="#EF4444" />
+                          <rect x={frogX + 5} y={frogY + 12} width="2" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 13} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 12. Woodcutter Axe */}
+                      {config.activityId === 'woodcutter_axe' && (
+                        <g>
+                          <line x1={frogX + 11} y1={frogY + 18} x2={frogX + 18} y2={frogY + 5} stroke="#78350F" strokeWidth="1.5" />
+                          <polygon points={`${frogX + 16},${frogY + 5} ${frogX + 22},${frogY + 3} ${frogX + 20},${frogY + 9}`} fill="#94A3B8" />
+                          <rect x={frogX + 10} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 13. Sushi Platter */}
+                      {config.activityId === 'sushi_platter' && (
+                        <g>
+                          <rect x={frogX + 4} y={frogY + 14} width="12" height="5" fill="#D97706" rx="1" />
+                          <rect x={frogX + 5} y={frogY + 13} width="4" height="2" fill="#FB923C" />
+                          <rect x={frogX + 10} y={frogY + 13} width="4" height="2" fill="#BE123C" />
+                          <rect x={frogX + 3} y={frogY + 15} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 13} y={frogY + 15} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 14. Matcha Tea Whisk */}
+                      {config.activityId === 'tea_whisk' && (
+                        <g>
+                          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#1E293B" rx="1" />
+                          <rect x={frogX + 5} y={frogY + 14} width="6" height="3" fill="#84CC16" />
+                          <line x1={frogX + 12} y1={frogY + 10} x2={frogX + 8} y2={frogY + 14} stroke="#FDE68A" strokeWidth="1.5" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
                       {/* 4. HATS & ACCESSORIES (HEAD LAYER) */}
+
+                      {/* Red Riding Hood */}
+                      {config.hatId === 'red_riding_hood' && (
+                        <g>
+                          <rect x={frogX - 3} y={frogY - 4} width="22" height="16" fill="#DC2626" rx="2" />
+                          <rect x={frogX - 1} y={frogY - 6} width="18" height="3" fill="#B91C1C" />
+                          <rect x={frogX + 1} y={frogY - 2} width="14" height="2" fill="#FEF2F2" />
+                          <polygon points={`${frogX + 5},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 5},${frogY + 15}`} fill="#991B1B" />
+                          <polygon points={`${frogX + 11},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 11},${frogY + 15}`} fill="#991B1B" />
+                          <circle cx={frogX + 8} cy={frogY + 13} r="1.5" fill="#EF4444" />
+                        </g>
+                      )}
+
+                      {/* Wolf Ears Hood */}
+                      {config.hatId === 'wolf_ears_hood' && (
+                        <g>
+                          <polygon points={`${frogX - 2},${frogY + 2} ${frogX + 2},${frogY - 8} ${frogX + 6},${frogY + 2}`} fill="#334155" />
+                          <polygon points={`${frogX},${frogY + 1} ${frogX + 2},${frogY - 6} ${frogX + 4},${frogY + 1}`} fill="#F472B6" />
+                          <polygon points={`${frogX + 10},${frogY + 2} ${frogX + 14},${frogY - 8} ${frogX + 18},${frogY + 2}`} fill="#334155" />
+                          <polygon points={`${frogX + 12},${frogY + 1} ${frogX + 14},${frogY - 6} ${frogX + 16},${frogY + 1}`} fill="#F472B6" />
+                          <rect x={frogX + 2} y={frogY - 1} width="12" height="3" fill="#475569" />
+                          <rect x={frogX + 6} y={frogY - 3} width="4" height="2" fill="#F1F5F9" />
+                        </g>
+                      )}
+
+                      {/* Granny Nightcap */}
+                      {config.hatId === 'granny_nightcap' && (
+                        <g>
+                          <ellipse cx={frogX + 8} cy={frogY - 2} rx="12" ry="7" fill="#F8FAFC" />
+                          <ellipse cx={frogX + 8} cy={frogY - 2} rx="10" ry="5" fill="#F1F5F9" />
+                          <rect x={frogX - 3} y={frogY + 2} width="22" height="2" fill="#FBCFE8" />
+                          <circle cx={frogX + 8} cy={frogY + 3} r="1.5" fill="#EC4899" />
+                        </g>
+                      )}
+
+                      {/* Sushi Salmon Nigiri */}
+                      {config.hatId === 'sushi_salmon' && (
+                        <g>
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
+                          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#FB923C" rx="2" />
+                          <line x1={frogX} y1={frogY - 6} x2={frogX + 4} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+                          <line x1={frogX + 6} y1={frogY - 6} x2={frogX + 10} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+                          <line x1={frogX + 12} y1={frogY - 6} x2={frogX + 16} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+                          <rect x={frogX + 7} y={frogY - 6} width="2" height="8" fill="#14532D" />
+                        </g>
+                      )}
+
+                      {/* Sushi Maguro */}
+                      {config.hatId === 'sushi_maguro' && (
+                        <g>
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
+                          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#BE123C" rx="2" />
+                          <rect x={frogX} y={frogY - 5} width="16" height="2" fill="#E11D48" />
+                          <rect x={frogX + 2} y={frogY - 5} width="4" height="1" fill="#FFFFFF" opacity="0.6" />
+                          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#84CC16" />
+                        </g>
+                      )}
+
+                      {/* Sushi Ebi */}
+                      {config.hatId === 'sushi_ebi' && (
+                        <g>
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
+                          <rect x={frogX - 2} y={frogY - 6} width="18" height="5" fill="#EA580C" rx="2" />
+                          <rect x={frogX + 1} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
+                          <rect x={frogX + 5} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
+                          <rect x={frogX + 9} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
+                          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY - 7} ${frogX + 20},${frogY - 1}`} fill="#DC2626" />
+                          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY + 1} ${frogX + 20},${frogY - 1}`} fill="#EA580C" />
+                        </g>
+                      )}
+
+                      {/* Sushi Chef Headband */}
+                      {config.hatId === 'sushi_chef_headband' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 2} width="20" height="3" fill="#FFFFFF" />
+                          <rect x={frogX - 1} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+                          <rect x={frogX + 4} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+                          <rect x={frogX + 9} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+                          <rect x={frogX + 14} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
+                          <circle cx={frogX + 8} cy={frogY + 3.5} r="2" fill="#DC2626" />
+                        </g>
+                      )}
 
                       {/* A. Lotus Leaf Hat */}
                       {config.hatId === 'lotus' && (
@@ -1651,39 +2243,133 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
               </g>
             )}
 
-            {/* 5. WEATHER PARTICLES OVERLAY */}
-
-            {/* Raindrops Falling */}
-            {effectiveWeather === 'rainy' && (
-              <g id="rain-layer" stroke="#93C5FD" strokeWidth="1" opacity="0.75">
-                {Array.from({ length: 24 }).map((_, i) => {
-                  const rx = (i * 19 + (animTick * 7)) % 160;
-                  const ry = (i * 13 + (animTick * 11)) % 100;
-                  return <line key={i} x1={rx} y1={ry} x2={rx - 2} y2={ry + 5} />;
-                })}
+            {/* I. Chibi Wolf Pup */}
+            {config.companionId === 'chibi_wolf_pup' && (
+              <g id="companion-wolf-pup" transform={`translate(112, 72)`}>
+                <ellipse cx="7" cy="6" rx="6" ry="4" fill="#475569" />
+                <circle cx="4" cy="4" r="3" fill="#475569" />
+                <polygon points="2,1 4,4 1,4" fill="#334155" />
+                <polygon points="5,1 6,4 4,4" fill="#334155" />
+                <circle cx="3" cy="4" r="0.8" fill="#FACC15" />
+                <ellipse cx="12" cy={animTick % 2 === 0 ? 4 : 2} rx="2" ry="1" fill="#475569" />
+                <rect x="3" y="9" width="2" height="2" fill="#334155" />
+                <rect x="8" y="9" width="2" height="2" fill="#334155" />
               </g>
             )}
 
-            {/* Sakura Petals Drifting */}
-            {effectiveWeather === 'petals' && (
-              <g id="petals-layer">
-                {Array.from({ length: 14 }).map((_, i) => {
-                  const px = (i * 27 + (animTick * 4)) % 160;
-                  const py = (i * 17 + (animTick * 3)) % 100;
-                  return (
-                    <rect
-                      key={i}
-                      x={px}
-                      y={py}
-                      width="2"
-                      height="2"
-                      fill={i % 2 === 0 ? '#F472B6' : '#FBCFE8'}
-                      opacity="0.9"
-                    />
-                  );
-                })}
+            {/* J. Forest Hedgehog */}
+            {config.companionId === 'forest_hedgehog' && (
+              <g id="companion-hedgehog" transform={`translate(38, 76)`}>
+                <ellipse cx="7" cy="4" rx="7" ry="4" fill="#78350F" />
+                <polygon points="3,1 5,3 4,4" fill="#451A03" />
+                <polygon points="6,0 8,3 7,4" fill="#451A03" />
+                <polygon points="9,1 11,3 10,4" fill="#451A03" />
+                <circle cx="12" cy="5" r="2" fill="#FBBF24" />
+                <circle cx="13" cy="4.5" r="0.6" fill="#18181B" />
+                <rect x="4" y="7" width="2" height="1.5" fill="#451A03" />
+                <rect x="9" y="7" width="2" height="1.5" fill="#451A03" />
               </g>
             )}
+
+            {/* K. Sushi Apprentice Cat */}
+            {config.companionId === 'sushi_apprentice_cat' && (
+              <g id="companion-sushi-cat" transform={`translate(40, 72)`}>
+                <ellipse cx="7" cy="7" rx="6" ry="4" fill="#FFFFFF" />
+                <circle cx="11" cy="4" r="3.5" fill="#FFFFFF" />
+                <polygon points="10,1 12,2 10,0" fill="#FB923C" />
+                <polygon points="12,1 14,2 13,0" fill="#FB923C" />
+                <circle cx="12" cy="4" r="0.8" fill="#1E3A8A" />
+                {/* Mini Headband */}
+                <rect x="9" y="3" width="6" height="1" fill="#DC2626" />
+                {/* Calico Spot */}
+                <circle cx="5" cy="6" r="2" fill="#FB923C" />
+                <rect x="4" y="10" width="2" height="2" fill="#E2E8F0" />
+                <rect x="8" y="10" width="2" height="2" fill="#E2E8F0" />
+              </g>
+            )}
+
+            {/* L. Mini Ebi Shrimp */}
+            {config.companionId === 'mini_ebi_shrimp' && (
+              <g id="companion-ebi-shrimp" transform={`translate(115, ${animTick % 2 === 0 ? 74 : 73})`}>
+                <ellipse cx="6" cy="4" rx="5" ry="3" fill="#EA580C" />
+                <rect x="3" y="2" width="1.5" height="4" fill="#FFFFFF" />
+                <rect x="6" y="2" width="1.5" height="4" fill="#FFFFFF" />
+                <polygon points="10,4 14,1 13,4" fill="#DC2626" />
+                <polygon points="10,4 14,7 13,4" fill="#EA580C" />
+                <line x1="2" y1="3" x2="0" y2="1" stroke="#EA580C" strokeWidth="0.8" />
+                <circle cx="3" cy="3" r="0.6" fill="#18181B" />
+              </g>
+            )}
+      </g>
+
+      {/* 5. WEATHER PARTICLES OVERLAY */}
+
+      {/* Raindrops Falling */}
+      {effectiveWeather === 'rainy' && (
+        <g id="rain-layer" stroke="#93C5FD" strokeWidth="1" opacity="0.75">
+          {Array.from({ length: fullscreen ? 50 : 24 }).map((_, i) => {
+            const rx = (i * 19 + (animTick * 7)) % 160;
+            const ry = (i * 13 + (animTick * 11)) % viewBoxHeight;
+            return <line key={i} x1={rx} y1={ry} x2={rx - 2} y2={ry + 5} />;
+          })}
+        </g>
+      )}
+
+      {/* Sakura Petals Drifting */}
+      {effectiveWeather === 'petals' && (
+        <g id="petals-layer">
+          {Array.from({ length: fullscreen ? 28 : 14 }).map((_, i) => {
+            const px = (i * 27 + (animTick * 4)) % 160;
+            const py = (i * 17 + (animTick * 3)) % viewBoxHeight;
+            return (
+              <rect
+                key={i}
+                x={px}
+                y={py}
+                width="2"
+                height="2"
+                fill={i % 2 === 0 ? '#F472B6' : '#FBCFE8'}
+                opacity="0.9"
+              />
+            );
+          })}
+        </g>
+      )}
+    </>
+  );
+
+  if (fullscreen) {
+    return (
+      <div
+        className={`absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none ${className}`}
+        style={{
+          background: `linear-gradient(to bottom, ${sky.top} 0%, ${sky.bottom} 100%)`,
+        }}
+      >
+        <svg
+          viewBox={`0 0 160 ${viewBoxHeight}`}
+          preserveAspectRatio="xMidYMid slice"
+          className="w-full h-full object-cover block scale-100"
+          shapeRendering="crispEdges"
+        >
+          {svgContent}
+        </svg>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`space-y-3 ${className}`}>
+      {/* Diorama Display Card */}
+      <div className="relative rounded-[26px] overflow-hidden border border-black/[0.08] dark:border-white/[0.12] bg-[#f8f5ee] dark:bg-[#191613] shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+        {/* Main Pixel Canvas (160x100 viewBox) */}
+        <div className="relative w-full aspect-[16/10] max-h-[300px] select-none overflow-hidden bg-black">
+          <svg
+            viewBox="0 0 160 100"
+            className="w-full h-full object-cover block"
+            shapeRendering="crispEdges"
+          >
+            {svgContent}
           </svg>
         </div>
 

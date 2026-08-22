@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { GachaPullResult, GachaGrade } from '../types';
 import { PixelItemThumbnail } from './PixelItemThumbnail';
 import { getGachaGrade } from '../utils/gachaUtils';
-import { Sparkles, ArrowRight, RotateCcw, Check, FastForward, Heart } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
 
 interface GachaSummonAnimationProps {
@@ -16,6 +15,219 @@ interface GachaSummonAnimationProps {
   hapticEnabled?: boolean;
 }
 
+/** Pixel Art Sparkle Star SVG */
+const PixelStar: React.FC<{ size?: number; color?: string; className?: string }> = ({
+  size = 16,
+  color = '#FBBF24',
+  className = '',
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 12 12"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+  >
+    <rect x="5" y="0" width="2" height="12" fill={color} />
+    <rect x="0" y="5" width="12" height="2" fill={color} />
+    <rect x="3" y="3" width="6" height="6" fill={color} />
+    <rect x="5" y="5" width="2" height="2" fill="#FFFFFF" />
+  </svg>
+);
+
+/** 16-bit Pixel Gacha Capsule SVG */
+const PixelCapsuleGraphic: React.FC<{
+  grade?: GachaGrade;
+  isOpen?: boolean;
+  size?: number;
+}> = ({ grade = 'N', isOpen = false, size = 140 }) => {
+  // Top and bottom shell colors based on rarity
+  const topColor = grade === 'SR' ? '#F59E0B' : grade === 'R' ? '#10B981' : '#E11D48';
+  const topLight = grade === 'SR' ? '#FDE68A' : grade === 'R' ? '#A7F3D0' : '#FDA4AF';
+  const topDark = grade === 'SR' ? '#B45309' : grade === 'R' ? '#047857' : '#9F1239';
+
+  const bottomColor = grade === 'SR' ? '#FEF3C7' : grade === 'R' ? '#ECFDF5' : '#FFFFFF';
+  const bottomDark = grade === 'SR' ? '#FDE68A' : grade === 'R' ? '#D1FAE5' : '#E2E8F0';
+
+  return (
+    <div className="relative inline-block select-none" style={{ width: size, height: size }}>
+      {/* Top Half */}
+      <motion.div
+        animate={
+          isOpen
+            ? { y: -45, rotate: -15, opacity: 0 }
+            : { y: 0, rotate: 0, opacity: 1 }
+        }
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="absolute top-0 left-0 right-0 h-1/2 flex items-end justify-center"
+      >
+        <svg
+          width={size}
+          height={size / 2}
+          viewBox="0 0 32 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          shapeRendering="crispEdges"
+        >
+          {/* Black Outer Pixel Border */}
+          <rect x="10" y="0" width="12" height="2" fill="#181410" />
+          <rect x="6" y="2" width="20" height="2" fill="#181410" />
+          <rect x="4" y="4" width="24" height="2" fill="#181410" />
+          <rect x="2" y="6" width="28" height="2" fill="#181410" />
+          <rect x="0" y="8" width="32" height="6" fill="#181410" />
+          <rect x="0" y="14" width="32" height="2" fill="#181410" />
+
+          {/* Top Colored Shell Base */}
+          <rect x="10" y="2" width="12" height="2" fill={topColor} />
+          <rect x="6" y="4" width="20" height="2" fill={topColor} />
+          <rect x="4" y="6" width="24" height="2" fill={topColor} />
+          <rect x="2" y="8" width="28" height="6" fill={topColor} />
+
+          {/* Highlights & Specular Pixel Glint */}
+          <rect x="10" y="2" width="6" height="2" fill={topLight} />
+          <rect x="6" y="4" width="8" height="2" fill={topLight} />
+          <rect x="4" y="6" width="4" height="2" fill={topLight} />
+          <rect x="4" y="8" width="2" height="4" fill={topLight} />
+          <rect x="8" y="4" width="2" height="2" fill="#FFFFFF" />
+
+          {/* Shading */}
+          <rect x="26" y="8" width="4" height="6" fill={topDark} />
+          <rect x="24" y="6" width="4" height="2" fill={topDark} />
+
+          {/* Middle Silver Lip Rim */}
+          <rect x="2" y="13" width="28" height="2" fill="#E2E8F0" />
+          <rect x="4" y="13" width="6" height="1" fill="#FFFFFF" />
+        </svg>
+      </motion.div>
+
+      {/* Bottom Half */}
+      <motion.div
+        animate={
+          isOpen
+            ? { y: 45, rotate: 15, opacity: 0 }
+            : { y: 0, rotate: 0, opacity: 1 }
+        }
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="absolute bottom-0 left-0 right-0 h-1/2 flex items-start justify-center"
+      >
+        <svg
+          width={size}
+          height={size / 2}
+          viewBox="0 0 32 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          shapeRendering="crispEdges"
+        >
+          {/* Black Outer Pixel Border */}
+          <rect x="0" y="0" width="32" height="2" fill="#181410" />
+          <rect x="0" y="2" width="32" height="6" fill="#181410" />
+          <rect x="2" y="8" width="28" height="2" fill="#181410" />
+          <rect x="4" y="10" width="24" height="2" fill="#181410" />
+          <rect x="6" y="12" width="20" height="2" fill="#181410" />
+          <rect x="10" y="14" width="12" height="2" fill="#181410" />
+
+          {/* Bottom White/Cream Shell Base */}
+          <rect x="2" y="2" width="28" height="6" fill={bottomColor} />
+          <rect x="4" y="8" width="24" height="2" fill={bottomColor} />
+          <rect x="6" y="10" width="20" height="2" fill={bottomColor} />
+          <rect x="10" y="12" width="12" height="2" fill={bottomColor} />
+
+          {/* Shading */}
+          <rect x="24" y="2" width="6" height="6" fill={bottomDark} />
+          <rect x="20" y="8" width="8" height="2" fill={bottomDark} />
+          <rect x="18" y="10" width="8" height="2" fill={bottomDark} />
+
+          {/* Center Pixel Star Badge Lock */}
+          <rect x="12" y="0" width="8" height="4" fill="#FBBF24" />
+          <rect x="14" y="1" width="4" height="2" fill="#FFFFFF" />
+        </svg>
+      </motion.div>
+
+      {/* Burst Particles on open */}
+      {isOpen && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          {[-40, 0, 40].map((x, i) => (
+            <motion.div
+              key={i}
+              initial={{ scale: 0, x: 0, y: 0 }}
+              animate={{
+                scale: [0, 1.5, 0],
+                x: x * 1.5,
+                y: (i % 2 === 0 ? -1 : 1) * 50,
+              }}
+              transition={{ duration: 0.4 }}
+              className="w-3 h-3 bg-amber-300 pixel-box-shadow"
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+/** 16-bit Gacha Machine Crank Illustration */
+const PixelGachaCrankMachine: React.FC<{ isCranking: boolean }> = ({ isCranking }) => (
+  <div className="relative flex flex-col items-center">
+    <svg
+      width={120}
+      height={120}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      shapeRendering="crispEdges"
+      className="filter drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]"
+    >
+      {/* Red Roof Dome */}
+      <rect x="10" y="2" width="12" height="2" fill="#E11D48" />
+      <rect x="8" y="4" width="16" height="2" fill="#E11D48" />
+      <rect x="10" y="3" width="4" height="1" fill="#FDA4AF" />
+
+      {/* Glass Jar */}
+      <rect x="6" y="6" width="20" height="12" fill="#BAE6FD" />
+      <rect x="5" y="7" width="1" height="10" fill="#0284C7" />
+      <rect x="26" y="7" width="1" height="10" fill="#0284C7" />
+      <rect x="7" y="7" width="3" height="5" fill="#FFFFFF" />
+
+      {/* Pixel Mini Capsules Inside */}
+      <rect x="10" y="12" width="4" height="4" fill="#F43F5E" />
+      <rect x="18" y="12" width="4" height="4" fill="#FBBF24" />
+      <rect x="14" y="9" width="4" height="4" fill="#10B981" />
+      <rect x="10" y="8" width="4" height="4" fill="#A855F7" />
+
+      {/* Machine Base */}
+      <rect x="6" y="18" width="20" height="2" fill="#9F1239" />
+      <rect x="7" y="20" width="18" height="10" fill="#E11D48" />
+
+      {/* Metal Chute */}
+      <rect x="12" y="25" width="8" height="4" fill="#181410" />
+      <rect x="14" y="26" width="4" height="2" fill="#38BDF8" />
+    </svg>
+
+    {/* Turning Crank Handle */}
+    <motion.div
+      animate={isCranking ? { rotate: [0, 90, 180, 270, 360, 450, 720] } : { rotate: 0 }}
+      transition={{ duration: 0.6, ease: 'easeInOut' }}
+      className="absolute top-[68px] w-8 h-8 flex items-center justify-center pointer-events-none"
+    >
+      <svg
+        width={24}
+        height={24}
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        shapeRendering="crispEdges"
+      >
+        <rect x="6" y="6" width="4" height="4" fill="#FBBF24" />
+        <rect x="7" y="7" width="2" height="2" fill="#FFFFFF" />
+        <rect x="7" y="2" width="2" height="5" fill="#D97706" />
+        <rect x="6" y="1" width="4" height="2" fill="#FEF08A" />
+      </svg>
+    </motion.div>
+  </div>
+);
+
 export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
   results,
   onComplete,
@@ -25,438 +237,539 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
   soundEnabled = true,
   hapticEnabled = true,
 }) => {
-  // Stages: 'intro' (magical beanstalk/portal) -> 'reveal_cards' -> 'summary'
-  const [stage, setStage] = useState<'intro' | 'reveal_cards' | 'summary'>('intro');
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [animTick, setAnimTick] = useState(0);
+  // Phase: 'capsule' -> 'reveal' -> 'summary'
+  const [phase, setPhase] = useState<'capsule' | 'reveal' | 'summary'>('capsule');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isOpeningCapsule, setIsOpeningCapsule] = useState(false);
+  const [isCranking, setIsCranking] = useState(false);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setAnimTick((prev) => (prev + 1) % 1000);
-    }, 50);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Intro transition to first card
-  useEffect(() => {
-    if (stage === 'intro') {
-      if (soundEnabled) soundEngine.playGachaSpinSound();
-      const t = setTimeout(() => {
-        setStage('reveal_cards');
-        triggerCardSound(results[0]);
-      }, 1200);
-      return () => clearTimeout(t);
-    }
-  }, [stage]);
-
-  const triggerCardSound = (pull: GachaPullResult | undefined) => {
-    if (!pull) return;
-    const grade = getGachaGrade(pull.item);
-    if (grade === 'SR') {
-      confetti({
-        particleCount: 50,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ['#fbbf24', '#f59e0b', '#ec4899', '#ffffff'],
-      });
-      if (soundEnabled) soundEngine.playCelebrationSound();
-    } else if (grade === 'R') {
-      confetti({
-        particleCount: 25,
-        spread: 60,
-        origin: { y: 0.6 },
-        colors: ['#a855f7', '#6366f1', '#ffffff'],
-      });
-      if (soundEnabled) soundEngine.playSuccessSound();
-    } else {
-      if (soundEnabled) soundEngine.playTapSound();
-    }
-  };
-
-  const handleNextCard = () => {
-    if (hapticEnabled) triggerHaptic();
-    if (currentCardIndex + 1 < results.length) {
-      const nextIdx = currentCardIndex + 1;
-      setCurrentCardIndex(nextIdx);
-      triggerCardSound(results[nextIdx]);
-    } else {
-      setStage('summary');
-      if (soundEnabled) soundEngine.playCelebrationSound();
-      confetti({
-        particleCount: 60,
-        spread: 70,
-        origin: { y: 0.5 },
-        colors: ['#ec4899', '#5f7a61', '#f59e0b', '#ffffff'],
-      });
-    }
-  };
-
-  const handleSkip = () => {
-    if (soundEnabled) soundEngine.playTapSound();
-    if (hapticEnabled) triggerHaptic();
-    setStage('summary');
-  };
-
-  const currentResult = results[currentCardIndex] || results[0];
+  const currentResult = results[currentIndex] || results[0];
   const currentGrade: GachaGrade = currentResult ? getGachaGrade(currentResult.item) : 'N';
 
-  const getCategoryIcon = (cat: string) => {
+  // Has highest rarity in pool
+  const hasSR = results.some((r) => getGachaGrade(r.item) === 'SR');
+  const hasR = results.some((r) => getGachaGrade(r.item) === 'R');
+  const topGrade: GachaGrade = hasSR ? 'SR' : hasR ? 'R' : 'N';
+
+  // Trigger sound & celebration based on grade
+  const triggerItemCelebration = useCallback(
+    (pull: GachaPullResult | undefined) => {
+      if (!pull) return;
+      const grade = getGachaGrade(pull.item);
+      if (grade === 'SR') {
+        if (soundEnabled) soundEngine.play8BitFanfareSR();
+      } else if (grade === 'R') {
+        if (soundEnabled) soundEngine.play8BitChimeR();
+      } else {
+        if (soundEnabled) soundEngine.playCardFlipSound();
+      }
+    },
+    [soundEnabled]
+  );
+
+  // Initial sound on mount
+  useEffect(() => {
+    if (soundEnabled) soundEngine.play8BitCrankSound();
+  }, [soundEnabled]);
+
+  // Open capsule action
+  const handleOpenCapsule = () => {
+    if (isOpeningCapsule) return;
+    setIsCranking(true);
+    setIsOpeningCapsule(true);
+    if (hapticEnabled) triggerHaptic();
+    if (soundEnabled) soundEngine.playCapsulePopSound();
+
+    setTimeout(() => {
+      setPhase('reveal');
+      triggerItemCelebration(results[0]);
+    }, 450);
+  };
+
+  // Next card in reveal
+  const handleNextCard = () => {
+    if (hapticEnabled) triggerHaptic();
+    if (currentIndex + 1 < results.length) {
+      const nextIdx = currentIndex + 1;
+      setCurrentIndex(nextIdx);
+      triggerItemCelebration(results[nextIdx]);
+    } else {
+      setPhase('summary');
+      if (soundEnabled) soundEngine.play8BitFanfareSR();
+    }
+  };
+
+  // Skip to summary
+  const handleSkip = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (soundEnabled) soundEngine.playTapSound();
+    if (hapticEnabled) triggerHaptic();
+    setPhase('summary');
+  };
+
+  // Keyboard controls
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        if (phase === 'capsule') {
+          handleOpenCapsule();
+        } else if (phase === 'reveal') {
+          handleNextCard();
+        }
+      } else if (e.key === 'Escape' || e.key === 's' || e.key === 'S') {
+        if (phase !== 'summary') {
+          handleSkip();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase, currentIndex, isOpeningCapsule]);
+
+  const getCategoryLabel = (cat: string) => {
     switch (cat) {
       case 'hats':
-        return '👒';
+        return 'HAT';
       case 'outfits':
-        return '👘';
+        return 'OUTFIT';
       case 'accessories':
-        return '👓';
+        return 'ACCESSORY';
       case 'skins':
-        return '🐸';
+        return 'SKIN COLOR';
       case 'props':
-        return '🧋';
+        return 'PROP & POSE';
       case 'companions':
-        return '🐌';
+        return 'COMPANION';
       case 'scenes':
-        return '🏞️';
+        return 'SCENE';
+      case 'weather':
+        return 'WEATHER';
       default:
-        return '✨';
+        return 'ITEM';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#0f172a]/85 backdrop-blur-md animate-fade-in select-none">
-      {/* ------------------------------------------------------------- */}
-      {/* STAGE 1: INTRO BEANSTALK / SUMMONING GLOW                   */}
-      {/* ------------------------------------------------------------- */}
-      {stage === 'intro' && (
-        <div className="flex flex-col items-center justify-center text-center space-y-6">
-          <div className="relative w-40 h-40 flex items-center justify-center">
-            {/* Glowing Aura Rings */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-pink-500/40 via-purple-500/30 to-amber-400/40 animate-ping opacity-60" />
-            <div className="absolute inset-2 rounded-full bg-white/10 blur-xl animate-pulse" />
-            
-            {/* Sprouting Magic Capsule */}
-            <div className="relative z-10 w-24 h-24 rounded-[32px] bg-gradient-to-b from-white/90 to-pink-100 dark:from-white/80 dark:to-pink-200 border-2 border-white flex items-center justify-center shadow-[0_0_40px_rgba(236,72,153,0.6)] animate-bounce">
-              <Sparkles size={44} className="text-pink-500 animate-spin" style={{ animationDuration: '3s' }} />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <h2 className="text-xl font-black text-white tracking-wide">
-              Summoning from Sanctuary...
-            </h2>
-            <p className="text-xs text-pink-200/80 font-medium">
-              Harvesting lucky botanical drops
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* ------------------------------------------------------------- */}
-      {/* STAGE 2: CARD REVEAL (Exact style inspired by IMG_2865.PNG)   */}
-      {/* ------------------------------------------------------------- */}
-      {stage === 'reveal_cards' && currentResult && (
+    <div
+      id="gacha-summon-modal"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#0c0a09]/90 pixel-art-rendering select-none overflow-hidden"
+      onClick={() => {
+        if (phase === 'capsule') handleOpenCapsule();
+        else if (phase === 'reveal') handleNextCard();
+      }}
+    >
+      {/* Retro Pixel Starfield Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+        {/* Pixel Scanline Grid Overlay */}
         <div
-          className="relative w-full max-w-sm h-[82vh] max-h-[640px] flex flex-col items-center justify-between p-6 rounded-[36px] overflow-hidden shadow-2xl cursor-pointer"
-          onClick={handleNextCard}
+          className="absolute inset-0"
           style={{
-            background:
-              currentGrade === 'SR'
-                ? 'linear-gradient(180deg, #382548 0%, #4a284c 40%, #1e1b2e 100%)'
-                : currentGrade === 'R'
-                ? 'linear-gradient(180deg, #233b53 0%, #29486b 40%, #17212e 100%)'
-                : 'linear-gradient(180deg, #2b333d 0%, #3a4552 40%, #1c2229 100%)',
+            backgroundImage:
+              'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03))',
+            backgroundSize: '100% 4px, 6px 100%',
           }}
-        >
-          {/* Subtle Ambient Starry Background */}
-          <div
-            className="absolute inset-0 opacity-20 pointer-events-none"
-            style={{
-              backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
-              backgroundSize: '24px 24px',
-            }}
-          />
+        />
+        {/* Twinkling Pixel Stars */}
+        <div className="absolute top-12 left-16 animate-pulse">
+          <PixelStar size={12} color="#FEF08A" />
+        </div>
+        <div className="absolute top-28 right-20 animate-pulse" style={{ animationDelay: '0.5s' }}>
+          <PixelStar size={16} color="#67E8F9" />
+        </div>
+        <div className="absolute bottom-20 left-24 animate-pulse" style={{ animationDelay: '1s' }}>
+          <PixelStar size={14} color="#F472B6" />
+        </div>
+        <div className="absolute bottom-32 right-16 animate-pulse" style={{ animationDelay: '0.7s' }}>
+          <PixelStar size={10} color="#FBBF24" />
+        </div>
+        <div className="absolute top-1/2 left-8 animate-pulse" style={{ animationDelay: '1.2s' }}>
+          <PixelStar size={8} color="#FFFFFF" />
+        </div>
+      </div>
 
-          {/* Ornate Frame Border (White Filigree as in Pokecolo) */}
-          <div className="absolute inset-3 border-2 border-white/40 rounded-[28px] pointer-events-none">
-            {/* Top Left Sun/Star corner */}
-            <div className="absolute top-2 left-2 text-white/60 text-xs font-serif">✦</div>
-            {/* Top Right Sun/Star corner */}
-            <div className="absolute top-2 right-2 text-white/60 text-xs font-serif">✦</div>
-            {/* Bottom Left Corner */}
-            <div className="absolute bottom-2 left-2 text-white/60 text-xs font-serif">✦</div>
-            {/* Bottom Right Corner */}
-            <div className="absolute bottom-2 right-2 text-white/60 text-xs font-serif">✦</div>
-          </div>
+      <AnimatePresence mode="wait">
+        {/* ========================================================================= */}
+        {/* 1. PIXEL GACHA MACHINE & CAPSULE DROP STAGE                              */}
+        {/* ========================================================================= */}
+        {phase === 'capsule' && (
+          <motion.div
+            key="pixel-capsule-stage"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col items-center justify-center text-center max-w-sm w-full cursor-pointer z-10 space-y-4"
+          >
+            {/* Top Retro Pixel Header */}
+            <div className="bg-[#1c1917] border-4 border-black px-4 py-2 pixel-box-shadow">
+              <h2 className="font-pixel text-xs sm:text-sm text-[#fef08a] tracking-wider uppercase">
+                ✦ GASHAPON SUMMON ✦
+              </h2>
+            </div>
 
-          {/* Top Bar: Progress counter & Skip button */}
-          <div className="relative z-10 w-full flex items-center justify-between pt-2 px-1">
-            <span className="px-3 py-1 rounded-full text-xs font-black bg-black/40 text-white/90 border border-white/20 backdrop-blur-sm">
-              {currentCardIndex + 1} / {results.length}
-            </span>
+            {/* Gacha Machine & Capsule Area */}
+            <div className="relative py-2 flex flex-col items-center justify-center">
+              {/* Pixel Machine at Top */}
+              <PixelGachaCrankMachine isCranking={isCranking} />
 
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSkip();
-              }}
-              className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 hover:bg-white/30 text-white flex items-center gap-1 backdrop-blur-sm transition active:scale-95"
-            >
-              <span>Skip</span>
-              <FastForward size={12} />
-            </button>
-          </div>
-
-          {/* Rarity Header (Big Glowing Title) */}
-          <div className="relative z-10 text-center mt-2 space-y-1">
-            {currentGrade === 'SR' && (
-              <div className="animate-fade-in">
-                <h1 className="text-3xl sm:text-4xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-100 drop-shadow-[0_0_20px_rgba(251,191,36,0.8)]">
-                  Super Rare
-                </h1>
-                <div className="flex items-center justify-center gap-1.5 text-amber-200/90 text-xs font-bold mt-0.5">
-                  <Sparkles size={13} />
-                  <span>★ ★ ★ ★ ★</span>
-                  <Sparkles size={13} />
-                </div>
-              </div>
-            )}
-
-            {currentGrade === 'R' && (
-              <div className="animate-fade-in">
-                <h1 className="text-3xl sm:text-4xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-cyan-300 to-blue-200 drop-shadow-[0_0_20px_rgba(56,189,248,0.8)]">
-                  Rare
-                </h1>
-                <div className="flex items-center justify-center gap-1.5 text-cyan-200/90 text-xs font-bold mt-0.5">
-                  <Sparkles size={13} />
-                  <span>★ ★ ★ ★</span>
-                  <Sparkles size={13} />
-                </div>
-              </div>
-            )}
-
-            {currentGrade === 'N' && (
-              <div className="animate-fade-in">
-                <h1 className="text-2xl sm:text-3xl font-black tracking-wider text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                  Normal
-                </h1>
-                <div className="text-white/60 text-xs font-bold mt-0.5">
-                  <span>★ ★ ★</span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Central Item Stage with Radiant Light Beam & Pedestal */}
-          <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center my-auto">
-            {/* Radiant Spotlight Beam */}
-            <div
-              className={`absolute w-56 h-56 rounded-full blur-2xl opacity-60 animate-pulse pointer-events-none ${
-                currentGrade === 'SR'
-                  ? 'bg-amber-400'
-                  : currentGrade === 'R'
-                  ? 'bg-cyan-400'
-                  : 'bg-white/40'
-              }`}
-            />
-
-            {/* Glowing Light Burst Effect */}
-            <div className="relative z-10 flex flex-col items-center justify-center">
-              <div className="transform scale-[2.2] transition-transform duration-300 drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]">
-                <PixelItemThumbnail
-                  id={currentResult.item.id}
-                  category={currentResult.item.category}
-                  size={64}
+              {/* Pixel Capsule Dropped */}
+              <motion.div
+                initial={{ y: -30, scale: 0.6 }}
+                animate={{
+                  y: isOpeningCapsule ? [0, -10, 20] : [0, -6, 0],
+                  scale: isOpeningCapsule ? 1.15 : 1,
+                }}
+                transition={
+                  isOpeningCapsule
+                    ? { duration: 0.35 }
+                    : { repeat: Infinity, duration: 1.2, ease: 'easeInOut' }
+                }
+                className="mt-2"
+              >
+                <PixelCapsuleGraphic
+                  grade={topGrade}
+                  isOpen={isOpeningCapsule}
+                  size={120}
                 />
+              </motion.div>
+            </div>
+
+            {/* Pixel Action Button Prompt */}
+            <div className="space-y-2 pt-2">
+              <div className="bg-[#5f7a61] border-4 border-black px-5 py-2.5 pixel-box-shadow pixel-btn-press text-white font-pixel text-[11px] tracking-wider uppercase animate-pulse">
+                ▶ TAP TO OPEN ({results.length}x)
+              </div>
+              <p className="font-silkscreen text-[10px] text-[#a8a29e] tracking-widest uppercase">
+                [ SPACE / ENTER / TAP ]
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* 2. PIXEL REVEAL STAGE (ITEM SHOWCASE CARD)                               */}
+        {/* ========================================================================= */}
+        {phase === 'reveal' && currentResult && (
+          <motion.div
+            key={`pixel-card-${currentIndex}`}
+            initial={{ opacity: 0, scale: 0.9, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: -15 }}
+            transition={{ duration: 0.18 }}
+            className={`relative w-full max-w-sm flex flex-col justify-between p-4 sm:p-5 border-4 border-black z-10 cursor-pointer ${
+              currentGrade === 'SR'
+                ? 'bg-[#291b2e] pixel-box-gold'
+                : currentGrade === 'R'
+                ? 'bg-[#132a24] pixel-box-shadow'
+                : 'bg-[#24201c] pixel-box-shadow'
+            }`}
+          >
+            {/* Top Pixel Control Bar: Progress & Skip */}
+            <div className="flex items-center justify-between border-b-2 border-black/50 pb-2 mb-3">
+              {/* Pixel Pull Counter */}
+              <div className="flex items-center gap-1.5 bg-[#181410] px-2.5 py-1 border-2 border-black">
+                <span className="font-pixel text-[9px] text-[#fef08a]">
+                  PULL {String(currentIndex + 1).padStart(2, '0')}/{String(results.length).padStart(2, '0')}
+                </span>
               </div>
 
-              {/* Floating Status Badge (NEW or Duplicate Refund) */}
-              <div className="mt-8 flex items-center justify-center">
+              {/* Progress Pixel Dots */}
+              {results.length > 1 && (
+                <div className="flex items-center gap-1">
+                  {results.slice(0, 10).map((r, idx) => {
+                    const g = getGachaGrade(r.item);
+                    const isCur = idx === currentIndex;
+                    const isPast = idx < currentIndex;
+                    return (
+                      <div
+                        key={idx}
+                        className={`w-2.5 h-2.5 border border-black ${
+                          isCur
+                            ? g === 'SR'
+                              ? 'bg-amber-400'
+                              : g === 'R'
+                              ? 'bg-emerald-400'
+                              : 'bg-white'
+                            : isPast
+                            ? 'bg-stone-500 opacity-60'
+                            : 'bg-stone-800'
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Pixel Skip Button */}
+              <button
+                type="button"
+                id="pixel-skip-btn"
+                onClick={handleSkip}
+                className="bg-[#383028] hover:bg-[#4a3f35] active:bg-[#1f1b17] text-[#e7e5e4] border-2 border-black px-2 py-0.5 font-pixel text-[8px] uppercase tracking-wider pixel-btn-press"
+              >
+                SKIP ▶▶
+              </button>
+            </div>
+
+            {/* Pixel Rarity Header Banner */}
+            <div className="text-center my-1">
+              {currentGrade === 'SR' && (
+                <div className="inline-block bg-[#78350f] border-2 border-[#f59e0b] px-3 py-1 shadow-md">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#fef08a] tracking-widest uppercase">
+                    ★ SUPER RARE ★
+                  </span>
+                </div>
+              )}
+              {currentGrade === 'R' && (
+                <div className="inline-block bg-[#064e3b] border-2 border-[#10b981] px-3 py-1 shadow-md">
+                  <span className="font-pixel text-[10px] sm:text-[11px] text-[#a7f3d0] tracking-widest uppercase">
+                    ★ RARE ★
+                  </span>
+                </div>
+              )}
+              {currentGrade === 'N' && (
+                <div className="inline-block bg-[#292524] border-2 border-[#78716c] px-3 py-1 shadow-md">
+                  <span className="font-pixel text-[9px] text-[#d6d3d1] tracking-widest uppercase">
+                    ★ NORMAL ★
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Central Pixel Spotlight & Thumbnail Display */}
+            <div className="relative my-4 flex flex-col items-center justify-center">
+              {/* Stepped Pixel Pedestal */}
+              <div className="relative w-40 h-40 flex items-center justify-center bg-[#151210] border-4 border-black pixel-box-shadow">
+                {/* 4 Corner Pixel Studs */}
+                <div className="absolute top-1 left-1 w-2 h-2 bg-[#f59e0b]" />
+                <div className="absolute top-1 right-1 w-2 h-2 bg-[#f59e0b]" />
+                <div className="absolute bottom-1 left-1 w-2 h-2 bg-[#f59e0b]" />
+                <div className="absolute bottom-1 right-1 w-2 h-2 bg-[#f59e0b]" />
+
+                {/* Floating Pixel Item Thumbnail */}
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+                  className="transform scale-[2.2] pixel-art-rendering"
+                >
+                  <PixelItemThumbnail
+                    id={currentResult.item.id}
+                    category={currentResult.item.category}
+                    size={56}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Status Banner: NEW vs DUP */}
+              <div className="mt-3">
                 {currentResult.isNew ? (
-                  <span className="px-3.5 py-1 rounded-full text-xs font-black bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg shadow-pink-500/50 border border-white/40 animate-bounce">
-                    ✨ NEW UNLOCKED!
-                  </span>
+                  <div className="bg-[#15803d] border-2 border-[#86efac] px-3 py-1 font-pixel text-[9px] text-white tracking-widest uppercase">
+                    ★ NEW UNLOCKED! ★
+                  </div>
                 ) : (
-                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 text-amber-200 border border-amber-300/40 backdrop-blur-sm">
-                    Duplicate (+{currentResult.duplicateRefundCoins || 20} Coins Refund)
-                  </span>
+                  <div className="bg-[#b45309] border-2 border-[#fde68a] px-2.5 py-0.5 font-pixel text-[8px] text-[#fef3c7] tracking-wider uppercase">
+                    DUP (+{currentResult.duplicateRefundCoins || 20} COINS)
+                  </div>
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Bottom Frosted Pill Banner (Matching IMG_2865.PNG) */}
-          <div className="relative z-10 w-full pb-2 space-y-3">
-            <div className="w-full py-2.5 px-4 rounded-full bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center gap-2.5 shadow-lg">
-              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs">
-                {getCategoryIcon(currentResult.item.category)}
-              </span>
-              <span className="font-black text-sm text-white truncate max-w-[200px]">
+            {/* Bottom Pixel Item Info Box */}
+            <div className="bg-[#1c1917] border-2 border-black p-3 space-y-1 text-left">
+              <div className="flex items-center justify-between">
+                <span className="font-silkscreen text-[9px] text-[#a8a29e] tracking-widest uppercase">
+                  [{getCategoryLabel(currentResult.item.category)}]
+                </span>
+                <span className="font-pixel text-[8px] text-[#fef08a]">
+                  {currentGrade === 'SR' ? '★★★★★' : currentGrade === 'R' ? '★★★★☆' : '★★★☆☆'}
+                </span>
+              </div>
+              <h3 className="font-pixel text-xs sm:text-sm text-[#fafaf9] tracking-wider">
                 {currentResult.item.name}
+              </h3>
+              <p className="font-silkscreen text-[10px] text-[#d6d3d1] line-clamp-2 leading-relaxed">
+                {currentResult.item.desc}
+              </p>
+            </div>
+
+            {/* Footer Prompt */}
+            <div className="mt-3 text-center">
+              <span className="font-silkscreen text-[9px] text-[#a8a29e] tracking-widest uppercase animate-pulse">
+                ▶ TAP ANYWHERE TO CONTINUE ▶
               </span>
             </div>
+          </motion.div>
+        )}
 
-            <div className="text-center">
-              <span className="text-[11px] text-white/70 font-semibold tracking-wide animate-pulse">
-                Tap anywhere to continue ➔
-              </span>
+        {/* ========================================================================= */}
+        {/* 3. PIXEL SUMMARY STAGE (REWARDS OVERVIEW)                                */}
+        {/* ========================================================================= */}
+        {phase === 'summary' && (
+          <motion.div
+            key="pixel-summary-stage"
+            initial={{ opacity: 0, scale: 0.9, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="bg-[#24201c] border-4 border-black max-w-sm w-full p-4 sm:p-5 pixel-box-shadow z-10 space-y-4 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header Banner */}
+            <div className="bg-[#1c1917] border-2 border-black py-2 px-3">
+              <h2 className="font-pixel text-xs sm:text-sm text-[#fef08a] tracking-wider uppercase">
+                ✦ SUMMON REWARDS ✦
+              </h2>
+              <p className="font-silkscreen text-[9px] text-[#a8a29e] mt-0.5 tracking-wider uppercase">
+                {results.length === 1
+                  ? '1 ITEM ACQUIRED'
+                  : `${results.length} ITEMS OBTAINED`}
+              </p>
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* ------------------------------------------------------------- */}
-      {/* STAGE 3: ALL RESULTS SUMMARY MODAL                           */}
-      {/* ------------------------------------------------------------- */}
-      {stage === 'summary' && (
-        <div
-          className="bg-[#fcfaf5] dark:bg-[#1a1714] border border-[#e3dacf] dark:border-[#383028] rounded-[32px] max-w-sm w-full p-5 sm:p-6 shadow-2xl overflow-hidden animate-scale-up space-y-4"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="text-center space-y-1">
-            <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-pink-500/15 border border-pink-500/30 text-pink-600 dark:text-pink-400 mb-0.5">
-              <Sparkles size={22} />
-            </div>
-            <h2 className="text-lg font-black text-[#2d2823] dark:text-[#f4efe8]">
-              Capsule Results!
-            </h2>
-            <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] font-medium">
-              {results.length === 1 ? '1 item unlocked' : `${results.length} items added to your wardrobe`}
-            </p>
-          </div>
-
-          {/* SINGLE PULL SHOWCASE (When 1 item is pulled) */}
-          {results.length === 1 ? (
-            <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-[#f5efe4]/80 dark:bg-[#151210]/80 border border-black/[0.04] dark:border-white/[0.06] space-y-3">
-              {(() => {
-                const single = results[0];
-                const grade = getGachaGrade(single.item);
-                return (
-                  <>
-                    <div className="relative w-24 h-24 rounded-2xl bg-white dark:bg-[#221e1a] border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-center shadow-sm">
-                      {/* Grade Badge */}
-                      <span
-                        className={`absolute top-1.5 left-1.5 text-[9px] font-black px-1.5 py-0.5 rounded-full flex items-center justify-center shadow-xs z-10 ${
+            {/* SINGLE RESULT VIEW */}
+            {results.length === 1 ? (
+              <div className="bg-[#181410] border-2 border-black p-4 flex flex-col items-center justify-center space-y-2">
+                {(() => {
+                  const single = results[0];
+                  const grade = getGachaGrade(single.item);
+                  return (
+                    <>
+                      <div
+                        className={`relative w-24 h-24 border-4 flex items-center justify-center bg-[#292524] ${
                           grade === 'SR'
-                            ? 'bg-amber-400 text-stone-900 ring-1 ring-amber-200'
+                            ? 'border-amber-400'
                             : grade === 'R'
-                            ? 'bg-purple-500 text-white'
-                            : 'bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
+                            ? 'border-emerald-400'
+                            : 'border-black'
                         }`}
                       >
-                        {grade === 'SR' ? '★ SR' : grade === 'R' ? '★ R' : 'N'}
+                        <span
+                          className={`absolute top-1 left-1 font-pixel text-[8px] px-1 border border-black ${
+                            grade === 'SR'
+                              ? 'bg-amber-400 text-black'
+                              : grade === 'R'
+                              ? 'bg-emerald-500 text-white'
+                              : 'bg-stone-600 text-white'
+                          }`}
+                        >
+                          {grade}
+                        </span>
+                        <div className="transform scale-[1.6] pixel-art-rendering">
+                          <PixelItemThumbnail
+                            id={single.item.id}
+                            category={single.item.category}
+                            size={40}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <span className="font-silkscreen text-[9px] text-[#a8a29e] tracking-wider uppercase">
+                          [{getCategoryLabel(single.item.category)}]
+                        </span>
+                        <h4 className="font-pixel text-xs text-[#fafaf9]">
+                          {single.item.name}
+                        </h4>
+                        <div>
+                          {single.isNew ? (
+                            <span className="inline-block bg-[#15803d] border border-black px-2 py-0.5 font-pixel text-[8px] text-white uppercase">
+                              ★ NEW ITEM ★
+                            </span>
+                          ) : (
+                            <span className="inline-block bg-[#b45309] border border-black px-2 py-0.5 font-pixel text-[7px] text-[#fef3c7] uppercase">
+                              DUP (+{single.duplicateRefundCoins || 20} COINS)
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            ) : (
+              /* MULTI 10X GRID VIEW */
+              <div className="grid grid-cols-5 gap-1.5 p-2 bg-[#181410] border-2 border-black max-h-[38vh] overflow-y-auto">
+                {results.map((res, idx) => {
+                  const grade = getGachaGrade(res.item);
+                  return (
+                    <div
+                      key={idx}
+                      className={`relative aspect-square bg-[#292524] border-2 flex items-center justify-center p-1 ${
+                        grade === 'SR'
+                          ? 'border-amber-400'
+                          : grade === 'R'
+                          ? 'border-emerald-400'
+                          : 'border-black'
+                      }`}
+                    >
+                      {/* Grade Badge */}
+                      <span
+                        className={`absolute top-0.5 left-0.5 font-pixel text-[6px] px-0.5 border border-black ${
+                          grade === 'SR'
+                            ? 'bg-amber-400 text-black'
+                            : grade === 'R'
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-stone-600 text-white'
+                        }`}
+                      >
+                        {grade}
                       </span>
 
+                      {/* NEW / DUP Badge */}
+                      {res.isNew && (
+                        <span className="absolute bottom-0.5 right-0.5 font-pixel text-[5px] bg-[#15803d] text-white px-0.5">
+                          NEW
+                        </span>
+                      )}
+
                       {/* Thumbnail */}
-                      <div className="transform scale-[1.7]">
+                      <div className="transform scale-[1.1] pixel-art-rendering">
                         <PixelItemThumbnail
-                          id={single.item.id}
-                          category={single.item.category}
-                          size={40}
+                          id={res.item.id}
+                          category={res.item.category}
+                          size={28}
                         />
                       </div>
                     </div>
+                  );
+                })}
+              </div>
+            )}
 
-                    <div className="text-center space-y-1">
-                      <h3 className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8]">
-                        {single.item.name}
-                      </h3>
-                      <div>
-                        {single.isNew ? (
-                          <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-black bg-pink-500 text-white shadow-xs">
-                            ✨ NEW ITEM
-                          </span>
-                        ) : (
-                          <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                            Duplicate (+{single.duplicateRefundCoins || 20} Coins Refund)
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                );
-              })()}
-            </div>
-          ) : (
-            /* MULTI 10-PULL GRID (When 10 items are pulled) */
-            <div className="grid grid-cols-5 gap-2 max-h-[38vh] overflow-y-auto p-2 bg-[#f5efe4]/70 dark:bg-[#151210]/70 rounded-2xl border border-black/[0.04] dark:border-white/[0.06]">
-              {results.map((res, idx) => {
-                const grade = getGachaGrade(res.item);
-                return (
-                  <div
-                    key={idx}
-                    className="relative aspect-square rounded-xl bg-white dark:bg-[#221e1a] border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-center p-1 shadow-2xs group"
-                  >
-                    {/* Grade Badge */}
-                    <span
-                      className={`absolute top-0.5 left-0.5 text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs ${
-                        grade === 'SR'
-                          ? 'bg-amber-400 text-stone-900 ring-1 ring-amber-200'
-                          : grade === 'R'
-                          ? 'bg-purple-500 text-white'
-                          : 'bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300'
-                      }`}
-                    >
-                      {grade}
-                    </span>
+            {/* Pixel Bottom Action Buttons */}
+            <div className="flex items-center gap-2 pt-1">
+              {canSpinAgain && onSpinAgain && (
+                <button
+                  type="button"
+                  id="pixel-spin-again-btn"
+                  onClick={() => {
+                    if (soundEnabled) soundEngine.playTapSound();
+                    if (hapticEnabled) triggerHaptic();
+                    onSpinAgain();
+                  }}
+                  className="flex-1 py-2.5 bg-[#b86f52] hover:bg-[#a15e44] active:bg-[#7e4632] border-4 border-black text-white font-pixel text-[9px] sm:text-[10px] tracking-wider uppercase pixel-btn-press cursor-pointer"
+                >
+                  ↺ SPIN ({spinAgainCost})
+                </button>
+              )}
 
-                    {/* NEW / DUP Badge */}
-                    {res.isNew ? (
-                      <span className="absolute bottom-0.5 right-0.5 px-1 rounded-sm text-[7px] font-black bg-pink-500 text-white">
-                        NEW
-                      </span>
-                    ) : (
-                      <span className="absolute bottom-0.5 right-0.5 text-[7px] font-bold text-[#8c7e70]">
-                        DUP
-                      </span>
-                    )}
-
-                    {/* Thumbnail */}
-                    <div className="transform scale-[1.1]">
-                      <PixelItemThumbnail
-                        id={res.item.id}
-                        category={res.item.category}
-                        size={32}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2 pt-1">
-            {canSpinAgain && onSpinAgain && (
               <button
                 type="button"
+                id="pixel-done-btn"
                 onClick={() => {
                   if (soundEnabled) soundEngine.playTapSound();
                   if (hapticEnabled) triggerHaptic();
-                  onSpinAgain();
+                  onComplete();
                 }}
-                className="flex-1 py-3 rounded-2xl text-xs font-black bg-gradient-to-r from-pink-500 to-purple-600 hover:opacity-90 text-white flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95"
+                className="flex-1 py-2.5 bg-[#5f7a61] hover:bg-[#4d6650] active:bg-[#3d5240] border-4 border-black text-white font-pixel text-[9px] sm:text-[10px] tracking-wider uppercase pixel-btn-press cursor-pointer"
               >
-                <RotateCcw size={14} />
-                <span>Spin Again ({spinAgainCost} Coins)</span>
+                ✓ DONE
               </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => {
-                if (soundEnabled) soundEngine.playTapSound();
-                if (hapticEnabled) triggerHaptic();
-                onComplete();
-              }}
-              className="flex-1 py-3 rounded-2xl text-xs font-black bg-[#5f7a61] hover:bg-[#4d6650] text-white flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95"
-            >
-              <Check size={14} />
-              <span>OK</span>
-            </button>
-          </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

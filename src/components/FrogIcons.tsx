@@ -1816,3 +1816,255 @@ export const PixelTabPropIcon: React.FC<IconProps> = ({ size = 20, className = '
     <rect x="10" y="14" width="2" height="2" fill="#18181B" />
   </svg>
 );
+
+// -------------------------------------------------------------
+// HOME SCREEN PIXEL ART ACTION ICONS
+// -------------------------------------------------------------
+
+/** Pixel Gacha Machine / Capsule Button */
+export const PixelGachaMachineIcon: React.FC<IconProps> = ({ size = 36, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] ${className}`}
+    {...props}
+  >
+    {/* Red Top Dome */}
+    <rect x="7" y="2" width="10" height="2" fill="#E11D48" />
+    <rect x="5" y="4" width="14" height="2" fill="#E11D48" />
+    <rect x="7" y="3" width="3" height="1" fill="#FDA4AF" />
+    <rect x="5" y="4" width="2" height="1" fill="#FDA4AF" />
+    {/* Glass Chamber with Colored Capsules */}
+    <rect x="4" y="6" width="16" height="8" fill="#BAE6FD" />
+    <rect x="3" y="7" width="1" height="6" fill="#0284C7" />
+    <rect x="20" y="7" width="1" height="6" fill="#0284C7" />
+    <rect x="5" y="7" width="2" height="4" fill="#FFFFFF" />
+    {/* Capsules inside */}
+    <rect x="7" y="10" width="3" height="3" fill="#F43F5E" />
+    <rect x="14" y="10" width="3" height="3" fill="#FBBF24" />
+    <rect x="11" y="8" width="3" height="3" fill="#10B981" />
+    <rect x="8" y="7" width="3" height="3" fill="#A855F7" />
+    {/* Gacha Machine Body Base */}
+    <rect x="4" y="14" width="16" height="2" fill="#BE123C" />
+    <rect x="5" y="16" width="14" height="6" fill="#E11D48" />
+    {/* Turn Dial */}
+    <rect x="10" y="16" width="4" height="3" fill="#FDE047" />
+    <rect x="11" y="15" width="2" height="5" fill="#EAB308" />
+    {/* Drop Slot */}
+    <rect x="9" y="20" width="6" height="2" fill="#4C0519" />
+    <rect x="11" y="19" width="2" height="1" fill="#38BDF8" />
+  </svg>
+);
+
+/** Pixel Wardrobe / Kimono Clothes Hanger */
+export const PixelWardrobeClosetIcon: React.FC<IconProps> = ({ size = 36, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] ${className}`}
+    {...props}
+  >
+    {/* Golden Hanger Hook */}
+    <rect x="11" y="2" width="3" height="2" fill="#F59E0B" />
+    <rect x="13" y="4" width="1" height="2" fill="#F59E0B" />
+    <rect x="11" y="5" width="2" height="1" fill="#F59E0B" />
+    {/* Wooden Hanger Bar */}
+    <rect x="10" y="6" width="4" height="2" fill="#B45309" />
+    <rect x="6" y="8" width="12" height="2" fill="#D97706" />
+    <rect x="4" y="10" width="16" height="1" fill="#B45309" />
+    {/* Cute Green Frog Kimono / Shirt */}
+    <rect x="6" y="10" width="12" height="11" fill="#10B981" />
+    <rect x="4" y="11" width="3" height="5" fill="#059669" />
+    <rect x="17" y="11" width="3" height="5" fill="#059669" />
+    {/* White Collar & Gold Obi Belt */}
+    <rect x="10" y="10" width="4" height="4" fill="#FFFFFF" />
+    <rect x="6" y="15" width="12" height="3" fill="#FBBF24" />
+    <rect x="10" y="15" width="4" height="3" fill="#D97706" />
+    {/* Bottom Hem & Sparkle */}
+    <rect x="7" y="21" width="10" height="1" fill="#047857" />
+    <rect x="18" y="4" width="2" height="2" fill="#FDE047" />
+  </svg>
+);
+
+/** Pixel Magic Shuffle / Surprise Mix Dice & Sparkles */
+export const PixelMagicMixIcon: React.FC<IconProps> = ({ size = 36, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] ${className}`}
+    {...props}
+  >
+    {/* Golden Magic Sparkles Top Left */}
+    <rect x="3" y="3" width="1" height="3" fill="#FDE047" />
+    <rect x="2" y="4" width="3" height="1" fill="#FDE047" />
+    {/* Golden Magic Sparkles Top Right */}
+    <rect x="19" y="4" width="1" height="3" fill="#FDE047" />
+    <rect x="18" y="5" width="3" height="1" fill="#FDE047" />
+    {/* Pixel Die 1 (Amber / Gold) */}
+    <rect x="4" y="8" width="10" height="10" fill="#F59E0B" />
+    <rect x="4" y="8" width="10" height="1" fill="#FDE047" />
+    <rect x="4" y="8" width="1" height="10" fill="#FDE047" />
+    <rect x="13" y="8" width="1" height="10" fill="#B45309" />
+    <rect x="4" y="17" width="10" height="1" fill="#B45309" />
+    {/* Die 1 Pips */}
+    <rect x="6" y="10" width="2" height="2" fill="#78350F" />
+    <rect x="10" y="14" width="2" height="2" fill="#78350F" />
+    <rect x="8" y="12" width="2" height="2" fill="#FEF08A" />
+    {/* Pixel Die 2 (Emerald / Violet Magic) */}
+    <rect x="11" y="11" width="10" height="10" fill="#8B5CF6" />
+    <rect x="11" y="11" width="10" height="1" fill="#C4B5FD" />
+    <rect x="11" y="11" width="1" height="10" fill="#C4B5FD" />
+    <rect x="20" y="11" width="1" height="10" fill="#5B21B6" />
+    <rect x="11" y="20" width="10" height="1" fill="#5B21B6" />
+    {/* Die 2 Pips */}
+    <rect x="13" y="13" width="2" height="2" fill="#EDE9FE" />
+    <rect x="17" y="13" width="2" height="2" fill="#EDE9FE" />
+    <rect x="15" y="15" width="2" height="2" fill="#EDE9FE" />
+    <rect x="13" y="17" width="2" height="2" fill="#EDE9FE" />
+    <rect x="17" y="17" width="2" height="2" fill="#EDE9FE" />
+  </svg>
+);
+
+/** Pixel Heart (Pet Interaction) */
+export const PixelHeartPetIcon: React.FC<IconProps> = ({ size = 28, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 filter drop-shadow-[0_2px_3px_rgba(0,0,0,0.25)] ${className}`}
+    {...props}
+  >
+    {/* Heart Dark Red Outline */}
+    <rect x="6" y="5" width="4" height="2" fill="#881337" />
+    <rect x="14" y="5" width="4" height="2" fill="#881337" />
+    <rect x="4" y="7" width="2" height="5" fill="#881337" />
+    <rect x="18" y="7" width="2" height="5" fill="#881337" />
+    <rect x="10" y="7" width="4" height="2" fill="#881337" />
+    {/* Heart Body Red */}
+    <rect x="6" y="7" width="4" height="6" fill="#F43F5E" />
+    <rect x="14" y="7" width="4" height="6" fill="#F43F5E" />
+    <rect x="6" y="12" width="12" height="3" fill="#E11D48" />
+    <rect x="8" y="15" width="8" height="3" fill="#E11D48" />
+    <rect x="10" y="18" width="4" height="2" fill="#BE123C" />
+    <rect x="11" y="20" width="2" height="1" fill="#881337" />
+    {/* Heart White Shine */}
+    <rect x="6" y="7" width="2" height="2" fill="#FFFFFF" />
+    <rect x="8" y="7" width="1" height="1" fill="#FDA4AF" />
+    <rect x="14" y="7" width="2" height="2" fill="#FDA4AF" />
+  </svg>
+);
+
+/** Pixel Snack Dango Treat (Feed Interaction) */
+export const PixelSnackDangoIcon: React.FC<IconProps> = ({ size = 28, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 filter drop-shadow-[0_2px_3px_rgba(0,0,0,0.25)] ${className}`}
+    {...props}
+  >
+    {/* Bamboo Skewer */}
+    <rect x="19" y="3" width="2" height="2" fill="#D97706" />
+    <rect x="17" y="5" width="2" height="2" fill="#D97706" />
+    <rect x="5" y="17" width="2" height="2" fill="#B45309" />
+    <rect x="3" y="19" width="2" height="2" fill="#78350F" />
+    {/* Pink Dango (Top) */}
+    <rect x="13" y="5" width="6" height="6" fill="#F472B6" />
+    <rect x="14" y="6" width="2" height="2" fill="#FFFFFF" />
+    <rect x="13" y="5" width="6" height="1" fill="#DB2777" />
+    {/* White Dango (Middle) */}
+    <rect x="9" y="9" width="6" height="6" fill="#F8FAFC" />
+    <rect x="10" y="10" width="2" height="2" fill="#FFFFFF" />
+    <rect x="9" y="14" width="6" height="1" fill="#CBD5E1" />
+    {/* Green Matcha Dango (Bottom) */}
+    <rect x="5" y="13" width="6" height="6" fill="#84CC16" />
+    <rect x="6" y="14" width="2" height="2" fill="#BEF264" />
+    <rect x="5" y="18" width="6" height="1" fill="#4D7C0F" />
+  </svg>
+);
+
+/** Pixel Furin Wind Chime / Bell (Music Interaction) */
+export const PixelFurinChimeIcon: React.FC<IconProps> = ({ size = 28, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 filter drop-shadow-[0_2px_3px_rgba(0,0,0,0.25)] ${className}`}
+    {...props}
+  >
+    {/* Top Hanging String */}
+    <rect x="11" y="2" width="2" height="3" fill="#A855F7" />
+    {/* Glass Bell Dome (Sky Blue & Lavender) */}
+    <rect x="8" y="5" width="8" height="2" fill="#A855F7" />
+    <rect x="6" y="7" width="12" height="6" fill="#C084FC" />
+    <rect x="7" y="8" width="2" height="2" fill="#FFFFFF" />
+    <rect x="6" y="12" width="12" height="1" fill="#9333EA" />
+    {/* Clapper Cord & Clapper */}
+    <rect x="11" y="13" width="2" height="2" fill="#7E22CE" />
+    <rect x="10" y="14" width="4" height="2" fill="#FDE047" />
+    {/* Hanging Tanzaku Paper Strip */}
+    <rect x="11" y="16" width="2" height="6" fill="#38BDF8" />
+    <rect x="11" y="18" width="2" height="2" fill="#FFFFFF" />
+    {/* Sound Music Note Sparkles */}
+    <rect x="19" y="8" width="1" height="3" fill="#F43F5E" />
+    <rect x="18" y="8" width="3" height="1" fill="#F43F5E" />
+    <rect x="2" y="10" width="1" height="2" fill="#F59E0B" />
+  </svg>
+);
+
+/** Pixel Art RPG Dialogue Box with tail */
+export const PixelDialogueBox: React.FC<{
+  text: string;
+  onClick?: (e: React.MouseEvent) => void;
+  className?: string;
+}> = ({ text, onClick, className = '' }) => (
+  <div
+    onClick={onClick}
+    className={`relative inline-flex flex-col items-center cursor-pointer select-none transition-transform active:scale-95 ${className}`}
+  >
+    {/* Retro RPG Dialogue Container (Crisp pixel stepped border) */}
+    <div className="relative px-3.5 py-1.5 bg-[#FFFDF7] dark:bg-[#1E1915] text-[#332219] dark:text-[#F3EFE6] text-xs font-black tracking-wide border-2 border-[#3D2C22] shadow-[0_3px_0_#271911] rounded-none">
+      {/* 4 Corner Pixel Cutouts / Highlights */}
+      <span className="absolute -top-[2px] -left-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
+      <span className="absolute -top-[2px] -right-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
+      <span className="absolute -bottom-[2px] -left-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
+      <span className="absolute -bottom-[2px] -right-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
+      
+      {/* Inner Highlight line */}
+      <span className="absolute inset-[1px] border border-white/50 dark:border-white/10 pointer-events-none" />
+      
+      <div className="relative flex items-center gap-1.5 drop-shadow-xs">
+        <span>{text}</span>
+      </div>
+    </div>
+    
+    {/* Downward Pixel Tail */}
+    <div className="flex flex-col items-center -mt-[1px]">
+      <span className="w-2.5 h-1 bg-[#3D2C22]" />
+      <span className="w-1.5 h-1 bg-[#3D2C22]" />
+    </div>
+  </div>
+);
+
+
