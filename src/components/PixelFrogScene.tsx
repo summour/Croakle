@@ -4,11 +4,17 @@ import {
   SceneLocationId,
   FrogActivityId,
   FrogHatId,
+  FrogOutfitId,
+  FrogGlassesId,
+  FrogSkinId,
   FrogCompanionId,
   FrogWeatherId,
   SCENE_LOCATIONS,
   FROG_ACTIVITIES,
   FROG_HATS,
+  FROG_OUTFITS,
+  FROG_GLASSES,
+  FROG_SKINS,
   FROG_COMPANIONS,
   FROG_WEATHERS,
 } from '../types';
@@ -22,6 +28,8 @@ import {
   CloudRain,
   Heart,
   Volume2,
+  ShoppingBag,
+  Shirt,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
@@ -32,17 +40,485 @@ import {
   PixelTabHeadwearIcon,
   PixelTabCompanionIcon,
   PixelTabWeatherIcon,
+  PixelTabOutfitIcon,
+  PixelTabGlassesIcon,
+  PixelTabSkinIcon,
   PixelCheckIcon,
 } from './FrogIcons';
 
+export const getSkinColors = (skinId?: FrogSkinId) => {
+  switch (skinId) {
+    case 'golden':
+      return {
+        main: '#F59E0B',
+        dark: '#B45309',
+        outline: '#78350F',
+        belly: '#FEF08A',
+        cheeks: '#F97316',
+        legs: '#D97706',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'sakura_pink':
+      return {
+        main: '#F472B6',
+        dark: '#DB2777',
+        outline: '#831843',
+        belly: '#FDF2F8',
+        cheeks: '#FB7185',
+        legs: '#EC4899',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'twilight_blue':
+      return {
+        main: '#38BDF8',
+        dark: '#0284C7',
+        outline: '#0C4A6E',
+        belly: '#E0F2FE',
+        cheeks: '#818CF8',
+        legs: '#0369A1',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'matcha':
+      return {
+        main: '#84CC16',
+        dark: '#65A30D',
+        outline: '#365314',
+        belly: '#ECFCCB',
+        cheeks: '#F43F5E',
+        legs: '#4D7C0F',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'albino_white':
+      return {
+        main: '#F8FAFC',
+        dark: '#CBD5E1',
+        outline: '#475569',
+        belly: '#FFFFFF',
+        cheeks: '#FB7185',
+        legs: '#E2E8F0',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'ember_orange':
+      return {
+        main: '#FB923C',
+        dark: '#EA580C',
+        outline: '#7C2D12',
+        belly: '#FFEDD5',
+        cheeks: '#C2410C',
+        legs: '#C2410C',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'classic':
+    default:
+      return {
+        main: '#75A65A',
+        dark: '#5F7A61',
+        outline: '#2D3A20',
+        belly: '#FEF9C3',
+        cheeks: '#E88B8B',
+        legs: '#5F9744',
+        eyeHighlight: '#FFFFFF',
+      };
+  }
+};
+
+/** Standalone SVG Frog Character Solo Renderer for Shop Previews */
+export const PixelFrogSolo: React.FC<{
+  config: Partial<PixelSceneConfig>;
+  size?: number;
+  className?: string;
+  isAnimated?: boolean;
+}> = ({ config, size = 120, className = '', isAnimated = true }) => {
+  const skin = getSkinColors(config.skinId || 'classic');
+  const frogX = 40;
+  const frogY = 32;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      shapeRendering="crispEdges"
+      className={`inline-block shrink-0 ${className}`}
+    >
+      {/* Frog Shadow */}
+      <ellipse cx={frogX + 8} cy={frogY + 28} rx="18" ry="4" fill="#000000" opacity="0.18" />
+
+      {/* Eyes Outlines & Color */}
+      <rect x={frogX} y={frogY} width="5" height="5" fill={skin.outline} />
+      <rect x={frogX + 11} y={frogY} width="5" height="5" fill={skin.outline} />
+      <rect x={frogX + 1} y={frogY + 1} width="3" height="3" fill={skin.main} />
+      <rect x={frogX + 12} y={frogY + 1} width="3" height="3" fill={skin.main} />
+      <rect x={frogX + 2} y={frogY + 1} width="1" height="1" fill={skin.eyeHighlight} />
+      <rect x={frogX + 13} y={frogY + 1} width="1" height="1" fill={skin.eyeHighlight} />
+
+      {/* Body & Head */}
+      <rect x={frogX - 2} y={frogY + 4} width="20" height="18" fill={skin.main} />
+      <rect x={frogX - 3} y={frogY + 6} width="1" height="14" fill={skin.outline} />
+      <rect x={frogX + 18} y={frogY + 6} width="1" height="14" fill={skin.outline} />
+      <rect x={frogX} y={frogY + 22} width="16" height="1" fill={skin.outline} />
+
+      {/* Belly */}
+      <rect x={frogX + 3} y={frogY + 11} width="10" height="8" fill={skin.belly} />
+
+      {/* Cheeks */}
+      <rect x={frogX - 1} y={frogY + 10} width="3" height="2" fill={skin.cheeks} />
+      <rect x={frogX + 14} y={frogY + 10} width="3" height="2" fill={skin.cheeks} />
+
+      {/* Face Expression */}
+      <rect x={frogX + 2} y={frogY + 7} width="3" height="2" fill={skin.outline} />
+      <rect x={frogX + 2} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+      <rect x={frogX + 11} y={frogY + 7} width="3" height="2" fill={skin.outline} />
+      <rect x={frogX + 11} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+      <rect x={frogX + 6} y={frogY + 11} width="4" height="1" fill={skin.outline} />
+      <rect x={frogX + 5} y={frogY + 10} width="1" height="1" fill={skin.outline} />
+      <rect x={frogX + 10} y={frogY + 10} width="1" height="1" fill={skin.outline} />
+
+      {/* Feet */}
+      <rect x={frogX - 4} y={frogY + 20} width="6" height="3" fill={skin.legs} />
+      <rect x={frogX + 14} y={frogY + 20} width="6" height="3" fill={skin.legs} />
+
+      {/* OUTFIT LAYER */}
+      {config.outfitId === 'kimono' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 11} width="20" height="10" fill="#1E3A8A" />
+          <rect x={frogX} y={frogY + 11} width="16" height="10" fill="#2563EB" />
+          <rect x={frogX + 1} y={frogY + 14} width="14" height="3" fill="#FACC15" />
+          <rect x={frogX + 6} y={frogY + 13} width="4" height="5" fill="#EAB308" />
+        </g>
+      )}
+
+      {config.outfitId === 'raincoat' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="11" fill="#FACC15" />
+          <rect x={frogX} y={frogY + 11} width="16" height="9" fill="#EAB308" />
+          <rect x={frogX + 7} y={frogY + 12} width="2" height="2" fill="#713F12" />
+          <rect x={frogX + 7} y={frogY + 16} width="2" height="2" fill="#713F12" />
+        </g>
+      )}
+
+      {config.outfitId === 'sweater' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="11" fill="#EA580C" />
+          <rect x={frogX} y={frogY + 11} width="16" height="9" fill="#F97316" />
+          <rect x={frogX + 2} y={frogY + 13} width="12" height="1" fill="#C2410C" />
+          <rect x={frogX + 2} y={frogY + 16} width="12" height="1" fill="#C2410C" />
+        </g>
+      )}
+
+      {config.outfitId === 'ninja' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 9} width="20" height="12" fill="#18181B" />
+          <rect x={frogX} y={frogY + 14} width="16" height="2" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.outfitId === 'sailor' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 11} width="18" height="10" fill="#FFFFFF" />
+          <rect x={frogX + 1} y={frogY + 11} width="14" height="3" fill="#1E40AF" />
+          <rect x={frogX + 6} y={frogY + 13} width="4" height="4" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.outfitId === 'apron' && (
+        <g>
+          <rect x={frogX + 1} y={frogY + 11} width="14" height="10" fill="#78350F" />
+          <rect x={frogX + 4} y={frogY + 14} width="8" height="5" fill="#A16207" />
+          <rect x={frogX + 6} y={frogY + 15} width="4" height="1" fill="#FEF08A" />
+        </g>
+      )}
+
+      {config.outfitId === 'overalls' && (
+        <g>
+          <rect x={frogX} y={frogY + 13} width="16" height="8" fill="#2563EB" />
+          <rect x={frogX + 2} y={frogY + 10} width="3" height="4" fill="#1D4ED8" />
+          <rect x={frogX + 11} y={frogY + 10} width="3" height="4" fill="#1D4ED8" />
+          <rect x={frogX + 2} y={frogY + 12} width="2" height="2" fill="#FACC15" />
+          <rect x={frogX + 12} y={frogY + 12} width="2" height="2" fill="#FACC15" />
+        </g>
+      )}
+
+      {config.outfitId === 'scarf' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="4" fill="#DC2626" />
+          <rect x={frogX + 12} y={frogY + 13} width="4" height="7" fill="#B91C1C" />
+          <rect x={frogX + 12} y={frogY + 19} width="4" height="1" fill="#FEF08A" />
+        </g>
+      )}
+
+      {config.outfitId === 'business' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 11} width="18" height="10" fill="#334155" />
+          <polygon points={`${frogX + 4},${frogY + 11} ${frogX + 12},${frogY + 11} ${frogX + 8},${frogY + 18}`} fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.outfitId === 'hoodie' && (
+        <g>
+          <rect x={frogX - 3} y={frogY + 7} width="22" height="14" fill="#10B981" />
+          <rect x={frogX - 1} y={frogY + 5} width="4" height="3" fill="#059669" />
+          <rect x={frogX + 13} y={frogY + 5} width="4" height="3" fill="#059669" />
+          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#059669" />
+        </g>
+      )}
+
+      {/* GLASSES / FACE ACCESSORY */}
+      {config.glassesId === 'reading' && (
+        <g>
+          <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#D97706" />
+          <rect x={frogX + 1} y={frogY + 7} width="4" height="3" fill="#E0F2FE" />
+          <rect x={frogX + 1} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 10} y={frogY + 6} width="6" height="5" fill="#D97706" />
+          <rect x={frogX + 11} y={frogY + 7} width="4" height="3" fill="#E0F2FE" />
+          <rect x={frogX + 11} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 8} width="4" height="1" fill="#D97706" />
+        </g>
+      )}
+
+      {config.glassesId === 'sunglasses' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 6} width="8" height="5" fill="#18181B" />
+          <rect x={frogX + 9} y={frogY + 6} width="8" height="5" fill="#18181B" />
+          <rect x={frogX + 7} y={frogY + 7} width="2" height="2" fill="#18181B" />
+          <rect x={frogX} y={frogY + 7} width="2" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 10} y={frogY + 7} width="2" height="1" fill="#FFFFFF" />
+        </g>
+      )}
+
+      {config.glassesId === 'monocle' && (
+        <g>
+          <rect x={frogX + 10} y={frogY + 6} width="6" height="5" fill="#EAB308" />
+          <rect x={frogX + 11} y={frogY + 7} width="4" height="3" fill="#E0F2FE" />
+          <rect x={frogX + 11} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 16} y={frogY + 8} width="1" height="8" fill="#CA8A04" />
+        </g>
+      )}
+
+      {config.glassesId === 'blush_stars' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#FACC15" />
+          <rect x={frogX + 15} y={frogY + 9} width="2" height="2" fill="#FACC15" />
+        </g>
+      )}
+
+      {config.glassesId === 'sparkles' && (
+        <g>
+          <rect x={frogX - 5} y={frogY + 2} width="2" height="2" fill="#FEF08A" />
+          <rect x={frogX + 19} y={frogY + 3} width="2" height="2" fill="#FEF08A" />
+          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" />
+        </g>
+      )}
+
+      {config.glassesId === 'eyepatch' && (
+        <g>
+          <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#1C1917" />
+          <line x1={frogX - 2} y1={frogY + 5} x2={frogX + 18} y2={frogY + 11} stroke="#1C1917" strokeWidth="1" />
+        </g>
+      )}
+
+      {/* HAT LAYER */}
+      {config.hatId === 'lotus' && (
+        <g>
+          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#1E3A14" />
+          <rect x={frogX + 2} y={frogY - 2} width="12" height="2" fill="#4D7C0F" />
+          <rect x={frogX - 1} y={frogY} width="18" height="2" fill="#65A30D" />
+          <rect x={frogX - 2} y={frogY + 1} width="20" height="1" fill="#1E3A14" />
+          <rect x={frogX + 12} y={frogY - 1} width="1" height="1" fill="#FFFFFF" />
+        </g>
+      )}
+
+      {config.hatId === 'straw' && (
+        <g>
+          <polygon points={`${frogX + 8},${frogY - 5} ${frogX - 3},${frogY + 2} ${frogX + 19},${frogY + 2}`} fill="#FDE68A" />
+          <rect x={frogX - 4} y={frogY + 2} width="24" height="2" fill="#D97706" />
+          <rect x={frogX + 4} y={frogY} width="8" height="1" fill="#92400E" />
+        </g>
+      )}
+
+      {config.hatId === 'sakura' && (
+        <g>
+          <rect x={frogX} y={frogY - 1} width="4" height="3" fill="#F472B6" />
+          <rect x={frogX + 6} y={frogY - 2} width="4" height="3" fill="#FBCFE8" />
+          <rect x={frogX + 12} y={frogY - 1} width="4" height="3" fill="#F472B6" />
+          <rect x={frogX + 7} y={frogY - 1} width="2" height="1" fill="#FDE047" />
+        </g>
+      )}
+
+      {config.hatId === 'wizard' && (
+        <g>
+          <polygon points={`${frogX + 8},${frogY - 10} ${frogX},${frogY + 2} ${frogX + 16},${frogY + 2}`} fill="#1E1B4B" />
+          <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#4338CA" />
+          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" />
+        </g>
+      )}
+
+      {config.hatId === 'bandana' && (
+        <g>
+          <rect x={frogX - 1} y={frogY + 4} width="18" height="3" fill="#DC2626" />
+          <rect x={frogX + 14} y={frogY + 6} width="3" height="4" fill="#B91C1C" />
+        </g>
+      )}
+
+      {config.hatId === 'beanie' && (
+        <g>
+          <circle cx={frogX + 8} cy={frogY - 5} r="2.5" fill="#FFFFFF" />
+          <rect x={frogX} y={frogY - 3} width="16" height="5" fill="#DC2626" />
+          <rect x={frogX - 1} y={frogY + 1} width="18" height="3" fill="#F87171" />
+        </g>
+      )}
+
+      {config.hatId === 'chef' && (
+        <g>
+          <rect x={frogX} y={frogY - 8} width="16" height="8" fill="#FFFFFF" />
+          <circle cx={frogX + 3} cy={frogY - 8} r="3" fill="#FFFFFF" />
+          <circle cx={frogX + 8} cy={frogY - 9} r="3.5" fill="#FFFFFF" />
+          <circle cx={frogX + 13} cy={frogY - 8} r="3" fill="#FFFFFF" />
+          <rect x={frogX - 1} y={frogY} width="18" height="2" fill="#E2E8F0" />
+        </g>
+      )}
+
+      {config.hatId === 'crown' && (
+        <g>
+          <polygon points={`${frogX},${frogY - 4} ${frogX + 3},${frogY} ${frogX + 8},${frogY - 6} ${frogX + 13},${frogY} ${frogX + 16},${frogY - 4} ${frogX + 16},${frogY + 2} ${frogX},${frogY + 2}`} fill="#FACC15" />
+          <rect x={frogX} y={frogY + 1} width="16" height="2" fill="#EAB308" />
+          <rect x={frogX + 7} y={frogY} width="2" height="2" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.hatId === 'beret' && (
+        <g>
+          <ellipse cx={frogX + 8} cy={frogY} rx="11" ry="3.5" fill="#78350F" />
+          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#451A03" />
+        </g>
+      )}
+
+      {config.hatId === 'flower' && (
+        <g>
+          <circle cx={frogX + 16} cy={frogY + 2} r="3" fill="#FEF08A" />
+          <circle cx={frogX + 16} cy={frogY + 2} r="1.5" fill="#EA580C" />
+        </g>
+      )}
+
+      {config.hatId === 'headphone' && (
+        <g>
+          <rect x={frogX - 1} y={frogY - 3} width="18" height="2" fill="#18181B" />
+          <rect x={frogX - 3} y={frogY + 3} width="3" height="7" fill="#3B82F6" />
+          <rect x={frogX + 16} y={frogY + 3} width="3" height="7" fill="#3B82F6" />
+        </g>
+      )}
+
+      {config.hatId === 'detective' && (
+        <g>
+          <ellipse cx={frogX + 8} cy={frogY} rx="12" ry="3" fill="#78350F" />
+          <rect x={frogX + 2} y={frogY - 4} width="12" height="4" fill="#92400E" />
+          <rect x={frogX - 3} y={frogY + 1} width="22" height="1.5" fill="#451A03" />
+        </g>
+      )}
+
+      {config.hatId === 'samurai' && (
+        <g>
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#18181B" />
+          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 2},${frogY - 1} ${frogX + 14},${frogY - 1}`} fill="#CA8A04" />
+          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#DC2626" />
+        </g>
+      )}
+
+      {/* PROPS / HANDHELD ITEM */}
+      {config.activityId === 'tea' && (
+        <g>
+          <rect x={frogX + 5} y={frogY + 14} width="6" height="5" fill="#BBF7D0" />
+          <rect x={frogX + 6} y={frogY + 13} width="4" height="2" fill="#15803D" />
+        </g>
+      )}
+
+      {config.activityId === 'coffee' && (
+        <g>
+          <rect x={frogX + 5} y={frogY + 14} width="6" height="5" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 13} width="4" height="2" fill="#78350F" />
+          <rect x={frogX + 10} y={frogY + 15} width="2" height="3" fill="#E2E8F0" />
+        </g>
+      )}
+
+      {config.activityId === 'boba' && (
+        <g>
+          <rect x={frogX + 5} y={frogY + 13} width="6" height="7" fill="#FED7AA" />
+          <rect x={frogX + 7} y={frogY + 10} width="2" height="4" fill="#F43F5E" />
+          <rect x={frogX + 6} y={frogY + 18} width="1" height="1" fill="#18181B" />
+          <rect x={frogX + 8} y={frogY + 18} width="1" height="1" fill="#18181B" />
+        </g>
+      )}
+
+      {config.activityId === 'reading' && (
+        <g>
+          <rect x={frogX + 2} y={frogY + 13} width="12" height="7" fill="#FDF2F8" />
+          <rect x={frogX + 7} y={frogY + 13} width="2" height="7" fill="#DB2777" />
+        </g>
+      )}
+
+      {config.activityId === 'eating' && (
+        <g>
+          <polygon points={`${frogX + 8},${frogY + 11} ${frogX + 4},${frogY + 17} ${frogX + 12},${frogY + 17}`} fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 15} width="4" height="2" fill="#18181B" />
+        </g>
+      )}
+
+      {config.activityId === 'guitar' && (
+        <g>
+          <rect x={frogX + 6} y={frogY + 13} width="8" height="7" fill="#D97706" />
+          <rect x={frogX + 9} y={frogY + 15} width="2" height="3" fill="#451A03" />
+          <rect x={frogX + 13} y={frogY + 10} width="5" height="3" fill="#B45309" />
+        </g>
+      )}
+
+      {config.activityId === 'painting' && (
+        <g>
+          <ellipse cx={frogX + 9} cy={frogY + 16} rx="6" ry="4" fill="#D97706" />
+          <circle cx={frogX + 7} cy={frogY + 15} r="1" fill="#EF4444" />
+          <circle cx={frogX + 9} cy={frogY + 14} r="1" fill="#3B82F6" />
+          <circle cx={frogX + 11} cy={frogY + 15} r="1" fill="#EAB308" />
+        </g>
+      )}
+
+      {config.activityId === 'camera' && (
+        <g>
+          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#78350F" />
+          <circle cx={frogX + 8} cy={frogY + 16} r="2" fill="#1E293B" />
+        </g>
+      )}
+
+      {config.activityId === 'wand' && (
+        <g>
+          <line x1={frogX + 12} y1={frogY + 18} x2={frogX + 18} y2={frogY + 8} stroke="#CA8A04" strokeWidth="1.5" />
+          <polygon points={`${frogX + 18},${frogY + 5} ${frogX + 16},${frogY + 10} ${frogX + 21},${frogY + 8}`} fill="#FACC15" />
+        </g>
+      )}
+
+      {config.activityId === 'fishing' && (
+        <g>
+          <line x1={frogX + 10} y1={frogY + 18} x2={frogX + 24} y2={frogY + 2} stroke="#78350F" strokeWidth="1.5" />
+          <line x1={frogX + 24} y1={frogY + 2} x2={frogX + 26} y2={frogY + 24} stroke="#94A3B8" strokeWidth="0.5" />
+          <circle cx={frogX + 26} cy={frogY + 18} r="1.5" fill="#EF4444" />
+        </g>
+      )}
+    </svg>
+  );
+};
+
 interface PixelFrogSceneProps {
   config: PixelSceneConfig;
-  onUpdateConfig: (patch: Partial<PixelSceneConfig>) => void;
+  onUpdateConfig?: (patch: Partial<PixelSceneConfig>) => void;
   currentMoodValue?: number | null;
   soundEnabled?: boolean;
   hapticEnabled?: boolean;
   className?: string;
   showCustomizerButton?: boolean;
+  showInfoBar?: boolean;
+  size?: 'compact' | 'medium' | 'large';
+  onOpenShop?: () => void;
 }
 
 export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
@@ -53,12 +529,10 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   hapticEnabled = true,
   className = '',
   showCustomizerButton = true,
+  showInfoBar,
+  size = 'medium',
+  onOpenShop,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeCustomizerTab, setActiveCustomizerTab] = useState<
-    'scene' | 'activity' | 'hat' | 'companion' | 'weather'
-  >('scene');
-
   // Animation frame ticker for pixel effects
   const [animTick, setAnimTick] = useState(0);
 
@@ -96,13 +570,15 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
     const randomCompanion = FROG_COMPANIONS[Math.floor(Math.random() * FROG_COMPANIONS.length)].id;
     const randomWeather = FROG_WEATHERS[Math.floor(Math.random() * FROG_WEATHERS.length)].id;
 
-    onUpdateConfig({
-      sceneId: randomScene,
-      activityId: randomActivity,
-      hatId: randomHat,
-      companionId: randomCompanion,
-      weatherId: randomWeather,
-    });
+    if (onUpdateConfig) {
+      onUpdateConfig({
+        sceneId: randomScene,
+        activityId: randomActivity,
+        hatId: randomHat,
+        companionId: randomCompanion,
+        weatherId: randomWeather,
+      });
+    }
 
     confetti({
       particleCount: 35,
@@ -528,11 +1004,70 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
               </g>
             )}
 
+            {/* H. CELESTIAL CLOUD PALACE */}
+            {config.sceneId === 'cloud_palace' && (
+              <g>
+                {/* Rainbow Arch */}
+                <path d="M 10 70 Q 80 5 150 70" stroke="#F472B6" strokeWidth="3" fill="none" opacity="0.8" />
+                <path d="M 14 70 Q 80 11 146 70" stroke="#FBBF24" strokeWidth="3" fill="none" opacity="0.8" />
+                <path d="M 18 70 Q 80 17 142 70" stroke="#60A5FA" strokeWidth="3" fill="none" opacity="0.8" />
+
+                {/* Floating Starlight Particles */}
+                <circle cx="25" cy="25" r="2" fill="#FEF08A" className="animate-pulse" />
+                <circle cx="135" cy="22" r="2" fill="#FEF08A" className="animate-pulse" />
+                <circle cx="80" cy="18" r="2.5" fill="#FACC15" className="animate-pulse" />
+
+                {/* Fluffy Pastel Clouds Platform */}
+                <rect x="0" y="68" width="160" height="32" fill="#EDE9FE" />
+                {/* Cloud Puffs */}
+                <circle cx="30" cy="68" r="16" fill="#F5F3FF" />
+                <circle cx="60" cy="65" r="18" fill="#FFFFFF" />
+                <circle cx="80" cy="64" r="20" fill="#FFFFFF" />
+                <circle cx="100" cy="65" r="18" fill="#FFFFFF" />
+                <circle cx="130" cy="68" r="16" fill="#F5F3FF" />
+                {/* Golden Cloud Trim */}
+                <rect x="0" y="78" width="160" height="2" fill="#FDE047" opacity="0.6" />
+              </g>
+            )}
+
+            {/* I. MISTY EMERALD BAMBOO GROVE */}
+            {config.sceneId === 'bamboo_grove' && (
+              <g>
+                {/* Background Stalks */}
+                <rect x="15" y="0" width="8" height="75" fill="#14532D" opacity="0.6" />
+                <rect x="35" y="0" width="7" height="75" fill="#166534" opacity="0.6" />
+                <rect x="120" y="0" width="8" height="75" fill="#14532D" opacity="0.6" />
+                <rect x="140" y="0" width="7" height="75" fill="#166534" opacity="0.6" />
+
+                {/* Foreground Bamboo Stalks */}
+                <rect x="25" y="0" width="10" height="78" fill="#15803D" />
+                <rect x="25" y="20" width="10" height="2" fill="#14532D" />
+                <rect x="25" y="45" width="10" height="2" fill="#14532D" />
+
+                <rect x="130" y="0" width="10" height="78" fill="#15803D" />
+                <rect x="130" y="25" width="10" height="2" fill="#14532D" />
+                <rect x="130" y="50" width="10" height="2" fill="#14532D" />
+
+                {/* Hanging Paper Lantern */}
+                <line x1="30" y1="20" x2="45" y2="35" stroke="#78350F" strokeWidth="1" />
+                <rect x="42" y="35" width="8" height="12" fill="#DC2626" />
+                <rect x="44" y="38" width="4" height="6" fill="#FEF08A" />
+                <rect x="45" y="47" width="2" height="3" fill="#D97706" />
+
+                {/* Mossy Forest Stone Pathway Floor */}
+                <rect x="0" y="68" width="160" height="32" fill="#14532D" />
+                <rect x="0" y="74" width="160" height="26" fill="#166534" />
+                <ellipse cx="80" cy="80" rx="30" ry="10" fill="#475569" />
+                <ellipse cx="80" cy="80" rx="26" ry="8" fill="#64748B" />
+              </g>
+            )}
+
             {/* 3. FROG CHARACTER (CENTERED AT X=70..90, Y=56..80) */}
             {/* Dynamic gentle breathing offset */}
             {(() => {
               const frogY = config.isAnimated && animTick % 2 === 0 ? 56 : 57;
               const frogX = 72;
+              const skin = getSkinColors(config.skinId);
 
               return (
                 <g id="pixel-frog-hero">
@@ -549,12 +1084,12 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
                       {/* Frog Head on White Pillow */}
                       <rect x={frogX - 10} y={frogY + 2} width="16" height="14" fill="#F8FAFC" />
-                      <rect x={frogX - 6} y={frogY + 2} width="16" height="10" fill="#75A65A" />
-                      <rect x={frogX - 8} y={frogY} width="6" height="4" fill="#75A65A" />
+                      <rect x={frogX - 6} y={frogY + 2} width="16" height="10" fill={skin.main} />
+                      <rect x={frogX - 8} y={frogY} width="6" height="4" fill={skin.main} />
 
                       {/* Closed Sleepy Eyes (- -) */}
-                      <rect x={frogX - 2} y={frogY + 5} width="4" height="1" fill="#2D3A20" />
-                      <rect x={frogX + 4} y={frogY + 5} width="4" height="1" fill="#2D3A20" />
+                      <rect x={frogX - 2} y={frogY + 5} width="4" height="1" fill={skin.outline} />
+                      <rect x={frogX + 4} y={frogY + 5} width="4" height="1" fill={skin.outline} />
 
                       {/* Floating Zzz bubbles */}
                       <g fill="#38BDF8" className="font-mono text-[6px]">
@@ -573,33 +1108,33 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                     /* Standard / Relaxing / Reading / Tea / Eating / Meditating / Guitar Poses */
                     <g>
                       {/* Frog Eyes Top Outlines */}
-                      <rect x={frogX} y={frogY} width="5" height="5" fill="#2D3A20" />
-                      <rect x={frogX + 11} y={frogY} width="5" height="5" fill="#2D3A20" />
-                      <rect x={frogX + 1} y={frogY + 1} width="3" height="3" fill="#75A65A" />
-                      <rect x={frogX + 12} y={frogY + 1} width="3" height="3" fill="#75A65A" />
-                      <rect x={frogX + 2} y={frogY + 1} width="1" height="1" fill="#FFFFFF" />
-                      <rect x={frogX + 13} y={frogY + 1} width="1" height="1" fill="#FFFFFF" />
+                      <rect x={frogX} y={frogY} width="5" height="5" fill={skin.outline} />
+                      <rect x={frogX + 11} y={frogY} width="5" height="5" fill={skin.outline} />
+                      <rect x={frogX + 1} y={frogY + 1} width="3" height="3" fill={skin.main} />
+                      <rect x={frogX + 12} y={frogY + 1} width="3" height="3" fill={skin.main} />
+                      <rect x={frogX + 2} y={frogY + 1} width="1" height="1" fill={skin.eyeHighlight} />
+                      <rect x={frogX + 13} y={frogY + 1} width="1" height="1" fill={skin.eyeHighlight} />
 
                       {/* Frog Body / Head Main */}
-                      <rect x={frogX - 2} y={frogY + 4} width="20" height="16" fill="#75A65A" />
-                      <rect x={frogX - 3} y={frogY + 6} width="1" height="12" fill="#2D3A20" />
-                      <rect x={frogX + 18} y={frogY + 6} width="1" height="12" fill="#2D3A20" />
-                      <rect x={frogX} y={frogY + 20} width="16" height="1" fill="#2D3A20" />
+                      <rect x={frogX - 2} y={frogY + 4} width="20" height="16" fill={skin.main} />
+                      <rect x={frogX - 3} y={frogY + 6} width="1" height="12" fill={skin.outline} />
+                      <rect x={frogX + 18} y={frogY + 6} width="1" height="12" fill={skin.outline} />
+                      <rect x={frogX} y={frogY + 20} width="16" height="1" fill={skin.outline} />
 
                       {/* Cream Belly */}
-                      <rect x={frogX + 3} y={frogY + 11} width="10" height="7" fill="#FEF9C3" />
+                      <rect x={frogX + 3} y={frogY + 11} width="10" height="7" fill={skin.belly} />
 
                       {/* Rosy Cheeks */}
-                      <rect x={frogX - 1} y={frogY + 10} width="3" height="2" fill="#E88B8B" />
-                      <rect x={frogX + 14} y={frogY + 10} width="3" height="2" fill="#E88B8B" />
+                      <rect x={frogX - 1} y={frogY + 10} width="3" height="2" fill={skin.cheeks} />
+                      <rect x={frogX + 14} y={frogY + 10} width="3" height="2" fill={skin.cheeks} />
 
                       {/* Frog Face Expression (Mood & Activity Adapted) */}
                       {config.activityId === 'meditating' ? (
                         /* Zen Meditating Closed Eyes */
                         <g>
-                          <rect x={frogX + 2} y={frogY + 7} width="4" height="1" fill="#2D3A20" />
-                          <rect x={frogX + 10} y={frogY + 7} width="4" height="1" fill="#2D3A20" />
-                          <rect x={frogX + 6} y={frogY + 11} width="4" height="1" fill="#2D3A20" />
+                          <rect x={frogX + 2} y={frogY + 7} width="4" height="1" fill={skin.outline} />
+                          <rect x={frogX + 10} y={frogY + 7} width="4" height="1" fill={skin.outline} />
+                          <rect x={frogX + 6} y={frogY + 11} width="4" height="1" fill={skin.outline} />
                           {/* Floating Aura Sparkles */}
                           <rect x={frogX - 6} y={frogY - 4} width="2" height="2" fill="#FACC15" />
                           <rect x={frogX + 20} y={frogY - 2} width="2" height="2" fill="#FACC15" />
@@ -608,19 +1143,159 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       ) : (
                         /* Happy Eyes & Smile */
                         <g>
-                          <rect x={frogX + 2} y={frogY + 7} width="3" height="2" fill="#2D3A20" />
+                          <rect x={frogX + 2} y={frogY + 7} width="3" height="2" fill={skin.outline} />
                           <rect x={frogX + 2} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
-                          <rect x={frogX + 11} y={frogY + 7} width="3" height="2" fill="#2D3A20" />
+                          <rect x={frogX + 11} y={frogY + 7} width="3" height="2" fill={skin.outline} />
                           <rect x={frogX + 11} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
-                          <rect x={frogX + 6} y={frogY + 11} width="4" height="1" fill="#2D3A20" />
-                          <rect x={frogX + 5} y={frogY + 10} width="1" height="1" fill="#2D3A20" />
-                          <rect x={frogX + 10} y={frogY + 10} width="1" height="1" fill="#2D3A20" />
+                          <rect x={frogX + 6} y={frogY + 11} width="4" height="1" fill={skin.outline} />
+                          <rect x={frogX + 5} y={frogY + 10} width="1" height="1" fill={skin.outline} />
+                          <rect x={frogX + 10} y={frogY + 10} width="1" height="1" fill={skin.outline} />
                         </g>
                       )}
 
                       {/* Frog Legs / Feet */}
-                      <rect x={frogX - 4} y={frogY + 18} width="6" height="3" fill="#5F9744" />
-                      <rect x={frogX + 14} y={frogY + 18} width="6" height="3" fill="#5F9744" />
+                      <rect x={frogX - 4} y={frogY + 18} width="6" height="3" fill={skin.legs} />
+                      <rect x={frogX + 14} y={frogY + 18} width="6" height="3" fill={skin.legs} />
+
+                      {/* OUTFIT CLOTHING LAYER */}
+                      {config.outfitId === 'kimono' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 11} width="20" height="9" fill="#1E3A8A" />
+                          <rect x={frogX} y={frogY + 11} width="16" height="9" fill="#2563EB" />
+                          <rect x={frogX + 1} y={frogY + 14} width="14" height="3" fill="#FACC15" />
+                          <rect x={frogX + 6} y={frogY + 13} width="4" height="5" fill="#EAB308" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'raincoat' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#FACC15" />
+                          <rect x={frogX} y={frogY + 11} width="16" height="8" fill="#EAB308" />
+                          <rect x={frogX + 7} y={frogY + 12} width="2" height="2" fill="#713F12" />
+                          <rect x={frogX + 7} y={frogY + 16} width="2" height="2" fill="#713F12" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'sweater' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#EA580C" />
+                          <rect x={frogX} y={frogY + 11} width="16" height="8" fill="#F97316" />
+                          <rect x={frogX + 2} y={frogY + 13} width="12" height="1" fill="#C2410C" />
+                          <rect x={frogX + 2} y={frogY + 16} width="12" height="1" fill="#C2410C" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'ninja' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 9} width="20" height="11" fill="#18181B" />
+                          <rect x={frogX} y={frogY + 14} width="16" height="2" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'sailor' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY + 11} width="18" height="9" fill="#FFFFFF" />
+                          <rect x={frogX + 1} y={frogY + 11} width="14" height="3" fill="#1E40AF" />
+                          <rect x={frogX + 6} y={frogY + 13} width="4" height="4" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'apron' && (
+                        <g>
+                          <rect x={frogX + 1} y={frogY + 11} width="14" height="9" fill="#78350F" />
+                          <rect x={frogX + 4} y={frogY + 14} width="8" height="5" fill="#A16207" />
+                          <rect x={frogX + 6} y={frogY + 15} width="4" height="1" fill="#FEF08A" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'overalls' && (
+                        <g>
+                          <rect x={frogX} y={frogY + 13} width="16" height="7" fill="#2563EB" />
+                          <rect x={frogX + 2} y={frogY + 10} width="3" height="4" fill="#1D4ED8" />
+                          <rect x={frogX + 11} y={frogY + 10} width="3" height="4" fill="#1D4ED8" />
+                          <rect x={frogX + 2} y={frogY + 12} width="2" height="2" fill="#FACC15" />
+                          <rect x={frogX + 12} y={frogY + 12} width="2" height="2" fill="#FACC15" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'scarf' && (
+                        <g>
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="4" fill="#DC2626" />
+                          <rect x={frogX + 12} y={frogY + 13} width="4" height="7" fill="#B91C1C" />
+                          <rect x={frogX + 12} y={frogY + 19} width="4" height="1" fill="#FEF08A" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'business' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY + 11} width="18" height="9" fill="#334155" />
+                          <polygon points={`${frogX + 4},${frogY + 11} ${frogX + 12},${frogY + 11} ${frogX + 8},${frogY + 17}`} fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'hoodie' && (
+                        <g>
+                          <rect x={frogX - 3} y={frogY + 7} width="22" height="13" fill="#10B981" />
+                          <rect x={frogX - 1} y={frogY + 5} width="4" height="3" fill="#059669" />
+                          <rect x={frogX + 13} y={frogY + 5} width="4" height="3" fill="#059669" />
+                          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#059669" />
+                        </g>
+                      )}
+
+                      {/* GLASSES / FACE ACCESSORY LAYER */}
+                      {config.glassesId === 'reading' && (
+                        <g>
+                          <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#D97706" />
+                          <rect x={frogX + 1} y={frogY + 7} width="4" height="3" fill="#E0F2FE" />
+                          <rect x={frogX + 1} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+                          <rect x={frogX + 10} y={frogY + 6} width="6" height="5" fill="#D97706" />
+                          <rect x={frogX + 11} y={frogY + 7} width="4" height="3" fill="#E0F2FE" />
+                          <rect x={frogX + 11} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY + 8} width="4" height="1" fill="#D97706" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'sunglasses' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY + 6} width="8" height="5" fill="#18181B" />
+                          <rect x={frogX + 9} y={frogY + 6} width="8" height="5" fill="#18181B" />
+                          <rect x={frogX + 7} y={frogY + 7} width="2" height="2" fill="#18181B" />
+                          <rect x={frogX} y={frogY + 7} width="2" height="1" fill="#FFFFFF" />
+                          <rect x={frogX + 10} y={frogY + 7} width="2" height="1" fill="#FFFFFF" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'monocle' && (
+                        <g>
+                          <rect x={frogX + 10} y={frogY + 6} width="6" height="5" fill="#EAB308" />
+                          <rect x={frogX + 11} y={frogY + 7} width="4" height="3" fill="#E0F2FE" />
+                          <rect x={frogX + 11} y={frogY + 7} width="1" height="1" fill="#FFFFFF" />
+                          <rect x={frogX + 16} y={frogY + 8} width="1" height="8" fill="#CA8A04" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'blush_stars' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#FACC15" />
+                          <rect x={frogX + 15} y={frogY + 9} width="2" height="2" fill="#FACC15" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'sparkles' && (
+                        <g>
+                          <rect x={frogX - 5} y={frogY + 2} width="2" height="2" fill="#FEF08A" />
+                          <rect x={frogX + 19} y={frogY + 3} width="2" height="2" fill="#FEF08A" />
+                          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'eyepatch' && (
+                        <g>
+                          <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#1C1917" />
+                          <line x1={frogX - 2} y1={frogY + 5} x2={frogX + 18} y2={frogY + 11} stroke="#1C1917" strokeWidth="1" />
+                        </g>
+                      )}
 
                       {/* ACTIVITY PROPS */}
 
@@ -632,8 +1307,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 14} y={frogY + 12} width="1" height="8" fill="#DB2777" />
                           <rect x={frogX + 7} y={frogY + 12} width="2" height="8" fill="#DB2777" />
                           {/* Mini Paws holding book */}
-                          <rect x={frogX} y={frogY + 14} width="2" height="3" fill="#75A65A" />
-                          <rect x={frogX + 14} y={frogY + 14} width="2" height="3" fill="#75A65A" />
+                          <rect x={frogX} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 14} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
                       )}
 
@@ -652,34 +1327,53 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             opacity="0.8"
                           />
                           {/* Hands Holding Cup */}
-                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill="#75A65A" />
-                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill="#75A65A" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
                       )}
 
-                      {/* 3. Eating Treats (Onigiri / Rice bowl) */}
+                      {/* 3. Hot Coffee */}
+                      {config.activityId === 'coffee' && (
+                        <g>
+                          <rect x={frogX + 5} y={frogY + 12} width="6" height="6" fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY + 11} width="4" height="2" fill="#78350F" />
+                          <rect x={frogX + 10} y={frogY + 13} width="2" height="3" fill="#E2E8F0" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 4. Boba Milk Tea */}
+                      {config.activityId === 'boba' && (
+                        <g>
+                          <rect x={frogX + 5} y={frogY + 12} width="6" height="7" fill="#FED7AA" />
+                          <rect x={frogX + 7} y={frogY + 9} width="2" height="4" fill="#F43F5E" />
+                          <rect x={frogX + 6} y={frogY + 17} width="1" height="1" fill="#18181B" />
+                          <rect x={frogX + 8} y={frogY + 17} width="1" height="1" fill="#18181B" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 5. Eating Treats (Onigiri / Rice bowl) */}
                       {config.activityId === 'eating' && (
                         <g>
-                          {/* Onigiri */}
                           <polygon
                             points={`${frogX + 8},${frogY + 10} ${frogX + 4},${frogY + 16} ${frogX + 12},${frogY + 16}`}
                             fill="#FFFFFF"
                           />
-                          <rect x={frogX + 6} y={frogY + 14} width="4" height="2" fill="#18181B" /> {/* Nori */}
-                          {/* Hands */}
-                          <rect x={frogX + 2} y={frogY + 13} width="3" height="3" fill="#75A65A" />
-                          <rect x={frogX + 11} y={frogY + 13} width="3" height="3" fill="#75A65A" />
+                          <rect x={frogX + 6} y={frogY + 14} width="4" height="2" fill="#18181B" />
+                          <rect x={frogX + 2} y={frogY + 13} width="3" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 13} width="3" height="3" fill={skin.main} />
                         </g>
                       )}
 
-                      {/* 4. Plucking Guitar / Lute */}
+                      {/* 6. Plucking Guitar / Lute */}
                       {config.activityId === 'guitar' && (
                         <g>
-                          {/* Wooden Lute Body & Neck */}
                           <rect x={frogX + 6} y={frogY + 12} width="8" height="8" fill="#D97706" />
                           <rect x={frogX + 9} y={frogY + 14} width="2" height="3" fill="#451A03" />
                           <rect x={frogX + 13} y={frogY + 8} width="6" height="3" fill="#B45309" />
-                          {/* Floating Pixel Music Notes */}
                           <g fill="#F59E0B">
                             <g transform={`translate(${frogX + 16}, ${frogY + 2 - (animTick % 3) * 2})`}>
                               <rect x="0" y="2" width="2" height="2" />
@@ -697,6 +1391,47 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {/* 7. Painting Art */}
+                      {config.activityId === 'painting' && (
+                        <g>
+                          <ellipse cx={frogX + 9} cy={frogY + 15} rx="6" ry="4" fill="#D97706" />
+                          <circle cx={frogX + 7} cy={frogY + 14} r="1" fill="#EF4444" />
+                          <circle cx={frogX + 9} cy={frogY + 13} r="1" fill="#3B82F6" />
+                          <circle cx={frogX + 11} cy={frogY + 14} r="1" fill="#EAB308" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 8. Retro Camera */}
+                      {config.activityId === 'camera' && (
+                        <g>
+                          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#78350F" />
+                          <circle cx={frogX + 8} cy={frogY + 16} r="2" fill="#1E293B" />
+                          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 9. Magic Starlight Wand */}
+                      {config.activityId === 'wand' && (
+                        <g>
+                          <line x1={frogX + 12} y1={frogY + 16} x2={frogX + 18} y2={frogY + 8} stroke="#CA8A04" strokeWidth="1.5" />
+                          <polygon points={`${frogX + 18},${frogY + 5} ${frogX + 16},${frogY + 10} ${frogX + 21},${frogY + 8}`} fill="#FACC15" />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 10. Bamboo Fishing Rod */}
+                      {config.activityId === 'fishing' && (
+                        <g>
+                          <line x1={frogX + 10} y1={frogY + 16} x2={frogX + 24} y2={frogY + 2} stroke="#78350F" strokeWidth="1.5" />
+                          <line x1={frogX + 24} y1={frogY + 2} x2={frogX + 26} y2={frogY + 24} stroke="#94A3B8" strokeWidth="0.5" />
+                          <circle cx={frogX + 26} cy={frogY + 18} r="1.5" fill="#EF4444" />
+                          <rect x={frogX + 9} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
                       {/* 4. HATS & ACCESSORIES (HEAD LAYER) */}
 
                       {/* A. Lotus Leaf Hat */}
@@ -706,7 +1441,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 2} y={frogY - 2} width="12" height="2" fill="#4D7C0F" />
                           <rect x={frogX - 1} y={frogY} width="18" height="2" fill="#65A30D" />
                           <rect x={frogX - 2} y={frogY + 1} width="20" height="1" fill="#1E3A14" />
-                          <rect x={frogX + 12} y={frogY - 1} width="1" height="1" fill="#FFFFFF" /> {/* Dew drop */}
+                          <rect x={frogX + 12} y={frogY - 1} width="1" height="1" fill="#FFFFFF" />
                         </g>
                       )}
 
@@ -740,15 +1475,15 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             fill="#1E1B4B"
                           />
                           <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#4338CA" />
-                          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" /> {/* Gold star */}
+                          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" />
                         </g>
                       )}
 
-                      {/* E. Red Bandana / Scarf */}
+                      {/* E. Red Bandana */}
                       {config.hatId === 'bandana' && (
                         <g>
-                          <rect x={frogX - 1} y={frogY + 10} width="18" height="3" fill="#DC2626" />
-                          <rect x={frogX + 14} y={frogY + 12} width="3" height="5" fill="#B91C1C" />
+                          <rect x={frogX - 1} y={frogY + 4} width="18" height="3" fill="#DC2626" />
+                          <rect x={frogX + 14} y={frogY + 6} width="3" height="4" fill="#B91C1C" />
                         </g>
                       )}
 
@@ -758,6 +1493,69 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <circle cx={frogX + 8} cy={frogY - 5} r="2.5" fill="#FFFFFF" />
                           <rect x={frogX} y={frogY - 3} width="16" height="5" fill="#DC2626" />
                           <rect x={frogX - 1} y={frogY + 1} width="18" height="3" fill="#F87171" />
+                        </g>
+                      )}
+
+                      {/* G. Chef Toque */}
+                      {config.hatId === 'chef' && (
+                        <g>
+                          <rect x={frogX} y={frogY - 8} width="16" height="8" fill="#FFFFFF" />
+                          <circle cx={frogX + 3} cy={frogY - 8} r="3" fill="#FFFFFF" />
+                          <circle cx={frogX + 8} cy={frogY - 9} r="3.5" fill="#FFFFFF" />
+                          <circle cx={frogX + 13} cy={frogY - 8} r="3" fill="#FFFFFF" />
+                          <rect x={frogX - 1} y={frogY} width="18" height="2" fill="#E2E8F0" />
+                        </g>
+                      )}
+
+                      {/* H. Royal Golden Crown */}
+                      {config.hatId === 'crown' && (
+                        <g>
+                          <polygon points={`${frogX},${frogY - 4} ${frogX + 3},${frogY} ${frogX + 8},${frogY - 6} ${frogX + 13},${frogY} ${frogX + 16},${frogY - 4} ${frogX + 16},${frogY + 2} ${frogX},${frogY + 2}`} fill="#FACC15" />
+                          <rect x={frogX} y={frogY + 1} width="16" height="2" fill="#EAB308" />
+                          <rect x={frogX + 7} y={frogY} width="2" height="2" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {/* I. Artist Beret */}
+                      {config.hatId === 'beret' && (
+                        <g>
+                          <ellipse cx={frogX + 8} cy={frogY} rx="11" ry="3.5" fill="#78350F" />
+                          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#451A03" />
+                        </g>
+                      )}
+
+                      {/* J. Tropical Flower */}
+                      {config.hatId === 'flower' && (
+                        <g>
+                          <circle cx={frogX + 16} cy={frogY + 2} r="3" fill="#FEF08A" />
+                          <circle cx={frogX + 16} cy={frogY + 2} r="1.5" fill="#EA580C" />
+                        </g>
+                      )}
+
+                      {/* K. Lo-Fi Headphones */}
+                      {config.hatId === 'headphone' && (
+                        <g>
+                          <rect x={frogX - 1} y={frogY - 3} width="18" height="2" fill="#18181B" />
+                          <rect x={frogX - 3} y={frogY + 3} width="3" height="7" fill="#3B82F6" />
+                          <rect x={frogX + 16} y={frogY + 3} width="3" height="7" fill="#3B82F6" />
+                        </g>
+                      )}
+
+                      {/* L. Detective Cap */}
+                      {config.hatId === 'detective' && (
+                        <g>
+                          <ellipse cx={frogX + 8} cy={frogY} rx="12" ry="3" fill="#78350F" />
+                          <rect x={frogX + 2} y={frogY - 4} width="12" height="4" fill="#92400E" />
+                          <rect x={frogX - 3} y={frogY + 1} width="22" height="1.5" fill="#451A03" />
+                        </g>
+                      )}
+
+                      {/* M. Samurai Kabuto */}
+                      {config.hatId === 'samurai' && (
+                        <g>
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#18181B" />
+                          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 2},${frogY - 1} ${frogX + 14},${frogY - 1}`} fill="#CA8A04" />
+                          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#DC2626" />
                         </g>
                       )}
                     </g>
@@ -783,13 +1581,10 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             {config.companionId === 'crab' && (
               <g id="companion-crab">
                 <rect x="42" y="74" width="10" height="6" fill="#D95C3C" />
-                {/* Waving Claws */}
                 <rect x="38" y={(animTick % 2 === 0 ? 70 : 72)} width="3" height="3" fill="#D95C3C" />
                 <rect x="51" y={(animTick % 2 === 0 ? 72 : 70)} width="3" height="3" fill="#D95C3C" />
-                {/* Eyes */}
                 <rect x="44" y="72" width="2" height="2" fill="#FFFFFF" />
                 <rect x="48" y="72" width="2" height="2" fill="#FFFFFF" />
-                {/* Legs */}
                 <rect x="40" y="80" width="2" height="2" fill="#3A2218" />
                 <rect x="50" y="80" width="2" height="2" fill="#3A2218" />
               </g>
@@ -798,56 +1593,61 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             {/* C. Hotaru Fireflies Swarm */}
             {config.companionId === 'fireflies' && (
               <g id="companion-fireflies">
-                <circle
-                  cx={35 + (animTick % 4) * 2}
-                  cy={45 + (animTick % 3)}
-                  r="1.5"
-                  fill="#FEF08A"
-                  className="animate-pulse"
-                />
-                <circle
-                  cx={125 - (animTick % 3) * 2}
-                  cy={38 + (animTick % 2)}
-                  r="2"
-                  fill="#FACC15"
-                  className="animate-pulse"
-                />
-                <circle
-                  cx={60 + (animTick % 5)}
-                  cy={30 - (animTick % 2)}
-                  r="1.5"
-                  fill="#FEF08A"
-                  className="animate-pulse"
-                />
-                <circle
-                  cx={100 + (animTick % 3)}
-                  cy={55 + (animTick % 4)}
-                  r="1.5"
-                  fill="#FACC15"
-                  className="animate-pulse"
-                />
+                <circle cx={35 + (animTick % 4) * 2} cy={45 + (animTick % 3)} r="1.5" fill="#FEF08A" className="animate-pulse" />
+                <circle cx={125 - (animTick % 3) * 2} cy={38 + (animTick % 2)} r="2" fill="#FACC15" className="animate-pulse" />
+                <circle cx={60 + (animTick % 5)} cy={30 - (animTick % 2)} r="1.5" fill="#FEF08A" className="animate-pulse" />
+                <circle cx={100 + (animTick % 3)} cy={55 + (animTick % 4)} r="1.5" fill="#FACC15" className="animate-pulse" />
               </g>
             )}
 
             {/* D. Flutter Butterfly */}
             {config.companionId === 'butterfly' && (
-              <g
-                id="companion-butterfly"
-                transform={`translate(${115 + (animTick % 4)}, ${42 + ((animTick * 2) % 6)})`}
-              >
-                {/* Wings */}
+              <g id="companion-butterfly" transform={`translate(${115 + (animTick % 4)}, ${42 + ((animTick * 2) % 6)})`}>
                 <rect x="0" y="0" width="4" height="4" fill="#60A5FA" />
                 <rect x="6" y="0" width="4" height="4" fill="#60A5FA" />
                 <rect x="4" y="1" width="2" height="5" fill="#1E293B" />
               </g>
             )}
 
-            {/* E. Koi Fish Swimming in Water */}
+            {/* E. Koi Fish Swimming */}
             {config.companionId === 'koi' && (
               <g id="companion-koi" transform={`translate(${45 + ((animTick * 3) % 40)}, 82)`}>
                 <ellipse cx="6" cy="3" rx="7" ry="3" fill="#EA580C" />
                 <ellipse cx="4" cy="3" rx="3" ry="2" fill="#FFFFFF" />
-                <polygon points="12,3 16,0 16,6" fill="#EA580C" /> {/* Tail */}
+                <polygon points="12,3 16,0 16,6" fill="#EA580C" />
+              </g>
+            )}
+
+            {/* F. Duckling Companion */}
+            {config.companionId === 'duckling' && (
+              <g id="companion-duckling" transform={`translate(112, 74)`}>
+                <ellipse cx="6" cy="5" rx="6" ry="4" fill="#FACC15" />
+                <circle cx="3" cy="2" r="3" fill="#FACC15" />
+                <rect x="0" y="2" width="2" height="2" fill="#EA580C" />
+                <circle cx="3" cy="1" r="0.8" fill="#1E293B" />
+              </g>
+            )}
+
+            {/* G. Cat Companion */}
+            {config.companionId === 'cat' && (
+              <g id="companion-cat" transform={`translate(42, 74)`}>
+                <ellipse cx="6" cy="6" rx="6" ry="4" fill="#18181B" />
+                <circle cx="10" cy="4" r="3" fill="#18181B" />
+                <polygon points="9,1 11,1 10,0" fill="#18181B" />
+                <polygon points="11,1 13,1 12,0" fill="#18181B" />
+                <circle cx="11" cy="4" r="0.8" fill="#FDE047" />
+                <rect x="8" y="5" width="4" height="1" fill="#DC2626" />
+              </g>
+            )}
+
+            {/* H. Mossy Turtle */}
+            {config.companionId === 'turtle' && (
+              <g id="companion-turtle" transform={`translate(108, 76)`}>
+                <ellipse cx="8" cy="4" rx="8" ry="4" fill="#78350F" />
+                <ellipse cx="8" cy="3" rx="6" ry="3" fill="#15803D" />
+                <circle cx="1" cy="4" r="2" fill="#166534" />
+                <rect x="5" y="7" width="2" height="2" fill="#166534" />
+                <rect x="11" y="7" width="2" height="2" fill="#166534" />
               </g>
             )}
 
@@ -888,345 +1688,58 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
         </div>
 
         {/* Info & Quick Settings Bottom Bar inside Diorama */}
-        <div className="p-3.5 bg-white/90 dark:bg-[#1f1b17]/90 backdrop-blur-md flex items-center justify-between gap-2 border-t border-black/[0.06] dark:border-white/[0.08]">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border border-[#5f7a61]/20 flex items-center justify-center shrink-0 shadow-2xs">
-              <PixelOptionIcon id={config.sceneId} size={20} />
-            </div>
-            <div className="min-w-0">
-              <h4 className="font-extrabold text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
-                {SCENE_LOCATIONS.find((s) => s.id === config.sceneId)?.name}
-              </h4>
-              <p className="text-[10.5px] text-[#8c7e70] dark:text-[#a89b8d] font-medium truncate">
-                {FROG_ACTIVITIES.find((a) => a.id === config.activityId)?.name} •{' '}
-                {FROG_HATS.find((h) => h.id === config.hatId)?.name}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1.5 shrink-0">
-            {/* Surprise Shuffle Button */}
-            <button
-              type="button"
-              onClick={handleRandomize}
-              className="px-2.5 py-1.5 rounded-full text-xs font-bold bg-[#f2ebe0] hover:bg-[#e7dec7] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] flex items-center gap-1 transition ios-tap shadow-2xs"
-              title="Surprise Randomize"
-            >
-              <Shuffle size={12} className="text-[#b86f52]" />
-              <span className="hidden sm:inline">Shuffle</span>
-            </button>
-
-            {/* Customize Button */}
-            {showCustomizerButton && (
-              <button
-                type="button"
-                onClick={() => {
-                  if (soundEnabled) soundEngine.playTapSound();
-                  if (hapticEnabled) triggerHaptic();
-                  setIsModalOpen(true);
-                }}
-                className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#5f7a61] hover:bg-[#4d6650] text-white flex items-center gap-1.5 shadow-xs transition ios-tap"
-              >
-                <Sliders size={12} />
-                <span>Customize</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================= */}
-      {/* CUSTOMIZE FROG & HABITAT MODAL (100% UNLOCKED BOXES)     */}
-      {/* ========================================================= */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-md animate-fade-in">
-          <div
-            className="bg-[#fcfaf5] dark:bg-[#1a1714] border border-[#e3dacf] dark:border-[#383028] rounded-[28px] max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-scale-up"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="p-4 sm:p-5 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-[#5f7a61]/15 border border-[#5f7a61]/30 flex items-center justify-center text-[#5f7a61] dark:text-[#8fc493]">
-                  <Sparkles size={20} />
-                </div>
-                <div>
-                  <h3 className="font-black text-base text-[#2d2823] dark:text-[#f4efe8]">
-                    Pixel Sanctuary Studio
-                  </h3>
-                  <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] font-medium">
-                    All scenes, outfits & companions are 100% unlocked
-                  </p>
-                </div>
+        {size !== 'compact' && showInfoBar !== false && (
+          <div className="p-3.5 bg-white/90 dark:bg-[#1f1b17]/90 backdrop-blur-md flex items-center justify-between gap-2 border-t border-black/[0.06] dark:border-white/[0.08]">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border border-[#5f7a61]/20 flex items-center justify-center shrink-0 shadow-2xs">
+                <PixelOptionIcon id={config.sceneId} size={20} />
               </div>
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 flex items-center justify-center text-[#6e6052] dark:text-[#d6cbbe] transition"
-              >
-                <X size={16} />
-              </button>
+              <div className="min-w-0">
+                <h4 className="font-extrabold text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
+                  {SCENE_LOCATIONS.find((s) => s.id === config.sceneId)?.name}
+                </h4>
+                <p className="text-[10.5px] text-[#8c7e70] dark:text-[#a89b8d] font-medium truncate">
+                  {FROG_ACTIVITIES.find((a) => a.id === config.activityId)?.name} •{' '}
+                  {FROG_HATS.find((h) => h.id === config.hatId)?.name}
+                </p>
+              </div>
             </div>
 
-            {/* Customizer Tabs */}
-            <div className="flex border-b border-black/[0.06] dark:border-white/[0.08] px-3 bg-[#f5efe4]/60 dark:bg-[#151210]/60 overflow-x-auto no-scrollbar">
-              {[
-                { id: 'scene', label: 'Scene', icon: <PixelTabSceneIcon size={18} /> },
-                { id: 'activity', label: 'Activity', icon: <PixelTabActivityIcon size={18} /> },
-                { id: 'hat', label: 'Headwear', icon: <PixelTabHeadwearIcon size={18} /> },
-                { id: 'companion', label: 'Companion', icon: <PixelTabCompanionIcon size={18} /> },
-                { id: 'weather', label: 'Sky & Weather', icon: <PixelTabWeatherIcon size={18} /> },
-              ].map((tab) => {
-                const isActive = activeCustomizerTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => {
-                      if (soundEnabled) soundEngine.playTapSound();
-                      setActiveCustomizerTab(tab.id as any);
-                    }}
-                    className={`py-3 px-3.5 text-xs font-black flex items-center gap-1.5 border-b-2 transition whitespace-nowrap ${
-                      isActive
-                        ? 'border-[#5f7a61] text-[#5f7a61] dark:text-[#8fc493]'
-                        : 'border-transparent text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] dark:hover:text-[#f4efe8]'
-                    }`}
-                  >
-                    <span className="shrink-0">{tab.icon}</span>
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Tab Body Options List (Scrollable) */}
-            <div className="p-4 sm:p-5 overflow-y-auto max-h-[50vh] space-y-2.5">
-              {/* 1. SCENE SELECTION */}
-              {activeCustomizerTab === 'scene' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {SCENE_LOCATIONS.map((loc) => {
-                    const isSelected = config.sceneId === loc.id;
-                    return (
-                      <button
-                        key={loc.id}
-                        type="button"
-                        onClick={() => {
-                          if (soundEnabled) soundEngine.playTapSound();
-                          if (hapticEnabled) triggerHaptic();
-                          onUpdateConfig({ sceneId: loc.id });
-                        }}
-                        className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all ios-tap ${
-                          isSelected
-                            ? 'bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border-[#5f7a61] shadow-xs'
-                            : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
-                        }`}
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
-                          <PixelOptionIcon id={loc.id} size={28} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-1">
-                            <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
-                              {loc.name}
-                            </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
-                          </div>
-                          <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
-                            {loc.desc}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Surprise Shuffle Button */}
+              {onUpdateConfig && (
+                <button
+                  type="button"
+                  onClick={handleRandomize}
+                  className="px-2.5 py-1.5 rounded-full text-xs font-bold bg-[#f2ebe0] hover:bg-[#e7dec7] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] flex items-center gap-1 transition ios-tap shadow-2xs"
+                  title="Surprise Mix"
+                >
+                  <Shuffle size={12} className="text-[#b86f52]" />
+                  <span className="hidden sm:inline">Shuffle</span>
+                </button>
               )}
 
-              {/* 2. ACTIVITY SELECTION */}
-              {activeCustomizerTab === 'activity' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {FROG_ACTIVITIES.map((act) => {
-                    const isSelected = config.activityId === act.id;
-                    return (
-                      <button
-                        key={act.id}
-                        type="button"
-                        onClick={() => {
-                          if (soundEnabled) soundEngine.playTapSound();
-                          if (hapticEnabled) triggerHaptic();
-                          onUpdateConfig({ activityId: act.id });
-                        }}
-                        className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all ios-tap ${
-                          isSelected
-                            ? 'bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border-[#5f7a61] shadow-xs'
-                            : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
-                        }`}
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
-                          <PixelOptionIcon id={act.id} size={28} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-1">
-                            <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
-                              {act.name}
-                            </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
-                          </div>
-                          <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
-                            {act.desc}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+              {/* Wardrobe Button */}
+              {showCustomizerButton && onOpenShop && (
+                <button
+                  id="frog-scene-dressup-btn"
+                  type="button"
+                  onClick={() => {
+                    if (soundEnabled) soundEngine.playTapSound();
+                    if (hapticEnabled) triggerHaptic();
+                    onOpenShop();
+                  }}
+                  className="px-3.5 py-1.5 rounded-full text-xs font-black bg-[#5f7a61] hover:bg-[#4d6650] active:scale-95 text-white flex items-center gap-1.5 shadow-xs transition ios-tap"
+                  title="Frog Wardrobe"
+                >
+                  <Shirt size={13} />
+                  <span>Wardrobe</span>
+                </button>
               )}
-
-              {/* 3. HEADWEAR SELECTION */}
-              {activeCustomizerTab === 'hat' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {FROG_HATS.map((hat) => {
-                    const isSelected = config.hatId === hat.id;
-                    return (
-                      <button
-                        key={hat.id}
-                        type="button"
-                        onClick={() => {
-                          if (soundEnabled) soundEngine.playTapSound();
-                          if (hapticEnabled) triggerHaptic();
-                          onUpdateConfig({ hatId: hat.id });
-                        }}
-                        className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all ios-tap ${
-                          isSelected
-                            ? 'bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border-[#5f7a61] shadow-xs'
-                            : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
-                        }`}
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
-                          <PixelOptionIcon id={hat.id} size={28} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-1">
-                            <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
-                              {hat.name}
-                            </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
-                          </div>
-                          <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
-                            {hat.desc}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* 4. COMPANION SELECTION */}
-              {activeCustomizerTab === 'companion' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {FROG_COMPANIONS.map((comp) => {
-                    const isSelected = config.companionId === comp.id;
-                    return (
-                      <button
-                        key={comp.id}
-                        type="button"
-                        onClick={() => {
-                          if (soundEnabled) soundEngine.playTapSound();
-                          if (hapticEnabled) triggerHaptic();
-                          onUpdateConfig({ companionId: comp.id });
-                        }}
-                        className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all ios-tap ${
-                          isSelected
-                            ? 'bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border-[#5f7a61] shadow-xs'
-                            : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
-                        }`}
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
-                          <PixelOptionIcon id={comp.id} size={28} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-1">
-                            <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
-                              {comp.name}
-                            </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
-                          </div>
-                          <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
-                            {comp.desc}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* 5. WEATHER & ATMOSPHERE SELECTION */}
-              {activeCustomizerTab === 'weather' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {FROG_WEATHERS.map((weath) => {
-                    const isSelected = config.weatherId === weath.id;
-                    return (
-                      <button
-                        key={weath.id}
-                        type="button"
-                        onClick={() => {
-                          if (soundEnabled) soundEngine.playTapSound();
-                          if (hapticEnabled) triggerHaptic();
-                          onUpdateConfig({ weatherId: weath.id });
-                        }}
-                        className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all ios-tap ${
-                          isSelected
-                            ? 'bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border-[#5f7a61] shadow-xs'
-                            : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
-                        }`}
-                      >
-                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
-                          <PixelOptionIcon id={weath.id} size={28} />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between gap-1">
-                            <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
-                              {weath.name}
-                            </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
-                          </div>
-                          <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
-                            {weath.desc}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Modal Bottom Actions */}
-            <div className="p-4 bg-[#f5efe4]/60 dark:bg-[#151210]/60 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-2">
-              <button
-                type="button"
-                onClick={handleRandomize}
-                className="px-3.5 py-2 rounded-xl text-xs font-black bg-white dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb] flex items-center gap-1.5 border border-black/[0.06] dark:border-white/[0.1] shadow-2xs transition ios-tap"
-              >
-                <Shuffle size={13} className="text-[#b86f52]" />
-                <span>Surprise Mix</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (soundEnabled) soundEngine.playTapSound();
-                  setIsModalOpen(false);
-                }}
-                className="px-5 py-2 rounded-xl text-xs font-black bg-[#5f7a61] hover:bg-[#4d6650] text-white shadow-xs transition ios-tap"
-              >
-                Done
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

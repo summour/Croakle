@@ -3,12 +3,9 @@ import { PageType } from '../types';
 import {
   FrogHouseDockIcon,
   HabitCloverDockIcon,
-  BambooProjectDockIcon,
-  FrogFaceDockIcon,
   WashiJournalDockIcon,
   PocketTimerDockIcon,
   ToriiStatsDockIcon,
-  WoodGearDockIcon,
 } from './FrogIcons';
 
 interface BottomDockProps {
@@ -26,7 +23,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
   }[] = [
     {
       id: 'menu',
-      activeKeys: ['menu'],
+      activeKeys: ['menu', 'mood', 'settings'],
       label: 'Home',
       icon: FrogHouseDockIcon,
     },
@@ -37,8 +34,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
       icon: HabitCloverDockIcon,
     },
     {
-      id: 'mood',
-      activeKeys: ['mood', 'notes'],
+      id: 'notes',
+      activeKeys: ['notes'],
       label: 'Journal',
       icon: WashiJournalDockIcon,
     },
@@ -50,8 +47,8 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     },
     {
       id: 'analysis',
-      activeKeys: ['analysis', 'settings'],
-      label: 'Insights',
+      activeKeys: ['analysis'],
+      label: 'Insight',
       icon: ToriiStatsDockIcon,
     },
   ];
@@ -59,7 +56,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
   return (
     <footer
       id="croakle-bottom-dock"
-      className="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md bg-[#221c17]/85 dark:bg-[#130f0d]/88 backdrop-blur-3xl border border-white/25 dark:border-white/12 rounded-[36px] p-2 shadow-[0_24px_48px_-12px_rgba(15,10,6,0.55),0_6px_16px_rgba(0,0,0,0.25),inset_0_1.5px_2px_rgba(255,255,255,0.3)] flex items-center justify-between gap-1.5 transition-all duration-300"
+      className="absolute bottom-3.5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md bg-[#221c17]/90 dark:bg-[#130f0d]/92 backdrop-blur-3xl border border-white/20 dark:border-white/10 rounded-[34px] p-2 shadow-[0_20px_44px_-10px_rgba(15,10,6,0.6),0_4px_14px_rgba(0,0,0,0.3)] flex items-center justify-between gap-1.5 transition-all duration-300"
     >
       {groups.map((group) => {
         const Icon = group.icon;
@@ -76,9 +73,9 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
               }
             }}
             title={group.label}
-            className={`flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-[24px] transition-all duration-250 min-h-[52px] ios-tap relative ${
+            className={`flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-[24px] transition-all duration-200 min-h-[50px] ios-tap relative ${
               isActive
-                ? 'bg-gradient-to-b from-[#ffffff] via-[#faf6f0] to-[#f0e7dc] text-[#221c17] font-black shadow-[0_8px_20px_-2px_rgba(0,0,0,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,1),inset_0_-1px_1px_rgba(0,0,0,0.06)] scale-[1.04]'
+                ? 'bg-gradient-to-b from-[#ffffff] via-[#faf6f0] to-[#f0e7dc] text-[#221c17] font-black shadow-[0_6px_16px_-2px_rgba(0,0,0,0.22),inset_0_1.5px_1.5px_rgba(255,255,255,1)] scale-[1.03]'
                 : 'text-[#a89b8d] hover:text-[#f4efe8] hover:bg-white/[0.06] font-medium'
             }`}
           >
@@ -101,6 +98,3 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     </footer>
   );
 };
-
-
-

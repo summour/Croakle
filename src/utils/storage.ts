@@ -7,10 +7,12 @@ import {
   AppSettings,
   ActiveTimerState,
   PixelSceneConfig,
+  FrogShopState,
   DEFAULT_HABITS,
   DEFAULT_PROJECTS,
   DEFAULT_ACTIVE_TIMER,
   DEFAULT_PIXEL_SCENE,
+  DEFAULT_FROG_SHOP_STATE,
 } from '../types';
 import { getDaysInMonth, getMonthKey, formatIsoDate, getWeekKey } from './dateUtils';
 
@@ -21,6 +23,7 @@ export const SESSIONS_STORAGE_KEY = 'CroakleSessionBlocksV1';
 export const SETTINGS_STORAGE_KEY = 'CroakleSettingsV1';
 export const ACTIVE_TIMER_STORAGE_KEY = 'CroakleActiveTimerV1';
 export const PIXEL_SCENE_STORAGE_KEY = 'CroaklePixelSceneConfigV1';
+export const SHOP_STORAGE_KEY = 'CroakleFrogShopStateV1';
 
 export interface HabitStoreState {
   habitTemplates: HabitTemplate[];
@@ -294,6 +297,9 @@ export function loadPixelSceneState(): PixelSceneConfig {
       sceneId: parsed.sceneId || 'zen_pond',
       activityId: parsed.activityId || 'relaxing',
       hatId: parsed.hatId || 'lotus',
+      outfitId: parsed.outfitId || 'none',
+      glassesId: parsed.glassesId || 'none',
+      skinId: parsed.skinId || 'classic',
       companionId: parsed.companionId || 'snail',
       weatherId: parsed.weatherId || 'auto',
       isAnimated: parsed.isAnimated !== undefined ? Boolean(parsed.isAnimated) : true,
@@ -312,6 +318,30 @@ export function savePixelSceneState(config: PixelSceneConfig) {
   }
 }
 
+export function loadShopState(): FrogShopState {
+  try {
+    const raw = localStorage.getItem(SHOP_STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_FROG_SHOP_STATE };
+    const parsed = JSON.parse(raw);
+    return {
+      coins: typeof parsed.coins === 'number' ? parsed.coins : DEFAULT_FROG_SHOP_STATE.coins,
+      ownedItemIds: Array.isArray(parsed.ownedItemIds) ? parsed.ownedItemIds : [...DEFAULT_FROG_SHOP_STATE.ownedItemIds],
+      lastDailyClaimDate: parsed.lastDailyClaimDate || undefined,
+      transactions: Array.isArray(parsed.transactions) ? parsed.transactions : DEFAULT_FROG_SHOP_STATE.transactions,
+    };
+  } catch {
+    return { ...DEFAULT_FROG_SHOP_STATE };
+  }
+}
+
+export function saveShopState(shopState: FrogShopState) {
+  try {
+    localStorage.setItem(SHOP_STORAGE_KEY, JSON.stringify(shopState));
+  } catch (e) {
+    console.error('Failed to save frog shop state', e);
+  }
+}
+
 export function exportFullBackup(): string {
   const data = {
     version: '1.0',
@@ -322,6 +352,7 @@ export function exportFullBackup(): string {
     sessions: loadSessionsState(),
     settings: loadSettingsState(),
     pixelScene: loadPixelSceneState(),
+    shopState: loadShopState(),
   };
   return JSON.stringify(data, null, 2);
 }
@@ -335,6 +366,7 @@ export function importFullBackup(jsonString: string): boolean {
     if (parsed.sessions) saveSessionsState(parsed.sessions);
     if (parsed.settings) saveSettingsState(parsed.settings);
     if (parsed.pixelScene) savePixelSceneState(parsed.pixelScene);
+    if (parsed.shopState) saveShopState(parsed.shopState);
     return true;
   } catch (e) {
     console.error('Import failed', e);

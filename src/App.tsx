@@ -9,10 +9,20 @@ import {
   AppSettings,
   ActiveTimerState,
   PixelSceneConfig,
+  FrogShopState,
+  ShopItem,
+  FrogOutfitId,
+  FrogHatId,
+  FrogGlassesId,
+  FrogSkinId,
+  FrogActivityId,
+  SceneLocationId,
+  FrogCompanionId,
   DEFAULT_HABITS,
   DEFAULT_PROJECTS,
   DEFAULT_ACTIVE_TIMER,
   DEFAULT_PIXEL_SCENE,
+  DEFAULT_FROG_SHOP_STATE,
 } from './types';
 import {
   loadHabitsState,
@@ -30,6 +40,8 @@ import {
   saveActiveTimerState,
   loadPixelSceneState,
   savePixelSceneState,
+  loadShopState,
+  saveShopState,
 } from './utils/storage';
 import { getTodayIso, getDaysInMonth } from './utils/dateUtils';
 import { BottomDock } from './components/BottomDock';
@@ -42,12 +54,15 @@ import { NotesView } from './components/NotesView';
 import { TimeSessionsView } from './components/TimeSessionsView';
 import { AnalyticsView } from './components/AnalyticsView';
 import { SettingsView } from './components/SettingsView';
+import { GachaView } from './components/GachaView';
+import { WardrobeView } from './components/WardrobeView';
 import { LiveTimerBar } from './components/LiveTimerBar';
+import { GachaPullResult } from './types';
 import { soundEngine, triggerHaptic } from './utils/audioUtils';
 import confetti from 'canvas-confetti';
 
 export function App() {
-  const [activePage, setActivePage] = useState<PageType>('menu');
+  const [activePage, setActivePage] = useState<PageType>('shop');
 
   // Today Date & Active View Dates
   const [todayDate] = useState(new Date());
@@ -62,6 +77,162 @@ export function App() {
   const [sessions, setSessions] = useState<TimeSession[]>(loadSessionsState);
   const [settings, setSettings] = useState<AppSettings>(loadSettingsState);
   const [pixelScene, setPixelScene] = useState<PixelSceneConfig>(loadPixelSceneState);
+  const [shopState, setShopState] = useState<FrogShopState>(loadShopState);
+
+  // Persist Frog Shop State whenever changed
+  useEffect(() => {
+    saveShopState(shopState);
+  }, [shopState]);
+
+  // Helper to award Lily Coins with optional transaction log
+  const earnCoins = (amount: number, reason: string) => {
+    setShopState((prev) => ({
+      ...prev,
+      coins: prev.coins + amount,
+      transactions: [
+        {
+          id: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+          title: reason,
+          amount,
+          date: new Date().toISOString().slice(0, 10),
+          type: 'earn',
+        },
+        ...(prev.transactions || []),
+      ],
+    }));
+  };
+
+  const handleBuyItem = (item: ShopItem): boolean => {
+    if (shopState.coins < item.price) return false;
+
+    setShopState((prev) => ({
+      ...prev,
+      coins: prev.coins - item.price,
+      ownedItemIds: prev.ownedItemIds.includes(item.id)
+        ? prev.ownedItemIds
+        : [...prev.ownedItemIds, item.id],
+      transactions: [
+        {
+          id: `tx_${Date.now()}`,
+          title: `Purchased ${item.name}`,
+          amount: item.price,
+          date: new Date().toISOString().slice(0, 10),
+          type: 'spend',
+        },
+        ...(prev.transactions || []),
+      ],
+    }));
+    return true;
+  };
+
+  const handleEquipItem = (item: ShopItem) => {
+    const patch: Partial<PixelSceneConfig> = {};
+    if (item.category === 'outfit') patch.outfitId = item.itemId as FrogOutfitId;
+    if (item.category === 'hat') patch.hatId = item.itemId as FrogHatId;
+    if (item.category === 'glasses') patch.glassesId = item.itemId as FrogGlassesId;
+    if (item.category === 'skin') patch.skinId = item.itemId as FrogSkinId;
+    if (item.category === 'prop') patch.activityId = item.itemId as FrogActivityId;
+    if (item.category === 'scene') patch.sceneId = item.itemId as SceneLocationId;
+    if (item.category === 'companion') patch.companionId = item.itemId as FrogCompanionId;
+
+    handleUpdatePixelScene(patch);
+  };
+
+  const handleClaimDailyReward = () => {
+    const today = new Date().toISOString().slice(0, 10);
+    setShopState((prev) => ({
+      ...prev,
+      coins: prev.coins + 50,
+      lastDailyClaimDate: today,
+      transactions: [
+        {
+          id: `tx_${Date.now()}`,
+          title: 'Daily Boutique Reward 🎁',
+          amount: 50,
+          date: today,
+          type: 'earn',
+        },
+        ...(prev.transactions || []),
+      ],
+    }));
+  };
+
+  const handleGachaPullResults = (results: GachaPullResult[], totalCost: number, isDailyFree?: boolean) => {
+    let totalRefund = 0;
+    const newOwnedIds: string[] = [];
+
+    results.forEach((res) => {
+      newOwnedIds.push(res.item.id);
+      if (res.duplicateRefundCoins) {
+        totalRefund += res.duplicateRefundCoins;
+      }
+    });
+
+    const today = new Date().toISOString().slice(0, 10);
+
+    setShopState((prev) => {
+      const mergedOwned = Array.from(new Set([...prev.ownedItemIds, ...newOwnedIds]));
+      const newCoins = prev.coins - totalCost + totalRefund;
+
+      const txs = [
+        {
+          id: `tx_${Date.now()}`,
+          title: isDailyFree
+            ? `Daily Free Gacha 1-Pull 🎁 (${results[0]?.item.name || 'Item'})`
+            : `Gacha ${results.length}x Pulls (${results.map((r) => r.item.name).slice(0, 2).join(', ')}${results.length > 2 ? '...' : ''})`,
+          amount: Math.max(0, totalCost - totalRefund),
+          date: today,
+          type: (totalCost > 0 ? 'spend' : 'earn') as 'spend' | 'earn',
+        },
+        ...(prev.transactions || []),
+      ];
+
+      return {
+        ...prev,
+        coins: Math.max(0, newCoins),
+        ownedItemIds: mergedOwned,
+        gachaPityCounter: (prev.gachaPityCounter || 0) + results.length,
+        lastFreeGachaDate: isDailyFree ? today : prev.lastFreeGachaDate,
+        transactions: txs,
+      };
+    });
+  };
+
+  const handleToggleWishlist = (itemId: string) => {
+    setShopState((prev) => {
+      const current = prev.wishlistIds || [];
+      const exists = current.includes(itemId);
+      const next = exists ? current.filter((id) => id !== itemId) : [...current, itemId];
+      return {
+        ...prev,
+        wishlistIds: next,
+      };
+    });
+  };
+
+  const handleClaimSetCompletionBonus = (setId: string, rewardCoins: number) => {
+    const today = new Date().toISOString().slice(0, 10);
+    setShopState((prev) => {
+      const alreadyClaimed = (prev.completedSetClaimedIds || []).includes(setId);
+      if (alreadyClaimed) return prev;
+
+      return {
+        ...prev,
+        coins: prev.coins + rewardCoins,
+        completedSetClaimedIds: [...(prev.completedSetClaimedIds || []), setId],
+        transactions: [
+          {
+            id: `tx_${Date.now()}`,
+            title: `Set Master Completion Reward 👑 (+${rewardCoins} Coins)`,
+            amount: rewardCoins,
+            date: today,
+            type: 'earn',
+          },
+          ...(prev.transactions || []),
+        ],
+      };
+    });
+  };
 
   // Persist Pixel Scene Config whenever changed
   useEffect(() => {
@@ -335,6 +506,7 @@ export function App() {
 
   const handleSelectMoodToday = (moodValue: number) => {
     handleSetMoodDay(todayDate.getDate(), moodValue);
+    earnCoins(10, 'Daily Mood Check-in 🐸');
   };
 
   // Note Actions
@@ -345,6 +517,7 @@ export function App() {
       createdAt: Date.now(),
     };
     setNotes((prev) => [newNote, ...prev]);
+    earnCoins(15, 'Journal Note Written 📝');
 
     // 1. Sync Mood Tracker if category is 'mood'
     if (noteData.type === 'mood' && typeof noteData.moodValue === 'number') {
@@ -526,6 +699,8 @@ export function App() {
       notes: `Recorded with Continuous Timer (${durationMinutes}m)`,
     });
 
+    earnCoins(20, `Focus Session Completed (${durationMinutes}m) ⏱️`);
+
     if (settings.soundEnabled) soundEngine.playCompletionChime();
     if (settings.hapticEnabled) triggerHaptic();
 
@@ -552,6 +727,7 @@ export function App() {
     setSessions(loadSessionsState());
     setSettings(loadSettingsState());
     setPixelScene(loadPixelSceneState());
+    setShopState(loadShopState());
   };
 
   const handleResetData = () => {
@@ -707,6 +883,31 @@ export function App() {
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
               onNavigate={setActivePage}
+            />
+          )}
+
+          {activePage === 'shop' && (
+            <GachaView
+              config={pixelScene}
+              onUpdateConfig={handleUpdatePixelScene}
+              shopState={shopState}
+              onGachaPullResults={handleGachaPullResults}
+              onToggleWishlist={handleToggleWishlist}
+              onBack={() => setActivePage('menu')}
+              soundEnabled={settings.soundEnabled}
+              hapticEnabled={settings.hapticEnabled}
+            />
+          )}
+
+          {activePage === 'dressup' && (
+            <WardrobeView
+              config={pixelScene}
+              onUpdateConfig={handleUpdatePixelScene}
+              shopState={shopState}
+              onToggleWishlist={handleToggleWishlist}
+              onBack={() => setActivePage('menu')}
+              soundEnabled={settings.soundEnabled}
+              hapticEnabled={settings.hapticEnabled}
             />
           )}
 

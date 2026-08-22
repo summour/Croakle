@@ -1,4 +1,5 @@
 import React from 'react';
+import { PixelItemThumbnail } from './PixelItemThumbnail';
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number;
@@ -1170,91 +1171,13 @@ export const PixelTabCompanionIcon: React.FC<IconProps> = (props) => <PixelCompa
 export const PixelTabWeatherIcon: React.FC<IconProps> = (props) => <PixelWeatherSunnyIcon {...props} />;
 
 /** Master Pixel Option Icon Renderer */
-export const PixelOptionIcon: React.FC<{ id: string; size?: number; className?: string }> = ({
+export const PixelOptionIcon: React.FC<{ id: string; category?: string; size?: number; className?: string }> = ({
   id,
+  category,
   size = 24,
   className = '',
 }) => {
-  switch (id) {
-    // Scenes
-    case 'zen_pond':
-      return <PixelZenPondIcon size={size} className={className} />;
-    case 'treehouse':
-      return <PixelTreehouseIcon size={size} className={className} />;
-    case 'sakura_shrine':
-      return <PixelSakuraShrineIcon size={size} className={className} />;
-    case 'rainy_meadow':
-      return <PixelRainyMeadowIcon size={size} className={className} />;
-    case 'onsen':
-      return <PixelOnsenIcon size={size} className={className} />;
-    case 'night_camp':
-      return <PixelNightCampIcon size={size} className={className} />;
-    case 'tearoom':
-      return <PixelTearoomIcon size={size} className={className} />;
-
-    // Activities
-    case 'relaxing':
-      return <PixelFrogRelaxIcon size={size} className={className} />;
-    case 'reading':
-      return <PixelFrogReadingIcon size={size} className={className} />;
-    case 'tea':
-      return <PixelFrogTeaIcon size={size} className={className} />;
-    case 'eating':
-      return <PixelFrogEatingIcon size={size} className={className} />;
-    case 'meditating':
-      return <PixelFrogMeditatingIcon size={size} className={className} />;
-    case 'guitar':
-      return <PixelFrogGuitarIcon size={size} className={className} />;
-    case 'sleeping':
-      return <PixelFrogSleepingIcon size={size} className={className} />;
-
-    // Headwear
-    case 'none':
-      return <PixelHatNaturalIcon size={size} className={className} />;
-    case 'lotus':
-      return <PixelHatLotusIcon size={size} className={className} />;
-    case 'straw':
-      return <PixelHatStrawIcon size={size} className={className} />;
-    case 'sakura':
-      return <PixelHatSakuraIcon size={size} className={className} />;
-    case 'wizard':
-      return <PixelHatWizardIcon size={size} className={className} />;
-    case 'bandana':
-      return <PixelHatBandanaIcon size={size} className={className} />;
-    case 'beanie':
-      return <PixelHatBeanieIcon size={size} className={className} />;
-
-    // Companions
-    case 'companion_none':
-      return <PixelCompanionSoloIcon size={size} className={className} />;
-    case 'snail':
-      return <PixelCompanionSnailIcon size={size} className={className} />;
-    case 'crab':
-      return <PixelCompanionCrabIcon size={size} className={className} />;
-    case 'fireflies':
-      return <PixelCompanionFirefliesIcon size={size} className={className} />;
-    case 'butterfly':
-      return <PixelCompanionButterflyIcon size={size} className={className} />;
-    case 'koi':
-      return <PixelCompanionKoiIcon size={size} className={className} />;
-
-    // Weather
-    case 'auto':
-      return <PixelWeatherAutoIcon size={size} className={className} />;
-    case 'sunny':
-      return <PixelWeatherSunnyIcon size={size} className={className} />;
-    case 'golden':
-      return <PixelWeatherGoldenIcon size={size} className={className} />;
-    case 'starry':
-      return <PixelWeatherStarryIcon size={size} className={className} />;
-    case 'rainy':
-      return <PixelWeatherRainyIcon size={size} className={className} />;
-    case 'petals':
-      return <PixelWeatherPetalsIcon size={size} className={className} />;
-
-    default:
-      return <CloverIcon size={size} className={className} />;
-  }
+  return <PixelItemThumbnail id={id} category={category} size={size} className={className} />;
 };
 
 /** Pixel Checkmark Icon */
@@ -1715,3 +1638,181 @@ export const FrogItemIcon: React.FC<{ itemId: string; size?: number; className?:
       return <CloverIcon size={size} className={className} />;
   }
 };
+
+/** Pixel Golden Lily Coin Icon */
+export const LilyCoinIcon: React.FC<IconProps> = ({ size = 24, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Sparkle top right */}
+    <rect x="18" y="1" width="1" height="1" fill="#FEF08A" />
+    <rect x="17" y="2" width="3" height="1" fill="#FEF08A" />
+    <rect x="18" y="3" width="1" height="1" fill="#FEF08A" />
+
+    {/* Coin Outer Ring */}
+    <rect x="8" y="3" width="8" height="1" fill="#CA8A04" />
+    <rect x="5" y="4" width="3" height="2" fill="#CA8A04" />
+    <rect x="16" y="4" width="3" height="2" fill="#CA8A04" />
+    <rect x="4" y="6" width="1" height="12" fill="#CA8A04" />
+    <rect x="19" y="6" width="1" height="12" fill="#CA8A04" />
+    <rect x="5" y="18" width="3" height="2" fill="#CA8A04" />
+    <rect x="16" y="18" width="3" height="2" fill="#CA8A04" />
+    <rect x="8" y="20" width="8" height="1" fill="#CA8A04" />
+
+    {/* Coin Main Face */}
+    <rect x="8" y="4" width="8" height="1" fill="#FACC15" />
+    <rect x="5" y="6" width="14" height="12" fill="#FACC15" />
+    <rect x="8" y="19" width="8" height="1" fill="#EAB308" />
+
+    {/* Coin Highlights (Top Left) */}
+    <rect x="7" y="5" width="4" height="2" fill="#FEF08A" />
+    <rect x="5" y="7" width="2" height="4" fill="#FEF08A" />
+
+    {/* Center Frog Face / Lily Emblem on Coin */}
+    <rect x="8" y="9" width="2" height="2" fill="#854D0E" />
+    <rect x="14" y="9" width="2" height="2" fill="#854D0E" />
+    <rect x="9" y="13" width="6" height="2" fill="#854D0E" />
+    <rect x="10" y="14" width="4" height="1" fill="#CA8A04" />
+    {/* Frog cheeks */}
+    <rect x="7" y="12" width="2" height="1" fill="#EAB308" />
+    <rect x="15" y="12" width="2" height="1" fill="#EAB308" />
+  </svg>
+);
+
+/** Frog Shop Dock / Wardrobe Icon */
+export const FrogShopDockIcon: React.FC<IconProps> = ({ size = 24, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Shopping Bag Handles */}
+    <rect x="8" y="2" width="8" height="2" fill="#A16207" />
+    <rect x="7" y="4" width="2" height="4" fill="#A16207" />
+    <rect x="15" y="4" width="2" height="4" fill="#A16207" />
+
+    {/* Bag Body Outline */}
+    <rect x="4" y="7" width="16" height="15" fill="#D97706" />
+    <rect x="5" y="8" width="14" height="13" fill="#F59E0B" />
+    <rect x="6" y="9" width="12" height="11" fill="#FDE68A" />
+
+    {/* Frog Face Emblem on Front of Bag */}
+    <rect x="8" y="11" width="2" height="2" fill="#5F7A61" />
+    <rect x="14" y="11" width="2" height="2" fill="#5F7A61" />
+    <rect x="8" y="13" width="8" height="4" fill="#5F7A61" />
+    <rect x="9" y="14" width="6" height="2" fill="#FEF9C3" />
+    <rect x="11" y="15" width="2" height="1" fill="#2D3A20" />
+    {/* Rosy cheeks */}
+    <rect x="8" y="15" width="1" height="1" fill="#E88B8B" />
+    <rect x="15" y="15" width="1" height="1" fill="#E88B8B" />
+  </svg>
+);
+
+/** Pixel Tab Outfit / Clothes Icon */
+export const PixelTabOutfitIcon: React.FC<IconProps> = ({ size = 20, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Hanger / Collar */}
+    <rect x="10" y="3" width="4" height="2" fill="#D97706" />
+    <rect x="7" y="5" width="10" height="2" fill="#2563EB" />
+    {/* Kimono Sleeves & Robe */}
+    <rect x="4" y="7" width="16" height="13" fill="#3B82F6" />
+    <rect x="2" y="7" width="4" height="6" fill="#1D4ED8" />
+    <rect x="18" y="7" width="4" height="6" fill="#1D4ED8" />
+    {/* Golden Obi Sash */}
+    <rect x="6" y="13" width="12" height="3" fill="#FACC15" />
+    <rect x="10" y="12" width="4" height="5" fill="#EAB308" />
+  </svg>
+);
+
+/** Pixel Tab Glasses / Face Accessory Icon */
+export const PixelTabGlassesIcon: React.FC<IconProps> = ({ size = 20, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Spectacles Bridge */}
+    <rect x="11" y="10" width="2" height="2" fill="#D97706" />
+    {/* Left Rim */}
+    <rect x="3" y="7" width="7" height="8" fill="#F59E0B" />
+    <rect x="5" y="9" width="3" height="4" fill="#38BDF8" />
+    <rect x="5" y="9" width="1" height="1" fill="#FFFFFF" />
+    {/* Right Rim */}
+    <rect x="14" y="7" width="7" height="8" fill="#F59E0B" />
+    <rect x="16" y="9" width="3" height="4" fill="#38BDF8" />
+    <rect x="16" y="9" width="1" height="1" fill="#FFFFFF" />
+  </svg>
+);
+
+/** Pixel Tab Frog Skin Icon */
+export const PixelTabSkinIcon: React.FC<IconProps> = ({ size = 20, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Frog Palette */}
+    <rect x="6" y="4" width="4" height="4" fill="#75A65A" />
+    <rect x="14" y="4" width="4" height="4" fill="#75A65A" />
+    <rect x="4" y="8" width="16" height="10" fill="#75A65A" />
+    <rect x="8" y="12" width="8" height="5" fill="#FEF9C3" />
+    <rect x="5" y="11" width="2" height="2" fill="#E88B8B" />
+    <rect x="17" y="11" width="2" height="2" fill="#E88B8B" />
+    <rect x="10" y="11" width="4" height="2" fill="#2D3A20" />
+  </svg>
+);
+
+/** Pixel Tab Handheld Prop Icon */
+export const PixelTabPropIcon: React.FC<IconProps> = ({ size = 20, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Boba Tea / Wand */}
+    <rect x="14" y="2" width="2" height="7" fill="#F43F5E" />
+    <rect x="7" y="8" width="10" height="13" fill="#FB923C" />
+    <rect x="8" y="9" width="8" height="10" fill="#FED7AA" />
+    {/* Boba pearls */}
+    <rect x="9" y="16" width="2" height="2" fill="#18181B" />
+    <rect x="12" y="17" width="2" height="2" fill="#18181B" />
+    <rect x="14" y="15" width="2" height="2" fill="#18181B" />
+    <rect x="10" y="14" width="2" height="2" fill="#18181B" />
+  </svg>
+);
