@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActiveTimerState } from '../types';
-import { Play, Pause, Check, ChevronRight } from 'lucide-react';
-import { PocketTimerDockIcon } from './FrogIcons';
+import { Play, Pause, ChevronRight } from 'lucide-react';
+import { PocketTimerDockIcon, PixelCheckIcon } from './FrogIcons';
 
 interface LiveTimerBarProps {
   activeTimer: ActiveTimerState;
@@ -100,7 +100,7 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
               title="Finish & Save Session"
               className="w-8 h-8 rounded-full bg-[#5f7a61] hover:bg-[#4f6751] text-white flex items-center justify-center shadow-xs transition ios-tap"
             >
-              <Check size={15} />
+              <PixelCheckIcon size={15} />
             </button>
           )}
         </div>

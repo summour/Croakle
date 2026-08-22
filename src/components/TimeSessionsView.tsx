@@ -8,7 +8,6 @@ import {
   Trash2,
   Edit3,
   X,
-  Check,
   Sparkles,
   Target,
   Flame,
@@ -16,7 +15,7 @@ import {
   ChevronRight,
   Calendar,
 } from 'lucide-react';
-import { PocketTimerDockIcon, LanternToolIcon } from './FrogIcons';
+import { PocketTimerDockIcon, LanternToolIcon, PixelLightbulbIcon, PixelCheckIcon } from './FrogIcons';
 import {
   getTodayIso,
   formatTimeMinutes,
@@ -322,7 +321,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   className="px-5 py-3 rounded-full bg-[#4a6b4d] hover:bg-[#3d5940] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition shadow-[0_6px_20px_rgba(74,107,77,0.35)] ios-tap"
                   title="Finish and log session"
                 >
-                  <Check size={17} /> <span>Save</span>
+                  <PixelCheckIcon size={16} /> <span>Save</span>
                 </button>
                 <button
                   type="button"
@@ -336,9 +335,10 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
             )}
           </div>
 
-          <div className="relative z-10 text-center">
+          <div className="relative z-10 text-center flex items-center justify-center gap-1.5">
+            <PixelLightbulbIcon size={14} className="text-[#eab308]" />
             <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] font-medium">
-              💡 Continuous background timer tracks accurately even when switching to other pages
+              Continuous background timer tracks accurately even when switching to other pages
             </p>
           </div>
         </div>

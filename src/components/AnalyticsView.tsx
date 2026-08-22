@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, Project, NoteItem, TimeSession, MOOD_LEVELS } from '../types';
 import { MONTH_NAMES, CALENDAR_HEADER_DAYS, DAY_SHORT_NAMES, getDaysInMonth, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
-import { ChevronLeft, ChevronRight, CheckCircle2, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart } from 'lucide-react';
 import {
   ToriiStatsDockIcon,
   EmaTabIcon,
@@ -523,7 +523,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
               <p className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8] flex items-center gap-1.5">
                 {dominantMoodObj ? (
                   <>
-                    <span>{dominantMoodObj.emoji}</span>
+                    <FrogMoodIcon value={dominantMoodObj.value} size={20} />
                     <span>Mostly {dominantMoodObj.label}</span>
                   </>
                 ) : (

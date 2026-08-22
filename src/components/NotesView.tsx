@@ -243,7 +243,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
     if (note.type === 'mood') {
       const mObj = MOOD_LEVELS.find((m) => m.value === note.moodValue);
       return mObj
-        ? `Mood recorded: ${mObj.emoji} ${mObj.label} (${mObj.value}/5)`
+        ? `Mood recorded: ${mObj.label} (${mObj.value}/5)`
         : 'Daily mood rating logged';
     }
     if (note.type === 'project') {
