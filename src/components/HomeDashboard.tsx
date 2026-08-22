@@ -13,7 +13,6 @@ import {
 } from './FrogIcons';
 import { PixelFrogScene } from './PixelFrogScene';
 import {
-  CheckCircle2,
   ArrowRight,
   Sparkles,
   Coffee,

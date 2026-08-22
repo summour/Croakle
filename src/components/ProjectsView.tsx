@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { PageType, Project, PriorityType } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, formatIsoDate } from '../utils/dateUtils';
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Archive, CheckCircle, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
-import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon } from './FrogIcons';
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Archive, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
+import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
@@ -409,7 +409,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                               : 'bg-white dark:bg-[#211e1b] border border-black/[0.08] dark:border-white/[0.1] hover:border-[#b86f52]'
                           }`}
                         >
-                          {isDone ? <Check size={18} strokeWidth={3} /> : null}
+                          {isDone ? <PixelCheckIcon size={18} /> : null}
                         </button>
                       );
                     })}
@@ -633,7 +633,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   }}
                   className="py-3 rounded-2xl bg-[#eee5d8] hover:bg-[#e1d5c4] dark:bg-[#383129] dark:hover:bg-[#473e35] text-[#2d2823] dark:text-[#f2eee9] font-bold text-sm transition flex items-center justify-center gap-1.5"
                 >
-                  <CheckCircle size={16} />
+                  <PixelCheckCircleIcon size={16} />
                   {projects[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
                 </button>
               </div>

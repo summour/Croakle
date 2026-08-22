@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react';
 import { FrogMoodIcon, FrogMoodRad, FrogFaceDockIcon, WashiJournalDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
+import { InteractiveMoodTrendChart } from './charts/InteractiveMoodTrendChart';
 import confetti from 'canvas-confetti';
 
 interface MoodViewProps {
@@ -191,6 +192,28 @@ export const MoodView: React.FC<MoodViewProps> = ({
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Interactive Mood Trend & Flow Curve Card */}
+      <div className="ios-glass-card p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <FrogMoodRad size={18} />
+            <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              Interactive Mood Flow Curve
+            </h3>
+          </div>
+          <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+            Tap node to inspect
+          </span>
+        </div>
+
+        <InteractiveMoodTrendChart
+          year={year}
+          monthIndex={monthIndex}
+          monthData={monthData}
+          onSelectDay={(d) => setSelectedDay(d)}
+        />
       </div>
 
       {/* Select Mood Modal */}

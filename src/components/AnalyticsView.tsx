@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, Project, NoteItem, TimeSession, MOOD_LEVELS } from '../types';
 import { MONTH_NAMES, CALENDAR_HEADER_DAYS, DAY_SHORT_NAMES, getDaysInMonth, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
-import { ChevronLeft, ChevronRight, CheckCircle2, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart } from 'lucide-react';
 import {
   ToriiStatsDockIcon,
   EmaTabIcon,
@@ -17,6 +17,9 @@ import {
 } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
+import { InteractiveMomentumChart } from './charts/InteractiveMomentumChart';
+import { InteractiveMoodTrendChart } from './charts/InteractiveMoodTrendChart';
+import { InteractiveLeaderboardChart } from './charts/InteractiveLeaderboardChart';
 
 interface AnalyticsViewProps {
   habits: HabitTemplate[];
@@ -392,13 +395,13 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
           </div>
 
-          {/* Combined Momentum Curve */}
+          {/* Combined Interactive Momentum Curve */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <ToriiStatsDockIcon size={18} className="text-[#5f7a61]" />
                 <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-                  Monthly Habit & Mood Flow
+                  Interactive Habit, Mood & Focus Flow
                 </h3>
               </div>
               <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
@@ -406,98 +409,13 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
               </span>
             </div>
 
-            {actualHabitChecks === 0 && recordedMoodsCount === 0 ? (
-              <div className="py-8 text-center space-y-2 bg-black/[0.02] dark:bg-white/[0.02] rounded-2xl border border-dashed border-black/[0.08] dark:border-white/[0.08]">
-                <p className="text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d]">
-                  No habit or mood records yet for {MONTH_NAMES[monthIndex]} {year}.
-                </p>
-                <p className="text-[11px] text-[#a89b8d] dark:text-[#706456]">
-                  Check off habits in the Habits tab or log your daily mood to generate your momentum graph.
-                </p>
-              </div>
-            ) : (
-              <div className="w-full overflow-hidden rounded-[18px] bg-black/[0.02] dark:bg-white/[0.02] p-2 border border-black/[0.04] dark:border-white/[0.06]">
-                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-36 sm:h-40">
-                  {/* Grid Guidelines */}
-                  <line x1={paddingX} y1={paddingY} x2={svgWidth - paddingX} y2={paddingY} stroke="currentColor" className="text-[#ebdccb]/50 dark:text-[#383129]" strokeDasharray="3 3" strokeWidth="1" />
-                  <line x1={paddingX} y1={paddingY + innerHeight / 2} x2={svgWidth - paddingX} y2={paddingY + innerHeight / 2} stroke="currentColor" className="text-[#ebdccb]/50 dark:text-[#383129]" strokeDasharray="3 3" strokeWidth="1" />
-                  <line x1={paddingX} y1={svgHeight - paddingY} x2={svgWidth - paddingX} y2={svgHeight - paddingY} stroke="currentColor" className="text-[#ebdccb]/80 dark:text-[#383129]" strokeWidth="1.5" />
-
-                  {/* Area fill under habit curve */}
-                  {areaPath && <path d={areaPath} fill="#5f7a61" fillOpacity="0.14" />}
-
-                  {/* Habit line curve */}
-                  {linePath && <path d={linePath} fill="none" stroke="#5f7a61" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
-
-                  {/* Data Points */}
-                  {points.map((p) => {
-                    if (p.rate === 0 && !p.mood) return null;
-                    return (
-                      <g key={p.day}>
-                        {p.rate > 0 && (
-                          <circle
-                            cx={p.x}
-                            cy={p.y}
-                            r="3"
-                            fill="#ffffff"
-                            stroke="#5f7a61"
-                            strokeWidth="2"
-                          >
-                            <title>Day {p.day}: {p.rate}% Habits</title>
-                          </circle>
-                        )}
-                        {p.mood && (
-                          <circle
-                            cx={p.x}
-                            cy={paddingY + innerHeight - ((p.mood - 1) / 4) * innerHeight}
-                            r="2.5"
-                            fill="#d98236"
-                          >
-                            <title>Day {p.day}: Mood {p.mood}/5</title>
-                          </circle>
-                        )}
-                      </g>
-                    );
-                  })}
-                </svg>
-                <div className="flex items-center justify-between px-2 pt-1 text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
-                  <span className="flex items-center gap-1">
-                    <span className="w-2.5 h-1 bg-[#5f7a61] rounded-full inline-block" /> Habit Completion %
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="w-2 h-2 bg-[#d98236] rounded-full inline-block" /> Mood Rating (1-5)
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Weekday Productivity Heatmap */}
-          <div className="ios-glass-card p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-                Weekday Habit Consistency
-              </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Mon – Sun</span>
-            </div>
-
-            <div className="grid grid-cols-7 gap-1.5 pt-1">
-              {DAY_SHORT_NAMES.map((name, i) => {
-                const rate = weekdayRates[i];
-                return (
-                  <div key={name} className="flex flex-col items-center gap-1.5">
-                    <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-20 rounded-xl flex flex-col justify-end p-1 overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
-                      <div
-                        className="w-full rounded-lg transition-all duration-500 bg-[#5f7a61] dark:bg-[#7d9d80]"
-                        style={{ height: `${Math.max(6, rate)}%` }}
-                      />
-                    </div>
-                    <span className="text-[11px] font-black text-[#2d2823] dark:text-[#f4efe8]">{name}</span>
-                    <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">{rate}%</span>
-                  </div>
-                );
-              })}
-            </div>
+            <InteractiveMomentumChart
+              year={year}
+              monthIndex={monthIndex}
+              habits={habits}
+              monthData={monthData}
+              sessions={sessions}
+            />
           </div>
 
           {/* Monthly Highlights Summary */}
@@ -576,112 +494,23 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
           </div>
 
-          {/* Weekly Adherence Breakdown */}
+          {/* Interactive Leaderboard & Performance Chart */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-                Weekly Completion Rates
+                Habit Consistency & Performance
               </h3>
               <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
-                {monthWeeks.length} Weeks
+                Tap habit to inspect activity
               </span>
             </div>
 
-            <div className="space-y-2.5">
-              {weeklyHabitRates.map((wk, idx) => (
-                <div key={idx} className="space-y-1">
-                  <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="text-[#2d2823] dark:text-[#f4efe8]">
-                      {wk.label} <span className="text-[10px] font-normal text-[#8c7e70]">({wk.range})</span>
-                    </span>
-                    <span className="text-[#5f7a61] dark:text-[#7d9d80] font-black">{wk.rate}%</span>
-                  </div>
-                  <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
-                    <div
-                      className="h-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-full transition-all duration-500"
-                      style={{ width: `${wk.rate}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Habit by Habit Detailed Cards */}
-          <div className="ios-glass-card p-4 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-                Detailed Habit Performance
-              </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
-                {activeOrTrackedHabits.length} Habits Tracked
-              </span>
-            </div>
-
-            {activeOrTrackedHabits.length === 0 ? (
-              <div className="py-8 text-center text-xs text-[#8c7e70] dark:text-[#a89b8d]">
-                No active habits tracked for {MONTH_NAMES[monthIndex]} {year}.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {activeOrTrackedHabits.map(({ habit, days, checks, isArchived }) => {
-                  const percent = daysInMonth > 0 ? Math.round((checks / daysInMonth) * 100) : 0;
-
-                  return (
-                    <div
-                      key={habit.id}
-                      className="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] space-y-2.5"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-2.5 h-2.5 rounded-full ${isArchived ? 'bg-[#8c7e70]' : 'bg-[#5f7a61]'}`} />
-                          <strong className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8]">{habit.name}</strong>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {isArchived && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d]">
-                              Archived
-                            </span>
-                          )}
-                          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f5efe6] dark:bg-[#282420] text-[#8c7e70] dark:text-[#a89b8d]">
-                            {habit.priority}
-                          </span>
-                          <span className="text-xs font-black text-[#5f7a61] dark:text-[#7d9d80]">{percent}%</span>
-                        </div>
-                      </div>
-
-                      <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
-                        <div
-                          className="h-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-full transition-all duration-500"
-                          style={{ width: `${percent}%` }}
-                        />
-                      </div>
-
-                      {/* Mini Day Dots Strip (1..31) */}
-                      <div className="flex items-center justify-between pt-1">
-                        <div className="flex items-center gap-1 overflow-x-auto py-0.5 max-w-full">
-                          {Array.from({ length: daysInMonth }, (_, dayI) => {
-                            const isDone = !!days[dayI];
-                            return (
-                              <span
-                                key={dayI}
-                                title={`Day ${dayI + 1}: ${isDone ? 'Done' : 'Missed'}`}
-                                className={`w-2 h-2 rounded-full shrink-0 ${
-                                  isDone ? 'bg-[#5f7a61]' : 'bg-black/[0.08] dark:bg-white/[0.1]'
-                                }`}
-                              />
-                            );
-                          })}
-                        </div>
-                        <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d] shrink-0 ml-2">
-                          {checks} / {daysInMonth} d
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            <InteractiveLeaderboardChart
+              year={year}
+              monthIndex={monthIndex}
+              habits={habits}
+              monthData={monthData}
+            />
           </div>
         </div>
       )}
@@ -731,47 +560,22 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
           </div>
 
-          {/* Mood Distribution Breakdown */}
+          {/* Interactive Mood Trend & Flow Curve */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-                Mood Distribution
+                Monthly Mood Trend & Flow
               </h3>
               <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
-                {recordedMoodsCount} Total Entries
+                Tap point to inspect
               </span>
             </div>
 
-            <div className="space-y-2">
-              {MOOD_LEVELS.map((ml) => {
-                const count = moodCounts[ml.value] || 0;
-                const percent = recordedMoodsCount > 0 ? Math.round((count / recordedMoodsCount) * 100) : 0;
-                return (
-                  <div key={ml.value} className={`p-2 rounded-xl border space-y-1.5 ${ml.bgLight} ${ml.bgDark} ${ml.borderLight} ${ml.borderDark}`}>
-                    <div className="flex items-center justify-between text-xs font-black">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${ml.iconBgLight} ${ml.iconBgDark}`}>
-                          <FrogMoodIcon value={ml.value} size={16} />
-                        </div>
-                        <span className={`${ml.textColorLight} ${ml.textColorDark}`}>{ml.label}</span>
-                      </div>
-                      <span className={`text-[11px] font-black ${ml.textColorLight} ${ml.textColorDark}`}>
-                        {count} days ({percent}%)
-                      </span>
-                    </div>
-                    <div className="w-full bg-white/60 dark:bg-black/20 h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
-                      <div
-                        className="h-full rounded-full transition-all duration-500"
-                        style={{
-                          width: `${percent}%`,
-                          backgroundColor: ml.color,
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <InteractiveMoodTrendChart
+              year={year}
+              monthIndex={monthIndex}
+              monthData={monthData}
+            />
           </div>
 
           {/* Mood Calendar Matrix */}

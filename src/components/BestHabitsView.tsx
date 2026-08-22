@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Trophy, Sparkles } from 'lucide-react';
 import { HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
+import { InteractiveLeaderboardChart } from './charts/InteractiveLeaderboardChart';
 
 interface BestHabitsViewProps {
   habits: HabitTemplate[];
@@ -104,6 +105,28 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
             <ChevronRight size={20} />
           </button>
         </div>
+      </div>
+
+      {/* Interactive Leaderboard Visualizer */}
+      <div className="ios-glass-card p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Trophy size={18} className="text-[#b86f52]" />
+            <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              Interactive Consistency Chart
+            </h3>
+          </div>
+          <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+            Tap habit for breakdown
+          </span>
+        </div>
+
+        <InteractiveLeaderboardChart
+          year={year}
+          monthIndex={monthIndex}
+          habits={habits}
+          monthData={monthData}
+        />
       </div>
 
       {/* Summary Card */}

@@ -8,7 +8,6 @@ import {
   Trash2,
   Edit3,
   X,
-  Check,
   Sparkles,
   Target,
   Flame,
@@ -16,7 +15,8 @@ import {
   ChevronRight,
   Calendar,
 } from 'lucide-react';
-import { PocketTimerDockIcon, LanternToolIcon, PixelLightbulbIcon } from './FrogIcons';
+import { PocketTimerDockIcon, LanternToolIcon, PixelLightbulbIcon, PixelCheckIcon } from './FrogIcons';
+import { InteractiveFocusTimeChart } from './charts/InteractiveFocusTimeChart';
 import {
   getTodayIso,
   formatTimeMinutes,
@@ -322,7 +322,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   className="px-5 py-3 rounded-full bg-[#4a6b4d] hover:bg-[#3d5940] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition shadow-[0_6px_20px_rgba(74,107,77,0.35)] ios-tap"
                   title="Finish and log session"
                 >
-                  <Check size={17} /> <span>Save</span>
+                  <PixelCheckIcon size={16} /> <span>Save</span>
                 </button>
                 <button
                   type="button"
@@ -510,6 +510,28 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
             {Math.floor(totalMinutes / 60)}h {totalMinutes % 60}m ({daySessions.length} {daySessions.length === 1 ? 'session' : 'sessions'})
           </strong>
         </div>
+
+        {/* Interactive Focus Session & Category Analytics Chart */}
+        {sessions.length > 0 && (
+          <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.05] space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <PocketTimerDockIcon size={16} className="text-[#c28f3a]" />
+                <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+                  Focus Activity & Categories
+                </h3>
+              </div>
+              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+                Tap bar to inspect
+              </span>
+            </div>
+            <InteractiveFocusTimeChart
+              sessions={sessions}
+              selectedDate={selectedDate}
+              onSelectDate={(iso) => setSelectedDate(iso)}
+            />
+          </div>
+        )}
 
         {/* Sessions List */}
         <div className="space-y-3">
