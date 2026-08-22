@@ -50,29 +50,49 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
   const monthWeeks = getMonthWeeks(year, monthIndex);
 
   // ----------------------------------------------------
-  // Habit Calculations
+  // Habit Filtering for Selected Month
+  // Exclude archived/completed habits that have 0 checks in this specific month
   // ----------------------------------------------------
-  const dailyHabitRates = Array.from({ length: daysInMonth }, (_, dayIdx) => {
-    if (habits.length === 0) return 0;
-    const completed = monthData.habits.reduce((acc, h) => acc + (h.days[dayIdx] ? 1 : 0), 0);
-    return Math.round((completed / habits.length) * 100);
+  const habitMonthStats = habits.map((habit, originalIndex) => {
+    const monthHabit = monthData.habits[originalIndex];
+    const days = monthHabit?.days || [];
+    const checks = days.reduce((acc, d) => acc + (d ? 1 : 0), 0);
+    const isArchived = Boolean(habit.completed);
+    const isRelevantForMonth = !isArchived || checks > 0;
+    return {
+      habit,
+      originalIndex,
+      monthHabit,
+      days,
+      checks,
+      isArchived,
+      isRelevantForMonth,
+    };
   });
 
-  const totalPossibleChecks = habits.length * daysInMonth;
-  const actualHabitChecks = monthData.habits.reduce(
-    (acc, h) => acc + (h.days ? h.days.reduce((dAcc, d) => dAcc + (d ? 1 : 0), 0) : 0),
-    0
-  );
+  // Active habits or archived habits that were tracked in this month
+  const activeOrTrackedHabits = habitMonthStats.filter((h) => h.isRelevantForMonth);
+
+  // ----------------------------------------------------
+  // Habit Calculations (using active/tracked habits)
+  // ----------------------------------------------------
+  const dailyHabitRates = Array.from({ length: daysInMonth }, (_, dayIdx) => {
+    if (activeOrTrackedHabits.length === 0) return 0;
+    const completed = activeOrTrackedHabits.reduce((acc, h) => acc + (h.days[dayIdx] ? 1 : 0), 0);
+    return Math.round((completed / activeOrTrackedHabits.length) * 100);
+  });
+
+  const totalPossibleChecks = activeOrTrackedHabits.length * daysInMonth;
+  const actualHabitChecks = activeOrTrackedHabits.reduce((acc, h) => acc + h.checks, 0);
   const overallMonthPercent = totalPossibleChecks > 0 ? Math.round((actualHabitChecks / totalPossibleChecks) * 100) : 0;
 
   // Best Habit
   let bestHabitName = 'None';
   let bestHabitCount = -1;
-  habits.forEach((h, idx) => {
-    const checks = monthData.habits[idx]?.days ? monthData.habits[idx].days.reduce((acc, d) => acc + (d ? 1 : 0), 0) : 0;
-    if (checks > bestHabitCount) {
-      bestHabitCount = checks;
-      bestHabitName = h.name;
+  activeOrTrackedHabits.forEach((h) => {
+    if (h.checks > bestHabitCount) {
+      bestHabitCount = h.checks;
+      bestHabitName = h.habit.name;
     }
   });
 
@@ -83,11 +103,11 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
     const date = new Date(year, monthIndex, day);
     const dayOfWeek = (date.getDay() + 6) % 7; // Monday = 0, Sunday = 6
     weekdayCounts[dayOfWeek]++;
-    const dayChecks = monthData.habits.reduce((acc, h) => acc + (h.days?.[day - 1] ? 1 : 0), 0);
+    const dayChecks = activeOrTrackedHabits.reduce((acc, h) => acc + (h.days?.[day - 1] ? 1 : 0), 0);
     weekdayTotals[dayOfWeek] += dayChecks;
   }
   const weekdayRates = weekdayTotals.map((tot, i) => {
-    const possible = habits.length * Math.max(1, weekdayCounts[i]);
+    const possible = activeOrTrackedHabits.length * Math.max(1, weekdayCounts[i]);
     return possible > 0 ? Math.round((tot / possible) * 100) : 0;
   });
 
@@ -97,8 +117,8 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
     let weekActual = 0;
     week.days.forEach((d) => {
       if (d.inMonth) {
-        weekPossible += habits.length;
-        weekActual += monthData.habits.reduce((acc, h) => acc + (h.days?.[d.dayOfMonth - 1] ? 1 : 0), 0);
+        weekPossible += activeOrTrackedHabits.length;
+        weekActual += activeOrTrackedHabits.reduce((acc, h) => acc + (h.days?.[d.dayOfMonth - 1] ? 1 : 0), 0);
       }
     });
     return {
@@ -151,7 +171,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
   for (let day = 1; day <= daysInMonth; day++) {
     const mood = monthData.moods[day - 1];
-    const checks = monthData.habits.reduce((acc, h) => acc + (h.days?.[day - 1] ? 1 : 0), 0);
+    const checks = activeOrTrackedHabits.reduce((acc, h) => acc + (h.days?.[day - 1] ? 1 : 0), 0);
     if (mood && mood >= 4) {
       positiveDayHabitChecks += checks;
       positiveDayCount++;
@@ -161,11 +181,11 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
     }
   }
 
-  const positiveDayAvgHabitRate = positiveDayCount > 0 && habits.length > 0
-    ? Math.round((positiveDayHabitChecks / (positiveDayCount * habits.length)) * 100)
+  const positiveDayAvgHabitRate = positiveDayCount > 0 && activeOrTrackedHabits.length > 0
+    ? Math.round((positiveDayHabitChecks / (positiveDayCount * activeOrTrackedHabits.length)) * 100)
     : null;
-  const normalDayAvgHabitRate = normalDayCount > 0 && habits.length > 0
-    ? Math.round((normalDayHabitChecks / (normalDayCount * habits.length)) * 100)
+  const normalDayAvgHabitRate = normalDayCount > 0 && activeOrTrackedHabits.length > 0
+    ? Math.round((normalDayHabitChecks / (normalDayCount * activeOrTrackedHabits.length)) * 100)
     : null;
 
   // ----------------------------------------------------
@@ -194,8 +214,11 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
       weeksHitGoal,
       totalWeeks: monthWeeks.length,
       goalAdherence: monthWeeks.length > 0 ? Math.round((weeksHitGoal / monthWeeks.length) * 100) : 0,
+      isRelevantForMonth: !p.completed || checkCount > 0,
     };
   });
+
+  const activeOrTrackedProjects = projectStats.filter((p) => p.isRelevantForMonth);
 
   // ----------------------------------------------------
   // Notes & Focus Time
@@ -535,10 +558,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             <div className="ios-glass-card p-3.5 space-y-1">
               <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Active Habits</span>
               <strong className="text-2xl font-black text-[#2d2823] dark:text-[#f4efe8] block">
-                {habits.length}
+                {activeOrTrackedHabits.length}
               </strong>
               <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
-                templates tracked
+                tracked this month
               </span>
             </div>
 
@@ -590,65 +613,75 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
               <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
                 Detailed Habit Performance
               </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">{habits.length} Habits</span>
+              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+                {activeOrTrackedHabits.length} Habits Tracked
+              </span>
             </div>
 
-            <div className="space-y-3">
-              {habits.map((habit, idx) => {
-                const habitData = monthData.habits[idx];
-                const days = habitData?.days || [];
-                const checks = days.reduce((acc, d) => acc + (d ? 1 : 0), 0);
-                const percent = daysInMonth > 0 ? Math.round((checks / daysInMonth) * 100) : 0;
+            {activeOrTrackedHabits.length === 0 ? (
+              <div className="py-8 text-center text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+                No active habits tracked for {MONTH_NAMES[monthIndex]} {year}.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {activeOrTrackedHabits.map(({ habit, days, checks, isArchived }) => {
+                  const percent = daysInMonth > 0 ? Math.round((checks / daysInMonth) * 100) : 0;
 
-                return (
-                  <div
-                    key={habit.id}
-                    className="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] space-y-2.5"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#5f7a61]" />
-                        <strong className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8]">{habit.name}</strong>
+                  return (
+                    <div
+                      key={habit.id}
+                      className="p-3 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] space-y-2.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2.5 h-2.5 rounded-full ${isArchived ? 'bg-[#8c7e70]' : 'bg-[#5f7a61]'}`} />
+                          <strong className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8]">{habit.name}</strong>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {isArchived && (
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d]">
+                              Archived
+                            </span>
+                          )}
+                          <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f5efe6] dark:bg-[#282420] text-[#8c7e70] dark:text-[#a89b8d]">
+                            {habit.priority}
+                          </span>
+                          <span className="text-xs font-black text-[#5f7a61] dark:text-[#7d9d80]">{percent}%</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f5efe6] dark:bg-[#282420] text-[#8c7e70] dark:text-[#a89b8d]">
-                          {habit.priority}
+
+                      <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
+                        <div
+                          className="h-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-full transition-all duration-500"
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+
+                      {/* Mini Day Dots Strip (1..31) */}
+                      <div className="flex items-center justify-between pt-1">
+                        <div className="flex items-center gap-1 overflow-x-auto py-0.5 max-w-full">
+                          {Array.from({ length: daysInMonth }, (_, dayI) => {
+                            const isDone = !!days[dayI];
+                            return (
+                              <span
+                                key={dayI}
+                                title={`Day ${dayI + 1}: ${isDone ? 'Done' : 'Missed'}`}
+                                className={`w-2 h-2 rounded-full shrink-0 ${
+                                  isDone ? 'bg-[#5f7a61]' : 'bg-black/[0.08] dark:bg-white/[0.1]'
+                                }`}
+                              />
+                            );
+                          })}
+                        </div>
+                        <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d] shrink-0 ml-2">
+                          {checks} / {daysInMonth} d
                         </span>
-                        <span className="text-xs font-black text-[#5f7a61] dark:text-[#7d9d80]">{percent}%</span>
                       </div>
                     </div>
-
-                    <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
-                      <div
-                        className="h-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-full transition-all duration-500"
-                        style={{ width: `${percent}%` }}
-                      />
-                    </div>
-
-                    {/* Mini Day Dots Strip (1..31) */}
-                    <div className="flex items-center justify-between pt-1">
-                      <div className="flex items-center gap-1 overflow-x-auto py-0.5 max-w-full">
-                        {Array.from({ length: daysInMonth }, (_, dayI) => {
-                          const isDone = !!days[dayI];
-                          return (
-                            <span
-                              key={dayI}
-                              title={`Day ${dayI + 1}: ${isDone ? 'Done' : 'Missed'}`}
-                              className={`w-2 h-2 rounded-full shrink-0 ${
-                                isDone ? 'bg-[#5f7a61]' : 'bg-black/[0.08] dark:bg-white/[0.1]'
-                              }`}
-                            />
-                          );
-                        })}
-                      </div>
-                      <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d] shrink-0 ml-2">
-                        {checks} / {daysInMonth} d
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -857,17 +890,17 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                 Projects Progress & Weekly Adherence
               </h3>
               <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
-                {projects.length} Total Projects
+                {activeOrTrackedProjects.length} Projects Tracked
               </span>
             </div>
 
-            {projects.length === 0 ? (
+            {activeOrTrackedProjects.length === 0 ? (
               <div className="py-8 text-center text-xs text-[#8c7e70] dark:text-[#a89b8d]">
-                No projects found. Create a project in the Projects tab to start tracking progress.
+                No active projects tracked for {MONTH_NAMES[monthIndex]} {year}.
               </div>
             ) : (
               <div className="space-y-3">
-                {projectStats.map((p) => (
+                {activeOrTrackedProjects.map((p) => (
                   <div
                     key={p.id}
                     className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] space-y-2.5"

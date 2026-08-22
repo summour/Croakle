@@ -14,7 +14,7 @@ import {
 } from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
 import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Sparkles, Sliders, Volume2, VolumeX } from 'lucide-react';
-import { WoodGearDockIcon, CloverIcon, BambooScrollDockIcon, FrogFaceDockIcon, ToriiStatsDockIcon } from './FrogIcons';
+import { WoodGearDockIcon, CloverIcon, BambooScrollDockIcon, FrogFaceDockIcon, ToriiStatsDockIcon, PixelZenPondIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 
 interface SettingsViewProps {
@@ -158,8 +158,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div className="ios-glass-card p-5 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-[14px] bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border border-[#5f7a61]/20 flex items-center justify-center text-sm shadow-2xs">
-                🪷
+              <div className="w-8 h-8 rounded-[14px] bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border border-[#5f7a61]/20 flex items-center justify-center p-1 shadow-2xs">
+                <PixelZenPondIcon size={18} />
               </div>
               <div>
                 <h2 className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Pixel Sanctuary Habitat</h2>
@@ -202,7 +202,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               }`}
             >
               <div className="flex items-center gap-2">
-                <span>🐸</span>
+                <FrogFaceDockIcon size={14} className="text-[#5f7a61]" />
                 <span>Mood Reaction</span>
               </div>
               <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${

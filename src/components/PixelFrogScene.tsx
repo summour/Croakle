@@ -26,6 +26,14 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
+import {
+  PixelOptionIcon,
+  PixelTabSceneIcon,
+  PixelTabActivityIcon,
+  PixelTabHeadwearIcon,
+  PixelTabCompanionIcon,
+  PixelTabWeatherIcon,
+} from './FrogIcons';
 
 interface PixelFrogSceneProps {
   config: PixelSceneConfig;
@@ -959,11 +967,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             {/* Customizer Tabs */}
             <div className="flex border-b border-black/[0.06] dark:border-white/[0.08] px-3 bg-[#f5efe4]/60 dark:bg-[#151210]/60 overflow-x-auto no-scrollbar">
               {[
-                { id: 'scene', label: 'Scene', emoji: '🏡' },
-                { id: 'activity', label: 'Activity', emoji: '🐸' },
-                { id: 'hat', label: 'Headwear', emoji: '👒' },
-                { id: 'companion', label: 'Companion', emoji: '🐌' },
-                { id: 'weather', label: 'Sky & Weather', emoji: '☀️' },
+                { id: 'scene', label: 'Scene', icon: <PixelTabSceneIcon size={18} /> },
+                { id: 'activity', label: 'Activity', icon: <PixelTabActivityIcon size={18} /> },
+                { id: 'hat', label: 'Headwear', icon: <PixelTabHeadwearIcon size={18} /> },
+                { id: 'companion', label: 'Companion', icon: <PixelTabCompanionIcon size={18} /> },
+                { id: 'weather', label: 'Sky & Weather', icon: <PixelTabWeatherIcon size={18} /> },
               ].map((tab) => {
                 const isActive = activeCustomizerTab === tab.id;
                 return (
@@ -980,7 +988,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         : 'border-transparent text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] dark:hover:text-[#f4efe8]'
                     }`}
                   >
-                    <span>{tab.emoji}</span>
+                    <span className="shrink-0">{tab.icon}</span>
                     <span>{tab.label}</span>
                   </button>
                 );
@@ -1009,8 +1017,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                         }`}
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-black/20 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-xl shrink-0 shadow-2xs">
-                          {loc.emoji}
+                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
+                          <PixelOptionIcon id={loc.id} size={28} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
@@ -1049,8 +1057,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                         }`}
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-black/20 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-xl shrink-0 shadow-2xs">
-                          {act.emoji}
+                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
+                          <PixelOptionIcon id={act.id} size={28} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
@@ -1089,8 +1097,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                         }`}
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-black/20 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-xl shrink-0 shadow-2xs">
-                          {hat.emoji}
+                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
+                          <PixelOptionIcon id={hat.id} size={28} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
@@ -1129,8 +1137,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                         }`}
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-black/20 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-xl shrink-0 shadow-2xs">
-                          {comp.emoji}
+                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
+                          <PixelOptionIcon id={comp.id} size={28} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
@@ -1169,8 +1177,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             : 'bg-white dark:bg-[#201c18] border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                         }`}
                       >
-                        <div className="w-10 h-10 rounded-xl bg-white dark:bg-black/20 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-xl shrink-0 shadow-2xs">
-                          {weath.emoji}
+                        <div className="w-10 h-10 rounded-xl bg-[#5f7a61]/5 dark:bg-black/30 border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shrink-0 shadow-2xs">
+                          <PixelOptionIcon id={weath.id} size={28} />
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between gap-1">
