@@ -16,6 +16,7 @@ import {
   Sparkles,
   Sliders,
   Shuffle,
+  Check,
   X,
   Sun,
   Moon,
@@ -32,7 +33,6 @@ import {
   PixelTabHeadwearIcon,
   PixelTabCompanionIcon,
   PixelTabWeatherIcon,
-  PixelCheckIcon,
 } from './FrogIcons';
 
 interface PixelFrogSceneProps {
@@ -1029,7 +1029,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
                               {loc.name}
                             </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
+                            {isSelected && <Check size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
                           </div>
                           <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
                             {loc.desc}
@@ -1069,7 +1069,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
                               {act.name}
                             </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
+                            {isSelected && <Check size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
                           </div>
                           <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
                             {act.desc}
@@ -1109,7 +1109,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
                               {hat.name}
                             </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
+                            {isSelected && <Check size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
                           </div>
                           <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
                             {hat.desc}
@@ -1149,7 +1149,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
                               {comp.name}
                             </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
+                            {isSelected && <Check size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
                           </div>
                           <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
                             {comp.desc}
@@ -1189,7 +1189,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             <h4 className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8] truncate">
                               {weath.name}
                             </h4>
-                            {isSelected && <PixelCheckIcon size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
+                            {isSelected && <Check size={14} className="text-[#5f7a61] dark:text-[#8fc493] shrink-0" />}
                           </div>
                           <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] line-clamp-2 mt-0.5">
                             {weath.desc}

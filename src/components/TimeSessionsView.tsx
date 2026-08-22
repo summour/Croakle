@@ -8,6 +8,7 @@ import {
   Trash2,
   Edit3,
   X,
+  Check,
   Sparkles,
   Target,
   Flame,
@@ -15,7 +16,7 @@ import {
   ChevronRight,
   Calendar,
 } from 'lucide-react';
-import { PocketTimerDockIcon, LanternToolIcon, PixelLightbulbIcon, PixelCheckIcon } from './FrogIcons';
+import { PocketTimerDockIcon, LanternToolIcon, PixelLightbulbIcon } from './FrogIcons';
 import {
   getTodayIso,
   formatTimeMinutes,
@@ -321,7 +322,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   className="px-5 py-3 rounded-full bg-[#4a6b4d] hover:bg-[#3d5940] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition shadow-[0_6px_20px_rgba(74,107,77,0.35)] ios-tap"
                   title="Finish and log session"
                 >
-                  <PixelCheckIcon size={16} /> <span>Save</span>
+                  <Check size={17} /> <span>Save</span>
                 </button>
                 <button
                   type="button"

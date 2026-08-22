@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, PriorityType, MOOD_LEVELS } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
-import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon } from './FrogIcons';
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
+import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon } from './FrogIcons';
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Check, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, CheckCircle, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
@@ -433,7 +433,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                               : 'bg-white/80 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] hover:border-[#5f7a61] dark:hover:border-[#7d9d80]'
                           }`}
                         >
-                          {isDone ? <PixelCheckIcon size={18} /> : null}
+                          {isDone ? <Check size={18} strokeWidth={3.5} /> : null}
                         </button>
                       );
                     })}
@@ -662,7 +662,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   }}
                   className="py-3 rounded-2xl bg-[#eee5d8] hover:bg-[#e1d5c4] dark:bg-[#383129] dark:hover:bg-[#473e35] text-[#2d2823] dark:text-[#f2eee9] font-bold text-sm transition flex items-center justify-center gap-1.5"
                 >
-                  <PixelCheckCircleIcon size={16} />
+                  <CheckCircle size={16} />
                   {habits[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
                 </button>
               </div>
