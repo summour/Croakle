@@ -94,6 +94,17 @@ export function getWeekKey(date: Date): string {
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
 }
 
+export function addDaysIso(iso: string, days: number): string {
+  try {
+    const [y, m, d] = iso.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    date.setDate(date.getDate() + days);
+    return formatIsoDate(date);
+  } catch {
+    return iso;
+  }
+}
+
 export function formatTimeMinutes(minutes: number): string {
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;

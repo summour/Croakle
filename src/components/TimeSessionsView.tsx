@@ -1,8 +1,31 @@
 import React, { useState } from 'react';
 import { TimeSession, HabitTemplate, Project, ActiveTimerState } from '../types';
-import { Play, Pause, RotateCcw, Plus, Trash2, Edit3, X, Check, Sparkles, Target, Flame } from 'lucide-react';
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  Plus,
+  Trash2,
+  Edit3,
+  X,
+  Check,
+  Sparkles,
+  Target,
+  Flame,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+} from 'lucide-react';
 import { PocketTimerDockIcon, LanternToolIcon } from './FrogIcons';
-import { getTodayIso, formatTimeMinutes } from '../utils/dateUtils';
+import {
+  getTodayIso,
+  formatTimeMinutes,
+  addDaysIso,
+  formatFriendlyDate,
+  getWeekDates,
+  parseIsoDate,
+  DAY_SHORT_NAMES,
+} from '../utils/dateUtils';
 
 interface TimeSessionsViewProps {
   sessions: TimeSession[];
@@ -134,6 +157,37 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
     .sort((a, b) => a.startMinute - b.startMinute);
 
   const totalMinutes = daySessions.reduce((acc, s) => acc + s.duration, 0);
+
+  const todayIso = getTodayIso();
+  const isSelectedToday = selectedDate === todayIso;
+  const selectedDateObj = parseIsoDate(selectedDate);
+  const weekDays = getWeekDates(selectedDateObj);
+
+  const getDaySessionStats = (iso: string) => {
+    const dayList = sessions.filter((s) => s.date === iso);
+    const totalMins = dayList.reduce((acc, s) => acc + s.duration, 0);
+    return { count: dayList.length, totalMins };
+  };
+
+  const handlePrevDay = () => {
+    setSelectedDate((curr) => addDaysIso(curr, -1));
+  };
+
+  const handleNextDay = () => {
+    setSelectedDate((curr) => addDaysIso(curr, 1));
+  };
+
+  const handlePrevWeek = () => {
+    setSelectedDate((curr) => addDaysIso(curr, -7));
+  };
+
+  const handleNextWeek = () => {
+    setSelectedDate((curr) => addDaysIso(curr, 7));
+  };
+
+  const handleJumpToday = () => {
+    setSelectedDate(todayIso);
+  };
 
   // Target duration calculation for progress ring if set
   const targetSecs = (activeTimer.targetDurationMinutes || 0) * 60;
@@ -292,6 +346,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
       {/* Date Selector & Day Summary Card */}
       <div className="ios-glass-card p-5 space-y-4">
+        {/* Header with Title and Add Button */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-[14px] bg-black/[0.04] dark:bg-white/[0.08] border border-black/[0.06] dark:border-white/[0.1] flex items-center justify-center shadow-2xs">
@@ -304,27 +359,152 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               <h3 className="text-lg font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">Sessions Log</h3>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-1.5 rounded-[14px] border border-black/[0.08] dark:border-white/[0.1] bg-white/70 dark:bg-white/[0.06] text-xs font-bold text-[#2d2823] dark:text-[#f4efe8] focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={handleOpenAdd}
-              className="p-2 rounded-[14px] bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-bold transition shadow-xs ios-tap"
-              title="Add Session Manually"
-            >
-              <Plus size={16} />
-            </button>
+          <button
+            type="button"
+            onClick={handleOpenAdd}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-[14px] bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] text-xs font-bold transition shadow-xs ios-tap"
+            title="Add Session Manually"
+          >
+            <Plus size={16} />
+            <span>Add Session</span>
+          </button>
+        </div>
+
+        {/* Day Stepper & Quick Date Navigation */}
+        <div className="flex items-center justify-between gap-2 p-2 rounded-[20px] bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08]">
+          <button
+            type="button"
+            onClick={handlePrevDay}
+            className="p-2 rounded-xl text-[#6e6052] dark:text-[#c9bea7] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition ios-tap shrink-0"
+            title="Previous Day"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          <div className="flex items-center gap-2 min-w-0 justify-center flex-1">
+            <label className="relative flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-xl hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition text-center min-w-0">
+              <Calendar size={15} className="text-[#5f7a61] dark:text-[#7d9d80] shrink-0" />
+              <span className="text-xs sm:text-sm font-black text-[#2d2823] dark:text-[#f4efe8] truncate">
+                {formatFriendlyDate(selectedDate)}
+              </span>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
+                className="sr-only"
+              />
+            </label>
+
+            {!isSelectedToday && (
+              <button
+                type="button"
+                onClick={handleJumpToday}
+                className="px-2.5 py-1 rounded-lg bg-[#5f7a61]/15 dark:bg-[#7d9d80]/20 text-[#5f7a61] dark:text-[#8fc493] text-[11px] font-black hover:bg-[#5f7a61]/25 transition shrink-0 ios-tap"
+                title="Jump to Today"
+              >
+                Today
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleNextDay}
+            className="p-2 rounded-xl text-[#6e6052] dark:text-[#c9bea7] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] transition ios-tap shrink-0"
+            title="Next Day"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+
+        {/* 7-Day Interactive Week Strip */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+              Week View
+            </span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={handlePrevWeek}
+                className="text-[10px] font-bold px-2 py-0.5 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-[#8c7e70] dark:text-[#a89b8d] transition"
+              >
+                ◀ Prev Week
+              </button>
+              <button
+                type="button"
+                onClick={handleNextWeek}
+                className="text-[10px] font-bold px-2 py-0.5 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-[#8c7e70] dark:text-[#a89b8d] transition"
+              >
+                Next Week ▶
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-7 gap-1 sm:gap-1.5 p-1.5 rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06]">
+            {weekDays.map((wd) => {
+              const isSelected = wd.iso === selectedDate;
+              const isToday = wd.iso === todayIso;
+              const stats = getDaySessionStats(wd.iso);
+              const dayLabel = DAY_SHORT_NAMES[wd.dayIndex];
+              const dayNum = wd.date.getDate();
+
+              return (
+                <button
+                  key={wd.iso}
+                  type="button"
+                  onClick={() => setSelectedDate(wd.iso)}
+                  className={`py-2 px-1 rounded-[16px] flex flex-col items-center justify-center transition-all duration-200 ios-tap relative select-none ${
+                    isSelected
+                      ? 'bg-[#5f7a61] dark:bg-[#6c8c6f] text-white shadow-md font-black ring-2 ring-[#5f7a61]/30 dark:ring-[#7d9d80]/30 scale-[1.02]'
+                      : 'hover:bg-black/[0.05] dark:hover:bg-white/[0.06] text-[#6e6052] dark:text-[#c9bea7]'
+                  }`}
+                >
+                  {isToday && !isSelected && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#5f7a61] dark:bg-[#7d9d80] absolute top-1.5" />
+                  )}
+                  <span
+                    className={`text-[10px] uppercase font-bold tracking-tight ${
+                      isSelected ? 'text-white/85 font-black' : 'text-[#8c7e70] dark:text-[#a89b8d]'
+                    }`}
+                  >
+                    {dayLabel}
+                  </span>
+                  <span
+                    className={`text-sm sm:text-base mt-0.5 leading-none ${
+                      isSelected ? 'text-white font-black' : 'font-extrabold text-[#2d2823] dark:text-[#f4efe8]'
+                    }`}
+                  >
+                    {dayNum}
+                  </span>
+
+                  {/* Activity Indicator: Session count / dots */}
+                  <div className="h-3 flex items-center justify-center mt-0.5">
+                    {stats.count > 0 ? (
+                      <span
+                        className={`text-[9px] font-black px-1 rounded-full leading-tight ${
+                          isSelected
+                            ? 'bg-white/30 text-white'
+                            : 'bg-[#5f7a61]/15 dark:bg-[#7d9d80]/20 text-[#5f7a61] dark:text-[#8fc493]'
+                        }`}
+                      >
+                        {stats.totalMins}m
+                      </span>
+                    ) : (
+                      <span className="w-1 h-1 rounded-full opacity-0" />
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
         {/* Total Time Badge */}
         <div className="p-3.5 rounded-[20px] bg-white/60 dark:bg-white/[0.04] border border-black/[0.05] dark:border-white/[0.08] flex items-center justify-between shadow-2xs">
-          <span className="text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d]">Total Focus Time:</span>
+          <span className="text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+            Total Focus Time:
+          </span>
           <strong className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8]">
             {Math.floor(totalMinutes / 60)}h {totalMinutes % 60}m ({daySessions.length} {daySessions.length === 1 ? 'session' : 'sessions'})
           </strong>
@@ -338,7 +518,9 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                 <LanternToolIcon size={34} />
               </div>
               <div>
-                <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">No sessions recorded today</p>
+                <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">
+                  {isSelectedToday ? 'No sessions recorded today' : `No sessions recorded for ${formatFriendlyDate(selectedDate)}`}
+                </p>
                 <p className="text-xs mt-0.5">Start the focus timer above or manually log a session.</p>
               </div>
             </div>
