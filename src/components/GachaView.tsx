@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   PixelSceneConfig,
   FrogShopState,
@@ -22,6 +22,7 @@ import {
   RotateCcw,
   Check,
   Lock,
+  CheckCircle2,
 } from 'lucide-react';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
 
@@ -39,18 +40,32 @@ interface GachaViewProps {
 
 export const GachaView: React.FC<GachaViewProps> = ({
   config,
+  onUpdateConfig,
   shopState,
   onGachaPullResults,
+  onToggleWishlist,
   onOpenCoins,
   onBack,
   soundEnabled = true,
   hapticEnabled = true,
 }) => {
-  // Live preview config for trying on items
-  const [previewConfig, setPreviewConfig] = useState<PixelSceneConfig>({ ...config });
+  // Current active set index in carousel (0 to THEMED_FROG_SETS.length - 1, or last index for 'all')
+  const [activeSetIndex, setActiveSetIndex] = useState<number>(0);
 
-  // Selected Set Tab ('all' or set.id)
-  const [selectedSetId, setSelectedSetId] = useState<string>(THEMED_FROG_SETS[0]?.id || 'all');
+  // Live preview config for trying on items
+  const [previewConfig, setPreviewConfig] = useState<PixelSceneConfig>(() => {
+    const firstSet = THEMED_FROG_SETS[0];
+    return firstSet
+      ? {
+          ...config,
+          ...firstSet.items,
+        }
+      : { ...config };
+  });
+
+  // Touch swipe handling
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
 
   // Summoning Animation state
   const [activeSummonResults, setActiveSummonResults] = useState<GachaPullResult[] | null>(null);
@@ -58,6 +73,9 @@ export const GachaView: React.FC<GachaViewProps> = ({
 
   // Lineup Rates modal
   const [showLineupModal, setShowLineupModal] = useState(false);
+
+  // Toast notification for equipping
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Daily free pull
   const todayStr = new Date().toISOString().slice(0, 10);
@@ -73,25 +91,74 @@ export const GachaView: React.FC<GachaViewProps> = ({
     return SHOP_CATALOG.filter((item) => !item.id.includes('none') && item.id !== 'skin_classic');
   }, []);
 
-  const currentSet = useMemo(() => {
-    return THEMED_FROG_SETS.find((s) => s.id === selectedSetId);
-  }, [selectedSetId]);
+  const totalSets = THEMED_FROG_SETS.length + 1; // themed sets + "All Items"
+  const isAllItemsMode = activeSetIndex === THEMED_FROG_SETS.length;
+  const currentSet = !isAllItemsMode ? THEMED_FROG_SETS[activeSetIndex] : null;
+
+  // Change set with automatic live frog room preview
+  const handleSelectSetIndex = (newIndex: number) => {
+    const clampedIndex = (newIndex + totalSets) % totalSets;
+    setActiveSetIndex(clampedIndex);
+
+    if (soundEnabled) soundEngine.playEquipSound();
+    if (hapticEnabled) triggerHaptic();
+
+    if (clampedIndex < THEMED_FROG_SETS.length) {
+      const targetSet = THEMED_FROG_SETS[clampedIndex];
+      setPreviewConfig((prev) => ({
+        ...prev,
+        ...targetSet.items,
+      }));
+    } else {
+      // All items mode: revert to user's current equipped frog
+      setPreviewConfig({ ...config });
+    }
+  };
+
+  const handlePrevSet = () => {
+    handleSelectSetIndex(activeSetIndex - 1);
+  };
+
+  const handleNextSet = () => {
+    handleSelectSetIndex(activeSetIndex + 1);
+  };
+
+  // Touch Swipe Handlers for mobile & stage sliding
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    // Trigger swipe if horizontal movement is dominant and > 40px
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        handleNextSet(); // Swipe Left -> Next
+      } else {
+        handlePrevSet(); // Swipe Right -> Prev
+      }
+    }
+
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+  };
 
   // Display items filtered by selected set or all
   const displayItems = useMemo(() => {
-    if (selectedSetId === 'all') {
+    if (isAllItemsMode || !currentSet) {
       return allGachaItems;
     }
-    const foundSet = THEMED_FROG_SETS.find((s) => s.id === selectedSetId);
-    if (!foundSet) return allGachaItems;
 
     return allGachaItems.filter((item) => {
-      // Check if item.id is in foundSet.itemIds, or item value matches any item in foundSet.items
-      if (foundSet.itemIds.includes(item.id)) return true;
-      const slotVal = foundSet.items[item.slot as keyof typeof foundSet.items];
+      if (currentSet.itemIds.includes(item.id)) return true;
+      const slotVal = currentSet.items[item.slot as keyof typeof currentSet.items];
       return slotVal === item.value;
     });
-  }, [selectedSetId, allGachaItems]);
+  }, [isAllItemsMode, currentSet, allGachaItems]);
 
   const ownedCount = useMemo(() => {
     return displayItems.filter((item) => isItemOwned(item.id)).length;
@@ -134,13 +201,23 @@ export const GachaView: React.FC<GachaViewProps> = ({
     setPreviewConfig((prev) => ({ ...prev, ...patch }));
   };
 
-  const handleTryOnSet = (set: ThemedFrogSet) => {
-    if (soundEnabled) soundEngine.playEquipSound();
+  const handleReapplySet = () => {
+    if (currentSet) {
+      if (soundEnabled) soundEngine.playEquipSound();
+      if (hapticEnabled) triggerHaptic();
+      setPreviewConfig((prev) => ({
+        ...prev,
+        ...currentSet.items,
+      }));
+    }
+  };
+
+  const handleApplyToMainFrog = () => {
+    if (soundEnabled) soundEngine.playCompletionChime();
     if (hapticEnabled) triggerHaptic();
-    setPreviewConfig((prev) => ({
-      ...prev,
-      ...set.items,
-    }));
+    onUpdateConfig(previewConfig);
+    setToastMessage('Applied look to your Main Frog! 🐸✨');
+    setTimeout(() => setToastMessage(null), 2500);
   };
 
   const handleResetPreview = () => {
@@ -205,6 +282,8 @@ export const GachaView: React.FC<GachaViewProps> = ({
     <div
       id="pokecolo-gacha-stage"
       className="relative w-full h-full flex flex-col justify-between overflow-hidden select-none"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* 1. FULLSCREEN 3D ROOM & FROG BACKGROUND */}
       <PixelFrogScene
@@ -214,6 +293,14 @@ export const GachaView: React.FC<GachaViewProps> = ({
         soundEnabled={soundEnabled}
         hapticEnabled={hapticEnabled}
       />
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-40 px-4 py-2 rounded-full bg-[#5f7a61] text-white text-xs font-black shadow-lg flex items-center gap-2 animate-bounce">
+          <CheckCircle2 size={14} />
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
       {/* 2. TOP FLOATING HEADER BAR */}
       <header className="relative z-20 w-full flex items-center justify-between px-4 pt-3.5 pointer-events-auto">
@@ -226,14 +313,14 @@ export const GachaView: React.FC<GachaViewProps> = ({
                 if (soundEnabled) soundEngine.playTapSound();
                 onBack();
               }}
-              className="w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md border border-white/60 dark:border-white/15 flex items-center justify-center text-[#2d2823] dark:text-[#f4efe8] shadow-sm active:scale-95 transition-all"
+              className="w-8 h-8 rounded-full bg-white/85 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md border border-white/60 dark:border-white/15 flex items-center justify-center text-[#2d2823] dark:text-[#f4efe8] shadow-sm active:scale-95 transition-all"
               title="Back"
             >
               <ArrowLeft size={16} />
             </button>
           )}
 
-          <div className="px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-white/60 dark:border-white/15 shadow-sm flex items-center gap-1.5">
+          <div className="px-3 py-1.5 rounded-full bg-white/85 dark:bg-black/60 backdrop-blur-md border border-white/60 dark:border-white/15 shadow-sm flex items-center gap-1.5">
             <Sparkles size={14} className="text-[#5f7a61] dark:text-[#8cb88f]" />
             <h2 className="text-xs font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
               Gacha & Sets
@@ -241,13 +328,23 @@ export const GachaView: React.FC<GachaViewProps> = ({
           </div>
         </div>
 
-        {/* Right Side: Coins & Reset Preview */}
+        {/* Right Side: Coins, Wear Look, & Reset */}
         <div className="flex items-center gap-1.5">
           <button
             type="button"
+            onClick={handleApplyToMainFrog}
+            className="px-2.5 py-1.5 rounded-full bg-[#5f7a61]/90 hover:bg-[#5f7a61] active:scale-95 text-white text-[11px] font-black backdrop-blur-md flex items-center gap-1 shadow-sm transition"
+            title="Wear current look on main frog"
+          >
+            <Check size={13} strokeWidth={2.5} />
+            <span className="hidden sm:inline">Wear Look</span>
+          </button>
+
+          <button
+            type="button"
             onClick={handleResetPreview}
-            className="w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md text-[#4a4036] dark:text-[#e0d6cb] border border-white/60 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
-            title="Reset Preview"
+            className="w-8 h-8 rounded-full bg-white/85 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md text-[#4a4036] dark:text-[#e0d6cb] border border-white/60 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
+            title="Reset to your saved frog"
           >
             <RotateCcw size={14} />
           </button>
@@ -275,19 +372,16 @@ export const GachaView: React.FC<GachaViewProps> = ({
         {/* Drag Handle */}
         <div className="w-10 h-1 rounded-full bg-black/15 dark:bg-white/20 mx-auto" />
 
-        {/* Set Selector Tabs */}
+        {/* Set Selector Pills */}
         <div className="overflow-x-auto no-scrollbar py-0.5">
           <div className="flex items-center gap-1.5">
-            {THEMED_FROG_SETS.map((set) => {
-              const isActive = selectedSetId === set.id;
+            {THEMED_FROG_SETS.map((set, idx) => {
+              const isActive = activeSetIndex === idx;
               return (
                 <button
                   key={set.id}
                   type="button"
-                  onClick={() => {
-                    if (soundEnabled) soundEngine.playTapSound();
-                    setSelectedSetId(set.id);
-                  }}
+                  onClick={() => handleSelectSetIndex(idx)}
                   className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                     isActive
                       ? 'bg-[#5f7a61] text-white shadow-xs'
@@ -295,24 +389,21 @@ export const GachaView: React.FC<GachaViewProps> = ({
                   }`}
                 >
                   <span>{set.bannerEmoji}</span>
-                  <span>{set.name.split('&')[0]}</span>
+                  <span>{set.name.split('&')[0].trim()}</span>
                 </button>
               );
             })}
 
             <button
               type="button"
-              onClick={() => {
-                if (soundEnabled) soundEngine.playTapSound();
-                setSelectedSetId('all');
-              }}
+              onClick={() => handleSelectSetIndex(THEMED_FROG_SETS.length)}
               className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap ${
-                selectedSetId === 'all'
+                isAllItemsMode
                   ? 'bg-[#5f7a61] text-white shadow-xs'
                   : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-[#554b3f] dark:text-[#c4b5a5]'
               }`}
             >
-              All Items
+              ✨ All Items
             </button>
           </div>
         </div>
@@ -327,7 +418,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
             {currentSet && (
               <button
                 type="button"
-                onClick={() => handleTryOnSet(currentSet)}
+                onClick={handleReapplySet}
                 className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#5f7a61]/15 text-[#5f7a61] dark:text-[#8cb88f] hover:bg-[#5f7a61]/25 active:scale-95 transition"
               >
                 Try Full Set
@@ -521,3 +612,4 @@ export const GachaView: React.FC<GachaViewProps> = ({
     </div>
   );
 };
+
