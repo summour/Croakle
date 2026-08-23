@@ -292,8 +292,6 @@ export const GachaView: React.FC<GachaViewProps> = ({
     <div
       id="pokecolo-gacha-stage"
       className="relative w-full h-full flex flex-col justify-between overflow-hidden select-none"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       {/* 1. FULLSCREEN 3D ROOM & FROG BACKGROUND */}
       <PixelFrogScene
@@ -420,11 +418,19 @@ export const GachaView: React.FC<GachaViewProps> = ({
         </div>
       </div>
 
-      {/* Spacer */}
-      <div className="flex-1 w-full" />
+      {/* Interactive Middle Area (Swiping on frog room changes banner) */}
+      <div
+        className="flex-1 w-full relative z-10 touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      />
 
       {/* 3. BOTTOM GACHA TRAY */}
-      <div className="relative z-20 w-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-xl border-t border-black/10 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2.5 pointer-events-auto">
+      <div
+        className="relative z-20 w-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-xl border-t border-black/10 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2.5 pointer-events-auto"
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+      >
         {/* Drag Handle */}
         <div className="w-10 h-1 rounded-full bg-black/15 dark:bg-white/20 mx-auto" />
 
@@ -464,8 +470,12 @@ export const GachaView: React.FC<GachaViewProps> = ({
           </div>
         </div>
 
-        {/* Lineup Items Grid / Tray */}
-        <div className="overflow-x-auto no-scrollbar py-1">
+        {/* Lineup Items Grid / Tray with isolated horizontal scroll */}
+        <div
+          className="overflow-x-auto no-scrollbar py-1 overscroll-x-contain touch-pan-x"
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+        >
           <div className="flex items-center gap-2">
             {displayItems.map((item) => {
               const grade = getGachaGrade(item);
