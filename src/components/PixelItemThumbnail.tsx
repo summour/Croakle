@@ -38,6 +38,8 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       'fairytale_rose',
       'timber_wolf_grey',
       'konbini_mint',
+      'cyber_neon_violet',
+      'gameboy_monochrome',
     ].includes(key)
   ) {
     const pal = getSkinColors(key as any);
@@ -114,6 +116,57 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           <rect x="7" y="7" width="10" height="10" fill="#FFFFFF" />
           <rect x="9" y="9" width="6" height="6" fill="#CBD5E1" />
           <rect x="11" y="11" width="2" height="2" fill="#94A3B8" />
+        </svg>
+      );
+
+    case 'arcade_joystick_cap':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Black Snapback Cap Crown */}
+          <rect x="5" y="7" width="14" height="6" fill="#18181B" />
+          <rect x="6" y="6" width="12" height="2" fill="#27272A" />
+          {/* Flat Visor Bill */}
+          <rect x="2" y="12" width="20" height="2" fill="#09090B" />
+          <rect x="3" y="13" width="18" height="1" fill="#18181B" />
+          {/* Embroidered Joystick & Red Ball on Front */}
+          <rect x="11" y="8" width="2" height="3" fill="#71717A" />
+          <rect x="10" y="7" width="4" height="2" fill="#EF4444" />
+          {/* Blue Button Accent */}
+          <rect x="15" y="9" width="2" height="2" fill="#3B82F6" />
+        </svg>
+      );
+
+    case 'pixel_vr_visor':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Dark VR Visor Body */}
+          <rect x="3" y="7" width="18" height="9" fill="#0F172A" />
+          <rect x="2" y="8" width="20" height="7" fill="#1E293B" />
+          {/* Glowing Animated Visor Glass */}
+          <rect x="4" y="9" width="16" height="5" fill="#06B6D4" />
+          <rect x="6" y="10" width="12" height="2" fill="#67E8F9" />
+          <rect x="12" y="10" width="4" height="2" fill="#EC4899" />
+          {/* Side Head Straps */}
+          <rect x="2" y="10" width="2" height="3" fill="#475569" />
+          <rect x="20" y="10" width="2" height="3" fill="#475569" />
+          <rect x="10" y="6" width="4" height="2" fill="#334155" />
+        </svg>
+      );
+
+    case 'retro_gameboy_beanie':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Grey Knit Beanie Body */}
+          <rect x="5" y="5" width="14" height="10" fill="#94A3B8" />
+          <rect x="7" y="4" width="10" height="2" fill="#CBD5E1" />
+          {/* Folded Beanie Rim */}
+          <rect x="4" y="13" width="16" height="3" fill="#64748B" />
+          {/* Mini Handheld Screen & Buttons on Front */}
+          <rect x="7" y="7" width="5" height="4" fill="#8BAC0F" />
+          <rect x="8" y="8" width="3" height="2" fill="#0F380F" />
+          <rect x="14" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="16" y="7" width="2" height="2" fill="#BE123C" />
+          <rect x="15" y="9" width="2" height="2" fill="#BE123C" />
         </svg>
       );
 
@@ -482,6 +535,60 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // B. OUTFITS
     // -----------------------------------------------------------
+    case 'arcade_gamer_bomber':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Satin Purple Bomber Jacket Body */}
+          <rect x="4" y="6" width="16" height="12" fill="#581C87" />
+          <rect x="5" y="7" width="14" height="10" fill="#7E22CE" />
+          {/* Neon Cyan Sleeves */}
+          <rect x="2" y="7" width="3" height="9" fill="#06B6D4" />
+          <rect x="19" y="7" width="3" height="9" fill="#06B6D4" />
+          {/* Gold Center Zipper */}
+          <rect x="11" y="6" width="2" height="11" fill="#FACC15" />
+          {/* Pixel Badges on Chest */}
+          <rect x="7" y="9" width="3" height="3" fill="#EC4899" />
+          <rect x="14" y="9" width="3" height="3" fill="#22D3EE" />
+          {/* Dark Ribbed Hem */}
+          <rect x="4" y="17" width="16" height="2" fill="#3B0764" />
+        </svg>
+      );
+
+    case 'pixel_hero_armor':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Royal Purple Cape behind shoulders */}
+          <rect x="3" y="6" width="18" height="13" fill="#6B21A8" />
+          <rect x="2" y="8" width="20" height="11" fill="#7C3AED" />
+          {/* Silver Steel Breastplate */}
+          <rect x="5" y="7" width="14" height="10" fill="#94A3B8" />
+          <rect x="6" y="8" width="12" height="8" fill="#CBD5E1" />
+          {/* Golden Hero Sword / Crest */}
+          <rect x="10" y="9" width="4" height="4" fill="#FACC15" />
+          <rect x="11" y="8" width="2" height="6" fill="#FEF08A" />
+          {/* Heavy Leather Belt */}
+          <rect x="5" y="15" width="14" height="2" fill="#475569" />
+          <rect x="10" y="15" width="4" height="2" fill="#FACC15" />
+        </svg>
+      );
+
+    case 'retro_esports_jersey':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Dark Esports Jersey Body */}
+          <rect x="4" y="6" width="16" height="12" fill="#0F172A" />
+          <rect x="5" y="7" width="14" height="10" fill="#1E293B" />
+          {/* Neon Cyan Shoulder Racing Stripes */}
+          <rect x="3" y="7" width="3" height="10" fill="#06B6D4" />
+          <rect x="18" y="7" width="3" height="10" fill="#06B6D4" />
+          {/* Yellow Retro 88 Number Print */}
+          <rect x="8" y="9" width="8" height="5" fill="#FACC15" />
+          <rect x="10" y="10" width="4" height="3" fill="#0F172A" />
+          {/* Neon Magenta Collar Trim */}
+          <rect x="9" y="6" width="6" height="2" fill="#EC4899" />
+        </svg>
+      );
+
     case 'konbini_staff_uniform':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
@@ -723,6 +830,42 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // C. FACE ACCESSORIES & GLASSES
     // -----------------------------------------------------------
+    case 'cyber_pixel_shades':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Stepped Thug/Meme Pixel Sunglasses with Neon Glint */}
+          <rect x="3" y="9" width="7" height="3" fill="#09090B" />
+          <rect x="4" y="12" width="5" height="3" fill="#09090B" />
+          <rect x="14" y="9" width="7" height="3" fill="#09090B" />
+          <rect x="15" y="12" width="5" height="3" fill="#09090B" />
+          <rect x="10" y="10" width="4" height="2" fill="#09090B" />
+          {/* White Stepped Specular Gleam */}
+          <rect x="4" y="10" width="2" height="1" fill="#FFFFFF" />
+          <rect x="5" y="11" width="2" height="1" fill="#FFFFFF" />
+          <rect x="15" y="10" width="2" height="1" fill="#FFFFFF" />
+          <rect x="16" y="11" width="2" height="1" fill="#FFFFFF" />
+          <rect x="4" y="13" width="2" height="1" fill="#22D3EE" />
+          <rect x="15" y="13" width="2" height="1" fill="#22D3EE" />
+        </>
+      );
+
+    case 'game_over_dizzy':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Dizzy Spiral Swirls on Eyes */}
+          <rect x="4" y="8" width="6" height="6" fill="#FACC15" />
+          <rect x="5" y="9" width="4" height="4" fill="#0F172A" />
+          <rect x="6" y="10" width="2" height="2" fill="#EC4899" />
+          <rect x="14" y="8" width="6" height="6" fill="#FACC15" />
+          <rect x="15" y="9" width="4" height="4" fill="#0F172A" />
+          <rect x="16" y="10" width="2" height="2" fill="#EC4899" />
+          {/* Floating Yellow Dizzy Sparkles */}
+          <rect x="11" y="5" width="2" height="2" fill="#FDE047" />
+          <rect x="2" y="6" width="2" height="2" fill="#FDE047" />
+          <rect x="20" y="6" width="2" height="2" fill="#FDE047" />
+        </>
+      );
+
     case 'scanner_headset':
       return renderAccessoryWithFrogFace(
         <>

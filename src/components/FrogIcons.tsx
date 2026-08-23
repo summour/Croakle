@@ -2029,9 +2029,10 @@ export const PixelFurinChimeIcon: React.FC<IconProps> = ({ size = 28, className 
 /** Pixel Art RPG Dialogue Box with tail */
 export const PixelDialogueBox: React.FC<{
   text: string;
+  icon?: React.ReactNode;
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
-}> = ({ text, onClick, className = '' }) => (
+}> = ({ text, icon, onClick, className = '' }) => (
   <div
     onClick={onClick}
     className={`relative inline-flex flex-col items-center cursor-pointer select-none transition-transform active:scale-95 ${className}`}
@@ -2049,6 +2050,7 @@ export const PixelDialogueBox: React.FC<{
       
       <div className="relative flex items-center gap-1.5 drop-shadow-xs">
         <span>{text}</span>
+        {icon && <span className="inline-flex items-center shrink-0">{icon}</span>}
       </div>
     </div>
     
@@ -2058,6 +2060,220 @@ export const PixelDialogueBox: React.FC<{
       <span className="w-1.5 h-1 bg-[#3D2C22]" />
     </div>
   </div>
+);
+
+/** 8-Bit Pixel Matcha Tea Cup Icon */
+export const PixelMatchaCupIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Steam wisps */}
+    <rect x="5" y="1" width="1" height="2" fill="#E2E8F0" opacity="0.8" />
+    <rect x="6" y="2" width="1" height="2" fill="#CBD5E1" opacity="0.8" />
+    <rect x="9" y="1" width="1" height="2" fill="#E2E8F0" opacity="0.8" />
+    <rect x="10" y="2" width="1" height="2" fill="#CBD5E1" opacity="0.8" />
+    {/* Wooden saucer coaster */}
+    <rect x="3" y="13" width="10" height="2" fill="#78350F" />
+    <rect x="4" y="13" width="8" height="1" fill="#92400E" />
+    {/* Ceramic Bowl Outer Border */}
+    <rect x="4" y="5" width="8" height="8" fill="#1C1917" />
+    <rect x="3" y="6" width="10" height="6" fill="#1C1917" />
+    {/* Ceramic Bowl Body (Off-white ceramic) */}
+    <rect x="4" y="6" width="8" height="6" fill="#F8FAFC" />
+    <rect x="3" y="7" width="10" height="4" fill="#F8FAFC" />
+    {/* Bowl Shading */}
+    <rect x="4" y="11" width="8" height="1" fill="#E2E8F0" />
+    <rect x="11" y="7" width="1" height="4" fill="#CBD5E1" />
+    {/* Matcha Green Tea Surface */}
+    <rect x="5" y="6" width="6" height="3" fill="#15803D" />
+    <rect x="5" y="6" width="5" height="1" fill="#22C55E" />
+    <rect x="6" y="7" width="2" height="1" fill="#86EFAC" />
+  </svg>
+);
+
+/** 8-Bit Pixel Sparkle Star Icon */
+export const PixelSparkleStarIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Big Gold Star */}
+    <rect x="7" y="1" width="2" height="12" fill="#F59E0B" />
+    <rect x="2" y="6" width="12" height="2" fill="#F59E0B" />
+    <rect x="6" y="3" width="4" height="8" fill="#FBBF24" />
+    <rect x="4" y="5" width="8" height="4" fill="#FBBF24" />
+    <rect x="7" y="5" width="2" height="4" fill="#FEF08A" />
+    <rect x="6" y="6" width="4" height="2" fill="#FEF08A" />
+    <rect x="7" y="6" width="2" height="2" fill="#FFFFFF" />
+    {/* Small Side Sparkle */}
+    <rect x="13" y="2" width="1" height="3" fill="#FDE047" />
+    <rect x="12" y="3" width="3" height="1" fill="#FDE047" />
+  </svg>
+);
+
+/** 8-Bit Pixel Water Droplet Icon */
+export const PixelWaterDropletIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Dark Outline */}
+    <rect x="7" y="2" width="2" height="2" fill="#0C4A6E" />
+    <rect x="6" y="4" width="4" height="2" fill="#0C4A6E" />
+    <rect x="5" y="6" width="6" height="2" fill="#0C4A6E" />
+    <rect x="4" y="8" width="8" height="5" fill="#0C4A6E" />
+    <rect x="5" y="13" width="6" height="1" fill="#0C4A6E" />
+    {/* Water Body */}
+    <rect x="7" y="3" width="2" height="1" fill="#0284C7" />
+    <rect x="6" y="4" width="4" height="2" fill="#0284C7" />
+    <rect x="5" y="6" width="6" height="2" fill="#0284C7" />
+    <rect x="5" y="8" width="6" height="4" fill="#0284C7" />
+    {/* Highlight & Light blue reflections */}
+    <rect x="6" y="5" width="2" height="2" fill="#38BDF8" />
+    <rect x="6" y="7" width="2" height="4" fill="#38BDF8" />
+    <rect x="6" y="6" width="1" height="3" fill="#BAE6FD" />
+    <rect x="6" y="6" width="2" height="1" fill="#FFFFFF" />
+  </svg>
+);
+
+/** 8-Bit Pixel Sprout Leaf Icon */
+export const PixelSproutLeafIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Stem */}
+    <rect x="7" y="8" width="2" height="6" fill="#14532D" />
+    <rect x="7" y="9" width="1" height="4" fill="#16A34A" />
+    {/* Left Leaf */}
+    <rect x="2" y="4" width="5" height="4" fill="#14532D" />
+    <rect x="3" y="3" width="4" height="5" fill="#14532D" />
+    <rect x="3" y="4" width="4" height="3" fill="#22C55E" />
+    <rect x="4" y="4" width="2" height="2" fill="#86EFAC" />
+    {/* Right Leaf */}
+    <rect x="9" y="5" width="5" height="4" fill="#14532D" />
+    <rect x="9" y="4" width="4" height="5" fill="#14532D" />
+    <rect x="9" y="5" width="4" height="3" fill="#16A34A" />
+    <rect x="10" y="5" width="2" height="2" fill="#4ADE80" />
+  </svg>
+);
+
+/** 8-Bit Pixel Sakura Blossom Flower Icon */
+export const PixelSakuraBlossomIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Dark Pink outline */}
+    <rect x="6" y="2" width="4" height="2" fill="#9D174D" />
+    <rect x="2" y="6" width="2" height="4" fill="#9D174D" />
+    <rect x="12" y="6" width="2" height="4" fill="#9D174D" />
+    <rect x="4" y="11" width="3" height="3" fill="#9D174D" />
+    <rect x="9" y="11" width="3" height="3" fill="#9D174D" />
+    {/* Petal Body (Soft Pink) */}
+    <rect x="5" y="3" width="6" height="4" fill="#F472B6" />
+    <rect x="3" y="6" width="10" height="4" fill="#F472B6" />
+    <rect x="4" y="10" width="3" height="3" fill="#F472B6" />
+    <rect x="9" y="10" width="3" height="3" fill="#F472B6" />
+    {/* Highlights */}
+    <rect x="6" y="4" width="4" height="2" fill="#FBCFE8" />
+    <rect x="4" y="7" width="2" height="2" fill="#FBCFE8" />
+    <rect x="10" y="7" width="2" height="2" fill="#FBCFE8" />
+    {/* Golden Center Pistil */}
+    <rect x="7" y="7" width="2" height="2" fill="#F59E0B" />
+    <rect x="7" y="7" width="1" height="1" fill="#FEF08A" />
+  </svg>
+);
+
+/** 8-Bit Pixel Wood Log / Cottage Icon */
+export const PixelCampfireLogIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Log Bark Dark */}
+    <rect x="2" y="6" width="12" height="6" fill="#451A03" />
+    <rect x="3" y="5" width="10" height="8" fill="#451A03" />
+    {/* Log Bark Medium */}
+    <rect x="3" y="6" width="10" height="6" fill="#78350F" />
+    <rect x="4" y="6" width="8" height="2" fill="#92400E" />
+    {/* Cut Ring on Left */}
+    <rect x="3" y="7" width="3" height="4" fill="#D97706" />
+    <rect x="4" y="8" width="1" height="2" fill="#FDE68A" />
+    {/* Wood grain line */}
+    <rect x="7" y="8" width="4" height="1" fill="#451A03" />
+    <rect x="9" y="10" width="3" height="1" fill="#451A03" />
+  </svg>
+);
+
+/** 8-Bit Pixel Heart Emote Icon */
+export const PixelHeartEmoteIcon: React.FC<IconProps> = ({ size = 16, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Dark Border */}
+    <rect x="3" y="3" width="4" height="2" fill="#881337" />
+    <rect x="9" y="3" width="4" height="2" fill="#881337" />
+    <rect x="2" y="4" width="12" height="5" fill="#881337" />
+    <rect x="3" y="9" width="10" height="2" fill="#881337" />
+    <rect x="5" y="11" width="6" height="2" fill="#881337" />
+    <rect x="7" y="13" width="2" height="2" fill="#881337" />
+    {/* Heart Body (Vibrant Emerald / Rose Green or Red) */}
+    <rect x="3" y="4" width="4" height="4" fill="#10B981" />
+    <rect x="9" y="4" width="4" height="4" fill="#10B981" />
+    <rect x="3" y="7" width="10" height="2" fill="#10B981" />
+    <rect x="4" y="9" width="8" height="2" fill="#10B981" />
+    <rect x="6" y="11" width="4" height="2" fill="#10B981" />
+    <rect x="7" y="13" width="2" height="1" fill="#10B981" />
+    {/* Highlights */}
+    <rect x="4" y="4" width="2" height="2" fill="#A7F3D0" />
+    <rect x="4" y="4" width="1" height="1" fill="#FFFFFF" />
+    <rect x="10" y="4" width="2" height="2" fill="#34D399" />
+  </svg>
 );
 
 /** 8-Bit Pixel Gacha Ticket Icon (Cozy Amber Golden Ticket with Notched Perforations) */

@@ -12,6 +12,13 @@ import {
   PixelWardrobeClosetIcon,
   PixelDialogueBox,
   PixelHeartPetIcon,
+  PixelMatchaCupIcon,
+  PixelSparkleStarIcon,
+  PixelWaterDropletIcon,
+  PixelSproutLeafIcon,
+  PixelSakuraBlossomIcon,
+  PixelCampfireLogIcon,
+  PixelHeartEmoteIcon,
 } from './FrogIcons';
 import { PixelFrogScene } from './PixelFrogScene';
 import {
@@ -39,14 +46,14 @@ interface HomeDashboardProps {
   onToggleWishlist?: (itemId: string) => void;
 }
 
-const FROG_DIALOGUES = [
-  'Ribbit! Welcome home~ 🍵',
-  'So warm & cozy in here ✨',
-  'Did you drink water today? 💧',
-  'Let’s relax and focus together 🌿',
-  'Feeling peaceful today~ 🌸',
-  'Croak! Loving this room 🪵',
-  'Take a deep breath and smile 💚',
+const FROG_DIALOGUES: { text: string; icon: React.ReactNode }[] = [
+  { text: 'Ribbit! Welcome home~', icon: <PixelMatchaCupIcon size={14} /> },
+  { text: 'So warm & cozy in here', icon: <PixelSparkleStarIcon size={14} /> },
+  { text: 'Did you drink water today?', icon: <PixelWaterDropletIcon size={14} /> },
+  { text: 'Let’s relax and focus together', icon: <PixelSproutLeafIcon size={14} /> },
+  { text: 'Feeling peaceful today~', icon: <PixelSakuraBlossomIcon size={14} /> },
+  { text: 'Croak! Loving this room', icon: <PixelCampfireLogIcon size={14} /> },
+  { text: 'Take a deep breath and smile', icon: <PixelHeartEmoteIcon size={14} /> },
 ];
 
 export const HomeDashboard: React.FC<HomeDashboardProps> = ({
@@ -208,7 +215,8 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       <div className="relative z-20 flex flex-col items-center justify-center pointer-events-none mt-4">
         {speechVisible && (
           <PixelDialogueBox
-            text={FROG_DIALOGUES[dialogueIndex]}
+            text={FROG_DIALOGUES[dialogueIndex].text}
+            icon={FROG_DIALOGUES[dialogueIndex].icon}
             onClick={(e) => {
               e.stopPropagation();
               setDialogueIndex((prev) => (prev + 1) % FROG_DIALOGUES.length);

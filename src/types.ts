@@ -208,6 +208,7 @@ export function getMoodConfig(value: number | null | undefined): MoodConfig | un
 // -------------------------------------------------------------
 
 export type SceneLocationId =
+  | 'retro_arcade'
   | 'convenience_store'
   | 'red_riding_forest'
   | 'sushi_bar'
@@ -224,6 +225,9 @@ export type SceneLocationId =
 
 export type FrogActivityId =
   | 'relaxing'
+  | 'arcade_gamepad'
+  | 'claw_machine_prize'
+  | 'handheld_gaming'
   | 'konbini_scanner'
   | 'eating_onigiri'
   | 'holding_konbini_bag'
@@ -246,6 +250,9 @@ export type FrogActivityId =
 
 export type FrogHatId =
   | 'none'
+  | 'arcade_joystick_cap'
+  | 'pixel_vr_visor'
+  | 'retro_gameboy_beanie'
   | 'konbini_staff_visor'
   | 'shopper_bucket_hat'
   | 'onigiri_headband'
@@ -272,6 +279,9 @@ export type FrogHatId =
 
 export type FrogOutfitId =
   | 'none'
+  | 'arcade_gamer_bomber'
+  | 'pixel_hero_armor'
+  | 'retro_esports_jersey'
   | 'konbini_staff_uniform'
   | 'shopper_cozy_sweatset'
   | 'red_riding_dress'
@@ -292,6 +302,8 @@ export type FrogOutfitId =
 
 export type FrogGlassesId =
   | 'none'
+  | 'cyber_pixel_shades'
+  | 'game_over_dizzy'
   | 'scanner_headset'
   | 'konbini_blush'
   | 'forest_blush_freckles'
@@ -306,6 +318,8 @@ export type FrogGlassesId =
 
 export type FrogSkinId =
   | 'classic'
+  | 'cyber_neon_violet'
+  | 'gameboy_monochrome'
   | 'konbini_mint'
   | 'fairytale_rose'
   | 'timber_wolf_grey'
@@ -320,6 +334,8 @@ export type FrogSkinId =
 
 export type FrogCompanionId =
   | 'none'
+  | 'pixel_arcade_ghost'
+  | 'retro_tamagotchi'
   | 'konbini_cashier_cat'
   | 'snack_shiba'
   | 'chibi_wolf_pup'
@@ -372,6 +388,7 @@ export interface SceneOptionInfo<T> {
 }
 
 export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
+  { id: 'retro_arcade', name: '8-Bit Retro Arcade Game Center', emoji: '🕹️', desc: 'Neon CRT cabinets, prize claw machine, dance mat & pixel high scores', tag: 'Retro' },
   { id: 'convenience_store', name: '24h Neon Konbini Store', emoji: '🏪', desc: 'Glowing drink fridges, snack shelves & checkout counter', tag: 'Neon' },
   { id: 'red_riding_forest', name: 'Fairytale Red Riding Forest', emoji: '🧺', desc: 'Misty red ribbon woods, granny cottage & autumn trails', tag: 'Fairytale' },
   { id: 'sushi_bar', name: 'Edomae Sushi Counter', emoji: '🍣', desc: 'Polished hinoki bar, noren curtains & red lanterns', tag: 'Gourmet' },
@@ -389,6 +406,9 @@ export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
 
 export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
   { id: 'relaxing', name: 'Peaceful Chilling', emoji: '🐸', desc: 'Smiling cute with warm rosy cheeks', tag: 'Rest' },
+  { id: 'arcade_gamepad', name: 'Turbo Arcade Gamepad', emoji: '🎮', desc: 'Smashing button combos on a retro 8-bit controller', tag: 'Retro' },
+  { id: 'claw_machine_prize', name: 'Claw Machine Frog Plush', emoji: '🧸', desc: 'Hugging fluffy 8-bit prize plush won from crane game', tag: 'Retro' },
+  { id: 'handheld_gaming', name: 'Retro Pocket Console', emoji: '🕹️', desc: 'Playing portable 8-bit chiptune pocket console', tag: 'Retro' },
   { id: 'konbini_scanner', name: 'Scanning Konbini Barcodes', emoji: '📟', desc: 'Beeping cash register with red laser scanner', tag: 'Konbini' },
   { id: 'eating_onigiri', name: 'Steamed Bun & Onigiri', emoji: '🍙', desc: 'Munching hot nikuman bun and seaweed onigiri', tag: 'Food' },
   { id: 'holding_konbini_bag', name: 'Midnight Shopping Bag', emoji: '🛍️', desc: 'Striped konbini plastic bag & chilled canned drink', tag: 'Konbini' },
@@ -412,6 +432,9 @@ export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
 
 export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
   { id: 'none', name: 'Natural (No Hat)', emoji: '✨', desc: 'Classic cute frog head', tag: 'Simple' },
+  { id: 'arcade_joystick_cap', name: 'Arcade Snapback Cap', emoji: '🧢', desc: 'Black 8-bit gamer cap with embroidered joystick', tag: 'Retro' },
+  { id: 'pixel_vr_visor', name: 'Cyber Pixel VR Visor', emoji: '🥽', desc: 'Glowing neon 8-bit cyber visor headset', tag: 'Retro' },
+  { id: 'retro_gameboy_beanie', name: 'Handheld Console Beanie', emoji: '🎮', desc: 'Classic retro 8-bit handheld console knit hat', tag: 'Retro' },
   { id: 'konbini_staff_visor', name: 'Konbini Staff Visor', emoji: '🧢', desc: 'Vibrant green & orange stripe clerk sun visor', tag: 'Konbini' },
   { id: 'shopper_bucket_hat', name: 'Cozy Shopper Bucket Hat', emoji: '👒', desc: 'Cream pastel bucket hat for midnight grocery runs', tag: 'Casual' },
   { id: 'onigiri_headband', name: 'Plush Onigiri Headband', emoji: '🍙', desc: 'Cute nori triangle rice ball perched on head', tag: 'Cute' },
@@ -439,6 +462,9 @@ export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
 
 export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
   { id: 'none', name: 'No Outfit (Natural)', emoji: '🌱', desc: 'Pure classic frog appearance', tag: 'Simple' },
+  { id: 'arcade_gamer_bomber', name: 'Synthwave Arcade Bomber', emoji: '🧥', desc: 'Purple satin jacket with neon cyan 8-bit patches', tag: 'Retro' },
+  { id: 'pixel_hero_armor', name: '8-Bit Knight Armor', emoji: '🛡️', desc: 'Pixel RPG silver breastplate with heroic royal cape', tag: 'Retro' },
+  { id: 'retro_esports_jersey', name: 'Arcade Champion Jersey', emoji: '👕', desc: 'Neon esports gamer tee with pixel lightning bolt', tag: 'Retro' },
   { id: 'konbini_staff_uniform', name: 'Konbini Clerk Uniform', emoji: '🏪', desc: 'Striped staff polo vest with name badge & pen pocket', tag: 'Konbini' },
   { id: 'shopper_cozy_sweatset', name: 'Midnight Shopper Hoodie', emoji: '🛍️', desc: 'Oversized fleece lounge hoodie & comfy lounge pants', tag: 'Cozy' },
   { id: 'red_riding_dress', name: 'Fairytale Dirndl Dress', emoji: '👗', desc: 'Crimson embroidered folk corset with white frills', tag: 'Fairytale' },
@@ -460,6 +486,8 @@ export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
 
 export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
   { id: 'none', name: 'No Glasses', emoji: '✨', desc: 'Clear natural eyes', tag: 'Simple' },
+  { id: 'cyber_pixel_shades', name: 'Deal-With-It Pixel Shades', emoji: '🕶️', desc: 'Legendary 8-bit stepped pixel sunglasses with cyan gleam', tag: 'Retro' },
+  { id: 'game_over_dizzy', name: 'Game Over Spiral Eyes', emoji: '💫', desc: 'Cute animated cartoon pixel spiral swirl eyes', tag: 'Retro' },
   { id: 'scanner_headset', name: 'Clerk Headset & Mic', emoji: '🎧', desc: 'Smart communication headset with cashier mic', tag: 'Konbini' },
   { id: 'konbini_blush', name: 'Midnight Shopping Blush', emoji: '💖', desc: 'Warm rosy cheeks with cute snack sparkle', tag: 'Cute' },
   { id: 'forest_blush_freckles', name: 'Forest Rosy Freckles', emoji: '🍓', desc: 'Whimsical storybook freckles with sweet rosy glow', tag: 'Fairytale' },
@@ -475,6 +503,8 @@ export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
 
 export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
   { id: 'classic', name: 'Classic Moss Green', emoji: '🐸', desc: 'Original peaceful woodland green hue', tag: 'Classic' },
+  { id: 'cyber_neon_violet', name: 'Synthwave Cyber Violet', emoji: '🟣', desc: 'Electric neon purple frog with glowing mint belly', tag: 'Retro' },
+  { id: 'gameboy_monochrome', name: 'Dot Matrix LCD Green', emoji: '🟩', desc: 'Authentic 4-shade nostalgic olive green Gameboy skin', tag: 'Retro' },
   { id: 'konbini_mint', name: 'Neon Konbini Mint', emoji: '🟢', desc: 'Vivid mint neon green with lime accents', tag: 'Neon' },
   { id: 'fairytale_rose', name: 'Fairytale Rosy Blush', emoji: '🌹', desc: 'Soft enchanted storybook blossom petal skin', tag: 'Fairytale' },
   { id: 'timber_wolf_grey', name: 'Timber Wolf Slate', emoji: '🐺', desc: 'Mysterious moonlit slate grey forest coat', tag: 'Fairytale' },
@@ -490,6 +520,8 @@ export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
 
 export const FROG_COMPANIONS: SceneOptionInfo<FrogCompanionId>[] = [
   { id: 'none', name: 'Solo Time', emoji: '🌱', desc: 'Quiet peaceful sanctuary alone', tag: 'Solitude' },
+  { id: 'pixel_arcade_ghost', name: 'Blinky the 8-Bit Ghost', emoji: '👻', desc: 'Playful floating pixel maze ghost with bobbing animation', tag: 'Retro' },
+  { id: 'retro_tamagotchi', name: 'Tama the Virtual Pet', emoji: '📟', desc: 'Egg-shaped keychain pixel virtual pet companion', tag: 'Retro' },
   { id: 'konbini_cashier_cat', name: 'Lucky Konbini Cashier Cat', emoji: '🐱', desc: 'Waving lucky maneki-neko in konbini uniform', tag: 'Konbini' },
   { id: 'snack_shiba', name: 'Snack Basket Shiba', emoji: '🐕', desc: 'Adorable shiba inu curled in a shopping basket', tag: 'Konbini' },
   { id: 'chibi_wolf_pup', name: 'Lupo the Chibi Wolf Pup', emoji: '🐺', desc: 'Playful baby wolf with gold eyes & wagging tail', tag: 'Fairytale' },
