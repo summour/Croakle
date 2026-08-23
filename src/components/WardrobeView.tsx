@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
+import { getGachaGrade } from '../utils/gachaUtils';
 
 type WardrobeMainTab = 'equipped' | 'all' | 'theme';
 
@@ -447,23 +448,39 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
               </div>
             ) : (
               <div className="grid grid-cols-5 sm:grid-cols-6 gap-2 pb-2">
-                {equippedItems.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => handleWardrobeEquip(item)}
-                    className="relative aspect-square rounded-2xl bg-white dark:bg-[#1f1a16] border flex items-center justify-center p-1 transition-all active:scale-95 shadow-2xs group overflow-hidden border-[#5f7a61] ring-2 ring-[#5f7a61]/40 bg-[#5f7a61]/10"
-                    title={item.name}
-                  >
-                    <div className="absolute top-1 right-1 z-10 w-4 h-4 rounded-full bg-[#5f7a61] text-white flex items-center justify-center shadow-xs">
-                      <Check size={10} strokeWidth={3} />
-                    </div>
+                {equippedItems.map((item) => {
+                  const grade = getGachaGrade(item);
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => handleWardrobeEquip(item)}
+                      className="relative aspect-square rounded-2xl bg-white dark:bg-[#1f1a16] border flex items-center justify-center p-1 transition-all active:scale-95 shadow-2xs group overflow-hidden border-[#5f7a61] ring-2 ring-[#5f7a61]/40 bg-[#5f7a61]/10"
+                      title={`${item.name} [${grade}]`}
+                    >
+                      {/* Grade Badge */}
+                      <span
+                        className={`absolute top-1 left-1 font-pixel text-[7px] font-black px-1 py-[0.5px] rounded-[4px] leading-tight z-10 shadow-2xs pointer-events-none select-none ${
+                          grade === 'SR'
+                            ? 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] dark:bg-amber-950/90 dark:text-amber-200 dark:border-amber-700/80'
+                            : grade === 'R'
+                            ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] dark:bg-emerald-950/90 dark:text-emerald-200 dark:border-emerald-700/80'
+                            : 'bg-[#F5F5F4] text-[#57534E] border border-[#E7E5E4] dark:bg-stone-800/90 dark:text-stone-300 dark:border-stone-700/70'
+                        }`}
+                      >
+                        {grade}
+                      </span>
 
-                    <div className="transform scale-[1.1] group-hover:scale-[1.2] transition-transform">
-                      <PixelItemThumbnail id={item.id} category={item.category} size={30} />
-                    </div>
-                  </button>
-                ))}
+                      <div className="absolute top-1 right-1 z-10 w-4 h-4 rounded-full bg-[#5f7a61] text-white flex items-center justify-center shadow-xs">
+                        <Check size={10} strokeWidth={3} />
+                      </div>
+
+                      <div className="transform scale-[1.1] group-hover:scale-[1.2] transition-transform">
+                        <PixelItemThumbnail id={item.id} category={item.category} size={30} />
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -518,6 +535,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                 <div className="grid grid-cols-5 sm:grid-cols-6 gap-2 pb-2">
                   {displayAllOwnedItems.map((item) => {
                     const isEquipped = isItemEquippedInPreview(item);
+                    const grade = getGachaGrade(item);
 
                     return (
                       <button
@@ -529,8 +547,21 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                             ? 'border-[#5f7a61] ring-2 ring-[#5f7a61]/40 bg-[#5f7a61]/10'
                             : 'border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                         }`}
-                        title={item.name}
+                        title={`${item.name} [${grade}]`}
                       >
+                        {/* Grade Badge */}
+                        <span
+                          className={`absolute top-1 left-1 font-pixel text-[7px] font-black px-1 py-[0.5px] rounded-[4px] leading-tight z-10 shadow-2xs pointer-events-none select-none ${
+                            grade === 'SR'
+                              ? 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] dark:bg-amber-950/90 dark:text-amber-200 dark:border-amber-700/80'
+                              : grade === 'R'
+                              ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] dark:bg-emerald-950/90 dark:text-emerald-200 dark:border-emerald-700/80'
+                              : 'bg-[#F5F5F4] text-[#57534E] border border-[#E7E5E4] dark:bg-stone-800/90 dark:text-stone-300 dark:border-stone-700/70'
+                          }`}
+                        >
+                          {grade}
+                        </span>
+
                         {isEquipped && (
                           <div className="absolute top-1 right-1 z-10 w-4 h-4 rounded-full bg-[#5f7a61] text-white flex items-center justify-center shadow-xs">
                             <Check size={10} strokeWidth={3} />
@@ -640,6 +671,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                       <div className="grid grid-cols-5 sm:grid-cols-6 gap-2">
                         {ownedSetItems.map((item) => {
                           const isEquipped = isItemEquippedInPreview(item);
+                          const grade = getGachaGrade(item);
 
                           return (
                             <button
@@ -651,8 +683,21 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                                   ? 'border-[#5f7a61] ring-2 ring-[#5f7a61]/40 bg-[#5f7a61]/10'
                                   : 'border-black/[0.06] dark:border-white/[0.08] hover:border-[#5f7a61]/50'
                               }`}
-                              title={item.name}
+                              title={`${item.name} [${grade}]`}
                             >
+                              {/* Grade Badge */}
+                              <span
+                                className={`absolute top-1 left-1 font-pixel text-[7px] font-black px-1 py-[0.5px] rounded-[4px] leading-tight z-10 shadow-2xs pointer-events-none select-none ${
+                                  grade === 'SR'
+                                    ? 'bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] dark:bg-amber-950/90 dark:text-amber-200 dark:border-amber-700/80'
+                                    : grade === 'R'
+                                    ? 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0] dark:bg-emerald-950/90 dark:text-emerald-200 dark:border-emerald-700/80'
+                                    : 'bg-[#F5F5F4] text-[#57534E] border border-[#E7E5E4] dark:bg-stone-800/90 dark:text-stone-300 dark:border-stone-700/70'
+                                }`}
+                              >
+                                {grade}
+                              </span>
+
                               {isEquipped && (
                                 <div className="absolute top-1 right-1 z-10 w-4 h-4 rounded-full bg-[#5f7a61] text-white flex items-center justify-center shadow-xs">
                                   <Check size={10} strokeWidth={3} />
