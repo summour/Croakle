@@ -206,7 +206,8 @@ export const PixelFrogSolo: React.FC<{
       className={`inline-block shrink-0 ${className}`}
     >
       {/* Frog Shadow */}
-      <ellipse cx={frogX + 8} cy={frogY + 28} rx="18" ry="4" fill="#000000" opacity="0.18" />
+      <rect x={frogX - 10} y={frogY + 26} width="36" height="4" fill="#000000" opacity="0.15" />
+      <rect x={frogX - 6} y={frogY + 25} width="28" height="6" fill="#000000" opacity="0.1" />
 
       {/* COMPANION LAYER (SOLO PREVIEW - Full sized equal to frog, pure crisp pixel art) */}
       {(config.companionId === 'snail' || config.companionId === 'companion_snail') && (
@@ -608,15 +609,17 @@ export const PixelFrogSolo: React.FC<{
 
       {config.outfitId === 'business' && (
         <g>
-          <rect x={frogX - 1} y={frogY + 11} width="18" height="10" fill="#334155" />
-          <polygon points={`${frogX + 4},${frogY + 11} ${frogX + 12},${frogY + 11} ${frogX + 8},${frogY + 18}`} fill="#FFFFFF" />
+          <rect x={frogX - 1} y={frogY + 11} width="18" height="9" fill="#334155" />
+          <rect x={frogX + 4} y={frogY + 11} width="8" height="2" fill="#FFFFFF" />
+          <rect x={frogX + 5} y={frogY + 13} width="6" height="2" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 15} width="4" height="2" fill="#FFFFFF" />
           <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#DC2626" />
         </g>
       )}
 
       {config.outfitId === 'hoodie' && (
         <g>
-          <rect x={frogX - 3} y={frogY + 7} width="22" height="14" fill="#10B981" />
+          <rect x={frogX - 3} y={frogY + 7} width="22" height="13" fill="#10B981" />
           <rect x={frogX - 1} y={frogY + 5} width="4" height="3" fill="#059669" />
           <rect x={frogX + 13} y={frogY + 5} width="4" height="3" fill="#059669" />
           <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#059669" />
@@ -628,20 +631,18 @@ export const PixelFrogSolo: React.FC<{
           <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#BE123C" />
           <rect x={frogX + 1} y={frogY + 10} width="14" height="9" fill="#991B1B" />
           <rect x={frogX + 3} y={frogY + 11} width="10" height="8" fill="#FFFFFF" />
-          <line x1={frogX + 6} y1={frogY + 12} x2={frogX + 10} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
-          <line x1={frogX + 10} y1={frogY + 12} x2={frogX + 6} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
-          <line x1={frogX + 6} y1={frogY + 14} x2={frogX + 10} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
-          <line x1={frogX + 10} y1={frogY + 14} x2={frogX + 6} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="1" fill="#18181B" />
+          <rect x={frogX + 6} y={frogY + 14} width="4" height="1" fill="#18181B" />
         </g>
       )}
 
       {config.outfitId === 'wolf_fur_cloak' && (
         <g>
-          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#334155" rx="2" />
+          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#334155" />
           <rect x={frogX - 2} y={frogY + 9} width="20" height="3" fill="#64748B" />
           <rect x={frogX + 2} y={frogY + 12} width="12" height="9" fill="#1E293B" />
-          <polygon points={`${frogX + 6},${frogY + 10} ${frogX + 8},${frogY + 13} ${frogX + 10},${frogY + 10}`} fill="#FEF08A" />
-          <circle cx={frogX + 8} cy={frogY + 10} r="1" fill="#DC2626" />
+          <rect x={frogX + 6} y={frogY + 10} width="4" height="3" fill="#FEF08A" />
+          <rect x={frogX + 7} y={frogY + 10} width="2" height="2" fill="#DC2626" />
         </g>
       )}
 
@@ -662,7 +663,7 @@ export const PixelFrogSolo: React.FC<{
           <rect x={frogX - 2} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
           <rect x={frogX + 15} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
           <rect x={frogX + 1} y={frogY + 15} width="14" height="2" fill="#1E3A8A" />
-          <circle cx={frogX + 8} cy={frogY + 13} r="2" fill="#2563EB" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="4" fill="#2563EB" />
         </g>
       )}
 
@@ -677,27 +678,21 @@ export const PixelFrogSolo: React.FC<{
 
       {config.outfitId === 'konbini_staff_uniform' && (
         <g>
-          {/* White Polo Shirt Base */}
           <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#FFFFFF" />
           <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#F8FAFC" />
-          {/* Konbini Green Stripes & Collar */}
           <rect x={frogX - 2} y={frogY + 10} width="20" height="3" fill="#10B981" />
           <rect x={frogX + 6} y={frogY + 10} width="4" height="3" fill="#059669" />
-          {/* Orange Accent Stripe */}
           <rect x={frogX - 2} y={frogY + 13} width="20" height="1.5" fill="#EA580C" />
-          {/* Staff ID Name Badge */}
-          <rect x={frogX + 11} y={frogY + 14} width="4" height="3" fill="#FEF08A" rx="0.5" stroke="#78350F" strokeWidth="0.5" />
+          <rect x={frogX + 11} y={frogY + 14} width="4" height="3" fill="#FEF08A" stroke="#78350F" strokeWidth="0.5" />
           <rect x={frogX + 12} y={frogY + 15} width="2" height="1" fill="#1E293B" />
         </g>
       )}
 
       {config.outfitId === 'shopper_cozy_sweatset' && (
         <g>
-          {/* Cozy Lavender/Heather Oversized Hoodie */}
-          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#8B5CF6" rx="1.5" />
-          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#A78BFA" rx="1" />
-          {/* Kangaroo Pocket */}
-          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#7C3AED" rx="0.5" />
+          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#8B5CF6" />
+          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#A78BFA" />
+          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#7C3AED" />
           <rect x={frogX + 5} y={frogY + 10} width="6" height="2" fill="#DDD6FE" />
         </g>
       )}
@@ -752,23 +747,25 @@ export const PixelFrogSolo: React.FC<{
       {config.glassesId === 'eyepatch' && (
         <g>
           <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#1C1917" />
-          <line x1={frogX - 2} y1={frogY + 5} x2={frogX + 18} y2={frogY + 11} stroke="#1C1917" strokeWidth="1" />
+          <rect x={frogX - 2} y={frogY + 5} width="3" height="2" fill="#1C1917" />
+          <rect x={frogX + 5} y={frogY + 7} width="7" height="2" fill="#1C1917" />
+          <rect x={frogX + 12} y={frogY + 9} width="6" height="2" fill="#1C1917" />
         </g>
       )}
 
       {config.glassesId === 'forest_blush_freckles' && (
         <g>
-          <circle cx={frogX} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
-          <circle cx={frogX + 2} cy={frogY + 11} r="0.8" fill="#78350F" />
-          <circle cx={frogX + 14} cy={frogY + 11} r="0.8" fill="#78350F" />
-          <circle cx={frogX + 16} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
+          <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#DC2626" opacity="0.6" />
+          <rect x={frogX + 2} y={frogY + 10} width="2" height="2" fill="#78350F" />
+          <rect x={frogX + 14} y={frogY + 10} width="2" height="2" fill="#78350F" />
+          <rect x={frogX + 16} y={frogY + 9} width="2" height="2" fill="#DC2626" opacity="0.6" />
         </g>
       )}
 
       {config.glassesId === 'wolf_snarl_fangs' && (
         <g>
-          <polygon points={`${frogX + 5},${frogY + 10} ${frogX + 6},${frogY + 13} ${frogX + 7},${frogY + 10}`} fill="#FFFFFF" />
-          <polygon points={`${frogX + 9},${frogY + 10} ${frogX + 10},${frogY + 13} ${frogX + 11},${frogY + 10}`} fill="#FFFFFF" />
+          <rect x={frogX + 5} y={frogY + 10} width="2" height="3" fill="#FFFFFF" />
+          <rect x={frogX + 9} y={frogY + 10} width="2" height="3" fill="#FFFFFF" />
         </g>
       )}
 
@@ -782,12 +779,14 @@ export const PixelFrogSolo: React.FC<{
 
       {config.glassesId === 'scanner_headset' && (
         <g>
-          {/* Clerk Earpiece & Mic Boom */}
-          <rect x={frogX - 3} y={frogY + 6} width="3" height="6" fill="#1E293B" rx="1" />
-          <line x1={frogX - 1} y1={frogY + 4} x2={frogX + 6} y2={frogY - 1} stroke="#334155" strokeWidth="1" />
-          <line x1={frogX - 2} y1={frogY + 10} x2={frogX + 4} y2={frogY + 12} stroke="#334155" strokeWidth="1" />
-          <circle cx={frogX + 4} cy={frogY + 12} r="1" fill="#10B981" />
-          <circle cx={frogX - 2} cy={frogY + 8} r="1" fill="#38BDF8" />
+          <rect x={frogX - 3} y={frogY + 6} width="3" height="6" fill="#1E293B" />
+          <rect x={frogX - 1} y={frogY + 4} width="2" height="2" fill="#334155" />
+          <rect x={frogX + 1} y={frogY + 2} width="2" height="2" fill="#334155" />
+          <rect x={frogX + 3} y={frogY} width="3" height="2" fill="#334155" />
+          <rect x={frogX - 2} y={frogY + 10} width="3" height="2" fill="#334155" />
+          <rect x={frogX + 1} y={frogY + 11} width="3" height="2" fill="#334155" />
+          <rect x={frogX + 3} y={frogY + 11} width="2" height="2" fill="#10B981" />
+          <rect x={frogX - 3} y={frogY + 7} width="2" height="2" fill="#38BDF8" />
         </g>
       )}
 
@@ -795,29 +794,28 @@ export const PixelFrogSolo: React.FC<{
         <g>
           <rect x={frogX - 2} y={frogY + 9} width="3" height="2" fill="#FB7185" />
           <rect x={frogX + 15} y={frogY + 9} width="3" height="2" fill="#FB7185" />
-          <circle cx={frogX} cy={frogY + 8} r="0.8" fill="#FDE047" />
-          <circle cx={frogX + 16} cy={frogY + 8} r="0.8" fill="#FDE047" />
+          <rect x={frogX} y={frogY + 8} width="2" height="1" fill="#FDE047" />
+          <rect x={frogX + 16} y={frogY + 8} width="2" height="1" fill="#FDE047" />
         </g>
       )}
 
       {/* HAT LAYER */}
       {config.hatId === 'red_riding_hood' && (
         <g>
-          <rect x={frogX - 3} y={frogY - 4} width="22" height="16" fill="#DC2626" rx="2" />
+          <rect x={frogX - 3} y={frogY - 4} width="22" height="16" fill="#DC2626" />
           <rect x={frogX - 1} y={frogY - 6} width="18" height="3" fill="#B91C1C" />
           <rect x={frogX + 1} y={frogY - 2} width="14" height="2" fill="#FEF2F2" />
-          <polygon points={`${frogX + 5},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 5},${frogY + 15}`} fill="#991B1B" />
-          <polygon points={`${frogX + 11},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 11},${frogY + 15}`} fill="#991B1B" />
-          <circle cx={frogX + 8} cy={frogY + 13} r="1.5" fill="#EF4444" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#991B1B" />
+          <rect x={frogX + 7} y={frogY + 12} width="2" height="2" fill="#EF4444" />
         </g>
       )}
 
       {config.hatId === 'wolf_ears_hood' && (
         <g>
-          <polygon points={`${frogX - 2},${frogY + 2} ${frogX + 2},${frogY - 8} ${frogX + 6},${frogY + 2}`} fill="#334155" />
-          <polygon points={`${frogX},${frogY + 1} ${frogX + 2},${frogY - 6} ${frogX + 4},${frogY + 1}`} fill="#F472B6" />
-          <polygon points={`${frogX + 10},${frogY + 2} ${frogX + 14},${frogY - 8} ${frogX + 18},${frogY + 2}`} fill="#334155" />
-          <polygon points={`${frogX + 12},${frogY + 1} ${frogX + 14},${frogY - 6} ${frogX + 16},${frogY + 1}`} fill="#F472B6" />
+          <rect x={frogX - 2} y={frogY - 6} width="6" height="8" fill="#334155" />
+          <rect x={frogX} y={frogY - 4} width="3" height="5" fill="#F472B6" />
+          <rect x={frogX + 12} y={frogY - 6} width="6" height="8" fill="#334155" />
+          <rect x={frogX + 13} y={frogY - 4} width="3" height="5" fill="#F472B6" />
           <rect x={frogX + 2} y={frogY - 1} width="12" height="3" fill="#475569" />
           <rect x={frogX + 6} y={frogY - 3} width="4" height="2" fill="#F1F5F9" />
         </g>
@@ -825,43 +823,46 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'granny_nightcap' && (
         <g>
-          <ellipse cx={frogX + 8} cy={frogY - 2} rx="12" ry="7" fill="#F8FAFC" />
-          <ellipse cx={frogX + 8} cy={frogY - 2} rx="10" ry="5" fill="#F1F5F9" />
+          <rect x={frogX - 2} y={frogY - 6} width="20" height="9" fill="#F8FAFC" />
+          <rect x={frogX} y={frogY - 5} width="16" height="7" fill="#F1F5F9" />
           <rect x={frogX - 3} y={frogY + 2} width="22" height="2" fill="#FBCFE8" />
-          <circle cx={frogX + 8} cy={frogY + 3} r="1.5" fill="#EC4899" />
+          <rect x={frogX + 7} y={frogY + 2} width="2" height="2" fill="#EC4899" />
         </g>
       )}
 
       {config.hatId === 'sushi_salmon' && (
         <g>
-          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
-          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#FB923C" rx="2" />
-          <line x1={frogX} y1={frogY - 6} x2={frogX + 4} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
-          <line x1={frogX + 6} y1={frogY - 6} x2={frogX + 10} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
-          <line x1={frogX + 12} y1={frogY - 6} x2={frogX + 16} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" />
+          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#FB923C" />
+          <rect x={frogX} y={frogY - 6} width="4" height="1" fill="#FFF7ED" />
+          <rect x={frogX + 6} y={frogY - 6} width="4" height="1" fill="#FFF7ED" />
+          <rect x={frogX + 12} y={frogY - 6} width="4" height="1" fill="#FFF7ED" />
+          <rect x={frogX + 2} y={frogY - 4} width="4" height="1" fill="#FFF7ED" />
+          <rect x={frogX + 8} y={frogY - 4} width="4" height="1" fill="#FFF7ED" />
+          <rect x={frogX + 14} y={frogY - 4} width="3" height="1" fill="#FFF7ED" />
           <rect x={frogX + 7} y={frogY - 6} width="2" height="8" fill="#14532D" />
         </g>
       )}
 
       {config.hatId === 'sushi_maguro' && (
         <g>
-          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
-          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#BE123C" rx="2" />
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" />
+          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#BE123C" />
           <rect x={frogX} y={frogY - 5} width="16" height="2" fill="#E11D48" />
           <rect x={frogX + 2} y={frogY - 5} width="4" height="1" fill="#FFFFFF" opacity="0.6" />
-          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#84CC16" />
+          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#84CC16" />
         </g>
       )}
 
       {config.hatId === 'sushi_ebi' && (
         <g>
-          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
-          <rect x={frogX - 2} y={frogY - 6} width="18" height="5" fill="#EA580C" rx="2" />
+          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" />
+          <rect x={frogX - 2} y={frogY - 6} width="18" height="5" fill="#EA580C" />
           <rect x={frogX + 1} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
           <rect x={frogX + 5} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
           <rect x={frogX + 9} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
-          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY - 7} ${frogX + 20},${frogY - 1}`} fill="#DC2626" />
-          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY + 1} ${frogX + 20},${frogY - 1}`} fill="#EA580C" />
+          <rect x={frogX + 16} y={frogY - 6} width="5" height="4" fill="#DC2626" />
+          <rect x={frogX + 16} y={frogY - 2} width="5" height="3" fill="#EA580C" />
         </g>
       )}
 
@@ -872,44 +873,37 @@ export const PixelFrogSolo: React.FC<{
           <rect x={frogX + 4} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
           <rect x={frogX + 9} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
           <rect x={frogX + 14} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
-          <circle cx={frogX + 8} cy={frogY + 3.5} r="2" fill="#DC2626" />
+          <rect x={frogX + 6} y={frogY + 2} width="4" height="3" fill="#DC2626" />
         </g>
       )}
 
       {config.hatId === 'konbini_staff_visor' && (
         <g>
-          {/* Clerk Visor Band */}
-          <rect x={frogX - 3} y={frogY + 1} width="22" height="3" fill="#10B981" rx="0.5" />
+          <rect x={frogX - 3} y={frogY + 1} width="22" height="3" fill="#10B981" />
           <rect x={frogX - 1} y={frogY + 1} width="18" height="1" fill="#34D399" />
-          {/* Visor Peak Brim */}
-          <polygon points={`${frogX - 5},${frogY + 2} ${frogX + 21},${frogY + 2} ${frogX + 18},${frogY - 2} ${frogX - 2},${frogY - 2}`} fill="#059669" />
-          {/* Store Logo Emblem */}
-          <circle cx={frogX + 8} cy={frogY + 2.5} r="1.2" fill="#FFFFFF" />
-          <circle cx={frogX + 8} cy={frogY + 2.5} r="0.6" fill="#EA580C" />
+          <rect x={frogX - 3} y={frogY - 1} width="22" height="2" fill="#059669" />
+          <rect x={frogX + 7} y={frogY + 1} width="2" height="2" fill="#FFFFFF" />
+          <rect x={frogX + 8} y={frogY + 2} width="1" height="1" fill="#EA580C" />
         </g>
       )}
 
       {config.hatId === 'shopper_bucket_hat' && (
         <g>
-          {/* Streetwear Bucket Hat Crown */}
-          <polygon points={`${frogX - 2},${frogY + 1} ${frogX + 18},${frogY + 1} ${frogX + 16},${frogY - 6} ${frogX},${frogY - 6}`} fill="#7C3AED" />
+          <rect x={frogX - 1} y={frogY - 6} width="18" height="7" fill="#7C3AED" />
           <rect x={frogX + 1} y={frogY - 5} width="14" height="2" fill="#8B5CF6" />
-          {/* Down-angled Bucket Hat Brim */}
-          <polygon points={`${frogX - 5},${frogY + 3} ${frogX + 21},${frogY + 3} ${frogX + 18},${frogY + 1} ${frogX - 2},${frogY + 1}`} fill="#6D28D9" />
-          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#FDE047" />
+          <rect x={frogX - 4} y={frogY + 1} width="24" height="2" fill="#6D28D9" />
+          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#FDE047" />
         </g>
       )}
 
       {config.hatId === 'onigiri_headband' && (
         <g>
-          {/* Thin Black Headband */}
           <rect x={frogX - 2} y={frogY + 2} width="20" height="1.5" fill="#18181B" />
-          {/* Triangle Onigiri on top of head */}
-          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 3},${frogY - 1} ${frogX + 13},${frogY - 1}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
-          {/* Nori Seaweed Wrap */}
-          <rect x={frogX + 6} y={frogY - 3} width="4" height="2.5" fill="#18181B" rx="0.5" />
-          {/* Red Umeboshi Plum dot */}
-          <circle cx={frogX + 8} cy={frogY - 4.5} r="0.8" fill="#DC2626" />
+          <rect x={frogX + 6} y={frogY - 8} width="4" height="2" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+          <rect x={frogX + 5} y={frogY - 6} width="6" height="3" fill="#FFFFFF" />
+          <rect x={frogX + 4} y={frogY - 3} width="8" height="3" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY - 3} width="4" height="2" fill="#18181B" />
+          <rect x={frogX + 7} y={frogY - 5} width="2" height="2" fill="#DC2626" />
         </g>
       )}
 
@@ -925,7 +919,8 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'straw' && (
         <g>
-          <polygon points={`${frogX + 8},${frogY - 5} ${frogX - 3},${frogY + 2} ${frogX + 19},${frogY + 2}`} fill="#FDE68A" />
+          <rect x={frogX + 5} y={frogY - 5} width="6" height="4" fill="#FDE68A" />
+          <rect x={frogX + 2} y={frogY - 2} width="12" height="4" fill="#FDE68A" />
           <rect x={frogX - 4} y={frogY + 2} width="24" height="2" fill="#D97706" />
           <rect x={frogX + 4} y={frogY} width="8" height="1" fill="#92400E" />
         </g>
@@ -942,7 +937,9 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'wizard' && (
         <g>
-          <polygon points={`${frogX + 8},${frogY - 10} ${frogX},${frogY + 2} ${frogX + 16},${frogY + 2}`} fill="#1E1B4B" />
+          <rect x={frogX + 6} y={frogY - 10} width="4" height="5" fill="#1E1B4B" />
+          <rect x={frogX + 4} y={frogY - 5} width="8" height="4" fill="#1E1B4B" />
+          <rect x={frogX + 1} y={frogY - 1} width="14" height="3" fill="#1E1B4B" />
           <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#4338CA" />
           <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" />
         </g>
@@ -957,7 +954,7 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'beanie' && (
         <g>
-          <circle cx={frogX + 8} cy={frogY - 5} r="2.5" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY - 6} width="4" height="3" fill="#FFFFFF" />
           <rect x={frogX} y={frogY - 3} width="16" height="5" fill="#DC2626" />
           <rect x={frogX - 1} y={frogY + 1} width="18" height="3" fill="#F87171" />
         </g>
@@ -965,17 +962,17 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'chef' && (
         <g>
+          <rect x={frogX + 1} y={frogY - 10} width="14" height="10" fill="#FFFFFF" />
           <rect x={frogX} y={frogY - 8} width="16" height="8" fill="#FFFFFF" />
-          <circle cx={frogX + 3} cy={frogY - 8} r="3" fill="#FFFFFF" />
-          <circle cx={frogX + 8} cy={frogY - 9} r="3.5" fill="#FFFFFF" />
-          <circle cx={frogX + 13} cy={frogY - 8} r="3" fill="#FFFFFF" />
           <rect x={frogX - 1} y={frogY} width="18" height="2" fill="#E2E8F0" />
         </g>
       )}
 
       {config.hatId === 'crown' && (
         <g>
-          <polygon points={`${frogX},${frogY - 4} ${frogX + 3},${frogY} ${frogX + 8},${frogY - 6} ${frogX + 13},${frogY} ${frogX + 16},${frogY - 4} ${frogX + 16},${frogY + 2} ${frogX},${frogY + 2}`} fill="#FACC15" />
+          <rect x={frogX} y={frogY - 3} width="4" height="5" fill="#FACC15" />
+          <rect x={frogX + 6} y={frogY - 5} width="4" height="7" fill="#FACC15" />
+          <rect x={frogX + 12} y={frogY - 3} width="4" height="5" fill="#FACC15" />
           <rect x={frogX} y={frogY + 1} width="16" height="2" fill="#EAB308" />
           <rect x={frogX + 7} y={frogY} width="2" height="2" fill="#DC2626" />
         </g>
@@ -983,15 +980,15 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'beret' && (
         <g>
-          <ellipse cx={frogX + 8} cy={frogY} rx="11" ry="3.5" fill="#78350F" />
+          <rect x={frogX - 2} y={frogY - 2} width="20" height="5" fill="#78350F" />
           <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#451A03" />
         </g>
       )}
 
       {config.hatId === 'flower' && (
         <g>
-          <circle cx={frogX + 16} cy={frogY + 2} r="3" fill="#FEF08A" />
-          <circle cx={frogX + 16} cy={frogY + 2} r="1.5" fill="#EA580C" />
+          <rect x={frogX + 14} y={frogY} width="5" height="5" fill="#FEF08A" />
+          <rect x={frogX + 15} y={frogY + 1} width="3" height="3" fill="#EA580C" />
         </g>
       )}
 
@@ -1005,7 +1002,7 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'detective' && (
         <g>
-          <ellipse cx={frogX + 8} cy={frogY} rx="12" ry="3" fill="#78350F" />
+          <rect x={frogX - 2} y={frogY - 1} width="20" height="4" fill="#78350F" />
           <rect x={frogX + 2} y={frogY - 4} width="12" height="4" fill="#92400E" />
           <rect x={frogX - 3} y={frogY + 1} width="22" height="1.5" fill="#451A03" />
         </g>
@@ -1014,7 +1011,8 @@ export const PixelFrogSolo: React.FC<{
       {config.hatId === 'samurai' && (
         <g>
           <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#18181B" />
-          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 2},${frogY - 1} ${frogX + 14},${frogY - 1}`} fill="#CA8A04" />
+          <rect x={frogX + 6} y={frogY - 7} width="4" height="6" fill="#CA8A04" />
+          <rect x={frogX + 2} y={frogY - 4} width="12" height="3" fill="#CA8A04" />
           <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#DC2626" />
         </g>
       )}
@@ -1022,99 +1020,115 @@ export const PixelFrogSolo: React.FC<{
       {/* PROPS / HANDHELD ITEM */}
       {config.activityId === 'tea' && (
         <g>
-          <rect x={frogX + 5} y={frogY + 14} width="6" height="5" fill="#BBF7D0" />
-          <rect x={frogX + 6} y={frogY + 13} width="4" height="2" fill="#15803D" />
+          <rect x={frogX + 5} y={frogY + 12} width="6" height="6" fill="#BBF7D0" />
+          <rect x={frogX + 6} y={frogY + 11} width="4" height="2" fill="#15803D" />
+          <rect x={frogX + 7} y={frogY + 8} width="2" height="2" fill="#FFFFFF" opacity="0.8" />
         </g>
       )}
 
       {config.activityId === 'coffee' && (
         <g>
-          <rect x={frogX + 5} y={frogY + 14} width="6" height="5" fill="#FFFFFF" />
-          <rect x={frogX + 6} y={frogY + 13} width="4" height="2" fill="#78350F" />
-          <rect x={frogX + 10} y={frogY + 15} width="2" height="3" fill="#E2E8F0" />
+          <rect x={frogX + 5} y={frogY + 12} width="6" height="6" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 11} width="4" height="2" fill="#78350F" />
+          <rect x={frogX + 10} y={frogY + 13} width="2" height="3" fill="#E2E8F0" />
         </g>
       )}
 
       {config.activityId === 'boba' && (
         <g>
-          <rect x={frogX + 5} y={frogY + 13} width="6" height="7" fill="#FED7AA" />
-          <rect x={frogX + 7} y={frogY + 10} width="2" height="4" fill="#F43F5E" />
-          <rect x={frogX + 6} y={frogY + 18} width="1" height="1" fill="#18181B" />
-          <rect x={frogX + 8} y={frogY + 18} width="1" height="1" fill="#18181B" />
+          <rect x={frogX + 5} y={frogY + 12} width="6" height="7" fill="#FED7AA" />
+          <rect x={frogX + 7} y={frogY + 9} width="2" height="4" fill="#F43F5E" />
+          <rect x={frogX + 6} y={frogY + 17} width="1" height="1" fill="#18181B" />
+          <rect x={frogX + 8} y={frogY + 17} width="1" height="1" fill="#18181B" />
         </g>
       )}
 
       {config.activityId === 'reading' && (
         <g>
-          <rect x={frogX + 2} y={frogY + 13} width="12" height="7" fill="#FDF2F8" />
-          <rect x={frogX + 7} y={frogY + 13} width="2" height="7" fill="#DB2777" />
+          <rect x={frogX + 2} y={frogY + 12} width="12" height="8" fill="#FDF2F8" />
+          <rect x={frogX + 1} y={frogY + 12} width="1" height="8" fill="#DB2777" />
+          <rect x={frogX + 14} y={frogY + 12} width="1" height="8" fill="#DB2777" />
+          <rect x={frogX + 7} y={frogY + 12} width="2" height="8" fill="#DB2777" />
         </g>
       )}
 
       {config.activityId === 'eating' && (
         <g>
-          <polygon points={`${frogX + 8},${frogY + 11} ${frogX + 4},${frogY + 17} ${frogX + 12},${frogY + 17}`} fill="#FFFFFF" />
-          <rect x={frogX + 6} y={frogY + 15} width="4" height="2" fill="#18181B" />
+          <rect x={frogX + 6} y={frogY + 10} width="4" height="2" fill="#FFFFFF" />
+          <rect x={frogX + 5} y={frogY + 12} width="6" height="2" fill="#FFFFFF" />
+          <rect x={frogX + 4} y={frogY + 14} width="8" height="3" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 14} width="4" height="2" fill="#18181B" />
         </g>
       )}
 
       {config.activityId === 'guitar' && (
         <g>
-          <rect x={frogX + 6} y={frogY + 13} width="8" height="7" fill="#D97706" />
-          <rect x={frogX + 9} y={frogY + 15} width="2" height="3" fill="#451A03" />
-          <rect x={frogX + 13} y={frogY + 10} width="5" height="3" fill="#B45309" />
+          <rect x={frogX + 6} y={frogY + 12} width="8" height="8" fill="#D97706" />
+          <rect x={frogX + 9} y={frogY + 14} width="2" height="3" fill="#451A03" />
+          <rect x={frogX + 13} y={frogY + 8} width="6" height="3" fill="#B45309" />
         </g>
       )}
 
       {config.activityId === 'painting' && (
         <g>
-          <ellipse cx={frogX + 9} cy={frogY + 16} rx="6" ry="4" fill="#D97706" />
-          <circle cx={frogX + 7} cy={frogY + 15} r="1" fill="#EF4444" />
-          <circle cx={frogX + 9} cy={frogY + 14} r="1" fill="#3B82F6" />
-          <circle cx={frogX + 11} cy={frogY + 15} r="1" fill="#EAB308" />
+          <rect x={frogX + 5} y={frogY + 13} width="10" height="6" fill="#D97706" />
+          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#EF4444" />
+          <rect x={frogX + 9} y={frogY + 13} width="2" height="2" fill="#3B82F6" />
+          <rect x={frogX + 11} y={frogY + 14} width="2" height="2" fill="#EAB308" />
         </g>
       )}
 
       {config.activityId === 'camera' && (
         <g>
           <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#78350F" />
-          <circle cx={frogX + 8} cy={frogY + 16} r="2" fill="#1E293B" />
+          <rect x={frogX + 6} y={frogY + 14} width="4" height="4" fill="#1E293B" />
         </g>
       )}
 
       {config.activityId === 'wand' && (
         <g>
-          <line x1={frogX + 12} y1={frogY + 18} x2={frogX + 18} y2={frogY + 8} stroke="#CA8A04" strokeWidth="1.5" />
-          <polygon points={`${frogX + 18},${frogY + 5} ${frogX + 16},${frogY + 10} ${frogX + 21},${frogY + 8}`} fill="#FACC15" />
+          <rect x={frogX + 12} y={frogY + 15} width="2" height="2" fill="#CA8A04" />
+          <rect x={frogX + 14} y={frogY + 13} width="2" height="2" fill="#CA8A04" />
+          <rect x={frogX + 16} y={frogY + 11} width="2" height="2" fill="#CA8A04" />
+          <rect x={frogX + 17} y={frogY + 6} width="4" height="4" fill="#FACC15" />
+          <rect x={frogX + 18} y={frogY + 5} width="2" height="6" fill="#FEF08A" />
         </g>
       )}
 
       {config.activityId === 'fishing' && (
         <g>
-          <line x1={frogX + 10} y1={frogY + 18} x2={frogX + 24} y2={frogY + 2} stroke="#78350F" strokeWidth="1.5" />
-          <line x1={frogX + 24} y1={frogY + 2} x2={frogX + 26} y2={frogY + 24} stroke="#94A3B8" strokeWidth="0.5" />
-          <circle cx={frogX + 26} cy={frogY + 18} r="1.5" fill="#EF4444" />
+          <rect x={frogX + 10} y={frogY + 16} width="2" height="2" fill="#78350F" />
+          <rect x={frogX + 12} y={frogY + 13} width="2" height="3" fill="#78350F" />
+          <rect x={frogX + 15} y={frogY + 10} width="2" height="3" fill="#78350F" />
+          <rect x={frogX + 18} y={frogY + 7} width="2" height="3" fill="#78350F" />
+          <rect x={frogX + 21} y={frogY + 4} width="2" height="3" fill="#78350F" />
+          <rect x={frogX + 23} y={frogY + 2} width="2" height="2" fill="#78350F" />
+          <rect x={frogX + 24} y={frogY + 3} width="1" height="14" fill="#94A3B8" />
+          <rect x={frogX + 23} y={frogY + 17} width="3" height="3" fill="#EF4444" />
         </g>
       )}
 
       {config.activityId === 'picnic_basket' && (
         <g>
-          <rect x={frogX + 5} y={frogY + 13} width="10" height="7" fill="#D97706" rx="1" />
-          <polygon points={`${frogX + 4},${frogY + 13} ${frogX + 10},${frogY + 11} ${frogX + 8},${frogY + 16}`} fill="#EF4444" />
+          <rect x={frogX + 5} y={frogY + 13} width="10" height="7" fill="#D97706" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#EF4444" />
           <rect x={frogX + 5} y={frogY + 12} width="2" height="2" fill="#FFFFFF" />
         </g>
       )}
 
       {config.activityId === 'woodcutter_axe' && (
         <g>
-          <line x1={frogX + 11} y1={frogY + 18} x2={frogX + 18} y2={frogY + 5} stroke="#78350F" strokeWidth="1.5" />
-          <polygon points={`${frogX + 16},${frogY + 5} ${frogX + 22},${frogY + 3} ${frogX + 20},${frogY + 9}`} fill="#94A3B8" />
+          <rect x={frogX + 11} y={frogY + 16} width="2" height="3" fill="#78350F" />
+          <rect x={frogX + 13} y={frogY + 13} width="2" height="3" fill="#78350F" />
+          <rect x={frogX + 15} y={frogY + 9} width="2" height="4" fill="#78350F" />
+          <rect x={frogX + 17} y={frogY + 5} width="2" height="4" fill="#78350F" />
+          <rect x={frogX + 17} y={frogY + 4} width="5" height="5" fill="#94A3B8" />
         </g>
       )}
 
       {(config.activityId === 'sushi_platter' || config.activityId === 'eating_sushi') && (
         <g>
-          <rect x={frogX + 4} y={frogY + 14} width="12" height="5" fill="#D97706" rx="1" />
+          <rect x={frogX + 4} y={frogY + 14} width="12" height="5" fill="#D97706" />
           <rect x={frogX + 5} y={frogY + 13} width="4" height="2" fill="#FB923C" />
           <rect x={frogX + 10} y={frogY + 13} width="4" height="2" fill="#BE123C" />
         </g>
@@ -1122,38 +1136,37 @@ export const PixelFrogSolo: React.FC<{
 
       {(config.activityId === 'tea_whisk' || config.activityId === 'sushi_crafting') && (
         <g>
-          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#1E293B" rx="1" />
+          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#1E293B" />
           <rect x={frogX + 5} y={frogY + 14} width="6" height="3" fill="#84CC16" />
-          <line x1={frogX + 12} y1={frogY + 10} x2={frogX + 8} y2={frogY + 14} stroke="#FDE68A" strokeWidth="1.5" />
+          <rect x={frogX + 11} y={frogY + 10} width="2" height="2" fill="#FDE68A" />
+          <rect x={frogX + 9} y={frogY + 12} width="2" height="2" fill="#FDE68A" />
         </g>
       )}
 
       {config.activityId === 'konbini_scanner' && (
         <g>
-          {/* Handheld Barcode Scanner Pistol */}
-          <rect x={frogX + 10} y={frogY + 13} width="6" height="4" fill="#1E293B" rx="1" />
-          <rect x={frogX + 14} y={frogY + 11} width="3" height="6" fill="#0F172A" rx="0.5" />
-          <line x1={frogX + 16} y1={frogY + 14} x2={frogX + 24} y2={frogY + 14} stroke="#EF4444" strokeWidth="1" />
-          <circle cx={frogX + 24} cy={frogY + 14} r="1" fill="#F87171" />
+          <rect x={frogX + 10} y={frogY + 13} width="6" height="4" fill="#1E293B" />
+          <rect x={frogX + 14} y={frogY + 11} width="3" height="6" fill="#0F172A" />
+          <rect x={frogX + 16} y={frogY + 14} width="10" height="1" fill="#EF4444" />
+          <rect x={frogX + 25} y={frogY + 13} width="2" height="2" fill="#F87171" />
         </g>
       )}
 
       {config.activityId === 'eating_onigiri' && (
         <g>
-          {/* Triangle Onigiri with bite mark */}
-          <polygon points={`${frogX + 8},${frogY + 11} ${frogX + 3},${frogY + 17} ${frogX + 13},${frogY + 17}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
-          <rect x={frogX + 6} y={frogY + 15} width="4" height="2.5" fill="#18181B" rx="0.5" />
-          <circle cx={frogX + 8} cy={frogY + 13} r="1" fill="#DC2626" />
+          <rect x={frogX + 6} y={frogY + 11} width="4" height="2" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+          <rect x={frogX + 5} y={frogY + 13} width="6" height="2" fill="#FFFFFF" />
+          <rect x={frogX + 4} y={frogY + 15} width="8" height="3" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 15} width="4" height="2" fill="#18181B" />
+          <rect x={frogX + 7} y={frogY + 13} width="2" height="2" fill="#DC2626" />
         </g>
       )}
 
       {config.activityId === 'holding_konbini_bag' && (
         <g>
-          {/* White Plastic Konbini Bag with Stripes */}
-          <polygon points={`${frogX + 9},${frogY + 12} ${frogX + 17},${frogY + 12} ${frogX + 19},${frogY + 22} ${frogX + 7},${frogY + 22}`} fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.5" />
+          <rect x={frogX + 8} y={frogY + 12} width="10" height="10" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.5" />
           <rect x={frogX + 9} y={frogY + 16} width="8" height="2" fill="#10B981" />
           <rect x={frogX + 9} y={frogY + 18} width="8" height="1" fill="#EA580C" />
-          {/* Snacks peeking out */}
           <rect x={frogX + 10} y={frogY + 10} width="3" height="4" fill="#FACC15" />
           <rect x={frogX + 13} y={frogY + 11} width="2" height="3" fill="#EF4444" />
         </g>
@@ -1801,9 +1814,13 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
       {effectiveWeather === 'golden' && (
         <g transform={fullscreen ? 'translate(0, 30)' : undefined}>
-          {/* Cozy Amber Horizon Sun */}
-          <circle cx="80" cy="38" r="10" fill="#fef08a" />
-          <circle cx="80" cy="38" r="14" fill="#fb923c" opacity="0.4" />
+          {/* Cozy Amber Horizon Pixel Sun */}
+          <rect x="72" y="30" width="16" height="16" fill="#fb923c" opacity="0.4" />
+          <rect x="74" y="28" width="12" height="20" fill="#fb923c" opacity="0.4" />
+          <rect x="70" y="32" width="20" height="12" fill="#fb923c" opacity="0.4" />
+          <rect x="74" y="32" width="12" height="12" fill="#fef08a" />
+          <rect x="76" y="30" width="8" height="16" fill="#fef08a" />
+          <rect x="72" y="34" width="16" height="8" fill="#fef08a" />
           {/* Minimalist Dusk Cloud Streaks */}
           <rect x="15" y="32" width="35" height="2" fill="#fb923c" opacity="0.6" />
           <rect x="110" y="28" width="38" height="2" fill="#fb923c" opacity="0.6" />
@@ -1838,12 +1855,12 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
       {effectiveWeather === 'rainy' && (
         <g opacity="0.7">
           {/* Gentle Pixel Rain Streaks */}
-          <line x1="20" y1="10" x2="16" y2="22" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
-          <line x1="50" y1="8" x2="46" y2="20" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
-          <line x1="90" y1="12" x2="86" y2="24" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
-          <line x1="130" y1="6" x2="126" y2="18" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
-          <line x1="35" y1="28" x2="31" y2="40" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
-          <line x1="110" y1="26" x2="106" y2="38" stroke="#93c5fd" strokeWidth="1" opacity="0.5" />
+          <rect x="20" y="10" width="1" height="8" fill="#93c5fd" opacity="0.5" />
+          <rect x="50" y="8" width="1" height="8" fill="#93c5fd" opacity="0.5" />
+          <rect x="90" y="12" width="1" height="8" fill="#93c5fd" opacity="0.5" />
+          <rect x="130" y="6" width="1" height="8" fill="#93c5fd" opacity="0.5" />
+          <rect x="35" y="28" width="1" height="8" fill="#93c5fd" opacity="0.5" />
+          <rect x="110" y="26" width="1" height="8" fill="#93c5fd" opacity="0.5" />
         </g>
       )}
 
@@ -1857,22 +1874,22 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <g>
               <rect x="0" y="-48" width="160" height="68" fill="#e7d7c1" />
               {/* Perspective Ceiling Beams */}
-              <line x1="0" y1="-48" x2="25" y2="20" stroke="#cbb497" strokeWidth="1" />
-              <line x1="160" y1="-48" x2="135" y2="20" stroke="#cbb497" strokeWidth="1" />
-              <line x1="45" y1="-48" x2="55" y2="20" stroke="#cbb497" strokeWidth="0.8" />
-              <line x1="115" y1="-48" x2="105" y2="20" stroke="#cbb497" strokeWidth="0.8" />
-              <line x1="15" y1="-25" x2="145" y2="-25" stroke="#cbb497" strokeWidth="0.8" />
-              <line x1="20" y1="-2" x2="140" y2="-2" stroke="#cbb497" strokeWidth="0.8" />
+              <rect x="0" y="-48" width="25" height="2" fill="#cbb497" />
+              <rect x="135" y="-48" width="25" height="2" fill="#cbb497" />
+              <rect x="45" y="-48" width="10" height="68" fill="#cbb497" opacity="0.6" />
+              <rect x="105" y="-48" width="10" height="68" fill="#cbb497" opacity="0.6" />
+              <rect x="15" y="-25" width="130" height="1" fill="#cbb497" opacity="0.8" />
+              <rect x="20" y="-2" width="120" height="1" fill="#cbb497" opacity="0.8" />
 
-              {/* Glowing Circular Recessed Lights */}
-              <circle cx="45" cy="-16" r="4" fill="#fef08a" opacity="0.9" />
-              <circle cx="45" cy="-16" r="7" fill="#fde047" opacity="0.35" />
-              <circle cx="115" cy="-16" r="4" fill="#fef08a" opacity="0.9" />
-              <circle cx="115" cy="-16" r="7" fill="#fde047" opacity="0.35" />
-              <circle cx="55" cy="8" r="4" fill="#fef08a" opacity="0.9" />
-              <circle cx="55" cy="8" r="6.5" fill="#fde047" opacity="0.35" />
-              <circle cx="105" cy="8" r="4" fill="#fef08a" opacity="0.9" />
-              <circle cx="105" cy="8" r="6.5" fill="#fde047" opacity="0.35" />
+              {/* Glowing Pixel Recessed Lights */}
+              <rect x="41" y="-20" width="8" height="8" fill="#fde047" opacity="0.35" />
+              <rect x="43" y="-18" width="4" height="4" fill="#fef08a" opacity="0.9" />
+              <rect x="111" y="-20" width="8" height="8" fill="#fde047" opacity="0.35" />
+              <rect x="113" y="-18" width="4" height="4" fill="#fef08a" opacity="0.9" />
+              <rect x="51" y="4" width="8" height="8" fill="#fde047" opacity="0.35" />
+              <rect x="53" y="6" width="4" height="4" fill="#fef08a" opacity="0.9" />
+              <rect x="101" y="4" width="8" height="8" fill="#fde047" opacity="0.35" />
+              <rect x="103" y="6" width="4" height="4" fill="#fef08a" opacity="0.9" />
             </g>
           ) : (
             <rect x="0" y="0" width="160" height="20" fill="#e7d7c1" />
@@ -1884,121 +1901,119 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
           {/* Back Wall with Warm Stone Bricks */}
           <rect x="0" y="22" width="160" height="48" fill="#d4be9c" />
-          <line x1="0" y1="30" x2="160" y2="30" stroke="#bfa682" strokeWidth="0.75" />
-          <line x1="0" y1="38" x2="160" y2="38" stroke="#bfa682" strokeWidth="0.75" />
-          <line x1="0" y1="46" x2="160" y2="46" stroke="#bfa682" strokeWidth="0.75" />
-          <line x1="0" y1="54" x2="160" y2="54" stroke="#bfa682" strokeWidth="0.75" />
-          <line x1="0" y1="62" x2="160" y2="62" stroke="#bfa682" strokeWidth="0.75" />
+          <rect x="0" y="30" width="160" height="1" fill="#bfa682" />
+          <rect x="0" y="38" width="160" height="1" fill="#bfa682" />
+          <rect x="0" y="46" width="160" height="1" fill="#bfa682" />
+          <rect x="0" y="54" width="160" height="1" fill="#bfa682" />
+          <rect x="0" y="62" width="160" height="1" fill="#bfa682" />
 
-          <line x1="20" y1="22" x2="20" y2="30" stroke="#bfa682" strokeWidth="0.6" />
-          <line x1="40" y1="30" x2="40" y2="38" stroke="#bfa682" strokeWidth="0.6" />
-          <line x1="25" y1="38" x2="25" y2="46" stroke="#bfa682" strokeWidth="0.6" />
-          <line x1="140" y1="22" x2="140" y2="30" stroke="#bfa682" strokeWidth="0.6" />
-          <line x1="125" y1="30" x2="125" y2="38" stroke="#bfa682" strokeWidth="0.6" />
-          <line x1="135" y1="38" x2="135" y2="46" stroke="#bfa682" strokeWidth="0.6" />
+          <rect x="20" y="22" width="1" height="8" fill="#bfa682" />
+          <rect x="40" y="30" width="1" height="8" fill="#bfa682" />
+          <rect x="25" y="38" width="1" height="8" fill="#bfa682" />
+          <rect x="140" y="22" width="1" height="8" fill="#bfa682" />
+          <rect x="125" y="30" width="1" height="8" fill="#bfa682" />
+          <rect x="135" y="38" width="1" height="8" fill="#bfa682" />
 
           {/* Perspective Side Walls */}
-          <polygon points="0,18 20,22 20,70 0,90" fill="#c4ad8a" />
-          <polygon points="160,18 140,22 140,70 160,90" fill="#bfa682" />
+          <rect x="0" y="20" width="20" height="50" fill="#c4ad8a" />
+          <rect x="140" y="20" width="20" height="50" fill="#bfa682" />
 
           {/* Right Wall Decor: Framed Anime Art & Vending Machine */}
           <rect x="143" y="28" width="14" height="18" fill="#fdf2f8" stroke="#78350f" strokeWidth="0.8" />
-          <circle cx="150" cy="37" r="4" fill="#f472b6" opacity="0.6" />
+          <rect x="147" y="34" width="6" height="6" fill="#f472b6" opacity="0.6" />
 
-          <rect x="118" y="34" width="18" height="34" fill="#f8fafc" rx="1.5" stroke="#64748b" strokeWidth="0.7" />
-          <rect x="120" y="37" width="14" height="14" fill="#0284c7" opacity="0.8" rx="1" />
-          <circle cx="123" cy="42" r="1.5" fill="#22c55e" />
-          <circle cx="127" cy="42" r="1.5" fill="#ef4444" />
-          <circle cx="131" cy="42" r="1.5" fill="#f59e0b" />
-          <circle cx="123" cy="47" r="1.5" fill="#38bdf8" />
-          <circle cx="127" cy="47" r="1.5" fill="#eab308" />
-          <circle cx="131" cy="47" r="1.5" fill="#ec4899" />
-          <rect x="122" y="56" width="10" height="4" fill="#334155" rx="0.5" />
+          <rect x="118" y="34" width="18" height="34" fill="#f8fafc" stroke="#64748b" strokeWidth="0.7" />
+          <rect x="120" y="37" width="14" height="14" fill="#0284c7" opacity="0.8" />
+          <rect x="122" y="41" width="3" height="3" fill="#22c55e" />
+          <rect x="126" y="41" width="3" height="3" fill="#ef4444" />
+          <rect x="130" y="41" width="3" height="3" fill="#f59e0b" />
+          <rect x="122" y="46" width="3" height="3" fill="#38bdf8" />
+          <rect x="126" y="46" width="3" height="3" fill="#eab308" />
+          <rect x="130" y="46" width="3" height="3" fill="#ec4899" />
+          <rect x="122" y="56" width="10" height="4" fill="#334155" />
 
           {/* Trash Bin */}
-          <polygon points="137,56 143,56 142,67 138,67" fill="#71717a" />
+          <rect x="137" y="56" width="6" height="11" fill="#71717a" />
 
           {/* Left Wall Decor: Potted Green Plant */}
-          <polygon points="12,56 18,56 17,66 13,66" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.5" />
-          <ellipse cx="15" cy="48" rx="6" ry="8" fill="#15803d" />
-          <ellipse cx="12" cy="51" rx="4" ry="5" fill="#16a34a" />
-          <ellipse cx="18" cy="51" rx="4" ry="5" fill="#22c55e" />
+          <rect x="12" y="56" width="6" height="10" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.5" />
+          <rect x="11" y="42" width="8" height="14" fill="#15803d" />
+          <rect x="9" y="46" width="6" height="8" fill="#16a34a" />
+          <rect x="15" y="46" width="6" height="8" fill="#22c55e" />
 
-          {/* Center Grand Romanesque Arched Sauna Doorway */}
-          <path d="M 52 70 L 52 38 A 28 28 0 0 1 108 38 L 108 70 Z" fill="#85532a" stroke="#542e12" strokeWidth="1.5" />
-          {/* Inner Arch Window / Sauna View */}
-          <path d="M 58 66 L 58 40 A 22 22 0 0 1 102 40 L 102 66 Z" fill="#693b16" />
-          {/* Warm Interior Glow & Sauna Benches */}
-          <path d="M 62 52 L 62 42 A 18 18 0 0 1 98 42 L 98 52 Z" fill="#fef3c7" opacity="0.95" />
-          <rect x="65" y="46" width="30" height="4" fill="#b45309" rx="0.5" />
-          <rect x="68" y="42" width="8" height="4" fill="#d97706" rx="0.5" />
-          <rect x="85" y="44" width="7" height="4" fill="#475569" rx="0.5" />
+          {/* Center Sauna Doorway & View */}
+          <rect x="52" y="34" width="56" height="36" fill="#85532a" stroke="#542e12" strokeWidth="1.5" />
+          <rect x="58" y="38" width="44" height="28" fill="#693b16" />
+          <rect x="62" y="40" width="36" height="16" fill="#fef3c7" opacity="0.95" />
+          <rect x="65" y="46" width="30" height="4" fill="#b45309" />
+          <rect x="68" y="42" width="8" height="4" fill="#d97706" />
+          <rect x="85" y="44" width="7" height="4" fill="#475569" />
 
           {/* Digital LED Sign: 38.0°C */}
-          <rect x="70" y="24" width="20" height="6" fill="#18181b" rx="1" stroke="#3f3f46" strokeWidth="0.5" />
+          <rect x="70" y="24" width="20" height="6" fill="#18181b" stroke="#3f3f46" strokeWidth="0.5" />
           <text x="80" y="28.5" fill="#ef4444" fontSize="4" fontFamily="monospace" textAnchor="middle" fontWeight="bold">38.0°C</text>
 
           {/* Wooden Door Panels & Details */}
-          <rect x="64" y="55" width="32" height="12" fill="#522a0e" rx="1" />
-          <line x1="68" y1="57" x2="92" y2="57" stroke="#fef08a" strokeWidth="0.8" opacity="0.8" />
-          <line x1="68" y1="60" x2="88" y2="60" stroke="#fef08a" strokeWidth="0.6" opacity="0.6" />
-          <line x1="68" y1="63" x2="84" y2="63" stroke="#fef08a" strokeWidth="0.6" opacity="0.6" />
+          <rect x="64" y="55" width="32" height="12" fill="#522a0e" />
+          <rect x="68" y="57" width="24" height="1" fill="#fef08a" opacity="0.8" />
+          <rect x="68" y="60" width="20" height="1" fill="#fef08a" opacity="0.6" />
+          <rect x="68" y="63" width="16" height="1" fill="#fef08a" opacity="0.6" />
 
           {/* 3D Perspective Warm Tiled Floor */}
-          <polygon points="0,70 160,70 160,280 0,280" fill="#dfc09c" />
+          <rect x="0" y="70" width="160" height="30" fill="#dfc09c" />
           {/* Radial Floor Lines */}
-          <line x1="20" y1="70" x2="-10" y2="280" stroke="#c9a780" strokeWidth="1" />
-          <line x1="50" y1="70" x2="30" y2="280" stroke="#c9a780" strokeWidth="1" />
-          <line x1="80" y1="70" x2="80" y2="280" stroke="#c9a780" strokeWidth="1" />
-          <line x1="110" y1="70" x2="130" y2="280" stroke="#c9a780" strokeWidth="1" />
-          <line x1="140" y1="70" x2="170" y2="280" stroke="#c9a780" strokeWidth="1" />
+          <rect x="20" y="70" width="1" height="30" fill="#c9a780" opacity="0.7" />
+          <rect x="50" y="70" width="1" height="30" fill="#c9a780" opacity="0.7" />
+          <rect x="80" y="70" width="1" height="30" fill="#c9a780" opacity="0.7" />
+          <rect x="110" y="70" width="1" height="30" fill="#c9a780" opacity="0.7" />
+          <rect x="140" y="70" width="1" height="30" fill="#c9a780" opacity="0.7" />
           {/* Horizontal Floor Tile Lines */}
-          <line x1="0" y1="78" x2="160" y2="78" stroke="#c9a780" strokeWidth="0.8" />
-          <line x1="0" y1="90" x2="160" y2="90" stroke="#c9a780" strokeWidth="1" />
-          <line x1="0" y1="108" x2="160" y2="108" stroke="#c9a780" strokeWidth="1.2" />
-          <line x1="0" y1="135" x2="160" y2="135" stroke="#c9a780" strokeWidth="1.4" />
-          <line x1="0" y1="175" x2="160" y2="175" stroke="#c9a780" strokeWidth="1.6" />
+          <rect x="0" y="78" width="160" height="1" fill="#c9a780" />
+          <rect x="0" y="90" width="160" height="1" fill="#c9a780" />
 
           {/* Midground Furniture: Sleeping Mats */}
           <g>
             {/* Orange Futon Mat 1 */}
-            <polygon points="36,78 58,78 50,88 28,88" fill="#fb923c" />
-            <polygon points="28,88 50,88 49,90 27,90" fill="#c2410c" />
-            <rect x="49" y="77" width="7" height="3" fill="#78350f" rx="1" />
+            <rect x="28" y="78" width="30" height="10" fill="#fb923c" />
+            <rect x="28" y="88" width="30" height="2" fill="#c2410c" />
+            <rect x="49" y="77" width="7" height="3" fill="#78350f" />
 
             {/* Orange Futon Mat 2 */}
-            <polygon points="64,80 86,80 78,90 56,90" fill="#fb923c" />
-            <polygon points="56,90 78,90 77,92 55,92" fill="#c2410c" />
-            <rect x="77" y="79" width="7" height="3" fill="#78350f" rx="1" />
+            <rect x="56" y="80" width="30" height="10" fill="#fb923c" />
+            <rect x="56" y="90" width="30" height="2" fill="#c2410c" />
+            <rect x="77" y="79" width="7" height="3" fill="#78350f" />
           </g>
 
           {/* Foreground Tea Table on Right */}
           <g transform="translate(102, 78)">
-            <polygon points="8,8 30,8 24,18 2,18" fill="#78350f" />
-            <polygon points="2,18 24,18 23,21 1,21" fill="#451a03" />
+            <rect x="2" y="8" width="26" height="10" fill="#78350f" />
+            <rect x="2" y="18" width="26" height="3" fill="#451a03" />
             {/* Green Floor Cushion */}
-            <polygon points="24,14 34,14 30,22 20,22" fill="#15803d" />
-            <circle cx="27" cy="18" r="2.5" fill="#ca8a04" opacity="0.8" />
+            <rect x="20" y="14" width="14" height="8" fill="#15803d" />
+            <rect x="25" y="16" width="4" height="4" fill="#ca8a04" opacity="0.8" />
             {/* Steaming Bowl of Ramen / Matcha */}
-            <ellipse cx="14" cy="12" rx="4" ry="2.5" fill="#f8fafc" />
-            <circle cx="14" cy="11.5" r="2" fill="#eab308" />
+            <rect x="10" y="10" width="8" height="5" fill="#f8fafc" />
+            <rect x="12" y="11" width="4" height="3" fill="#eab308" />
           </g>
 
           {/* Mini Pedestal Table with Succulent in Center */}
-          <ellipse cx="80" cy="98" rx="8" ry="3" fill="#93c5fd" opacity="0.4" />
-          <ellipse cx="80" cy="96" rx="6" ry="2" fill="#a16207" />
-          <rect x="79" y="96" width="2" height="4" fill="#78350f" />
-          <ellipse cx="80" cy="93" rx="2.5" ry="1.5" fill="#ffffff" />
-          <circle cx="80" cy="91" r="1.8" fill="#16a34a" />
+          <rect x="72" y="96" width="16" height="4" fill="#a16207" />
+          <rect x="79" y="94" width="2" height="4" fill="#78350f" />
+          <rect x="77" y="91" width="6" height="3" fill="#ffffff" />
+          <rect x="78" y="89" width="4" height="3" fill="#16a34a" />
         </g>
       )}
 
       {/* A. ZEN LOTUS POND SCENE */}
       {config.sceneId === 'zen_pond' && (
         <g>
-          {/* Distant Soft Mountain Silhouette */}
-          <polygon points="0,50 35,36 80,52" fill="#1e293b" opacity="0.45" />
-          <polygon points="65,52 110,34 160,50" fill="#1e293b" opacity="0.45" />
+          {/* Distant Soft Mountain Silhouette Pixel Blocks */}
+          <rect x="0" y="44" width="35" height="10" fill="#1e293b" opacity="0.45" />
+          <rect x="15" y="38" width="25" height="6" fill="#1e293b" opacity="0.45" />
+          <rect x="25" y="34" width="15" height="4" fill="#1e293b" opacity="0.45" />
+          <rect x="65" y="44" width="95" height="10" fill="#1e293b" opacity="0.45" />
+          <rect x="85" y="38" width="40" height="6" fill="#1e293b" opacity="0.45" />
+          <rect x="98" y="32" width="20" height="6" fill="#1e293b" opacity="0.45" />
 
           {/* Minimalist Stone Lantern on Left */}
           <rect x="20" y="44" width="8" height="2" fill="#475569" />
@@ -2047,13 +2062,13 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="44" width="160" height="1" fill="#382110" opacity="0.5" />
 
           {/* Cozy Window Looking Out to Nature */}
-          <rect x="106" y="12" width="40" height="34" fill="#382110" rx="4" />
-          <rect x="108" y="14" width="36" height="30" fill="#60a5fa" rx="2" />
+          <rect x="106" y="12" width="40" height="34" fill="#382110" />
+          <rect x="108" y="14" width="36" height="30" fill="#60a5fa" />
           <rect x="108" y="30" width="36" height="14" fill="#4b6e38" />
           <rect x="125" y="14" width="2" height="30" fill="#382110" />
 
           {/* Minimalist Bookshelf on Left */}
-          <rect x="16" y="18" width="28" height="36" fill="#382110" rx="2" />
+          <rect x="16" y="18" width="28" height="36" fill="#382110" />
           <rect x="18" y="20" width="24" height="8" fill="#29180c" />
           <rect x="18" y="32" width="24" height="10" fill="#29180c" />
           {/* Books & Succulent */}
@@ -2068,22 +2083,30 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="78" width="160" height="1" fill="#523218" />
           <rect x="0" y="88" width="160" height="1" fill="#523218" />
 
-          {/* Minimalist Round Rug (Frog Stage) */}
-          <ellipse cx="80" cy="78" rx="26" ry="10" fill="#d97706" />
-          <ellipse cx="80" cy="78" rx="22" ry="8" fill="#fde68a" />
+          {/* Minimalist Pixel Round Rug (Frog Stage) */}
+          <rect x="56" y="72" width="48" height="12" fill="#d97706" />
+          <rect x="52" y="74" width="56" height="8" fill="#d97706" />
+          <rect x="58" y="74" width="44" height="8" fill="#fde68a" />
+          <rect x="62" y="72" width="36" height="12" fill="#fde68a" />
         </g>
       )}
 
       {/* C. SAKURA BLOSSOM SHRINE SCENE */}
       {config.sceneId === 'sakura_shrine' && (
         <g>
-          {/* Mount Fuji Silhouette */}
-          <polygon points="52,46 80,26 108,46" fill="#475569" opacity="0.6" />
-          <polygon points="72,32 80,26 88,32" fill="#f8fafc" />
+          {/* Mount Fuji Pixel Silhouette */}
+          <rect x="52" y="44" width="56" height="6" fill="#475569" opacity="0.6" />
+          <rect x="60" y="38" width="40" height="6" fill="#475569" opacity="0.6" />
+          <rect x="68" y="32" width="24" height="6" fill="#475569" opacity="0.6" />
+          <rect x="74" y="26" width="12" height="6" fill="#475569" opacity="0.6" />
+          <rect x="74" y="26" width="12" height="4" fill="#f8fafc" />
+          <rect x="72" y="30" width="16" height="2" fill="#f8fafc" />
 
           {/* Minimalist Soft Sakura Canopy */}
-          <rect x="0" y="30" width="48" height="24" fill="#f472b6" opacity="0.75" rx="6" />
-          <rect x="112" y="28" width="48" height="26" fill="#f472b6" opacity="0.75" rx="6" />
+          <rect x="0" y="30" width="48" height="24" fill="#f472b6" opacity="0.75" />
+          <rect x="4" y="26" width="40" height="4" fill="#f472b6" opacity="0.75" />
+          <rect x="112" y="28" width="48" height="26" fill="#f472b6" opacity="0.75" />
+          <rect x="116" y="24" width="40" height="4" fill="#f472b6" opacity="0.75" />
 
           {/* Minimalist Vermillion Torii Silhouette */}
           <rect x="50" y="24" width="60" height="4" fill="#dc2626" />
@@ -2101,9 +2124,14 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
       {/* D. RAINY MUSHROOM MEADOW SCENE */}
       {config.sceneId === 'rainy_meadow' && (
         <g>
-          {/* Misty Evergreen Trees */}
-          <polygon points="10,50 25,28 40,50" fill="#14532d" opacity="0.5" />
-          <polygon points="120,50 135,26 150,50" fill="#14532d" opacity="0.5" />
+          {/* Misty Evergreen Trees Pixel Blocks */}
+          <rect x="10" y="44" width="30" height="6" fill="#14532d" opacity="0.5" />
+          <rect x="16" y="36" width="18" height="8" fill="#14532d" opacity="0.5" />
+          <rect x="22" y="28" width="6" height="8" fill="#14532d" opacity="0.5" />
+
+          <rect x="120" y="44" width="30" height="6" fill="#14532d" opacity="0.5" />
+          <rect x="126" y="34" width="18" height="10" fill="#14532d" opacity="0.5" />
+          <rect x="132" y="26" width="6" height="8" fill="#14532d" opacity="0.5" />
 
           {/* Meadow Ground */}
           <rect x="0" y="52" width="160" height="48" fill="#15803d" />
@@ -2111,44 +2139,53 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
           {/* Minimalist Red Polka-Dot Mushroom on Left */}
           <rect x="22" y="48" width="6" height="22" fill="#f5f5f4" />
-          <rect x="12" y="36" width="26" height="14" fill="#dc2626" rx="4" />
-          <circle cx="18" cy="42" r="2" fill="#ffffff" />
-          <circle cx="28" cy="40" r="2" fill="#ffffff" />
+          <rect x="12" y="36" width="26" height="14" fill="#dc2626" />
+          <rect x="14" y="34" width="22" height="2" fill="#dc2626" />
+          <rect x="16" y="40" width="4" height="4" fill="#ffffff" />
+          <rect x="26" y="38" width="4" height="4" fill="#ffffff" />
 
           {/* Small Mushroom on Right */}
           <rect x="132" y="56" width="4" height="12" fill="#f5f5f4" />
-          <rect x="126" y="50" width="16" height="8" fill="#ea580c" rx="2" />
-          <circle cx="134" cy="53" r="1.5" fill="#ffffff" />
+          <rect x="126" y="50" width="16" height="8" fill="#ea580c" />
+          <rect x="133" y="52" width="3" height="3" fill="#ffffff" />
 
           {/* Cozy Mossy Stone Platform (Frog Stage) */}
-          <rect x="58" y="66" width="44" height="16" fill="#3f3f46" rx="4" />
-          <rect x="62" y="64" width="36" height="6" fill="#65a30d" rx="2" />
+          <rect x="58" y="66" width="44" height="16" fill="#3f3f46" />
+          <rect x="62" y="64" width="36" height="6" fill="#65a30d" />
         </g>
       )}
 
       {/* E. MOUNTAIN HOT SPRING (ONSEN) */}
       {config.sceneId === 'onsen' && (
         <g>
-          {/* Distant Mountain Peak */}
-          <polygon points="20,50 60,26 100,50" fill="#334155" opacity="0.4" />
-          <polygon points="80,50 120,24 160,50" fill="#334155" opacity="0.4" />
+          {/* Distant Mountain Peak Pixel Blocks */}
+          <rect x="20" y="44" width="80" height="6" fill="#334155" opacity="0.4" />
+          <rect x="40" y="34" width="40" height="10" fill="#334155" opacity="0.4" />
+          <rect x="55" y="26" width="12" height="8" fill="#334155" opacity="0.4" />
+
+          <rect x="80" y="44" width="80" height="6" fill="#334155" opacity="0.4" />
+          <rect x="100" y="32" width="40" height="12" fill="#334155" opacity="0.4" />
+          <rect x="114" y="24" width="12" height="8" fill="#334155" opacity="0.4" />
 
           {/* Steaming Mineral Water Basin */}
           <rect x="0" y="56" width="160" height="44" fill="#3f3f46" />
-          <rect x="16" y="62" width="128" height="34" fill="#06b6d4" rx="4" />
-          <rect x="20" y="66" width="120" height="28" fill="#0891b2" rx="2" />
+          <rect x="16" y="62" width="128" height="34" fill="#06b6d4" />
+          <rect x="20" y="66" width="120" height="28" fill="#0891b2" />
 
-          {/* Soothing Steam Puffs */}
-          <ellipse cx="45" cy={animTick % 2 === 0 ? 52 : 50} rx="8" ry="3" fill="#ffffff" opacity="0.4" />
-          <ellipse cx="115" cy={animTick % 2 === 0 ? 50 : 48} rx="10" ry="3" fill="#ffffff" opacity="0.4" />
+          {/* Soothing Steam Puffs Pixel Blocks */}
+          <rect x="37" y={animTick % 2 === 0 ? 52 : 50} width="16" height="4" fill="#ffffff" opacity="0.4" />
+          <rect x="41" y={animTick % 2 === 0 ? 50 : 48} width="8" height="2" fill="#ffffff" opacity="0.4" />
+          <rect x="105" y={animTick % 2 === 0 ? 50 : 48} width="20" height="4" fill="#ffffff" opacity="0.4" />
+          <rect x="110" y={animTick % 2 === 0 ? 48 : 46} width="10" height="2" fill="#ffffff" opacity="0.4" />
 
           {/* Wooden Bucket on Right */}
-          <rect x="124" y="60" width="12" height="8" fill="#d97706" rx="1" />
+          <rect x="124" y="60" width="12" height="8" fill="#d97706" />
           <rect x="126" y="58" width="6" height="3" fill="#ffffff" />
 
           {/* Smooth Warm River Rock (Frog Stage) */}
-          <ellipse cx="80" cy="76" rx="20" ry="8" fill="#71717a" />
-          <ellipse cx="80" cy="74" rx="16" ry="6" fill="#a1a1aa" />
+          <rect x="62" y="70" width="36" height="12" fill="#71717a" />
+          <rect x="58" y="74" width="44" height="6" fill="#71717a" />
+          <rect x="66" y="72" width="28" height="8" fill="#a1a1aa" />
         </g>
       )}
 
@@ -2156,25 +2193,34 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
       {config.sceneId === 'night_camp' && (
         <g>
           {/* Distant Pine Trees in Night */}
-          <polygon points="10,50 25,28 40,50" fill="#0f172a" />
-          <polygon points="120,50 135,26 150,50" fill="#0f172a" />
+          <rect x="10" y="44" width="30" height="6" fill="#0f172a" />
+          <rect x="16" y="36" width="18" height="8" fill="#0f172a" />
+          <rect x="22" y="28" width="6" height="8" fill="#0f172a" />
+
+          <rect x="120" y="44" width="30" height="6" fill="#0f172a" />
+          <rect x="126" y="34" width="18" height="10" fill="#0f172a" />
+          <rect x="132" y="26" width="6" height="8" fill="#0f172a" />
 
           {/* Forest Ground */}
           <rect x="0" y="52" width="160" height="48" fill="#1e293b" />
           <rect x="0" y="62" width="160" height="38" fill="#0f172a" />
 
-          {/* Minimalist A-Frame Tent on Right */}
-          <polygon points="112,78 132,46 152,78" fill="#0284c7" />
-          <polygon points="124,78 132,58 140,78" fill="#0f172a" />
+          {/* Minimalist A-Frame Tent on Right Pixel Blocks */}
+          <rect x="112" y="66" width="40" height="12" fill="#0284c7" />
+          <rect x="120" y="54" width="24" height="12" fill="#0284c7" />
+          <rect x="128" y="46" width="8" height="8" fill="#0284c7" />
+          <rect x="124" y="64" width="16" height="14" fill="#0f172a" />
+          <rect x="128" y="58" width="8" height="6" fill="#0f172a" />
 
           {/* Minimalist Crackling Campfire on Left */}
           <rect x="22" y="74" width="16" height="3" fill="#78350f" />
-          <polygon points="26,74 30,60 34,74" fill="#ea580c" />
-          <polygon points="28,74 30,64 32,74" fill="#facc15" />
+          <rect x="26" y="68" width="8" height="6" fill="#ea580c" />
+          <rect x="28" y="60" width="4" height="8" fill="#ea580c" />
+          <rect x="28" y="64" width="4" height="8" fill="#facc15" />
 
           {/* Cozy Camp Mat (Frog Stage) */}
-          <rect x="60" y="68" width="40" height="16" fill="#dc2626" rx="3" />
-          <rect x="64" y="70" width="32" height="12" fill="#f87171" rx="2" />
+          <rect x="60" y="68" width="40" height="16" fill="#dc2626" />
+          <rect x="64" y="70" width="32" height="12" fill="#f87171" />
         </g>
       )}
 
@@ -2192,17 +2238,18 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="120" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
 
           {/* Bonsai Plant on Right */}
-          <rect x="130" y="40" width="12" height="6" fill="#1c1917" rx="1" />
+          <rect x="130" y="40" width="12" height="6" fill="#1c1917" />
           <rect x="134" y="32" width="3" height="8" fill="#78350f" />
-          <circle cx="135" cy="28" r="7" fill="#15803d" />
+          <rect x="128" y="24" width="14" height="10" fill="#15803d" />
+          <rect x="131" y="21" width="8" height="3" fill="#15803d" />
 
           {/* Tatami Mats */}
           <rect x="0" y="62" width="160" height="38" fill="#d9f99d" />
           <rect x="0" y="76" width="160" height="2" fill="#365314" />
 
           {/* Low Wooden Table (Frog Stage) */}
-          <rect x="58" y="66" width="44" height="14" fill="#78350f" rx="2" />
-          <rect x="62" y="64" width="36" height="3" fill="#b45309" rx="1" />
+          <rect x="58" y="66" width="44" height="14" fill="#78350f" />
+          <rect x="62" y="64" width="36" height="3" fill="#b45309" />
         </g>
       )}
 
@@ -2210,16 +2257,21 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
       {config.sceneId === 'cloud_palace' && (
         <g>
           {/* Golden Starlight Particles */}
-          <circle cx="28" cy="24" r="1.5" fill="#fef08a" />
-          <circle cx="132" cy="20" r="1.5" fill="#fef08a" />
-          <circle cx="80" cy="16" r="2" fill="#facc15" />
+          <rect x="27" y="23" width="3" height="3" fill="#fef08a" />
+          <rect x="131" y="19" width="3" height="3" fill="#fef08a" />
+          <rect x="78" y="14" width="4" height="4" fill="#facc15" />
 
           {/* Dreamy Cloud Platform */}
           <rect x="0" y="66" width="160" height="34" fill="#ede9fe" />
-          <circle cx="35" cy="66" r="14" fill="#ffffff" />
-          <circle cx="65" cy="64" r="16" fill="#ffffff" />
-          <circle cx="95" cy="64" r="16" fill="#ffffff" />
-          <circle cx="125" cy="66" r="14" fill="#ffffff" />
+          {/* Cloud Puffs (Crisp Pixel Blocks) */}
+          <rect x="21" y="52" width="28" height="20" fill="#ffffff" />
+          <rect x="25" y="48" width="20" height="4" fill="#ffffff" />
+          <rect x="49" y="48" width="32" height="24" fill="#ffffff" />
+          <rect x="55" y="44" width="20" height="4" fill="#ffffff" />
+          <rect x="79" y="48" width="32" height="24" fill="#ffffff" />
+          <rect x="85" y="44" width="20" height="4" fill="#ffffff" />
+          <rect x="111" y="52" width="28" height="20" fill="#ffffff" />
+          <rect x="115" y="48" width="20" height="4" fill="#ffffff" />
         </g>
       )}
 
@@ -2233,50 +2285,64 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="140" y="0" width="4" height="74" fill="#166534" opacity="0.6" />
 
           {/* Soft Paper Lantern */}
-          <line x1="26" y1="20" x2="38" y2="30" stroke="#78350f" strokeWidth="1" />
-          <rect x="35" y="30" width="8" height="10" fill="#dc2626" rx="2" />
+          <rect x="26" y="20" width="2" height="2" fill="#78350f" />
+          <rect x="28" y="22" width="2" height="2" fill="#78350f" />
+          <rect x="30" y="24" width="2" height="2" fill="#78350f" />
+          <rect x="32" y="26" width="2" height="2" fill="#78350f" />
+          <rect x="34" y="28" width="2" height="2" fill="#78350f" />
+          <rect x="35" y="30" width="8" height="10" fill="#dc2626" />
           <rect x="37" y="33" width="4" height="4" fill="#fef08a" />
 
           {/* Mossy Stepping Stone Pathway */}
           <rect x="0" y="66" width="160" height="34" fill="#14532d" />
-          <ellipse cx="80" cy="78" rx="26" ry="9" fill="#475569" />
-          <ellipse cx="80" cy="78" rx="22" ry="7" fill="#64748b" />
+          <rect x="54" y="72" width="52" height="14" fill="#475569" />
+          <rect x="58" y="70" width="44" height="18" fill="#475569" />
+          <rect x="58" y="73" width="44" height="12" fill="#64748b" />
+          <rect x="62" y="71" width="36" height="16" fill="#64748b" />
         </g>
       )}
 
       {/* J. FAIRYTALE RED RIDING FOREST */}
       {config.sceneId === 'red_riding_forest' && (
         <g>
-          {/* Deep Evergreen Forest Trees */}
-          <polygon points="10,54 28,18 46,54" fill="#064e3b" />
-          <polygon points="26,50 42,22 58,50" fill="#065f46" opacity="0.8" />
-          <polygon points="114,52 132,20 150,52" fill="#064e3b" />
-          <polygon points="100,54 116,24 132,54" fill="#065f46" opacity="0.8" />
+          {/* Deep Evergreen Forest Trees Pixel Blocks */}
+          <rect x="10" y="44" width="36" height="10" fill="#064e3b" />
+          <rect x="18" y="32" width="20" height="12" fill="#064e3b" />
+          <rect x="24" y="18" width="8" height="14" fill="#064e3b" />
+
+          <rect x="26" y="42" width="32" height="8" fill="#065f46" opacity="0.8" />
+          <rect x="34" y="32" width="16" height="10" fill="#065f46" opacity="0.8" />
+          <rect x="38" y="22" width="8" height="10" fill="#065f46" opacity="0.8" />
+
+          <rect x="114" y="42" width="36" height="10" fill="#064e3b" />
+          <rect x="122" y="30" width="20" height="12" fill="#064e3b" />
+          <rect x="128" y="20" width="8" height="10" fill="#064e3b" />
 
           {/* Cozy Thatched Cottage in Deep Background */}
-          <polygon points="70,36 85,22 100,36" fill="#78350f" />
+          <rect x="70" y="30" width="30" height="6" fill="#78350f" />
+          <rect x="76" y="24" width="18" height="6" fill="#78350f" />
           <rect x="73" y="36" width="24" height="18" fill="#fde68a" />
           <rect x="78" y="42" width="6" height="12" fill="#92400e" />
           <rect x="88" y="39" width="6" height="6" fill="#f59e0b" />
           {/* Stone Chimney & Smoke Puff */}
           <rect x="91" y="24" width="4" height="8" fill="#64748b" />
-          <circle cx="93" cy={animTick % 2 === 0 ? 18 : 16} r="2.5" fill="#ffffff" opacity="0.5" />
+          <rect x="91" y={animTick % 2 === 0 ? 18 : 16} width="5" height="5" fill="#ffffff" opacity="0.5" />
 
           {/* Forest Moss Ground & Trail */}
           <rect x="0" y="54" width="160" height="46" fill="#14532d" />
           <rect x="0" y="66" width="160" height="34" fill="#166534" />
           {/* Winding Cobblestone Trail */}
-          <polygon points="40,100 68,54 92,54 120,100" fill="#78716c" opacity="0.5" />
+          <rect x="40" y="54" width="80" height="46" fill="#78716c" opacity="0.5" />
 
           {/* Fairytale Red Toadstool Mushrooms */}
           <rect x="24" y="66" width="4" height="12" fill="#f5f5f4" />
-          <rect x="18" y="58" width="16" height="9" fill="#dc2626" rx="3" />
-          <circle cx="22" cy="62" r="1.5" fill="#ffffff" />
-          <circle cx="30" cy="61" r="1.5" fill="#ffffff" />
+          <rect x="18" y="58" width="16" height="9" fill="#dc2626" />
+          <rect x="21" y="61" width="3" height="3" fill="#ffffff" />
+          <rect x="29" y="60" width="3" height="3" fill="#ffffff" />
 
           {/* Mossy Wood Log Bench (Frog Stage) */}
-          <rect x="58" y="68" width="44" height="14" fill="#523218" rx="3" />
-          <rect x="60" y="66" width="40" height="4" fill="#784a28" rx="2" />
+          <rect x="58" y="68" width="44" height="14" fill="#523218" />
+          <rect x="60" y="66" width="40" height="4" fill="#784a28" />
           <rect x="64" y="65" width="8" height="2" fill="#84cc16" />
           <rect x="88" y="65" width="6" height="2" fill="#84cc16" />
         </g>
@@ -2292,18 +2358,18 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="16" width="160" height="2" fill="#451a03" opacity="0.6" />
 
           {/* Indigo Noren Curtain with Split */}
-          <rect x="12" y="6" width="40" height="22" fill="#1e3a8a" rx="1" />
-          <rect x="56" y="6" width="48" height="22" fill="#1e3a8a" rx="1" />
-          <rect x="108" y="6" width="40" height="22" fill="#1e3a8a" rx="1" />
+          <rect x="12" y="6" width="40" height="22" fill="#1e3a8a" />
+          <rect x="56" y="6" width="48" height="22" fill="#1e3a8a" />
+          <rect x="108" y="6" width="40" height="22" fill="#1e3a8a" />
           {/* White Emblem Pattern on Noren */}
-          <circle cx="32" cy="17" r="4" fill="#ffffff" opacity="0.9" />
-          <circle cx="80" cy="17" r="4" fill="#ffffff" opacity="0.9" />
-          <circle cx="128" cy="17" r="4" fill="#ffffff" opacity="0.9" />
+          <rect x="28" y="13" width="8" height="8" fill="#ffffff" opacity="0.9" />
+          <rect x="76" y="13" width="8" height="8" fill="#ffffff" opacity="0.9" />
+          <rect x="124" y="13" width="8" height="8" fill="#ffffff" opacity="0.9" />
 
           {/* Warm Red Paper Izakaya Lanterns */}
-          <rect x="18" y="30" width="10" height="14" fill="#dc2626" rx="3" />
+          <rect x="18" y="30" width="10" height="14" fill="#dc2626" />
           <rect x="21" y="33" width="4" height="8" fill="#fef08a" />
-          <rect x="132" y="30" width="10" height="14" fill="#dc2626" rx="3" />
+          <rect x="132" y="30" width="10" height="14" fill="#dc2626" />
           <rect x="135" y="33" width="4" height="8" fill="#fef08a" />
 
           {/* Polished Hinoki Wood Counter (Frog Stage) */}
@@ -2312,8 +2378,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="68" width="160" height="2" fill="#92400e" />
 
           {/* Wooden Nigiri Cutting Board Platform */}
-          <rect x="56" y="64" width="48" height="16" fill="#fde68a" rx="2" />
-          <rect x="58" y="66" width="44" height="12" fill="#fef3c7" rx="1" />
+          <rect x="56" y="64" width="48" height="16" fill="#fde68a" />
+          <rect x="58" y="66" width="44" height="12" fill="#fef3c7" />
           <rect x="60" y="78" width="4" height="3" fill="#b45309" />
           <rect x="96" y="78" width="4" height="3" fill="#b45309" />
         </g>
@@ -2330,12 +2396,12 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="10" width="160" height="2" fill="#0284c7" />
 
           {/* Glowing 24h Digital LED Sign */}
-          <rect x="60" y="1" width="40" height="11" fill="#09090b" rx="1" stroke="#27272a" strokeWidth="0.5" />
+          <rect x="60" y="1" width="40" height="11" fill="#09090b" stroke="#27272a" strokeWidth="0.5" />
           <text x="80" y="8" fill="#10b981" fontSize="5" fontFamily="monospace" textAnchor="middle" fontWeight="bold" letterSpacing="0.5">
             24h MART
           </text>
-          <circle cx="64" cy="6.5" r="1.2" fill="#ef4444" className="animate-pulse" />
-          <circle cx="96" cy="6.5" r="1.2" fill="#22c55e" />
+          <rect x="63" y="5" width="2" height="2" fill="#ef4444" className="animate-pulse" />
+          <rect x="95" y="5" width="2" height="2" fill="#22c55e" />
 
           {/* Recessed Ceiling Neon Tube Lights */}
           <rect x="15" y="14" width="40" height="2" fill="#ffffff" opacity="0.85" />
@@ -2345,138 +2411,130 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
           {/* Back Store Wall Interior */}
           <rect x="0" y="14" width="160" height="46" fill="#f1f5f9" />
-          <line x1="0" y1="28" x2="160" y2="28" stroke="#e2e8f0" strokeWidth="0.5" />
-          <line x1="0" y1="42" x2="160" y2="42" stroke="#e2e8f0" strokeWidth="0.5" />
+          <rect x="0" y="28" width="160" height="1" fill="#e2e8f0" />
+          <rect x="0" y="42" width="160" height="1" fill="#e2e8f0" />
 
           {/* LEFT SIDE: Illuminated Glass Drink Cooler Display Case */}
-          <rect x="4" y="18" width="48" height="42" fill="#0f172a" rx="1.5" stroke="#38bdf8" strokeWidth="0.8" />
-          <rect x="6" y="20" width="44" height="38" fill="#0369a1" opacity="0.9" rx="1" />
+          <rect x="4" y="18" width="48" height="42" fill="#0f172a" stroke="#38bdf8" strokeWidth="0.8" />
+          <rect x="6" y="20" width="44" height="38" fill="#0369a1" opacity="0.9" />
           {/* Frosty Glass Backlight */}
           <rect x="8" y="22" width="40" height="34" fill="#0284c7" opacity="0.6" />
 
           {/* Cooler Shelves & Colorful Canned Drinks */}
           {/* Shelf 1 - Top: Green Melon Sodas & Canned Coffees */}
-          <line x1="6" y1="28" x2="50" y2="28" stroke="#e0f2fe" strokeWidth="1" />
-          <rect x="9" y="23" width="4" height="5" fill="#22c55e" rx="0.5" />
-          <rect x="15" y="23" width="4" height="5" fill="#22c55e" rx="0.5" />
-          <rect x="21" y="23" width="4" height="5" fill="#f59e0b" rx="0.5" />
-          <rect x="27" y="23" width="4" height="5" fill="#ef4444" rx="0.5" />
-          <rect x="33" y="23" width="4" height="5" fill="#3b82f6" rx="0.5" />
-          <rect x="39" y="23" width="4" height="5" fill="#78350f" rx="0.5" />
+          <rect x="6" y="28" width="44" height="1" fill="#e0f2fe" />
+          <rect x="9" y="23" width="4" height="5" fill="#22c55e" />
+          <rect x="15" y="23" width="4" height="5" fill="#22c55e" />
+          <rect x="21" y="23" width="4" height="5" fill="#f59e0b" />
+          <rect x="27" y="23" width="4" height="5" fill="#ef4444" />
+          <rect x="33" y="23" width="4" height="5" fill="#3b82f6" />
+          <rect x="39" y="23" width="4" height="5" fill="#78350f" />
 
           {/* Shelf 2 - Middle: Strawberry Milk & Bottled Teas */}
-          <line x1="6" y1="38" x2="50" y2="38" stroke="#e0f2fe" strokeWidth="1" />
-          <rect x="9" y="31" width="4" height="7" fill="#f472b6" rx="0.5" />
-          <rect x="15" y="31" width="4" height="7" fill="#f472b6" rx="0.5" />
-          <rect x="21" y="31" width="4" height="7" fill="#84cc16" rx="0.5" />
-          <rect x="27" y="31" width="4" height="7" fill="#84cc16" rx="0.5" />
-          <rect x="33" y="31" width="4" height="7" fill="#38bdf8" rx="0.5" />
-          <rect x="39" y="31" width="4" height="7" fill="#ffffff" rx="0.5" />
+          <rect x="6" y="38" width="44" height="1" fill="#e0f2fe" />
+          <rect x="9" y="31" width="4" height="7" fill="#f472b6" />
+          <rect x="15" y="31" width="4" height="7" fill="#f472b6" />
+          <rect x="21" y="31" width="4" height="7" fill="#84cc16" />
+          <rect x="27" y="31" width="4" height="7" fill="#84cc16" />
+          <rect x="33" y="31" width="4" height="7" fill="#38bdf8" />
+          <rect x="39" y="31" width="4" height="7" fill="#ffffff" />
 
           {/* Shelf 3 - Bottom: Giant Beverage Cartons */}
-          <line x1="6" y1="48" x2="50" y2="48" stroke="#e0f2fe" strokeWidth="1" />
-          <rect x="10" y="40" width="5" height="8" fill="#fb923c" rx="0.5" />
-          <rect x="18" y="40" width="5" height="8" fill="#38bdf8" rx="0.5" />
-          <rect x="26" y="40" width="5" height="8" fill="#a855f7" rx="0.5" />
-          <rect x="34" y="40" width="5" height="8" fill="#10b981" rx="0.5" />
+          <rect x="6" y="48" width="44" height="1" fill="#e0f2fe" />
+          <rect x="10" y="40" width="5" height="8" fill="#fb923c" />
+          <rect x="18" y="40" width="5" height="8" fill="#38bdf8" />
+          <rect x="26" y="40" width="5" height="8" fill="#a855f7" />
+          <rect x="34" y="40" width="5" height="8" fill="#10b981" />
 
           {/* Cooler Digital Temp & Glass Glare */}
-          <rect x="34" y="19" width="12" height="3" fill="#09090b" rx="0.5" />
+          <rect x="34" y="19" width="12" height="3" fill="#09090b" />
           <text x="40" y="21.2" fill="#38bdf8" fontSize="2.2" fontFamily="monospace" textAnchor="middle">3.2°C</text>
-          <line x1="12" y1="21" x2="44" y2="55" stroke="#ffffff" strokeWidth="0.8" opacity="0.3" />
+          <rect x="12" y="22" width="2" height="6" fill="#ffffff" opacity="0.3" />
+          <rect x="18" y="30" width="2" height="6" fill="#ffffff" opacity="0.3" />
 
           {/* RIGHT SIDE: Snack Aisle Racks & Hot Food Warmer Case */}
           {/* Multi-tier Snack Shelves */}
-          <rect x="110" y="22" width="46" height="38" fill="#334155" rx="1" />
+          <rect x="110" y="22" width="46" height="38" fill="#334155" />
           {/* Shelf 1: Potato Chip Bags (Red, Blue, Yellow) */}
-          <line x1="110" y1="31" x2="156" y2="31" stroke="#64748b" strokeWidth="1" />
-          <rect x="113" y="24" width="6" height="7" fill="#ef4444" rx="1" />
-          <rect x="121" y="24" width="6" height="7" fill="#3b82f6" rx="1" />
-          <rect x="129" y="24" width="6" height="7" fill="#eab308" rx="1" />
-          <rect x="137" y="24" width="6" height="7" fill="#10b981" rx="1" />
-          <rect x="145" y="24" width="6" height="7" fill="#ec4899" rx="1" />
+          <rect x="110" y="31" width="46" height="1" fill="#64748b" />
+          <rect x="113" y="24" width="6" height="7" fill="#ef4444" />
+          <rect x="121" y="24" width="6" height="7" fill="#3b82f6" />
+          <rect x="129" y="24" width="6" height="7" fill="#eab308" />
+          <rect x="137" y="24" width="6" height="7" fill="#10b981" />
+          <rect x="145" y="24" width="6" height="7" fill="#ec4899" />
 
           {/* Shelf 2: Ramen Cup Noodles & Pocky Boxes */}
-          <line x1="110" y1="41" x2="156" y2="41" stroke="#64748b" strokeWidth="1" />
-          <polygon points="113,34 119,34 118,40 114,40" fill="#dc2626" />
-          <polygon points="121,34 127,34 126,40 122,40" fill="#ea580c" />
-          <rect x="129" y="33" width="4" height="8" fill="#dc2626" rx="0.5" />
-          <rect x="135" y="33" width="4" height="8" fill="#78350f" rx="0.5" />
-          <rect x="141" y="33" width="4" height="8" fill="#ec4899" rx="0.5" />
-          <rect x="147" y="33" width="4" height="8" fill="#84cc16" rx="0.5" />
+          <rect x="110" y="41" width="46" height="1" fill="#64748b" />
+          <rect x="114" y="34" width="5" height="6" fill="#dc2626" />
+          <rect x="122" y="34" width="5" height="6" fill="#ea580c" />
+          <rect x="129" y="33" width="4" height="8" fill="#dc2626" />
+          <rect x="135" y="33" width="4" height="8" fill="#78350f" />
+          <rect x="141" y="33" width="4" height="8" fill="#ec4899" />
+          <rect x="147" y="33" width="4" height="8" fill="#84cc16" />
 
           {/* Shelf 3 / Hot Warmer Case on Counter Base */}
-          <rect x="110" y="44" width="46" height="16" fill="#78350f" rx="1" stroke="#d97706" strokeWidth="0.8" />
-          <rect x="112" y="46" width="42" height="12" fill="#fef3c7" opacity="0.95" rx="0.5" />
+          <rect x="110" y="44" width="46" height="16" fill="#78350f" stroke="#d97706" strokeWidth="0.8" />
+          <rect x="112" y="46" width="42" height="12" fill="#fef3c7" opacity="0.95" />
           {/* Steamy Buns / Karaage Golden Glow */}
-          <circle cx="118" cy="51" r="3" fill="#f59e0b" />
-          <circle cx="126" cy="51" r="3" fill="#f97316" />
-          <circle cx="134" cy="51" r="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.5" />
-          <circle cx="142" cy="51" r="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.5" />
+          <rect x="115" y="48" width="6" height="6" fill="#f59e0b" />
+          <rect x="123" y="48" width="6" height="6" fill="#f97316" />
+          <rect x="131" y="48" width="6" height="6" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.5" />
+          <rect x="139" y="48" width="6" height="6" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.5" />
           <text x="133" y="48" fill="#dc2626" fontSize="2.5" fontFamily="monospace" fontWeight="bold">HOT</text>
 
           {/* 3D Checkered Convenience Store Tiled Floor */}
-          <polygon points="0,60 160,60 160,280 0,280" fill="#f8fafc" />
+          <rect x="0" y="60" width="160" height="40" fill="#f8fafc" />
           {/* Floor Tile Grid Lines */}
-          <line x1="0" y1="60" x2="160" y2="60" stroke="#cbd5e1" strokeWidth="1" />
-          <line x1="0" y1="72" x2="160" y2="72" stroke="#cbd5e1" strokeWidth="0.8" />
-          <line x1="0" y1="88" x2="160" y2="88" stroke="#cbd5e1" strokeWidth="1" />
-          <line x1="0" y1="110" x2="160" y2="110" stroke="#cbd5e1" strokeWidth="1.2" />
-          <line x1="0" y1="140" x2="160" y2="140" stroke="#cbd5e1" strokeWidth="1.4" />
-          <line x1="0" y1="180" x2="160" y2="180" stroke="#cbd5e1" strokeWidth="1.6" />
-
-          {/* Radial Perspective Tile Lines */}
-          <line x1="20" y1="60" x2="-15" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
-          <line x1="50" y1="60" x2="25" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
-          <line x1="80" y1="60" x2="80" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
-          <line x1="110" y1="60" x2="135" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
-          <line x1="140" y1="60" x2="175" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
+          <rect x="0" y="60" width="160" height="1" fill="#cbd5e1" />
+          <rect x="0" y="72" width="160" height="1" fill="#cbd5e1" />
+          <rect x="0" y="88" width="160" height="1" fill="#cbd5e1" />
 
           {/* Alternating Soft Pastel Checker Accents */}
-          <polygon points="50,60 80,60 76,72 45,72" fill="#ecfdf5" opacity="0.7" />
-          <polygon points="110,60 140,60 144,72 113,72" fill="#ecfdf5" opacity="0.7" />
-          <polygon points="15,72 45,72 38,88 5,88" fill="#eff6ff" opacity="0.7" />
-          <polygon points="76,72 113,72 118,88 80,88" fill="#eff6ff" opacity="0.7" />
-          <polygon points="38,88 80,88 80,110 30,110" fill="#ecfdf5" opacity="0.7" />
-          <polygon points="118,88 160,88 160,110 126,110" fill="#ecfdf5" opacity="0.7" />
+          <rect x="45" y="60" width="32" height="12" fill="#ecfdf5" opacity="0.7" />
+          <rect x="112" y="60" width="32" height="12" fill="#ecfdf5" opacity="0.7" />
+          <rect x="8" y="72" width="36" height="16" fill="#eff6ff" opacity="0.7" />
+          <rect x="78" y="72" width="38" height="16" fill="#eff6ff" opacity="0.7" />
+          <rect x="32" y="88" width="48" height="22" fill="#ecfdf5" opacity="0.7" />
+          <rect x="120" y="88" width="40" height="22" fill="#ecfdf5" opacity="0.7" />
 
           {/* Red Plastic Shopping Basket on Floor on Left (Hidden if animated Snack Shiba companion is active) */}
           {config.companionId !== 'snack_shiba' && config.companionId !== 'companion_snack_shiba' && (
             <g transform="translate(14, 68)">
-              <polygon points="0,4 20,4 17,14 3,14" fill="#dc2626" />
-              <polygon points="2,6 18,6 16,12 4,12" fill="#b91c1c" />
-              <path d="M 4 4 Q 10 -2 16 4" stroke="#78350f" strokeWidth="1" fill="none" />
+              <rect x="2" y="4" width="18" height="10" fill="#dc2626" />
+              <rect x="4" y="6" width="14" height="6" fill="#b91c1c" />
+              <rect x="5" y="1" width="12" height="2" fill="#78350f" />
               {/* Bag of Chips & Drink inside basket */}
-              <rect x="5" y="2" width="4" height="6" fill="#facc15" rx="0.5" />
-              <rect x="11" y="1" width="3" height="6" fill="#22c55e" rx="0.5" />
+              <rect x="5" y="2" width="4" height="6" fill="#facc15" />
+              <rect x="11" y="1" width="3" height="6" fill="#22c55e" />
             </g>
           )}
 
           {/* CENTER CASHIER CHECKOUT REGISTER COUNTER (Frog Stage) */}
           <g id="konbini-checkout-counter">
             {/* Front Counter Panel */}
-            <rect x="52" y="62" width="56" height="20" fill="#ffffff" rx="2" stroke="#cbd5e1" strokeWidth="0.8" />
-            <rect x="54" y="64" width="52" height="4" fill="#10b981" rx="1" />
+            <rect x="52" y="62" width="56" height="20" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.8" />
+            <rect x="54" y="64" width="52" height="4" fill="#10b981" />
             <rect x="54" y="70" width="52" height="1.5" fill="#ea580c" />
-            <rect x="54" y="74" width="52" height="6" fill="#f8fafc" rx="0.5" />
+            <rect x="54" y="74" width="52" height="6" fill="#f8fafc" />
 
             {/* Counter Surface / Platform */}
-            <polygon points="48,62 112,62 110,58 50,58" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="0.5" />
+            <rect x="48" y="58" width="64" height="4" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="0.5" />
 
             {/* Digital POS Cash Register Terminal */}
-            <rect x="92" y="48" width="14" height="12" fill="#1e293b" rx="1.5" stroke="#475569" strokeWidth="0.6" />
+            <rect x="92" y="48" width="14" height="12" fill="#1e293b" stroke="#475569" strokeWidth="0.6" />
             {/* Glowing Screen Display */}
-            <rect x="94" y="50" width="10" height="6" fill="#0284c7" rx="0.5" />
+            <rect x="94" y="50" width="10" height="6" fill="#0284c7" />
             <text x="99" y="54.5" fill="#ffffff" fontSize="2.5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">¥850</text>
             <rect x="94" y="57" width="10" height="2" fill="#334155" />
             {/* Scanner Stand Cradle */}
-            <line x1="88" y1="58" x2="90" y2="52" stroke="#64748b" strokeWidth="1" />
-            <circle cx="90" cy="52" r="1.5" fill="#ef4444" />
+            <rect x="88" y="56" width="2" height="3" fill="#64748b" />
+            <rect x="89" y="53" width="2" height="3" fill="#64748b" />
+            <rect x="89" y="51" width="2" height="2" fill="#ef4444" />
 
-            {/* Fresh Onigiri & Bento Staging Tray on Counter (Positioned neatly on the left edge of counter) */}
-            <rect x="46" y="58" width="12" height="4" fill="#fef3c7" rx="0.5" stroke="#d97706" strokeWidth="0.5" />
-            <polygon points="48,59 52,59 51,61 49,61" fill="#ffffff" />
-            <polygon points="53,59 57,59 56,61 54,61" fill="#ffffff" />
+            {/* Fresh Onigiri & Bento Staging Tray on Counter */}
+            <rect x="46" y="58" width="12" height="4" fill="#fef3c7" stroke="#d97706" strokeWidth="0.5" />
+            <rect x="48" y="59" width="3" height="2" fill="#ffffff" />
+            <rect x="53" y="59" width="3" height="2" fill="#ffffff" />
           </g>
         </g>
       )}
@@ -2928,12 +2986,20 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                   id="pixel-frog-hero"
                   transform={`translate(${dx}, ${dy + hopArc}) ${facing === 'left' ? 'translate(160, 0) scale(-1, 1)' : ''}`}
                 >
-                  {/* Dynamic Frog Shadow */}
-                  <ellipse
-                    cx={frogX + 8}
-                    cy={frogY + 25 - hopArc}
-                    rx={14 * shadowScale}
-                    ry={3 * shadowScale}
+                  {/* Dynamic Frog Pixel Shadow */}
+                  <rect
+                    x={frogX + 8 - 14 * shadowScale}
+                    y={frogY + 24 - hopArc}
+                    width={28 * shadowScale}
+                    height={4 * shadowScale}
+                    fill="#000000"
+                    opacity={0.35 * shadowScale}
+                  />
+                  <rect
+                    x={frogX + 8 - 10 * shadowScale}
+                    y={frogY + 23 - hopArc}
+                    width={20 * shadowScale}
+                    height={6 * shadowScale}
                     fill="#000000"
                     opacity={0.35 * shadowScale}
                   />
@@ -2941,8 +3007,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                   {/* Cute Action / Emotion Speech Bubble */}
                   {actionBubble && (
                     <g transform={`translate(${frogX + 8}, ${frogY - 6})`} className="animate-bounce">
-                      <rect x="-8" y="-12" width="16" height="11" fill="#FFFFFF" rx="2" stroke="#18181B" strokeWidth="0.8" />
-                      <polygon points="-2,-1 2,-1 0,2" fill="#FFFFFF" stroke="#18181B" strokeWidth="0.8" />
+                      <rect x="-8" y="-12" width="16" height="11" fill="#FFFFFF" stroke="#18181B" strokeWidth="0.8" />
+                      <rect x="-2" y="-1" width="4" height="2" fill="#FFFFFF" stroke="#18181B" strokeWidth="0.8" />
+                      <rect x="-1" y="1" width="2" height="2" fill="#FFFFFF" stroke="#18181B" strokeWidth="0.8" />
                       <rect x="-1" y="-1.5" width="2" height="1" fill="#FFFFFF" />
                       <text x="0" y="-4.5" fontSize="6.5" textAnchor="middle" dominantBaseline="middle">
                         {actionBubble}
@@ -3105,7 +3172,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {config.outfitId === 'business' && (
                         <g>
                           <rect x={frogX - 1} y={frogY + 11} width="18" height="9" fill="#334155" />
-                          <polygon points={`${frogX + 4},${frogY + 11} ${frogX + 12},${frogY + 11} ${frogX + 8},${frogY + 17}`} fill="#FFFFFF" />
+                          <rect x={frogX + 4} y={frogY + 11} width="8" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 5} y={frogY + 13} width="6" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY + 15} width="4" height="2" fill="#FFFFFF" />
                           <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#DC2626" />
                         </g>
                       )}
@@ -3124,20 +3193,18 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#BE123C" />
                           <rect x={frogX + 1} y={frogY + 10} width="14" height="9" fill="#991B1B" />
                           <rect x={frogX + 3} y={frogY + 11} width="10" height="8" fill="#FFFFFF" />
-                          <line x1={frogX + 6} y1={frogY + 12} x2={frogX + 10} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
-                          <line x1={frogX + 10} y1={frogY + 12} x2={frogX + 6} y2={frogY + 14} stroke="#18181B" strokeWidth="1" />
-                          <line x1={frogX + 6} y1={frogY + 14} x2={frogX + 10} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
-                          <line x1={frogX + 10} y1={frogY + 14} x2={frogX + 6} y2={frogY + 16} stroke="#18181B" strokeWidth="1" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="1" fill="#18181B" />
+                          <rect x={frogX + 6} y={frogY + 14} width="4" height="1" fill="#18181B" />
                         </g>
                       )}
 
                       {config.outfitId === 'wolf_fur_cloak' && (
                         <g>
-                          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#334155" rx="2" />
+                          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#334155" />
                           <rect x={frogX - 2} y={frogY + 9} width="20" height="3" fill="#64748B" />
                           <rect x={frogX + 2} y={frogY + 12} width="12" height="9" fill="#1E293B" />
-                          <polygon points={`${frogX + 6},${frogY + 10} ${frogX + 8},${frogY + 13} ${frogX + 10},${frogY + 10}`} fill="#FEF08A" />
-                          <circle cx={frogX + 8} cy={frogY + 10} r="1" fill="#DC2626" />
+                          <rect x={frogX + 6} y={frogY + 10} width="4" height="3" fill="#FEF08A" />
+                          <rect x={frogX + 7} y={frogY + 10} width="2" height="2" fill="#DC2626" />
                         </g>
                       )}
 
@@ -3158,7 +3225,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX - 2} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
                           <rect x={frogX + 15} y={frogY + 10} width="3" height="10" fill="#1E3A8A" />
                           <rect x={frogX + 1} y={frogY + 15} width="14" height="2" fill="#1E3A8A" />
-                          <circle cx={frogX + 8} cy={frogY + 13} r="2" fill="#2563EB" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="4" fill="#2563EB" />
                         </g>
                       )}
 
@@ -3178,16 +3245,16 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX - 2} y={frogY + 10} width="20" height="3" fill="#10B981" />
                           <rect x={frogX + 6} y={frogY + 10} width="4" height="3" fill="#059669" />
                           <rect x={frogX - 2} y={frogY + 13} width="20" height="1.5" fill="#EA580C" />
-                          <rect x={frogX + 11} y={frogY + 14} width="4" height="3" fill="#FEF08A" rx="0.5" stroke="#78350F" strokeWidth="0.5" />
+                          <rect x={frogX + 11} y={frogY + 14} width="4" height="3" fill="#FEF08A" stroke="#78350F" strokeWidth="0.5" />
                           <rect x={frogX + 12} y={frogY + 15} width="2" height="1" fill="#1E293B" />
                         </g>
                       )}
 
                       {config.outfitId === 'shopper_cozy_sweatset' && (
                         <g id="scene-outfit-shopper">
-                          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#8B5CF6" rx="1.5" />
-                          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#A78BFA" rx="1" />
-                          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#7C3AED" rx="0.5" />
+                          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#8B5CF6" />
+                          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#A78BFA" />
+                          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#7C3AED" />
                           <rect x={frogX + 5} y={frogY + 10} width="6" height="2" fill="#DDD6FE" />
                         </g>
                       )}
@@ -3242,23 +3309,25 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {config.glassesId === 'eyepatch' && (
                         <g>
                           <rect x={frogX} y={frogY + 6} width="6" height="5" fill="#1C1917" />
-                          <line x1={frogX - 2} y1={frogY + 5} x2={frogX + 18} y2={frogY + 11} stroke="#1C1917" strokeWidth="1" />
+                          <rect x={frogX - 2} y={frogY + 5} width="3" height="2" fill="#1C1917" />
+                          <rect x={frogX + 5} y={frogY + 7} width="7" height="2" fill="#1C1917" />
+                          <rect x={frogX + 12} y={frogY + 9} width="6" height="2" fill="#1C1917" />
                         </g>
                       )}
 
                       {config.glassesId === 'forest_blush_freckles' && (
                         <g>
-                          <circle cx={frogX} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
-                          <circle cx={frogX + 2} cy={frogY + 11} r="0.8" fill="#78350F" />
-                          <circle cx={frogX + 14} cy={frogY + 11} r="0.8" fill="#78350F" />
-                          <circle cx={frogX + 16} cy={frogY + 10} r="1" fill="#DC2626" opacity="0.6" />
+                          <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#DC2626" opacity="0.6" />
+                          <rect x={frogX + 2} y={frogY + 10} width="2" height="2" fill="#78350F" />
+                          <rect x={frogX + 14} y={frogY + 10} width="2" height="2" fill="#78350F" />
+                          <rect x={frogX + 16} y={frogY + 9} width="2" height="2" fill="#DC2626" opacity="0.6" />
                         </g>
                       )}
 
                       {config.glassesId === 'wolf_snarl_fangs' && (
                         <g>
-                          <polygon points={`${frogX + 5},${frogY + 10} ${frogX + 6},${frogY + 13} ${frogX + 7},${frogY + 10}`} fill="#FFFFFF" />
-                          <polygon points={`${frogX + 9},${frogY + 10} ${frogX + 10},${frogY + 13} ${frogX + 11},${frogY + 10}`} fill="#FFFFFF" />
+                          <rect x={frogX + 5} y={frogY + 10} width="2" height="3" fill="#FFFFFF" />
+                          <rect x={frogX + 9} y={frogY + 10} width="2" height="3" fill="#FFFFFF" />
                         </g>
                       )}
 
@@ -3272,11 +3341,14 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
                       {config.glassesId === 'scanner_headset' && (
                         <g id="scene-glasses-headset">
-                          <rect x={frogX - 3} y={frogY + 6} width="3" height="6" fill="#1E293B" rx="1" />
-                          <line x1={frogX - 1} y1={frogY + 4} x2={frogX + 6} y2={frogY - 1} stroke="#334155" strokeWidth="1" />
-                          <line x1={frogX - 2} y1={frogY + 10} x2={frogX + 4} y2={frogY + 12} stroke="#334155" strokeWidth="1" />
-                          <circle cx={frogX + 4} cy={frogY + 12} r="1" fill="#10B981" />
-                          <circle cx={frogX - 2} cy={frogY + 8} r="1" fill="#38BDF8" />
+                          <rect x={frogX - 3} y={frogY + 6} width="3" height="6" fill="#1E293B" />
+                          <rect x={frogX - 1} y={frogY + 4} width="2" height="2" fill="#334155" />
+                          <rect x={frogX + 1} y={frogY + 2} width="2" height="2" fill="#334155" />
+                          <rect x={frogX + 3} y={frogY} width="3" height="2" fill="#334155" />
+                          <rect x={frogX - 2} y={frogY + 10} width="3" height="2" fill="#334155" />
+                          <rect x={frogX + 1} y={frogY + 11} width="3" height="2" fill="#334155" />
+                          <rect x={frogX + 3} y={frogY + 11} width="2" height="2" fill="#10B981" />
+                          <rect x={frogX - 3} y={frogY + 7} width="2" height="2" fill="#38BDF8" />
                         </g>
                       )}
 
@@ -3284,8 +3356,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         <g id="scene-glasses-blush">
                           <rect x={frogX - 2} y={frogY + 9} width="3" height="2" fill="#FB7185" />
                           <rect x={frogX + 15} y={frogY + 9} width="3" height="2" fill="#FB7185" />
-                          <circle cx={frogX} cy={frogY + 8} r="0.8" fill="#FDE047" />
-                          <circle cx={frogX + 16} cy={frogY + 8} r="0.8" fill="#FDE047" />
+                          <rect x={frogX} y={frogY + 8} width="2" height="1" fill="#FDE047" />
+                          <rect x={frogX + 16} y={frogY + 8} width="2" height="1" fill="#FDE047" />
                         </g>
                       )}
 
@@ -3350,10 +3422,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 5. Eating Treats (Onigiri / Rice bowl) */}
                       {config.activityId === 'eating' && (
                         <g>
-                          <polygon
-                            points={`${frogX + 8},${frogY + 10} ${frogX + 4},${frogY + 16} ${frogX + 12},${frogY + 16}`}
-                            fill="#FFFFFF"
-                          />
+                          <rect x={frogX + 6} y={frogY + 10} width="4" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 5} y={frogY + 12} width="6" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 4} y={frogY + 14} width="8" height="3" fill="#FFFFFF" />
                           <rect x={frogX + 6} y={frogY + 14} width="4" height="2" fill="#18181B" />
                           <rect x={frogX + 2} y={frogY + 13} width="3" height="3" fill={skin.main} />
                           <rect x={frogX + 11} y={frogY + 13} width="3" height="3" fill={skin.main} />
@@ -3386,10 +3457,10 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 7. Painting Art */}
                       {config.activityId === 'painting' && (
                         <g>
-                          <ellipse cx={frogX + 9} cy={frogY + 15} rx="6" ry="4" fill="#D97706" />
-                          <circle cx={frogX + 7} cy={frogY + 14} r="1" fill="#EF4444" />
-                          <circle cx={frogX + 9} cy={frogY + 13} r="1" fill="#3B82F6" />
-                          <circle cx={frogX + 11} cy={frogY + 14} r="1" fill="#EAB308" />
+                          <rect x={frogX + 5} y={frogY + 13} width="10" height="6" fill="#D97706" />
+                          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#EF4444" />
+                          <rect x={frogX + 9} y={frogY + 13} width="2" height="2" fill="#3B82F6" />
+                          <rect x={frogX + 11} y={frogY + 14} width="2" height="2" fill="#EAB308" />
                           <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
                           <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
@@ -3399,7 +3470,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {config.activityId === 'camera' && (
                         <g>
                           <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#78350F" />
-                          <circle cx={frogX + 8} cy={frogY + 16} r="2" fill="#1E293B" />
+                          <rect x={frogX + 6} y={frogY + 14} width="4" height="4" fill="#1E293B" />
                           <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
                           <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
@@ -3408,8 +3479,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 9. Magic Starlight Wand */}
                       {config.activityId === 'wand' && (
                         <g>
-                          <line x1={frogX + 12} y1={frogY + 16} x2={frogX + 18} y2={frogY + 8} stroke="#CA8A04" strokeWidth="1.5" />
-                          <polygon points={`${frogX + 18},${frogY + 5} ${frogX + 16},${frogY + 10} ${frogX + 21},${frogY + 8}`} fill="#FACC15" />
+                          <rect x={frogX + 13} y={frogY + 15} width="2" height="2" fill="#CA8A04" />
+                          <rect x={frogX + 15} y={frogY + 12} width="2" height="3" fill="#CA8A04" />
+                          <rect x={frogX + 17} y={frogY + 9} width="2" height="3" fill="#CA8A04" />
+                          <rect x={frogX + 17} y={frogY + 6} width="4" height="4" fill="#FACC15" />
+                          <rect x={frogX + 18} y={frogY + 5} width="2" height="6" fill="#FEF08A" />
                           <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
                       )}
@@ -3417,9 +3491,13 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 10. Bamboo Fishing Rod */}
                       {config.activityId === 'fishing' && (
                         <g>
-                          <line x1={frogX + 10} y1={frogY + 16} x2={frogX + 24} y2={frogY + 2} stroke="#78350F" strokeWidth="1.5" />
-                          <line x1={frogX + 24} y1={frogY + 2} x2={frogX + 26} y2={frogY + 24} stroke="#94A3B8" strokeWidth="0.5" />
-                          <circle cx={frogX + 26} cy={frogY + 18} r="1.5" fill="#EF4444" />
+                          <rect x={frogX + 10} y={frogY + 15} width="3" height="2" fill="#78350F" />
+                          <rect x={frogX + 13} y={frogY + 12} width="3" height="3" fill="#78350F" />
+                          <rect x={frogX + 16} y={frogY + 9} width="3" height="3" fill="#78350F" />
+                          <rect x={frogX + 19} y={frogY + 6} width="3" height="3" fill="#78350F" />
+                          <rect x={frogX + 22} y={frogY + 3} width="3" height="3" fill="#78350F" />
+                          <rect x={frogX + 25} y={frogY + 3} width="1" height="20" fill="#94A3B8" />
+                          <rect x={frogX + 24} y={frogY + 17} width="3" height="3" fill="#EF4444" />
                           <rect x={frogX + 9} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
                       )}
@@ -3427,8 +3505,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 11. Picnic Basket */}
                       {config.activityId === 'picnic_basket' && (
                         <g>
-                          <rect x={frogX + 5} y={frogY + 13} width="10" height="7" fill="#D97706" rx="1" />
-                          <polygon points={`${frogX + 4},${frogY + 13} ${frogX + 10},${frogY + 11} ${frogX + 8},${frogY + 16}`} fill="#EF4444" />
+                          <rect x={frogX + 5} y={frogY + 13} width="10" height="7" fill="#D97706" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#EF4444" />
                           <rect x={frogX + 5} y={frogY + 12} width="2" height="2" fill="#FFFFFF" />
                           <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
                           <rect x={frogX + 13} y={frogY + 14} width="2" height="3" fill={skin.main} />
@@ -3438,8 +3516,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 12. Woodcutter Axe */}
                       {config.activityId === 'woodcutter_axe' && (
                         <g>
-                          <line x1={frogX + 11} y1={frogY + 18} x2={frogX + 18} y2={frogY + 5} stroke="#78350F" strokeWidth="1.5" />
-                          <polygon points={`${frogX + 16},${frogY + 5} ${frogX + 22},${frogY + 3} ${frogX + 20},${frogY + 9}`} fill="#94A3B8" />
+                          <rect x={frogX + 11} y={frogY + 16} width="2" height="3" fill="#78350F" />
+                          <rect x={frogX + 13} y={frogY + 12} width="2" height="4" fill="#78350F" />
+                          <rect x={frogX + 15} y={frogY + 8} width="2" height="4" fill="#78350F" />
+                          <rect x={frogX + 17} y={frogY + 5} width="2" height="3" fill="#78350F" />
+                          <rect x={frogX + 17} y={frogY + 4} width="5" height="5" fill="#94A3B8" />
                           <rect x={frogX + 10} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
                       )}
@@ -3447,7 +3528,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 13. Sushi Platter */}
                       {(config.activityId === 'sushi_platter' || config.activityId === 'eating_sushi') && (
                         <g>
-                          <rect x={frogX + 4} y={frogY + 14} width="12" height="5" fill="#D97706" rx="1" />
+                          <rect x={frogX + 4} y={frogY + 14} width="12" height="5" fill="#D97706" />
                           <rect x={frogX + 5} y={frogY + 13} width="4" height="2" fill="#FB923C" />
                           <rect x={frogX + 10} y={frogY + 13} width="4" height="2" fill="#BE123C" />
                           <rect x={frogX + 3} y={frogY + 15} width="2" height="3" fill={skin.main} />
@@ -3458,9 +3539,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 14. Matcha Tea Whisk */}
                       {(config.activityId === 'tea_whisk' || config.activityId === 'sushi_crafting') && (
                         <g>
-                          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#1E293B" rx="1" />
+                          <rect x={frogX + 4} y={frogY + 13} width="8" height="6" fill="#1E293B" />
                           <rect x={frogX + 5} y={frogY + 14} width="6" height="3" fill="#84CC16" />
-                          <line x1={frogX + 12} y1={frogY + 10} x2={frogX + 8} y2={frogY + 14} stroke="#FDE68A" strokeWidth="1.5" />
+                          <rect x={frogX + 12} y={frogY + 10} width="2" height="2" fill="#FDE68A" />
+                          <rect x={frogX + 10} y={frogY + 12} width="2" height="2" fill="#FDE68A" />
+                          <rect x={frogX + 8} y={frogY + 14} width="2" height="2" fill="#FDE68A" />
                           <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
                           <rect x={frogX + 11} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
@@ -3469,11 +3552,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 15. Konbini Barcode Scanner */}
                       {config.activityId === 'konbini_scanner' && (
                         <g id="scene-prop-scanner">
-                          <rect x={frogX + 10} y={frogY + 13} width="6" height="4" fill="#1E293B" rx="1" />
-                          <rect x={frogX + 14} y={frogY + 11} width="3" height="6" fill="#0F172A" rx="0.5" />
+                          <rect x={frogX + 10} y={frogY + 13} width="6" height="4" fill="#1E293B" />
+                          <rect x={frogX + 14} y={frogY + 11} width="3" height="6" fill="#0F172A" />
                           {/* Animated Laser Beam */}
-                          <line x1={frogX + 16} y1={frogY + 14} x2={frogX + 26} y2={frogY + 14} stroke="#EF4444" strokeWidth="1" className="animate-pulse" />
-                          <circle cx={frogX + 26} cy={frogY + 14} r="1.2" fill="#F87171" />
+                          <rect x={frogX + 16} y={frogY + 14} width="10" height="1" fill="#EF4444" className="animate-pulse" />
+                          <rect x={frogX + 25} y={frogY + 13} width="2" height="2" fill="#F87171" />
                           <rect x={frogX + 9} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
                       )}
@@ -3481,9 +3564,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 16. Eating Delicious Onigiri */}
                       {config.activityId === 'eating_onigiri' && (
                         <g id="scene-prop-eating-onigiri">
-                          <polygon points={`${frogX + 8},${frogY + 11} ${frogX + 3},${frogY + 17} ${frogX + 13},${frogY + 17}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
-                          <rect x={frogX + 6} y={frogY + 15} width="4" height="2.5" fill="#18181B" rx="0.5" />
-                          <circle cx={frogX + 8} cy={frogY + 13} r="1" fill="#DC2626" />
+                          <rect x={frogX + 6} y={frogY + 11} width="4" height="2" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                          <rect x={frogX + 5} y={frogY + 13} width="6" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 4} y={frogY + 15} width="8" height="3" fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY + 15} width="4" height="2" fill="#18181B" />
+                          <rect x={frogX + 7} y={frogY + 13} width="2" height="2" fill="#DC2626" />
                           <rect x={frogX + 2} y={frogY + 14} width="2" height="3" fill={skin.main} />
                           <rect x={frogX + 12} y={frogY + 14} width="2" height="3" fill={skin.main} />
                         </g>
@@ -3492,7 +3577,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* 17. Holding Konbini Shopping Bag */}
                       {config.activityId === 'holding_konbini_bag' && (
                         <g id="scene-prop-bag">
-                          <polygon points={`${frogX + 9},${frogY + 12} ${frogX + 17},${frogY + 12} ${frogX + 19},${frogY + 22} ${frogX + 7},${frogY + 22}`} fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.5" />
+                          <rect x={frogX + 8} y={frogY + 12} width="10" height="10" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.5" />
                           <rect x={frogX + 9} y={frogY + 16} width="8" height="2" fill="#10B981" />
                           <rect x={frogX + 9} y={frogY + 18} width="8" height="1" fill="#EA580C" />
                           <rect x={frogX + 10} y={frogY + 10} width="3" height="4" fill="#FACC15" />
@@ -3506,22 +3591,21 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* Red Riding Hood */}
                       {config.hatId === 'red_riding_hood' && (
                         <g>
-                          <rect x={frogX - 3} y={frogY - 4} width="22" height="16" fill="#DC2626" rx="2" />
+                          <rect x={frogX - 3} y={frogY - 4} width="22" height="16" fill="#DC2626" />
                           <rect x={frogX - 1} y={frogY - 6} width="18" height="3" fill="#B91C1C" />
                           <rect x={frogX + 1} y={frogY - 2} width="14" height="2" fill="#FEF2F2" />
-                          <polygon points={`${frogX + 5},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 5},${frogY + 15}`} fill="#991B1B" />
-                          <polygon points={`${frogX + 11},${frogY + 11} ${frogX + 8},${frogY + 13} ${frogX + 11},${frogY + 15}`} fill="#991B1B" />
-                          <circle cx={frogX + 8} cy={frogY + 13} r="1.5" fill="#EF4444" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#991B1B" />
+                          <rect x={frogX + 7} y={frogY + 12} width="2" height="2" fill="#EF4444" />
                         </g>
                       )}
 
                       {/* Wolf Ears Hood */}
                       {config.hatId === 'wolf_ears_hood' && (
                         <g>
-                          <polygon points={`${frogX - 2},${frogY + 2} ${frogX + 2},${frogY - 8} ${frogX + 6},${frogY + 2}`} fill="#334155" />
-                          <polygon points={`${frogX},${frogY + 1} ${frogX + 2},${frogY - 6} ${frogX + 4},${frogY + 1}`} fill="#F472B6" />
-                          <polygon points={`${frogX + 10},${frogY + 2} ${frogX + 14},${frogY - 8} ${frogX + 18},${frogY + 2}`} fill="#334155" />
-                          <polygon points={`${frogX + 12},${frogY + 1} ${frogX + 14},${frogY - 6} ${frogX + 16},${frogY + 1}`} fill="#F472B6" />
+                          <rect x={frogX - 2} y={frogY - 6} width="6" height="8" fill="#334155" />
+                          <rect x={frogX} y={frogY - 4} width="3" height="5" fill="#F472B6" />
+                          <rect x={frogX + 12} y={frogY - 6} width="6" height="8" fill="#334155" />
+                          <rect x={frogX + 13} y={frogY - 4} width="3" height="5" fill="#F472B6" />
                           <rect x={frogX + 2} y={frogY - 1} width="12" height="3" fill="#475569" />
                           <rect x={frogX + 6} y={frogY - 3} width="4" height="2" fill="#F1F5F9" />
                         </g>
@@ -3530,21 +3614,24 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* Granny Nightcap */}
                       {config.hatId === 'granny_nightcap' && (
                         <g>
-                          <ellipse cx={frogX + 8} cy={frogY - 2} rx="12" ry="7" fill="#F8FAFC" />
-                          <ellipse cx={frogX + 8} cy={frogY - 2} rx="10" ry="5" fill="#F1F5F9" />
+                          <rect x={frogX - 2} y={frogY - 6} width="20" height="9" fill="#F8FAFC" />
+                          <rect x={frogX} y={frogY - 5} width="16" height="7" fill="#F1F5F9" />
                           <rect x={frogX - 3} y={frogY + 2} width="22" height="2" fill="#FBCFE8" />
-                          <circle cx={frogX + 8} cy={frogY + 3} r="1.5" fill="#EC4899" />
+                          <rect x={frogX + 7} y={frogY + 2} width="2" height="2" fill="#EC4899" />
                         </g>
                       )}
 
                       {/* Sushi Salmon Nigiri */}
                       {config.hatId === 'sushi_salmon' && (
                         <g>
-                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
-                          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#FB923C" rx="2" />
-                          <line x1={frogX} y1={frogY - 6} x2={frogX + 4} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
-                          <line x1={frogX + 6} y1={frogY - 6} x2={frogX + 10} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
-                          <line x1={frogX + 12} y1={frogY - 6} x2={frogX + 16} y2={frogY - 1} stroke="#FFF7ED" strokeWidth="1" />
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" />
+                          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#FB923C" />
+                          <rect x={frogX} y={frogY - 6} width="4" height="1" fill="#FFF7ED" />
+                          <rect x={frogX + 6} y={frogY - 6} width="4" height="1" fill="#FFF7ED" />
+                          <rect x={frogX + 12} y={frogY - 6} width="4" height="1" fill="#FFF7ED" />
+                          <rect x={frogX + 2} y={frogY - 4} width="4" height="1" fill="#FFF7ED" />
+                          <rect x={frogX + 8} y={frogY - 4} width="4" height="1" fill="#FFF7ED" />
+                          <rect x={frogX + 14} y={frogY - 4} width="3" height="1" fill="#FFF7ED" />
                           <rect x={frogX + 7} y={frogY - 6} width="2" height="8" fill="#14532D" />
                         </g>
                       )}
@@ -3552,24 +3639,24 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* Sushi Maguro */}
                       {config.hatId === 'sushi_maguro' && (
                         <g>
-                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
-                          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#BE123C" rx="2" />
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" />
+                          <rect x={frogX - 2} y={frogY - 6} width="20" height="5" fill="#BE123C" />
                           <rect x={frogX} y={frogY - 5} width="16" height="2" fill="#E11D48" />
                           <rect x={frogX + 2} y={frogY - 5} width="4" height="1" fill="#FFFFFF" opacity="0.6" />
-                          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#84CC16" />
+                          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#84CC16" />
                         </g>
                       )}
 
                       {/* Sushi Ebi */}
                       {config.hatId === 'sushi_ebi' && (
                         <g>
-                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" rx="1" />
-                          <rect x={frogX - 2} y={frogY - 6} width="18" height="5" fill="#EA580C" rx="2" />
+                          <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#FFFFFF" />
+                          <rect x={frogX - 2} y={frogY - 6} width="18" height="5" fill="#EA580C" />
                           <rect x={frogX + 1} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
                           <rect x={frogX + 5} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
                           <rect x={frogX + 9} y={frogY - 6} width="2" height="5" fill="#FFFFFF" />
-                          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY - 7} ${frogX + 20},${frogY - 1}`} fill="#DC2626" />
-                          <polygon points={`${frogX + 16},${frogY - 3} ${frogX + 21},${frogY + 1} ${frogX + 20},${frogY - 1}`} fill="#EA580C" />
+                          <rect x={frogX + 16} y={frogY - 6} width="5" height="4" fill="#DC2626" />
+                          <rect x={frogX + 16} y={frogY - 2} width="5" height="3" fill="#EA580C" />
                         </g>
                       )}
 
@@ -3581,28 +3668,28 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 4} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
                           <rect x={frogX + 9} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
                           <rect x={frogX + 14} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
-                          <circle cx={frogX + 8} cy={frogY + 3.5} r="2" fill="#DC2626" />
+                          <rect x={frogX + 6} y={frogY + 2} width="4" height="3" fill="#DC2626" />
                         </g>
                       )}
 
                       {/* Konbini Staff Visor */}
                       {config.hatId === 'konbini_staff_visor' && (
                         <g id="scene-hat-visor">
-                          <rect x={frogX - 3} y={frogY + 1} width="22" height="3" fill="#10B981" rx="0.5" />
+                          <rect x={frogX - 3} y={frogY + 1} width="22" height="3" fill="#10B981" />
                           <rect x={frogX - 1} y={frogY + 1} width="18" height="1" fill="#34D399" />
-                          <polygon points={`${frogX - 5},${frogY + 2} ${frogX + 21},${frogY + 2} ${frogX + 18},${frogY - 2} ${frogX - 2},${frogY - 2}`} fill="#059669" />
-                          <circle cx={frogX + 8} cy={frogY + 2.5} r="1.2" fill="#FFFFFF" />
-                          <circle cx={frogX + 8} cy={frogY + 2.5} r="0.6" fill="#EA580C" />
+                          <rect x={frogX - 3} y={frogY - 1} width="22" height="2" fill="#059669" />
+                          <rect x={frogX + 7} y={frogY + 1} width="2" height="2" fill="#FFFFFF" />
+                          <rect x={frogX + 8} y={frogY + 2} width="1" height="1" fill="#EA580C" />
                         </g>
                       )}
 
                       {/* Shopper Bucket Hat */}
                       {config.hatId === 'shopper_bucket_hat' && (
                         <g id="scene-hat-bucket">
-                          <polygon points={`${frogX - 2},${frogY + 1} ${frogX + 18},${frogY + 1} ${frogX + 16},${frogY - 6} ${frogX},${frogY - 6}`} fill="#7C3AED" />
+                          <rect x={frogX - 1} y={frogY - 6} width="18" height="7" fill="#7C3AED" />
                           <rect x={frogX + 1} y={frogY - 5} width="14" height="2" fill="#8B5CF6" />
-                          <polygon points={`${frogX - 5},${frogY + 3} ${frogX + 21},${frogY + 3} ${frogX + 18},${frogY + 1} ${frogX - 2},${frogY + 1}`} fill="#6D28D9" />
-                          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#FDE047" />
+                          <rect x={frogX - 4} y={frogY + 1} width="24" height="2" fill="#6D28D9" />
+                          <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#FDE047" />
                         </g>
                       )}
 
@@ -3610,9 +3697,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {config.hatId === 'onigiri_headband' && (
                         <g id="scene-hat-onigiri">
                           <rect x={frogX - 2} y={frogY + 2} width="20" height="1.5" fill="#18181B" />
-                          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 3},${frogY - 1} ${frogX + 13},${frogY - 1}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
-                          <rect x={frogX + 6} y={frogY - 3} width="4" height="2.5" fill="#18181B" rx="0.5" />
-                          <circle cx={frogX + 8} cy={frogY - 4.5} r="0.8" fill="#DC2626" />
+                          <rect x={frogX + 6} y={frogY - 8} width="4" height="2" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                          <rect x={frogX + 5} y={frogY - 6} width="6" height="3" fill="#FFFFFF" />
+                          <rect x={frogX + 4} y={frogY - 3} width="8" height="3" fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY - 3} width="4" height="2" fill="#18181B" />
+                          <rect x={frogX + 7} y={frogY - 5} width="2" height="2" fill="#DC2626" />
                         </g>
                       )}
 
@@ -3630,10 +3719,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* B. Straw Travel Hat */}
                       {config.hatId === 'straw' && (
                         <g>
-                          <polygon
-                            points={`${frogX + 8},${frogY - 5} ${frogX - 3},${frogY + 2} ${frogX + 19},${frogY + 2}`}
-                            fill="#FDE68A"
-                          />
+                          <rect x={frogX + 5} y={frogY - 5} width="6" height="4" fill="#FDE68A" />
+                          <rect x={frogX + 2} y={frogY - 2} width="12" height="4" fill="#FDE68A" />
                           <rect x={frogX - 4} y={frogY + 2} width="24" height="2" fill="#D97706" />
                           <rect x={frogX + 4} y={frogY} width="8" height="1" fill="#92400E" />
                         </g>
@@ -3652,10 +3739,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* D. Mystic Star Wizard Hat */}
                       {config.hatId === 'wizard' && (
                         <g>
-                          <polygon
-                            points={`${frogX + 8},${frogY - 10} ${frogX},${frogY + 2} ${frogX + 16},${frogY + 2}`}
-                            fill="#1E1B4B"
-                          />
+                          <rect x={frogX + 6} y={frogY - 10} width="4" height="5" fill="#1E1B4B" />
+                          <rect x={frogX + 4} y={frogY - 5} width="8" height="4" fill="#1E1B4B" />
+                          <rect x={frogX + 1} y={frogY - 1} width="14" height="3" fill="#1E1B4B" />
                           <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#4338CA" />
                           <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FACC15" />
                         </g>
@@ -3672,7 +3758,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* F. Winter Knit Beanie */}
                       {config.hatId === 'beanie' && (
                         <g>
-                          <circle cx={frogX + 8} cy={frogY - 5} r="2.5" fill="#FFFFFF" />
+                          <rect x={frogX + 6} y={frogY - 6} width="4" height="3" fill="#FFFFFF" />
                           <rect x={frogX} y={frogY - 3} width="16" height="5" fill="#DC2626" />
                           <rect x={frogX - 1} y={frogY + 1} width="18" height="3" fill="#F87171" />
                         </g>
@@ -3681,10 +3767,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* G. Chef Toque */}
                       {config.hatId === 'chef' && (
                         <g>
+                          <rect x={frogX + 1} y={frogY - 10} width="14" height="10" fill="#FFFFFF" />
                           <rect x={frogX} y={frogY - 8} width="16" height="8" fill="#FFFFFF" />
-                          <circle cx={frogX + 3} cy={frogY - 8} r="3" fill="#FFFFFF" />
-                          <circle cx={frogX + 8} cy={frogY - 9} r="3.5" fill="#FFFFFF" />
-                          <circle cx={frogX + 13} cy={frogY - 8} r="3" fill="#FFFFFF" />
                           <rect x={frogX - 1} y={frogY} width="18" height="2" fill="#E2E8F0" />
                         </g>
                       )}
@@ -3692,7 +3776,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* H. Royal Golden Crown */}
                       {config.hatId === 'crown' && (
                         <g>
-                          <polygon points={`${frogX},${frogY - 4} ${frogX + 3},${frogY} ${frogX + 8},${frogY - 6} ${frogX + 13},${frogY} ${frogX + 16},${frogY - 4} ${frogX + 16},${frogY + 2} ${frogX},${frogY + 2}`} fill="#FACC15" />
+                          <rect x={frogX} y={frogY - 3} width="4" height="5" fill="#FACC15" />
+                          <rect x={frogX + 6} y={frogY - 5} width="4" height="7" fill="#FACC15" />
+                          <rect x={frogX + 12} y={frogY - 3} width="4" height="5" fill="#FACC15" />
                           <rect x={frogX} y={frogY + 1} width="16" height="2" fill="#EAB308" />
                           <rect x={frogX + 7} y={frogY} width="2" height="2" fill="#DC2626" />
                         </g>
@@ -3701,7 +3787,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* I. Artist Beret */}
                       {config.hatId === 'beret' && (
                         <g>
-                          <ellipse cx={frogX + 8} cy={frogY} rx="11" ry="3.5" fill="#78350F" />
+                          <rect x={frogX - 2} y={frogY - 2} width="20" height="5" fill="#78350F" />
                           <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#451A03" />
                         </g>
                       )}
@@ -3709,8 +3795,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* J. Tropical Flower */}
                       {config.hatId === 'flower' && (
                         <g>
-                          <circle cx={frogX + 16} cy={frogY + 2} r="3" fill="#FEF08A" />
-                          <circle cx={frogX + 16} cy={frogY + 2} r="1.5" fill="#EA580C" />
+                          <rect x={frogX + 14} y={frogY} width="5" height="5" fill="#FEF08A" />
+                          <rect x={frogX + 15} y={frogY + 1} width="3" height="3" fill="#EA580C" />
                         </g>
                       )}
 
@@ -3726,7 +3812,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {/* L. Detective Cap */}
                       {config.hatId === 'detective' && (
                         <g>
-                          <ellipse cx={frogX + 8} cy={frogY} rx="12" ry="3" fill="#78350F" />
+                          <rect x={frogX - 2} y={frogY - 1} width="20" height="4" fill="#78350F" />
                           <rect x={frogX + 2} y={frogY - 4} width="12" height="4" fill="#92400E" />
                           <rect x={frogX - 3} y={frogY + 1} width="22" height="1.5" fill="#451A03" />
                         </g>
@@ -3736,7 +3822,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                       {config.hatId === 'samurai' && (
                         <g>
                           <rect x={frogX} y={frogY - 2} width="16" height="4" fill="#18181B" />
-                          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 2},${frogY - 1} ${frogX + 14},${frogY - 1}`} fill="#CA8A04" />
+                          <rect x={frogX + 6} y={frogY - 7} width="4" height="6" fill="#CA8A04" />
+                          <rect x={frogX + 2} y={frogY - 4} width="12" height="3" fill="#CA8A04" />
                           <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#DC2626" />
                         </g>
                       )}
@@ -3751,11 +3838,16 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
       {/* Raindrops Falling */}
       {effectiveWeather === 'rainy' && (
-        <g id="rain-layer" stroke="#93C5FD" strokeWidth="1" opacity="0.75">
+        <g id="rain-layer" opacity="0.75">
           {Array.from({ length: fullscreen ? 50 : 24 }).map((_, i) => {
             const rx = (i * 19 + (animTick * 7)) % 160;
             const ry = (i * 13 + (animTick * 11)) % viewBoxHeight;
-            return <line key={i} x1={rx} y1={ry} x2={rx - 2} y2={ry + 5} />;
+            return (
+              <g key={i}>
+                <rect x={rx} y={ry} width="1" height="4" fill="#93C5FD" />
+                <rect x={rx - 1} y={ry + 3} width="1" height="2" fill="#93C5FD" opacity="0.6" />
+              </g>
+            );
           })}
         </g>
       )}

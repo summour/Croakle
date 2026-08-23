@@ -141,7 +141,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
     handleSelectSetIndex(activeSetIndex + 1);
   };
 
-  // Touch Swipe Handlers for mobile & stage sliding
+  // Touch Swipe Handlers for mobile & stage sliding (intentional banner swipe only)
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartXRef.current = e.touches[0].clientX;
     touchStartYRef.current = e.touches[0].clientY;
@@ -152,8 +152,8 @@ export const GachaView: React.FC<GachaViewProps> = ({
     const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
     const deltaY = e.changedTouches[0].clientY - touchStartYRef.current;
 
-    // Trigger swipe if horizontal movement is dominant and > 40px
-    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+    // Trigger swipe only when horizontal gesture is deliberate and > 90px (not accidental during item scrolling)
+    if (Math.abs(deltaX) > 90 && Math.abs(deltaX) > Math.abs(deltaY) * 1.8) {
       if (deltaX < 0) {
         handleNextSet(); // Swipe Left -> Next
       } else {
@@ -429,6 +429,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
       <div
         className="relative z-20 w-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-xl border-t border-black/10 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2.5 pointer-events-auto"
         onTouchStart={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
       >
         {/* Drag Handle */}
@@ -474,6 +475,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
         <div
           className="overflow-x-auto no-scrollbar py-1 overscroll-x-contain touch-pan-x"
           onTouchStart={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
           onTouchEnd={(e) => e.stopPropagation()}
         >
           <div className="flex items-center gap-2">

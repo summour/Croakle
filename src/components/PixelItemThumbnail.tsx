@@ -16,7 +16,7 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
 }) => {
   const pixelStyle = { shapeRendering: 'crispEdges' as const };
 
-  // Normalize key by stripping item prefixes (hat_, outfit_, glasses_, skin_, prop_, activity_, companion_, comp_, scene_, weather_)
+  // Normalize key by stripping item prefixes
   const key = id.replace(/^(hat_|outfit_|glasses_|skin_|prop_|activity_|companion_|comp_|scene_|weather_)/, '');
 
   // -------------------------------------------------------------
@@ -51,38 +51,57 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         {...pixelStyle}
         className={`inline-block ${className}`}
       >
-        {/* Frog Eyes */}
-        <rect x="4" y="5" width="4" height="4" fill={pal.dark} />
-        <rect x="16" y="5" width="4" height="4" fill={pal.dark} />
-        <rect x="5" y="6" width="2" height="2" fill="#18181B" />
-        <rect x="17" y="6" width="2" height="2" fill="#18181B" />
-        <rect x="5" y="6" width="1" height="1" fill={pal.eyeHighlight} />
-        <rect x="17" y="6" width="1" height="1" fill={pal.eyeHighlight} />
+        {/* Frog Eyes Outlines */}
+        <rect x="4" y="4" width="5" height="5" fill={pal.outline} />
+        <rect x="15" y="4" width="5" height="5" fill={pal.outline} />
+        <rect x="5" y="5" width="3" height="3" fill={pal.main} />
+        <rect x="16" y="5" width="3" height="3" fill={pal.main} />
+        <rect x="5" y="5" width="1" height="1" fill={pal.eyeHighlight} />
+        <rect x="16" y="5" width="1" height="1" fill={pal.eyeHighlight} />
 
         {/* Head Main */}
-        <rect x="3" y="9" width="18" height="10" fill={pal.main} />
-        <rect x="2" y="10" width="1" height="8" fill={pal.outline} />
-        <rect x="21" y="10" width="1" height="8" fill={pal.outline} />
-        <rect x="4" y="19" width="16" height="1" fill={pal.outline} />
-        <rect x="8" y="8" width="8" height="1" fill={pal.outline} />
+        <rect x="3" y="8" width="18" height="12" fill={pal.main} />
+        <rect x="2" y="9" width="1" height="10" fill={pal.outline} />
+        <rect x="21" y="9" width="1" height="10" fill={pal.outline} />
+        <rect x="4" y="20" width="16" height="1" fill={pal.outline} />
+        <rect x="8" y="7" width="8" height="1" fill={pal.outline} />
 
         {/* Belly */}
-        <rect x="7" y="14" width="10" height="5" fill={pal.belly} />
+        <rect x="7" y="13" width="10" height="7" fill={pal.belly} />
 
         {/* Cheeks */}
-        <rect x="4" y="12" width="2" height="2" fill={pal.cheeks} />
-        <rect x="18" y="12" width="2" height="2" fill={pal.cheeks} />
+        <rect x="4" y="11" width="3" height="2" fill={pal.cheeks} />
+        <rect x="17" y="11" width="3" height="2" fill={pal.cheeks} />
 
         {/* Cute Smile */}
-        <rect x="10" y="13" width="4" height="1" fill={pal.outline} />
-        <rect x="9" y="12" width="1" height="1" fill={pal.outline} />
-        <rect x="14" y="12" width="1" height="1" fill={pal.outline} />
+        <rect x="10" y="12" width="4" height="1" fill={pal.outline} />
+        <rect x="9" y="11" width="1" height="1" fill={pal.outline} />
+        <rect x="14" y="11" width="1" height="1" fill={pal.outline} />
       </svg>
     );
   }
 
   // -------------------------------------------------------------
-  // 2. ITEM SWITCH (Hats, Outfits, Glasses, Props, Companions, Scenes, Weather)
+  // 2. FACE ACCESSORIES & GLASSES HELPER SILHOUETTE
+  // Render accessory on a soft miniature frog face silhouette
+  // -------------------------------------------------------------
+  const renderAccessoryWithFrogFace = (children: React.ReactNode) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+      {/* Frog Silhouette Background */}
+      <rect x="5" y="4" width="4" height="4" fill="#5F7A61" opacity="0.35" />
+      <rect x="15" y="4" width="4" height="4" fill="#5F7A61" opacity="0.35" />
+      <rect x="6" y="5" width="2" height="2" fill="#2D3A20" opacity="0.4" />
+      <rect x="16" y="5" width="2" height="2" fill="#2D3A20" opacity="0.4" />
+      <rect x="4" y="7" width="16" height="13" fill="#75A65A" opacity="0.3" />
+      <rect x="7" y="13" width="10" height="7" fill="#FEF9C3" opacity="0.35" />
+      <rect x="10" y="12" width="4" height="1" fill="#2D3A20" opacity="0.4" />
+      {/* Accessory Content */}
+      {children}
+    </svg>
+  );
+
+  // -------------------------------------------------------------
+  // 3. ITEM SWITCH (100% PURE CRISP PIXEL ART RECTANGLES)
   // -------------------------------------------------------------
   switch (key) {
     // -----------------------------------------------------------
@@ -91,790 +110,764 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'none':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="9" y="4" width="2" height="2" fill="#A3E635" />
-          <rect x="13" y="4" width="2" height="2" fill="#A3E635" />
-          <rect x="7" y="8" width="10" height="8" fill="#75A65A" />
-          <rect x="6" y="9" width="1" height="6" fill="#2D3A20" />
-          <rect x="17" y="9" width="1" height="6" fill="#2D3A20" />
-          <rect x="8" y="10" width="2" height="2" fill="#2D3A20" />
-          <rect x="14" y="10" width="2" height="2" fill="#2D3A20" />
-          <rect x="10" y="13" width="4" height="1" fill="#2D3A20" />
-        </svg>
-      );
-
-    case 'lotus':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="4" width="2" height="3" fill="#15803D" />
-          <rect x="9" y="7" width="2" height="2" fill="#38BDF8" />
-          <rect x="6" y="8" width="12" height="3" fill="#22C55E" />
-          <rect x="3" y="11" width="18" height="4" fill="#16A34A" />
-          <rect x="2" y="15" width="20" height="2" fill="#15803D" />
-          <rect x="5" y="17" width="3" height="1" fill="#14532D" />
-          <rect x="16" y="17" width="3" height="1" fill="#14532D" />
-        </svg>
-      );
-
-    case 'straw':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="10" y="5" width="4" height="2" fill="#A16207" />
-          <rect x="8" y="7" width="8" height="3" fill="#D97706" />
-          <rect x="6" y="10" width="12" height="3" fill="#F59E0B" />
-          <rect x="3" y="13" width="18" height="3" fill="#FBBF24" />
-          <rect x="2" y="16" width="20" height="2" fill="#D97706" />
-          <rect x="9" y="18" width="2" height="3" fill="#DC2626" />
-          <rect x="13" y="18" width="2" height="3" fill="#DC2626" />
-        </svg>
-      );
-
-    case 'sakura':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="11" width="16" height="2" fill="#15803D" />
-          <rect x="4" y="7" width="4" height="4" fill="#F472B6" />
-          <rect x="5" y="8" width="2" height="2" fill="#FEF08A" />
-          <rect x="10" y="5" width="4" height="4" fill="#FB7185" />
-          <rect x="11" y="6" width="2" height="2" fill="#FEF08A" />
-          <rect x="16" y="7" width="4" height="4" fill="#F472B6" />
-          <rect x="17" y="8" width="2" height="2" fill="#FEF08A" />
-          <rect x="2" y="13" width="2" height="2" fill="#FDA4AF" />
-          <rect x="20" y="14" width="2" height="2" fill="#FDA4AF" />
-        </svg>
-      );
-
-    case 'wizard':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="2" width="2" height="2" fill="#FACC15" />
-          <rect x="10" y="4" width="4" height="3" fill="#312E81" />
-          <rect x="8" y="7" width="8" height="4" fill="#3730A3" />
-          <rect x="6" y="11" width="12" height="3" fill="#4338CA" />
-          <rect x="11" y="9" width="2" height="2" fill="#FDE047" />
-          <rect x="3" y="14" width="18" height="3" fill="#312E81" />
-          <rect x="2" y="17" width="20" height="2" fill="#1E1B4B" />
-        </svg>
-      );
-
-    case 'bandana':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="8" width="16" height="6" fill="#DC2626" />
-          <rect x="6" y="10" width="2" height="2" fill="#FFFFFF" />
-          <rect x="11" y="9" width="2" height="2" fill="#FFFFFF" />
-          <rect x="16" y="10" width="2" height="2" fill="#FFFFFF" />
-          <rect x="18" y="13" width="3" height="5" fill="#B91C1C" />
-          <rect x="19" y="14" width="2" height="4" fill="#DC2626" />
-        </svg>
-      );
-
-    case 'beanie':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="12" cy="5" r="2.5" fill="#EA580C" />
-          <rect x="7" y="7" width="10" height="4" fill="#F97316" />
-          <rect x="5" y="10" width="14" height="4" fill="#FB923C" />
-          <rect x="4" y="14" width="16" height="4" fill="#EA580C" />
-          <rect x="4" y="17" width="16" height="1" fill="#C2410C" />
-        </svg>
-      );
-
-    case 'chef':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="4" width="10" height="3" fill="#FFFFFF" />
-          <rect x="5" y="7" width="14" height="6" fill="#FFFFFF" />
-          <rect x="4" y="8" width="2" height="4" fill="#E2E8F0" />
-          <rect x="18" y="8" width="2" height="4" fill="#E2E8F0" />
-          <rect x="5" y="13" width="14" height="4" fill="#CBD5E1" />
-          <rect x="6" y="14" width="12" height="2" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'crown':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="8" width="3" height="3" fill="#FACC15" />
-          <rect x="10" y="5" width="4" height="4" fill="#FACC15" />
-          <rect x="17" y="8" width="3" height="3" fill="#FACC15" />
-          <rect x="5" y="9" width="1" height="1" fill="#3B82F6" />
-          <rect x="11" y="6" width="2" height="2" fill="#EF4444" />
-          <rect x="18" y="9" width="1" height="1" fill="#3B82F6" />
-          <rect x="4" y="11" width="16" height="4" fill="#FACC15" />
-          <rect x="3" y="15" width="18" height="3" fill="#EAB308" />
-        </svg>
-      );
-
-    case 'beret':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="6" width="2" height="2" fill="#374151" />
-          <rect x="7" y="8" width="10" height="3" fill="#4B5563" />
-          <rect x="4" y="11" width="16" height="4" fill="#374151" />
-          <rect x="3" y="13" width="18" height="2" fill="#1F2937" />
-          <rect x="6" y="15" width="12" height="2" fill="#111827" />
-        </svg>
-      );
-
-    case 'flower':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="10" y="5" width="4" height="4" fill="#FEF08A" />
-          <rect x="6" y="9" width="4" height="4" fill="#FEF08A" />
-          <rect x="14" y="9" width="4" height="4" fill="#FEF08A" />
-          <rect x="8" y="13" width="4" height="4" fill="#FEF08A" />
-          <rect x="12" y="13" width="4" height="4" fill="#FEF08A" />
-          <rect x="10" y="9" width="4" height="4" fill="#EA580C" />
-          <rect x="11" y="10" width="2" height="2" fill="#F97316" />
-        </svg>
-      );
-
-    case 'samurai':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="4" width="2" height="4" fill="#FACC15" />
-          <rect x="15" y="4" width="2" height="4" fill="#FACC15" />
-          <rect x="10" y="6" width="4" height="3" fill="#CA8A04" />
-          <rect x="11" y="7" width="2" height="2" fill="#DC2626" />
-          <rect x="5" y="9" width="14" height="5" fill="#18181B" />
-          <rect x="3" y="14" width="18" height="3" fill="#27272A" />
-          <rect x="6" y="17" width="12" height="2" fill="#DC2626" />
-        </svg>
-      );
-
-    case 'headphone':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="2" fill="#18181B" />
-          <rect x="5" y="7" width="2" height="4" fill="#18181B" />
-          <rect x="17" y="7" width="2" height="4" fill="#18181B" />
-          <rect x="4" y="11" width="4" height="7" fill="#0284C7" />
-          <rect x="5" y="12" width="2" height="5" fill="#38BDF8" />
-          <rect x="16" y="11" width="4" height="7" fill="#0284C7" />
-          <rect x="17" y="12" width="2" height="5" fill="#38BDF8" />
-        </svg>
-      );
-
-    case 'detective':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="6" width="2" height="2" fill="#451A03" />
-          <rect x="8" y="8" width="8" height="4" fill="#92400E" />
-          <rect x="5" y="12" width="14" height="3" fill="#B45309" />
-          <rect x="2" y="15" width="20" height="2" fill="#78350F" />
-        </svg>
-      );
-
-    case 'sushi_salmon':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="6" width="16" height="5" fill="#FB923C" />
-          <rect x="5" y="5" width="14" height="2" fill="#F97316" />
-          <rect x="7" y="7" width="2" height="3" fill="#FED7AA" />
-          <rect x="12" y="6" width="2" height="4" fill="#FED7AA" />
-          <rect x="17" y="7" width="2" height="3" fill="#FED7AA" />
-          <rect x="5" y="11" width="14" height="5" fill="#FFFFFF" />
-          <rect x="11" y="5" width="3" height="13" fill="#18181B" />
-        </svg>
-      );
-
-    case 'sushi_maguro':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="6" width="16" height="5" fill="#E11D48" />
-          <rect x="5" y="5" width="14" height="2" fill="#BE123C" />
-          <rect x="7" y="7" width="2" height="3" fill="#FDA4AF" />
-          <rect x="13" y="6" width="2" height="4" fill="#FDA4AF" />
-          <rect x="5" y="11" width="14" height="5" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'sushi_ebi':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="6" width="14" height="5" fill="#F43F5E" />
-          <rect x="6" y="7" width="2" height="3" fill="#FFFFFF" />
-          <rect x="10" y="6" width="2" height="4" fill="#FFFFFF" />
-          <rect x="14" y="7" width="2" height="3" fill="#FFFFFF" />
-          <polygon points="18,5 22,3 20,8" fill="#E11D48" />
-          <polygon points="18,9 22,11 19,7" fill="#E11D48" />
-          <rect x="5" y="11" width="13" height="5" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'sushi_chef_headband':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="3" y="9" width="18" height="5" fill="#FFFFFF" />
-          <circle cx="12" cy="11.5" r="2" fill="#DC2626" />
-          <rect x="18" y="14" width="3" height="6" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'red_riding_hood':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="6" y="3" width="12" height="4" fill="#991B1B" />
-          <rect x="4" y="6" width="16" height="8" fill="#DC2626" />
-          <rect x="3" y="10" width="18" height="6" fill="#EF4444" />
-          <rect x="7" y="9" width="10" height="5" fill="#991B1B" />
-          <rect x="3" y="15" width="18" height="1" fill="#FEF08A" />
-          <rect x="10" y="16" width="4" height="3" fill="#B91C1C" />
-        </svg>
-      );
-
-    case 'wolf_ears_hood':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <polygon points="5,2 9,7 5,7" fill="#4B5563" />
-          <polygon points="6,3 8,6 6,6" fill="#FCA5A5" />
-          <polygon points="19,2 15,7 19,7" fill="#4B5563" />
-          <polygon points="18,3 16,6 18,6" fill="#FCA5A5" />
-          <rect x="5" y="6" width="14" height="8" fill="#374151" />
-          <rect x="4" y="9" width="16" height="6" fill="#4B5563" />
-        </svg>
-      );
-
-    case 'granny_nightcap':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="19" cy="6" r="2.5" fill="#F8FAFC" />
-          <polygon points="8,5 18,5 15,10 6,10" fill="#E2E8F0" />
-          <rect x="5" y="9" width="14" height="6" fill="#F1F5F9" />
-          <rect x="3" y="15" width="18" height="3" fill="#E2E8F0" />
+          <rect x="6" y="6" width="12" height="12" fill="#F1F5F9" />
+          <rect x="7" y="7" width="10" height="10" fill="#FFFFFF" />
+          <rect x="9" y="9" width="6" height="6" fill="#CBD5E1" />
+          <rect x="11" y="11" width="2" height="2" fill="#94A3B8" />
         </svg>
       );
 
     case 'konbini_staff_visor':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Green & Orange Convenience Store Sun Visor */}
-          <rect x="4" y="8" width="16" height="4" fill="#16A34A" />
-          <rect x="4" y="12" width="16" height="2" fill="#EA580C" />
-          <rect x="2" y="14" width="20" height="3" fill="#22C55E" />
-          <circle cx="12" cy="10" r="1.5" fill="#FEF08A" />
+          {/* Emerald Green Visor Crown & Brim */}
+          <rect x="3" y="10" width="18" height="3" fill="#047857" />
+          <rect x="4" y="11" width="16" height="2" fill="#10B981" />
+          <rect x="1" y="13" width="22" height="2" fill="#047857" />
+          <rect x="2" y="13" width="20" height="1" fill="#34D399" />
+          <rect x="1" y="15" width="22" height="1" fill="#064E3B" />
+          {/* White & Orange Logo Emblem */}
+          <rect x="10" y="9" width="4" height="3" fill="#FFFFFF" />
+          <rect x="11" y="10" width="2" height="1" fill="#EA580C" />
         </svg>
       );
 
     case 'shopper_bucket_hat':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Pastel Lilac Bucket Hat with Smiley Badge */}
-          <rect x="7" y="6" width="10" height="5" fill="#C084FC" />
-          <rect x="5" y="11" width="14" height="3" fill="#A855F7" />
-          <rect x="3" y="14" width="18" height="3" fill="#C084FC" />
-          <circle cx="12" cy="9" r="1.5" fill="#FEF08A" />
+          {/* Midnight Purple Bucket Hat Top */}
+          <rect x="6" y="5" width="12" height="2" fill="#4C1D95" />
+          <rect x="5" y="7" width="14" height="6" fill="#6D28D9" />
+          <rect x="6" y="7" width="12" height="5" fill="#7C3AED" />
+          {/* Lavender Band */}
+          <rect x="5" y="11" width="14" height="2" fill="#A78BFA" />
+          <rect x="11" y="11" width="2" height="2" fill="#FACC15" />
+          {/* Downward Slanted Brim */}
+          <rect x="2" y="13" width="20" height="3" fill="#5B21B6" />
+          <rect x="3" y="14" width="18" height="1" fill="#7C3AED" />
+          <rect x="2" y="16" width="20" height="1" fill="#3B0764" />
         </svg>
       );
 
     case 'onigiri_headband':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Cute Little Mini Onigiri on Headband */}
-          <rect x="4" y="12" width="16" height="2" fill="#18181B" />
-          <polygon points="12,3 7,11 17,11" fill="#FFFFFF" />
-          <rect x="10" y="8" width="4" height="3" fill="#18181B" />
-          <circle cx="10" cy="6" r="0.5" fill="#FB7185" />
-          <circle cx="14" cy="6" r="0.5" fill="#FB7185" />
+          {/* Headband Base */}
+          <rect x="3" y="15" width="18" height="2" fill="#78350F" />
+          <rect x="4" y="15" width="16" height="1" fill="#D97706" />
+          {/* Rice Triangle (Stepped Pixel Rectangles) */}
+          <rect x="11" y="4" width="2" height="2" fill="#1E293B" />
+          <rect x="9" y="6" width="6" height="2" fill="#1E293B" />
+          <rect x="7" y="8" width="10" height="2" fill="#1E293B" />
+          <rect x="6" y="10" width="12" height="5" fill="#1E293B" />
+          {/* Rice Fill */}
+          <rect x="11" y="5" width="2" height="1" fill="#FFFFFF" />
+          <rect x="10" y="6" width="4" height="2" fill="#FFFFFF" />
+          <rect x="8" y="8" width="8" height="2" fill="#FFFFFF" />
+          <rect x="7" y="10" width="10" height="4" fill="#FFFFFF" />
+          {/* Seaweed Nori Wrap */}
+          <rect x="9" y="11" width="6" height="3" fill="#0F172A" />
+          {/* Pickled Plum Umeboshi Center */}
+          <rect x="11" y="8" width="2" height="2" fill="#DC2626" />
+        </svg>
+      );
+
+    case 'red_riding_hood':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Crimson Hood Dome */}
+          <rect x="6" y="3" width="12" height="2" fill="#991B1B" />
+          <rect x="4" y="5" width="16" height="9" fill="#B91C1C" />
+          <rect x="5" y="5" width="14" height="8" fill="#DC2626" />
+          <rect x="6" y="6" width="4" height="3" fill="#EF4444" />
+          {/* White Frill Trim */}
+          <rect x="3" y="13" width="18" height="2" fill="#FFFFFF" />
+          <rect x="4" y="13" width="2" height="1" fill="#FCA5A5" />
+          <rect x="8" y="13" width="2" height="1" fill="#FCA5A5" />
+          <rect x="14" y="13" width="2" height="1" fill="#FCA5A5" />
+          <rect x="18" y="13" width="2" height="1" fill="#FCA5A5" />
+          {/* Front Tied Knot Ribbon */}
+          <rect x="10" y="15" width="4" height="2" fill="#991B1B" />
+          <rect x="8" y="17" width="3" height="4" fill="#DC2626" />
+          <rect x="13" y="17" width="3" height="4" fill="#DC2626" />
+        </svg>
+      );
+
+    case 'wolf_ears_hood':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Left Wolf Ear */}
+          <rect x="4" y="2" width="4" height="2" fill="#1E293B" />
+          <rect x="3" y="4" width="6" height="4" fill="#334155" />
+          <rect x="4" y="4" width="3" height="3" fill="#F472B6" />
+          {/* Right Wolf Ear */}
+          <rect x="16" y="2" width="4" height="2" fill="#1E293B" />
+          <rect x="15" y="4" width="6" height="4" fill="#334155" />
+          <rect x="17" y="4" width="3" height="3" fill="#F472B6" />
+          {/* Furry Hood Base */}
+          <rect x="4" y="8" width="16" height="6" fill="#1E293B" />
+          <rect x="5" y="9" width="14" height="4" fill="#475569" />
+          <rect x="2" y="13" width="20" height="3" fill="#64748B" />
+          <rect x="3" y="15" width="18" height="2" fill="#1E293B" />
+        </svg>
+      );
+
+    case 'granny_nightcap':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Puffy White Sleeping Cap */}
+          <rect x="6" y="4" width="12" height="3" fill="#E2E8F0" />
+          <rect x="4" y="7" width="16" height="7" fill="#F8FAFC" />
+          <rect x="6" y="6" width="12" height="6" fill="#FFFFFF" />
+          {/* Ruffled Lace Edge */}
+          <rect x="2" y="13" width="20" height="3" fill="#E2E8F0" />
+          <rect x="3" y="13" width="3" height="2" fill="#FFFFFF" />
+          <rect x="7" y="13" width="3" height="2" fill="#FFFFFF" />
+          <rect x="11" y="13" width="3" height="2" fill="#FFFFFF" />
+          <rect x="15" y="13" width="3" height="2" fill="#FFFFFF" />
+          <rect x="19" y="13" width="2" height="2" fill="#FFFFFF" />
+          {/* Pink Ribbon Bow */}
+          <rect x="10" y="15" width="4" height="2" fill="#F472B6" />
+          <rect x="9" y="17" width="2" height="3" fill="#EC4899" />
+          <rect x="13" y="17" width="2" height="3" fill="#EC4899" />
+        </svg>
+      );
+
+    case 'sushi_salmon':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Rice Base */}
+          <rect x="3" y="12" width="18" height="6" fill="#1E293B" />
+          <rect x="4" y="13" width="16" height="4" fill="#FFFFFF" />
+          {/* Salmon Sashimi Slab */}
+          <rect x="2" y="6" width="20" height="7" fill="#9A3412" />
+          <rect x="3" y="7" width="18" height="5" fill="#FB923C" />
+          <rect x="3" y="7" width="18" height="1" fill="#FED7AA" />
+          {/* White Marbling Stripes */}
+          <rect x="6" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
+          <rect x="10" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
+          <rect x="14" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
+          <rect x="18" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
+          {/* Dark Nori Band */}
+          <rect x="10" y="6" width="4" height="12" fill="#0F172A" />
+        </svg>
+      );
+
+    case 'sushi_maguro':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Rice Base */}
+          <rect x="3" y="12" width="18" height="6" fill="#1E293B" />
+          <rect x="4" y="13" width="16" height="4" fill="#FFFFFF" />
+          {/* Ruby Tuna Slab */}
+          <rect x="2" y="6" width="20" height="7" fill="#881337" />
+          <rect x="3" y="7" width="18" height="5" fill="#BE123C" />
+          <rect x="4" y="7" width="16" height="2" fill="#E11D48" />
+          <rect x="5" y="8" width="6" height="1" fill="#FDA4AF" />
+          {/* Nori Band */}
+          <rect x="10" y="6" width="4" height="12" fill="#0F172A" />
+        </svg>
+      );
+
+    case 'sushi_ebi':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Rice Base */}
+          <rect x="3" y="12" width="18" height="6" fill="#1E293B" />
+          <rect x="4" y="13" width="16" height="4" fill="#FFFFFF" />
+          {/* Butterfly Cut Prawn */}
+          <rect x="3" y="7" width="15" height="6" fill="#C2410C" />
+          <rect x="4" y="8" width="13" height="4" fill="#EA580C" />
+          <rect x="4" y="8" width="13" height="1" fill="#FED7AA" />
+          <rect x="7" y="8" width="2" height="4" fill="#FFFFFF" />
+          <rect x="12" y="8" width="2" height="4" fill="#FFFFFF" />
+          {/* Split Tail Fins */}
+          <rect x="17" y="5" width="4" height="3" fill="#DC2626" />
+          <rect x="17" y="9" width="4" height="3" fill="#DC2626" />
+          {/* Nori Wrap */}
+          <rect x="9" y="7" width="3" height="11" fill="#0F172A" />
+        </svg>
+      );
+
+    case 'sushi_chef_headband':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Red Twisted Headband */}
+          <rect x="2" y="10" width="20" height="4" fill="#991B1B" />
+          <rect x="3" y="11" width="18" height="2" fill="#DC2626" />
+          {/* White Kanji Emblem in Center */}
+          <rect x="10" y="9" width="4" height="4" fill="#FFFFFF" />
+          <rect x="11" y="10" width="2" height="2" fill="#DC2626" />
+          {/* Side Ties */}
+          <rect x="20" y="12" width="3" height="5" fill="#DC2626" />
+          <rect x="18" y="14" width="2" height="4" fill="#991B1B" />
+        </svg>
+      );
+
+    case 'lotus':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="11" y="4" width="2" height="4" fill="#14532D" />
+          <rect x="4" y="8" width="16" height="3" fill="#166534" />
+          <rect x="2" y="11" width="20" height="4" fill="#22C55E" />
+          <rect x="3" y="11" width="18" height="2" fill="#4ADE80" />
+          <rect x="1" y="14" width="22" height="2" fill="#14532D" />
+          {/* Dewdrop */}
+          <rect x="7" y="12" width="2" height="2" fill="#E0F2FE" />
+          <rect x="7" y="12" width="1" height="1" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'straw':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="8" y="5" width="8" height="4" fill="#78350F" />
+          <rect x="9" y="6" width="6" height="3" fill="#FACC15" />
+          {/* Red Ribbon */}
+          <rect x="7" y="9" width="10" height="2" fill="#DC2626" />
+          {/* Wide Brim */}
+          <rect x="2" y="11" width="20" height="4" fill="#B45309" />
+          <rect x="3" y="12" width="18" height="2" fill="#FDE047" />
+        </svg>
+      );
+
+    case 'sakura':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* 5 Petals Pixel Flower */}
+          <rect x="10" y="4" width="4" height="4" fill="#F472B6" />
+          <rect x="4" y="9" width="4" height="4" fill="#F472B6" />
+          <rect x="16" y="9" width="4" height="4" fill="#F472B6" />
+          <rect x="6" y="15" width="4" height="4" fill="#F472B6" />
+          <rect x="14" y="15" width="4" height="4" fill="#F472B6" />
+          {/* Center */}
+          <rect x="9" y="9" width="6" height="6" fill="#FDE047" />
+          <rect x="11" y="11" width="2" height="2" fill="#EAB308" />
+        </svg>
+      );
+
+    case 'wizard':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Pointed Cone */}
+          <rect x="11" y="2" width="2" height="2" fill="#312E81" />
+          <rect x="10" y="4" width="4" height="3" fill="#4338CA" />
+          <rect x="8" y="7" width="8" height="4" fill="#4F46E5" />
+          {/* Golden Star & Buckle */}
+          <rect x="11" y="7" width="2" height="2" fill="#FACC15" />
+          <rect x="6" y="11" width="12" height="2" fill="#FBBF24" />
+          {/* Brim */}
+          <rect x="2" y="13" width="20" height="3" fill="#312E81" />
+          <rect x="3" y="14" width="18" height="1" fill="#6366F1" />
+        </svg>
+      );
+
+    case 'bandana':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="8" width="16" height="5" fill="#991B1B" />
+          <rect x="5" y="9" width="14" height="3" fill="#EF4444" />
+          <rect x="7" y="10" width="2" height="1" fill="#FFFFFF" />
+          <rect x="11" y="10" width="2" height="1" fill="#FFFFFF" />
+          <rect x="15" y="10" width="2" height="1" fill="#FFFFFF" />
+          <rect x="18" y="13" width="4" height="4" fill="#DC2626" />
+        </svg>
+      );
+
+    case 'beanie':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Pompom */}
+          <rect x="10" y="3" width="4" height="3" fill="#FACC15" />
+          {/* Body */}
+          <rect x="6" y="6" width="12" height="6" fill="#0369A1" />
+          <rect x="7" y="7" width="10" height="4" fill="#0284C7" />
+          {/* Folded Brim */}
+          <rect x="4" y="12" width="16" height="4" fill="#0C4A6E" />
+          <rect x="5" y="13" width="14" height="2" fill="#38BDF8" />
+        </svg>
+      );
+
+    case 'chef':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="8" y="3" width="8" height="3" fill="#E2E8F0" />
+          <rect x="5" y="6" width="14" height="7" fill="#FFFFFF" />
+          <rect x="4" y="8" width="16" height="4" fill="#FFFFFF" />
+          <rect x="6" y="13" width="12" height="3" fill="#CBD5E1" />
+          <rect x="7" y="14" width="10" height="2" fill="#94A3B8" />
+        </svg>
+      );
+
+    case 'crown':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="3" y="12" width="18" height="4" fill="#B45309" />
+          <rect x="4" y="13" width="16" height="2" fill="#FACC15" />
+          {/* Spikes */}
+          <rect x="4" y="6" width="3" height="6" fill="#FDE047" />
+          <rect x="10" y="4" width="4" height="8" fill="#FDE047" />
+          <rect x="17" y="6" width="3" height="6" fill="#FDE047" />
+          {/* Jewels */}
+          <rect x="5" y="7" width="1" height="2" fill="#EF4444" />
+          <rect x="11" y="5" width="2" height="2" fill="#3B82F6" />
+          <rect x="18" y="7" width="1" height="2" fill="#EF4444" />
+        </svg>
+      );
+
+    case 'beret':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="11" y="5" width="2" height="2" fill="#450A0A" />
+          <rect x="4" y="7" width="16" height="5" fill="#881337" />
+          <rect x="2" y="10" width="20" height="4" fill="#BE123C" />
+          <rect x="5" y="14" width="14" height="2" fill="#450A0A" />
+        </svg>
+      );
+
+    case 'flower':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="10" y="4" width="4" height="4" fill="#FFFFFF" />
+          <rect x="4" y="9" width="4" height="4" fill="#FFFFFF" />
+          <rect x="16" y="9" width="4" height="4" fill="#FFFFFF" />
+          <rect x="7" y="15" width="4" height="4" fill="#FFFFFF" />
+          <rect x="13" y="15" width="4" height="4" fill="#FFFFFF" />
+          <rect x="9" y="8" width="6" height="6" fill="#F59E0B" />
+          <rect x="10" y="9" width="4" height="4" fill="#FACC15" />
+        </svg>
+      );
+
+    case 'headphone':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Headband */}
+          <rect x="5" y="4" width="14" height="3" fill="#DC2626" />
+          <rect x="4" y="6" width="3" height="7" fill="#18181B" />
+          <rect x="17" y="6" width="3" height="7" fill="#18181B" />
+          {/* Earcups */}
+          <rect x="2" y="11" width="5" height="7" fill="#3B82F6" />
+          <rect x="17" y="11" width="5" height="7" fill="#3B82F6" />
+          <rect x="3" y="13" width="3" height="3" fill="#FFFFFF" />
+          <rect x="18" y="13" width="3" height="3" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'detective':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="11" y="4" width="2" height="3" fill="#451A03" />
+          <rect x="6" y="7" width="12" height="6" fill="#78350F" />
+          <rect x="7" y="8" width="10" height="4" fill="#92400E" />
+          <rect x="2" y="13" width="20" height="3" fill="#451A03" />
+          <rect x="3" y="14" width="18" height="1" fill="#B45309" />
+        </svg>
+      );
+
+    case 'samurai':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Gold Crest */}
+          <rect x="11" y="2" width="2" height="4" fill="#FACC15" />
+          <rect x="8" y="4" width="8" height="2" fill="#FACC15" />
+          {/* Kabuto Helmet */}
+          <rect x="5" y="6" width="14" height="6" fill="#18181B" />
+          <rect x="6" y="7" width="12" height="4" fill="#27272A" />
+          <rect x="2" y="12" width="20" height="3" fill="#991B1B" />
+          <rect x="3" y="15" width="4" height="3" fill="#FACC15" />
+          <rect x="17" y="15" width="4" height="3" fill="#FACC15" />
         </svg>
       );
 
     // -----------------------------------------------------------
     // B. OUTFITS
     // -----------------------------------------------------------
-    case 'kimono':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#1E3A8A" />
-          <rect x="4" y="8" width="16" height="12" fill="#1E40AF" />
-          <rect x="6" y="12" width="12" height="3" fill="#FACC15" />
-          <rect x="9" y="11" width="6" height="5" fill="#CA8A04" />
-        </svg>
-      );
-
-    case 'raincoat':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#EAB308" />
-          <rect x="4" y="8" width="16" height="12" fill="#FACC15" />
-          <rect x="11" y="10" width="2" height="2" fill="#18181B" />
-          <rect x="11" y="14" width="2" height="2" fill="#18181B" />
-        </svg>
-      );
-
-    case 'sweater':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#EA580C" />
-          <rect x="4" y="8" width="16" height="12" fill="#F97316" />
-          <line x1="8" y1="8" x2="8" y2="19" stroke="#C2410C" strokeWidth="1" />
-          <line x1="12" y1="8" x2="12" y2="19" stroke="#C2410C" strokeWidth="1" />
-          <line x1="16" y1="8" x2="16" y2="19" stroke="#C2410C" strokeWidth="1" />
-        </svg>
-      );
-
-    case 'ninja':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#09090B" />
-          <rect x="4" y="8" width="16" height="12" fill="#18181B" />
-          <rect x="5" y="13" width="14" height="2" fill="#DC2626" />
-          <rect x="10" y="14" width="4" height="4" fill="#B91C1C" />
-        </svg>
-      );
-
-    case 'sailor':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#0284C7" />
-          <rect x="4" y="8" width="16" height="12" fill="#F8FAFC" />
-          <polygon points="12,13 7,8 17,8" fill="#0284C7" />
-          <circle cx="12" cy="14" r="1.5" fill="#EF4444" />
-        </svg>
-      );
-
-    case 'apron':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#15803D" />
-          <rect x="5" y="8" width="14" height="12" fill="#16A34A" />
-          <rect x="8" y="13" width="8" height="5" fill="#15803D" />
-        </svg>
-      );
-
-    case 'overalls':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="7" width="2" height="7" fill="#1D4ED8" />
-          <rect x="15" y="7" width="2" height="7" fill="#1D4ED8" />
-          <rect x="5" y="12" width="14" height="8" fill="#2563EB" />
-          <rect x="7" y="13" width="1" height="1" fill="#FACC15" />
-          <rect x="16" y="13" width="1" height="1" fill="#FACC15" />
-        </svg>
-      );
-
-    case 'scarf':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="5" y="8" width="14" height="6" fill="#DC2626" />
-          <rect x="6" y="9" width="12" height="4" fill="#EF4444" />
-          <rect x="13" y="14" width="4" height="7" fill="#DC2626" />
-          <rect x="13" y="21" width="4" height="1" fill="#FDE047" />
-        </svg>
-      );
-
-    case 'business':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#18181B" />
-          <rect x="4" y="8" width="16" height="12" fill="#27272A" />
-          <polygon points="12,14 8,8 16,8" fill="#FFFFFF" />
-          <rect x="11" y="9" width="2" height="6" fill="#DC2626" />
-          <rect x="10" y="15" width="4" height="2" fill="#DC2626" />
-        </svg>
-      );
-
-    case 'hoodie':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="4" fill="#65A30D" />
-          <rect x="4" y="9" width="16" height="11" fill="#84CC16" />
-          <rect x="7" y="14" width="10" height="5" fill="#4D7C0F" />
-        </svg>
-      );
-
-    case 'sushi_chef_happi':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#1E293B" />
-          <rect x="4" y="8" width="16" height="12" fill="#0F172A" />
-          <rect x="8" y="7" width="2" height="13" fill="#FFFFFF" />
-          <rect x="14" y="7" width="2" height="13" fill="#FFFFFF" />
-          <rect x="5" y="13" width="14" height="2" fill="#DC2626" />
-          <rect x="10" y="14" width="4" height="4" fill="#B91C1C" />
-        </svg>
-      );
-
-    case 'sushi_kimono_waiter':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#15803D" />
-          <rect x="4" y="8" width="16" height="12" fill="#16A34A" />
-          <rect x="6" y="12" width="12" height="3" fill="#FACC15" />
-          <rect x="9" y="11" width="6" height="5" fill="#FEF08A" />
-        </svg>
-      );
-
-    case 'red_riding_dress':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="6" y="6" width="12" height="4" fill="#991B1B" />
-          <rect x="4" y="10" width="16" height="10" fill="#DC2626" />
-          <rect x="8" y="10" width="8" height="10" fill="#FFFFFF" />
-          <rect x="9" y="11" width="6" height="2" fill="#B91C1C" />
-          <rect x="9" y="14" width="6" height="2" fill="#B91C1C" />
-          <rect x="7" y="19" width="10" height="1" fill="#FEF08A" />
-        </svg>
-      );
-
-    case 'wolf_fur_cloak':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="6" y="5" width="12" height="4" fill="#374151" />
-          <rect x="4" y="9" width="16" height="11" fill="#4B5563" />
-          <polygon points="4,9 2,15 6,15" fill="#6B7280" />
-          <polygon points="20,9 18,15 22,15" fill="#6B7280" />
-          <rect x="6" y="13" width="12" height="2" fill="#78350F" />
-          <rect x="11" y="12" width="2" height="4" fill="#FACC15" />
-        </svg>
-      );
-
-    case 'hunter_woodsman':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="7" y="5" width="10" height="3" fill="#14532D" />
-          <rect x="4" y="8" width="16" height="12" fill="#166534" />
-          <rect x="5" y="13" width="14" height="2" fill="#78350F" />
-          <rect x="11" y="12" width="2" height="4" fill="#FACC15" />
-          <rect x="8" y="9" width="4" height="3" fill="#DC2626" />
-        </svg>
-      );
-
     case 'konbini_staff_uniform':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Green & Orange Clerk Polo & Apron with Badge */}
-          <rect x="6" y="5" width="12" height="3" fill="#15803D" />
-          <rect x="4" y="8" width="16" height="12" fill="#16A34A" />
-          <rect x="8" y="8" width="8" height="12" fill="#EA580C" />
-          <rect x="10" y="8" width="4" height="12" fill="#FFFFFF" />
-          <rect x="6" y="11" width="3" height="2" fill="#FFFFFF" />
-          <rect x="7" y="11" width="1" height="2" fill="#3B82F6" />
+          {/* Green Store Shirt with Collar & Name Badge */}
+          <rect x="4" y="6" width="16" height="12" fill="#047857" />
+          <rect x="5" y="7" width="14" height="10" fill="#10B981" />
+          {/* White Center Stripe */}
+          <rect x="11" y="6" width="2" height="11" fill="#FFFFFF" />
+          {/* Orange Collar Tips */}
+          <rect x="8" y="6" width="3" height="3" fill="#EA580C" />
+          <rect x="13" y="6" width="3" height="3" fill="#EA580C" />
+          {/* Yellow Name Tag */}
+          <rect x="6" y="10" width="3" height="2" fill="#FACC15" />
+          {/* Dark Trousers */}
+          <rect x="5" y="17" width="14" height="4" fill="#1E293B" />
+          <rect x="11" y="18" width="2" height="3" fill="#0F172A" />
         </svg>
       );
 
     case 'shopper_cozy_sweatset':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Lilac Fleece Hoodie & Sweats */}
-          <rect x="6" y="5" width="12" height="4" fill="#A855F7" />
-          <rect x="4" y="9" width="16" height="11" fill="#C084FC" />
-          <rect x="7" y="13" width="10" height="5" fill="#E9D5FF" />
-          <rect x="18" y="12" width="4" height="5" fill="#DC2626" />
+          {/* Purple Relaxed Hoodie Body */}
+          <rect x="4" y="6" width="16" height="11" fill="#581C87" />
+          <rect x="5" y="7" width="14" height="9" fill="#7E22CE" />
+          {/* White Drawstrings */}
+          <rect x="9" y="7" width="1" height="4" fill="#FFFFFF" />
+          <rect x="14" y="7" width="1" height="4" fill="#FFFFFF" />
+          {/* Front Kangaroo Pouch */}
+          <rect x="7" y="11" width="10" height="4" fill="#6B21A8" />
+          <rect x="8" y="12" width="8" height="2" fill="#9333EA" />
+          {/* Sweatpants */}
+          <rect x="5" y="17" width="14" height="4" fill="#3B0764" />
+          <rect x="11" y="18" width="2" height="3" fill="#1E1B4B" />
+        </svg>
+      );
+
+    case 'red_riding_dress':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* White Frill Blouse */}
+          <rect x="6" y="5" width="12" height="5" fill="#FFFFFF" />
+          <rect x="8" y="6" width="8" height="2" fill="#FEE2E2" />
+          {/* Brown Leather Corset */}
+          <rect x="6" y="9" width="12" height="4" fill="#78350F" />
+          <rect x="10" y="9" width="4" height="4" fill="#B45309" />
+          <rect x="11" y="10" width="2" height="2" fill="#FDE047" />
+          {/* Ruby Red Flared Skirt */}
+          <rect x="4" y="13" width="16" height="6" fill="#991B1B" />
+          <rect x="5" y="13" width="14" height="5" fill="#DC2626" />
+          {/* White Lace Apron Over Skirt */}
+          <rect x="8" y="13" width="8" height="4" fill="#FFFFFF" />
+          <rect x="9" y="14" width="6" height="2" fill="#F8FAFC" />
+          <rect x="5" y="18" width="14" height="1" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'wolf_fur_cloak':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Heavy Fur Mantle Collar */}
+          <rect x="3" y="5" width="18" height="5" fill="#1E293B" />
+          <rect x="4" y="6" width="16" height="3" fill="#475569" />
+          {/* Fang Clasp */}
+          <rect x="10" y="7" width="4" height="2" fill="#E2E8F0" />
+          <rect x="11" y="8" width="2" height="2" fill="#FFFFFF" />
+          {/* Charcoal Fur Body */}
+          <rect x="4" y="10" width="16" height="9" fill="#0F172A" />
+          <rect x="5" y="10" width="14" height="8" fill="#334155" />
+          <rect x="7" y="11" width="10" height="5" fill="#475569" />
+          {/* Jagged Fur Hem */}
+          <rect x="5" y="18" width="3" height="2" fill="#1E293B" />
+          <rect x="10" y="18" width="4" height="2" fill="#1E293B" />
+          <rect x="16" y="18" width="3" height="2" fill="#1E293B" />
+        </svg>
+      );
+
+    case 'hunter_woodsman':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Red/Black Buffalo Plaid Shirt */}
+          <rect x="4" y="5" width="16" height="10" fill="#7F1D1D" />
+          <rect x="5" y="6" width="14" height="8" fill="#DC2626" />
+          <rect x="6" y="6" width="3" height="8" fill="#18181B" />
+          <rect x="11" y="6" width="2" height="8" fill="#18181B" />
+          <rect x="15" y="6" width="3" height="8" fill="#18181B" />
+          {/* Leather Belt & Brass Buckle */}
+          <rect x="4" y="14" width="16" height="3" fill="#451A03" />
+          <rect x="10" y="14" width="4" height="3" fill="#CA8A04" />
+          {/* Sturdy Boots/Pants */}
+          <rect x="5" y="17" width="14" height="4" fill="#1E293B" />
+          <rect x="11" y="17" width="2" height="4" fill="#0F172A" />
+        </svg>
+      );
+
+    case 'sushi_chef_happi':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* White Traditional Happi Coat */}
+          <rect x="4" y="5" width="16" height="12" fill="#CBD5E1" />
+          <rect x="5" y="6" width="14" height="10" fill="#FFFFFF" />
+          {/* Navy Blue Lapels */}
+          <rect x="6" y="5" width="3" height="11" fill="#1E3A8A" />
+          <rect x="15" y="5" width="3" height="11" fill="#1E3A8A" />
+          {/* Red Chef Sash */}
+          <rect x="4" y="13" width="16" height="2" fill="#DC2626" />
+          <rect x="10" y="14" width="4" height="3" fill="#991B1B" />
+          {/* Ocean Wave Motif at Hem */}
+          <rect x="4" y="15" width="16" height="2" fill="#1E3A8A" />
+          <rect x="6" y="15" width="2" height="1" fill="#60A5FA" />
+          <rect x="11" y="15" width="2" height="1" fill="#60A5FA" />
+          <rect x="16" y="15" width="2" height="1" fill="#60A5FA" />
+          {/* Navy Trousers */}
+          <rect x="5" y="17" width="14" height="4" fill="#0F172A" />
+        </svg>
+      );
+
+    case 'sushi_kimono_waiter':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Indigo Kimono Body */}
+          <rect x="4" y="5" width="16" height="14" fill="#1E3A8A" />
+          <rect x="5" y="6" width="14" height="12" fill="#2563EB" />
+          <rect x="8" y="5" width="8" height="5" fill="#E0F2FE" />
+          {/* Beige Waiter Half Apron */}
+          <rect x="5" y="12" width="14" height="7" fill="#D97706" />
+          <rect x="6" y="13" width="12" height="5" fill="#FEF3C7" />
+          <rect x="4" y="11" width="16" height="2" fill="#78350F" />
+        </svg>
+      );
+
+    case 'kimono':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="5" width="16" height="14" fill="#166534" />
+          <rect x="5" y="6" width="14" height="12" fill="#22C55E" />
+          <rect x="8" y="5" width="8" height="5" fill="#FEF9C3" />
+          {/* Golden Obi Sash */}
+          <rect x="4" y="11" width="16" height="4" fill="#CA8A04" />
+          <rect x="5" y="12" width="14" height="2" fill="#FDE047" />
+        </svg>
+      );
+
+    case 'raincoat':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="6" width="16" height="13" fill="#CA8A04" />
+          <rect x="5" y="7" width="14" height="11" fill="#FACC15" />
+          <rect x="11" y="8" width="2" height="2" fill="#1E293B" />
+          <rect x="11" y="12" width="2" height="2" fill="#1E293B" />
+          <rect x="11" y="15" width="2" height="2" fill="#1E293B" />
+        </svg>
+      );
+
+    case 'sweater':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="6" width="16" height="12" fill="#9A3412" />
+          <rect x="5" y="7" width="14" height="10" fill="#EA580C" />
+          <rect x="7" y="7" width="2" height="10" fill="#FED7AA" />
+          <rect x="15" y="7" width="2" height="10" fill="#FED7AA" />
+          <rect x="4" y="16" width="16" height="2" fill="#7C2D12" />
+        </svg>
+      );
+
+    case 'ninja':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="6" width="16" height="13" fill="#09090B" />
+          <rect x="5" y="7" width="14" height="11" fill="#18181B" />
+          <rect x="4" y="12" width="16" height="2" fill="#DC2626" />
+          <rect x="11" y="13" width="2" height="3" fill="#DC2626" />
+        </svg>
+      );
+
+    case 'sailor':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="6" width="16" height="12" fill="#E2E8F0" />
+          <rect x="5" y="7" width="14" height="10" fill="#FFFFFF" />
+          <rect x="4" y="6" width="16" height="4" fill="#1E3A8A" />
+          <rect x="11" y="8" width="2" height="4" fill="#DC2626" />
+          <rect x="4" y="15" width="16" height="4" fill="#1E3A8A" />
+        </svg>
+      );
+
+    case 'apron':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="7" y="5" width="10" height="13" fill="#15803D" />
+          <rect x="8" y="6" width="8" height="11" fill="#22C55E" />
+          <rect x="8" y="11" width="8" height="5" fill="#78350F" />
+          <rect x="9" y="12" width="6" height="3" fill="#D97706" />
+        </svg>
+      );
+
+    case 'overalls':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="5" y="6" width="14" height="6" fill="#FFFFFF" />
+          <rect x="6" y="8" width="2" height="8" fill="#1D4ED8" />
+          <rect x="16" y="8" width="2" height="8" fill="#1D4ED8" />
+          <rect x="4" y="12" width="16" height="7" fill="#1E40AF" />
+          <rect x="5" y="13" width="14" height="5" fill="#2563EB" />
+          <rect x="6" y="10" width="2" height="2" fill="#FACC15" />
+          <rect x="16" y="10" width="2" height="2" fill="#FACC15" />
+        </svg>
+      );
+
+    case 'scarf':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="9" width="16" height="5" fill="#991B1B" />
+          <rect x="5" y="10" width="14" height="3" fill="#DC2626" />
+          <rect x="14" y="13" width="4" height="6" fill="#DC2626" />
+          <rect x="14" y="18" width="4" height="2" fill="#7F1D1D" />
+        </svg>
+      );
+
+    case 'business':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="6" width="16" height="13" fill="#0F172A" />
+          <rect x="5" y="7" width="14" height="11" fill="#1E293B" />
+          <rect x="8" y="6" width="8" height="6" fill="#FFFFFF" />
+          <rect x="11" y="7" width="2" height="6" fill="#DC2626" />
+        </svg>
+      );
+
+    case 'hoodie':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="4" y="6" width="16" height="12" fill="#064E3B" />
+          <rect x="5" y="7" width="14" height="10" fill="#059669" />
+          <rect x="7" y="11" width="10" height="4" fill="#047857" />
         </svg>
       );
 
     // -----------------------------------------------------------
-    // C. ACCESSORIES & GLASSES
+    // C. FACE ACCESSORIES & GLASSES
     // -----------------------------------------------------------
-    case 'reading':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="3" y="9" width="8" height="7" fill="#F59E0B" />
-          <rect x="5" y="11" width="4" height="3" fill="#E0F2FE" />
-          <rect x="11" y="11" width="2" height="2" fill="#D97706" />
-          <rect x="13" y="9" width="8" height="7" fill="#F59E0B" />
-          <rect x="15" y="11" width="4" height="3" fill="#E0F2FE" />
-        </svg>
-      );
-
-    case 'sunglasses':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="3" y="10" width="18" height="2" fill="#18181B" />
-          <rect x="4" y="12" width="7" height="4" fill="#27272A" />
-          <rect x="13" y="12" width="7" height="4" fill="#27272A" />
-          <rect x="5" y="12" width="1" height="2" fill="#FFFFFF" />
-          <rect x="14" y="12" width="1" height="2" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'monocle':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="8" width="9" height="8" fill="#F59E0B" />
-          <rect x="13" y="10" width="5" height="4" fill="#E0F2FE" />
-          <rect x="19" y="13" width="1" height="3" fill="#D97706" />
-          <rect x="20" y="16" width="1" height="3" fill="#D97706" />
-        </svg>
-      );
-
-    case 'blush_stars':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="3" y="11" width="6" height="5" fill="#FB7185" />
-          <rect x="5" y="12" width="2" height="2" fill="#FDE047" />
-          <rect x="15" y="11" width="6" height="5" fill="#FB7185" />
-          <rect x="17" y="12" width="2" height="2" fill="#FDE047" />
-        </svg>
-      );
-
-    case 'sparkles':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="4" width="2" height="6" fill="#FACC15" />
-          <rect x="9" y="6" width="6" height="2" fill="#FACC15" />
-          <rect x="11" y="6" width="2" height="2" fill="#FFFFFF" />
-          <rect x="4" y="13" width="2" height="4" fill="#FDE047" />
-          <rect x="18" y="13" width="2" height="4" fill="#FDE047" />
-        </svg>
-      );
-
-    case 'eyepatch':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <line x1="3" y1="7" x2="21" y2="15" stroke="#18181B" strokeWidth="2" />
-          <rect x="4" y="9" width="7" height="6" fill="#18181B" />
-          <rect x="6" y="11" width="3" height="2" fill="#FFFFFF" />
-        </svg>
-      );
-
-    case 'wasabi_sparkle':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="3" y="12" width="5" height="4" fill="#84CC16" />
-          <rect x="16" y="12" width="5" height="4" fill="#84CC16" />
-          <rect x="11" y="4" width="2" height="6" fill="#A3E635" />
-          <rect x="9" y="6" width="6" height="2" fill="#A3E635" />
-          <rect x="11" y="6" width="2" height="2" fill="#FEF08A" />
-        </svg>
-      );
-
-    case 'forest_blush_freckles':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="3" y="11" width="6" height="5" fill="#F43F5E" opacity="0.8" />
-          <rect x="15" y="11" width="6" height="5" fill="#F43F5E" opacity="0.8" />
-          <rect x="5" y="12" width="1" height="1" fill="#78350F" />
-          <rect x="7" y="13" width="1" height="1" fill="#78350F" />
-          <rect x="16" y="12" width="1" height="1" fill="#78350F" />
-          <rect x="18" y="13" width="1" height="1" fill="#78350F" />
-        </svg>
-      );
-
-    case 'wolf_snarl_fangs':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="8" y="11" width="8" height="4" fill="#18181B" />
-          <polygon points="9,11 11,11 10,14" fill="#FFFFFF" />
-          <polygon points="13,11 15,11 14,14" fill="#FFFFFF" />
-          <rect x="11" y="13" width="2" height="2" fill="#FB7185" />
-        </svg>
-      );
-
     case 'scanner_headset':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Smart Clerk Headset & Cashier Mic */}
-          <path d="M4 14 C4 6, 20 6, 20 14" stroke="#1E293B" strokeWidth="2" fill="none" />
-          <rect x="3" y="12" width="3" height="6" fill="#3B82F6" />
-          <rect x="18" y="12" width="3" height="6" fill="#3B82F6" />
-          <path d="M5 16 Q8 21 13 20" stroke="#0F172A" strokeWidth="1.5" fill="none" />
-          <circle cx="14" cy="20" r="1.5" fill="#EF4444" />
-        </svg>
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Black Headband Arc across forehead */}
+          <rect x="5" y="6" width="14" height="2" fill="#0F172A" />
+          {/* Left Earpiece Cushion */}
+          <rect x="3" y="6" width="3" height="5" fill="#0284C7" />
+          <rect x="4" y="7" width="1" height="3" fill="#38BDF8" />
+          {/* Adjustable Boom Mic Arm */}
+          <rect x="4" y="11" width="2" height="3" fill="#0F172A" />
+          <rect x="5" y="13" width="5" height="2" fill="#0F172A" />
+          {/* Red Glowing LED Mic Tip */}
+          <rect x="10" y="13" width="2" height="2" fill="#EF4444" />
+        </>
       );
 
     case 'konbini_blush':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Rosy Snack Cheerful Blush with heart sparkles */}
-          <rect x="3" y="11" width="6" height="5" fill="#F43F5E" />
-          <rect x="15" y="11" width="6" height="5" fill="#F43F5E" />
-          <circle cx="6" cy="13" r="1" fill="#FFFFFF" />
-          <circle cx="18" cy="13" r="1" fill="#FFFFFF" />
-          <rect x="11" y="5" width="2" height="2" fill="#FB7185" />
-        </svg>
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Rosy Pink Pixel Cheeks */}
+          <rect x="3" y="10" width="4" height="2" fill="#FDA4AF" />
+          <rect x="4" y="11" width="2" height="2" fill="#FB7185" />
+          <rect x="17" y="10" width="4" height="2" fill="#FDA4AF" />
+          <rect x="18" y="11" width="2" height="2" fill="#FB7185" />
+        </>
       );
 
-    // -----------------------------------------------------------
-    // D. FROG SKINS & BODY COLORS
-    // -----------------------------------------------------------
-    case 'classic':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Classic Woodland Moss Green */}
-          <circle cx="7" cy="8" r="4" fill="#5F7A61" />
-          <circle cx="17" cy="8" r="4" fill="#5F7A61" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#75A65A" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#18181B" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#18181B" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#D5E8C8" />
-          <circle cx="5" cy="14" r="1.5" fill="#F472B6" opacity="0.7" />
-          <circle cx="19" cy="14" r="1.5" fill="#F472B6" opacity="0.7" />
-        </svg>
+    case 'forest_blush_freckles':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Freckle Pixels & Warm Golden Blush */}
+          <rect x="3" y="11" width="4" height="2" fill="#FCA5A5" opacity="0.8" />
+          <rect x="17" y="11" width="4" height="2" fill="#FCA5A5" opacity="0.8" />
+          <rect x="4" y="10" width="1" height="1" fill="#78350F" />
+          <rect x="6" y="11" width="1" height="1" fill="#78350F" />
+          <rect x="17" y="11" width="1" height="1" fill="#78350F" />
+          <rect x="19" y="10" width="1" height="1" fill="#78350F" />
+        </>
       );
 
-    case 'konbini_mint':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Neon Konbini Mint & Lime */}
-          <circle cx="7" cy="8" r="4" fill="#10B981" />
-          <circle cx="17" cy="8" r="4" fill="#10B981" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#34D399" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#064E3B" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#064E3B" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#A7F3D0" />
-          <circle cx="5" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
-          <circle cx="19" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
-          <rect x="11" y="9" width="2" height="2" fill="#FDE047" />
-        </svg>
+    case 'wolf_snarl_fangs':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Pair of White Canine Fangs */}
+          <rect x="8" y="13" width="2" height="3" fill="#FFFFFF" />
+          <rect x="9" y="15" width="1" height="1" fill="#FFFFFF" />
+          <rect x="14" y="13" width="2" height="3" fill="#FFFFFF" />
+          <rect x="14" y="15" width="1" height="1" fill="#FFFFFF" />
+          {/* Snarl Mark */}
+          <rect x="11" y="9" width="2" height="2" fill="#B91C1C" />
+        </>
       );
 
-    case 'fairytale_rose':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Fairytale Blossom Rose Pink */}
-          <circle cx="7" cy="8" r="4" fill="#E11D48" />
-          <circle cx="17" cy="8" r="4" fill="#E11D48" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#FB7185" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#4C0519" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#4C0519" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FFE4E6" />
-          <circle cx="5" cy="14" r="1.5" fill="#BE123C" opacity="0.6" />
-          <circle cx="19" cy="14" r="1.5" fill="#BE123C" opacity="0.6" />
-        </svg>
+    case 'wasabi_sparkle':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Wasabi Leaf & Sparkles */}
+          <rect x="4" y="10" width="3" height="3" fill="#84CC16" />
+          <rect x="17" y="10" width="3" height="3" fill="#84CC16" />
+          <rect x="11" y="4" width="2" height="2" fill="#FEF08A" />
+          <rect x="4" y="5" width="2" height="2" fill="#FACC15" />
+          <rect x="18" y="5" width="2" height="2" fill="#FACC15" />
+        </>
       );
 
-    case 'timber_wolf_grey':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Timber Wolf Charcoal Grey */}
-          <circle cx="7" cy="8" r="4" fill="#374151" />
-          <circle cx="17" cy="8" r="4" fill="#374151" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#6B7280" />
-          <circle cx="7" cy="7" r="1.5" fill="#FEF08A" />
-          <circle cx="7" cy="7" r="0.8" fill="#18181B" />
-          <circle cx="17" cy="7" r="1.5" fill="#FEF08A" />
-          <circle cx="17" cy="7" r="0.8" fill="#18181B" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#D1D5DB" />
-          <circle cx="5" cy="14" r="1.5" fill="#9CA3AF" opacity="0.8" />
-          <circle cx="19" cy="14" r="1.5" fill="#9CA3AF" opacity="0.8" />
-        </svg>
+    case 'reading':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Round Gold Wire Spectacles */}
+          <rect x="4" y="8" width="6" height="5" fill="#E0F2FE" />
+          <rect x="4" y="8" width="6" height="1" fill="#B45309" />
+          <rect x="4" y="12" width="6" height="1" fill="#B45309" />
+          <rect x="4" y="8" width="1" height="5" fill="#B45309" />
+          <rect x="9" y="8" width="1" height="5" fill="#B45309" />
+          {/* Bridge */}
+          <rect x="10" y="9" width="4" height="1" fill="#B45309" />
+          {/* Right Lens */}
+          <rect x="14" y="8" width="6" height="5" fill="#E0F2FE" />
+          <rect x="14" y="8" width="6" height="1" fill="#B45309" />
+          <rect x="14" y="12" width="6" height="1" fill="#B45309" />
+          <rect x="14" y="8" width="1" height="5" fill="#B45309" />
+          <rect x="19" y="8" width="1" height="5" fill="#B45309" />
+          {/* Highlights */}
+          <rect x="5" y="9" width="1" height="1" fill="#FFFFFF" />
+          <rect x="15" y="9" width="1" height="1" fill="#FFFFFF" />
+        </>
       );
 
-    case 'wasabi_green':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Fresh Wasabi Pale Lime Green */}
-          <circle cx="7" cy="8" r="4" fill="#65A30D" />
-          <circle cx="17" cy="8" r="4" fill="#65A30D" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#84CC16" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#1A2E05" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#1A2E05" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#ECFCCB" />
-          <circle cx="5" cy="14" r="1.5" fill="#A3E635" opacity="0.8" />
-          <circle cx="19" cy="14" r="1.5" fill="#A3E635" opacity="0.8" />
-        </svg>
+    case 'sunglasses':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Retro 8-Bit Cool Black Shades */}
+          <rect x="3" y="8" width="8" height="5" fill="#18181B" />
+          <rect x="13" y="8" width="8" height="5" fill="#18181B" />
+          <rect x="11" y="9" width="2" height="2" fill="#18181B" />
+          <rect x="4" y="9" width="2" height="1" fill="#FFFFFF" />
+          <rect x="14" y="9" width="2" height="1" fill="#FFFFFF" />
+        </>
       );
 
-    case 'salmon_peach':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Salmon Coral Peach */}
-          <circle cx="7" cy="8" r="4" fill="#EA580C" />
-          <circle cx="17" cy="8" r="4" fill="#EA580C" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#FB923C" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#431407" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#431407" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FFEDD5" />
-          <circle cx="5" cy="14" r="1.5" fill="#F43F5E" opacity="0.7" />
-          <circle cx="19" cy="14" r="1.5" fill="#F43F5E" opacity="0.7" />
-        </svg>
+    case 'monocle':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Golden Monocle with Chain */}
+          <rect x="13" y="7" width="7" height="7" fill="#E0F2FE" />
+          <rect x="13" y="7" width="7" height="1" fill="#D97706" />
+          <rect x="13" y="13" width="7" height="1" fill="#D97706" />
+          <rect x="13" y="7" width="1" height="7" fill="#D97706" />
+          <rect x="19" y="7" width="1" height="7" fill="#D97706" />
+          <rect x="14" y="8" width="1" height="1" fill="#FFFFFF" />
+          {/* Chain */}
+          <rect x="20" y="12" width="1" height="2" fill="#B45309" />
+          <rect x="21" y="14" width="1" height="3" fill="#B45309" />
+          <rect x="20" y="17" width="1" height="2" fill="#B45309" />
+        </>
       );
 
-    case 'sakura_pink':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Sakura Pastel Pink */}
-          <circle cx="7" cy="8" r="4" fill="#DB2777" />
-          <circle cx="17" cy="8" r="4" fill="#DB2777" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#F472B6" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#500724" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#500724" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FCE7F3" />
-          <circle cx="5" cy="14" r="1.5" fill="#FDA4AF" opacity="0.9" />
-          <circle cx="19" cy="14" r="1.5" fill="#FDA4AF" opacity="0.9" />
-        </svg>
+    case 'blush_stars':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Twinkle Star Cheek Decals */}
+          <rect x="3" y="10" width="5" height="3" fill="#FB7185" />
+          <rect x="16" y="10" width="5" height="3" fill="#FB7185" />
+          <rect x="5" y="9" width="2" height="2" fill="#FDE047" />
+          <rect x="17" y="9" width="2" height="2" fill="#FDE047" />
+        </>
       );
 
-    case 'twilight_blue':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Twilight Midnight Blue */}
-          <circle cx="7" cy="8" r="4" fill="#1E3A8A" />
-          <circle cx="17" cy="8" r="4" fill="#1E3A8A" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#3B82F6" />
-          <circle cx="7" cy="7" r="1.5" fill="#FACC15" />
-          <circle cx="7" cy="7" r="0.8" fill="#172554" />
-          <circle cx="17" cy="7" r="1.5" fill="#FACC15" />
-          <circle cx="17" cy="7" r="0.8" fill="#172554" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#DBEAFE" />
-          <circle cx="5" cy="14" r="1.5" fill="#60A5FA" opacity="0.8" />
-          <circle cx="19" cy="14" r="1.5" fill="#60A5FA" opacity="0.8" />
-        </svg>
+    case 'sparkles':
+      return renderAccessoryWithFrogFace(
+        <>
+          <rect x="11" y="2" width="2" height="4" fill="#FACC15" />
+          <rect x="10" y="3" width="4" height="2" fill="#FACC15" />
+          <rect x="3" y="9" width="2" height="3" fill="#FEF08A" />
+          <rect x="19" y="9" width="2" height="3" fill="#FEF08A" />
+        </>
       );
 
-    case 'matcha':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Creamy Matcha Green */}
-          <circle cx="7" cy="8" r="4" fill="#3F6212" />
-          <circle cx="17" cy="8" r="4" fill="#3F6212" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#65A30D" />
-          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="0.8" fill="#14532D" />
-          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="0.8" fill="#14532D" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#D9F99D" />
-          <circle cx="5" cy="14" r="1.5" fill="#BEF264" opacity="0.8" />
-          <circle cx="19" cy="14" r="1.5" fill="#BEF264" opacity="0.8" />
-        </svg>
-      );
-
-    case 'albino_white':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Snow Albino Pearl */}
-          <circle cx="7" cy="8" r="4" fill="#E2E8F0" />
-          <circle cx="17" cy="8" r="4" fill="#E2E8F0" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#FFFFFF" />
-          <circle cx="7" cy="7" r="1.5" fill="#FDA4AF" />
-          <circle cx="7" cy="7" r="0.8" fill="#DC2626" />
-          <circle cx="17" cy="7" r="1.5" fill="#FDA4AF" />
-          <circle cx="17" cy="7" r="0.8" fill="#DC2626" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#F8FAFC" />
-          <circle cx="5" cy="14" r="1.5" fill="#F43F5E" opacity="0.5" />
-          <circle cx="19" cy="14" r="1.5" fill="#F43F5E" opacity="0.5" />
-        </svg>
-      );
-
-    case 'ember_orange':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Ember Flame Orange */}
-          <circle cx="7" cy="8" r="4" fill="#C2410C" />
-          <circle cx="17" cy="8" r="4" fill="#C2410C" />
-          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#EA580C" />
-          <circle cx="7" cy="7" r="1.5" fill="#FEF08A" />
-          <circle cx="7" cy="7" r="0.8" fill="#7C2D12" />
-          <circle cx="17" cy="7" r="1.5" fill="#FEF08A" />
-          <circle cx="17" cy="7" r="0.8" fill="#7C2D12" />
-          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FED7AA" />
-          <circle cx="5" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
-          <circle cx="19" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
-        </svg>
+    case 'eyepatch':
+      return renderAccessoryWithFrogFace(
+        <>
+          <rect x="2" y="7" width="20" height="2" fill="#18181B" />
+          <rect x="4" y="8" width="7" height="6" fill="#18181B" />
+          <rect x="6" y="10" width="2" height="2" fill="#FFFFFF" />
+        </>
       );
 
     // -----------------------------------------------------------
@@ -883,110 +876,169 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'relaxing':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="12" cy="12" r="7" fill="#75A65A" />
-          <circle cx="9" cy="10" r="1" fill="#18181B" />
-          <circle cx="15" cy="10" r="1" fill="#18181B" />
-          <path d="M9 13 Q12 16 15 13" stroke="#18181B" strokeWidth="1" fill="none" />
-          <circle cx="7" cy="13" r="1.5" fill="#FB7185" />
-          <circle cx="17" cy="13" r="1.5" fill="#FB7185" />
+          <rect x="5" y="5" width="14" height="14" fill="#75A65A" />
+          <rect x="4" y="6" width="16" height="12" fill="#75A65A" />
+          <rect x="8" y="9" width="2" height="2" fill="#18181B" />
+          <rect x="14" y="9" width="2" height="2" fill="#18181B" />
+          <rect x="10" y="13" width="4" height="1" fill="#18181B" />
+          <rect x="6" y="12" width="2" height="2" fill="#FB7185" />
+          <rect x="16" y="12" width="2" height="2" fill="#FB7185" />
         </svg>
       );
 
     case 'konbini_scanner':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Digital Register & Beeping Laser Scanner */}
-          <rect x="4" y="8" width="16" height="12" fill="#334155" />
-          <rect x="6" y="10" width="12" height="5" fill="#38BDF8" />
-          <line x1="7" y1="12" x2="17" y2="12" stroke="#EF4444" strokeWidth="1.5" />
-          <rect x="6" y="16" width="12" height="3" fill="#64748B" />
+          {/* Register Base + Laser Scanner */}
+          <rect x="3" y="5" width="18" height="14" fill="#0F172A" />
+          <rect x="4" y="6" width="16" height="7" fill="#0284C7" />
+          <rect x="5" y="9" width="14" height="2" fill="#EF4444" />
+          <rect x="5" y="14" width="3" height="3" fill="#64748B" />
+          <rect x="10" y="14" width="3" height="3" fill="#64748B" />
+          <rect x="15" y="14" width="4" height="3" fill="#22C55E" />
         </svg>
       );
 
     case 'eating_onigiri':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Steaming Nikuman Bun & Onigiri */}
-          <polygon points="12,5 6,15 18,15" fill="#FFFFFF" />
-          <rect x="9" y="11" width="6" height="4" fill="#18181B" />
-          <circle cx="17" cy="17" r="4" fill="#FEF3C7" />
-          <path d="M11 2 Q12 0 13 2" stroke="#CBD5E1" strokeWidth="1" fill="none" />
+          {/* Triangle Onigiri with Nori & Steam */}
+          <rect x="11" y="4" width="2" height="2" fill="#18181B" />
+          <rect x="9" y="6" width="6" height="2" fill="#18181B" />
+          <rect x="7" y="8" width="10" height="2" fill="#18181B" />
+          <rect x="5" y="10" width="14" height="7" fill="#18181B" />
+          <rect x="11" y="5" width="2" height="1" fill="#FFFFFF" />
+          <rect x="10" y="6" width="4" height="2" fill="#FFFFFF" />
+          <rect x="8" y="8" width="8" height="2" fill="#FFFFFF" />
+          <rect x="6" y="10" width="12" height="6" fill="#FFFFFF" />
+          <rect x="9" y="12" width="6" height="4" fill="#0F172A" />
+          {/* Tea Cup */}
+          <rect x="17" y="15" width="5" height="5" fill="#FEF3C7" />
+          <rect x="18" y="14" width="3" height="1" fill="#16A34A" />
+        </svg>
+      );
+
+    case 'eating':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ceramic Dish */}
+          <rect x="2" y="15" width="20" height="4" fill="#CBD5E1" />
+          <rect x="4" y="16" width="16" height="2" fill="#F8FAFC" />
+          {/* Onigiri Rice Ball with Nori */}
+          <rect x="5" y="8" width="7" height="7" fill="#1E293B" />
+          <rect x="6" y="9" width="5" height="5" fill="#FFFFFF" />
+          <rect x="7" y="11" width="3" height="3" fill="#0F172A" />
+          {/* Strawberry Pastry Scone */}
+          <rect x="13" y="10" width="7" height="5" fill="#D97706" />
+          <rect x="15" y="8" width="3" height="3" fill="#EF4444" />
         </svg>
       );
 
     case 'holding_konbini_bag':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Striped Convenience Shopping Bag & Iced Coffee */}
-          <rect x="5" y="8" width="14" height="13" fill="#F8FAFC" />
-          <rect x="5" y="12" width="14" height="2" fill="#16A34A" />
-          <rect x="5" y="15" width="14" height="2" fill="#EA580C" />
-          <path d="M8 8 C8 4, 16 4, 16 8" stroke="#CBD5E1" strokeWidth="2" fill="none" />
+          {/* Plastic Bag Handles & Stripes */}
+          <rect x="8" y="3" width="2" height="5" fill="#94A3B8" />
+          <rect x="14" y="3" width="2" height="5" fill="#94A3B8" />
+          <rect x="5" y="7" width="14" height="14" fill="#1E293B" />
+          <rect x="6" y="8" width="12" height="12" fill="#F8FAFC" />
+          <rect x="6" y="11" width="12" height="2" fill="#10B981" />
+          <rect x="6" y="14" width="12" height="2" fill="#EA580C" />
         </svg>
       );
 
     case 'picnic_basket':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <path d="M7 11 C7 4, 17 4, 17 11" stroke="#92400E" strokeWidth="2" fill="none" />
-          <rect x="4" y="11" width="16" height="10" fill="#B45309" />
-          <polygon points="4,11 11,11 7,16" fill="#DC2626" />
-          <circle cx="15" cy="10" r="2.5" fill="#EF4444" />
+          {/* Wicker Handle */}
+          <rect x="6" y="3" width="2" height="7" fill="#78350F" />
+          <rect x="16" y="3" width="2" height="7" fill="#78350F" />
+          <rect x="7" y="3" width="10" height="2" fill="#78350F" />
+          {/* Basket Body */}
+          <rect x="3" y="10" width="18" height="11" fill="#78350F" />
+          <rect x="4" y="11" width="16" height="9" fill="#D97706" />
+          {/* Red Checkered Napkin */}
+          <rect x="4" y="11" width="8" height="5" fill="#DC2626" />
+          <rect x="5" y="12" width="2" height="2" fill="#FFFFFF" />
+          <rect x="8" y="12" width="2" height="2" fill="#FFFFFF" />
+          {/* Red Apple */}
+          <rect x="14" y="9" width="4" height="4" fill="#EF4444" />
+          <rect x="15" y="8" width="1" height="1" fill="#15803D" />
         </svg>
       );
 
     case 'woodcutter_axe':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <line x1="6" y1="20" x2="16" y2="5" stroke="#78350F" strokeWidth="2.5" />
-          <polygon points="14,4 20,2 18,10 13,8" fill="#94A3B8" />
-          <circle cx="7" cy="14" r="2" fill="#3B82F6" />
+          {/* Wooden Haft */}
+          <rect x="5" y="18" width="3" height="3" fill="#78350F" />
+          <rect x="8" y="15" width="3" height="3" fill="#78350F" />
+          <rect x="11" y="12" width="3" height="3" fill="#78350F" />
+          <rect x="14" y="9" width="3" height="3" fill="#78350F" />
+          <rect x="17" y="6" width="3" height="3" fill="#78350F" />
+          {/* Steel Axe Blade */}
+          <rect x="14" y="2" width="7" height="6" fill="#64748B" />
+          <rect x="15" y="3" width="5" height="4" fill="#CBD5E1" />
+          <rect x="19" y="3" width="2" height="4" fill="#F8FAFC" />
         </svg>
       );
 
     case 'eating_sushi':
+    case 'sushi_platter':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Wooden Geta Platter with Sushi */}
-          <rect x="3" y="12" width="18" height="6" fill="#D97706" />
-          <rect x="5" y="18" width="3" height="3" fill="#78350F" />
-          <rect x="16" y="18" width="3" height="3" fill="#78350F" />
-          <rect x="6" y="9" width="4" height="3" fill="#FB923C" />
-          <rect x="11" y="9" width="4" height="3" fill="#E11D48" />
-          <circle cx="17" cy="10.5" r="1.5" fill="#84CC16" />
+          {/* Wooden Geta Platter */}
+          <rect x="2" y="11" width="20" height="7" fill="#78350F" />
+          <rect x="3" y="12" width="18" height="5" fill="#D97706" />
+          <rect x="5" y="17" width="3" height="3" fill="#451A03" />
+          <rect x="16" y="17" width="3" height="3" fill="#451A03" />
+          {/* Salmon & Tuna Nigiri */}
+          <rect x="4" y="8" width="6" height="4" fill="#FB923C" />
+          <rect x="4" y="10" width="6" height="2" fill="#FFFFFF" />
+          <rect x="11" y="8" width="6" height="4" fill="#E11D48" />
+          <rect x="11" y="10" width="6" height="2" fill="#FFFFFF" />
+          {/* Wasabi */}
+          <rect x="18" y="9" width="3" height="3" fill="#84CC16" />
         </svg>
       );
 
     case 'sushi_crafting':
+    case 'tea_whisk':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Itamae Hand-Shaping Shari & Neta */}
-          <ellipse cx="12" cy="13" rx="6" ry="4" fill="#FFFFFF" />
-          <rect x="8" y="11" width="8" height="2" fill="#FB923C" />
-          <circle cx="8" cy="9" r="2" fill="#75A65A" />
-          <circle cx="16" cy="9" r="2" fill="#75A65A" />
+          {/* Wooden Board */}
+          <rect x="2" y="11" width="20" height="8" fill="#78350F" />
+          <rect x="3" y="12" width="18" height="6" fill="#D97706" />
+          {/* Rice Ball / Matcha Scoop */}
+          <rect x="5" y="8" width="8" height="5" fill="#FFFFFF" />
+          <rect x="6" y="7" width="6" height="2" fill="#FB923C" />
+          {/* Chef Knife */}
+          <rect x="13" y="9" width="8" height="3" fill="#E2E8F0" />
+          <rect x="19" y="8" width="3" height="5" fill="#78350F" />
         </svg>
       );
 
     case 'tea':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          <rect x="5" y="7" width="14" height="13" fill="#78350F" />
           <rect x="6" y="8" width="12" height="11" fill="#FEF3C7" />
           <rect x="7" y="9" width="10" height="4" fill="#16A34A" />
-          <rect x="9" y="10" width="6" height="2" fill="#22C55E" />
-          <rect x="8" y="19" width="8" height="2" fill="#D97706" />
-          <rect x="9" y="4" width="2" height="3" fill="#E2E8F0" />
-          <rect x="13" y="3" width="2" height="4" fill="#E2E8F0" />
+          {/* Steam */}
+          <rect x="10" y="3" width="1" height="3" fill="#94A3B8" />
+          <rect x="13" y="2" width="1" height="3" fill="#94A3B8" />
         </svg>
       );
 
     case 'coffee':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="6" y="8" width="10" height="11" fill="#FFFFFF" />
-          <rect x="7" y="9" width="8" height="3" fill="#78350F" />
-          <rect x="16" y="10" width="3" height="6" fill="#FFFFFF" />
-          <rect x="9" y="4" width="2" height="3" fill="#E2E8F0" />
+          <rect x="5" y="7" width="11" height="13" fill="#334155" />
+          <rect x="6" y="8" width="9" height="11" fill="#FFFFFF" />
+          <rect x="7" y="9" width="7" height="4" fill="#78350F" />
+          {/* Handle */}
+          <rect x="16" y="9" width="3" height="7" fill="#334155" />
+          <rect x="16" y="11" width="1" height="3" fill="#FFFFFF" />
         </svg>
       );
 
@@ -994,10 +1046,11 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="11" y="2" width="2" height="6" fill="#F43F5E" />
+          <rect x="6" y="6" width="12" height="16" fill="#78350F" />
           <rect x="7" y="7" width="10" height="14" fill="#FED7AA" />
-          <rect x="6" y="7" width="12" height="2" fill="#F97316" />
           <rect x="9" y="16" width="2" height="2" fill="#18181B" />
           <rect x="13" y="16" width="2" height="2" fill="#18181B" />
+          <rect x="11" y="18" width="2" height="2" fill="#18181B" />
         </svg>
       );
 
@@ -1005,50 +1058,53 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'reading':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="8" width="7" height="10" fill="#F8FAFC" />
-          <rect x="13" y="8" width="7" height="10" fill="#F8FAFC" />
+          <rect x="3" y="7" width="18" height="13" fill="#1E293B" />
+          <rect x="4" y="8" width="7" height="10" fill="#FFFFFF" />
+          <rect x="13" y="8" width="7" height="10" fill="#FFFFFF" />
           <rect x="11" y="7" width="2" height="12" fill="#DC2626" />
           <rect x="5" y="10" width="5" height="1" fill="#64748B" />
           <rect x="14" y="10" width="5" height="1" fill="#64748B" />
         </svg>
       );
 
-    case 'eating':
-      return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <polygon points="12,6 5,18 19,18" fill="#FFFFFF" />
-          <rect x="9" y="13" width="6" height="5" fill="#18181B" />
-        </svg>
-      );
-
     case 'guitar':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="6" y="11" width="9" height="9" fill="#D97706" />
-          <rect x="9" y="14" width="3" height="3" fill="#451A03" />
-          <rect x="14" y="6" width="5" height="3" fill="#92400E" />
-          <rect x="18" y="4" width="3" height="3" fill="#CA8A04" />
+          <rect x="4" y="9" width="11" height="12" fill="#78350F" />
+          <rect x="5" y="10" width="9" height="10" fill="#D97706" />
+          <rect x="8" y="13" width="3" height="3" fill="#451A03" />
+          {/* Neck & Head */}
+          <rect x="12" y="4" width="8" height="3" fill="#78350F" />
+          <rect x="18" y="2" width="4" height="4" fill="#CA8A04" />
         </svg>
       );
 
     case 'painting':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="5" y="7" width="13" height="11" fill="#F59E0B" />
-          <circle cx="8" cy="10" r="1.5" fill="#EF4444" />
-          <circle cx="12" cy="9" r="1.5" fill="#3B82F6" />
-          <circle cx="15" cy="12" r="1.5" fill="#22C55E" />
-          <rect x="14" y="15" width="6" height="3" fill="#78350F" />
+          {/* Wooden Artist Palette */}
+          <rect x="4" y="8" width="16" height="12" fill="#78350F" />
+          <rect x="5" y="9" width="14" height="10" fill="#D97706" />
+          {/* Paint Colors */}
+          <rect x="7" y="11" width="3" height="3" fill="#EF4444" />
+          <rect x="11" y="10" width="3" height="3" fill="#3B82F6" />
+          <rect x="14" y="13" width="3" height="3" fill="#FACC15" />
+          {/* Paintbrush */}
+          <rect x="16" y="3" width="2" height="6" fill="#78350F" />
+          <rect x="16" y="2" width="2" height="2" fill="#18181B" />
         </svg>
       );
 
     case 'camera':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="8" width="16" height="11" fill="#451A03" />
-          <rect x="7" y="6" width="5" height="2" fill="#78350F" />
-          <circle cx="12" cy="13.5" r="3.5" fill="#94A3B8" />
-          <circle cx="12" cy="13.5" r="2" fill="#0F172A" />
+          <rect x="3" y="7" width="18" height="13" fill="#18181B" />
+          <rect x="4" y="8" width="16" height="11" fill="#475569" />
+          <rect x="6" y="5" width="5" height="3" fill="#18181B" />
+          {/* Lens */}
+          <rect x="9" y="10" width="6" height="6" fill="#0F172A" />
+          <rect x="10" y="11" width="4" height="4" fill="#38BDF8" />
+          <rect x="11" y="12" width="2" height="2" fill="#FFFFFF" />
           <rect x="16" y="9" width="2" height="2" fill="#FACC15" />
         </svg>
       );
@@ -1056,48 +1112,83 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'wand':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <line x1="5" y1="19" x2="15" y2="9" stroke="#78350F" strokeWidth="2" />
-          <polygon points="17,5 19,8 15,9 18,12 14,11 12,14 11,10 8,9 11,7 9,4 13,6" fill="#FACC15" />
-          <circle cx="15" cy="8" r="1" fill="#FFFFFF" />
+          {/* Wand Shaft */}
+          <rect x="5" y="17" width="3" height="3" fill="#B45309" />
+          <rect x="8" y="14" width="3" height="3" fill="#B45309" />
+          <rect x="11" y="11" width="3" height="3" fill="#B45309" />
+          <rect x="13" y="9" width="3" height="3" fill="#D97706" />
+          {/* Star Top */}
+          <rect x="14" y="4" width="6" height="6" fill="#FACC15" />
+          <rect x="16" y="2" width="2" height="10" fill="#FDE047" />
+          <rect x="12" y="6" width="10" height="2" fill="#FDE047" />
         </svg>
       );
 
     case 'meditating':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="12" cy="11" r="5" fill="#75A65A" />
-          <path d="M6 18 Q12 13 18 18" stroke="#15803D" strokeWidth="2" fill="none" />
-          <circle cx="12" cy="4" r="1.5" fill="#FACC15" />
+          {/* Peaceful Meditating Frog Face with Closed Eyes */}
+          <rect x="4" y="6" width="16" height="13" fill="#75A65A" />
+          <rect x="5" y="5" width="4" height="3" fill="#75A65A" />
+          <rect x="15" y="5" width="4" height="3" fill="#75A65A" />
+          {/* Closed Serene Eyes */}
+          <rect x="6" y="11" width="4" height="1" fill="#18181B" />
+          <rect x="14" y="11" width="4" height="1" fill="#18181B" />
+          <rect x="10" y="14" width="4" height="1" fill="#18181B" />
+          {/* Rosy Cheeks */}
+          <rect x="5" y="13" width="2" height="2" fill="#FB7185" />
+          <rect x="17" y="13" width="2" height="2" fill="#FB7185" />
+          {/* Golden Sparkles */}
+          <rect x="2" y="4" width="2" height="2" fill="#FACC15" />
+          <rect x="20" y="4" width="2" height="2" fill="#FACC15" />
+          <rect x="11" y="2" width="2" height="2" fill="#FEF08A" />
         </svg>
       );
 
     case 'sleeping':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="10" width="16" height="10" fill="#3B82F6" />
-          <rect x="4" y="8" width="6" height="5" fill="#FEF3C7" />
-          <text x="16" y="8" fill="#FDE047" fontSize="6" fontFamily="monospace" fontWeight="bold">Z</text>
+          {/* Pillow */}
+          <rect x="3" y="7" width="18" height="14" fill="#F8FAFC" />
+          <rect x="2" y="6" width="20" height="1" fill="#E2E8F0" />
+          {/* Blue Cozy Quilt Blanket */}
+          <rect x="3" y="12" width="18" height="9" fill="#0284C7" />
+          <rect x="4" y="14" width="16" height="2" fill="#38BDF8" />
+          {/* Sleeping Closed Eyes */}
+          <rect x="7" y="9" width="3" height="1" fill="#18181B" />
+          <rect x="14" y="9" width="3" height="1" fill="#18181B" />
+          {/* Zzz floating */}
+          <rect x="18" y="3" width="3" height="1" fill="#38BDF8" />
+          <rect x="19" y="4" width="2" height="1" fill="#38BDF8" />
+          <rect x="18" y="5" width="3" height="1" fill="#38BDF8" />
         </svg>
       );
 
     case 'fishing':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <line x1="4" y1="20" x2="16" y2="4" stroke="#78350F" strokeWidth="2" />
-          <line x1="16" y1="4" x2="19" y2="15" stroke="#CBD5E1" strokeWidth="1" />
-          <circle cx="19" cy="15" r="1.5" fill="#EF4444" />
+          {/* Rod */}
+          <rect x="4" y="18" width="2" height="2" fill="#78350F" />
+          <rect x="7" y="14" width="2" height="2" fill="#78350F" />
+          <rect x="10" y="10" width="2" height="2" fill="#78350F" />
+          <rect x="13" y="6" width="2" height="2" fill="#78350F" />
+          <rect x="16" y="2" width="2" height="2" fill="#78350F" />
+          {/* Line & Bobber */}
+          <rect x="18" y="4" width="1" height="12" fill="#38BDF8" />
+          <rect x="17" y="15" width="3" height="3" fill="#EF4444" />
+          <rect x="17" y="17" width="3" height="1" fill="#FFFFFF" />
         </svg>
       );
 
     // -----------------------------------------------------------
-    // E. COMPANIONS & PETS
+    // E. COMPANIONS & PETS (100% PURE CRISP PIXEL ART)
     // -----------------------------------------------------------
     case 'companion_none':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="11" y="8" width="2" height="8" fill="#22C55E" />
-          <circle cx="10" cy="8" r="2" fill="#84CC16" />
-          <circle cx="14" cy="10" r="2" fill="#84CC16" />
+          <rect x="11" y="7" width="2" height="10" fill="#15803D" />
+          <rect x="8" y="7" width="3" height="3" fill="#22C55E" />
+          <rect x="13" y="9" width="3" height="3" fill="#22C55E" />
         </svg>
       );
 
@@ -1105,181 +1196,271 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'cashier_cat':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Maneki Neko Cashier Cat waving paw */}
-          <polygon points="6,5 9,9 6,9" fill="#18181B" />
-          <polygon points="18,5 15,9 18,9" fill="#EA580C" />
-          <circle cx="12" cy="10" r="5" fill="#FFFFFF" />
-          <rect x="8" y="7" width="8" height="2" fill="#16A34A" />
-          <rect x="11" y="7" width="2" height="2" fill="#EA580C" />
-          <circle cx="10" cy="10" r="1" fill="#18181B" />
-          <circle cx="14" cy="10" r="1" fill="#18181B" />
-          <rect x="8" y="14" width="8" height="6" fill="#F8FAFC" />
-          <circle cx="17" cy="13" r="2" fill="#FFFFFF" />
+          {/* Calico Ears */}
+          <rect x="5" y="4" width="4" height="4" fill="#18181B" />
+          <rect x="15" y="4" width="4" height="4" fill="#EA580C" />
+          {/* Head */}
+          <rect x="5" y="7" width="14" height="8" fill="#1E293B" />
+          <rect x="6" y="8" width="12" height="6" fill="#FFFFFF" />
+          {/* Green Store Visor */}
+          <rect x="5" y="7" width="14" height="2" fill="#10B981" />
+          {/* Face */}
+          <rect x="8" y="10" width="2" height="2" fill="#18181B" />
+          <rect x="14" y="10" width="2" height="2" fill="#18181B" />
+          <rect x="11" y="11" width="2" height="1" fill="#FB7185" />
+          {/* Green Apron & Gold Coin */}
+          <rect x="6" y="14" width="12" height="7" fill="#047857" />
+          <rect x="7" y="15" width="10" height="5" fill="#10B981" />
+          <rect x="11" y="16" width="2" height="3" fill="#FACC15" />
         </svg>
       );
 
     case 'snack_shiba':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Shiba in Red Shopping Basket */}
-          <rect x="4" y="12" width="16" height="8" fill="#DC2626" />
-          <circle cx="12" cy="10" r="4.5" fill="#D97706" />
-          <polygon points="8,6 10,9 7,9" fill="#B45309" />
-          <polygon points="16,6 14,9 17,9" fill="#B45309" />
-          <ellipse cx="12" cy="11" rx="2" ry="1.5" fill="#FFFFFF" />
-          <circle cx="12" cy="11" r="0.8" fill="#18181B" />
+          {/* Shiba Ears */}
+          <rect x="6" y="3" width="3" height="4" fill="#78350F" />
+          <rect x="15" y="3" width="3" height="4" fill="#78350F" />
+          {/* Shiba Head */}
+          <rect x="6" y="6" width="12" height="7" fill="#B45309" />
+          <rect x="7" y="7" width="10" height="5" fill="#D97706" />
+          <rect x="8" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="14" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="9" y="10" width="6" height="3" fill="#FFFFFF" />
+          <rect x="11" y="10" width="2" height="1" fill="#18181B" />
+          {/* Red Shopping Basket */}
+          <rect x="3" y="12" width="18" height="9" fill="#991B1B" />
+          <rect x="4" y="13" width="16" height="7" fill="#DC2626" />
+          <rect x="2" y="10" width="5" height="5" fill="#FACC15" />
         </svg>
       );
 
     case 'chibi_wolf_pup':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <polygon points="5,4 8,8 5,8" fill="#4B5563" />
-          <polygon points="19,4 16,8 19,8" fill="#4B5563" />
-          <circle cx="12" cy="9" r="5" fill="#6B7280" />
-          <circle cx="9" cy="9" r="1.5" fill="#D97706" />
-          <circle cx="15" cy="9" r="1.5" fill="#D97706" />
-          <rect x="8" y="13" width="8" height="2" fill="#DC2626" />
-          <rect x="7" y="14" width="10" height="6" fill="#4B5563" />
+          {/* Wolf Ears */}
+          <rect x="4" y="2" width="4" height="4" fill="#1F2937" />
+          <rect x="16" y="2" width="4" height="4" fill="#1F2937" />
+          {/* Head & Body */}
+          <rect x="5" y="5" width="14" height="8" fill="#1F2937" />
+          <rect x="6" y="6" width="12" height="6" fill="#6B7280" />
+          {/* Amber Eyes */}
+          <rect x="8" y="7" width="2" height="2" fill="#FACC15" />
+          <rect x="14" y="7" width="2" height="2" fill="#FACC15" />
+          <rect x="9" y="8" width="1" height="1" fill="#000000" />
+          <rect x="15" y="8" width="1" height="1" fill="#000000" />
+          {/* White Snout */}
+          <rect x="10" y="9" width="4" height="3" fill="#F3F4F6" />
+          <rect x="11" y="9" width="2" height="1" fill="#18181B" />
+          {/* Red Neckerchief */}
+          <rect x="6" y="13" width="12" height="3" fill="#DC2626" />
+          <rect x="6" y="16" width="12" height="6" fill="#4B5563" />
         </svg>
       );
 
     case 'forest_hedgehog':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <polygon points="6,6 10,12 8,15" fill="#92400E" />
-          <polygon points="11,4 14,10 12,14" fill="#78350F" />
-          <rect x="7" y="11" width="11" height="8" fill="#92400E" />
-          <ellipse cx="18" cy="15" rx="3.5" ry="2.5" fill="#FED7AA" />
-          <circle cx="11" cy="9" r="3.5" fill="#DC2626" />
+          {/* Spiky Hedgehog Quills */}
+          <rect x="4" y="4" width="4" height="4" fill="#451A03" />
+          <rect x="9" y="3" width="4" height="4" fill="#451A03" />
+          <rect x="14" y="4" width="4" height="4" fill="#451A03" />
+          {/* Body */}
+          <rect x="5" y="7" width="14" height="11" fill="#78350F" />
+          <rect x="6" y="8" width="12" height="9" fill="#92400E" />
+          {/* Red Strawberry on Back */}
+          <rect x="7" y="3" width="5" height="5" fill="#DC2626" />
+          <rect x="8" y="2" width="3" height="2" fill="#16A34A" />
+          {/* Snout & Eye */}
+          <rect x="17" y="11" width="5" height="5" fill="#FED7AA" />
+          <rect x="20" y="12" width="2" height="2" fill="#18181B" />
+          {/* Feet */}
+          <rect x="6" y="18" width="4" height="3" fill="#451A03" />
+          <rect x="14" y="18" width="4" height="3" fill="#451A03" />
         </svg>
       );
 
     case 'sushi_apprentice_cat':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <polygon points="6,5 9,9 6,9" fill="#EA580C" />
-          <polygon points="18,5 15,9 18,9" fill="#18181B" />
-          <circle cx="12" cy="10" r="5" fill="#FFFFFF" />
-          <rect x="8" y="7" width="8" height="2" fill="#FFFFFF" />
-          <rect x="11" y="7" width="2" height="2" fill="#DC2626" />
-          <circle cx="10" cy="10" r="1" fill="#18181B" />
-          <circle cx="14" cy="10" r="1" fill="#18181B" />
-          <rect x="8" y="14" width="8" height="6" fill="#F8FAFC" />
-          <rect x="10" y="15" width="4" height="4" fill="#18181B" />
+          {/* Calico Cat Ears (Left Orange, Right Charcoal) */}
+          <rect x="5" y="3" width="4" height="4" fill="#EA580C" />
+          <rect x="15" y="3" width="4" height="4" fill="#18181B" />
+          {/* Head */}
+          <rect x="5" y="6" width="14" height="8" fill="#1E293B" />
+          <rect x="6" y="7" width="12" height="6" fill="#FFFFFF" />
+          {/* Red Chef Headband */}
+          <rect x="5" y="6" width="14" height="2" fill="#DC2626" />
+          {/* Sapphire Blue Eyes */}
+          <rect x="8" y="9" width="2" height="2" fill="#1E3A8A" />
+          <rect x="14" y="9" width="2" height="2" fill="#1E3A8A" />
+          <rect x="11" y="10" width="2" height="1" fill="#FB7185" />
+          {/* Calico Body */}
+          <rect x="6" y="14" width="12" height="7" fill="#CBD5E1" />
+          <rect x="7" y="14" width="10" height="6" fill="#FFFFFF" />
+          <rect x="7" y="15" width="4" height="4" fill="#FB923C" />
+          <rect x="13" y="16" width="4" height="3" fill="#1E293B" />
+          {/* Wooden Platter with Salmon Nigiri Held */}
+          <rect x="14" y="13" width="8" height="4" fill="#78350F" />
+          <rect x="15" y="12" width="6" height="2" fill="#FB923C" />
+          <rect x="17" y="12" width="2" height="4" fill="#15803D" />
         </svg>
       );
 
     case 'mini_ebi_shrimp':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <ellipse cx="12" cy="13" rx="6" ry="4" fill="#F97316" />
-          <ellipse cx="11" cy="12" rx="4" ry="3" fill="#FED7AA" />
-          <polygon points="17,12 22,8 21,15" fill="#EF4444" />
-          <circle cx="9" cy="12" r="1" fill="#18181B" />
-          <rect x="8" y="14" width="2" height="1" fill="#FB7185" />
+          {/* Crispy Golden Tempura Prawn Body */}
+          <rect x="5" y="8" width="14" height="9" fill="#C2410C" />
+          <rect x="6" y="9" width="12" height="7" fill="#F97316" />
+          <rect x="8" y="10" width="6" height="4" fill="#FED7AA" />
+          {/* Crispy Tail */}
+          <rect x="18" y="6" width="4" height="4" fill="#DC2626" />
+          <rect x="18" y="13" width="4" height="4" fill="#DC2626" />
+          {/* Face */}
+          <rect x="7" y="11" width="2" height="2" fill="#18181B" />
+          <rect x="7" y="13" width="2" height="1" fill="#FB7185" />
         </svg>
       );
 
     case 'snail':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="10" cy="12" r="5" fill="#B45309" />
-          <circle cx="10" cy="12" r="3" fill="#D97706" />
-          <ellipse cx="16" cy="14" rx="4" ry="2.5" fill="#A3E635" />
-          <rect x="18" y="9" width="1" height="4" fill="#A3E635" />
-          <circle cx="18" cy="8" r="1" fill="#18181B" />
+          {/* Spiral Shell */}
+          <rect x="5" y="7" width="10" height="10" fill="#78350F" />
+          <rect x="6" y="8" width="8" height="8" fill="#D97706" />
+          <rect x="8" y="10" width="4" height="4" fill="#FEF3C7" />
+          {/* Snail Body & Foot */}
+          <rect x="3" y="15" width="18" height="4" fill="#A3E635" />
+          <rect x="16" y="10" width="4" height="6" fill="#A3E635" />
+          {/* Eyestalks */}
+          <rect x="17" y="6" width="2" height="4" fill="#15803D" />
+          <rect x="17" y="5" width="2" height="2" fill="#18181B" />
         </svg>
       );
 
     case 'crab':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <ellipse cx="12" cy="13" rx="5" ry="4" fill="#DC2626" />
-          <circle cx="10" cy="10" r="1.5" fill="#FFFFFF" />
-          <circle cx="14" cy="10" r="1.5" fill="#FFFFFF" />
-          <circle cx="10" cy="10" r="0.8" fill="#18181B" />
-          <circle cx="14" cy="10" r="0.8" fill="#18181B" />
-          <circle cx="6" cy="10" r="2" fill="#EF4444" />
-          <circle cx="18" cy="10" r="2" fill="#EF4444" />
+          {/* Big Snapping Claws */}
+          <rect x="3" y="6" width="5" height="5" fill="#DC2626" />
+          <rect x="16" y="6" width="5" height="5" fill="#DC2626" />
+          {/* Body */}
+          <rect x="6" y="9" width="12" height="9" fill="#7F1D1D" />
+          <rect x="7" y="10" width="10" height="7" fill="#EF4444" />
+          {/* Eyes */}
+          <rect x="9" y="8" width="2" height="2" fill="#FFFFFF" />
+          <rect x="13" y="8" width="2" height="2" fill="#FFFFFF" />
+          <rect x="9" y="8" width="1" height="1" fill="#18181B" />
+          <rect x="13" y="8" width="1" height="1" fill="#18181B" />
+          {/* Walking Legs */}
+          <rect x="4" y="17" width="3" height="3" fill="#7F1D1D" />
+          <rect x="17" y="17" width="3" height="3" fill="#7F1D1D" />
         </svg>
       );
 
     case 'fireflies':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="8" cy="8" r="3" fill="#FEF08A" />
-          <circle cx="8" cy="8" r="1.5" fill="#FFFFFF" />
-          <circle cx="16" cy="14" r="3.5" fill="#FEF08A" />
-          <circle cx="16" cy="14" r="2" fill="#FFFFFF" />
-          <circle cx="17" cy="7" r="2" fill="#FDE047" />
+          <rect x="6" y="6" width="4" height="4" fill="#FACC15" />
+          <rect x="7" y="7" width="2" height="2" fill="#FFFFFF" />
+          <rect x="14" y="12" width="5" height="5" fill="#FACC15" />
+          <rect x="15" y="13" width="3" height="3" fill="#FFFFFF" />
+          <rect x="16" y="4" width="3" height="3" fill="#FEF08A" />
         </svg>
       );
 
     case 'butterfly':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <ellipse cx="8" cy="10" rx="4" ry="5" fill="#38BDF8" />
-          <ellipse cx="16" cy="10" rx="4" ry="5" fill="#38BDF8" />
-          <ellipse cx="9" cy="15" rx="3" ry="3.5" fill="#0284C7" />
-          <ellipse cx="15" cy="15" rx="3" ry="3.5" fill="#0284C7" />
-          <rect x="11.5" y="7" width="1" height="10" fill="#0F172A" />
+          {/* Left Wing */}
+          <rect x="4" y="5" width="7" height="7" fill="#0284C7" />
+          <rect x="5" y="6" width="5" height="5" fill="#38BDF8" />
+          <rect x="6" y="12" width="5" height="6" fill="#38BDF8" />
+          {/* Right Wing */}
+          <rect x="13" y="5" width="7" height="7" fill="#0284C7" />
+          <rect x="14" y="6" width="5" height="5" fill="#38BDF8" />
+          <rect x="13" y="12" width="5" height="6" fill="#38BDF8" />
+          {/* Body */}
+          <rect x="11" y="4" width="2" height="15" fill="#0F172A" />
         </svg>
       );
 
     case 'koi':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <ellipse cx="12" cy="12" rx="7" ry="3.5" fill="#FFFFFF" />
-          <ellipse cx="10" cy="11" rx="3" ry="2" fill="#DC2626" />
-          <polygon points="19,12 23,8 23,16" fill="#FFFFFF" />
+          {/* Koi Fish Body */}
+          <rect x="4" y="8" width="14" height="8" fill="#FFFFFF" />
+          <rect x="6" y="7" width="10" height="10" fill="#FFFFFF" />
+          <rect x="8" y="8" width="6" height="5" fill="#DC2626" />
+          <rect x="4" y="10" width="3" height="3" fill="#18181B" />
+          {/* Tail Fin */}
+          <rect x="17" y="6" width="4" height="4" fill="#DC2626" />
+          <rect x="17" y="14" width="4" height="4" fill="#DC2626" />
         </svg>
       );
 
     case 'duckling':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="10" cy="10" r="4" fill="#FACC15" />
-          <ellipse cx="14" cy="14" rx="5" ry="3.5" fill="#EAB308" />
-          <polygon points="6,10 3,11 6,12" fill="#F97316" />
-          <circle cx="10" cy="9" r="0.8" fill="#18181B" />
+          {/* Yellow Duck Head & Body */}
+          <rect x="6" y="5" width="7" height="7" fill="#FACC15" />
+          <rect x="10" y="10" width="9" height="8" fill="#FACC15" />
+          <rect x="8" y="7" width="2" height="2" fill="#18181B" />
+          {/* Orange Beak */}
+          <rect x="2" y="7" width="4" height="3" fill="#EA580C" />
+          {/* Wing & Feet */}
+          <rect x="12" y="12" width="5" height="4" fill="#EAB308" />
+          <rect x="12" y="18" width="3" height="2" fill="#EA580C" />
+          <rect x="16" y="18" width="3" height="2" fill="#EA580C" />
         </svg>
       );
 
     case 'cat':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <polygon points="7,5 10,9 7,9" fill="#18181B" />
-          <polygon points="17,5 14,9 17,9" fill="#18181B" />
-          <circle cx="12" cy="10" r="5" fill="#27272A" />
-          <circle cx="10" cy="10" r="1.5" fill="#FACC15" />
-          <circle cx="14" cy="10" r="1.5" fill="#FACC15" />
+          {/* Black Cat Ears */}
+          <rect x="5" y="4" width="4" height="4" fill="#18181B" />
+          <rect x="15" y="4" width="4" height="4" fill="#18181B" />
+          {/* Head & Body */}
+          <rect x="6" y="7" width="12" height="11" fill="#18181B" />
+          <rect x="8" y="9" width="2" height="2" fill="#FACC15" />
+          <rect x="14" y="9" width="2" height="2" fill="#FACC15" />
+          {/* Collar & Bell */}
+          <rect x="7" y="14" width="10" height="2" fill="#DC2626" />
+          <rect x="11" y="15" width="2" height="2" fill="#FACC15" />
         </svg>
       );
 
     case 'turtle':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <ellipse cx="13" cy="12" rx="6" ry="5" fill="#65A30D" />
-          <ellipse cx="13" cy="12" rx="4" ry="3" fill="#84CC16" />
-          <circle cx="6" cy="12" r="2.5" fill="#4D7C0F" />
-          <rect x="5" y="11" width="1" height="1" fill="#18181B" />
+          {/* Mossy Shell */}
+          <rect x="7" y="6" width="12" height="12" fill="#14532D" />
+          <rect x="8" y="7" width="10" height="10" fill="#65A30D" />
+          {/* Head */}
+          <rect x="3" y="10" width="5" height="5" fill="#84CC16" />
+          <rect x="4" y="11" width="1" height="1" fill="#18181B" />
+          {/* Flippers */}
+          <rect x="6" y="17" width="4" height="3" fill="#166534" />
+          <rect x="16" y="17" width="4" height="3" fill="#166534" />
         </svg>
       );
 
     // -----------------------------------------------------------
-    // F. HABITATS & SCENES
+    // F. HABITATS & SCENES (Mini Isometric Pixel Dioramas)
     // -----------------------------------------------------------
     case 'convenience_store':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* 24h Neon Konbini Store */}
+          {/* Canopy */}
           <rect x="2" y="2" width="20" height="20" fill="#0F172A" />
-          <rect x="2" y="2" width="20" height="4" fill="#16A34A" />
-          <rect x="2" y="6" width="20" height="1.5" fill="#EA580C" />
-          <rect x="4" y="9" width="6" height="8" fill="#38BDF8" opacity="0.8" />
-          <rect x="12" y="9" width="8" height="8" fill="#FACC15" opacity="0.8" />
-          <rect x="2" y="17" width="20" height="5" fill="#E2E8F0" />
+          <rect x="2" y="2" width="20" height="4" fill="#10B981" />
+          <rect x="2" y="6" width="20" height="2" fill="#EA580C" />
+          {/* Glass Windows */}
+          <rect x="4" y="9" width="7" height="8" fill="#38BDF8" />
+          <rect x="13" y="9" width="7" height="8" fill="#FACC15" />
+          <rect x="2" y="18" width="20" height="4" fill="#E2E8F0" />
         </svg>
       );
 
@@ -1287,30 +1468,40 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#064E3B" />
-          <polygon points="12,6 6,12 18,12" fill="#991B1B" />
-          <rect x="7" y="12" width="10" height="8" fill="#78350F" />
-          <circle cx="5" cy="18" r="2" fill="#EF4444" />
+          {/* Pine Roof */}
+          <rect x="8" y="5" width="8" height="3" fill="#991B1B" />
+          <rect x="6" y="8" width="12" height="4" fill="#991B1B" />
+          <rect x="7" y="12" width="10" height="6" fill="#78350F" />
+          {/* Mushroom */}
+          <rect x="4" y="15" width="4" height="3" fill="#EF4444" />
+          <rect x="5" y="18" width="2" height="2" fill="#FFFFFF" />
+          <rect x="2" y="19" width="20" height="3" fill="#14532D" />
         </svg>
       );
 
     case 'sushi_bar':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="2" y="2" width="20" height="20" fill="#3E2723" />
-          <rect x="2" y="2" width="20" height="3" fill="#5D4037" />
-          <rect x="18" y="9" width="4" height="5" fill="#DC2626" />
-          <rect x="2" y="14" width="20" height="4" fill="#D97706" />
-          <rect x="5" y="12" width="10" height="3" fill="#38BDF8" opacity="0.8" />
+          <rect x="2" y="2" width="20" height="20" fill="#0F172A" />
+          <rect x="2" y="2" width="20" height="4" fill="#78350F" />
+          {/* Indigo Noren */}
+          <rect x="4" y="6" width="4" height="5" fill="#1E3A8A" />
+          <rect x="9" y="6" width="4" height="5" fill="#1E3A8A" />
+          <rect x="14" y="6" width="4" height="5" fill="#1E3A8A" />
+          {/* Red Lantern */}
+          <rect x="18" y="8" width="4" height="5" fill="#DC2626" />
+          {/* Hinoki Counter */}
+          <rect x="2" y="14" width="20" height="6" fill="#D97706" />
+          <rect x="6" y="15" width="12" height="4" fill="#FEF3C7" />
         </svg>
       );
 
     case 'sauna_bathhouse':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Bathhouse Stone Wall & Arched Door */}
           <rect x="2" y="2" width="20" height="20" fill="#D4BE9C" />
-          <path d="M7 18 L7 9 A5 5 0 0 1 17 9 L17 18 Z" fill="#85532A" />
-          <path d="M9 16 L9 10 A3 3 0 0 1 15 10 L15 16 Z" fill="#FEF3C7" />
+          <rect x="6" y="6" width="12" height="12" fill="#85532A" />
+          <rect x="8" y="8" width="8" height="8" fill="#FEF3C7" />
           <rect x="2" y="18" width="20" height="4" fill="#DFC09C" />
         </svg>
       );
@@ -1320,9 +1511,11 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#0C4A6E" />
           <rect x="2" y="10" width="20" height="12" fill="#0284C7" />
-          <ellipse cx="9" cy="15" rx="5" ry="2.5" fill="#22C55E" />
-          <rect x="15" y="8" width="4" height="6" fill="#64748B" />
-          <rect x="16" y="9" width="2" height="2" fill="#FEF08A" />
+          {/* Lilypad */}
+          <rect x="5" y="13" width="8" height="4" fill="#22C55E" />
+          {/* Stone Lantern */}
+          <rect x="15" y="8" width="5" height="7" fill="#64748B" />
+          <rect x="16" y="10" width="3" height="2" fill="#FEF08A" />
         </svg>
       );
 
@@ -1330,8 +1523,8 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#523218" />
-          <polygon points="12,3 4,9 20,9" fill="#15803D" />
-          <rect x="6" y="9" width="12" height="10" fill="#92400E" />
+          <rect x="5" y="4" width="14" height="6" fill="#15803D" />
+          <rect x="6" y="10" width="12" height="9" fill="#92400E" />
           <rect x="10" y="13" width="4" height="6" fill="#78350F" />
         </svg>
       );
@@ -1340,9 +1533,10 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#FCE7F3" />
-          <rect x="4" y="5" width="16" height="3" fill="#DC2626" />
-          <rect x="6" y="8" width="2" height="12" fill="#DC2626" />
-          <rect x="16" y="8" width="2" height="12" fill="#DC2626" />
+          {/* Torii Gate */}
+          <rect x="3" y="5" width="18" height="3" fill="#DC2626" />
+          <rect x="5" y="8" width="3" height="12" fill="#DC2626" />
+          <rect x="16" y="8" width="3" height="12" fill="#DC2626" />
         </svg>
       );
 
@@ -1350,10 +1544,13 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#0F172A" />
-          <rect x="2" y="14" width="20" height="8" fill="#15803D" />
-          <path d="M7 13 Q12 7 17 13 Z" fill="#EF4444" />
-          <rect x="11" y="13" width="2" height="4" fill="#FFFFFF" />
-          <line x1="5" y1="4" x2="4" y2="7" stroke="#38BDF8" strokeWidth="1" />
+          <rect x="2" y="13" width="20" height="9" fill="#15803D" />
+          {/* Toadstool */}
+          <rect x="7" y="8" width="10" height="5" fill="#EF4444" />
+          <rect x="11" y="13" width="2" height="5" fill="#FFFFFF" />
+          {/* Rain lines */}
+          <rect x="5" y="4" width="1" height="4" fill="#38BDF8" />
+          <rect x="17" y="3" width="1" height="4" fill="#38BDF8" />
         </svg>
       );
 
@@ -1362,8 +1559,10 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#27272A" />
           <rect x="4" y="11" width="16" height="9" fill="#0284C7" />
-          <path d="M8 8 Q9 5 8 3" stroke="#E2E8F0" strokeWidth="1.5" fill="none" />
-          <path d="M12 7 Q13 4 12 2" stroke="#E2E8F0" strokeWidth="1.5" fill="none" />
+          {/* Steam */}
+          <rect x="7" y="5" width="2" height="4" fill="#E2E8F0" />
+          <rect x="12" y="4" width="2" height="5" fill="#E2E8F0" />
+          <rect x="16" y="6" width="2" height="3" fill="#E2E8F0" />
         </svg>
       );
 
@@ -1371,9 +1570,11 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#0F172A" />
-          <circle cx="7" cy="6" r="1" fill="#FACC15" />
-          <polygon points="12,11 9,18 15,18" fill="#EA580C" />
-          <polygon points="12,13 10,18 14,18" fill="#FACC15" />
+          <rect x="6" y="5" width="2" height="2" fill="#FACC15" />
+          {/* Campfire */}
+          <rect x="10" y="13" width="4" height="4" fill="#EA580C" />
+          <rect x="11" y="14" width="2" height="2" fill="#FACC15" />
+          <rect x="9" y="17" width="6" height="2" fill="#78350F" />
         </svg>
       );
 
@@ -1382,8 +1583,8 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#FEF3C7" />
           <rect x="2" y="14" width="20" height="8" fill="#C59B63" />
-          <rect x="8" y="11" width="8" height="3" fill="#78350F" />
-          <circle cx="12" cy="8" r="3" fill="#15803D" />
+          <rect x="7" y="11" width="10" height="4" fill="#78350F" />
+          <rect x="10" y="8" width="4" height="3" fill="#15803D" />
         </svg>
       );
 
@@ -1391,10 +1592,10 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#38BDF8" />
-          <circle cx="12" cy="14" r="5" fill="#FFFFFF" />
-          <circle cx="8" cy="15" r="4" fill="#FFFFFF" />
-          <circle cx="16" cy="15" r="4" fill="#FFFFFF" />
-          <rect x="11" y="6" width="3" height="3" fill="#FACC15" />
+          {/* Cloud Blocks */}
+          <rect x="4" y="13" width="16" height="6" fill="#FFFFFF" />
+          <rect x="7" y="10" width="10" height="8" fill="#FFFFFF" />
+          <rect x="11" y="5" width="3" height="3" fill="#FACC15" />
         </svg>
       );
 
@@ -1402,8 +1603,10 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           <rect x="2" y="2" width="20" height="20" fill="#052E16" />
-          <rect x="6" y="4" width="3" height="16" fill="#15803D" />
-          <rect x="14" y="3" width="3" height="17" fill="#22C55E" />
+          <rect x="5" y="3" width="4" height="18" fill="#15803D" />
+          <rect x="13" y="3" width="4" height="18" fill="#22C55E" />
+          <rect x="7" y="7" width="6" height="6" fill="#DC2626" />
+          <rect x="9" y="9" width="2" height="2" fill="#FEF08A" />
         </svg>
       );
 
@@ -1413,7 +1616,7 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'auto':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="12" cy="12" r="8" fill="#64748B" />
+          <rect x="5" y="5" width="14" height="14" fill="#64748B" />
           <rect x="11" y="7" width="2" height="5" fill="#FFFFFF" />
           <rect x="11" y="11" width="5" height="2" fill="#FFFFFF" />
         </svg>
@@ -1422,7 +1625,9 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'sunny':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="12" cy="12" r="5" fill="#F59E0B" />
+          <rect x="8" y="8" width="8" height="8" fill="#F59E0B" />
+          <rect x="9" y="9" width="6" height="6" fill="#FDE047" />
+          {/* Sun Rays */}
           <rect x="11" y="3" width="2" height="3" fill="#F59E0B" />
           <rect x="11" y="18" width="2" height="3" fill="#F59E0B" />
           <rect x="3" y="11" width="3" height="2" fill="#F59E0B" />
@@ -1433,43 +1638,50 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'golden':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="4" y="13" width="16" height="7" fill="#EA580C" />
-          <circle cx="12" cy="13" r="5" fill="#FACC15" />
+          <rect x="3" y="12" width="18" height="8" fill="#EA580C" />
+          <rect x="8" y="8" width="8" height="8" fill="#FACC15" />
+          <rect x="9" y="9" width="6" height="6" fill="#FEF08A" />
         </svg>
       );
 
     case 'starry':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <path d="M15 6 A 7 7 0 0 0 10 17 A 7 7 0 1 1 15 6 Z" fill="#FACC15" />
-          <circle cx="18" cy="8" r="1" fill="#FFFFFF" />
-          <circle cx="6" cy="14" r="1" fill="#FFFFFF" />
+          {/* Crescent Moon */}
+          <rect x="8" y="5" width="9" height="12" fill="#FACC15" />
+          <rect x="12" y="7" width="7" height="8" fill="#0B132B" />
+          {/* Stars */}
+          <rect x="5" y="7" width="2" height="2" fill="#FFFFFF" />
+          <rect x="17" y="17" width="2" height="2" fill="#FFFFFF" />
         </svg>
       );
 
     case 'rainy':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <ellipse cx="12" cy="9" rx="7" ry="4" fill="#94A3B8" />
-          <line x1="8" y1="15" x2="7" y2="19" stroke="#38BDF8" strokeWidth="1.5" />
-          <line x1="12" y1="15" x2="11" y2="19" stroke="#38BDF8" strokeWidth="1.5" />
+          <rect x="5" y="6" width="14" height="8" fill="#94A3B8" />
+          <rect x="7" y="5" width="10" height="9" fill="#94A3B8" />
+          {/* Rain streaks */}
+          <rect x="7" y="15" width="2" height="4" fill="#38BDF8" />
+          <rect x="12" y="16" width="2" height="4" fill="#38BDF8" />
+          <rect x="16" y="14" width="2" height="4" fill="#38BDF8" />
         </svg>
       );
 
     case 'petals':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="7" cy="7" r="2" fill="#F472B6" />
-          <circle cx="16" cy="9" r="2.5" fill="#FB7185" />
-          <circle cx="11" cy="15" r="2" fill="#FDA4AF" />
+          <rect x="5" y="6" width="4" height="4" fill="#F472B6" />
+          <rect x="15" y="8" width="5" height="5" fill="#FB7185" />
+          <rect x="10" y="14" width="4" height="4" fill="#FDA4AF" />
         </svg>
       );
 
     default:
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <circle cx="12" cy="12" r="7" fill="#75A65A" />
-          <circle cx="12" cy="12" r="4" fill="#FEF9C3" />
+          <rect x="5" y="5" width="14" height="14" fill="#75A65A" />
+          <rect x="8" y="8" width="8" height="8" fill="#FEF9C3" />
         </svg>
       );
   }
