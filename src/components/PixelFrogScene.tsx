@@ -181,6 +181,16 @@ export const PixelFrogSolo: React.FC<{
   className?: string;
   isAnimated?: boolean;
 }> = ({ config, size = 120, className = '', isAnimated = true }) => {
+  const [soloTick, setSoloTick] = useState(0);
+
+  useEffect(() => {
+    if (!isAnimated) return;
+    const interval = setInterval(() => {
+      setSoloTick((prev) => (prev + 1) % 60);
+    }, 350);
+    return () => clearInterval(interval);
+  }, [isAnimated]);
+
   const skin = getSkinColors(config.skinId || 'classic');
   const frogX = 40;
   const frogY = 32;
@@ -197,6 +207,153 @@ export const PixelFrogSolo: React.FC<{
     >
       {/* Frog Shadow */}
       <ellipse cx={frogX + 8} cy={frogY + 28} rx="18" ry="4" fill="#000000" opacity="0.18" />
+
+      {/* COMPANION LAYER (SOLO PREVIEW - Rendered behind frog so frog accessories always remain in front) */}
+      {(config.companionId === 'snail' || config.companionId === 'companion_snail') && (
+        <g transform={`translate(${frogX + 26 + ((soloTick * 0.8) % 4)}, ${frogY + 16})`}>
+          <rect x="0" y="6" width="12" height="2.5" fill="#F2E6CA" rx="1" />
+          <line x1="10" y1="5" x2="11" y2={soloTick % 2 === 0 ? 1 : 2.5} stroke="#4A3D2A" strokeWidth="0.8" />
+          <circle cx="11" cy={soloTick % 2 === 0 ? 1 : 2.5} r="0.8" fill="#4A3D2A" />
+          <ellipse cx="4" cy={3 + (soloTick % 2 === 0 ? 0 : 0.5)} rx="4" ry="3.2" fill="#E2CCAB" stroke="#7D6242" strokeWidth="0.6" />
+        </g>
+      )}
+
+      {(config.companionId === 'crab' || config.companionId === 'companion_crab') && (
+        <g transform={`translate(${frogX - 28 + ((soloTick % 4) < 2 ? 0 : 2)}, ${frogY + 16})`}>
+          <rect x="3" y="4" width="9" height="4.5" fill="#D95C3C" rx="1.5" />
+          <rect x="0" y={soloTick % 2 === 0 ? 1 : 3} width="2.5" height="2.5" fill="#DC2626" />
+          <rect x="11" y={soloTick % 2 === 0 ? 3 : 1} width="2.5" height="2.5" fill="#DC2626" />
+          <circle cx="5" cy={soloTick % 2 === 0 ? 2.5 : 3.5} r="0.8" fill="#18181B" />
+          <circle cx="9" cy={soloTick % 2 === 0 ? 3.5 : 2.5} r="0.8" fill="#18181B" />
+        </g>
+      )}
+
+      {(config.companionId === 'fireflies' || config.companionId === 'companion_fireflies') && (
+        <g>
+          <circle cx={frogX - 16 + Math.sin(soloTick * 0.5) * 4} cy={frogY + 4 + Math.cos(soloTick * 0.4) * 3} r="2.5" fill="#FEF08A" opacity="0.4" />
+          <circle cx={frogX - 16 + Math.sin(soloTick * 0.5) * 4} cy={frogY + 4 + Math.cos(soloTick * 0.4) * 3} r="1.2" fill="#FACC15" />
+          <circle cx={frogX + 30 + Math.cos(soloTick * 0.4) * 5} cy={frogY + 2 + Math.sin(soloTick * 0.6) * 4} r="3" fill="#FEF08A" opacity="0.4" />
+          <circle cx={frogX + 30 + Math.cos(soloTick * 0.4) * 5} cy={frogY + 2 + Math.sin(soloTick * 0.6) * 4} r="1.4" fill="#FACC15" />
+        </g>
+      )}
+
+      {(config.companionId === 'butterfly' || config.companionId === 'companion_butterfly') && (
+        <g transform={`translate(${frogX + 26 + Math.sin(soloTick * 0.4) * 4}, ${frogY - 6 + Math.cos(soloTick * 0.5) * 3})`}>
+          <ellipse cx={2 - (soloTick % 2 === 0 ? 3 : 1)} cy="2" rx={soloTick % 2 === 0 ? 3 : 1} ry="3.5" fill="#60A5FA" />
+          <ellipse cx={4 + (soloTick % 2 === 0 ? 3 : 1)} cy="2" rx={soloTick % 2 === 0 ? 3 : 1} ry="3.5" fill="#60A5FA" />
+          <rect x="2.5" y="0" width="1" height="4.5" fill="#0F172A" rx="0.5" />
+        </g>
+      )}
+
+      {(config.companionId === 'koi' || config.companionId === 'companion_koi') && (
+        <g transform={`translate(${frogX - 28 + ((soloTick * 2) % 20)}, ${frogY + 22 + Math.sin(soloTick * 0.6)})`}>
+          <ellipse cx="5" cy="2" rx="6" ry="2.5" fill="#EA580C" />
+          <polygon points={`10,2 ${13 + (soloTick % 2 === 0 ? -1 : 1)},0 ${13 + (soloTick % 2 === 0 ? -1 : 1)},4`} fill="#EA580C" />
+          <circle cx="2" cy="1.8" r="0.6" fill="#18181B" />
+        </g>
+      )}
+
+      {(config.companionId === 'duckling' || config.companionId === 'companion_duckling') && (
+        <g transform={`translate(${frogX + 26}, ${frogY + 16 + (soloTick % 2 === 0 ? 0 : 1.5)})`}>
+          <ellipse cx="5" cy="4" rx="5" ry="3.2" fill="#FACC15" />
+          <circle cx="2" cy="2" r="2.5" fill="#FACC15" />
+          <polygon points="0,2 -2,2.5 0,3" fill="#EA580C" />
+          <circle cx="1.8" cy="1.5" r="0.6" fill="#18181B" />
+          <ellipse cx="5" cy={soloTick % 2 === 0 ? 3.5 : 2.5} rx="2.2" ry="1.5" fill="#EAB308" />
+        </g>
+      )}
+
+      {(config.companionId === 'cat' || config.companionId === 'companion_cat') && (
+        <g transform={`translate(${frogX - 28}, ${frogY + 14})`}>
+          <path d={`M 1 6 Q -1 ${soloTick % 2 === 0 ? 2 : 4} -2 ${soloTick % 2 === 0 ? 0 : 3}`} stroke="#18181B" strokeWidth="1.5" fill="none" />
+          <ellipse cx="5" cy="5" rx="5" ry="3.8" fill="#18181B" />
+          <circle cx="8" cy="3" r="3" fill="#18181B" />
+          <polygon points="6.5,0.8 8.5,1 7.5,-0.5" fill="#18181B" />
+          <polygon points="8.5,1 10.5,1 9.5,-0.5" fill="#18181B" />
+          <circle cx="7.8" cy="3" r="0.7" fill="#FDE047" />
+          <circle cx="9.2" cy="3" r="0.7" fill="#FDE047" />
+        </g>
+      )}
+
+      {(config.companionId === 'turtle' || config.companionId === 'companion_turtle') && (
+        <g transform={`translate(${frogX + 24}, ${frogY + 18})`}>
+          <ellipse cx="6" cy="3" rx="6.5" ry="3.8" fill="#78350F" />
+          <ellipse cx="6" cy="2.5" rx="5" ry="2.8" fill="#15803D" />
+          <circle cx={soloTick % 2 === 0 ? 1 : -0.5} cy="3" r="1.8" fill="#166534" />
+        </g>
+      )}
+
+      {(config.companionId === 'chibi_wolf_pup' || config.companionId === 'companion_chibi_wolf_pup') && (
+        <g transform={`translate(${frogX + 26}, ${frogY + 14 + (soloTick % 2 === 0 ? 0 : -1)})`}>
+          <ellipse cx="6" cy="5" rx="5" ry="3.5" fill="#475569" />
+          <circle cx="3" cy="3" r="3.2" fill="#475569" />
+          <polygon points="1,0.8 2.8,3 0.5,3" fill="#334155" />
+          <polygon points="3.5,0.5 4.8,3 2.5,3" fill="#334155" />
+          <circle cx="2" cy="2.8" r="0.7" fill="#FACC15" />
+          <ellipse cx="10" cy={soloTick % 2 === 0 ? 3 : 5} rx="2" ry="1.2" fill="#475569" />
+        </g>
+      )}
+
+      {(config.companionId === 'forest_hedgehog' || config.companionId === 'companion_forest_hedgehog') && (
+        <g transform={`translate(${frogX - 28}, ${frogY + 18 + (soloTick % 2 === 0 ? 0 : 0.5)})`}>
+          <ellipse cx="6" cy="3" rx="6" ry="3.8" fill="#78350F" />
+          <polygon points="1,0.5 3,2 2,3" fill="#451A03" />
+          <polygon points="4,-0.2 6,2 5,3" fill="#451A03" />
+          <polygon points="7,0.2 9,2 8,3" fill="#451A03" />
+          <circle cx="10" cy={4 + (soloTick % 2 === 0 ? 0 : 0.6)} r="1.8" fill="#FBBF24" />
+          <circle cx="11.2" cy={3.8 + (soloTick % 2 === 0 ? 0 : 0.6)} r="0.6" fill="#18181B" />
+        </g>
+      )}
+
+      {(config.companionId === 'sushi_apprentice_cat' || config.companionId === 'companion_sushi_apprentice_cat') && (
+        <g transform={`translate(${frogX - 28}, ${frogY + 14 + (soloTick % 2 === 0 ? 0 : -1)})`}>
+          <ellipse cx="6" cy="6" rx="5" ry="3.8" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.4" />
+          <circle cx="9" cy="3" r="3" fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.4" />
+          <polygon points="8,0.5 9.5,1.5 8,-0.2" fill="#FB923C" />
+          <rect x="7.5" y="2.2" width="5" height="1" fill="#DC2626" />
+          <circle cx="9.5" cy="3" r="0.7" fill="#1E3A8A" />
+          <rect x={soloTick % 2 === 0 ? 11 : 10} y={soloTick % 2 === 0 ? 4 : 5} width="2.8" height="1.5" fill="#FB923C" rx="0.4" />
+        </g>
+      )}
+
+      {(config.companionId === 'mini_ebi_shrimp' || config.companionId === 'companion_mini_ebi_shrimp') && (
+        <g transform={`translate(${frogX + 26}, ${frogY + 16 + (soloTick % 3 === 1 ? -3 : 0)})`}>
+          <ellipse cx="5" cy="3" rx="4.5" ry="2.6" fill="#EA580C" />
+          <polygon points={`8,3 ${11 + (soloTick % 2 === 0 ? 1 : 0)},1 10,3`} fill="#DC2626" />
+          <circle cx="2.5" cy="2.2" r="0.5" fill="#18181B" />
+        </g>
+      )}
+
+      {(config.companionId === 'konbini_cashier_cat' || config.companionId === 'companion_konbini_cashier_cat') && (
+        <g transform={`translate(${frogX + 24}, ${frogY + 8})`}>
+          <ellipse cx="6" cy="8" rx="5" ry="4" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.4" />
+          <circle cx="6" cy="3.5" r="3.2" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.4" />
+          <rect x="2.5" y={soloTick % 2 === 0 ? 1.5 : 2} width="7" height="1.2" fill="#10B981" rx="0.4" />
+          <circle cx="4.8" cy="3.5" r="0.5" fill="#1E293B" />
+          <circle cx="7.2" cy="3.5" r="0.5" fill="#1E293B" />
+          <rect x="3" y="7" width="6" height="3" fill="#10B981" rx="0.4" />
+          <circle cx="6" cy="8.5" r={soloTick % 2 === 0 ? 1.2 : 0.9} fill="#FACC15" />
+          <rect x="0.8" y={soloTick % 2 === 0 ? 2 : 4} width="2.2" height="2.8" fill="#FFFFFF" rx="1" stroke="#CBD5E1" strokeWidth="0.3" />
+        </g>
+      )}
+
+      {(config.companionId === 'snack_shiba' || config.companionId === 'companion_snack_shiba') && (
+        <g transform={`translate(${frogX - 30}, ${frogY + 12})`}>
+          <polygon points="0,5 18,5 16,13 2,13" fill="#DC2626" />
+          <polygon points="1.5,6.5 16.5,6.5 15,11.5 3,11.5" fill="#B91C1C" />
+          <ellipse cx="9" cy="7.5" rx="5.5" ry="3.2" fill="#D97706" />
+          <g transform={`translate(0, ${soloTick % 2 === 0 ? 0 : -0.8})`}>
+            <circle cx="12" cy="5" r="3" fill="#D97706" />
+            <ellipse cx="13" cy="6" rx="1.8" ry="1.2" fill="#FFFFFF" />
+            <polygon points="10.5,2.5 12,0.8 12,3" fill="#B45309" />
+            <polygon points="13,2.5 14.5,0.8 14.5,3" fill="#B45309" />
+            <line x1="11" y1="4.8" x2="12.5" y2="4.8" stroke="#18181B" strokeWidth="0.5" />
+            {soloTick % 2 === 0 && <circle cx="13" cy="6.8" r="0.6" fill="#FB7185" />}
+          </g>
+          <circle cx="4" cy={soloTick % 2 === 0 ? 5 : 6.5} r="1.6" fill="#D97706" />
+          <rect x="2" y="3.5" width="3.5" height="4.5" fill="#FACC15" rx="0.4" />
+        </g>
+      )}
 
       {/* Eyes Outlines & Color */}
       <rect x={frogX} y={frogY} width="5" height="5" fill={skin.outline} />
@@ -2135,15 +2292,17 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <polygon points="38,88 80,88 80,110 30,110" fill="#ecfdf5" opacity="0.7" />
           <polygon points="118,88 160,88 160,110 126,110" fill="#ecfdf5" opacity="0.7" />
 
-          {/* Red Plastic Shopping Basket on Floor on Left */}
-          <g transform="translate(18, 68)">
-            <polygon points="0,4 20,4 17,14 3,14" fill="#dc2626" />
-            <polygon points="2,6 18,6 16,12 4,12" fill="#b91c1c" />
-            <path d="M 4 4 Q 10 -2 16 4" stroke="#78350f" strokeWidth="1" fill="none" />
-            {/* Bag of Chips & Drink inside basket */}
-            <rect x="5" y="2" width="4" height="6" fill="#facc15" rx="0.5" />
-            <rect x="11" y="1" width="3" height="6" fill="#22c55e" rx="0.5" />
-          </g>
+          {/* Red Plastic Shopping Basket on Floor on Left (Hidden if animated Snack Shiba companion is active) */}
+          {config.companionId !== 'snack_shiba' && config.companionId !== 'companion_snack_shiba' && (
+            <g transform="translate(14, 68)">
+              <polygon points="0,4 20,4 17,14 3,14" fill="#dc2626" />
+              <polygon points="2,6 18,6 16,12 4,12" fill="#b91c1c" />
+              <path d="M 4 4 Q 10 -2 16 4" stroke="#78350f" strokeWidth="1" fill="none" />
+              {/* Bag of Chips & Drink inside basket */}
+              <rect x="5" y="2" width="4" height="6" fill="#facc15" rx="0.5" />
+              <rect x="11" y="1" width="3" height="6" fill="#22c55e" rx="0.5" />
+            </g>
+          )}
 
           {/* CENTER CASHIER CHECKOUT REGISTER COUNTER (Frog Stage) */}
           <g id="konbini-checkout-counter">
@@ -2166,15 +2325,512 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <line x1="88" y1="58" x2="90" y2="52" stroke="#64748b" strokeWidth="1" />
             <circle cx="90" cy="52" r="1.5" fill="#ef4444" />
 
-            {/* Fresh Onigiri & Bento Staging Tray on Counter */}
-            <rect x="54" y="58" width="14" height="4" fill="#fef3c7" rx="0.5" stroke="#d97706" strokeWidth="0.5" />
-            <polygon points="57,59 61,59 60,61 58,61" fill="#ffffff" />
-            <polygon points="63,59 67,59 66,61 64,61" fill="#ffffff" />
+            {/* Fresh Onigiri & Bento Staging Tray on Counter (Positioned neatly on the left edge of counter) */}
+            <rect x="46" y="58" width="12" height="4" fill="#fef3c7" rx="0.5" stroke="#d97706" strokeWidth="0.5" />
+            <polygon points="48,59 52,59 51,61 49,61" fill="#ffffff" />
+            <polygon points="53,59 57,59 56,61 54,61" fill="#ffffff" />
           </g>
         </g>
       )}
 
-            {/* 3. FROG CHARACTER (DYNAMICALLY MOVING, HOPPING & INTERACTING ACROSS SCENE) */}
+            {/* 3. COMPANION VISITOR LAYER (ALL PETS ANIMATED - Placed BEFORE frog so frog & props are always in foreground) */}
+
+            {/* A. Snail Friend (Crawling, eyestalks wiggling, shell rocking, glistening slime trail & heart) */}
+            {(config.companionId === 'snail' || config.companionId === 'companion_snail') && (() => {
+              const crawlX = 122 + ((animTick * 1.2) % 12);
+              const stalkY = animTick % 2 === 0 ? 71 : 73;
+              const shellTilt = animTick % 2 === 0 ? 0 : 1;
+              return (
+                <g id="companion-snail" transform={`translate(${crawlX}, 0)`}>
+                  {/* Glistening Slime Trail */}
+                  <line x1="-10" y1="82" x2="6" y2="82" stroke="#E2E8F0" strokeWidth="1" strokeDasharray="2,2" opacity={animTick % 2 === 0 ? 0.7 : 0.4} />
+                  {animTick % 4 === 0 && <circle cx="-4" cy="81" r="0.8" fill="#FDE047" opacity="0.8" />}
+                  {/* Snail Foot / Soft Body */}
+                  <rect x="0" y="80" width="18" height="3" fill="#F2E6CA" rx="1.5" />
+                  <rect x="12" y="77" width="5" height="4" fill="#F2E6CA" rx="1" />
+                  {/* Eyestalks (Animated wiggling up & down) */}
+                  <line x1="14" y1="77" x2="13" y2={stalkY} stroke="#4A3D2A" strokeWidth="0.8" />
+                  <line x1="16" y1="77" x2="16.5" y2={stalkY + (animTick % 2 === 0 ? 0.5 : -0.5)} stroke="#4A3D2A" strokeWidth="0.8" />
+                  <circle cx="13" cy={stalkY} r="1" fill="#4A3D2A" />
+                  <circle cx="16.5" cy={stalkY + (animTick % 2 === 0 ? 0.5 : -0.5)} r="1" fill="#4A3D2A" />
+                  <circle cx="13" cy={stalkY} r="0.4" fill="#FFFFFF" />
+                  <circle cx="16.5" cy={stalkY + (animTick % 2 === 0 ? 0.5 : -0.5)} r="0.4" fill="#FFFFFF" />
+                  {/* Spiral Shell (Rocking gently) */}
+                  <g transform={`translate(4, ${73 + shellTilt})`}>
+                    <ellipse cx="5" cy="4" rx="5.5" ry="4.5" fill="#E2CCAB" stroke="#7D6242" strokeWidth="0.8" />
+                    <ellipse cx="5" cy="4" rx="3.5" ry="2.8" fill="#D4B692" />
+                    <circle cx="5" cy="4" r="1.5" fill="#7D6242" />
+                  </g>
+                  {/* Tiny Sweet Sparkle / Heart occasionally */}
+                  {animTick % 6 === 0 && (
+                    <text x="14" y={stalkY - 4} fontSize="5" fill="#F43F5E" className="animate-bounce">♥</text>
+                  )}
+                </g>
+              );
+            })()}
+
+            {/* B. Crab Friend (Scuttling sideways on left floor, snapping claws & blowing bubbles) */}
+            {(config.companionId === 'crab' || config.companionId === 'companion_crab') && (() => {
+              const crabX = 14 + ((animTick % 6) < 3 ? 0 : 3);
+              const leftClawY = animTick % 2 === 0 ? 69 : 72;
+              const rightClawY = animTick % 2 === 0 ? 72 : 69;
+              return (
+                <g id="companion-crab" transform={`translate(${crabX}, 0)`}>
+                  {/* Crab Body */}
+                  <rect x="6" y="74" width="12" height="6" fill="#D95C3C" rx="2" />
+                  <rect x="8" y="75" width="8" height="4" fill="#EA580C" rx="1" />
+                  {/* Animated Left Claw */}
+                  <g transform={`translate(2, ${leftClawY})`}>
+                    <rect x="0" y="2" width="3" height="3" fill="#DC2626" rx="0.5" />
+                    <polygon points="0,2 1,0 2,2" fill="#EF4444" />
+                    <polygon points="2,2 3,0 4,2" fill="#EF4444" />
+                  </g>
+                  {/* Animated Right Claw */}
+                  <g transform={`translate(19, ${rightClawY})`}>
+                    <rect x="0" y="2" width="3" height="3" fill="#DC2626" rx="0.5" />
+                    <polygon points="0,2 1,0 2,2" fill="#EF4444" />
+                    <polygon points="2,2 3,0 4,2" fill="#EF4444" />
+                  </g>
+                  {/* Eyestalks & Curious Eyes */}
+                  <rect x="8" y={animTick % 2 === 0 ? 71 : 72} width="2" height="3" fill="#FFFFFF" />
+                  <circle cx="9" cy={animTick % 2 === 0 ? 72 : 73} r="0.8" fill="#18181B" />
+                  <rect x="14" y={animTick % 2 === 0 ? 72 : 71} width="2" height="3" fill="#FFFFFF" />
+                  <circle cx="15" cy={animTick % 2 === 0 ? 73 : 72} r="0.8" fill="#18181B" />
+                  {/* Walking Legs (Alternating stride) */}
+                  <line x1="5" y1="78" x2={animTick % 2 === 0 ? 3 : 4} y2="82" stroke="#3A2218" strokeWidth="1" />
+                  <line x1="7" y1="79" x2={animTick % 2 === 0 ? 6 : 5} y2="82" stroke="#3A2218" strokeWidth="1" />
+                  <line x1="17" y1="79" x2={animTick % 2 === 0 ? 18 : 19} y2="82" stroke="#3A2218" strokeWidth="1" />
+                  <line x1="19" y1="78" x2={animTick % 2 === 0 ? 21 : 20} y2="82" stroke="#3A2218" strokeWidth="1" />
+                  {/* Tiny Bubble popping */}
+                  <circle cx="12" cy={69 - ((animTick * 2) % 6)} r="1" fill="#38BDF8" opacity="0.8" />
+                </g>
+              );
+            })()}
+
+            {/* C. Hotaru Fireflies Swarm (Floating in corners away from center frog) */}
+            {(config.companionId === 'fireflies' || config.companionId === 'companion_fireflies') && (() => {
+              const f1x = 24 + Math.sin(animTick * 0.4) * 8;
+              const f1y = 38 + Math.cos(animTick * 0.3) * 6;
+              const f2x = 135 + Math.cos(animTick * 0.35) * 10;
+              const f2y = 32 + Math.sin(animTick * 0.5) * 7;
+              const f3x = 36 + Math.sin(animTick * 0.6) * 8;
+              const f3y = 24 + Math.cos(animTick * 0.4) * 5;
+              const f4x = 142 + Math.cos(animTick * 0.45) * 6;
+              const f4y = 52 + Math.sin(animTick * 0.3) * 5;
+              const f5x = 20 + Math.sin(animTick * 0.5) * 6;
+              const f5y = 56 + Math.cos(animTick * 0.55) * 6;
+
+              return (
+                <g id="companion-fireflies">
+                  {/* Firefly 1 */}
+                  <circle cx={f1x} cy={f1y} r="4" fill="#FEF08A" opacity={0.25 + (animTick % 2) * 0.15} />
+                  <circle cx={f1x} cy={f1y} r="1.5" fill="#FACC15" />
+                  <circle cx={f1x} cy={f1y} r="0.6" fill="#FFFFFF" />
+
+                  {/* Firefly 2 */}
+                  <circle cx={f2x} cy={f2y} r="4.5" fill="#FEF08A" opacity={0.3 - (animTick % 2) * 0.1} />
+                  <circle cx={f2x} cy={f2y} r="1.8" fill="#FACC15" />
+                  <circle cx={f2x} cy={f2y} r="0.8" fill="#FFFFFF" />
+
+                  {/* Firefly 3 */}
+                  <circle cx={f3x} cy={f3y} r="3.5" fill="#FDE047" opacity={0.25 + (animTick % 3) * 0.1} />
+                  <circle cx={f3x} cy={f3y} r="1.4" fill="#FACC15" />
+                  <circle cx={f3x} cy={f3y} r="0.5" fill="#FFFFFF" />
+
+                  {/* Firefly 4 */}
+                  <circle cx={f4x} cy={f4y} r="4" fill="#FEF08A" opacity={0.2} />
+                  <circle cx={f4x} cy={f4y} r="1.5" fill="#EAB308" />
+
+                  {/* Firefly 5 */}
+                  <circle cx={f5x} cy={f5y} r="3.5" fill="#FEF08A" opacity={0.3} />
+                  <circle cx={f5x} cy={f5y} r="1.3" fill="#FACC15" />
+                </g>
+              );
+            })()}
+
+            {/* D. Flutter Butterfly (Flapping wings in upper right sky) */}
+            {(config.companionId === 'butterfly' || config.companionId === 'companion_butterfly') && (() => {
+              const bX = 126 + Math.sin(animTick * 0.35) * 8;
+              const bY = 32 + Math.cos(animTick * 0.45) * 6;
+              const wingW = animTick % 2 === 0 ? 4.5 : 1.5;
+              const wingH = animTick % 2 === 0 ? 5 : 4;
+
+              return (
+                <g id="companion-butterfly" transform={`translate(${bX}, ${bY})`}>
+                  {/* Trailing sparkle dust */}
+                  <circle cx={-3 - (animTick % 3)} cy={3 + (animTick % 2)} r="0.7" fill="#93C5FD" opacity="0.8" />
+                  <circle cx={-6 - (animTick % 4)} cy={1} r="0.5" fill="#FBCFE8" opacity="0.7" />
+                  {/* Left Wing */}
+                  <ellipse cx={4 - wingW} cy="3" rx={wingW} ry={wingH} fill="#60A5FA" />
+                  <ellipse cx={4 - wingW * 0.7} cy="3" rx={wingW * 0.6} ry={wingH * 0.6} fill="#BAE6FD" />
+                  {/* Right Wing */}
+                  <ellipse cx={6 + wingW} cy="3" rx={wingW} ry={wingH} fill="#60A5FA" />
+                  <ellipse cx={6 + wingW * 0.7} cy="3" rx={wingW * 0.6} ry={wingH * 0.6} fill="#BAE6FD" />
+                  {/* Body & Antennae */}
+                  <rect x="4.5" y="1" width="1.5" height="5.5" fill="#0F172A" rx="0.7" />
+                  <line x1="5" y1="1" x2="3.5" y2="0" stroke="#0F172A" strokeWidth="0.5" />
+                  <line x1="5.5" y1="1" x2="7" y2="0" stroke="#0F172A" strokeWidth="0.5" />
+                </g>
+              );
+            })()}
+
+            {/* E. Koi Fish Swimming (Gliding in lower water/floor area) */}
+            {(config.companionId === 'koi' || config.companionId === 'companion_koi') && (() => {
+              const koiX = 14 + ((animTick * 2) % 36);
+              const koiY = 86 + Math.sin(animTick * 0.6) * 1.5;
+              const tailWiggle = animTick % 2 === 0 ? -1.5 : 1.5;
+
+              return (
+                <g id="companion-koi" transform={`translate(${koiX}, ${koiY})`}>
+                  {/* Water ripple circles behind fish */}
+                  <ellipse cx="-4" cy="3" rx={3 + (animTick % 3)} ry={1.5} fill="none" stroke="#67E8F9" strokeWidth="0.6" opacity={0.6 - (animTick % 3) * 0.15} />
+                  {/* Fish Body */}
+                  <ellipse cx="7" cy="3" rx="8" ry="3.5" fill="#FFFFFF" />
+                  <ellipse cx="6" cy="3" rx="5" ry="2.8" fill="#EA580C" />
+                  {/* Red/White Nishiki markings */}
+                  <ellipse cx="4" cy="2.2" rx="2.5" ry="1.2" fill="#DC2626" />
+                  <ellipse cx="9" cy="3" rx="2" ry="1.5" fill="#FFFFFF" />
+                  {/* Swishing Tail Fin */}
+                  <polygon points={`14,3 ${18 + tailWiggle},${0} ${18 + tailWiggle},${6}`} fill="#EA580C" />
+                  <polygon points={`14,3 ${16 + tailWiggle},${1.5} ${16 + tailWiggle},${4.5}`} fill="#FFFFFF" />
+                  {/* Pectoral Fins (Animated fluttering) */}
+                  <ellipse cx="5" cy={animTick % 2 === 0 ? 5.5 : 4.5} rx="2" ry="1" fill="#FFFFFF" opacity="0.9" />
+                  {/* Eye */}
+                  <circle cx="2" cy="2.5" r="0.8" fill="#18181B" />
+                  <circle cx="1.8" cy="2.3" r="0.3" fill="#FFFFFF" />
+                  {/* Oxygen Bubble */}
+                  <circle cx="0" cy={animTick % 2 === 0 ? 1 : 0} r="0.8" fill="#E0F2FE" opacity="0.85" />
+                </g>
+              );
+            })()}
+
+            {/* F. Duckling Companion (Bobbing in right side area) */}
+            {(config.companionId === 'duckling' || config.companionId === 'companion_duckling') && (() => {
+              const duckBob = animTick % 2 === 0 ? 0 : 1.5;
+              const beakOpen = animTick % 4 === 0;
+
+              return (
+                <g id="companion-duckling" transform={`translate(122, ${74 + duckBob})`}>
+                  {/* Water Ripple Ring */}
+                  <ellipse cx="6" cy="9" rx="8" ry="2" fill="none" stroke="#38BDF8" strokeWidth="0.5" opacity={animTick % 2 === 0 ? 0.7 : 0.3} />
+                  {/* Fluffy Body */}
+                  <ellipse cx="7" cy="5" rx="6.5" ry="4" fill="#FACC15" />
+                  <ellipse cx="6.5" cy="5.5" rx="4" ry="2.5" fill="#FEF08A" />
+                  {/* Cute Tail Feathers */}
+                  <polygon points="12,4 15,2 13,6" fill="#EAB308" />
+                  {/* Duck Head */}
+                  <circle cx="3" cy="2.5" r="3.2" fill="#FACC15" />
+                  {/* Eye (Blinking cute) */}
+                  {animTick % 5 === 0 ? (
+                    <line x1="2" y1="2" x2="3.8" y2="2" stroke="#1E293B" strokeWidth="0.6" />
+                  ) : (
+                    <>
+                      <circle cx="2.8" cy="2" r="0.9" fill="#1E293B" />
+                      <circle cx="2.6" cy="1.7" r="0.3" fill="#FFFFFF" />
+                    </>
+                  )}
+                  {/* Beak (Quacking open/close) */}
+                  {beakOpen ? (
+                    <>
+                      <polygon points="0,2 -2,1.2 0,2.5" fill="#EA580C" />
+                      <polygon points="0,2.5 -2,3.3 0,3.5" fill="#EA580C" />
+                      {/* Quacking Music Note */}
+                      <text x="-4" y="-1" fontSize="5" fill="#F59E0B" className="animate-bounce font-bold">♪</text>
+                    </>
+                  ) : (
+                    <polygon points="0,2 -2.5,2.5 0,3" fill="#EA580C" />
+                  )}
+                  {/* Wing (Flapping) */}
+                  <ellipse cx="7" cy={animTick % 2 === 0 ? 4 : 3} rx="3" ry="2" fill="#EAB308" />
+                  {/* Paddling Webbed Feet */}
+                  <ellipse cx="5" cy={animTick % 2 === 0 ? 9 : 8} rx="2" ry="0.8" fill="#EA580C" />
+                  <ellipse cx="9" cy={animTick % 2 === 0 ? 8 : 9} rx="2" ry="0.8" fill="#EA580C" />
+                </g>
+              );
+            })()}
+
+            {/* G. Cat Companion (Starry kitten on left floor) */}
+            {(config.companionId === 'cat' || config.companionId === 'companion_cat') && (() => {
+              const tailY = animTick % 2 === 0 ? 2 : 5;
+              const blink = animTick % 6 === 0;
+
+              return (
+                <g id="companion-cat" transform="translate(16, 73)">
+                  {/* Swaying Starry Tail */}
+                  <path
+                    d={`M 1 7 Q -2 ${tailY} ${animTick % 2 === 0 ? -4 : -2} ${tailY - 2}`}
+                    stroke="#18181B"
+                    strokeWidth="1.8"
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                  <circle cx={animTick % 2 === 0 ? -4 : -2} cy={tailY - 2} r="0.7" fill="#FACC15" />
+                  {/* Black Cat Body */}
+                  <ellipse cx="6" cy="6" rx="6" ry="4.5" fill="#18181B" />
+                  <circle cx="10" cy="3.5" r="3.5" fill="#18181B" />
+                  {/* Pointy Ears (Twitching) */}
+                  <polygon points="8,1 10.5,1 9.5,-0.5" fill={animTick % 2 === 0 ? '#FB7185' : '#18181B'} />
+                  <polygon points="10.5,1 13,1 12,-0.5" fill="#18181B" />
+                  {/* Golden Glowing Eyes */}
+                  {blink ? (
+                    <line x1="9" y1="3.5" x2="12" y2="3.5" stroke="#FDE047" strokeWidth="0.8" />
+                  ) : (
+                    <>
+                      <circle cx="9.5" cy="3.5" r="0.9" fill="#FDE047" />
+                      <circle cx="11.5" cy="3.5" r="0.9" fill="#FDE047" />
+                      <circle cx="9.5" cy="3.5" r="0.4" fill="#000000" />
+                      <circle cx="11.5" cy="3.5" r="0.4" fill="#000000" />
+                    </>
+                  )}
+                  {/* Red Collar & Pulsing Star Pendant */}
+                  <rect x="7.5" y="5.5" width="4.5" height="1" fill="#DC2626" />
+                  <circle cx="9.8" cy="7" r={animTick % 2 === 0 ? 1.2 : 0.9} fill="#FACC15" />
+                  {/* Paws */}
+                  <circle cx="5" cy="10" r="1.2" fill="#18181B" />
+                  <circle cx="9" cy="10" r="1.2" fill="#18181B" />
+                </g>
+              );
+            })()}
+
+            {/* H. Mossy Turtle (On right side floor) */}
+            {(config.companionId === 'turtle' || config.companionId === 'companion_turtle') && (() => {
+              const headExtend = animTick % 2 === 0 ? 1 : 2.5;
+
+              return (
+                <g id="companion-turtle" transform="translate(122, 75)">
+                  {/* Flipper Feet (Paddling) */}
+                  <ellipse cx="4" cy={animTick % 2 === 0 ? 8 : 7} rx="2" ry="1.2" fill="#166534" />
+                  <ellipse cx="12" cy={animTick % 2 === 0 ? 7 : 8} rx="2" ry="1.2" fill="#166534" />
+                  <ellipse cx="2" cy={animTick % 2 === 0 ? 3 : 4} rx="2" ry="1.2" fill="#166534" />
+                  {/* Mossy Shell */}
+                  <ellipse cx="8" cy="4" rx="8" ry="4.5" fill="#78350F" stroke="#451A03" strokeWidth="0.6" />
+                  <ellipse cx="8" cy="3.5" rx="6.5" ry="3.5" fill="#15803D" />
+                  <ellipse cx="8" cy="3.5" rx="4" ry="2" fill="#22C55E" />
+                  {/* Swaying Shell Flower */}
+                  <circle cx="8" cy="1" r="1.5" fill="#F472B6" />
+                  <circle cx="8" cy="1" r="0.6" fill="#FDE047" />
+                  {/* Head (Extending out and peeking) */}
+                  <g transform={`translate(${-headExtend}, 3)`}>
+                    <ellipse cx="2" cy="1" rx="2.5" ry="1.8" fill="#166534" />
+                    <circle cx="1.2" cy="0.8" r="0.6" fill="#18181B" />
+                    <circle cx="1" cy="0.6" r="0.2" fill="#FFFFFF" />
+                  </g>
+                </g>
+              );
+            })()}
+
+            {/* I. Chibi Wolf Pup (Excited pup on right side floor) */}
+            {(config.companionId === 'chibi_wolf_pup' || config.companionId === 'companion_chibi_wolf_pup') && (() => {
+              const tailAngle = animTick % 2 === 0 ? 25 : -15;
+              const pupHop = animTick % 2 === 0 ? 0 : -1;
+
+              return (
+                <g id="companion-wolf-pup" transform={`translate(122, ${72 + pupHop})`}>
+                  {/* Fluffy Wagging Tail */}
+                  <g transform={`translate(12, 6) rotate(${tailAngle})`}>
+                    <ellipse cx="3" cy="0" rx="3.5" ry="1.8" fill="#475569" />
+                    <polygon points="5,0 7,-1 7,1" fill="#F1F5F9" />
+                  </g>
+                  {/* Slate Grey Body */}
+                  <ellipse cx="7" cy="6" rx="6" ry="4" fill="#475569" />
+                  <ellipse cx="6" cy="7" rx="3.5" ry="2" fill="#E2E8F0" />
+                  {/* Wolf Head */}
+                  <circle cx="3.5" cy="3.5" r="3.8" fill="#475569" />
+                  <ellipse cx="1.5" cy="4.2" rx="2" ry="1.2" fill="#F1F5F9" />
+                  <circle cx="0.5" cy="4" r="0.6" fill="#18181B" />
+                  {/* Playful Ears (Twitching) */}
+                  <polygon points="1.5,1 3.5,3.5 0.5,3.5" fill={animTick % 2 === 0 ? '#F472B6' : '#334155'} />
+                  <polygon points="4,0.5 5.5,3.5 3,3.5" fill="#334155" />
+                  {/* Golden Sparkly Eyes */}
+                  <circle cx="2.5" cy="3" r="0.9" fill="#FACC15" />
+                  <circle cx="2.3" cy="2.8" r="0.3" fill="#FFFFFF" />
+                  {/* Pink Puppy Tongue peeking out */}
+                  {animTick % 2 === 0 && (
+                    <rect x="0" y="4.8" width="1.2" height="1.5" fill="#FB7185" rx="0.5" />
+                  )}
+                  {/* Front & Back Paws */}
+                  <rect x="1.5" y="8.5" width="2" height="2.5" fill="#334155" rx="0.5" />
+                  <rect x="7.5" y="8.5" width="2" height="2.5" fill="#334155" rx="0.5" />
+                </g>
+              );
+            })()}
+
+            {/* J. Forest Hedgehog (On left floor) */}
+            {(config.companionId === 'forest_hedgehog' || config.companionId === 'companion_forest_hedgehog') && (() => {
+              const noseBob = animTick % 2 === 0 ? 0 : 0.8;
+              const trot = animTick % 2 === 0 ? 0 : 0.5;
+
+              return (
+                <g id="companion-hedgehog" transform={`translate(14, ${76 + trot})`}>
+                  {/* Prickly Spikes Body */}
+                  <ellipse cx="7" cy="4" rx="7" ry="4.5" fill="#78350F" />
+                  <polygon points="2,1 4,3 3,4" fill="#451A03" />
+                  <polygon points="5,0 7,3 6,4" fill="#451A03" />
+                  <polygon points="8,0.5 10,3 9,4" fill="#451A03" />
+                  <polygon points="11,1.5 13,3.5 12,4.5" fill="#451A03" />
+                  {/* Fresh Ruby Strawberry on its back */}
+                  <g transform={`translate(5, ${-2 + (animTick % 2 === 0 ? 0 : -0.5)})`}>
+                    <polygon points="2,3 4,0 6,3 4,5" fill="#DC2626" />
+                    <rect x="3.5" y="-0.5" width="1" height="1" fill="#15803D" />
+                  </g>
+                  {/* Cute Snout & Face */}
+                  <circle cx="12" cy={5 + noseBob} r="2.2" fill="#FBBF24" />
+                  <circle cx="13.5" cy={4.8 + noseBob} r="0.7" fill="#18181B" />
+                  <circle cx="11.5" cy={4.2 + noseBob} r="0.6" fill="#18181B" />
+                  <circle cx="11.8" cy={5.8 + noseBob} r="0.8" fill="#F43F5E" opacity="0.6" />
+                  {/* Trotting Feet */}
+                  <rect x={animTick % 2 === 0 ? 3.5 : 4.5} y="8" width="2" height="1.8" fill="#451A03" rx="0.5" />
+                  <rect x={animTick % 2 === 0 ? 8.5 : 7.5} y="8" width="2" height="1.8" fill="#451A03" rx="0.5" />
+                </g>
+              );
+            })()}
+
+            {/* K. Sushi Apprentice Cat (On left floor) */}
+            {(config.companionId === 'sushi_apprentice_cat' || config.companionId === 'companion_sushi_apprentice_cat') && (() => {
+              const chefHop = animTick % 2 === 0 ? 0 : -1;
+              const tailSway = animTick % 2 === 0 ? -2 : 2;
+
+              return (
+                <g id="companion-sushi-cat" transform={`translate(14, ${72 + chefHop})`}>
+                  {/* Calico Tail */}
+                  <path d={`M 2 7 Q ${-1 + tailSway} 3 ${-3 + tailSway} 2`} stroke="#FB923C" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                  {/* White Calico Body & Head */}
+                  <ellipse cx="7" cy="7" rx="6" ry="4.5" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                  <circle cx="11" cy="4" r="3.5" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                  {/* Calico Spots */}
+                  <circle cx="5" cy="6" r="2" fill="#FB923C" />
+                  <circle cx="8" cy="8" r="1.5" fill="#1E293B" />
+                  {/* Ears */}
+                  <polygon points="10,1 12,2 10,0" fill="#FB923C" />
+                  <polygon points="12,1 14,2 13,0" fill="#1E293B" />
+                  {/* Tied Chef Hachimaki Headband with fluttering ties */}
+                  <rect x="9" y="3" width="6" height="1.2" fill="#DC2626" />
+                  <circle cx="12" cy="3.6" r="0.5" fill="#FFFFFF" />
+                  <line x1="14.5" y1="3.5" x2={16.5 + (animTick % 2 === 0 ? 1 : 0)} y2="2.5" stroke="#DC2626" strokeWidth="0.8" />
+                  {/* Big Sparkling Blue Eyes */}
+                  <circle cx="11.5" cy="4" r="0.8" fill="#1E3A8A" />
+                  <circle cx="11.3" cy="3.8" r="0.3" fill="#FFFFFF" />
+                  {/* Waving Paw holding Mini Salmon Nigiri */}
+                  <g transform={`translate(${animTick % 2 === 0 ? 14 : 13}, ${animTick % 2 === 0 ? 5 : 6})`}>
+                    <rect x="0" y="0" width="3.5" height="2" fill="#FFFFFF" rx="0.5" />
+                    <rect x="0" y="-1" width="3.5" height="1.5" fill="#FB923C" rx="0.5" />
+                    <rect x="1.2" y="-1" width="1" height="3" fill="#166534" />
+                  </g>
+                  {/* Feet */}
+                  <circle cx="4.5" cy="10.5" r="1.2" fill="#FFFFFF" />
+                  <circle cx="8.5" cy="10.5" r="1.2" fill="#FFFFFF" />
+                </g>
+              );
+            })()}
+
+            {/* L. Mini Ebi Shrimp (On right floor/water area) */}
+            {(config.companionId === 'mini_ebi_shrimp' || config.companionId === 'companion_mini_ebi_shrimp') && (() => {
+              const shrimpHop = (animTick % 3 === 1) ? -4 : (animTick % 3 === 2) ? -2 : 0;
+              const tailSpread = animTick % 2 === 0 ? 1 : 0;
+
+              return (
+                <g id="companion-ebi-shrimp" transform={`translate(126, ${74 + shrimpHop})`}>
+                  {/* Golden Sparkles around jumping prawn */}
+                  {animTick % 3 === 1 && (
+                    <>
+                      <circle cx="2" cy="-2" r="0.8" fill="#FDE047" />
+                      <circle cx="14" cy="-1" r="0.8" fill="#FDE047" />
+                    </>
+                  )}
+                  {/* Crispy Tempura Body */}
+                  <ellipse cx="6" cy="4" rx="5.5" ry="3.2" fill="#EA580C" />
+                  <rect x="3" y="2" width="1.5" height="4" fill="#FFFFFF" />
+                  <rect x="6" y="2" width="1.5" height="4" fill="#FFFFFF" />
+                  {/* Flapping Crispy Prawn Tail */}
+                  <polygon points={`10,4 ${14 + tailSpread},1 13,4`} fill="#DC2626" />
+                  <polygon points={`10,4 ${14 + tailSpread},${7 + tailSpread} 13,4`} fill="#EA580C" />
+                  {/* Bouncy Antennae */}
+                  <path d={`M 2 3 Q 0 ${1 + (animTick % 2)} -2 0`} stroke="#EA580C" strokeWidth="0.8" fill="none" />
+                  <path d={`M 2 4 Q 0 ${5 - (animTick % 2)} -1 6`} stroke="#EA580C" strokeWidth="0.8" fill="none" />
+                  {/* Cute Face */}
+                  <circle cx="3" cy="3" r="0.7" fill="#18181B" />
+                  <circle cx="2.8" cy="2.8" r="0.2" fill="#FFFFFF" />
+                  <rect x="3.5" y="4.2" width="1" height="0.8" fill="#FB7185" rx="0.3" />
+                </g>
+              );
+            })()}
+
+            {/* M. Konbini Cashier Lucky Cat (On far right counter side) */}
+            {(config.companionId === 'konbini_cashier_cat' || config.companionId === 'companion_konbini_cashier_cat') && (() => {
+              const waveY = animTick % 2 === 0 ? 2 : 5;
+              const coinGlow = animTick % 2 === 0 ? 1.5 : 1.1;
+
+              return (
+                <g id="companion-konbini-cat" transform="translate(120, 62)">
+                  {/* White Cat Body & Head */}
+                  <ellipse cx="7" cy="9" rx="6" ry="5" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                  <circle cx="7" cy="4" r="4" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                  {/* Cat Ears */}
+                  <polygon points="4,1 6,3 3,3" fill="#FB7185" />
+                  <polygon points="8,3 10,1 11,3" fill="#FB7185" />
+                  {/* Mini Clerk Green Visor (Bobbing) */}
+                  <rect x="3" y={animTick % 2 === 0 ? 1.8 : 2.2} width="8" height="1.5" fill="#10B981" rx="0.5" />
+                  {/* Cat Face: Eyes & Happy Whiskers */}
+                  <circle cx="5.5" cy="4" r="0.6" fill="#1E293B" />
+                  <circle cx="8.5" cy="4" r="0.6" fill="#1E293B" />
+                  <circle cx="7" cy="5" r="0.4" fill="#FB7185" />
+                  {/* Mini Green Staff Apron with Pulsing Gold Coin */}
+                  <rect x="3.5" y="8" width="7" height="4" fill="#10B981" rx="0.5" />
+                  <circle cx="7" cy="10" r={coinGlow} fill="#FACC15" />
+                  <text x="7" y="10.8" fontSize="2" fill="#78350F" textAnchor="middle" fontWeight="bold">¥</text>
+                  {/* Beckoning Waving Paw (Continuous Smooth Waving Arc) */}
+                  <g transform={`translate(1, ${waveY})`}>
+                    <rect x="0" y="0" width="2.8" height="3.5" fill="#FFFFFF" rx="1.2" stroke="#E2E8F0" strokeWidth="0.4" />
+                    <circle cx="1.4" cy="0.8" r="0.8" fill="#FB7185" />
+                  </g>
+                  {/* Tail Swaying */}
+                  <path d={`M 12 11 Q ${14 + (animTick % 2)} 9 ${13 + (animTick % 2)} 7`} stroke="#1E293B" strokeWidth="1" fill="none" />
+                </g>
+              );
+            })()}
+
+            {/* N. Snack Basket Shiba Inu (Sitting on left floor area) */}
+            {(config.companionId === 'snack_shiba' || config.companionId === 'companion_snack_shiba') && (() => {
+              const headBob = animTick % 2 === 0 ? 0 : -1;
+              const tailWag = animTick % 2 === 0 ? 6 : 8;
+
+              return (
+                <g id="companion-snack-shiba" transform="translate(14, 68)">
+                  {/* Red Konbini Basket Container */}
+                  <polygon points="0,6 22,6 19,16 3,16" fill="#DC2626" />
+                  <polygon points="2,8 20,8 18,14 4,14" fill="#B91C1C" />
+                  {/* Shiba Inu Body */}
+                  <ellipse cx="11" cy="9" rx="7" ry="4" fill="#D97706" />
+                  {/* Head (Popping up and looking around with happy panting smile) */}
+                  <g transform={`translate(0, ${headBob})`}>
+                    <circle cx="15" cy="6" r="3.8" fill="#D97706" />
+                    {/* White Muzzle & Cheeks */}
+                    <ellipse cx="16" cy="7" rx="2.2" ry="1.6" fill="#FFFFFF" />
+                    <circle cx="16.5" cy="6.5" r="0.6" fill="#18181B" />
+                    {/* Shiba Pointy Ears (Bouncing) */}
+                    <polygon points="13,3 15,0.8 15,4" fill="#B45309" />
+                    <polygon points="16,3 18,0.8 18,4" fill="#B45309" />
+                    {/* Happy Curved Squint Eyes */}
+                    <path d="M 13.5 5.5 Q 14.5 4.5 15.5 5.5" stroke="#18181B" strokeWidth="0.6" fill="none" />
+                    {/* Pink Tongue sticking out happily */}
+                    {animTick % 2 === 0 && (
+                      <ellipse cx="16.5" cy="8" rx="0.8" ry="1" fill="#FB7185" />
+                    )}
+                  </g>
+                  {/* Fluffy Curly Tail Wagging out the basket */}
+                  <circle cx="5" cy={tailWag} r="2.2" fill="#D97706" />
+                  <circle cx="5" cy={tailWag} r="1" fill="#FFFFFF" />
+                  {/* Rustling Bag of Chips beside Shiba */}
+                  <g transform={`translate(3, ${4 + (animTick % 2 === 0 ? 0 : 0.5)})`}>
+                    <rect x="0" y="0" width="4.5" height="6" fill="#FACC15" rx="0.5" />
+                    <rect x="0.5" y="1.5" width="3.5" height="1.5" fill="#EF4444" />
+                    {animTick % 4 === 0 && <circle cx="5" cy="0" r="0.6" fill="#FDE047" />}
+                  </g>
+                </g>
+              );
+            })()}
+
+            {/* 4. FROG CHARACTER (DYNAMICALLY MOVING, HOPPING & INTERACTING ACROSS SCENE) */}
             {(() => {
               const frogY = config.isAnimated && animTick % 2 === 0 ? 56 : 57;
               const frogX = 72;
@@ -3012,199 +3668,6 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                 </g>
               );
             })()}
-
-            {/* 4. COMPANION VISITOR LAYER */}
-
-            {/* A. Snail Friend */}
-            {config.companionId === 'snail' && (
-              <g id="companion-snail">
-                <rect x="110" y="74" width="10" height="8" fill="#E2CCAB" />
-                <rect x="112" y="76" width="6" height="4" fill="#7D6242" />
-                <rect x="106" y="80" width="16" height="3" fill="#F2E6CA" />
-                <rect x="108" y="72" width="1" height="4" fill="#4A3D2A" />
-                <rect x="107" y="71" width="2" height="2" fill="#4A3D2A" />
-              </g>
-            )}
-
-            {/* B. Crab Friend */}
-            {config.companionId === 'crab' && (
-              <g id="companion-crab">
-                <rect x="42" y="74" width="10" height="6" fill="#D95C3C" />
-                <rect x="38" y={(animTick % 2 === 0 ? 70 : 72)} width="3" height="3" fill="#D95C3C" />
-                <rect x="51" y={(animTick % 2 === 0 ? 72 : 70)} width="3" height="3" fill="#D95C3C" />
-                <rect x="44" y="72" width="2" height="2" fill="#FFFFFF" />
-                <rect x="48" y="72" width="2" height="2" fill="#FFFFFF" />
-                <rect x="40" y="80" width="2" height="2" fill="#3A2218" />
-                <rect x="50" y="80" width="2" height="2" fill="#3A2218" />
-              </g>
-            )}
-
-            {/* C. Hotaru Fireflies Swarm */}
-            {config.companionId === 'fireflies' && (
-              <g id="companion-fireflies">
-                <circle cx={35 + (animTick % 4) * 2} cy={45 + (animTick % 3)} r="1.5" fill="#FEF08A" className="animate-pulse" />
-                <circle cx={125 - (animTick % 3) * 2} cy={38 + (animTick % 2)} r="2" fill="#FACC15" className="animate-pulse" />
-                <circle cx={60 + (animTick % 5)} cy={30 - (animTick % 2)} r="1.5" fill="#FEF08A" className="animate-pulse" />
-                <circle cx={100 + (animTick % 3)} cy={55 + (animTick % 4)} r="1.5" fill="#FACC15" className="animate-pulse" />
-              </g>
-            )}
-
-            {/* D. Flutter Butterfly */}
-            {config.companionId === 'butterfly' && (
-              <g id="companion-butterfly" transform={`translate(${115 + (animTick % 4)}, ${42 + ((animTick * 2) % 6)})`}>
-                <rect x="0" y="0" width="4" height="4" fill="#60A5FA" />
-                <rect x="6" y="0" width="4" height="4" fill="#60A5FA" />
-                <rect x="4" y="1" width="2" height="5" fill="#1E293B" />
-              </g>
-            )}
-
-            {/* E. Koi Fish Swimming */}
-            {config.companionId === 'koi' && (
-              <g id="companion-koi" transform={`translate(${45 + ((animTick * 3) % 40)}, 82)`}>
-                <ellipse cx="6" cy="3" rx="7" ry="3" fill="#EA580C" />
-                <ellipse cx="4" cy="3" rx="3" ry="2" fill="#FFFFFF" />
-                <polygon points="12,3 16,0 16,6" fill="#EA580C" />
-              </g>
-            )}
-
-            {/* F. Duckling Companion */}
-            {config.companionId === 'duckling' && (
-              <g id="companion-duckling" transform={`translate(112, 74)`}>
-                <ellipse cx="6" cy="5" rx="6" ry="4" fill="#FACC15" />
-                <circle cx="3" cy="2" r="3" fill="#FACC15" />
-                <rect x="0" y="2" width="2" height="2" fill="#EA580C" />
-                <circle cx="3" cy="1" r="0.8" fill="#1E293B" />
-              </g>
-            )}
-
-            {/* G. Cat Companion */}
-            {config.companionId === 'cat' && (
-              <g id="companion-cat" transform={`translate(42, 74)`}>
-                <ellipse cx="6" cy="6" rx="6" ry="4" fill="#18181B" />
-                <circle cx="10" cy="4" r="3" fill="#18181B" />
-                <polygon points="9,1 11,1 10,0" fill="#18181B" />
-                <polygon points="11,1 13,1 12,0" fill="#18181B" />
-                <circle cx="11" cy="4" r="0.8" fill="#FDE047" />
-                <rect x="8" y="5" width="4" height="1" fill="#DC2626" />
-              </g>
-            )}
-
-            {/* H. Mossy Turtle */}
-            {config.companionId === 'turtle' && (
-              <g id="companion-turtle" transform={`translate(108, 76)`}>
-                <ellipse cx="8" cy="4" rx="8" ry="4" fill="#78350F" />
-                <ellipse cx="8" cy="3" rx="6" ry="3" fill="#15803D" />
-                <circle cx="1" cy="4" r="2" fill="#166534" />
-                <rect x="5" y="7" width="2" height="2" fill="#166534" />
-                <rect x="11" y="7" width="2" height="2" fill="#166534" />
-              </g>
-            )}
-
-            {/* I. Chibi Wolf Pup */}
-            {config.companionId === 'chibi_wolf_pup' && (
-              <g id="companion-wolf-pup" transform={`translate(112, 72)`}>
-                <ellipse cx="7" cy="6" rx="6" ry="4" fill="#475569" />
-                <circle cx="4" cy="4" r="3" fill="#475569" />
-                <polygon points="2,1 4,4 1,4" fill="#334155" />
-                <polygon points="5,1 6,4 4,4" fill="#334155" />
-                <circle cx="3" cy="4" r="0.8" fill="#FACC15" />
-                <ellipse cx="12" cy={animTick % 2 === 0 ? 4 : 2} rx="2" ry="1" fill="#475569" />
-                <rect x="3" y="9" width="2" height="2" fill="#334155" />
-                <rect x="8" y="9" width="2" height="2" fill="#334155" />
-              </g>
-            )}
-
-            {/* J. Forest Hedgehog */}
-            {config.companionId === 'forest_hedgehog' && (
-              <g id="companion-hedgehog" transform={`translate(38, 76)`}>
-                <ellipse cx="7" cy="4" rx="7" ry="4" fill="#78350F" />
-                <polygon points="3,1 5,3 4,4" fill="#451A03" />
-                <polygon points="6,0 8,3 7,4" fill="#451A03" />
-                <polygon points="9,1 11,3 10,4" fill="#451A03" />
-                <circle cx="12" cy="5" r="2" fill="#FBBF24" />
-                <circle cx="13" cy="4.5" r="0.6" fill="#18181B" />
-                <rect x="4" y="7" width="2" height="1.5" fill="#451A03" />
-                <rect x="9" y="7" width="2" height="1.5" fill="#451A03" />
-              </g>
-            )}
-
-            {/* K. Sushi Apprentice Cat */}
-            {config.companionId === 'sushi_apprentice_cat' && (
-              <g id="companion-sushi-cat" transform={`translate(40, 72)`}>
-                <ellipse cx="7" cy="7" rx="6" ry="4" fill="#FFFFFF" />
-                <circle cx="11" cy="4" r="3.5" fill="#FFFFFF" />
-                <polygon points="10,1 12,2 10,0" fill="#FB923C" />
-                <polygon points="12,1 14,2 13,0" fill="#FB923C" />
-                <circle cx="12" cy="4" r="0.8" fill="#1E3A8A" />
-                {/* Mini Headband */}
-                <rect x="9" y="3" width="6" height="1" fill="#DC2626" />
-                {/* Calico Spot */}
-                <circle cx="5" cy="6" r="2" fill="#FB923C" />
-                <rect x="4" y="10" width="2" height="2" fill="#E2E8F0" />
-                <rect x="8" y="10" width="2" height="2" fill="#E2E8F0" />
-              </g>
-            )}
-
-            {/* L. Mini Ebi Shrimp */}
-            {config.companionId === 'mini_ebi_shrimp' && (
-              <g id="companion-ebi-shrimp" transform={`translate(115, ${animTick % 2 === 0 ? 74 : 73})`}>
-                <ellipse cx="6" cy="4" rx="5" ry="3" fill="#EA580C" />
-                <rect x="3" y="2" width="1.5" height="4" fill="#FFFFFF" />
-                <rect x="6" y="2" width="1.5" height="4" fill="#FFFFFF" />
-                <polygon points="10,4 14,1 13,4" fill="#DC2626" />
-                <polygon points="10,4 14,7 13,4" fill="#EA580C" />
-                <line x1="2" y1="3" x2="0" y2="1" stroke="#EA580C" strokeWidth="0.8" />
-                <circle cx="3" cy="3" r="0.6" fill="#18181B" />
-              </g>
-            )}
-
-            {/* M. Konbini Cashier Lucky Cat (Waving Maneki Neko with Clerk Visor) */}
-            {(config.companionId === 'konbini_cashier_cat' || config.companionId === 'companion_konbini_cashier_cat') && (
-              <g id="companion-konbini-cat" transform="translate(108, 62)">
-                {/* White Cat Body & Head */}
-                <ellipse cx="7" cy="9" rx="6" ry="5" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
-                <circle cx="7" cy="4" r="4" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
-                {/* Cat Ears */}
-                <polygon points="4,1 6,3 3,3" fill="#FB7185" />
-                <polygon points="8,3 10,1 11,3" fill="#FB7185" />
-                {/* Mini Clerk Green Visor */}
-                <rect x="3" y="2" width="8" height="1.5" fill="#10B981" rx="0.5" />
-                {/* Cat Face: Eyes & Happy Whiskers */}
-                <circle cx="5.5" cy="4" r="0.6" fill="#1E293B" />
-                <circle cx="8.5" cy="4" r="0.6" fill="#1E293B" />
-                <circle cx="7" cy="5" r="0.4" fill="#FB7185" />
-                {/* Mini Green Staff Apron with Gold Coin */}
-                <rect x="3.5" y="8" width="7" height="4" fill="#10B981" rx="0.5" />
-                <circle cx="7" cy="10" r="1.2" fill="#FACC15" />
-                {/* Waving Paw (Animated Up and Down) */}
-                <rect x="1" y={animTick % 2 === 0 ? 3 : 5} width="2.5" height="3" fill="#FFFFFF" rx="1" stroke="#E2E8F0" strokeWidth="0.4" />
-                <circle cx="2.2" cy={animTick % 2 === 0 ? 3.5 : 5.5} r="0.8" fill="#FB7185" />
-              </g>
-            )}
-
-            {/* N. Snack Basket Shiba Inu (Curled up inside shopping basket) */}
-            {(config.companionId === 'snack_shiba' || config.companionId === 'companion_snack_shiba') && (
-              <g id="companion-snack-shiba" transform="translate(36, 70)">
-                {/* Red Konbini Basket Container */}
-                <polygon points="0,6 22,6 19,16 3,16" fill="#DC2626" />
-                <polygon points="2,8 20,8 18,14 4,14" fill="#B91C1C" />
-                {/* Shiba Inu Body */}
-                <ellipse cx="11" cy="9" rx="7" ry="4" fill="#D97706" />
-                <circle cx="15" cy="6" r="3.5" fill="#D97706" />
-                {/* White Muzzle & Cheeks */}
-                <ellipse cx="16" cy="7" rx="2" ry="1.5" fill="#FFFFFF" />
-                <circle cx="16.5" cy="6.5" r="0.5" fill="#18181B" />
-                {/* Shiba Pointy Ears */}
-                <polygon points="13,3 15,1 15,4" fill="#B45309" />
-                <polygon points="16,3 18,1 18,4" fill="#B45309" />
-                {/* Sleeping/Happy Curved Eye */}
-                <line x1="14" y1="5.5" x2="16" y2="5.5" stroke="#18181B" strokeWidth="0.6" />
-                {/* Cute Tail Wag */}
-                <ellipse cx="5" cy={animTick % 2 === 0 ? 7 : 8} rx="2" ry="1.5" fill="#D97706" />
-                {/* Bag of Chips beside Shiba */}
-                <rect x="3" y="4" width="4" height="6" fill="#FACC15" rx="0.5" />
-              </g>
-            )}
       </g>
 
       {/* 5. WEATHER PARTICLES OVERLAY */}
