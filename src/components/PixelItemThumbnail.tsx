@@ -687,6 +687,197 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       );
 
     // -----------------------------------------------------------
+    // D. FROG SKINS & BODY COLORS
+    // -----------------------------------------------------------
+    case 'classic':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Classic Woodland Moss Green */}
+          <circle cx="7" cy="8" r="4" fill="#5F7A61" />
+          <circle cx="17" cy="8" r="4" fill="#5F7A61" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#75A65A" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#18181B" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#18181B" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#D5E8C8" />
+          <circle cx="5" cy="14" r="1.5" fill="#F472B6" opacity="0.7" />
+          <circle cx="19" cy="14" r="1.5" fill="#F472B6" opacity="0.7" />
+        </svg>
+      );
+
+    case 'konbini_mint':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Neon Konbini Mint & Lime */}
+          <circle cx="7" cy="8" r="4" fill="#10B981" />
+          <circle cx="17" cy="8" r="4" fill="#10B981" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#34D399" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#064E3B" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#064E3B" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#A7F3D0" />
+          <circle cx="5" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
+          <circle cx="19" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
+          <rect x="11" y="9" width="2" height="2" fill="#FDE047" />
+        </svg>
+      );
+
+    case 'fairytale_rose':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fairytale Blossom Rose Pink */}
+          <circle cx="7" cy="8" r="4" fill="#E11D48" />
+          <circle cx="17" cy="8" r="4" fill="#E11D48" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#FB7185" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#4C0519" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#4C0519" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FFE4E6" />
+          <circle cx="5" cy="14" r="1.5" fill="#BE123C" opacity="0.6" />
+          <circle cx="19" cy="14" r="1.5" fill="#BE123C" opacity="0.6" />
+        </svg>
+      );
+
+    case 'timber_wolf_grey':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Timber Wolf Charcoal Grey */}
+          <circle cx="7" cy="8" r="4" fill="#374151" />
+          <circle cx="17" cy="8" r="4" fill="#374151" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#6B7280" />
+          <circle cx="7" cy="7" r="1.5" fill="#FEF08A" />
+          <circle cx="7" cy="7" r="0.8" fill="#18181B" />
+          <circle cx="17" cy="7" r="1.5" fill="#FEF08A" />
+          <circle cx="17" cy="7" r="0.8" fill="#18181B" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#D1D5DB" />
+          <circle cx="5" cy="14" r="1.5" fill="#9CA3AF" opacity="0.8" />
+          <circle cx="19" cy="14" r="1.5" fill="#9CA3AF" opacity="0.8" />
+        </svg>
+      );
+
+    case 'wasabi_green':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fresh Wasabi Pale Lime Green */}
+          <circle cx="7" cy="8" r="4" fill="#65A30D" />
+          <circle cx="17" cy="8" r="4" fill="#65A30D" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#84CC16" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#1A2E05" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#1A2E05" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#ECFCCB" />
+          <circle cx="5" cy="14" r="1.5" fill="#A3E635" opacity="0.8" />
+          <circle cx="19" cy="14" r="1.5" fill="#A3E635" opacity="0.8" />
+        </svg>
+      );
+
+    case 'salmon_peach':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Salmon Coral Peach */}
+          <circle cx="7" cy="8" r="4" fill="#EA580C" />
+          <circle cx="17" cy="8" r="4" fill="#EA580C" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#FB923C" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#431407" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#431407" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FFEDD5" />
+          <circle cx="5" cy="14" r="1.5" fill="#F43F5E" opacity="0.7" />
+          <circle cx="19" cy="14" r="1.5" fill="#F43F5E" opacity="0.7" />
+        </svg>
+      );
+
+    case 'sakura_pink':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Sakura Pastel Pink */}
+          <circle cx="7" cy="8" r="4" fill="#DB2777" />
+          <circle cx="17" cy="8" r="4" fill="#DB2777" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#F472B6" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#500724" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#500724" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FCE7F3" />
+          <circle cx="5" cy="14" r="1.5" fill="#FDA4AF" opacity="0.9" />
+          <circle cx="19" cy="14" r="1.5" fill="#FDA4AF" opacity="0.9" />
+        </svg>
+      );
+
+    case 'twilight_blue':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Twilight Midnight Blue */}
+          <circle cx="7" cy="8" r="4" fill="#1E3A8A" />
+          <circle cx="17" cy="8" r="4" fill="#1E3A8A" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#3B82F6" />
+          <circle cx="7" cy="7" r="1.5" fill="#FACC15" />
+          <circle cx="7" cy="7" r="0.8" fill="#172554" />
+          <circle cx="17" cy="7" r="1.5" fill="#FACC15" />
+          <circle cx="17" cy="7" r="0.8" fill="#172554" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#DBEAFE" />
+          <circle cx="5" cy="14" r="1.5" fill="#60A5FA" opacity="0.8" />
+          <circle cx="19" cy="14" r="1.5" fill="#60A5FA" opacity="0.8" />
+        </svg>
+      );
+
+    case 'matcha':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Creamy Matcha Green */}
+          <circle cx="7" cy="8" r="4" fill="#3F6212" />
+          <circle cx="17" cy="8" r="4" fill="#3F6212" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#65A30D" />
+          <circle cx="7" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="0.8" fill="#14532D" />
+          <circle cx="17" cy="7" r="1.5" fill="#FFFFFF" />
+          <circle cx="17" cy="7" r="0.8" fill="#14532D" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#D9F99D" />
+          <circle cx="5" cy="14" r="1.5" fill="#BEF264" opacity="0.8" />
+          <circle cx="19" cy="14" r="1.5" fill="#BEF264" opacity="0.8" />
+        </svg>
+      );
+
+    case 'albino_white':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Snow Albino Pearl */}
+          <circle cx="7" cy="8" r="4" fill="#E2E8F0" />
+          <circle cx="17" cy="8" r="4" fill="#E2E8F0" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#FFFFFF" />
+          <circle cx="7" cy="7" r="1.5" fill="#FDA4AF" />
+          <circle cx="7" cy="7" r="0.8" fill="#DC2626" />
+          <circle cx="17" cy="7" r="1.5" fill="#FDA4AF" />
+          <circle cx="17" cy="7" r="0.8" fill="#DC2626" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#F8FAFC" />
+          <circle cx="5" cy="14" r="1.5" fill="#F43F5E" opacity="0.5" />
+          <circle cx="19" cy="14" r="1.5" fill="#F43F5E" opacity="0.5" />
+        </svg>
+      );
+
+    case 'ember_orange':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ember Flame Orange */}
+          <circle cx="7" cy="8" r="4" fill="#C2410C" />
+          <circle cx="17" cy="8" r="4" fill="#C2410C" />
+          <ellipse cx="12" cy="13" rx="8" ry="6.5" fill="#EA580C" />
+          <circle cx="7" cy="7" r="1.5" fill="#FEF08A" />
+          <circle cx="7" cy="7" r="0.8" fill="#7C2D12" />
+          <circle cx="17" cy="7" r="1.5" fill="#FEF08A" />
+          <circle cx="17" cy="7" r="0.8" fill="#7C2D12" />
+          <ellipse cx="12" cy="15" rx="5" ry="3" fill="#FED7AA" />
+          <circle cx="5" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
+          <circle cx="19" cy="14" r="1.5" fill="#F59E0B" opacity="0.8" />
+        </svg>
+      );
+
+    // -----------------------------------------------------------
     // D. PROPS & ACTIVITIES
     // -----------------------------------------------------------
     case 'relaxing':

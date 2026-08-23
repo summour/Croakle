@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FrogShopState } from '../types';
 import { LilyCoinIcon } from './FrogIcons';
+import { PixelIcon } from './PixelIcon';
 import {
   ArrowLeft,
   Sparkles,
@@ -33,7 +34,7 @@ const COIN_PACKAGES: CoinPackage[] = [
     name: 'Handful of Lilies',
     coins: 200,
     priceDisplay: '$0.99',
-    icon: '🌿',
+    icon: 'sprout',
     color: 'from-emerald-500/10 to-emerald-500/5 border-emerald-500/20 text-emerald-800 dark:text-emerald-300',
   },
   {
@@ -43,7 +44,7 @@ const COIN_PACKAGES: CoinPackage[] = [
     bonusCoins: 50,
     tag: 'Popular',
     priceDisplay: '$2.99',
-    icon: '🪷',
+    icon: 'pouch',
     color: 'from-amber-500/10 to-amber-500/5 border-amber-500/20 text-amber-800 dark:text-amber-300',
   },
   {
@@ -53,7 +54,7 @@ const COIN_PACKAGES: CoinPackage[] = [
     bonusCoins: 250,
     tag: 'Best Value',
     priceDisplay: '$6.99',
-    icon: '🌸',
+    icon: 'basket',
     color: 'from-rose-500/10 to-rose-500/5 border-rose-500/20 text-rose-800 dark:text-rose-300',
   },
   {
@@ -63,7 +64,7 @@ const COIN_PACKAGES: CoinPackage[] = [
     bonusCoins: 800,
     tag: 'Collector',
     priceDisplay: '$14.99',
-    icon: '🏮',
+    icon: 'chest',
     color: 'from-purple-500/10 to-purple-500/5 border-purple-500/20 text-purple-800 dark:text-purple-300',
   },
   {
@@ -73,7 +74,7 @@ const COIN_PACKAGES: CoinPackage[] = [
     bonusCoins: 3000,
     tag: 'Grand',
     priceDisplay: '$29.99',
-    icon: '👑',
+    icon: 'treasury',
     color: 'from-yellow-500/15 to-amber-500/10 border-yellow-500/30 text-yellow-900 dark:text-yellow-200',
   },
 ];
@@ -138,7 +139,7 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
 
     const bonus = 35;
     const randomFortune = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
-    onEarnCoins(bonus, 'Wishing Well Blessing 🪷');
+    onEarnCoins(bonus, 'Wishing Well Blessing');
     setWellTossedToday(true);
     setWellFortune(randomFortune);
 
@@ -188,8 +189,8 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
       {/* 2. Free Daily Sanctuary Bonus Card */}
       <div className="ios-glass-card p-4 rounded-3xl border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3 bg-gradient-to-r from-emerald-500/5 via-amber-500/5 to-transparent">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#5f7a61]/15 text-[#425744] dark:text-[#9bc29e] flex items-center justify-center text-2xl shadow-2xs shrink-0">
-            🎁
+          <div className="w-12 h-12 rounded-2xl bg-[#5f7a61]/15 text-[#425744] dark:text-[#9bc29e] flex items-center justify-center shadow-2xs shrink-0">
+            <PixelIcon name="gift" size={24} />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
@@ -255,8 +256,8 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
               >
                 {/* Icon & Details */}
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 rounded-2xl bg-white/80 dark:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center text-xl shadow-2xs shrink-0">
-                    {pkg.icon}
+                  <div className="w-11 h-11 rounded-2xl bg-white/80 dark:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shadow-2xs shrink-0">
+                    <PixelIcon name={pkg.icon} size={22} />
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -310,7 +311,7 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
       <div className="ios-glass-card p-4 rounded-3xl border border-black/[0.06] dark:border-white/[0.08] space-y-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-lg">🪷</span>
+            <PixelIcon name="coin" size={20} />
             <div>
               <h3 className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">
                 Peaceful Wishing Pond
@@ -325,13 +326,14 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
             type="button"
             disabled={wellTossedToday}
             onClick={handleTossWishingWell}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-black transition-all active:scale-95 shadow-xs ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-black transition-all active:scale-95 shadow-xs flex items-center gap-1.5 ${
               wellTossedToday
                 ? 'bg-black/[0.06] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d] cursor-not-allowed'
                 : 'bg-amber-500/20 text-amber-900 dark:text-amber-200 border border-amber-500/30 hover:bg-amber-500/30'
             }`}
           >
-            {wellTossedToday ? 'Blessed Today' : 'Make a Wish ✨'}
+            <PixelIcon name="sparkle" size={13} />
+            <span>{wellTossedToday ? 'Blessed Today' : 'Make a Wish'}</span>
           </button>
         </div>
 

@@ -28,6 +28,7 @@ import {
   PixelCheckIcon,
 } from './FrogIcons';
 import { PixelItemThumbnail } from './PixelItemThumbnail';
+import { PixelIcon } from './PixelIcon';
 import {
   Sparkles,
   ShoppingBag,
@@ -48,19 +49,18 @@ import { soundEngine, triggerHaptic } from '../utils/audioUtils';
 interface ExtendedCategory {
   id: ShopCategory | 'weather' | 'all';
   label: string;
-  icon: string;
 }
 
 const CATEGORIES: ExtendedCategory[] = [
-  { id: 'all', label: 'All Items', icon: '✨' },
-  { id: 'hats', label: 'Headwear', icon: '👒' },
-  { id: 'outfits', label: 'Outfits', icon: '👘' },
-  { id: 'accessories', label: 'Glasses & Face', icon: '👓' },
-  { id: 'skins', label: 'Skin Colors', icon: '🐸' },
-  { id: 'props', label: 'Handheld & Poses', icon: '🧋' },
-  { id: 'companions', label: 'Pets & Visitors', icon: '🐌' },
-  { id: 'scenes', label: 'Habitats', icon: '🏞️' },
-  { id: 'weather', label: 'Sky & Weather', icon: '☀️' },
+  { id: 'all', label: 'All Items' },
+  { id: 'hats', label: 'Headwear' },
+  { id: 'outfits', label: 'Outfits' },
+  { id: 'accessories', label: 'Glasses & Face' },
+  { id: 'skins', label: 'Skin Colors' },
+  { id: 'props', label: 'Handheld & Poses' },
+  { id: 'companions', label: 'Pets & Visitors' },
+  { id: 'scenes', label: 'Habitats' },
+  { id: 'weather', label: 'Sky & Weather' },
 ];
 
 interface ShopViewProps {
@@ -415,23 +415,23 @@ export const ShopView: React.FC<ShopViewProps> = ({
               {/* Current Outfit Tags */}
               <div className="mt-2 flex flex-wrap items-center justify-center gap-1 max-w-full">
                 {previewConfig.outfitId && previewConfig.outfitId !== 'none' && (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs">
-                    👘 {FROG_OUTFITS.find((i) => i.id === previewConfig.outfitId)?.name}
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs flex items-center gap-1">
+                    <PixelIcon name="outfits" size={12} /> {FROG_OUTFITS.find((i) => i.id === previewConfig.outfitId)?.name}
                   </span>
                 )}
                 {previewConfig.hatId && previewConfig.hatId !== 'none' && (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs">
-                    👒 {FROG_HATS.find((i) => i.id === previewConfig.hatId)?.name}
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs flex items-center gap-1">
+                    <PixelIcon name="hats" size={12} /> {FROG_HATS.find((i) => i.id === previewConfig.hatId)?.name}
                   </span>
                 )}
                 {previewConfig.glassesId && previewConfig.glassesId !== 'none' && (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs">
-                    👓 {FROG_GLASSES.find((i) => i.id === previewConfig.glassesId)?.name}
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs flex items-center gap-1">
+                    <PixelIcon name="accessories" size={12} /> {FROG_GLASSES.find((i) => i.id === previewConfig.glassesId)?.name}
                   </span>
                 )}
                 {previewConfig.skinId && previewConfig.skinId !== 'classic' && (
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs">
-                    🐸 {FROG_SKINS.find((i) => i.id === previewConfig.skinId)?.name}
+                  <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white/85 dark:bg-black/50 text-[#2d2823] dark:text-[#f4efe8] border border-black/5 shadow-2xs flex items-center gap-1">
+                    <PixelIcon name="skins" size={12} /> {FROG_SKINS.find((i) => i.id === previewConfig.skinId)?.name}
                   </span>
                 )}
               </div>
@@ -541,7 +541,7 @@ export const ShopView: React.FC<ShopViewProps> = ({
                         : 'bg-white dark:bg-[#1a1714] border border-black/[0.06] dark:border-white/[0.08] text-[#6e6052] dark:text-[#d6cbbe] hover:border-[#5f7a61]/50'
                     }`}
                   >
-                    <span>{cat.icon}</span>
+                    <PixelIcon name={cat.id} size={14} />
                     <span>{cat.label}</span>
                   </button>
                 );

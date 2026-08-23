@@ -11,6 +11,7 @@ import { THEMED_FROG_SETS } from '../data/themedSets';
 import { PixelFrogScene } from './PixelFrogScene';
 import { LilyCoinIcon } from './FrogIcons';
 import { PixelItemThumbnail } from './PixelItemThumbnail';
+import { PixelIcon } from './PixelIcon';
 import { GachaSummonAnimation } from './GachaSummonAnimation';
 import { getGachaGrade } from '../utils/gachaUtils';
 import {
@@ -84,7 +85,9 @@ export const GachaView: React.FC<GachaViewProps> = ({
   const isDailyFreeAvailable = shopState.lastFreeGachaDate !== todayStr;
 
   const isItemOwned = (itemId: string) => {
-    if (itemId.includes('none') || itemId === 'skin_classic' || itemId.startsWith('weather_')) return true;
+    if (itemId.includes('none') || itemId.startsWith('weather_')) return true;
+    const catItem = SHOP_CATALOG.find((i) => i.id === itemId);
+    if (catItem?.defaultUnlocked) return true;
     return shopState.ownedItemIds.includes(itemId);
   };
 
@@ -238,7 +241,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
     if (hapticEnabled) triggerHaptic();
 
     // Gacha pool: weighted towards current featured set items + general gacha items (excluding defaults)
-    const pool = displayItems.length > 0 ? displayItems : gachaPoolItems;
+    const featuredIds = currentSet ? currentSet.itemIds : [];
     const results: GachaPullResult[] = [];
 
     const rollItemWeighted = (): ShopItem => {
@@ -252,14 +255,19 @@ export const GachaView: React.FC<GachaViewProps> = ({
         targetTier = 'N';
       }
 
-      let candidates = pool.filter((i) => getGachaGrade(i) === targetTier);
-      if (candidates.length === 0) {
-        candidates = gachaPoolItems.filter((i) => getGachaGrade(i) === targetTier);
+      // Filter pool by target tier
+      const tierItems = gachaPoolItems.filter((i) => getGachaGrade(i) === targetTier);
+      
+      // 50% rate-up chance to pull a featured banner item of this tier if available
+      const featuredInTier = tierItems.filter((i) => featuredIds.includes(i.id));
+      if (featuredInTier.length > 0 && Math.random() < 0.5) {
+        return featuredInTier[Math.floor(Math.random() * featuredInTier.length)];
       }
-      if (candidates.length === 0) {
-        candidates = pool.length > 0 ? pool : gachaPoolItems;
+
+      if (tierItems.length > 0) {
+        return tierItems[Math.floor(Math.random() * tierItems.length)];
       }
-      return candidates[Math.floor(Math.random() * candidates.length)] || gachaPoolItems[0];
+      return gachaPoolItems[Math.floor(Math.random() * gachaPoolItems.length)] || gachaPoolItems[0];
     };
 
     for (let i = 0; i < count; i++) {
@@ -315,14 +323,14 @@ export const GachaView: React.FC<GachaViewProps> = ({
                 if (soundEnabled) soundEngine.playTapSound();
                 onBack();
               }}
-              className="w-8 h-8 rounded-full bg-white/85 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md border border-white/60 dark:border-white/15 flex items-center justify-center text-[#2d2823] dark:text-[#f4efe8] shadow-sm active:scale-95 transition-all"
+              className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md border border-black/10 dark:border-white/15 flex items-center justify-center text-[#2d2823] dark:text-[#f4efe8] shadow-sm active:scale-95 transition-all"
               title="Back"
             >
               <ArrowLeft size={16} />
             </button>
           )}
 
-          <div className="px-3 py-1.5 rounded-full bg-white/85 dark:bg-black/60 backdrop-blur-md border border-white/60 dark:border-white/15 shadow-sm flex items-center gap-1.5">
+          <div className="px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-sm flex items-center gap-1.5">
             <Sparkles size={14} className="text-[#5f7a61] dark:text-[#8cb88f]" />
             <h2 className="text-xs font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
               Gacha & Sets
@@ -335,7 +343,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
           <button
             type="button"
             onClick={handleApplyToMainFrog}
-            className="px-2.5 py-1.5 rounded-full bg-[#5f7a61]/90 hover:bg-[#5f7a61] active:scale-95 text-white text-[11px] font-black backdrop-blur-md flex items-center gap-1 shadow-sm transition"
+            className="px-2.5 py-1.5 rounded-full bg-[#5f7a61] hover:bg-[#4d6650] active:scale-95 text-white text-[11px] font-black backdrop-blur-md flex items-center gap-1 shadow-sm transition"
             title="Wear current look on main frog"
           >
             <Check size={13} strokeWidth={2.5} />
@@ -345,7 +353,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
           <button
             type="button"
             onClick={handleResetPreview}
-            className="w-8 h-8 rounded-full bg-white/85 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md text-[#4a4036] dark:text-[#e0d6cb] border border-white/60 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
+            className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
             title="Reset to your saved frog"
           >
             <RotateCcw size={14} />
@@ -358,17 +366,17 @@ export const GachaView: React.FC<GachaViewProps> = ({
               if (soundEnabled) soundEngine.playTapSound();
               if (onOpenCoins) onOpenCoins();
             }}
-            className="px-3 py-1.5 rounded-full text-xs font-black bg-amber-500/20 hover:bg-amber-500/30 active:scale-95 text-amber-950 dark:text-amber-200 backdrop-blur-md transition-all flex items-center gap-1.5 border border-amber-500/30 shadow-sm"
+            className="px-3 py-1.5 rounded-full text-xs font-black bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 active:scale-95 text-[#2d2823] dark:text-[#f4efe8] backdrop-blur-md transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm"
           >
             <LilyCoinIcon size={14} />
-            <span>{shopState.coins}</span>
+            <span className="text-[#2d2823] dark:text-[#f4efe8]">{shopState.coins}</span>
           </button>
         </div>
       </header>
 
       {/* Floating Minimalist Set Switcher under header */}
       <div className="relative z-20 w-full flex flex-col items-center pt-2 pointer-events-auto">
-        <div className="flex items-center gap-1 bg-white/85 dark:bg-black/60 backdrop-blur-md border border-white/60 dark:border-white/15 rounded-full px-2 py-1 shadow-sm">
+        <div className="flex items-center gap-1 bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md border border-black/10 dark:border-white/15 rounded-full px-2 py-1 shadow-sm">
           <button
             type="button"
             onClick={handlePrevSet}
@@ -405,7 +413,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
               className={`h-1.5 rounded-full transition-all ${
                 activeSetIndex === idx
                   ? 'w-3.5 bg-[#5f7a61]'
-                  : 'w-1.5 bg-black/20 dark:bg-white/20 hover:bg-black/35'
+                  : 'w-1.5 bg-black/25 dark:bg-white/25 hover:bg-black/40'
               }`}
             />
           ))}
@@ -416,7 +424,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
       <div className="flex-1 w-full" />
 
       {/* 3. BOTTOM GACHA TRAY */}
-      <div className="relative z-20 w-full bg-white/90 dark:bg-[#1a1613]/90 backdrop-blur-xl border-t border-white/60 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2.5 pointer-events-auto">
+      <div className="relative z-20 w-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-xl border-t border-black/10 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2.5 pointer-events-auto">
         {/* Drag Handle */}
         <div className="w-10 h-1 rounded-full bg-black/15 dark:bg-white/20 mx-auto" />
 
@@ -582,11 +590,11 @@ export const GachaView: React.FC<GachaViewProps> = ({
       {/* Lineup Rates Modal */}
       {showLineupModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#faf8f5] dark:bg-[#201c18] border border-black/10 dark:border-white/10 rounded-3xl w-full max-w-sm p-5 space-y-4 shadow-xl text-[#2d2823] dark:text-[#f4efe8]">
-            <div className="flex items-center justify-between">
+          <div className="bg-[#faf8f5] dark:bg-[#201c18] border border-black/10 dark:border-white/10 rounded-3xl w-full max-w-md max-h-[85vh] p-5 space-y-3.5 shadow-xl text-[#2d2823] dark:text-[#f4efe8] flex flex-col">
+            <div className="flex items-center justify-between shrink-0">
               <h3 className="text-sm font-black flex items-center gap-1.5">
                 <List size={16} />
-                <span>Lineup & Probabilities</span>
+                <span>Gacha Pool & Probabilities</span>
               </h3>
               <button
                 type="button"
@@ -597,29 +605,129 @@ export const GachaView: React.FC<GachaViewProps> = ({
               </button>
             </div>
 
-            <div className="space-y-2 text-xs">
-              <div className="p-2.5 rounded-xl bg-[#d4a373]/15 border border-[#d4a373]/30 flex items-center justify-between">
-                <span className="font-extrabold text-[#8a5d2c] dark:text-[#d4a373]">Super Rare (SR)</span>
-                <span className="font-black">2.5%</span>
+            {/* Rates Overview Cards */}
+            <div className="grid grid-cols-3 gap-2 text-xs shrink-0">
+              <div className="p-2 rounded-xl bg-[#d4a373]/15 border border-[#d4a373]/30 flex flex-col items-center justify-center">
+                <span className="font-extrabold text-[#8a5d2c] dark:text-[#d4a373] text-[11px]">Super Rare (SR)</span>
+                <span className="font-black text-sm">2.5%</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#6b7b8c]/15 border border-[#6b7b8c]/30 flex items-center justify-between">
-                <span className="font-extrabold text-[#405060] dark:text-[#9ab0c4]">Rare (R)</span>
-                <span className="font-black">15.0%</span>
+              <div className="p-2 rounded-xl bg-[#6b7b8c]/15 border border-[#6b7b8c]/30 flex flex-col items-center justify-center">
+                <span className="font-extrabold text-[#405060] dark:text-[#9ab0c4] text-[11px]">Rare (R)</span>
+                <span className="font-black text-sm">15.0%</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
-                <span className="font-extrabold text-[#554b3f] dark:text-[#c4b5a5]">Normal (N)</span>
-                <span className="font-black">82.5%</span>
+              <div className="p-2 rounded-xl bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] flex flex-col items-center justify-center">
+                <span className="font-extrabold text-[#554b3f] dark:text-[#c4b5a5] text-[11px]">Normal (N)</span>
+                <span className="font-black text-sm">82.5%</span>
               </div>
             </div>
 
-            <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] leading-relaxed">
-              * Duplicates automatically refund Lily Coins based on rarity grade. 10x spins give 10% coin discount.
+            {/* Scrollable Item Pool Breakdown */}
+            <div className="flex-1 overflow-y-auto no-scrollbar space-y-3 pr-1 text-xs">
+              <div>
+                <h4 className="font-black text-xs text-[#8a5d2c] dark:text-[#d4a373] mb-1.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <PixelIcon name="star" size={13} />
+                    <span>Super Rare (SR) - Habitats & Rare Pets</span>
+                  </span>
+                  <span className="text-[10px] font-normal opacity-75">
+                    {gachaPoolItems.filter(i => getGachaGrade(i) === 'SR').length} Items
+                  </span>
+                </h4>
+                <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5">
+                  {gachaPoolItems.filter(i => getGachaGrade(i) === 'SR').map(item => {
+                    const owned = isItemOwned(item.id);
+                    return (
+                      <div
+                        key={item.id}
+                        className={`p-1.5 rounded-xl border flex flex-col items-center text-center gap-1 relative ${
+                          owned ? 'bg-[#5f7a61]/10 border-[#5f7a61]/40' : 'bg-black/[0.02] dark:bg-white/[0.03] border-black/5 dark:border-white/10'
+                        }`}
+                        title={item.name}
+                      >
+                        <PixelItemThumbnail id={item.id} category={item.category} size={24} />
+                        <span className="text-[9px] font-bold leading-tight line-clamp-1 w-full">{item.name}</span>
+                        {owned && (
+                          <span className="text-[7.5px] font-black text-[#5f7a61] dark:text-[#8cb88f]">OWNED</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-black text-xs text-[#405060] dark:text-[#9ab0c4] mb-1.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <PixelIcon name="sparkle" size={13} />
+                    <span>Rare (R) - Outfits, Skins & Pets</span>
+                  </span>
+                  <span className="text-[10px] font-normal opacity-75">
+                    {gachaPoolItems.filter(i => getGachaGrade(i) === 'R').length} Items
+                  </span>
+                </h4>
+                <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5">
+                  {gachaPoolItems.filter(i => getGachaGrade(i) === 'R').map(item => {
+                    const owned = isItemOwned(item.id);
+                    return (
+                      <div
+                        key={item.id}
+                        className={`p-1.5 rounded-xl border flex flex-col items-center text-center gap-1 relative ${
+                          owned ? 'bg-[#5f7a61]/10 border-[#5f7a61]/40' : 'bg-black/[0.02] dark:bg-white/[0.03] border-black/5 dark:border-white/10'
+                        }`}
+                        title={item.name}
+                      >
+                        <PixelItemThumbnail id={item.id} category={item.category} size={24} />
+                        <span className="text-[9px] font-bold leading-tight line-clamp-1 w-full">{item.name}</span>
+                        {owned && (
+                          <span className="text-[7.5px] font-black text-[#5f7a61] dark:text-[#8cb88f]">OWNED</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-black text-xs text-[#554b3f] dark:text-[#c4b5a5] mb-1.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <PixelIcon name="leaf" size={13} />
+                    <span>Normal (N) - Hats, Props & Accessories</span>
+                  </span>
+                  <span className="text-[10px] font-normal opacity-75">
+                    {gachaPoolItems.filter(i => getGachaGrade(i) === 'N').length} Items
+                  </span>
+                </h4>
+                <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5">
+                  {gachaPoolItems.filter(i => getGachaGrade(i) === 'N').map(item => {
+                    const owned = isItemOwned(item.id);
+                    return (
+                      <div
+                        key={item.id}
+                        className={`p-1.5 rounded-xl border flex flex-col items-center text-center gap-1 relative ${
+                          owned ? 'bg-[#5f7a61]/10 border-[#5f7a61]/40' : 'bg-black/[0.02] dark:bg-white/[0.03] border-black/5 dark:border-white/10'
+                        }`}
+                        title={item.name}
+                      >
+                        <PixelItemThumbnail id={item.id} category={item.category} size={24} />
+                        <span className="text-[9px] font-bold leading-tight line-clamp-1 w-full">{item.name}</span>
+                        {owned && (
+                          <span className="text-[7.5px] font-black text-[#5f7a61] dark:text-[#8cb88f]">OWNED</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <p className="text-[10.5px] text-[#8c7e70] dark:text-[#a89b8d] leading-relaxed shrink-0">
+              * Duplicates automatically refund Lily Coins based on rarity grade. 10x multi-spins offer a 10% coin discount.
             </p>
 
             <button
               type="button"
               onClick={() => setShowLineupModal(false)}
-              className="w-full py-2 rounded-xl bg-[#5f7a61] text-white font-bold text-xs"
+              className="w-full py-2.5 rounded-xl bg-[#5f7a61] text-white font-bold text-xs shrink-0 active:scale-98 transition"
             >
               Close
             </button>

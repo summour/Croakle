@@ -20,6 +20,7 @@ import { THEMED_FROG_SETS } from '../data/themedSets';
 import { PixelFrogScene } from './PixelFrogScene';
 import { LilyCoinIcon } from './FrogIcons';
 import { PixelItemThumbnail } from './PixelItemThumbnail';
+import { PixelIcon } from './PixelIcon';
 import {
   ArrowLeft,
   Shirt,
@@ -34,19 +35,19 @@ import { getGachaGrade } from '../utils/gachaUtils';
 type WardrobeMainTab = 'equipped' | 'all' | 'theme';
 
 interface WardrobeCategoryOption {
-  id: ShopCategory | 'all';
+  id: ShopCategory | 'weather' | 'all';
   label: string;
 }
 
 const WARDROBE_CATEGORIES: WardrobeCategoryOption[] = [
   { id: 'all', label: 'All' },
-  { id: 'hats', label: 'Hats' },
+  { id: 'companions', label: 'Pets' },
   { id: 'outfits', label: 'Outfits' },
-  { id: 'accessories', label: 'Accessories' },
+  { id: 'hats', label: 'Hats' },
+  { id: 'accessories', label: 'Face' },
   { id: 'skins', label: 'Skins' },
   { id: 'props', label: 'Props' },
-  { id: 'companions', label: 'Companions' },
-  { id: 'scenes', label: 'Scenes' },
+  { id: 'scenes', label: 'Habitats' },
   { id: 'weather', label: 'Weather' },
 ];
 
@@ -85,7 +86,9 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
   const [selectedThemeId, setSelectedThemeId] = useState<string>('all_sets');
 
   const isItemOwned = (itemId: string) => {
-    if (itemId.includes('none') || itemId === 'skin_classic' || itemId.startsWith('weather_')) return true;
+    if (itemId.includes('none') || itemId.startsWith('weather_')) return true;
+    const catItem = SHOP_CATALOG.find((i) => i.id === itemId);
+    if (catItem?.defaultUnlocked) return true;
     return shopState.ownedItemIds.includes(itemId);
   };
 
@@ -314,14 +317,14 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                 if (soundEnabled) soundEngine.playTapSound();
                 onBack();
               }}
-              className="w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md border border-white/60 dark:border-white/15 flex items-center justify-center text-[#2d2823] dark:text-[#f4efe8] shadow-sm active:scale-95 transition-all"
+              className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md border border-black/10 dark:border-white/15 flex items-center justify-center text-[#2d2823] dark:text-[#f4efe8] shadow-sm active:scale-95 transition-all"
               title="Back"
             >
               <ArrowLeft size={16} />
             </button>
           )}
 
-          <div className="px-3 py-1.5 rounded-full bg-white/80 dark:bg-black/60 backdrop-blur-md border border-white/60 dark:border-white/15 shadow-sm flex items-center gap-1.5">
+          <div className="px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-sm flex items-center gap-1.5">
             <Shirt size={14} className="text-[#5f7a61] dark:text-[#8cb88f]" />
             <h2 className="text-xs font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
               Wardrobe
@@ -337,10 +340,10 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
             if (soundEnabled) soundEngine.playTapSound();
             if (onOpenCoins) onOpenCoins();
           }}
-          className="px-3 py-1.5 rounded-full text-xs font-black bg-amber-500/20 hover:bg-amber-500/30 active:scale-95 text-amber-950 dark:text-amber-200 backdrop-blur-md transition-all flex items-center gap-1.5 border border-amber-500/30 shadow-sm"
+          className="px-3 py-1.5 rounded-full text-xs font-black bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 active:scale-95 text-[#2d2823] dark:text-[#f4efe8] backdrop-blur-md transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm"
         >
           <LilyCoinIcon size={14} />
-          <span>{shopState.coins}</span>
+          <span className="text-[#2d2823] dark:text-[#f4efe8]">{shopState.coins}</span>
         </button>
       </header>
 
@@ -349,7 +352,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
         <button
           type="button"
           onClick={handleSurpriseMix}
-          className="w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md text-[#4a4036] dark:text-[#e0d6cb] border border-white/60 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
+          className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
           title="Random Mix"
         >
           <Shuffle size={14} />
@@ -358,7 +361,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
         <button
           type="button"
           onClick={handleResetLook}
-          className="w-8 h-8 rounded-full bg-white/80 dark:bg-black/60 hover:bg-white dark:hover:bg-black/80 backdrop-blur-md text-[#4a4036] dark:text-[#e0d6cb] border border-white/60 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
+          className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
           title="Reset"
         >
           <RotateCcw size={14} />
@@ -496,6 +499,12 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
               <div className="flex items-center gap-1.5">
                 {WARDROBE_CATEGORIES.map((cat) => {
                   const isActive = subCategory === cat.id;
+                  const count =
+                    cat.id === 'all'
+                      ? ownedItems.length
+                      : cat.id === 'weather'
+                      ? WEATHER_ITEMS.length
+                      : ownedItems.filter((i) => i.category === cat.id).length;
                   return (
                     <button
                       key={cat.id}
@@ -504,13 +513,21 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                         if (soundEnabled) soundEngine.playTapSound();
                         setSubCategory(cat.id);
                       }}
-                      className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap ${
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
                         isActive
                           ? 'bg-[#5f7a61] text-white shadow-xs'
                           : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-[#554b3f] dark:text-[#c4b5a5]'
                       }`}
                     >
+                      <PixelIcon name={cat.id} size={12} />
                       <span>{cat.label}</span>
+                      <span
+                        className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                          isActive ? 'bg-black/20 text-white' : 'bg-black/5 dark:bg-white/10'
+                        }`}
+                      >
+                        {count}
+                      </span>
                     </button>
                   );
                 })}
@@ -519,20 +536,59 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
 
             {/* Owned Items Grid - Pure Visual Thumbnails */}
             <div className="flex-1 overflow-y-auto no-scrollbar pr-0.5">
-              {displayAllOwnedItems.length === 0 ? (
+              {displayAllOwnedItems.length === 0 && subCategory === 'all' ? (
                 <div className="py-8 text-center space-y-2">
+                  <p className="text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+                    No items collected yet
+                  </p>
                   {onNavigateGacha && (
                     <button
                       type="button"
                       onClick={onNavigateGacha}
-                      className="px-3 py-1 rounded-full text-xs font-black bg-[#5f7a61] text-white shadow-xs"
+                      className="px-4 py-1.5 rounded-full text-xs font-black bg-[#5f7a61] hover:bg-[#4d6650] text-white shadow-xs inline-flex items-center gap-1.5"
                     >
-                      Gacha
+                      <PixelIcon name="gacha" size={13} />
+                      <span>Spin Gacha</span>
                     </button>
                   )}
                 </div>
               ) : (
                 <div className="grid grid-cols-5 sm:grid-cols-6 gap-2 pb-2">
+                  {/* Unequip tile for specific removable slots */}
+                  {subCategory !== 'all' && subCategory !== 'weather' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (soundEnabled) soundEngine.playTapSound();
+                        if (hapticEnabled) triggerHaptic();
+                        const patch: Partial<PixelSceneConfig> = {};
+                        if (subCategory === 'hats') patch.hatId = 'none';
+                        if (subCategory === 'outfits') patch.outfitId = 'none';
+                        if (subCategory === 'accessories') patch.glassesId = 'none';
+                        if (subCategory === 'props') patch.activityId = 'relaxing';
+                        if (subCategory === 'companions') patch.companionId = 'none';
+                        if (subCategory === 'skins') patch.skinId = 'classic';
+                        if (subCategory === 'scenes') patch.sceneId = 'indoor';
+                        setPreviewConfig((prev) => ({ ...prev, ...patch }));
+                      }}
+                      className={`relative aspect-square rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border flex flex-col items-center justify-center p-1 transition-all active:scale-95 shadow-2xs group overflow-hidden ${
+                        (subCategory === 'hats' && previewConfig.hatId === 'none') ||
+                        (subCategory === 'outfits' && previewConfig.outfitId === 'none') ||
+                        (subCategory === 'accessories' && previewConfig.glassesId === 'none') ||
+                        (subCategory === 'props' && previewConfig.activityId === 'relaxing') ||
+                        (subCategory === 'companions' && previewConfig.companionId === 'none') ||
+                        (subCategory === 'skins' && previewConfig.skinId === 'classic') ||
+                        (subCategory === 'scenes' && previewConfig.sceneId === 'indoor')
+                          ? 'border-[#5f7a61] ring-2 ring-[#5f7a61]/40 bg-[#5f7a61]/10'
+                          : 'border-black/[0.08] dark:border-white/[0.1] hover:border-black/20'
+                      }`}
+                      title="Unequip / Reset to default"
+                    >
+                      <PixelIcon name="none" size={16} />
+                      <span className="text-[8px] font-bold text-[#8c7e70] dark:text-[#a89b8d] mt-0.5">None</span>
+                    </button>
+                  )}
+
                   {displayAllOwnedItems.map((item) => {
                     const isEquipped = isItemEquippedInPreview(item);
                     const grade = getGachaGrade(item);
@@ -623,7 +679,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                           : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-[#554b3f] dark:text-[#c4b5a5]'
                       }`}
                     >
-                      <span>{set.bannerEmoji}</span>
+                      <PixelIcon name="sets" size={12} />
                       <span>{set.name.split('&')[0]}</span>
                       <span className="opacity-75 text-[10px]">({setOwnedCount})</span>
                     </button>
@@ -649,7 +705,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                     {/* Minimal Theme Header & Quick Wear Button */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-base">{set.bannerEmoji}</span>
+                        <PixelIcon name="sets" size={14} />
                         <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">
                           {set.name.split('&')[0]} ({ownedSetItems.length}/{totalSetCount})
                         </span>
