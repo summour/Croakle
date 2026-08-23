@@ -353,146 +353,115 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
   return (
     <div
       id="gacha-summon-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-gradient-to-b from-indigo-950/85 via-purple-900/80 to-slate-950/85 backdrop-blur-md pixel-art-rendering select-none overflow-hidden"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 dark:bg-black/75 backdrop-blur-md select-none overflow-hidden"
       onClick={() => {
         if (phase === 'capsule') handleOpenCapsule();
         else if (phase === 'reveal') handleNextCard();
       }}
     >
-      {/* Retro Colorful Pixel Starfield & Radiant Backdrop */}
+      {/* Cozy Minimal Backdrop Accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Colorful Radiant Glow Orbs */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-pink-500/20 via-amber-400/25 to-cyan-400/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-r from-emerald-400/15 via-teal-400/20 to-indigo-400/15 rounded-full blur-2xl" />
+        {/* Soft Warm Ambient Glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-amber-200/10 dark:bg-amber-400/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Pixel Scanline Grid Overlay */}
-        <div
-          className="absolute inset-0 opacity-25"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02), rgba(255, 255, 255, 0.03))',
-            backgroundSize: '100% 4px, 6px 100%',
-          }}
-        />
-
-        {/* Twinkling Vibrant Pixel Stars & Sparks */}
-        <div className="absolute top-10 left-12 animate-pulse">
-          <PixelStar size={14} color="#FEF08A" />
+        {/* Gentle Soft Star Accents */}
+        <div className="absolute top-12 left-14 opacity-30">
+          <PixelStar size={10} color="#D4AF37" />
         </div>
-        <div className="absolute top-20 right-16 animate-pulse" style={{ animationDelay: '0.4s' }}>
-          <PixelStar size={18} color="#67E8F9" />
+        <div className="absolute top-24 right-16 opacity-30">
+          <PixelStar size={12} color="#5F7A61" />
         </div>
-        <div className="absolute top-1/3 left-6 animate-pulse" style={{ animationDelay: '0.8s' }}>
-          <PixelStar size={12} color="#F472B6" />
+        <div className="absolute bottom-20 left-20 opacity-30">
+          <PixelStar size={10} color="#D4AF37" />
         </div>
-        <div className="absolute bottom-24 left-16 animate-pulse" style={{ animationDelay: '1.2s' }}>
-          <PixelStar size={16} color="#A7F3D0" />
-        </div>
-        <div className="absolute bottom-16 right-14 animate-pulse" style={{ animationDelay: '0.6s' }}>
-          <PixelStar size={14} color="#FBBF24" />
-        </div>
-        <div className="absolute top-2/3 right-8 animate-pulse" style={{ animationDelay: '1.5s' }}>
-          <PixelStar size={12} color="#C084FC" />
-        </div>
-        <div className="absolute top-8 right-1/3 animate-pulse" style={{ animationDelay: '0.9s' }}>
-          <PixelStar size={10} color="#FFFFFF" />
+        <div className="absolute bottom-28 right-20 opacity-30">
+          <PixelStar size={12} color="#B86F52" />
         </div>
       </div>
 
       <AnimatePresence mode="wait">
         {/* ========================================================================= */}
-        {/* 1. PIXEL GACHA MACHINE & CAPSULE DROP STAGE                              */}
+        {/* 1. COZY CAPSULE DROP STAGE                                                */}
         {/* ========================================================================= */}
         {phase === 'capsule' && (
           <motion.div
-            key="pixel-capsule-stage"
-            initial={{ opacity: 0, scale: 0.9 }}
+            key="cozy-capsule-stage"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
+            exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col items-center justify-center text-center max-w-sm w-full cursor-pointer z-10 space-y-4"
+            className="flex flex-col items-center justify-center text-center max-w-xs w-full cursor-pointer z-10 space-y-4"
           >
-            {/* Top Cheerful Radiant Pixel Header */}
-            <div className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 border-4 border-[#78350f] px-5 py-2.5 shadow-[0_4px_0_#451a03,0_0_20px_rgba(251,191,36,0.5)]">
-              <h2 className="font-pixel text-xs sm:text-sm text-[#78350f] font-black tracking-wider uppercase drop-shadow-xs">
+            {/* Top Cozy Minimal Header */}
+            <div className="bg-[#FAF7F2] dark:bg-[#23201D] border border-[#E8E2D9] dark:border-[#38332E] px-4 py-2 rounded-2xl shadow-sm">
+              <h2 className="font-pixel text-xs text-[#5F5244] dark:text-[#E7E2DA] tracking-wider uppercase">
                 ✦ GASHAPON SUMMON ✦
               </h2>
             </div>
 
-            {/* Gacha Machine & Capsule Area with Radiant Glow Aura */}
-            <div className="relative py-3 flex flex-col items-center justify-center">
-              {/* Backlight Halo */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-48 h-48 bg-gradient-to-r from-amber-300/35 via-pink-400/30 to-cyan-300/35 rounded-full blur-xl" />
-              </div>
-
+            {/* Gacha Machine & Capsule Area */}
+            <div className="relative py-2 flex flex-col items-center justify-center">
               {/* Pixel Machine at Top */}
               <PixelGachaCrankMachine isCranking={isCranking} />
 
               {/* Pixel Capsule Dropped */}
               <motion.div
-                initial={{ y: -30, scale: 0.6 }}
+                initial={{ y: -20, scale: 0.8 }}
                 animate={{
-                  y: isOpeningCapsule ? [0, -10, 20] : [0, -6, 0],
-                  scale: isOpeningCapsule ? 1.15 : 1,
+                  y: isOpeningCapsule ? [0, -8, 16] : [0, -4, 0],
+                  scale: isOpeningCapsule ? 1.1 : 1,
                 }}
                 transition={
                   isOpeningCapsule
                     ? { duration: 0.35 }
-                    : { repeat: Infinity, duration: 1.2, ease: 'easeInOut' }
+                    : { repeat: Infinity, duration: 1.6, ease: 'easeInOut' }
                 }
                 className="mt-2 relative z-10"
               >
                 <PixelCapsuleGraphic
                   grade={topGrade}
                   isOpen={isOpeningCapsule}
-                  size={120}
+                  size={110}
                 />
               </motion.div>
             </div>
 
-            {/* Pixel Action Button Prompt */}
-            <div className="space-y-2 pt-1">
-              <div className="bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 border-4 border-[#064e3b] px-6 py-3 shadow-[0_5px_0_#064e3b,0_0_20px_rgba(16,185,129,0.6)] text-white font-pixel text-xs tracking-wider uppercase animate-bounce">
-                ▶ TAP TO OPEN ({results.length}x)
+            {/* Action Prompt */}
+            <div className="space-y-1.5 pt-1">
+              <div className="bg-[#5F7A61] hover:bg-[#526B54] active:scale-95 text-white font-pixel text-xs px-5 py-2.5 rounded-xl shadow-md border-b-2 border-[#435945] tracking-wider uppercase transition">
+                TAP TO OPEN ({results.length}x)
               </div>
-              <p className="font-silkscreen text-[10px] text-amber-200 font-bold tracking-widest uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                [ SPACE / ENTER / TAP SCREEN ]
+              <p className="font-silkscreen text-[9.5px] text-[#A8A29E] tracking-widest uppercase">
+                [ SPACE / ENTER / TAP ]
               </p>
             </div>
           </motion.div>
         )}
 
         {/* ========================================================================= */}
-        {/* 2. PIXEL REVEAL STAGE (ITEM SHOWCASE CARD)                               */}
+        {/* 2. COZY REVEAL STAGE (ITEM SHOWCASE CARD)                                */}
         {/* ========================================================================= */}
         {phase === 'reveal' && currentResult && (
           <motion.div
-            key={`pixel-card-${currentIndex}`}
-            initial={{ opacity: 0, scale: 0.9, y: 15 }}
+            key={`cozy-card-${currentIndex}`}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: -15 }}
-            transition={{ duration: 0.18 }}
-            className={`relative w-full max-w-sm flex flex-col justify-between p-4 sm:p-5 border-4 z-10 cursor-pointer ${
-              currentGrade === 'SR'
-                ? 'bg-gradient-to-b from-[#fffdf5] via-[#fef3c7] to-[#fde68a] border-[#92400e] shadow-[0_8px_0_#78350f,0_0_35px_rgba(245,158,11,0.6)]'
-                : currentGrade === 'R'
-                ? 'bg-gradient-to-b from-[#f0fdf4] via-[#dcfce7] to-[#bbf7d0] border-[#166534] shadow-[0_8px_0_#14532d,0_0_30px_rgba(34,197,94,0.5)]'
-                : 'bg-gradient-to-b from-[#f0f9ff] via-[#e0f2fe] to-[#bae6fd] border-[#0369a1] shadow-[0_8px_0_#075985,0_0_25px_rgba(14,165,233,0.45)]'
-            }`}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="relative w-full max-w-xs flex flex-col justify-between p-5 bg-[#FAF7F2] dark:bg-[#23201D] border border-[#E8E2D9] dark:border-[#38332E] rounded-3xl shadow-xl z-10 cursor-pointer"
           >
             {/* Top Control Bar: Progress & Skip */}
-            <div className="flex items-center justify-between border-b-2 border-black/20 pb-2 mb-3">
-              {/* Pixel Pull Counter */}
-              <div className="flex items-center gap-1.5 bg-white/90 px-3 py-1 border-2 border-black/70 shadow-xs">
-                <span className="font-pixel text-[9px] text-[#78350f] font-black">
+            <div className="flex items-center justify-between border-b border-[#E8E2D9] dark:border-[#38332E] pb-2.5 mb-3">
+              {/* Pull Counter */}
+              <div className="flex items-center gap-1.5 bg-[#F0ECE4] dark:bg-[#1C1A17] px-2.5 py-0.5 rounded-lg border border-[#E0D9CE] dark:border-[#332E29]">
+                <span className="font-pixel text-[8.5px] text-[#786E64] dark:text-[#C5BEB5]">
                   PULL {String(currentIndex + 1).padStart(2, '0')}/{String(results.length).padStart(2, '0')}
                 </span>
               </div>
 
-              {/* Progress Pixel Dots */}
+              {/* Progress Dots */}
               {results.length > 1 && (
-                <div className="flex items-center gap-1 bg-black/10 px-2 py-1 rounded-xs">
+                <div className="flex items-center gap-1 bg-[#F0ECE4] dark:bg-[#1C1A17] px-2 py-1 rounded-md">
                   {results.slice(0, 10).map((r, idx) => {
                     const g = getGachaGrade(r.item);
                     const isCur = idx === currentIndex;
@@ -500,16 +469,16 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                     return (
                       <div
                         key={idx}
-                        className={`w-2.5 h-2.5 border border-black ${
+                        className={`w-2 h-2 rounded-xs transition-all ${
                           isCur
                             ? g === 'SR'
-                              ? 'bg-amber-400 scale-110 ring-1 ring-amber-600'
+                              ? 'bg-amber-400 scale-125'
                               : g === 'R'
-                              ? 'bg-emerald-400 scale-110 ring-1 ring-emerald-600'
-                              : 'bg-sky-400 scale-110 ring-1 ring-sky-600'
+                              ? 'bg-emerald-500 scale-125'
+                              : 'bg-stone-400 scale-125'
                             : isPast
-                            ? 'bg-stone-400 opacity-60'
-                            : 'bg-white/80'
+                            ? 'bg-stone-300 dark:bg-stone-600'
+                            : 'bg-stone-200 dark:bg-stone-800'
                         }`}
                       />
                     );
@@ -517,145 +486,119 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                 </div>
               )}
 
-              {/* Pixel Skip Button */}
+              {/* Skip Button */}
               <button
                 type="button"
-                id="pixel-skip-btn"
+                id="cozy-skip-btn"
                 onClick={handleSkip}
-                className="bg-amber-100 hover:bg-amber-200 active:bg-amber-300 text-amber-950 border-2 border-[#78350f] px-2.5 py-0.5 font-pixel text-[8.5px] uppercase tracking-wider shadow-xs cursor-pointer"
+                className="bg-[#F0ECE4] dark:bg-[#1C1A17] hover:bg-[#E5DFD4] dark:hover:bg-[#2B2723] text-[#786E64] dark:text-[#C5BEB5] px-2 py-0.5 rounded-lg font-pixel text-[8px] uppercase tracking-wider transition border border-[#E0D9CE] dark:border-[#332E29] cursor-pointer"
               >
-                SKIP ▶▶
+                SKIP ▶
               </button>
             </div>
 
-            {/* Pixel Rarity Header Banner */}
-            <div className="text-center my-1">
+            {/* Rarity Tag */}
+            <div className="text-center my-0.5">
               {currentGrade === 'SR' && (
-                <div className="inline-block bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 border-2 border-[#78350f] px-4 py-1 shadow-md">
-                  <span className="font-pixel text-[10px] sm:text-[11px] text-amber-950 font-black tracking-widest uppercase">
-                    ★ SUPER RARE ★
-                  </span>
+                <div className="inline-flex items-center gap-1 bg-[#FEF3C7] dark:bg-amber-950/40 border border-[#FDE68A] dark:border-amber-800/50 px-3 py-0.5 rounded-full text-[#92400E] dark:text-amber-300 font-pixel text-[9.5px]">
+                  <span>★</span>
+                  <span>SUPER RARE</span>
+                  <span>★</span>
                 </div>
               )}
               {currentGrade === 'R' && (
-                <div className="inline-block bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 border-2 border-[#064e3b] px-4 py-1 shadow-md">
-                  <span className="font-pixel text-[10px] sm:text-[11px] text-white font-black tracking-widest uppercase">
-                    ★ RARE ★
-                  </span>
+                <div className="inline-flex items-center gap-1 bg-[#ECFDF5] dark:bg-emerald-950/40 border border-[#A7F3D0] dark:border-emerald-800/50 px-3 py-0.5 rounded-full text-[#065F46] dark:text-emerald-300 font-pixel text-[9.5px]">
+                  <span>★</span>
+                  <span>RARE</span>
+                  <span>★</span>
                 </div>
               )}
               {currentGrade === 'N' && (
-                <div className="inline-block bg-gradient-to-r from-sky-600 via-cyan-500 to-sky-600 border-2 border-[#075985] px-4 py-1 shadow-md">
-                  <span className="font-pixel text-[9px] text-white font-black tracking-widest uppercase">
-                    ★ NORMAL ★
-                  </span>
+                <div className="inline-flex items-center gap-1 bg-[#F5F5F4] dark:bg-stone-800/50 border border-[#E7E5E4] dark:border-stone-700/50 px-3 py-0.5 rounded-full text-[#57534E] dark:text-stone-300 font-pixel text-[9px]">
+                  <span>★</span>
+                  <span>NORMAL</span>
+                  <span>★</span>
                 </div>
               )}
             </div>
 
-            {/* Central Pixel Spotlight & Thumbnail Display */}
+            {/* Central Pedestal & Thumbnail */}
             <div className="relative my-3 flex flex-col items-center justify-center">
-              {/* Radiant Light Behind Pedestal */}
-              <div className="absolute w-44 h-44 bg-white/60 rounded-full blur-lg pointer-events-none" />
-
-              {/* Stepped Cheerful Pixel Pedestal */}
-              <div
-                className={`relative w-40 h-40 flex items-center justify-center border-4 shadow-inner ${
-                  currentGrade === 'SR'
-                    ? 'bg-gradient-to-b from-white via-amber-50 to-amber-100 border-[#92400e]'
-                    : currentGrade === 'R'
-                    ? 'bg-gradient-to-b from-white via-emerald-50 to-emerald-100 border-[#166534]'
-                    : 'bg-gradient-to-b from-white via-sky-50 to-sky-100 border-[#0369a1]'
-                }`}
-              >
-                {/* 4 Corner Pixel Gems */}
-                <div className="absolute top-1 left-1 w-2 h-2 bg-amber-400 border border-black/40" />
-                <div className="absolute top-1 right-1 w-2 h-2 bg-amber-400 border border-black/40" />
-                <div className="absolute bottom-1 left-1 w-2 h-2 bg-amber-400 border border-black/40" />
-                <div className="absolute bottom-1 right-1 w-2 h-2 bg-amber-400 border border-black/40" />
-
-                {/* Floating Pixel Item Thumbnail */}
+              <div className="relative w-36 h-36 flex items-center justify-center bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-2xl shadow-inner">
+                {/* Floating Item Thumbnail */}
                 <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-                  className="transform scale-[2.3] pixel-art-rendering drop-shadow-md"
+                  animate={{ y: [0, -4, 0] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                  className="transform scale-[2.2] pixel-art-rendering drop-shadow-xs"
                 >
                   <PixelItemThumbnail
                     id={currentResult.item.id}
                     category={currentResult.item.category}
-                    size={56}
+                    size={52}
                   />
                 </motion.div>
               </div>
 
-              {/* Status Banner: NEW vs DUP */}
-              <div className="mt-3">
+              {/* Status Tag: NEW vs DUP */}
+              <div className="mt-2.5">
                 {currentResult.isNew ? (
-                  <div className="bg-gradient-to-r from-emerald-500 to-teal-500 border-2 border-[#064e3b] px-3.5 py-1 font-pixel text-[9px] text-white font-black tracking-widest uppercase shadow-md animate-pulse">
-                    ★ NEW UNLOCKED! ★
+                  <div className="bg-[#5F7A61] text-white px-3 py-0.5 rounded-full font-pixel text-[8.5px] tracking-wider uppercase shadow-xs">
+                    NEW UNLOCKED
                   </div>
                 ) : (
-                  <div className="bg-gradient-to-r from-amber-400 to-yellow-400 border-2 border-[#78350f] px-3 py-0.5 font-pixel text-[8px] text-amber-950 font-bold tracking-wider uppercase shadow-xs">
+                  <div className="bg-[#EAE4DC] dark:bg-[#2C2723] text-[#786E64] dark:text-[#B5ADA3] border border-[#DBD2C5] dark:border-[#3E3832] px-2.5 py-0.5 rounded-full font-pixel text-[8px] tracking-wider uppercase">
                     DUP (+{currentResult.duplicateRefundCoins || 20} COINS)
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Bottom Pixel Item Info Box */}
-            <div
-              className={`border-2 p-3 space-y-1 text-left bg-white/95 ${
-                currentGrade === 'SR'
-                  ? 'border-[#92400e]'
-                  : currentGrade === 'R'
-                  ? 'border-[#166534]'
-                  : 'border-[#0369a1]'
-              }`}
-            >
+            {/* Item Info Box */}
+            <div className="bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-xl p-3 space-y-1 text-left">
               <div className="flex items-center justify-between">
-                <span className="font-silkscreen text-[9px] text-stone-500 font-bold tracking-widest uppercase">
+                <span className="font-silkscreen text-[8.5px] text-[#A89F91] tracking-widest uppercase">
                   [{getCategoryLabel(currentResult.item.category)}]
                 </span>
-                <span className="font-pixel text-[9px] text-amber-500 font-black">
-                  {currentGrade === 'SR' ? '★★★★★' : currentGrade === 'R' ? '★★★★☆' : '★★★☆☆'}
+                <span className="font-pixel text-[8.5px] text-amber-500 dark:text-amber-400">
+                  {currentGrade === 'SR' ? '★★★' : currentGrade === 'R' ? '★★☆' : '★☆☆'}
                 </span>
               </div>
-              <h3 className="font-pixel text-xs sm:text-sm text-stone-900 font-black tracking-wider">
+              <h3 className="font-pixel text-xs text-[#292524] dark:text-[#F5F5F4]">
                 {currentResult.item.name}
               </h3>
-              <p className="font-silkscreen text-[10px] text-stone-600 line-clamp-2 leading-relaxed">
+              <p className="font-silkscreen text-[9.5px] text-[#78716C] dark:text-[#A8A29E] line-clamp-2 leading-relaxed">
                 {currentResult.item.desc}
               </p>
             </div>
 
             {/* Footer Prompt */}
             <div className="mt-3 text-center">
-              <span className="font-silkscreen text-[9.5px] text-stone-700 font-bold tracking-widest uppercase animate-pulse">
-                ▶ TAP ANYWHERE TO CONTINUE ▶
+              <span className="font-silkscreen text-[9px] text-[#A89F91] tracking-widest uppercase animate-pulse">
+                TAP TO CONTINUE
               </span>
             </div>
           </motion.div>
         )}
 
         {/* ========================================================================= */}
-        {/* 3. PIXEL SUMMARY STAGE (REWARDS OVERVIEW)                                */}
+        {/* 3. COZY SUMMARY STAGE (REWARDS OVERVIEW)                                 */}
         {/* ========================================================================= */}
         {phase === 'summary' && (
           <motion.div
-            key="pixel-summary-stage"
-            initial={{ opacity: 0, scale: 0.9, y: 15 }}
+            key="cozy-summary-stage"
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="bg-gradient-to-b from-[#fffdf5] via-[#fef3c7] to-[#fde68a] border-4 border-[#78350f] max-w-sm w-full p-4 sm:p-5 shadow-[0_8px_0_#451a03,0_0_35px_rgba(245,158,11,0.55)] z-10 space-y-3.5 text-center"
+            className="bg-[#FAF7F2] dark:bg-[#23201D] border border-[#E8E2D9] dark:border-[#38332E] max-w-xs w-full p-4 sm:p-5 rounded-3xl shadow-xl z-10 space-y-3.5 text-center"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Banner */}
-            <div className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 border-2 border-[#78350f] py-2 px-3 shadow-xs">
-              <h2 className="font-pixel text-xs sm:text-sm text-amber-950 font-black tracking-wider uppercase">
+            <div className="pb-1 border-b border-[#E8E2D9] dark:border-[#38332E]">
+              <h2 className="font-pixel text-xs text-[#5F5244] dark:text-[#E7E2DA] tracking-wider uppercase">
                 ✦ SUMMON REWARDS ✦
               </h2>
-              <p className="font-silkscreen text-[9px] text-[#78350f] font-bold mt-0.5 tracking-wider uppercase">
+              <p className="font-silkscreen text-[8.5px] text-[#A89F91] mt-0.5 tracking-wider uppercase">
                 {results.length === 1
                   ? '1 ITEM ACQUIRED'
                   : `${results.length} ITEMS OBTAINED`}
@@ -664,55 +607,47 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
 
             {/* SINGLE RESULT VIEW */}
             {results.length === 1 ? (
-              <div className="bg-white/95 border-2 border-[#78350f] p-4 flex flex-col items-center justify-center space-y-2 shadow-xs">
+              <div className="bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-2xl p-3.5 flex flex-col items-center justify-center space-y-2">
                 {(() => {
                   const single = results[0];
                   const grade = getGachaGrade(single.item);
                   return (
                     <>
-                      <div
-                        className={`relative w-24 h-24 border-4 flex items-center justify-center ${
-                          grade === 'SR'
-                            ? 'bg-amber-50 border-amber-500 shadow-md'
-                            : grade === 'R'
-                            ? 'bg-emerald-50 border-emerald-500 shadow-md'
-                            : 'bg-sky-50 border-sky-400 shadow-md'
-                        }`}
-                      >
+                      <div className="relative w-20 h-20 rounded-xl flex items-center justify-center bg-white dark:bg-[#292522] border border-[#E0D9CE] dark:border-[#3A342E] shadow-xs">
                         <span
-                          className={`absolute top-1 left-1 font-pixel text-[8px] px-1 border border-black/40 font-bold ${
+                          className={`absolute top-1 left-1 font-pixel text-[7.5px] px-1 rounded-sm ${
                             grade === 'SR'
-                              ? 'bg-amber-400 text-amber-950'
+                              ? 'bg-amber-100 text-amber-900'
                               : grade === 'R'
-                              ? 'bg-emerald-500 text-white'
-                              : 'bg-sky-500 text-white'
+                              ? 'bg-emerald-100 text-emerald-900'
+                              : 'bg-stone-100 text-stone-700'
                           }`}
                         >
                           {grade}
                         </span>
-                        <div className="transform scale-[1.7] pixel-art-rendering drop-shadow-xs">
+                        <div className="transform scale-[1.5] pixel-art-rendering">
                           <PixelItemThumbnail
                             id={single.item.id}
                             category={single.item.category}
-                            size={40}
+                            size={36}
                           />
                         </div>
                       </div>
 
-                      <div className="space-y-1">
-                        <span className="font-silkscreen text-[9px] text-stone-500 font-bold tracking-wider uppercase">
+                      <div className="space-y-0.5">
+                        <span className="font-silkscreen text-[8px] text-[#A89F91] tracking-wider uppercase">
                           [{getCategoryLabel(single.item.category)}]
                         </span>
-                        <h4 className="font-pixel text-xs text-stone-900 font-bold">
+                        <h4 className="font-pixel text-[11px] text-[#292524] dark:text-[#F5F5F4]">
                           {single.item.name}
                         </h4>
                         <div>
                           {single.isNew ? (
-                            <span className="inline-block bg-emerald-500 border border-emerald-700 px-2.5 py-0.5 font-pixel text-[8px] text-white uppercase font-bold shadow-xs">
-                              ★ NEW ITEM ★
+                            <span className="inline-block bg-[#5F7A61] text-white px-2 py-0.5 rounded-full font-pixel text-[7.5px] uppercase">
+                              NEW ITEM
                             </span>
                           ) : (
-                            <span className="inline-block bg-amber-400 border border-amber-700 px-2 py-0.5 font-pixel text-[7.5px] text-amber-950 uppercase font-bold">
+                            <span className="inline-block bg-[#EAE4DC] dark:bg-[#2C2723] text-[#786E64] dark:text-[#B5ADA3] px-2 py-0.5 rounded-full font-pixel text-[7px] uppercase">
                               DUP (+{single.duplicateRefundCoins || 20} COINS)
                             </span>
                           )}
@@ -724,46 +659,46 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
               </div>
             ) : (
               /* MULTI 10X GRID VIEW */
-              <div className="grid grid-cols-5 gap-1.5 p-2 bg-amber-900/10 border-2 border-[#78350f] max-h-[38vh] overflow-y-auto">
+              <div className="grid grid-cols-5 gap-1.5 p-2 bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-2xl max-h-[38vh] overflow-y-auto">
                 {results.map((res, idx) => {
                   const grade = getGachaGrade(res.item);
                   return (
                     <div
                       key={idx}
-                      className={`relative aspect-square border-2 flex items-center justify-center p-1 shadow-xs ${
+                      className={`relative aspect-square rounded-xl border flex items-center justify-center p-1 bg-white dark:bg-[#292522] ${
                         grade === 'SR'
-                          ? 'bg-gradient-to-b from-amber-50 to-amber-100 border-amber-500'
+                          ? 'border-amber-300 dark:border-amber-700'
                           : grade === 'R'
-                          ? 'bg-gradient-to-b from-emerald-50 to-emerald-100 border-emerald-500'
-                          : 'bg-gradient-to-b from-sky-50 to-sky-100 border-sky-400'
+                          ? 'border-emerald-300 dark:border-emerald-700'
+                          : 'border-[#E0D9CE] dark:border-[#3A342E]'
                       }`}
                     >
                       {/* Grade Badge */}
                       <span
-                        className={`absolute top-0.5 left-0.5 font-pixel text-[6px] px-0.5 border border-black/30 font-bold ${
+                        className={`absolute top-0.5 left-0.5 font-pixel text-[5.5px] px-0.5 rounded-xs ${
                           grade === 'SR'
-                            ? 'bg-amber-400 text-amber-950'
+                            ? 'bg-amber-100 text-amber-900'
                             : grade === 'R'
-                            ? 'bg-emerald-500 text-white'
-                            : 'bg-sky-500 text-white'
+                            ? 'bg-emerald-100 text-emerald-900'
+                            : 'bg-stone-100 text-stone-700'
                         }`}
                       >
                         {grade}
                       </span>
 
-                      {/* NEW / DUP Badge */}
+                      {/* NEW Badge */}
                       {res.isNew && (
-                        <span className="absolute bottom-0.5 right-0.5 font-pixel text-[5px] bg-emerald-500 text-white px-0.5 font-bold">
+                        <span className="absolute bottom-0.5 right-0.5 font-pixel text-[5px] bg-[#5F7A61] text-white px-0.5 rounded-xs">
                           NEW
                         </span>
                       )}
 
                       {/* Thumbnail */}
-                      <div className="transform scale-[1.15] pixel-art-rendering drop-shadow-xs">
+                      <div className="transform scale-[1.05] pixel-art-rendering">
                         <PixelItemThumbnail
                           id={res.item.id}
                           category={res.item.category}
-                          size={28}
+                          size={26}
                         />
                       </div>
                     </div>
@@ -772,18 +707,18 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
               </div>
             )}
 
-            {/* Pixel Bottom Action Buttons */}
+            {/* Bottom Action Buttons */}
             <div className="flex items-center gap-2 pt-1">
               {canSpinAgain && onSpinAgain && (
                 <button
                   type="button"
-                  id="pixel-spin-again-btn"
+                  id="cozy-spin-again-btn"
                   onClick={() => {
                     if (soundEnabled) soundEngine.playTapSound();
                     if (hapticEnabled) triggerHaptic();
                     onSpinAgain();
                   }}
-                  className="flex-1 py-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 hover:brightness-110 active:brightness-90 border-4 border-[#78350f] shadow-[0_4px_0_#451a03] text-white font-pixel text-[9px] sm:text-[10px] tracking-wider uppercase cursor-pointer"
+                  className="flex-1 py-2 bg-[#B86F52] hover:bg-[#A35E43] text-white font-pixel text-[9px] rounded-xl shadow-sm uppercase transition cursor-pointer"
                 >
                   ↺ SPIN ({spinAgainCost})
                 </button>
@@ -791,13 +726,13 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
 
               <button
                 type="button"
-                id="pixel-done-btn"
+                id="cozy-done-btn"
                 onClick={() => {
                   if (soundEnabled) soundEngine.playTapSound();
                   if (hapticEnabled) triggerHaptic();
                   onComplete();
                 }}
-                className="flex-1 py-2.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 hover:brightness-110 active:brightness-90 border-4 border-[#064e3b] shadow-[0_4px_0_#064e3b] text-white font-pixel text-[9px] sm:text-[10px] tracking-wider uppercase cursor-pointer"
+                className="flex-1 py-2 bg-[#5F7A61] hover:bg-[#526B54] text-white font-pixel text-[9px] rounded-xl shadow-sm uppercase transition cursor-pointer"
               >
                 ✓ DONE
               </button>
