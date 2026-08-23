@@ -11,6 +11,7 @@ import {
   PixelGachaMachineIcon,
   PixelWardrobeClosetIcon,
   PixelDialogueBox,
+  PixelHeartPetIcon,
 } from './FrogIcons';
 import { PixelFrogScene } from './PixelFrogScene';
 import {
@@ -94,7 +95,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
     const y = screenY ?? window.innerHeight * 0.45;
 
     setPetCount((prev) => prev + 1);
-    const newHeart = { id: Date.now(), x, y };
+    const offsetX = (Math.random() - 0.5) * 28;
+    const offsetY = (Math.random() - 0.5) * 16;
+    const newHeart = { id: Date.now() + Math.random(), x: x + offsetX, y: y + offsetY };
     setHeartsFloat((prev) => [...prev, newHeart]);
 
     // Next speech bubble
@@ -103,7 +106,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
     setTimeout(() => {
       setHeartsFloat((prev) => prev.filter((h) => h.id !== newHeart.id));
-    }, 1400);
+    }, 1250);
 
     if ((petCount + 1) % 5 === 0) {
       onEarnCoins(15, 'Affection bonus');
@@ -122,8 +125,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
     handleStageTapAffection(e.clientX - rect.left, e.clientY - rect.top);
   };
 
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const isDailyFreeAvailable = shopState.lastFreeGachaDate !== todayStr;
+  const ticketsCount = shopState.gachaTickets || 0;
 
   return (
     <div
@@ -143,14 +145,14 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         onTapStage={handleStageTapAffection}
       />
 
-      {/* Floating Pet Hearts Particles */}
+      {/* Floating Pet Hearts Particles (8-Bit Pixel Red, No Shadow, Cozy Minimal) */}
       {heartsFloat.map((heart) => (
         <div
           key={heart.id}
           style={{ left: `${heart.x}px`, top: `${heart.y}px` }}
-          className="absolute z-50 -translate-x-1/2 -translate-y-1/2 text-rose-500 animate-bounce pointer-events-none text-2xl font-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]"
+          className="absolute z-50 pointer-events-none animate-pixel-heart select-none"
         >
-          ♥
+          <PixelHeartPetIcon size={24} />
         </div>
       ))}
 
@@ -238,9 +240,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               className="group relative flex flex-col items-center gap-0.5 active:scale-90 hover:scale-110 transition-transform duration-150 ios-tap"
               title="Gacha Summon"
             >
-              {isDailyFreeAvailable && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-md bg-amber-400 text-amber-950 text-[8px] font-black uppercase tracking-wider animate-bounce shadow-md border border-amber-300 z-10">
-                  FREE
+              {ticketsCount > 0 && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-md bg-amber-400 text-amber-950 text-[8px] font-black uppercase tracking-wider animate-bounce shadow-md border border-amber-300 z-10 whitespace-nowrap">
+                  🎟️ {ticketsCount}
                 </span>
               )}
               <PixelGachaMachineIcon size={42} className="group-hover:-translate-y-1 transition-transform" />

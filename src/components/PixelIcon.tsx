@@ -402,14 +402,16 @@ export const PixelIcon: React.FC<PixelIconProps> = ({ name, size = 16, className
     case 'heart':
       return (
         <svg width={size} height={size} viewBox="0 0 16 16" fill="none" {...pixelStyle} className={`inline-block shrink-0 ${className}`}>
-          {/* Pixel Heart */}
-          <rect x="3" y="3" width="4" height="2" fill="#F43F5E" />
-          <rect x="9" y="3" width="4" height="2" fill="#F43F5E" />
-          <rect x="2" y="5" width="12" height="4" fill="#E11D48" />
-          <rect x="3" y="9" width="10" height="2" fill="#BE123C" />
-          <rect x="5" y="11" width="6" height="2" fill="#BE123C" />
-          <rect x="7" y="13" width="2" height="1" fill="#9F1239" />
-          <rect x="4" y="4" width="1" height="1" fill="#FECDD3" />
+          {/* 8-Bit Minimal Red Heart (No shadow, Cozy flat pixel) */}
+          <rect x="2" y="2" width="4" height="2" fill="#E53935" />
+          <rect x="10" y="2" width="4" height="2" fill="#E53935" />
+          <rect x="1" y="4" width="14" height="4" fill="#E53935" />
+          <rect x="2" y="8" width="12" height="2" fill="#E53935" />
+          <rect x="3" y="10" width="10" height="2" fill="#E53935" />
+          <rect x="4" y="12" width="8" height="1" fill="#E53935" />
+          <rect x="5" y="13" width="6" height="1" fill="#E53935" />
+          <rect x="6" y="14" width="4" height="1" fill="#E53935" />
+          <rect x="7" y="15" width="2" height="1" fill="#E53935" />
         </svg>
       );
 

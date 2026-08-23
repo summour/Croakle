@@ -11,6 +11,7 @@ interface GachaSummonAnimationProps {
   onSpinAgain?: () => void;
   canSpinAgain?: boolean;
   spinAgainCost?: number;
+  spinAgainLabel?: string;
   soundEnabled?: boolean;
   hapticEnabled?: boolean;
 }
@@ -234,6 +235,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
   onSpinAgain,
   canSpinAgain = false,
   spinAgainCost = 50,
+  spinAgainLabel,
   soundEnabled = true,
   hapticEnabled = true,
 }) => {
@@ -720,7 +722,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                   }}
                   className="flex-1 py-2 bg-[#B86F52] hover:bg-[#A35E43] text-white font-pixel text-[9px] rounded-xl shadow-sm uppercase transition cursor-pointer"
                 >
-                  ↺ SPIN ({spinAgainCost})
+                  {spinAgainLabel ? `↺ ${spinAgainLabel}` : `↺ SPIN (${spinAgainCost})`}
                 </button>
               )}
 

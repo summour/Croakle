@@ -143,11 +143,12 @@ export function App() {
     setShopState((prev) => ({
       ...prev,
       coins: prev.coins + 50,
+      gachaTickets: (prev.gachaTickets || 0) + 1,
       lastDailyClaimDate: today,
       transactions: [
         {
           id: `tx_${Date.now()}`,
-          title: 'Daily Boutique Reward 🎁',
+          title: 'Daily Sanctuary Gift 🎁 (+50 Coins, +1 Gacha Ticket 🎟️)',
           amount: 50,
           date: today,
           type: 'earn',
@@ -157,7 +158,10 @@ export function App() {
     }));
   };
 
-  const handleGachaPullResults = (results: GachaPullResult[], totalCost: number, isDailyFree?: boolean) => {
+  const handleGachaPullResults = (
+    results: GachaPullResult[],
+    payment: { type: 'tickets'; amount: number } | { type: 'coins'; amount: number }
+  ) => {
     let totalRefund = 0;
     const newOwnedIds: string[] = [];
 
@@ -172,17 +176,25 @@ export function App() {
 
     setShopState((prev) => {
       const mergedOwned = Array.from(new Set([...prev.ownedItemIds, ...newOwnedIds]));
-      const newCoins = prev.coins - totalCost + totalRefund;
+      const currentTickets = prev.gachaTickets || 0;
+      const newTickets = payment.type === 'tickets'
+        ? Math.max(0, currentTickets - payment.amount)
+        : currentTickets;
+      const newCoins = payment.type === 'coins'
+        ? Math.max(0, prev.coins - payment.amount + totalRefund)
+        : prev.coins + totalRefund;
+
+      const txTitle = payment.type === 'tickets'
+        ? `Gacha ${results.length}x Summon (Used ${payment.amount} 🎟️ Ticket${payment.amount > 1 ? 's' : ''})`
+        : `Gacha ${results.length}x Summon (${results.map((r) => r.item.name).slice(0, 2).join(', ')}${results.length > 2 ? '...' : ''})`;
 
       const txs = [
         {
           id: `tx_${Date.now()}`,
-          title: isDailyFree
-            ? `Daily Free Gacha 1-Pull 🎁 (${results[0]?.item.name || 'Item'})`
-            : `Gacha ${results.length}x Pulls (${results.map((r) => r.item.name).slice(0, 2).join(', ')}${results.length > 2 ? '...' : ''})`,
-          amount: Math.max(0, totalCost - totalRefund),
+          title: txTitle,
+          amount: payment.type === 'coins' ? Math.max(0, payment.amount - totalRefund) : 0,
           date: today,
-          type: (totalCost > 0 ? 'spend' : 'earn') as 'spend' | 'earn',
+          type: (payment.type === 'coins' ? 'spend' : 'spend') as 'spend' | 'earn',
         },
         ...(prev.transactions || []),
       ];
@@ -190,9 +202,9 @@ export function App() {
       return {
         ...prev,
         coins: Math.max(0, newCoins),
+        gachaTickets: newTickets,
         ownedItemIds: mergedOwned,
         gachaPityCounter: (prev.gachaPityCounter || 0) + results.length,
-        lastFreeGachaDate: isDailyFree ? today : prev.lastFreeGachaDate,
         transactions: txs,
       };
     });

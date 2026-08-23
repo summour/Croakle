@@ -325,9 +325,13 @@ export function loadShopState(): FrogShopState {
     const parsed = JSON.parse(raw);
     return {
       coins: typeof parsed.coins === 'number' ? parsed.coins : DEFAULT_FROG_SHOP_STATE.coins,
+      gachaTickets: typeof parsed.gachaTickets === 'number' ? parsed.gachaTickets : DEFAULT_FROG_SHOP_STATE.gachaTickets,
       ownedItemIds: Array.isArray(parsed.ownedItemIds) ? parsed.ownedItemIds : [...DEFAULT_FROG_SHOP_STATE.ownedItemIds],
       lastDailyClaimDate: parsed.lastDailyClaimDate || undefined,
       transactions: Array.isArray(parsed.transactions) ? parsed.transactions : DEFAULT_FROG_SHOP_STATE.transactions,
+      gachaPityCounter: typeof parsed.gachaPityCounter === 'number' ? parsed.gachaPityCounter : 0,
+      wishlistIds: Array.isArray(parsed.wishlistIds) ? parsed.wishlistIds : [],
+      completedSetClaimedIds: Array.isArray(parsed.completedSetClaimedIds) ? parsed.completedSetClaimedIds : [],
     };
   } catch {
     return { ...DEFAULT_FROG_SHOP_STATE };

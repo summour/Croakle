@@ -162,7 +162,7 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
               if (soundEnabled) soundEngine.playTapSound();
               onBack();
             }}
-            className="w-9 h-9 rounded-full bg-white/90 dark:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-center text-[#4a4036] dark:text-[#e0d6cb] shadow-xs active:scale-95 transition ios-tap"
+            className="w-9 h-9 rounded-full bg-white/90 dark:bg-white/[0.08] border border-black/[0.08] dark:border-white/[0.1] flex items-center justify-center text-[#4a4036] dark:text-[#e0d6cb] shadow-xs active:scale-95 transition ios-tap cursor-pointer"
             title="Back"
           >
             <ArrowLeft size={16} />
@@ -177,10 +177,10 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
           </div>
         </div>
 
-        {/* Current Balance Badge */}
+        {/* Current Coins Balance Badge */}
         <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/25 shadow-2xs">
           <LilyCoinIcon size={16} />
-          <span className="text-sm font-black text-amber-900 dark:text-amber-200">
+          <span className="text-xs font-black text-amber-900 dark:text-amber-200">
             {shopState.coins.toLocaleString()}
           </span>
         </div>
@@ -198,11 +198,11 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
                 Daily Lotus Fountain
               </span>
               <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#5f7a61]/15 text-[#425744] dark:text-[#9bc29e]">
-                Free
+                Daily Gift
               </span>
             </div>
             <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d]">
-              Claim +50 Lily Coins once every day
+              Claim <strong className="text-amber-700 dark:text-amber-300 font-bold">+50 Coins</strong> & <strong className="text-amber-700 dark:text-amber-300 font-bold">+1 Gacha Ticket 🎟️</strong> once every day
             </p>
           </div>
         </div>
@@ -219,17 +219,17 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
                 particleCount: 35,
                 spread: 50,
                 origin: { y: 0.5 },
-                colors: ['#5f7a61', '#d4af37'],
+                colors: ['#5f7a61', '#d4af37', '#fbbf24'],
               });
             }
           }}
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all active:scale-95 shadow-xs shrink-0 ${
             isDailyClaimed
               ? 'bg-black/[0.06] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d] cursor-not-allowed'
-              : 'bg-[#5f7a61] hover:bg-[#526b54] text-white'
+              : 'bg-[#5f7a61] hover:bg-[#526b54] text-white cursor-pointer'
           }`}
         >
-          {isDailyClaimed ? 'Claimed' : 'Claim +50'}
+          {isDailyClaimed ? 'Claimed Today' : 'Claim Daily Gift 🎁'}
         </button>
       </div>
 

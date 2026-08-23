@@ -602,9 +602,9 @@ export type GachaGrade = 'SR' | 'R' | 'N';
 
 export interface FrogShopState {
   coins: number;
+  gachaTickets: number; // Gacha summon tickets
   ownedItemIds: string[];
   lastDailyClaimDate?: string;
-  lastFreeGachaDate?: string; // Daily free 1-pull timestamp
   transactions?: CoinTransaction[];
   gachaPityCounter?: number; // Pity pull count towards guaranteed SR
   wishlistIds?: string[]; // Hearted items in gacha lineups
@@ -613,6 +613,7 @@ export interface FrogShopState {
 
 export const DEFAULT_FROG_SHOP_STATE: FrogShopState = {
   coins: 200, // Welcome coins so user can try their first Gacha summon right away!
+  gachaTickets: 1, // 1 Free starter Gacha Ticket
   ownedItemIds: [
     // Base starter essentials only (all other items are locked to be pulled from Gacha)
     'hat_none',
@@ -626,7 +627,7 @@ export const DEFAULT_FROG_SHOP_STATE: FrogShopState = {
   transactions: [
     {
       id: 'tx_welcome',
-      title: 'Welcome to Croakle Gift 🎁',
+      title: 'Welcome to Croakle Gift 🎁 (+200 Coins, +1 Ticket)',
       amount: 200,
       date: new Date().toISOString().slice(0, 10),
       type: 'earn',

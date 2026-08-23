@@ -9,7 +9,7 @@ import {
 import { SHOP_CATALOG } from '../data/shopCatalog';
 import { THEMED_FROG_SETS } from '../data/themedSets';
 import { PixelFrogScene } from './PixelFrogScene';
-import { LilyCoinIcon } from './FrogIcons';
+import { LilyCoinIcon, PixelGachaTicketIcon } from './FrogIcons';
 import { PixelItemThumbnail } from './PixelItemThumbnail';
 import { PixelIcon } from './PixelIcon';
 import { GachaSummonAnimation } from './GachaSummonAnimation';
@@ -33,7 +33,10 @@ interface GachaViewProps {
   config: PixelSceneConfig;
   onUpdateConfig: (patch: Partial<PixelSceneConfig>) => void;
   shopState: FrogShopState;
-  onGachaPullResults: (results: GachaPullResult[], totalCost: number, isDailyFree?: boolean) => void;
+  onGachaPullResults: (
+    results: GachaPullResult[],
+    payment: { type: 'tickets'; amount: number } | { type: 'coins'; amount: number }
+  ) => void;
   onToggleWishlist?: (itemId: string) => void;
   onOpenCoins?: () => void;
   onBack?: () => void;
@@ -72,7 +75,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
 
   // Summoning Animation state
   const [activeSummonResults, setActiveSummonResults] = useState<GachaPullResult[] | null>(null);
-  const [lastSpinParams, setLastSpinParams] = useState<{ count: 1 | 10; isFree: boolean } | null>(null);
+  const [lastSpinParams, setLastSpinParams] = useState<{ count: 1 | 10; useTicket: boolean } | null>(null);
 
   // Lineup Rates modal
   const [showLineupModal, setShowLineupModal] = useState(false);
@@ -80,9 +83,8 @@ export const GachaView: React.FC<GachaViewProps> = ({
   // Toast notification for equipping
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Daily free pull
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const isDailyFreeAvailable = shopState.lastFreeGachaDate !== todayStr;
+  // Tickets state
+  const tickets = shopState.gachaTickets || 0;
 
   const isItemOwned = (itemId: string) => {
     if (itemId.includes('none') || itemId.startsWith('weather_')) return true;
@@ -231,11 +233,20 @@ export const GachaView: React.FC<GachaViewProps> = ({
   };
 
   // Gacha spin execution
-  const executeGachaSpin = (count: 1 | 10, isFreeDaily: boolean = false) => {
-    const cost = isFreeDaily ? 0 : count === 1 ? 50 : 450;
-    if (!isFreeDaily && shopState.coins < cost) {
-      if (soundEnabled) soundEngine.playTapSound();
-      return;
+  const executeGachaSpin = (count: 1 | 10, preferTicket: boolean = true) => {
+    const useTicket = preferTicket && tickets >= count;
+    const coinCost = count === 1 ? 50 : 450;
+
+    if (useTicket) {
+      if (tickets < count) {
+        if (soundEnabled) soundEngine.playTapSound();
+        return;
+      }
+    } else {
+      if (shopState.coins < coinCost) {
+        if (soundEnabled) soundEngine.playTapSound();
+        return;
+      }
     }
 
     if (hapticEnabled) triggerHaptic();
@@ -283,8 +294,12 @@ export const GachaView: React.FC<GachaViewProps> = ({
       });
     }
 
-    onGachaPullResults(results, cost, isFreeDaily);
-    setLastSpinParams({ count, isFree: isFreeDaily });
+    const payment = useTicket
+      ? { type: 'tickets' as const, amount: count }
+      : { type: 'coins' as const, amount: coinCost };
+
+    onGachaPullResults(results, payment);
+    setLastSpinParams({ count, useTicket });
     setActiveSummonResults(results);
   };
 
@@ -336,26 +351,16 @@ export const GachaView: React.FC<GachaViewProps> = ({
           </div>
         </div>
 
-        {/* Right Side: Coins, Wear Look, & Reset */}
+        {/* Right Side: Tickets & Coins */}
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={handleApplyToMainFrog}
-            className="px-2.5 py-1.5 rounded-full bg-[#5f7a61] hover:bg-[#4d6650] active:scale-95 text-white text-[11px] font-black backdrop-blur-md flex items-center gap-1 shadow-sm transition"
-            title="Wear current look on main frog"
+          {/* Tickets Badge */}
+          <div
+            className="px-2.5 py-1.5 rounded-full text-xs font-black bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 border border-amber-500/40 flex items-center gap-1.5 shadow-sm"
+            title="Summon Tickets"
           >
-            <Check size={13} strokeWidth={2.5} />
-            <span className="hidden sm:inline">Wear Look</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleResetPreview}
-            className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
-            title="Reset to your saved frog"
-          >
-            <RotateCcw size={14} />
-          </button>
+            <PixelGachaTicketIcon size={15} />
+            <span>{tickets}</span>
+          </div>
 
           <button
             id="gacha-coins-btn"
@@ -364,7 +369,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
               if (soundEnabled) soundEngine.playTapSound();
               if (onOpenCoins) onOpenCoins();
             }}
-            className="px-3 py-1.5 rounded-full text-xs font-black bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 active:scale-95 text-[#2d2823] dark:text-[#f4efe8] backdrop-blur-md transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm"
+            className="px-3 py-1.5 rounded-full text-xs font-black bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 active:scale-95 text-[#2d2823] dark:text-[#f4efe8] backdrop-blur-md transition-all flex items-center gap-1.5 border border-amber-500/40 shadow-sm cursor-pointer"
           >
             <LilyCoinIcon size={14} />
             <span className="text-[#2d2823] dark:text-[#f4efe8]">{shopState.coins}</span>
@@ -545,33 +550,78 @@ export const GachaView: React.FC<GachaViewProps> = ({
         {/* Bottom Gacha Pull Controls (1x & 10x) */}
         <div className="grid grid-cols-2 gap-2 pt-0.5">
           {/* 1-Pull Button */}
-          <button
-            type="button"
-            onClick={() => executeGachaSpin(1, isDailyFreeAvailable)}
-            className="py-2 px-3 rounded-2xl text-xs font-black bg-[#5f7a61] hover:bg-[#4d6650] active:scale-95 text-white flex flex-col items-center justify-center shadow-sm transition"
-          >
-            <span>{isDailyFreeAvailable ? 'Free 1-Spin' : '1x Spin'}</span>
-            <span className="text-[10px] opacity-85 font-normal mt-0.5">
-              {isDailyFreeAvailable ? 'Daily Gift' : '50 Coins'}
-            </span>
-          </button>
+          {tickets >= 1 ? (
+            <button
+              type="button"
+              id="gacha-1pull-ticket-btn"
+              onClick={() => executeGachaSpin(1, true)}
+              className="py-2 px-3 rounded-2xl text-xs font-black bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 active:scale-95 text-white flex flex-col items-center justify-center shadow-md border border-amber-300/40 transition cursor-pointer"
+            >
+              <div className="flex items-center gap-1">
+                <span>1x Summon</span>
+                <span className="px-1 py-0.2 rounded-xs bg-amber-900/40 text-[9px] font-bold text-amber-200">
+                  🎟️ 1
+                </span>
+              </div>
+              <span className="text-[10px] text-amber-100 font-medium mt-0.5 flex items-center gap-1">
+                Use 1 Ticket ({tickets} left)
+              </span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              id="gacha-1pull-coin-btn"
+              onClick={() => executeGachaSpin(1, false)}
+              disabled={shopState.coins < 50}
+              className={`py-2 px-3 rounded-2xl text-xs font-black flex flex-col items-center justify-center shadow-sm transition ${
+                shopState.coins >= 50
+                  ? 'bg-[#5f7a61] hover:bg-[#4d6650] active:scale-95 text-white cursor-pointer'
+                  : 'bg-stone-200 dark:bg-stone-800 text-stone-400 cursor-not-allowed'
+              }`}
+            >
+              <span>1x Summon</span>
+              <span className="text-[10px] opacity-85 font-normal mt-0.5 flex items-center gap-1">
+                50 Coins
+              </span>
+            </button>
+          )}
 
           {/* 10-Pull Multi Button */}
-          <button
-            type="button"
-            onClick={() => executeGachaSpin(10, false)}
-            disabled={shopState.coins < 450}
-            className={`py-2 px-3 rounded-2xl text-xs font-black flex flex-col items-center justify-center shadow-sm transition ${
-              shopState.coins >= 450
-                ? 'bg-[#b86f52] hover:bg-[#9e5c43] active:scale-95 text-white'
-                : 'bg-stone-200 dark:bg-stone-800 text-stone-400 cursor-not-allowed'
-            }`}
-          >
-            <span>10x Multi Spin</span>
-            <span className="text-[10px] opacity-85 font-normal mt-0.5">
-              450 Coins
-            </span>
-          </button>
+          {tickets >= 10 ? (
+            <button
+              type="button"
+              id="gacha-10pull-ticket-btn"
+              onClick={() => executeGachaSpin(10, true)}
+              className="py-2 px-3 rounded-2xl text-xs font-black bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-800 hover:to-amber-700 active:scale-95 text-white flex flex-col items-center justify-center shadow-md border border-amber-300/40 transition cursor-pointer"
+            >
+              <div className="flex items-center gap-1">
+                <span>10x Multi Summon</span>
+                <span className="px-1 py-0.2 rounded-xs bg-amber-950/50 text-[9px] font-bold text-amber-200">
+                  🎟️ 10
+                </span>
+              </div>
+              <span className="text-[10px] text-amber-100 font-medium mt-0.5">
+                Use 10 Tickets ({tickets} left)
+              </span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              id="gacha-10pull-coin-btn"
+              onClick={() => executeGachaSpin(10, false)}
+              disabled={shopState.coins < 450}
+              className={`py-2 px-3 rounded-2xl text-xs font-black flex flex-col items-center justify-center shadow-sm transition ${
+                shopState.coins >= 450
+                  ? 'bg-[#b86f52] hover:bg-[#9e5c43] active:scale-95 text-white cursor-pointer'
+                  : 'bg-stone-200 dark:bg-stone-800 text-stone-400 cursor-not-allowed'
+              }`}
+            >
+              <span>10x Multi Summon</span>
+              <span className="text-[10px] opacity-85 font-normal mt-0.5">
+                450 Coins (10% OFF)
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -586,13 +636,27 @@ export const GachaView: React.FC<GachaViewProps> = ({
           onComplete={() => setActiveSummonResults(null)}
           onSpinAgain={() => {
             if (lastSpinParams) {
+              const preferTicket = lastSpinParams.useTicket && tickets >= lastSpinParams.count;
               setActiveSummonResults(null);
               setTimeout(() => {
-                executeGachaSpin(lastSpinParams.count, false);
+                executeGachaSpin(lastSpinParams.count, preferTicket);
               }, 150);
             }
           }}
-          canSpinAgain={lastSpinParams ? shopState.coins >= (lastSpinParams.count === 10 ? 450 : 50) : false}
+          canSpinAgain={
+            lastSpinParams
+              ? lastSpinParams.useTicket
+                ? tickets >= lastSpinParams.count
+                : shopState.coins >= (lastSpinParams.count === 10 ? 450 : 50)
+              : false
+          }
+          spinAgainLabel={
+            lastSpinParams
+              ? lastSpinParams.useTicket && tickets >= lastSpinParams.count
+                ? `SPIN (${lastSpinParams.count} 🎟️)`
+                : `SPIN (${lastSpinParams.count === 10 ? 450 : 50} 🪙)`
+              : undefined
+          }
           spinAgainCost={lastSpinParams?.count === 10 ? 450 : 50}
           soundEnabled={soundEnabled}
           hapticEnabled={hapticEnabled}

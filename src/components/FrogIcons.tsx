@@ -1937,35 +1937,28 @@ export const PixelMagicMixIcon: React.FC<IconProps> = ({ size = 36, className = 
   </svg>
 );
 
-/** Pixel Heart (Pet Interaction) */
-export const PixelHeartPetIcon: React.FC<IconProps> = ({ size = 28, className = '', ...props }) => (
+/** Pixel Heart (Pet Interaction & Affection) - 8-Bit Cozy Minimal Red, No Shadow */
+export const PixelHeartPetIcon: React.FC<IconProps> = ({ size = 24, className = '', ...props }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     shapeRendering="crispEdges"
-    className={`inline-block shrink-0 filter drop-shadow-[0_2px_3px_rgba(0,0,0,0.25)] ${className}`}
+    className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Heart Dark Red Outline */}
-    <rect x="6" y="5" width="4" height="2" fill="#881337" />
-    <rect x="14" y="5" width="4" height="2" fill="#881337" />
-    <rect x="4" y="7" width="2" height="5" fill="#881337" />
-    <rect x="18" y="7" width="2" height="5" fill="#881337" />
-    <rect x="10" y="7" width="4" height="2" fill="#881337" />
-    {/* Heart Body Red */}
-    <rect x="6" y="7" width="4" height="6" fill="#F43F5E" />
-    <rect x="14" y="7" width="4" height="6" fill="#F43F5E" />
-    <rect x="6" y="12" width="12" height="3" fill="#E11D48" />
-    <rect x="8" y="15" width="8" height="3" fill="#E11D48" />
-    <rect x="10" y="18" width="4" height="2" fill="#BE123C" />
-    <rect x="11" y="20" width="2" height="1" fill="#881337" />
-    {/* Heart White Shine */}
-    <rect x="6" y="7" width="2" height="2" fill="#FFFFFF" />
-    <rect x="8" y="7" width="1" height="1" fill="#FDA4AF" />
-    <rect x="14" y="7" width="2" height="2" fill="#FDA4AF" />
+    {/* 8-Bit Minimal Cozy Red Heart (No shadow, Flat Pixel) */}
+    <rect x="2" y="2" width="4" height="2" fill="#E53935" />
+    <rect x="10" y="2" width="4" height="2" fill="#E53935" />
+    <rect x="1" y="4" width="14" height="4" fill="#E53935" />
+    <rect x="2" y="8" width="12" height="2" fill="#E53935" />
+    <rect x="3" y="10" width="10" height="2" fill="#E53935" />
+    <rect x="4" y="12" width="8" height="1" fill="#E53935" />
+    <rect x="5" y="13" width="6" height="1" fill="#E53935" />
+    <rect x="6" y="14" width="4" height="1" fill="#E53935" />
+    <rect x="7" y="15" width="2" height="1" fill="#E53935" />
   </svg>
 );
 
@@ -2065,6 +2058,49 @@ export const PixelDialogueBox: React.FC<{
       <span className="w-1.5 h-1 bg-[#3D2C22]" />
     </div>
   </div>
+);
+
+/** 8-Bit Pixel Gacha Ticket Icon (Cozy Amber Golden Ticket with Notched Perforations) */
+export const PixelGachaTicketIcon: React.FC<IconProps> = ({ size = 20, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* Ticket Dark Border */}
+    <rect x="3" y="4" width="14" height="12" fill="#78350F" />
+    {/* Notched cutouts on left and right */}
+    <rect x="2" y="8" width="2" height="4" fill="none" />
+    <rect x="16" y="8" width="2" height="4" fill="none" />
+    
+    {/* Ticket Golden Body */}
+    <rect x="4" y="5" width="12" height="10" fill="#FBBF24" />
+    {/* Ticket Inner Shading & Highlight */}
+    <rect x="4" y="5" width="12" height="1" fill="#FDE68A" />
+    <rect x="4" y="6" width="1" height="8" fill="#FDE68A" />
+    <rect x="4" y="14" width="12" height="1" fill="#D97706" />
+    <rect x="15" y="6" width="1" height="8" fill="#D97706" />
+
+    {/* Center Perforated Ticket Notches */}
+    <rect x="2" y="8" width="2" height="4" fill="#000000" fillOpacity="0" />
+    <rect x="3" y="8" width="1" height="4" fill="#78350F" />
+    <rect x="16" y="8" width="1" height="4" fill="#78350F" />
+    <rect x="4" y="9" width="1" height="2" fill="#78350F" />
+    <rect x="15" y="9" width="1" height="2" fill="#78350F" />
+
+    {/* Center Clover / Star Motif (Pixel Emerald Green) */}
+    <rect x="9" y="8" width="2" height="4" fill="#15803D" />
+    <rect x="8" y="9" width="4" height="2" fill="#15803D" />
+    <rect x="9" y="9" width="2" height="2" fill="#4ADE80" />
+    {/* Gold Sparkle accents */}
+    <rect x="6" y="7" width="1" height="1" fill="#FEF3C7" />
+    <rect x="13" y="12" width="1" height="1" fill="#FEF3C7" />
+  </svg>
 );
 
 
