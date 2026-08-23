@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, PriorityType, MOOD_LEVELS } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
-import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon } from './FrogIcons';
+import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
@@ -202,15 +202,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
   return (
     <div className="space-y-4 pb-24" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Habits/Projects/Rankings */}
+      {/* Top Segmented Sub-Navigation for Mood / Habits / Projects */}
       {onNavigate && (
         <SubNavTabs
           activePage="track"
           onNavigate={onNavigate}
           tabs={[
+            { id: 'mood', label: 'Mood', icon: <FrogFaceDockIcon size={15} /> },
             { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
             { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
-            { id: 'best', label: 'Leaderboard', icon: <Trophy size={14} className="text-[#d98236]" /> },
           ]}
         />
       )}

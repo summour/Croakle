@@ -309,8 +309,8 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             {(
               [
                 { id: 'overview', label: 'Overview', icon: <ToriiStatsDockIcon size={13} className="shrink-0" /> },
+                { id: 'moods', label: 'Mood', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
                 { id: 'habits', label: 'Habits', icon: <HabitCloverDockIcon size={13} className="shrink-0" /> },
-                { id: 'moods', label: 'Moods', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
                 { id: 'projects', label: 'Projects', icon: <BambooProjectDockIcon size={13} className="shrink-0" /> },
               ] as const
             ).map((tab) => {

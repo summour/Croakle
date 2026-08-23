@@ -48,7 +48,6 @@ import { BottomDock } from './components/BottomDock';
 import { HomeDashboard } from './components/HomeDashboard';
 import { HabitsView } from './components/HabitsView';
 import { ProjectsView } from './components/ProjectsView';
-import { BestHabitsView } from './components/BestHabitsView';
 import { MoodView } from './components/MoodView';
 import { NotesView } from './components/NotesView';
 import { TimeSessionsView } from './components/TimeSessionsView';
@@ -812,18 +811,6 @@ export function App() {
               onDeleteProject={handleDeleteProject}
               onToggleCompleteProject={handleToggleCompleteProject}
               onReorderProjects={handleReorderProjects}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'best' && (
-            <BestHabitsView
-              habits={habitStore.habitTemplates}
-              monthData={currentMonthData}
-              year={trackYear}
-              monthIndex={trackMonth}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
               onNavigate={setActivePage}
             />
           )}

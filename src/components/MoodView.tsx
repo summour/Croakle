@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageType, MonthData, MOOD_LEVELS } from '../types';
 import { MONTH_NAMES, CALENDAR_HEADER_DAYS, getDaysInMonth, formatIsoDate } from '../utils/dateUtils';
 import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react';
-import { FrogMoodIcon, FrogMoodRad, FrogFaceDockIcon, WashiJournalDockIcon } from './FrogIcons';
+import { FrogMoodIcon, FrogMoodRad, FrogFaceDockIcon, HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import { InteractiveMoodTrendChart } from './charts/InteractiveMoodTrendChart';
@@ -79,14 +79,15 @@ export const MoodView: React.FC<MoodViewProps> = ({
 
   return (
     <div className="space-y-4 pb-24" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Journal/Mood */}
+      {/* Top Segmented Sub-Navigation for Mood / Habits / Projects */}
       {onNavigate && (
         <SubNavTabs
           activePage="mood"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood Tracker', icon: <FrogFaceDockIcon size={15} /> },
-            { id: 'notes', label: 'Journal & Notes', icon: <WashiJournalDockIcon size={15} /> },
+            { id: 'mood', label: 'Mood', icon: <FrogFaceDockIcon size={15} /> },
+            { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
+            { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
           ]}
         />
       )}

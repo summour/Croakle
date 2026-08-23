@@ -261,18 +261,6 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
   return (
     <div className="space-y-3 pb-24" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Journal/Mood */}
-      {onNavigate && (
-        <SubNavTabs
-          activePage="notes"
-          onNavigate={onNavigate}
-          tabs={[
-            { id: 'mood', label: 'Mood Tracker', icon: <FrogFaceDockIcon size={15} /> },
-            { id: 'notes', label: 'Journal & Notes', icon: <WashiJournalDockIcon size={15} /> },
-          ]}
-        />
-      )}
-
       {/* Top Controls Header (Sticky Locked) */}
       <div className="sticky top-0 z-20 bg-[#fdfbf7]/95 dark:bg-[#161311]/95 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
         <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 shadow-xs">
@@ -335,12 +323,12 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
           {/* Category Filter Tabs */}
           <div className="grid grid-cols-4 gap-1 p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-[18px] border border-black/[0.03] dark:border-white/[0.04]">
-            {(['all', 'habit', 'project', 'mood'] as const).map((tab) => {
+            {(['all', 'mood', 'habit', 'project'] as const).map((tab) => {
               const tabConfig: Record<string, { label: string; icon: React.ReactNode }> = {
                 all: { label: 'All', icon: <WashiJournalDockIcon size={13} className="shrink-0" /> },
+                mood: { label: 'Mood', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
                 habit: { label: 'Habits', icon: <HabitCloverDockIcon size={13} className="shrink-0" /> },
                 project: { label: 'Projects', icon: <BambooProjectDockIcon size={13} className="shrink-0" /> },
-                mood: { label: 'Mood', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
               };
               const config = tabConfig[tab];
               const isActive = filterType === tab;

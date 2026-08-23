@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageType, Project, PriorityType } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, formatIsoDate } from '../utils/dateUtils';
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Archive, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
-import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon } from './FrogIcons';
+import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
@@ -189,15 +189,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
   return (
     <div className="space-y-4 pb-24" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Habits/Projects/Rankings */}
+      {/* Top Segmented Sub-Navigation for Mood / Habits / Projects */}
       {onNavigate && (
         <SubNavTabs
           activePage="project"
           onNavigate={onNavigate}
           tabs={[
+            { id: 'mood', label: 'Mood', icon: <FrogFaceDockIcon size={15} /> },
             { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
             { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
-            { id: 'best', label: 'Leaderboard', icon: <Trophy size={14} className="text-[#d98236]" /> },
           ]}
         />
       )}

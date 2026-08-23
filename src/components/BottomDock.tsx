@@ -28,15 +28,15 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
       icon: FrogHouseDockIcon,
     },
     {
-      id: 'track',
-      activeKeys: ['track', 'project', 'best'],
-      label: 'Habits',
+      id: 'mood',
+      activeKeys: ['mood', 'track', 'project'],
+      label: 'Trackers',
       icon: HabitCloverDockIcon,
     },
     {
-      id: 'mood',
-      activeKeys: ['mood', 'notes'],
-      label: 'Mood & Journal',
+      id: 'notes',
+      activeKeys: ['notes'],
+      label: 'Journal',
       icon: WashiJournalDockIcon,
     },
     {
