@@ -30,6 +30,7 @@ import {
   Volume2,
   ShoppingBag,
   Shirt,
+  RotateCcw,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
@@ -147,6 +148,16 @@ export const getSkinColors = (skinId?: FrogSkinId | string) => {
         belly: '#FFEDD5',
         cheeks: '#FB7185',
         legs: '#EA580C',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'konbini_mint':
+      return {
+        main: '#34D399',
+        dark: '#059669',
+        outline: '#064E3B',
+        belly: '#ECFDF5',
+        cheeks: '#FB7185',
+        legs: '#10B981',
         eyeHighlight: '#FFFFFF',
       };
     case 'classic':
@@ -359,6 +370,33 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {config.outfitId === 'konbini_staff_uniform' && (
+        <g>
+          {/* White Polo Shirt Base */}
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#FFFFFF" />
+          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#F8FAFC" />
+          {/* Konbini Green Stripes & Collar */}
+          <rect x={frogX - 2} y={frogY + 10} width="20" height="3" fill="#10B981" />
+          <rect x={frogX + 6} y={frogY + 10} width="4" height="3" fill="#059669" />
+          {/* Orange Accent Stripe */}
+          <rect x={frogX - 2} y={frogY + 13} width="20" height="1.5" fill="#EA580C" />
+          {/* Staff ID Name Badge */}
+          <rect x={frogX + 11} y={frogY + 14} width="4" height="3" fill="#FEF08A" rx="0.5" stroke="#78350F" strokeWidth="0.5" />
+          <rect x={frogX + 12} y={frogY + 15} width="2" height="1" fill="#1E293B" />
+        </g>
+      )}
+
+      {config.outfitId === 'shopper_cozy_sweatset' && (
+        <g>
+          {/* Cozy Lavender/Heather Oversized Hoodie */}
+          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#8B5CF6" rx="1.5" />
+          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#A78BFA" rx="1" />
+          {/* Kangaroo Pocket */}
+          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#7C3AED" rx="0.5" />
+          <rect x={frogX + 5} y={frogY + 10} width="6" height="2" fill="#DDD6FE" />
+        </g>
+      )}
+
       {/* GLASSES / FACE ACCESSORY */}
       {config.glassesId === 'reading' && (
         <g>
@@ -437,6 +475,26 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {config.glassesId === 'scanner_headset' && (
+        <g>
+          {/* Clerk Earpiece & Mic Boom */}
+          <rect x={frogX - 3} y={frogY + 6} width="3" height="6" fill="#1E293B" rx="1" />
+          <line x1={frogX - 1} y1={frogY + 4} x2={frogX + 6} y2={frogY - 1} stroke="#334155" strokeWidth="1" />
+          <line x1={frogX - 2} y1={frogY + 10} x2={frogX + 4} y2={frogY + 12} stroke="#334155" strokeWidth="1" />
+          <circle cx={frogX + 4} cy={frogY + 12} r="1" fill="#10B981" />
+          <circle cx={frogX - 2} cy={frogY + 8} r="1" fill="#38BDF8" />
+        </g>
+      )}
+
+      {config.glassesId === 'konbini_blush' && (
+        <g>
+          <rect x={frogX - 2} y={frogY + 9} width="3" height="2" fill="#FB7185" />
+          <rect x={frogX + 15} y={frogY + 9} width="3" height="2" fill="#FB7185" />
+          <circle cx={frogX} cy={frogY + 8} r="0.8" fill="#FDE047" />
+          <circle cx={frogX + 16} cy={frogY + 8} r="0.8" fill="#FDE047" />
+        </g>
+      )}
+
       {/* HAT LAYER */}
       {config.hatId === 'red_riding_hood' && (
         <g>
@@ -510,6 +568,43 @@ export const PixelFrogSolo: React.FC<{
           <rect x={frogX + 9} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
           <rect x={frogX + 14} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
           <circle cx={frogX + 8} cy={frogY + 3.5} r="2" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.hatId === 'konbini_staff_visor' && (
+        <g>
+          {/* Clerk Visor Band */}
+          <rect x={frogX - 3} y={frogY + 1} width="22" height="3" fill="#10B981" rx="0.5" />
+          <rect x={frogX - 1} y={frogY + 1} width="18" height="1" fill="#34D399" />
+          {/* Visor Peak Brim */}
+          <polygon points={`${frogX - 5},${frogY + 2} ${frogX + 21},${frogY + 2} ${frogX + 18},${frogY - 2} ${frogX - 2},${frogY - 2}`} fill="#059669" />
+          {/* Store Logo Emblem */}
+          <circle cx={frogX + 8} cy={frogY + 2.5} r="1.2" fill="#FFFFFF" />
+          <circle cx={frogX + 8} cy={frogY + 2.5} r="0.6" fill="#EA580C" />
+        </g>
+      )}
+
+      {config.hatId === 'shopper_bucket_hat' && (
+        <g>
+          {/* Streetwear Bucket Hat Crown */}
+          <polygon points={`${frogX - 2},${frogY + 1} ${frogX + 18},${frogY + 1} ${frogX + 16},${frogY - 6} ${frogX},${frogY - 6}`} fill="#7C3AED" />
+          <rect x={frogX + 1} y={frogY - 5} width="14" height="2" fill="#8B5CF6" />
+          {/* Down-angled Bucket Hat Brim */}
+          <polygon points={`${frogX - 5},${frogY + 3} ${frogX + 21},${frogY + 3} ${frogX + 18},${frogY + 1} ${frogX - 2},${frogY + 1}`} fill="#6D28D9" />
+          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#FDE047" />
+        </g>
+      )}
+
+      {config.hatId === 'onigiri_headband' && (
+        <g>
+          {/* Thin Black Headband */}
+          <rect x={frogX - 2} y={frogY + 2} width="20" height="1.5" fill="#18181B" />
+          {/* Triangle Onigiri on top of head */}
+          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 3},${frogY - 1} ${frogX + 13},${frogY - 1}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+          {/* Nori Seaweed Wrap */}
+          <rect x={frogX + 6} y={frogY - 3} width="4" height="2.5" fill="#18181B" rx="0.5" />
+          {/* Red Umeboshi Plum dot */}
+          <circle cx={frogX + 8} cy={frogY - 4.5} r="0.8" fill="#DC2626" />
         </g>
       )}
 
@@ -727,6 +822,37 @@ export const PixelFrogSolo: React.FC<{
           <line x1={frogX + 12} y1={frogY + 10} x2={frogX + 8} y2={frogY + 14} stroke="#FDE68A" strokeWidth="1.5" />
         </g>
       )}
+
+      {config.activityId === 'konbini_scanner' && (
+        <g>
+          {/* Handheld Barcode Scanner Pistol */}
+          <rect x={frogX + 10} y={frogY + 13} width="6" height="4" fill="#1E293B" rx="1" />
+          <rect x={frogX + 14} y={frogY + 11} width="3" height="6" fill="#0F172A" rx="0.5" />
+          <line x1={frogX + 16} y1={frogY + 14} x2={frogX + 24} y2={frogY + 14} stroke="#EF4444" strokeWidth="1" />
+          <circle cx={frogX + 24} cy={frogY + 14} r="1" fill="#F87171" />
+        </g>
+      )}
+
+      {config.activityId === 'eating_onigiri' && (
+        <g>
+          {/* Triangle Onigiri with bite mark */}
+          <polygon points={`${frogX + 8},${frogY + 11} ${frogX + 3},${frogY + 17} ${frogX + 13},${frogY + 17}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+          <rect x={frogX + 6} y={frogY + 15} width="4" height="2.5" fill="#18181B" rx="0.5" />
+          <circle cx={frogX + 8} cy={frogY + 13} r="1" fill="#DC2626" />
+        </g>
+      )}
+
+      {config.activityId === 'holding_konbini_bag' && (
+        <g>
+          {/* White Plastic Konbini Bag with Stripes */}
+          <polygon points={`${frogX + 9},${frogY + 12} ${frogX + 17},${frogY + 12} ${frogX + 19},${frogY + 22} ${frogX + 7},${frogY + 22}`} fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.5" />
+          <rect x={frogX + 9} y={frogY + 16} width="8" height="2" fill="#10B981" />
+          <rect x={frogX + 9} y={frogY + 18} width="8" height="1" fill="#EA580C" />
+          {/* Snacks peeking out */}
+          <rect x={frogX + 10} y={frogY + 10} width="3" height="4" fill="#FACC15" />
+          <rect x={frogX + 13} y={frogY + 11} width="2" height="3" fill="#EF4444" />
+        </g>
+      )}
     </svg>
   );
 };
@@ -743,6 +869,9 @@ interface PixelFrogSceneProps {
   size?: 'compact' | 'medium' | 'large';
   onOpenShop?: () => void;
   fullscreen?: boolean;
+  isZoomed?: boolean;
+  onToggleZoom?: () => void;
+  onTapStage?: (screenX: number, screenY: number) => void;
 }
 
 export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
@@ -757,9 +886,440 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   size = 'medium',
   onOpenShop,
   fullscreen = false,
+  isZoomed = false,
+  onToggleZoom,
+  onTapStage,
 }) => {
   // Animation frame ticker for pixel effects
   const [animTick, setAnimTick] = useState(0);
+
+  // -------------------------------------------------------------
+  // FREE PAN & PINCH-TO-ZOOM GESTURE ENGINE (STRICT BACKGROUND BOUNDS)
+  // -------------------------------------------------------------
+  const [zoomScale, setZoomScale] = useState<number>(isZoomed ? 1.85 : 1.0);
+  const [panOffset, setPanOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isPointerDown, setIsPointerDown] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
+  const dragStartRef = React.useRef<{ x: number; y: number; panX: number; panY: number; time: number }>({
+    x: 0,
+    y: 0,
+    panX: 0,
+    panY: 0,
+    time: 0,
+  });
+  const lastTapTimeRef = React.useRef<number>(0);
+  const touchDistanceRef = React.useRef<number | null>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  // Helper to clamp pan offset strictly within the scaled background image boundaries
+  const clampPanToBounds = (x: number, y: number, scale: number) => {
+    if (scale <= 1.001) return { x: 0, y: 0 };
+    const container = containerRef.current;
+    const width = container ? container.clientWidth : 400;
+    const height = container ? container.clientHeight : 600;
+    // Exactly half the overflow dimensions
+    const maxPanX = Math.max(0, (width * (scale - 1)) / 2);
+    const maxPanY = Math.max(0, (height * (scale - 1)) / 2);
+    return {
+      x: Math.max(-maxPanX, Math.min(maxPanX, x)),
+      y: Math.max(-maxPanY, Math.min(maxPanY, y)),
+    };
+  };
+
+  // Sync zoomScale if isZoomed changes from parent
+  useEffect(() => {
+    if (isZoomed) {
+      setZoomScale((prev) => {
+        const next = prev < 1.35 ? 1.85 : prev;
+        setPanOffset((curr) => clampPanToBounds(curr.x, curr.y, next));
+        return next;
+      });
+    } else {
+      setZoomScale(1.0);
+      setPanOffset({ x: 0, y: 0 });
+    }
+  }, [isZoomed]);
+
+  // -------------------------------------------------------------
+  // AUTONOMOUS BACKGROUND FROG ACTION & ROAMING ENGINE (ALL 13 SCENES)
+  // -------------------------------------------------------------
+  const [roamEnabled] = useState(true);
+  const [frogPos, setFrogPos] = useState<{ x: number; y: number }>({ x: 72, y: 56 });
+  const [targetPos, setTargetPos] = useState<{ x: number; y: number } | null>(null);
+  const [facing, setFacing] = useState<'left' | 'right'>('right');
+  const [isHopping, setIsHopping] = useState(false);
+  const [hopProgress, setHopProgress] = useState(0);
+  const [actionState, setActionState] = useState<'idle' | 'inspect' | 'wave' | 'happy_jump'>('idle');
+  const [actionBubble, setActionBubble] = useState<string | null>(null);
+
+  // Thematic walkable floor & prop destinations for all 13 scenes
+  const getSceneDestinations = (sceneId?: string): { x: number; y: number }[] => {
+    switch (sceneId) {
+      case 'convenience_store':
+        return [
+          { x: 36, y: 58 }, // Drinks Cooler
+          { x: 72, y: 56 }, // Register Counter
+          { x: 118, y: 58 }, // Snack Shelves
+          { x: 50, y: 72 }, // Shopping Basket
+          { x: 92, y: 70 }, // Front Checkout Aisle
+          { x: 80, y: 60 }, // Onigiri Warmer
+        ];
+      case 'red_riding_forest':
+        return [
+          { x: 32, y: 68 }, // Flower Meadow
+          { x: 58, y: 60 }, // Cottage Porch
+          { x: 82, y: 72 }, // Grassy Trail
+          { x: 112, y: 64 }, // Mushroom Trunk
+          { x: 130, y: 70 }, // Wild Berry Bush
+        ];
+      case 'sauna_bathhouse':
+        return [
+          { x: 38, y: 62 }, // Wooden Tub Ledge
+          { x: 70, y: 58 }, // Stone Floor Hearth
+          { x: 104, y: 56 }, // Cedar Sauna Bench
+          { x: 52, y: 72 }, // Towel Mat
+          { x: 122, y: 70 }, // Steaming Bucket
+        ];
+      case 'sushi_bar':
+        return [
+          { x: 36, y: 58 }, // Customer Stool
+          { x: 72, y: 56 }, // Itamae Sushi Board
+          { x: 108, y: 58 }, // Matcha Cup Corner
+          { x: 54, y: 72 }, // Floor Mat
+          { x: 90, y: 68 }, // Wooden Geta Table
+        ];
+      case 'zen_pond':
+        return [
+          { x: 35, y: 62 }, // Giant Lily Pad
+          { x: 72, y: 58 }, // Pond Stepping Stone
+          { x: 110, y: 64 }, // Stone Lantern Base
+          { x: 56, y: 74 }, // Water Edge
+          { x: 95, y: 68 }, // Reed Shore
+        ];
+      case 'treehouse':
+        return [
+          { x: 38, y: 60 }, // Wooden Balcony
+          { x: 72, y: 56 }, // Cozy Tree Table
+          { x: 108, y: 62 }, // Rope Ladder Top
+          { x: 54, y: 72 }, // Plank Floor
+          { x: 88, y: 70 }, // Lantern Perch
+        ];
+      case 'sakura_shrine':
+        return [
+          { x: 34, y: 64 }, // Petal Lawn
+          { x: 72, y: 58 }, // Torii Gate Pathway
+          { x: 112, y: 62 }, // Shrine Bell Step
+          { x: 58, y: 72 }, // Stone Lantern
+          { x: 92, y: 68 }, // Cherry Blossom Shade
+        ];
+      case 'rainy_meadow':
+        return [
+          { x: 36, y: 64 }, // Mushroom Cap
+          { x: 70, y: 58 }, // Rain Puddle
+          { x: 108, y: 62 }, // Clover Patch
+          { x: 52, y: 72 }, // Meadow Grass
+          { x: 92, y: 68 }, // Snail Rock
+        ];
+      case 'onsen':
+        return [
+          { x: 36, y: 62 }, // Hot Spring Edge
+          { x: 72, y: 58 }, // Steaming Stone
+          { x: 110, y: 60 }, // Bamboo Spout
+          { x: 54, y: 72 }, // Cedar Deck
+          { x: 90, y: 68 }, // Bath Towel Bench
+        ];
+      case 'night_camp':
+        return [
+          { x: 38, y: 62 }, // Campfire Glow
+          { x: 72, y: 58 }, // Log Seat
+          { x: 110, y: 64 }, // Tent Doorway
+          { x: 56, y: 72 }, // Picnic Blanket
+          { x: 88, y: 68 }, // Starry Clearing
+        ];
+      case 'tearoom':
+        return [
+          { x: 38, y: 62 }, // Tatami Corner
+          { x: 72, y: 58 }, // Chasen Tea Table
+          { x: 108, y: 60 }, // Bonsai Stand
+          { x: 54, y: 72 }, // Zabuton Cushion
+          { x: 92, y: 68 }, // Tokonoma Step
+        ];
+      case 'cloud_palace':
+        return [
+          { x: 36, y: 62 }, // Pastel Cloud Cushion
+          { x: 72, y: 56 }, // Star Dais
+          { x: 112, y: 62 }, // Rainbow Cloud Step
+          { x: 54, y: 72 }, // Fluffy Pillow
+          { x: 90, y: 68 }, // Sky Platform
+        ];
+      case 'bamboo_grove':
+        return [
+          { x: 36, y: 64 }, // Bamboo Shoot Patch
+          { x: 72, y: 58 }, // Mossy Path
+          { x: 112, y: 62 }, // Stone Lantern Walk
+          { x: 52, y: 72 }, // Green Bamboo Grove
+          { x: 90, y: 68 }, // Creek Crossing
+        ];
+      default:
+        return [
+          { x: 35, y: 62 },
+          { x: 72, y: 56 },
+          { x: 110, y: 64 },
+          { x: 56, y: 72 },
+          { x: 88, y: 68 },
+        ];
+    }
+  };
+
+  const getSceneBubbles = (sceneId?: string): string[] => {
+    switch (sceneId) {
+      case 'convenience_store':
+        return ['🥤', '🍙', '✨', '💖', '🍡', '🍵', '🐾', '🛒', '🥟'];
+      case 'red_riding_forest':
+        return ['🍎', '🍄', '🐺', '🧺', '🌸', '✨', '🌲', '🐾'];
+      case 'sauna_bathhouse':
+        return ['♨️', '🪵', '🧼', '💧', '✨', '🧖', '🌿'];
+      case 'sushi_bar':
+        return ['🍣', '🍱', '🍵', '🍙', '🥢', '✨', '🐱'];
+      case 'sakura_shrine':
+        return ['🌸', '⛩️', '🏮', '🎐', '✨', '💖', '🍃'];
+      case 'onsen':
+        return ['♨️', '🍶', '🧖', '✨', '🌿', '🪵'];
+      case 'tearoom':
+        return ['🍵', '🍡', '🎋', '✨', '🌸', '🫖'];
+      case 'night_camp':
+        return ['🔥', '⛺', '⭐', '✨', '🪵', '🍢', '🌙'];
+      case 'cloud_palace':
+        return ['⭐', '☁️', '🌈', '✨', '👑', '🕊️'];
+      case 'bamboo_grove':
+        return ['🎋', '🍃', '🎍', '✨', '🐸', '💧'];
+      case 'rainy_meadow':
+        return ['🌧️', '🍄', '🐌', '🍀', '✨', '💧'];
+      default:
+        return ['🌸', '🍃', '✨', '🍵', '🐸', '💖', '☀️'];
+    }
+  };
+
+  // Frog hopping motion controller
+  useEffect(() => {
+    if (!targetPos) return;
+
+    const startX = frogPos.x;
+    const startY = frogPos.y;
+    const destX = targetPos.x;
+    const destY = targetPos.y;
+    const dist = Math.hypot(destX - startX, destY - startY);
+
+    if (dist < 1.5) {
+      setFrogPos(targetPos);
+      setTargetPos(null);
+      setIsHopping(false);
+      setHopProgress(0);
+      return;
+    }
+
+    setFacing(destX < startX ? 'left' : 'right');
+    setIsHopping(true);
+
+    const hopDuration = Math.min(600, Math.max(300, dist * 14));
+    const startTime = performance.now();
+
+    let animationFrameId: number;
+    const animateHop = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / hopDuration);
+      setHopProgress(progress);
+
+      const currentX = startX + (destX - startX) * progress;
+      const currentY = startY + (destY - startY) * progress;
+      setFrogPos({ x: currentX, y: currentY });
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animateHop);
+      } else {
+        setIsHopping(false);
+        setHopProgress(0);
+        setFrogPos({ x: destX, y: destY });
+        setTargetPos(null);
+
+        // Pick a cute post-arrival action
+        const postActions: ('idle' | 'inspect' | 'wave' | 'happy_jump')[] = ['inspect', 'wave', 'happy_jump', 'idle'];
+        const chosen = postActions[Math.floor(Math.random() * postActions.length)];
+        setActionState(chosen);
+
+        const bubbles = getSceneBubbles(config.sceneId);
+        const chosenBubble = bubbles[Math.floor(Math.random() * bubbles.length)];
+        setActionBubble(chosenBubble);
+
+        setTimeout(() => {
+          setActionBubble(null);
+          setActionState('idle');
+        }, 2000);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animateHop);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [targetPos, frogPos.x, frogPos.y, config.sceneId]);
+
+  // Autonomous Roaming AI for all scenes
+  useEffect(() => {
+    if (!roamEnabled || isHopping || targetPos) return;
+
+    const interval = setInterval(() => {
+      const roll = Math.random();
+      if (roll < 0.7) {
+        const safeDestinations = getSceneDestinations(config.sceneId);
+        const candidates = safeDestinations.filter(
+          (d) => Math.hypot(d.x - frogPos.x, d.y - frogPos.y) > 10
+        );
+        const dest = candidates[Math.floor(Math.random() * candidates.length)] || {
+          x: 40 + Math.random() * 80,
+          y: 56 + Math.random() * 18,
+        };
+
+        if (soundEnabled && Math.random() < 0.3) soundEngine.playTapSound();
+        setTargetPos(dest);
+      } else {
+        setActionState('happy_jump');
+        setActionBubble('✨');
+        setTimeout(() => {
+          setActionBubble(null);
+          setActionState('idle');
+        }, 1600);
+      }
+    }, 5000 + Math.random() * 4000);
+
+    return () => clearInterval(interval);
+  }, [roamEnabled, isHopping, targetPos, frogPos.x, frogPos.y, config.sceneId, soundEnabled]);
+
+  // Pointer Down (Mouse or single touch)
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest('button')) return;
+    setIsPointerDown(true);
+    setHasMoved(false);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: panOffset.x,
+      panY: panOffset.y,
+      time: Date.now(),
+    };
+  };
+
+  // Pointer Move (Drag to pan strictly within background dimensions)
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isPointerDown) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
+    if (Math.hypot(dx, dy) > 4) {
+      setHasMoved(true);
+      const targetPanX = dragStartRef.current.panX + dx;
+      const targetPanY = dragStartRef.current.panY + dy;
+      const clamped = clampPanToBounds(targetPanX, targetPanY, zoomScale);
+      setPanOffset(clamped);
+    }
+  };
+
+  // Pointer Up (Tap to call frog / Double-tap to zoom or reset)
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isPointerDown) return;
+    setIsPointerDown(false);
+
+    const now = Date.now();
+    const isQuickTap = !hasMoved && (now - dragStartRef.current.time < 320);
+
+    if (isQuickTap) {
+      const timeSinceLastTap = now - lastTapTimeRef.current;
+      lastTapTimeRef.current = now;
+
+      // Double-Tap detected: Zoom in or reset to 100%
+      if (timeSinceLastTap < 300) {
+        if (soundEnabled) soundEngine.playTapSound();
+        if (hapticEnabled) triggerHaptic();
+
+        if (zoomScale > 1.2) {
+          // Reset zoom
+          setZoomScale(1.0);
+          setPanOffset({ x: 0, y: 0 });
+        } else {
+          // Zoom in smoothly towards center
+          const targetZoom = 2.2;
+          setZoomScale(targetZoom);
+          setPanOffset((prev) => clampPanToBounds(prev.x, prev.y, targetZoom));
+        }
+        return;
+      }
+
+      // Single Tap: Call frog to point on stage
+      if (soundEnabled) soundEngine.playTapSound();
+      if (hapticEnabled) triggerHaptic();
+
+      const container = containerRef.current;
+      if (container) {
+        const rect = container.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        const svgW = 160;
+        const svgH = fullscreen ? (rect.height / rect.width) * 160 : 100;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const normalizedX = (clickX - centerX - panOffset.x) / zoomScale + centerX;
+        const normalizedY = (clickY - centerY - panOffset.y) / zoomScale + centerY;
+
+        const targetSvgX = Math.max(24, Math.min(136, (normalizedX / rect.width) * svgW));
+        const targetSvgY = Math.max(54, Math.min(84, (normalizedY / rect.height) * svgH));
+
+        setTargetPos({ x: targetSvgX, y: targetSvgY });
+      }
+
+      if (onTapStage) {
+        onTapStage(e.clientX, e.clientY);
+      }
+    }
+  };
+
+  // Multi-touch pinch-to-zoom (strictly clamped)
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 2) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      touchDistanceRef.current = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length === 2 && touchDistanceRef.current !== null) {
+      const t1 = e.touches[0];
+      const t2 = e.touches[1];
+      const dist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      const ratio = dist / touchDistanceRef.current;
+
+      setZoomScale((prev) => {
+        const next = Math.min(3.5, Math.max(1.0, prev * ratio));
+        setPanOffset((curr) => clampPanToBounds(curr.x, curr.y, next));
+        return next;
+      });
+      touchDistanceRef.current = dist;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchDistanceRef.current = null;
+  };
+
+  // Mouse wheel zoom (strictly clamped within background dimensions)
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setZoomScale((prev) => {
+      const delta = -e.deltaY * 0.0018;
+      const next = Math.min(3.5, Math.max(1.0, prev + delta));
+      setPanOffset((curr) => clampPanToBounds(curr.x, curr.y, next));
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (!config.isAnimated) return;
@@ -1454,17 +2014,208 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
         </g>
       )}
 
-            {/* 3. FROG CHARACTER (CENTERED AT X=70..90, Y=56..80) */}
-            {/* Dynamic gentle breathing offset */}
+      {/* L. 24H NEON KONBINI CONVENIENCE STORE */}
+      {config.sceneId === 'convenience_store' && (
+        <g id="scene-convenience-store">
+          {/* Top Neon Storefront Fascia Canopy */}
+          <rect x="0" y="0" width="160" height="14" fill="#18181b" />
+          <rect x="0" y="2" width="160" height="3" fill="#10b981" />
+          <rect x="0" y="5" width="160" height="2" fill="#ffffff" />
+          <rect x="0" y="7" width="160" height="3" fill="#ea580c" />
+          <rect x="0" y="10" width="160" height="2" fill="#0284c7" />
+
+          {/* Glowing 24h Digital LED Sign */}
+          <rect x="60" y="1" width="40" height="11" fill="#09090b" rx="1" stroke="#27272a" strokeWidth="0.5" />
+          <text x="80" y="8" fill="#10b981" fontSize="5" fontFamily="monospace" textAnchor="middle" fontWeight="bold" letterSpacing="0.5">
+            24h MART
+          </text>
+          <circle cx="64" cy="6.5" r="1.2" fill="#ef4444" className="animate-pulse" />
+          <circle cx="96" cy="6.5" r="1.2" fill="#22c55e" />
+
+          {/* Recessed Ceiling Neon Tube Lights */}
+          <rect x="15" y="14" width="40" height="2" fill="#ffffff" opacity="0.85" />
+          <rect x="105" y="14" width="40" height="2" fill="#ffffff" opacity="0.85" />
+          <rect x="18" y="16" width="34" height="1" fill="#38bdf8" opacity="0.4" />
+          <rect x="108" y="16" width="34" height="1" fill="#38bdf8" opacity="0.4" />
+
+          {/* Back Store Wall Interior */}
+          <rect x="0" y="14" width="160" height="46" fill="#f1f5f9" />
+          <line x1="0" y1="28" x2="160" y2="28" stroke="#e2e8f0" strokeWidth="0.5" />
+          <line x1="0" y1="42" x2="160" y2="42" stroke="#e2e8f0" strokeWidth="0.5" />
+
+          {/* LEFT SIDE: Illuminated Glass Drink Cooler Display Case */}
+          <rect x="4" y="18" width="48" height="42" fill="#0f172a" rx="1.5" stroke="#38bdf8" strokeWidth="0.8" />
+          <rect x="6" y="20" width="44" height="38" fill="#0369a1" opacity="0.9" rx="1" />
+          {/* Frosty Glass Backlight */}
+          <rect x="8" y="22" width="40" height="34" fill="#0284c7" opacity="0.6" />
+
+          {/* Cooler Shelves & Colorful Canned Drinks */}
+          {/* Shelf 1 - Top: Green Melon Sodas & Canned Coffees */}
+          <line x1="6" y1="28" x2="50" y2="28" stroke="#e0f2fe" strokeWidth="1" />
+          <rect x="9" y="23" width="4" height="5" fill="#22c55e" rx="0.5" />
+          <rect x="15" y="23" width="4" height="5" fill="#22c55e" rx="0.5" />
+          <rect x="21" y="23" width="4" height="5" fill="#f59e0b" rx="0.5" />
+          <rect x="27" y="23" width="4" height="5" fill="#ef4444" rx="0.5" />
+          <rect x="33" y="23" width="4" height="5" fill="#3b82f6" rx="0.5" />
+          <rect x="39" y="23" width="4" height="5" fill="#78350f" rx="0.5" />
+
+          {/* Shelf 2 - Middle: Strawberry Milk & Bottled Teas */}
+          <line x1="6" y1="38" x2="50" y2="38" stroke="#e0f2fe" strokeWidth="1" />
+          <rect x="9" y="31" width="4" height="7" fill="#f472b6" rx="0.5" />
+          <rect x="15" y="31" width="4" height="7" fill="#f472b6" rx="0.5" />
+          <rect x="21" y="31" width="4" height="7" fill="#84cc16" rx="0.5" />
+          <rect x="27" y="31" width="4" height="7" fill="#84cc16" rx="0.5" />
+          <rect x="33" y="31" width="4" height="7" fill="#38bdf8" rx="0.5" />
+          <rect x="39" y="31" width="4" height="7" fill="#ffffff" rx="0.5" />
+
+          {/* Shelf 3 - Bottom: Giant Beverage Cartons */}
+          <line x1="6" y1="48" x2="50" y2="48" stroke="#e0f2fe" strokeWidth="1" />
+          <rect x="10" y="40" width="5" height="8" fill="#fb923c" rx="0.5" />
+          <rect x="18" y="40" width="5" height="8" fill="#38bdf8" rx="0.5" />
+          <rect x="26" y="40" width="5" height="8" fill="#a855f7" rx="0.5" />
+          <rect x="34" y="40" width="5" height="8" fill="#10b981" rx="0.5" />
+
+          {/* Cooler Digital Temp & Glass Glare */}
+          <rect x="34" y="19" width="12" height="3" fill="#09090b" rx="0.5" />
+          <text x="40" y="21.2" fill="#38bdf8" fontSize="2.2" fontFamily="monospace" textAnchor="middle">3.2°C</text>
+          <line x1="12" y1="21" x2="44" y2="55" stroke="#ffffff" strokeWidth="0.8" opacity="0.3" />
+
+          {/* RIGHT SIDE: Snack Aisle Racks & Hot Food Warmer Case */}
+          {/* Multi-tier Snack Shelves */}
+          <rect x="110" y="22" width="46" height="38" fill="#334155" rx="1" />
+          {/* Shelf 1: Potato Chip Bags (Red, Blue, Yellow) */}
+          <line x1="110" y1="31" x2="156" y2="31" stroke="#64748b" strokeWidth="1" />
+          <rect x="113" y="24" width="6" height="7" fill="#ef4444" rx="1" />
+          <rect x="121" y="24" width="6" height="7" fill="#3b82f6" rx="1" />
+          <rect x="129" y="24" width="6" height="7" fill="#eab308" rx="1" />
+          <rect x="137" y="24" width="6" height="7" fill="#10b981" rx="1" />
+          <rect x="145" y="24" width="6" height="7" fill="#ec4899" rx="1" />
+
+          {/* Shelf 2: Ramen Cup Noodles & Pocky Boxes */}
+          <line x1="110" y1="41" x2="156" y2="41" stroke="#64748b" strokeWidth="1" />
+          <polygon points="113,34 119,34 118,40 114,40" fill="#dc2626" />
+          <polygon points="121,34 127,34 126,40 122,40" fill="#ea580c" />
+          <rect x="129" y="33" width="4" height="8" fill="#dc2626" rx="0.5" />
+          <rect x="135" y="33" width="4" height="8" fill="#78350f" rx="0.5" />
+          <rect x="141" y="33" width="4" height="8" fill="#ec4899" rx="0.5" />
+          <rect x="147" y="33" width="4" height="8" fill="#84cc16" rx="0.5" />
+
+          {/* Shelf 3 / Hot Warmer Case on Counter Base */}
+          <rect x="110" y="44" width="46" height="16" fill="#78350f" rx="1" stroke="#d97706" strokeWidth="0.8" />
+          <rect x="112" y="46" width="42" height="12" fill="#fef3c7" opacity="0.95" rx="0.5" />
+          {/* Steamy Buns / Karaage Golden Glow */}
+          <circle cx="118" cy="51" r="3" fill="#f59e0b" />
+          <circle cx="126" cy="51" r="3" fill="#f97316" />
+          <circle cx="134" cy="51" r="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.5" />
+          <circle cx="142" cy="51" r="3" fill="#ffffff" stroke="#e2e8f0" strokeWidth="0.5" />
+          <text x="133" y="48" fill="#dc2626" fontSize="2.5" fontFamily="monospace" fontWeight="bold">HOT</text>
+
+          {/* 3D Checkered Convenience Store Tiled Floor */}
+          <polygon points="0,60 160,60 160,280 0,280" fill="#f8fafc" />
+          {/* Floor Tile Grid Lines */}
+          <line x1="0" y1="60" x2="160" y2="60" stroke="#cbd5e1" strokeWidth="1" />
+          <line x1="0" y1="72" x2="160" y2="72" stroke="#cbd5e1" strokeWidth="0.8" />
+          <line x1="0" y1="88" x2="160" y2="88" stroke="#cbd5e1" strokeWidth="1" />
+          <line x1="0" y1="110" x2="160" y2="110" stroke="#cbd5e1" strokeWidth="1.2" />
+          <line x1="0" y1="140" x2="160" y2="140" stroke="#cbd5e1" strokeWidth="1.4" />
+          <line x1="0" y1="180" x2="160" y2="180" stroke="#cbd5e1" strokeWidth="1.6" />
+
+          {/* Radial Perspective Tile Lines */}
+          <line x1="20" y1="60" x2="-15" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
+          <line x1="50" y1="60" x2="25" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
+          <line x1="80" y1="60" x2="80" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
+          <line x1="110" y1="60" x2="135" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
+          <line x1="140" y1="60" x2="175" y2="280" stroke="#cbd5e1" strokeWidth="0.8" />
+
+          {/* Alternating Soft Pastel Checker Accents */}
+          <polygon points="50,60 80,60 76,72 45,72" fill="#ecfdf5" opacity="0.7" />
+          <polygon points="110,60 140,60 144,72 113,72" fill="#ecfdf5" opacity="0.7" />
+          <polygon points="15,72 45,72 38,88 5,88" fill="#eff6ff" opacity="0.7" />
+          <polygon points="76,72 113,72 118,88 80,88" fill="#eff6ff" opacity="0.7" />
+          <polygon points="38,88 80,88 80,110 30,110" fill="#ecfdf5" opacity="0.7" />
+          <polygon points="118,88 160,88 160,110 126,110" fill="#ecfdf5" opacity="0.7" />
+
+          {/* Red Plastic Shopping Basket on Floor on Left */}
+          <g transform="translate(18, 68)">
+            <polygon points="0,4 20,4 17,14 3,14" fill="#dc2626" />
+            <polygon points="2,6 18,6 16,12 4,12" fill="#b91c1c" />
+            <path d="M 4 4 Q 10 -2 16 4" stroke="#78350f" strokeWidth="1" fill="none" />
+            {/* Bag of Chips & Drink inside basket */}
+            <rect x="5" y="2" width="4" height="6" fill="#facc15" rx="0.5" />
+            <rect x="11" y="1" width="3" height="6" fill="#22c55e" rx="0.5" />
+          </g>
+
+          {/* CENTER CASHIER CHECKOUT REGISTER COUNTER (Frog Stage) */}
+          <g id="konbini-checkout-counter">
+            {/* Front Counter Panel */}
+            <rect x="52" y="62" width="56" height="20" fill="#ffffff" rx="2" stroke="#cbd5e1" strokeWidth="0.8" />
+            <rect x="54" y="64" width="52" height="4" fill="#10b981" rx="1" />
+            <rect x="54" y="70" width="52" height="1.5" fill="#ea580c" />
+            <rect x="54" y="74" width="52" height="6" fill="#f8fafc" rx="0.5" />
+
+            {/* Counter Surface / Platform */}
+            <polygon points="48,62 112,62 110,58 50,58" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="0.5" />
+
+            {/* Digital POS Cash Register Terminal */}
+            <rect x="92" y="48" width="14" height="12" fill="#1e293b" rx="1.5" stroke="#475569" strokeWidth="0.6" />
+            {/* Glowing Screen Display */}
+            <rect x="94" y="50" width="10" height="6" fill="#0284c7" rx="0.5" />
+            <text x="99" y="54.5" fill="#ffffff" fontSize="2.5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">¥850</text>
+            <rect x="94" y="57" width="10" height="2" fill="#334155" />
+            {/* Scanner Stand Cradle */}
+            <line x1="88" y1="58" x2="90" y2="52" stroke="#64748b" strokeWidth="1" />
+            <circle cx="90" cy="52" r="1.5" fill="#ef4444" />
+
+            {/* Fresh Onigiri & Bento Staging Tray on Counter */}
+            <rect x="54" y="58" width="14" height="4" fill="#fef3c7" rx="0.5" stroke="#d97706" strokeWidth="0.5" />
+            <polygon points="57,59 61,59 60,61 58,61" fill="#ffffff" />
+            <polygon points="63,59 67,59 66,61 64,61" fill="#ffffff" />
+          </g>
+        </g>
+      )}
+
+            {/* 3. FROG CHARACTER (DYNAMICALLY MOVING, HOPPING & INTERACTING ACROSS SCENE) */}
             {(() => {
               const frogY = config.isAnimated && animTick % 2 === 0 ? 56 : 57;
               const frogX = 72;
               const skin = getSkinColors(config.skinId);
 
+              // Dynamic offsets from autonomous roaming & jumping
+              const dx = frogPos.x - 72;
+              const dy = frogPos.y - 56;
+              const hopArc = isHopping
+                ? -Math.sin(hopProgress * Math.PI) * 13
+                : actionState === 'happy_jump'
+                ? -Math.abs(Math.sin(animTick * 1.5)) * 8
+                : 0;
+              const shadowScale = isHopping ? Math.max(0.35, 1 - Math.abs(hopArc) / 16) : 1;
+
               return (
-                <g id="pixel-frog-hero">
-                  {/* Frog Shadow */}
-                  <ellipse cx={frogX + 8} cy="81" rx="14" ry="3" fill="#000000" opacity="0.35" />
+                <g
+                  id="pixel-frog-hero"
+                  transform={`translate(${dx}, ${dy + hopArc}) ${facing === 'left' ? 'translate(160, 0) scale(-1, 1)' : ''}`}
+                >
+                  {/* Dynamic Frog Shadow */}
+                  <ellipse
+                    cx={frogX + 8}
+                    cy={frogY + 25 - hopArc}
+                    rx={14 * shadowScale}
+                    ry={3 * shadowScale}
+                    fill="#000000"
+                    opacity={0.35 * shadowScale}
+                  />
+
+                  {/* Cute Action / Emotion Speech Bubble */}
+                  {actionBubble && (
+                    <g transform={`translate(${frogX + 8}, ${frogY - 6})`} className="animate-bounce">
+                      <rect x="-8" y="-12" width="16" height="11" fill="#FFFFFF" rx="2" stroke="#18181B" strokeWidth="0.8" />
+                      <polygon points="-2,-1 2,-1 0,2" fill="#FFFFFF" stroke="#18181B" strokeWidth="0.8" />
+                      <rect x="-1" y="-1.5" width="2" height="1" fill="#FFFFFF" />
+                      <text x="0" y="-4.5" fontSize="6.5" textAnchor="middle" dominantBaseline="middle">
+                        {actionBubble}
+                      </text>
+                    </g>
+                  )}
 
                   {/* Sleeping Pose special handling */}
                   {config.activityId === 'sleeping' ? (
@@ -1687,6 +2438,27 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {config.outfitId === 'konbini_staff_uniform' && (
+                        <g id="scene-outfit-konbini-staff">
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#FFFFFF" />
+                          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#F8FAFC" />
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="3" fill="#10B981" />
+                          <rect x={frogX + 6} y={frogY + 10} width="4" height="3" fill="#059669" />
+                          <rect x={frogX - 2} y={frogY + 13} width="20" height="1.5" fill="#EA580C" />
+                          <rect x={frogX + 11} y={frogY + 14} width="4" height="3" fill="#FEF08A" rx="0.5" stroke="#78350F" strokeWidth="0.5" />
+                          <rect x={frogX + 12} y={frogY + 15} width="2" height="1" fill="#1E293B" />
+                        </g>
+                      )}
+
+                      {config.outfitId === 'shopper_cozy_sweatset' && (
+                        <g id="scene-outfit-shopper">
+                          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#8B5CF6" rx="1.5" />
+                          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#A78BFA" rx="1" />
+                          <rect x={frogX + 3} y={frogY + 14} width="10" height="5" fill="#7C3AED" rx="0.5" />
+                          <rect x={frogX + 5} y={frogY + 10} width="6" height="2" fill="#DDD6FE" />
+                        </g>
+                      )}
+
                       {/* GLASSES / FACE ACCESSORY LAYER */}
                       {config.glassesId === 'reading' && (
                         <g>
@@ -1762,6 +2534,25 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX - 1} y={frogY + 9} width="2" height="2" fill="#84CC16" />
                           <rect x={frogX + 15} y={frogY + 9} width="2" height="2" fill="#84CC16" />
                           <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#A3E635" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'scanner_headset' && (
+                        <g id="scene-glasses-headset">
+                          <rect x={frogX - 3} y={frogY + 6} width="3" height="6" fill="#1E293B" rx="1" />
+                          <line x1={frogX - 1} y1={frogY + 4} x2={frogX + 6} y2={frogY - 1} stroke="#334155" strokeWidth="1" />
+                          <line x1={frogX - 2} y1={frogY + 10} x2={frogX + 4} y2={frogY + 12} stroke="#334155" strokeWidth="1" />
+                          <circle cx={frogX + 4} cy={frogY + 12} r="1" fill="#10B981" />
+                          <circle cx={frogX - 2} cy={frogY + 8} r="1" fill="#38BDF8" />
+                        </g>
+                      )}
+
+                      {config.glassesId === 'konbini_blush' && (
+                        <g id="scene-glasses-blush">
+                          <rect x={frogX - 2} y={frogY + 9} width="3" height="2" fill="#FB7185" />
+                          <rect x={frogX + 15} y={frogY + 9} width="3" height="2" fill="#FB7185" />
+                          <circle cx={frogX} cy={frogY + 8} r="0.8" fill="#FDE047" />
+                          <circle cx={frogX + 16} cy={frogY + 8} r="0.8" fill="#FDE047" />
                         </g>
                       )}
 
@@ -1942,6 +2733,41 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {/* 15. Konbini Barcode Scanner */}
+                      {config.activityId === 'konbini_scanner' && (
+                        <g id="scene-prop-scanner">
+                          <rect x={frogX + 10} y={frogY + 13} width="6" height="4" fill="#1E293B" rx="1" />
+                          <rect x={frogX + 14} y={frogY + 11} width="3" height="6" fill="#0F172A" rx="0.5" />
+                          {/* Animated Laser Beam */}
+                          <line x1={frogX + 16} y1={frogY + 14} x2={frogX + 26} y2={frogY + 14} stroke="#EF4444" strokeWidth="1" className="animate-pulse" />
+                          <circle cx={frogX + 26} cy={frogY + 14} r="1.2" fill="#F87171" />
+                          <rect x={frogX + 9} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 16. Eating Delicious Onigiri */}
+                      {config.activityId === 'eating_onigiri' && (
+                        <g id="scene-prop-eating-onigiri">
+                          <polygon points={`${frogX + 8},${frogY + 11} ${frogX + 3},${frogY + 17} ${frogX + 13},${frogY + 17}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                          <rect x={frogX + 6} y={frogY + 15} width="4" height="2.5" fill="#18181B" rx="0.5" />
+                          <circle cx={frogX + 8} cy={frogY + 13} r="1" fill="#DC2626" />
+                          <rect x={frogX + 2} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                          <rect x={frogX + 12} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 17. Holding Konbini Shopping Bag */}
+                      {config.activityId === 'holding_konbini_bag' && (
+                        <g id="scene-prop-bag">
+                          <polygon points={`${frogX + 9},${frogY + 12} ${frogX + 17},${frogY + 12} ${frogX + 19},${frogY + 22} ${frogX + 7},${frogY + 22}`} fill="#FFFFFF" stroke="#CBD5E1" strokeWidth="0.5" />
+                          <rect x={frogX + 9} y={frogY + 16} width="8" height="2" fill="#10B981" />
+                          <rect x={frogX + 9} y={frogY + 18} width="8" height="1" fill="#EA580C" />
+                          <rect x={frogX + 10} y={frogY + 10} width="3" height="4" fill="#FACC15" />
+                          <rect x={frogX + 13} y={frogY + 11} width="2" height="3" fill="#EF4444" />
+                          <rect x={frogX + 8} y={frogY + 13} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
                       {/* 4. HATS & ACCESSORIES (HEAD LAYER) */}
 
                       {/* Red Riding Hood */}
@@ -2023,6 +2849,37 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 9} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
                           <rect x={frogX + 14} y={frogY + 2} width="3" height="3" fill="#1E3A8A" />
                           <circle cx={frogX + 8} cy={frogY + 3.5} r="2" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {/* Konbini Staff Visor */}
+                      {config.hatId === 'konbini_staff_visor' && (
+                        <g id="scene-hat-visor">
+                          <rect x={frogX - 3} y={frogY + 1} width="22" height="3" fill="#10B981" rx="0.5" />
+                          <rect x={frogX - 1} y={frogY + 1} width="18" height="1" fill="#34D399" />
+                          <polygon points={`${frogX - 5},${frogY + 2} ${frogX + 21},${frogY + 2} ${frogX + 18},${frogY - 2} ${frogX - 2},${frogY - 2}`} fill="#059669" />
+                          <circle cx={frogX + 8} cy={frogY + 2.5} r="1.2" fill="#FFFFFF" />
+                          <circle cx={frogX + 8} cy={frogY + 2.5} r="0.6" fill="#EA580C" />
+                        </g>
+                      )}
+
+                      {/* Shopper Bucket Hat */}
+                      {config.hatId === 'shopper_bucket_hat' && (
+                        <g id="scene-hat-bucket">
+                          <polygon points={`${frogX - 2},${frogY + 1} ${frogX + 18},${frogY + 1} ${frogX + 16},${frogY - 6} ${frogX},${frogY - 6}`} fill="#7C3AED" />
+                          <rect x={frogX + 1} y={frogY - 5} width="14" height="2" fill="#8B5CF6" />
+                          <polygon points={`${frogX - 5},${frogY + 3} ${frogX + 21},${frogY + 3} ${frogX + 18},${frogY + 1} ${frogX - 2},${frogY + 1}`} fill="#6D28D9" />
+                          <circle cx={frogX + 8} cy={frogY - 2} r="1" fill="#FDE047" />
+                        </g>
+                      )}
+
+                      {/* Onigiri Headband */}
+                      {config.hatId === 'onigiri_headband' && (
+                        <g id="scene-hat-onigiri">
+                          <rect x={frogX - 2} y={frogY + 2} width="20" height="1.5" fill="#18181B" />
+                          <polygon points={`${frogX + 8},${frogY - 8} ${frogX + 3},${frogY - 1} ${frogX + 13},${frogY - 1}`} fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                          <rect x={frogX + 6} y={frogY - 3} width="4" height="2.5" fill="#18181B" rx="0.5" />
+                          <circle cx={frogX + 8} cy={frogY - 4.5} r="0.8" fill="#DC2626" />
                         </g>
                       )}
 
@@ -2300,6 +3157,54 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                 <circle cx="3" cy="3" r="0.6" fill="#18181B" />
               </g>
             )}
+
+            {/* M. Konbini Cashier Lucky Cat (Waving Maneki Neko with Clerk Visor) */}
+            {(config.companionId === 'konbini_cashier_cat' || config.companionId === 'companion_konbini_cashier_cat') && (
+              <g id="companion-konbini-cat" transform="translate(108, 62)">
+                {/* White Cat Body & Head */}
+                <ellipse cx="7" cy="9" rx="6" ry="5" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                <circle cx="7" cy="4" r="4" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="0.5" />
+                {/* Cat Ears */}
+                <polygon points="4,1 6,3 3,3" fill="#FB7185" />
+                <polygon points="8,3 10,1 11,3" fill="#FB7185" />
+                {/* Mini Clerk Green Visor */}
+                <rect x="3" y="2" width="8" height="1.5" fill="#10B981" rx="0.5" />
+                {/* Cat Face: Eyes & Happy Whiskers */}
+                <circle cx="5.5" cy="4" r="0.6" fill="#1E293B" />
+                <circle cx="8.5" cy="4" r="0.6" fill="#1E293B" />
+                <circle cx="7" cy="5" r="0.4" fill="#FB7185" />
+                {/* Mini Green Staff Apron with Gold Coin */}
+                <rect x="3.5" y="8" width="7" height="4" fill="#10B981" rx="0.5" />
+                <circle cx="7" cy="10" r="1.2" fill="#FACC15" />
+                {/* Waving Paw (Animated Up and Down) */}
+                <rect x="1" y={animTick % 2 === 0 ? 3 : 5} width="2.5" height="3" fill="#FFFFFF" rx="1" stroke="#E2E8F0" strokeWidth="0.4" />
+                <circle cx="2.2" cy={animTick % 2 === 0 ? 3.5 : 5.5} r="0.8" fill="#FB7185" />
+              </g>
+            )}
+
+            {/* N. Snack Basket Shiba Inu (Curled up inside shopping basket) */}
+            {(config.companionId === 'snack_shiba' || config.companionId === 'companion_snack_shiba') && (
+              <g id="companion-snack-shiba" transform="translate(36, 70)">
+                {/* Red Konbini Basket Container */}
+                <polygon points="0,6 22,6 19,16 3,16" fill="#DC2626" />
+                <polygon points="2,8 20,8 18,14 4,14" fill="#B91C1C" />
+                {/* Shiba Inu Body */}
+                <ellipse cx="11" cy="9" rx="7" ry="4" fill="#D97706" />
+                <circle cx="15" cy="6" r="3.5" fill="#D97706" />
+                {/* White Muzzle & Cheeks */}
+                <ellipse cx="16" cy="7" rx="2" ry="1.5" fill="#FFFFFF" />
+                <circle cx="16.5" cy="6.5" r="0.5" fill="#18181B" />
+                {/* Shiba Pointy Ears */}
+                <polygon points="13,3 15,1 15,4" fill="#B45309" />
+                <polygon points="16,3 18,1 18,4" fill="#B45309" />
+                {/* Sleeping/Happy Curved Eye */}
+                <line x1="14" y1="5.5" x2="16" y2="5.5" stroke="#18181B" strokeWidth="0.6" />
+                {/* Cute Tail Wag */}
+                <ellipse cx="5" cy={animTick % 2 === 0 ? 7 : 8} rx="2" ry="1.5" fill="#D97706" />
+                {/* Bag of Chips beside Shiba */}
+                <rect x="3" y="4" width="4" height="6" fill="#FACC15" rx="0.5" />
+              </g>
+            )}
       </g>
 
       {/* 5. WEATHER PARTICLES OVERLAY */}
@@ -2341,19 +3246,38 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   if (fullscreen) {
     return (
       <div
-        className={`absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none ${className}`}
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        className={`absolute inset-0 w-full h-full overflow-hidden select-none touch-none ${
+          isPointerDown && hasMoved ? 'cursor-grabbing' : 'cursor-grab'
+        } ${className}`}
         style={{
           background: `linear-gradient(to bottom, ${sky.top} 0%, ${sky.bottom} 100%)`,
         }}
       >
-        <svg
-          viewBox={`0 0 160 ${viewBoxHeight}`}
-          preserveAspectRatio="xMidYMid slice"
-          className="w-full h-full object-cover block scale-100"
-          shapeRendering="crispEdges"
+        {/* Scalable & Pannable SVG Scene Layer */}
+        <div
+          className="w-full h-full transform-gpu origin-center will-change-transform transition-transform duration-75 pointer-events-none"
+          style={{
+            transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomScale})`,
+          }}
         >
-          {svgContent}
-        </svg>
+          <svg
+            viewBox={`0 0 160 ${viewBoxHeight}`}
+            preserveAspectRatio="xMidYMid slice"
+            className="w-full h-full object-cover block"
+            shapeRendering="crispEdges"
+          >
+            {svgContent}
+          </svg>
+        </div>
       </div>
     );
   }
@@ -2361,16 +3285,34 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   return (
     <div className={`space-y-3 ${className}`}>
       {/* Diorama Display Card */}
-      <div className="relative rounded-[26px] overflow-hidden border border-black/[0.08] dark:border-white/[0.12] bg-[#f8f5ee] dark:bg-[#191613] shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
+      <div
+        ref={containerRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        className="relative rounded-[26px] overflow-hidden border border-black/[0.08] dark:border-white/[0.12] bg-[#f8f5ee] dark:bg-[#191613] shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+      >
         {/* Main Pixel Canvas (160x100 viewBox) */}
-        <div className="relative w-full aspect-[16/10] max-h-[300px] select-none overflow-hidden bg-black">
-          <svg
-            viewBox="0 0 160 100"
-            className="w-full h-full object-cover block"
-            shapeRendering="crispEdges"
+        <div className="relative w-full aspect-[16/10] max-h-[300px] select-none overflow-hidden bg-black touch-none">
+          <div
+            className="w-full h-full transform-gpu origin-center will-change-transform transition-transform duration-75"
+            style={{
+              transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomScale})`,
+            }}
           >
-            {svgContent}
-          </svg>
+            <svg
+              viewBox="0 0 160 100"
+              className="w-full h-full object-cover block"
+              shapeRendering="crispEdges"
+            >
+              {svgContent}
+            </svg>
+          </div>
         </div>
 
         {/* Info & Quick Settings Bottom Bar inside Diorama */}

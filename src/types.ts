@@ -208,6 +208,7 @@ export function getMoodConfig(value: number | null | undefined): MoodConfig | un
 // -------------------------------------------------------------
 
 export type SceneLocationId =
+  | 'convenience_store'
   | 'red_riding_forest'
   | 'sushi_bar'
   | 'sauna_bathhouse'
@@ -223,6 +224,9 @@ export type SceneLocationId =
 
 export type FrogActivityId =
   | 'relaxing'
+  | 'konbini_scanner'
+  | 'eating_onigiri'
+  | 'holding_konbini_bag'
   | 'picnic_basket'
   | 'woodcutter_axe'
   | 'eating_sushi'
@@ -242,6 +246,9 @@ export type FrogActivityId =
 
 export type FrogHatId =
   | 'none'
+  | 'konbini_staff_visor'
+  | 'shopper_bucket_hat'
+  | 'onigiri_headband'
   | 'red_riding_hood'
   | 'wolf_ears_hood'
   | 'granny_nightcap'
@@ -265,6 +272,8 @@ export type FrogHatId =
 
 export type FrogOutfitId =
   | 'none'
+  | 'konbini_staff_uniform'
+  | 'shopper_cozy_sweatset'
   | 'red_riding_dress'
   | 'wolf_fur_cloak'
   | 'hunter_woodsman'
@@ -283,6 +292,8 @@ export type FrogOutfitId =
 
 export type FrogGlassesId =
   | 'none'
+  | 'scanner_headset'
+  | 'konbini_blush'
   | 'forest_blush_freckles'
   | 'wolf_snarl_fangs'
   | 'wasabi_sparkle'
@@ -295,6 +306,7 @@ export type FrogGlassesId =
 
 export type FrogSkinId =
   | 'classic'
+  | 'konbini_mint'
   | 'fairytale_rose'
   | 'timber_wolf_grey'
   | 'wasabi_green'
@@ -308,6 +320,8 @@ export type FrogSkinId =
 
 export type FrogCompanionId =
   | 'none'
+  | 'konbini_cashier_cat'
+  | 'snack_shiba'
   | 'chibi_wolf_pup'
   | 'forest_hedgehog'
   | 'sushi_apprentice_cat'
@@ -358,6 +372,9 @@ export interface SceneOptionInfo<T> {
 }
 
 export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
+  { id: 'convenience_store', name: '24h Neon Konbini Store', emoji: '🏪', desc: 'Glowing drink fridges, snack shelves & checkout counter', tag: 'Neon' },
+  { id: 'red_riding_forest', name: 'Fairytale Red Riding Forest', emoji: '🧺', desc: 'Misty red ribbon woods, granny cottage & autumn trails', tag: 'Fairytale' },
+  { id: 'sushi_bar', name: 'Edomae Sushi Counter', emoji: '🍣', desc: 'Polished hinoki bar, noren curtains & red lanterns', tag: 'Gourmet' },
   { id: 'sauna_bathhouse', name: 'Cozy Bathhouse Room', emoji: '🪵', desc: 'Warm stone bricks, arched sauna door & tea lounge', tag: 'Room' },
   { id: 'zen_pond', name: 'Zen Lotus Pond', emoji: '🪷', desc: 'Lily pads, ripples & stone lantern', tag: 'Outdoor' },
   { id: 'treehouse', name: 'Cozy Treehouse', emoji: '🏡', desc: 'Warm fireplace, books & herbal kettle', tag: 'Indoor' },
@@ -372,6 +389,13 @@ export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
 
 export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
   { id: 'relaxing', name: 'Peaceful Chilling', emoji: '🐸', desc: 'Smiling cute with warm rosy cheeks', tag: 'Rest' },
+  { id: 'konbini_scanner', name: 'Scanning Konbini Barcodes', emoji: '📟', desc: 'Beeping cash register with red laser scanner', tag: 'Konbini' },
+  { id: 'eating_onigiri', name: 'Steamed Bun & Onigiri', emoji: '🍙', desc: 'Munching hot nikuman bun and seaweed onigiri', tag: 'Food' },
+  { id: 'holding_konbini_bag', name: 'Midnight Shopping Bag', emoji: '🛍️', desc: 'Striped konbini plastic bag & chilled canned drink', tag: 'Konbini' },
+  { id: 'picnic_basket', name: 'Pastry Picnic Basket', emoji: '🧺', desc: 'Woven wicker basket with warm fresh baked pies', tag: 'Tale' },
+  { id: 'woodcutter_axe', name: 'Woodland Ax & Firewood', emoji: '🪓', desc: 'Cozy timber axe ready for forest hearth logs', tag: 'Tale' },
+  { id: 'eating_sushi', name: 'Fresh Sushi Nigiri Platter', emoji: '🍣', desc: 'Gourmet salmon, tuna & tamago nigiri with wasabi', tag: 'Gourmet' },
+  { id: 'sushi_crafting', name: 'Master Itamae Knife', emoji: '🔪', desc: 'Crafting fine cuts of sashimi with artisan knife', tag: 'Gourmet' },
   { id: 'reading', name: 'Reading Journal', emoji: '📖', desc: 'Immersed in an aesthetic leather book', tag: 'Study' },
   { id: 'tea', name: 'Sipping Green Tea', emoji: '🍵', desc: 'Warm ceramic cup of frothy matcha', tag: 'Zen' },
   { id: 'eating', name: 'Enjoying Treats', emoji: '🍙', desc: 'Feasting on fresh onigiri & baked scone', tag: 'Food' },
@@ -388,6 +412,16 @@ export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
 
 export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
   { id: 'none', name: 'Natural (No Hat)', emoji: '✨', desc: 'Classic cute frog head', tag: 'Simple' },
+  { id: 'konbini_staff_visor', name: 'Konbini Staff Visor', emoji: '🧢', desc: 'Vibrant green & orange stripe clerk sun visor', tag: 'Konbini' },
+  { id: 'shopper_bucket_hat', name: 'Cozy Shopper Bucket Hat', emoji: '👒', desc: 'Cream pastel bucket hat for midnight grocery runs', tag: 'Casual' },
+  { id: 'onigiri_headband', name: 'Plush Onigiri Headband', emoji: '🍙', desc: 'Cute nori triangle rice ball perched on head', tag: 'Cute' },
+  { id: 'red_riding_hood', name: 'Crimson Hooded Cape', emoji: '🧺', desc: 'Velvet fairytale hood with deep ruby silk ribbons', tag: 'Fairytale' },
+  { id: 'wolf_ears_hood', name: 'Wolf Ears Hunter Hood', emoji: '🐺', desc: 'Fluffy wolf ears with pink inner lining', tag: 'Fairytale' },
+  { id: 'granny_nightcap', name: 'Granny Lace Nightcap', emoji: '👵', desc: 'Ruffled vintage bonnet for cozy bedtime stories', tag: 'Fairytale' },
+  { id: 'sushi_salmon', name: 'Salmon Nigiri Hat', emoji: '🍣', desc: 'Glossy fresh salmon nigiri with nori seaweed belt', tag: 'Gourmet' },
+  { id: 'sushi_maguro', name: 'Otoro Maguro Nigiri', emoji: '🍣', desc: 'Deep crimson ruby tuna sashimi on rice bed', tag: 'Gourmet' },
+  { id: 'sushi_ebi', name: 'Sweet Ebi Prawn Hat', emoji: '🍤', desc: 'Crispy butterflied prawn tail hat with wasabi', tag: 'Gourmet' },
+  { id: 'sushi_chef_headband', name: 'Rising Sun Hachimaki', emoji: '🎌', desc: 'Artisan master sushi itamae tied headband', tag: 'Gourmet' },
   { id: 'lotus', name: 'Lotus Leaf Hat', emoji: '🍃', desc: 'Fresh green lily leaf umbrella', tag: 'Nature' },
   { id: 'straw', name: 'Straw Travel Hat', emoji: '👒', desc: 'Traditional woven kasa sun hat', tag: 'Travel' },
   { id: 'sakura', name: 'Sakura Crown', emoji: '🌸', desc: 'Handcrafted cherry blossom garland', tag: 'Floral' },
@@ -405,6 +439,13 @@ export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
 
 export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
   { id: 'none', name: 'No Outfit (Natural)', emoji: '🌱', desc: 'Pure classic frog appearance', tag: 'Simple' },
+  { id: 'konbini_staff_uniform', name: 'Konbini Clerk Uniform', emoji: '🏪', desc: 'Striped staff polo vest with name badge & pen pocket', tag: 'Konbini' },
+  { id: 'shopper_cozy_sweatset', name: 'Midnight Shopper Hoodie', emoji: '🛍️', desc: 'Oversized fleece lounge hoodie & comfy lounge pants', tag: 'Cozy' },
+  { id: 'red_riding_dress', name: 'Fairytale Dirndl Dress', emoji: '👗', desc: 'Crimson embroidered folk corset with white frills', tag: 'Fairytale' },
+  { id: 'wolf_fur_cloak', name: 'Timber Wolf Fur Cloak', emoji: '🐺', desc: 'Warm charcoal pelt cloak with bone toggle clasp', tag: 'Fairytale' },
+  { id: 'hunter_woodsman', name: 'Woodcutter Leather Tunic', emoji: '🪓', desc: 'Earthy forest tunic with brass buckles & pouch', tag: 'Fairytale' },
+  { id: 'sushi_chef_happi', name: 'Itamae Chef Happi Coat', emoji: '🥋', desc: 'Navy & white ocean wave patterned sushi coat', tag: 'Gourmet' },
+  { id: 'sushi_kimono_waiter', name: 'Izakaya Server Kimono', emoji: '🏮', desc: 'Indigo dining robe with vermillion belt sash', tag: 'Gourmet' },
   { id: 'kimono', name: 'Ceremonial Kimono', emoji: '👘', desc: 'Traditional indigo yukata with gold obi sash', tag: 'Zen' },
   { id: 'raincoat', name: 'Yellow Raincoat', emoji: '🧥', desc: 'Bright waterproof slicker with toggle buttons', tag: 'Cute' },
   { id: 'sweater', name: 'Cozy Knit Sweater', emoji: '🧶', desc: 'Warm autumn sweater with cable knit pattern', tag: 'Cozy' },
@@ -419,6 +460,11 @@ export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
 
 export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
   { id: 'none', name: 'No Glasses', emoji: '✨', desc: 'Clear natural eyes', tag: 'Simple' },
+  { id: 'scanner_headset', name: 'Clerk Headset & Mic', emoji: '🎧', desc: 'Smart communication headset with cashier mic', tag: 'Konbini' },
+  { id: 'konbini_blush', name: 'Midnight Shopping Blush', emoji: '💖', desc: 'Warm rosy cheeks with cute snack sparkle', tag: 'Cute' },
+  { id: 'forest_blush_freckles', name: 'Forest Rosy Freckles', emoji: '🍓', desc: 'Whimsical storybook freckles with sweet rosy glow', tag: 'Fairytale' },
+  { id: 'wolf_snarl_fangs', name: 'Wolf Mischief Fangs', emoji: '🦷', desc: 'Playful cute sharp wolf fangs grin', tag: 'Fairytale' },
+  { id: 'wasabi_sparkle', name: 'Wasabi Twinkle Glint', emoji: '✨', desc: 'Zesty wasabi sparkle eye gleam', tag: 'Gourmet' },
   { id: 'reading', name: 'Round Scholar Spectacles', emoji: '👓', desc: 'Gold wire round reading frames', tag: 'Smart' },
   { id: 'sunglasses', name: 'Pixel Cool Shades', emoji: '🕶️', desc: 'Retro 8-bit black tinted sunglasses', tag: 'Cool' },
   { id: 'monocle', name: 'Aristocrat Monocle', emoji: '🧐', desc: 'Gold rimmed monocle on a fine chain', tag: 'Fancy' },
@@ -429,6 +475,11 @@ export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
 
 export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
   { id: 'classic', name: 'Classic Moss Green', emoji: '🐸', desc: 'Original peaceful woodland green hue', tag: 'Classic' },
+  { id: 'konbini_mint', name: 'Neon Konbini Mint', emoji: '🟢', desc: 'Vivid mint neon green with lime accents', tag: 'Neon' },
+  { id: 'fairytale_rose', name: 'Fairytale Rosy Blush', emoji: '🌹', desc: 'Soft enchanted storybook blossom petal skin', tag: 'Fairytale' },
+  { id: 'timber_wolf_grey', name: 'Timber Wolf Slate', emoji: '🐺', desc: 'Mysterious moonlit slate grey forest coat', tag: 'Fairytale' },
+  { id: 'wasabi_green', name: 'Fresh Wasabi Zest', emoji: '🌱', desc: 'Bright zesty lime green itamae tone', tag: 'Gourmet' },
+  { id: 'salmon_peach', name: 'Salmon Roe Peach', emoji: '🍣', desc: 'Warm glowing salmon peach skin', tag: 'Gourmet' },
   { id: 'golden', name: 'Golden Sun Treefrog', emoji: '✨', desc: 'Luminous warm golden honey tone', tag: 'Rare' },
   { id: 'sakura_pink', name: 'Sakura Pastel Pink', emoji: '🌸', desc: 'Soft blushing petal pink skin', tag: 'Cute' },
   { id: 'twilight_blue', name: 'Twilight Deep Blue', emoji: '🌌', desc: 'Mystical midnight blue with cyan undertones', tag: 'Mystic' },
@@ -439,6 +490,12 @@ export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
 
 export const FROG_COMPANIONS: SceneOptionInfo<FrogCompanionId>[] = [
   { id: 'none', name: 'Solo Time', emoji: '🌱', desc: 'Quiet peaceful sanctuary alone', tag: 'Solitude' },
+  { id: 'konbini_cashier_cat', name: 'Lucky Konbini Cashier Cat', emoji: '🐱', desc: 'Waving lucky maneki-neko in konbini uniform', tag: 'Konbini' },
+  { id: 'snack_shiba', name: 'Snack Basket Shiba', emoji: '🐕', desc: 'Adorable shiba inu curled in a shopping basket', tag: 'Konbini' },
+  { id: 'chibi_wolf_pup', name: 'Lupo the Chibi Wolf Pup', emoji: '🐺', desc: 'Playful baby wolf with gold eyes & wagging tail', tag: 'Fairytale' },
+  { id: 'forest_hedgehog', name: 'Spike the Forest Hedgehog', emoji: '🦔', desc: 'Cozy prickly friend carrying fresh strawberries', tag: 'Fairytale' },
+  { id: 'sushi_apprentice_cat', name: 'Chef Tama the Calico', emoji: '🐱', desc: 'Apprentice sushi cat wearing a mini headband', tag: 'Gourmet' },
+  { id: 'mini_ebi_shrimp', name: 'Panko the Mini Shrimp', emoji: '🍤', desc: 'Tiny dancing tempura prawn with crispy tail', tag: 'Gourmet' },
   { id: 'snail', name: 'Maimai the Snail', emoji: '🐌', desc: 'Whimsical slow traveler with spiral shell', tag: 'Friend' },
   { id: 'crab', name: 'Kani the Crab', emoji: '🦀', desc: 'Cheerful little crab with waving pinchers', tag: 'Friend' },
   { id: 'fireflies', name: 'Hotaru Fireflies', emoji: '✨', desc: 'Dancing glowing light particles', tag: 'Atmosphere' },

@@ -22,6 +22,8 @@ import {
   RotateCcw,
   Check,
   Lock,
+  ChevronLeft,
+  ChevronRight,
   CheckCircle2,
 } from 'lucide-react';
 import { soundEngine, triggerHaptic } from '../utils/audioUtils';
@@ -86,14 +88,30 @@ export const GachaView: React.FC<GachaViewProps> = ({
     return shopState.ownedItemIds.includes(itemId);
   };
 
-  // Standard items in the catalog (excluding bare 'none' items)
-  const allGachaItems = useMemo(() => {
-    return SHOP_CATALOG.filter((item) => !item.id.includes('none') && item.id !== 'skin_classic');
+  // Only rotate through the Limited Themed Sets
+  const totalSets = THEMED_FROG_SETS.length;
+  const currentSet = THEMED_FROG_SETS[activeSetIndex] || THEMED_FROG_SETS[0];
+
+  // Pure Gacha pool: strictly exclude default starter items, none, and free basic items
+  const gachaPoolItems = useMemo(() => {
+    return SHOP_CATALOG.filter(
+      (item) =>
+        !item.defaultUnlocked &&
+        !item.id.includes('none') &&
+        item.id !== 'skin_classic' &&
+        !item.id.startsWith('weather_')
+    );
   }, []);
 
-  const totalSets = THEMED_FROG_SETS.length + 1; // themed sets + "All Items"
-  const isAllItemsMode = activeSetIndex === THEMED_FROG_SETS.length;
-  const currentSet = !isAllItemsMode ? THEMED_FROG_SETS[activeSetIndex] : null;
+  // Items featured in the current limited banner
+  const displayItems = useMemo(() => {
+    if (!currentSet) return gachaPoolItems;
+    return gachaPoolItems.filter((item) => {
+      if (currentSet.itemIds.includes(item.id)) return true;
+      const slotVal = currentSet.items[item.slot as keyof typeof currentSet.items];
+      return slotVal === item.value;
+    });
+  }, [currentSet, gachaPoolItems]);
 
   // Change set with automatic live frog room preview
   const handleSelectSetIndex = (newIndex: number) => {
@@ -103,15 +121,12 @@ export const GachaView: React.FC<GachaViewProps> = ({
     if (soundEnabled) soundEngine.playEquipSound();
     if (hapticEnabled) triggerHaptic();
 
-    if (clampedIndex < THEMED_FROG_SETS.length) {
-      const targetSet = THEMED_FROG_SETS[clampedIndex];
+    const targetSet = THEMED_FROG_SETS[clampedIndex];
+    if (targetSet) {
       setPreviewConfig((prev) => ({
         ...prev,
         ...targetSet.items,
       }));
-    } else {
-      // All items mode: revert to user's current equipped frog
-      setPreviewConfig({ ...config });
     }
   };
 
@@ -146,19 +161,6 @@ export const GachaView: React.FC<GachaViewProps> = ({
     touchStartXRef.current = null;
     touchStartYRef.current = null;
   };
-
-  // Display items filtered by selected set or all
-  const displayItems = useMemo(() => {
-    if (isAllItemsMode || !currentSet) {
-      return allGachaItems;
-    }
-
-    return allGachaItems.filter((item) => {
-      if (currentSet.itemIds.includes(item.id)) return true;
-      const slotVal = currentSet.items[item.slot as keyof typeof currentSet.items];
-      return slotVal === item.value;
-    });
-  }, [isAllItemsMode, currentSet, allGachaItems]);
 
   const ownedCount = useMemo(() => {
     return displayItems.filter((item) => isItemOwned(item.id)).length;
@@ -235,8 +237,8 @@ export const GachaView: React.FC<GachaViewProps> = ({
 
     if (hapticEnabled) triggerHaptic();
 
-    // Pool can be weighted towards the current set if in a set tab, or all items
-    const pool = displayItems.length > 0 ? displayItems : allGachaItems;
+    // Gacha pool: weighted towards current featured set items + general gacha items (excluding defaults)
+    const pool = displayItems.length > 0 ? displayItems : gachaPoolItems;
     const results: GachaPullResult[] = [];
 
     const rollItemWeighted = (): ShopItem => {
@@ -252,12 +254,12 @@ export const GachaView: React.FC<GachaViewProps> = ({
 
       let candidates = pool.filter((i) => getGachaGrade(i) === targetTier);
       if (candidates.length === 0) {
-        candidates = allGachaItems.filter((i) => getGachaGrade(i) === targetTier);
+        candidates = gachaPoolItems.filter((i) => getGachaGrade(i) === targetTier);
       }
       if (candidates.length === 0) {
-        candidates = pool;
+        candidates = pool.length > 0 ? pool : gachaPoolItems;
       }
-      return candidates[Math.floor(Math.random() * candidates.length)] || SHOP_CATALOG[0];
+      return candidates[Math.floor(Math.random() * candidates.length)] || gachaPoolItems[0];
     };
 
     for (let i = 0; i < count; i++) {
@@ -364,79 +366,94 @@ export const GachaView: React.FC<GachaViewProps> = ({
         </div>
       </header>
 
+      {/* Floating Minimalist Set Switcher under header */}
+      <div className="relative z-20 w-full flex flex-col items-center pt-2 pointer-events-auto">
+        <div className="flex items-center gap-1 bg-white/85 dark:bg-black/60 backdrop-blur-md border border-white/60 dark:border-white/15 rounded-full px-2 py-1 shadow-sm">
+          <button
+            type="button"
+            onClick={handlePrevSet}
+            className="w-6 h-6 rounded-full hover:bg-black/5 dark:hover:bg-white/10 flex items-center justify-center text-[#554b3f] dark:text-[#c4b5a5] active:scale-90 transition"
+            title="Previous Set"
+          >
+            <ChevronLeft size={15} />
+          </button>
+
+          <div className="px-2 flex items-center gap-1.5 min-w-[150px] justify-center text-center">
+            <span className="text-sm">{currentSet.bannerEmoji}</span>
+            <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8] truncate max-w-[140px]">
+              {currentSet.name.split('&')[0].trim()}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleNextSet}
+            className="w-6 h-6 rounded-full hover:bg-black/5 dark:hover:bg-white/10 flex items-center justify-center text-[#554b3f] dark:text-[#c4b5a5] active:scale-90 transition"
+            title="Next Set"
+          >
+            <ChevronRight size={15} />
+          </button>
+        </div>
+
+        {/* Subtle Dots Indicator */}
+        <div className="flex items-center gap-1 mt-1.5">
+          {Array.from({ length: totalSets }).map((_, idx) => (
+            <button
+              key={`gacha-set-dot-${idx}`}
+              type="button"
+              onClick={() => handleSelectSetIndex(idx)}
+              className={`h-1.5 rounded-full transition-all ${
+                activeSetIndex === idx
+                  ? 'w-3.5 bg-[#5f7a61]'
+                  : 'w-1.5 bg-black/20 dark:bg-white/20 hover:bg-black/35'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
       {/* Spacer */}
       <div className="flex-1 w-full" />
 
       {/* 3. BOTTOM GACHA TRAY */}
-      <div className="relative z-20 w-full bg-white/85 dark:bg-[#1a1613]/90 backdrop-blur-xl border-t border-white/60 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2 pointer-events-auto max-h-[48vh]">
+      <div className="relative z-20 w-full bg-white/90 dark:bg-[#1a1613]/90 backdrop-blur-xl border-t border-white/60 dark:border-white/10 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.15)] px-4 pt-2.5 pb-24 flex flex-col gap-2.5 pointer-events-auto">
         {/* Drag Handle */}
         <div className="w-10 h-1 rounded-full bg-black/15 dark:bg-white/20 mx-auto" />
 
-        {/* Set Selector Pills */}
-        <div className="overflow-x-auto no-scrollbar py-0.5">
-          <div className="flex items-center gap-1.5">
-            {THEMED_FROG_SETS.map((set, idx) => {
-              const isActive = activeSetIndex === idx;
-              return (
-                <button
-                  key={set.id}
-                  type="button"
-                  onClick={() => handleSelectSetIndex(idx)}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-[#5f7a61] text-white shadow-xs'
-                      : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-[#554b3f] dark:text-[#c4b5a5]'
-                  }`}
-                >
-                  <span>{set.bannerEmoji}</span>
-                  <span>{set.name.split('&')[0].trim()}</span>
-                </button>
-              );
-            })}
-
-            <button
-              type="button"
-              onClick={() => handleSelectSetIndex(THEMED_FROG_SETS.length)}
-              className={`px-3 py-1 rounded-full text-xs font-bold transition whitespace-nowrap ${
-                isAllItemsMode
-                  ? 'bg-[#5f7a61] text-white shadow-xs'
-                  : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-[#554b3f] dark:text-[#c4b5a5]'
-              }`}
-            >
-              ✨ All Items
-            </button>
-          </div>
-        </div>
-
-        {/* Sub-bar: Set Try-on & Progress & Rates */}
+        {/* Set Information & Quick Actions Row */}
         <div className="flex items-center justify-between px-0.5 text-xs">
           <div className="flex items-center gap-2">
-            <span className="font-black text-[#5f7a61] dark:text-[#8cb88f]">
-              {ownedCount}/{displayItems.length} Unlocked
+            <span className="font-black text-xs text-[#2d2823] dark:text-[#f4efe8]">
+              {currentSet.name.split('&')[0].trim()}
             </span>
+            <span className="text-[11px] font-bold text-[#5f7a61] dark:text-[#8cb88f]">
+              ({ownedCount}/{displayItems.length})
+            </span>
+          </div>
 
+          <div className="flex items-center gap-1.5">
             {currentSet && (
               <button
                 type="button"
                 onClick={handleReapplySet}
                 className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#5f7a61]/15 text-[#5f7a61] dark:text-[#8cb88f] hover:bg-[#5f7a61]/25 active:scale-95 transition"
               >
-                Try Full Set
+                Try Look
               </button>
             )}
-          </div>
 
-          <button
-            type="button"
-            onClick={() => {
-              if (soundEnabled) soundEngine.playTapSound();
-              setShowLineupModal(true);
-            }}
-            className="font-bold text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] dark:hover:text-[#f4efe8] flex items-center gap-1"
-          >
-            <List size={12} />
-            <span>Rates</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (soundEnabled) soundEngine.playTapSound();
+                setShowLineupModal(true);
+              }}
+              className="px-2 py-0.5 rounded-full text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] dark:hover:text-[#f4efe8] flex items-center gap-1"
+            >
+              <List size={11} />
+              <span>Rates</span>
+            </button>
+          </div>
         </div>
 
         {/* Lineup Items Grid / Tray */}
