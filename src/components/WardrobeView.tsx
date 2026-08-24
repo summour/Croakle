@@ -26,6 +26,8 @@ import {
   Shirt,
   Shuffle,
   RotateCcw,
+  Undo2,
+  Redo2,
   Check,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -75,6 +77,55 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
 }) => {
   // Live preview config
   const [previewConfig, setPreviewConfig] = useState<PixelSceneConfig>({ ...config });
+
+  // Undo / Redo History Stack
+  const [history, setHistory] = useState<PixelSceneConfig[]>([{ ...config }]);
+  const [historyIndex, setHistoryIndex] = useState<number>(0);
+
+  // Helper to apply config and push to undo/redo history
+  const applyConfigAndPushHistory = (nextConfig: PixelSceneConfig) => {
+    // Check if configuration actually changed
+    const current = history[historyIndex] || previewConfig;
+    const isSame =
+      current.hatId === nextConfig.hatId &&
+      current.outfitId === nextConfig.outfitId &&
+      current.glassesId === nextConfig.glassesId &&
+      current.skinId === nextConfig.skinId &&
+      current.activityId === nextConfig.activityId &&
+      current.companionId === nextConfig.companionId &&
+      current.sceneId === nextConfig.sceneId &&
+      current.weatherId === nextConfig.weatherId;
+
+    if (isSame) return;
+
+    const newHistory = [...history.slice(0, historyIndex + 1), nextConfig].slice(-40);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+    setPreviewConfig(nextConfig);
+  };
+
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      if (soundEnabled) soundEngine.playTapSound();
+      if (hapticEnabled) triggerHaptic();
+      const prevIdx = historyIndex - 1;
+      setHistoryIndex(prevIdx);
+      setPreviewConfig(history[prevIdx]);
+    }
+  };
+
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      if (soundEnabled) soundEngine.playTapSound();
+      if (hapticEnabled) triggerHaptic();
+      const nextIdx = historyIndex + 1;
+      setHistoryIndex(nextIdx);
+      setPreviewConfig(history[nextIdx]);
+    }
+  };
+
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < history.length - 1;
 
   // Main View Mode: 'equipped' | 'all' | 'theme'
   const [mainTab, setMainTab] = useState<WardrobeMainTab>('equipped');
@@ -208,7 +259,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
       patch.weatherId = isAlreadyEquipped ? 'auto' : (item.value as any);
     }
 
-    setPreviewConfig((prev) => ({ ...prev, ...patch }));
+    applyConfigAndPushHistory({ ...previewConfig, ...patch });
   };
 
   // Wear all owned pieces of a theme set
@@ -236,7 +287,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
       patch.weatherId = set.items.weatherId;
     }
 
-    setPreviewConfig((prev) => ({ ...prev, ...patch }));
+    applyConfigAndPushHistory({ ...previewConfig, ...patch });
   };
 
   // Save current preview look to persistent app state
@@ -255,7 +306,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
 
   const handleResetLook = () => {
     if (soundEnabled) soundEngine.playTapSound();
-    setPreviewConfig({ ...config });
+    applyConfigAndPushHistory({ ...config });
   };
 
   // Surprise random combination of owned items
@@ -273,16 +324,16 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
 
     const pickRandom = (arr: any[]) => (arr.length > 0 ? arr[Math.floor(Math.random() * arr.length)].value : undefined);
 
-    setPreviewConfig((prev) => ({
-      ...prev,
+    applyConfigAndPushHistory({
+      ...previewConfig,
       hatId: (pickRandom(ownedHats) as FrogHatId) || 'none',
       outfitId: (pickRandom(ownedOutfits) as FrogOutfitId) || 'none',
       glassesId: (pickRandom(ownedGlasses) as FrogGlassesId) || 'none',
-      skinId: (pickRandom(ownedSkins) as FrogSkinId) || prev.skinId,
+      skinId: (pickRandom(ownedSkins) as FrogSkinId) || previewConfig.skinId,
       activityId: (pickRandom(ownedProps) as FrogActivityId) || 'relaxing',
       companionId: (pickRandom(ownedComps) as FrogCompanionId) || 'none',
-      sceneId: (pickRandom(ownedScenes) as SceneLocationId) || prev.sceneId,
-    }));
+      sceneId: (pickRandom(ownedScenes) as SceneLocationId) || previewConfig.sceneId,
+    });
   };
 
   const filteredThemeSets = useMemo(() => {
@@ -347,22 +398,54 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
         </button>
       </header>
 
-      {/* 3. FLOATING UPPER RIGHT STAGE ACTIONS (Mix, Reset) */}
+      {/* 3. FLOATING UPPER RIGHT STAGE ACTIONS (Undo, Redo, Mix, Reset) */}
       <div className="relative z-20 flex items-center justify-end px-4 gap-1.5 mt-1 pointer-events-auto">
         <button
+          id="wardrobe-undo-btn"
+          type="button"
+          onClick={handleUndo}
+          disabled={!canUndo}
+          className={`w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm transition active:scale-90 ${
+            canUndo
+              ? 'hover:bg-white dark:hover:bg-black/90 cursor-pointer opacity-100'
+              : 'opacity-35 cursor-not-allowed pointer-events-none'
+          }`}
+          title="Undo (ยกเลิก)"
+        >
+          <Undo2 size={14} />
+        </button>
+
+        <button
+          id="wardrobe-redo-btn"
+          type="button"
+          onClick={handleRedo}
+          disabled={!canRedo}
+          className={`w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm transition active:scale-90 ${
+            canRedo
+              ? 'hover:bg-white dark:hover:bg-black/90 cursor-pointer opacity-100'
+              : 'opacity-35 cursor-not-allowed pointer-events-none'
+          }`}
+          title="Redo (ทำซ้ำ)"
+        >
+          <Redo2 size={14} />
+        </button>
+
+        <button
+          id="wardrobe-random-btn"
           type="button"
           onClick={handleSurpriseMix}
-          className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
-          title="Random Mix"
+          className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition cursor-pointer"
+          title="Random Mix (สุ่มชุด)"
         >
           <Shuffle size={14} />
         </button>
 
         <button
+          id="wardrobe-reset-btn"
           type="button"
           onClick={handleResetLook}
-          className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition"
-          title="Reset"
+          className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition cursor-pointer"
+          title="Reset (คืนค่าเดิม)"
         >
           <RotateCcw size={14} />
         </button>
