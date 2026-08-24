@@ -208,6 +208,7 @@ export function getMoodConfig(value: number | null | undefined): MoodConfig | un
 // -------------------------------------------------------------
 
 export type SceneLocationId =
+  | 'forest_camp'
   | 'retro_arcade'
   | 'convenience_store'
   | 'red_riding_forest'
@@ -225,6 +226,9 @@ export type SceneLocationId =
 
 export type FrogActivityId =
   | 'relaxing'
+  | 'roasting_marshmallow'
+  | 'holding_camp_lantern'
+  | 'camp_kettle_coffee'
   | 'arcade_gamepad'
   | 'claw_machine_prize'
   | 'handheld_gaming'
@@ -250,6 +254,9 @@ export type FrogActivityId =
 
 export type FrogHatId =
   | 'none'
+  | 'ranger_safari_hat'
+  | 'marshmallow_beanie'
+  | 'scout_headlamp'
   | 'arcade_joystick_cap'
   | 'pixel_vr_visor'
   | 'retro_gameboy_beanie'
@@ -279,6 +286,9 @@ export type FrogHatId =
 
 export type FrogOutfitId =
   | 'none'
+  | 'field_scout_parka'
+  | 'flannel_camp_vest'
+  | 'cozy_sleeping_bag'
   | 'arcade_gamer_bomber'
   | 'pixel_hero_armor'
   | 'retro_esports_jersey'
@@ -302,6 +312,8 @@ export type FrogOutfitId =
 
 export type FrogGlassesId =
   | 'none'
+  | 'campfire_warm_glow'
+  | 'explorer_binoculars'
   | 'cyber_pixel_shades'
   | 'game_over_dizzy'
   | 'scanner_headset'
@@ -318,6 +330,8 @@ export type FrogGlassesId =
 
 export type FrogSkinId =
   | 'classic'
+  | 'pine_forest_moss'
+  | 'ember_glow_amber'
   | 'cyber_neon_violet'
   | 'gameboy_monochrome'
   | 'konbini_mint'
@@ -334,6 +348,8 @@ export type FrogSkinId =
 
 export type FrogCompanionId =
   | 'none'
+  | 'forest_camp_fawn'
+  | 'campfire_raccoon'
   | 'pixel_arcade_ghost'
   | 'retro_tamagotchi'
   | 'konbini_cashier_cat'
@@ -388,6 +404,7 @@ export interface SceneOptionInfo<T> {
 }
 
 export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
+  { id: 'forest_camp', name: 'Wilderness Pine Forest Camp', emoji: '⛺', desc: 'Cozy A-frame tent, crackling bonfire, lantern glow & starry pine woods', tag: 'Camping' },
   { id: 'retro_arcade', name: '8-Bit Retro Arcade Game Center', emoji: '🕹️', desc: 'Neon CRT cabinets, prize claw machine, dance mat & pixel high scores', tag: 'Retro' },
   { id: 'convenience_store', name: '24h Neon Konbini Store', emoji: '🏪', desc: 'Glowing drink fridges, snack shelves & checkout counter', tag: 'Neon' },
   { id: 'red_riding_forest', name: 'Fairytale Red Riding Forest', emoji: '🧺', desc: 'Misty red ribbon woods, granny cottage & autumn trails', tag: 'Fairytale' },
@@ -406,6 +423,9 @@ export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
 
 export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
   { id: 'relaxing', name: 'Peaceful Chilling', emoji: '🐸', desc: 'Smiling cute with warm rosy cheeks', tag: 'Rest' },
+  { id: 'roasting_marshmallow', name: 'Roasting Marshmallows', emoji: '🍢', desc: 'Toasting golden fluffy marshmallows over glowing embers', tag: 'Camp' },
+  { id: 'holding_camp_lantern', name: 'Brass Campfire Lantern', emoji: '🏮', desc: 'Guiding the trail with a warm glowing storm lantern', tag: 'Camp' },
+  { id: 'camp_kettle_coffee', name: 'Campfire Drip Kettle', emoji: '☕', desc: 'Brewing steaming aromatic forest drip coffee', tag: 'Camp' },
   { id: 'arcade_gamepad', name: 'Turbo Arcade Gamepad', emoji: '🎮', desc: 'Smashing button combos on a retro 8-bit controller', tag: 'Retro' },
   { id: 'claw_machine_prize', name: 'Claw Machine Frog Plush', emoji: '🧸', desc: 'Hugging fluffy 8-bit prize plush won from crane game', tag: 'Retro' },
   { id: 'handheld_gaming', name: 'Retro Pocket Console', emoji: '🕹️', desc: 'Playing portable 8-bit chiptune pocket console', tag: 'Retro' },
@@ -432,6 +452,9 @@ export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
 
 export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
   { id: 'none', name: 'Natural (No Hat)', emoji: '✨', desc: 'Classic cute frog head', tag: 'Simple' },
+  { id: 'ranger_safari_hat', name: 'Wilderness Ranger Hat', emoji: '🤠', desc: 'Olive canvas safari brim with pinecone badge & cord', tag: 'Camp' },
+  { id: 'marshmallow_beanie', name: 'Campfire Waffle Beanie', emoji: '🧶', desc: 'Warm mustard knit beanie with toasted marshmallow patch', tag: 'Camp' },
+  { id: 'scout_headlamp', name: 'Explorer LED Headlamp', emoji: '🔦', desc: 'High-power night scout headlamp with elastic band', tag: 'Camp' },
   { id: 'arcade_joystick_cap', name: 'Arcade Snapback Cap', emoji: '🧢', desc: 'Black 8-bit gamer cap with embroidered joystick', tag: 'Retro' },
   { id: 'pixel_vr_visor', name: 'Cyber Pixel VR Visor', emoji: '🥽', desc: 'Glowing neon 8-bit cyber visor headset', tag: 'Retro' },
   { id: 'retro_gameboy_beanie', name: 'Handheld Console Beanie', emoji: '🎮', desc: 'Classic retro 8-bit handheld console knit hat', tag: 'Retro' },
@@ -462,6 +485,9 @@ export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
 
 export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
   { id: 'none', name: 'No Outfit (Natural)', emoji: '🌱', desc: 'Pure classic frog appearance', tag: 'Simple' },
+  { id: 'field_scout_parka', name: 'Wilderness Scout Parka', emoji: '🧥', desc: 'Earthy green mountain parka with compass badge & utility cargo pockets', tag: 'Camp' },
+  { id: 'flannel_camp_vest', name: 'Lumberjack Fleece Vest', emoji: '🦺', desc: 'Buffalo red-black plaid flannel shirt with sherpa fleece vest', tag: 'Camp' },
+  { id: 'cozy_sleeping_bag', name: 'Snug Mummy Sleeping Bag', emoji: '🏕️', desc: 'Toasty insulated forest green down sleeping cocoon', tag: 'Camp' },
   { id: 'arcade_gamer_bomber', name: 'Synthwave Arcade Bomber', emoji: '🧥', desc: 'Purple satin jacket with neon cyan 8-bit patches', tag: 'Retro' },
   { id: 'pixel_hero_armor', name: '8-Bit Knight Armor', emoji: '🛡️', desc: 'Pixel RPG silver breastplate with heroic royal cape', tag: 'Retro' },
   { id: 'retro_esports_jersey', name: 'Arcade Champion Jersey', emoji: '👕', desc: 'Neon esports gamer tee with pixel lightning bolt', tag: 'Retro' },
@@ -486,6 +512,8 @@ export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
 
 export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
   { id: 'none', name: 'No Glasses', emoji: '✨', desc: 'Clear natural eyes', tag: 'Simple' },
+  { id: 'campfire_warm_glow', name: 'Campfire Rosy Glow', emoji: '🔥', desc: 'Warm bonfire embers reflecting on cute rosy cheeks', tag: 'Camp' },
+  { id: 'explorer_binoculars', name: 'Field Scout Binoculars', emoji: '🔭', desc: 'Compact wilderness birdwatching binoculars around neck', tag: 'Camp' },
   { id: 'cyber_pixel_shades', name: 'Deal-With-It Pixel Shades', emoji: '🕶️', desc: 'Legendary 8-bit stepped pixel sunglasses with cyan gleam', tag: 'Retro' },
   { id: 'game_over_dizzy', name: 'Game Over Spiral Eyes', emoji: '💫', desc: 'Cute animated cartoon pixel spiral swirl eyes', tag: 'Retro' },
   { id: 'scanner_headset', name: 'Clerk Headset & Mic', emoji: '🎧', desc: 'Smart communication headset with cashier mic', tag: 'Konbini' },
@@ -503,6 +531,8 @@ export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
 
 export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
   { id: 'classic', name: 'Classic Moss Green', emoji: '🐸', desc: 'Original peaceful woodland green hue', tag: 'Classic' },
+  { id: 'pine_forest_moss', name: 'Deep Pine Needle Green', emoji: '🌲', desc: 'Rich evergreen pine forest moss tone with golden speckles', tag: 'Camp' },
+  { id: 'ember_glow_amber', name: 'Campfire Ember Warmth', emoji: '🔥', desc: 'Luminous warm honey flame amber glow', tag: 'Camp' },
   { id: 'cyber_neon_violet', name: 'Synthwave Cyber Violet', emoji: '🟣', desc: 'Electric neon purple frog with glowing mint belly', tag: 'Retro' },
   { id: 'gameboy_monochrome', name: 'Dot Matrix LCD Green', emoji: '🟩', desc: 'Authentic 4-shade nostalgic olive green Gameboy skin', tag: 'Retro' },
   { id: 'konbini_mint', name: 'Neon Konbini Mint', emoji: '🟢', desc: 'Vivid mint neon green with lime accents', tag: 'Neon' },
@@ -520,6 +550,8 @@ export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
 
 export const FROG_COMPANIONS: SceneOptionInfo<FrogCompanionId>[] = [
   { id: 'none', name: 'Solo Time', emoji: '🌱', desc: 'Quiet peaceful sanctuary alone', tag: 'Solitude' },
+  { id: 'forest_camp_fawn', name: 'Maple the Camping Fawn', emoji: '🦌', desc: 'Gentle baby deer curled beside the tent with white spots', tag: 'Camp' },
+  { id: 'campfire_raccoon', name: 'Bandit the Camp Raccoon', emoji: '🦝', desc: 'Cheeky masked raccoon nibbling toasted campfire bread', tag: 'Camp' },
   { id: 'pixel_arcade_ghost', name: 'Blinky the 8-Bit Ghost', emoji: '👻', desc: 'Playful floating pixel maze ghost with bobbing animation', tag: 'Retro' },
   { id: 'retro_tamagotchi', name: 'Tama the Virtual Pet', emoji: '📟', desc: 'Egg-shaped keychain pixel virtual pet companion', tag: 'Retro' },
   { id: 'konbini_cashier_cat', name: 'Lucky Konbini Cashier Cat', emoji: '🐱', desc: 'Waving lucky maneki-neko in konbini uniform', tag: 'Konbini' },

@@ -180,6 +180,26 @@ export const getSkinColors = (skinId?: FrogSkinId | string) => {
         legs: '#10B981',
         eyeHighlight: '#FFFFFF',
       };
+    case 'pine_forest_moss':
+      return {
+        main: '#2D5A27',
+        dark: '#1E3F1A',
+        outline: '#0F260C',
+        belly: '#E9D8A6',
+        cheeks: '#E76F51',
+        legs: '#22441E',
+        eyeHighlight: '#FFFFFF',
+      };
+    case 'ember_glow_amber':
+      return {
+        main: '#D97706',
+        dark: '#B45309',
+        outline: '#78350F',
+        belly: '#FEF3C7',
+        cheeks: '#EF4444',
+        legs: '#92400E',
+        eyeHighlight: '#FDE047',
+      };
     case 'classic':
     default:
       return {
@@ -581,6 +601,77 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {/* Camping Set: Maple the Baby Fawn */}
+      {(config.companionId === 'forest_camp_fawn' || config.companionId === 'companion_forest_camp_fawn') && (
+        <g transform={`translate(${frogX - 28}, ${frogY + 4 + (soloTick % 2 === 0 ? 0 : -1)})`}>
+          {/* Fawn Body & Chestnut Fur */}
+          <rect x="4" y="8" width="18" height="12" fill="#B45309" />
+          <rect x="6" y="10" width="14" height="9" fill="#D97706" />
+          {/* White Dappled Spots */}
+          <rect x="8" y="10" width="2" height="2" fill="#FEF3C7" />
+          <rect x="14" y="11" width="2" height="2" fill="#FEF3C7" />
+          <rect x="11" y="14" width="2" height="2" fill="#FEF3C7" />
+          <rect x="16" y="15" width="2" height="2" fill="#FEF3C7" />
+          {/* Gentle Head & Cute Ears */}
+          <rect x="12" y="2" width="11" height="9" fill="#D97706" />
+          <rect x="11" y={soloTick % 2 === 0 ? 0 : 1} width="4" height="4" fill="#B45309" />
+          <rect x="12" y={soloTick % 2 === 0 ? 1 : 2} width="2" height="2" fill="#FEF3C7" />
+          <rect x="19" y="0" width="4" height="4" fill="#B45309" />
+          <rect x="20" y="1" width="2" height="2" fill="#FEF3C7" />
+          {/* Sweet Face */}
+          <rect x="18" y="5" width="3" height="3" fill="#1C1917" />
+          <rect x="19" y="5" width="1" height="1" fill="#FFFFFF" />
+          <rect x="21" y="8" width="3" height="3" fill="#FEF3C7" />
+          <rect x="22" y="8" width="2" height="1" fill="#1C1917" />
+          {/* Rosy Cheek */}
+          <rect x="16" y="8" width="2" height="2" fill="#FB7185" />
+          {/* Fluffy Tail */}
+          <rect x="2" y={soloTick % 2 === 0 ? 9 : 11} width="4" height="5" fill="#FEF3C7" />
+          {/* Legs */}
+          <rect x="5" y="19" width="4" height="3" fill="#92400E" />
+          <rect x="15" y="19" width="4" height="3" fill="#92400E" />
+        </g>
+      )}
+
+      {/* Camping Set: Bandit the Camp Raccoon */}
+      {(config.companionId === 'campfire_raccoon' || config.companionId === 'companion_campfire_raccoon') && (
+        <g transform={`translate(${frogX + 22}, ${frogY + 3 + (soloTick % 2 === 0 ? 0 : 1)})`}>
+          {/* Raccoon Body */}
+          <rect x="2" y="8" width="16" height="13" fill="#64748B" />
+          <rect x="5" y="10" width="10" height="9" fill="#94A3B8" />
+          {/* Head & Round Ears */}
+          <rect x="3" y="1" width="14" height="10" fill="#64748B" />
+          <rect x="2" y="0" width="4" height="3" fill="#334155" />
+          <rect x="3" y="1" width="2" height="2" fill="#CBD5E1" />
+          <rect x="13" y="0" width="4" height="3" fill="#334155" />
+          <rect x="14" y="1" width="2" height="2" fill="#CBD5E1" />
+          {/* Bandit Black Eye Mask */}
+          <rect x="2" y="4" width="16" height="4" fill="#0F172A" />
+          <rect x="4" y="5" width="3" height="3" fill="#FFFFFF" />
+          <rect x="5" y="5" width="2" height="2" fill="#0F172A" />
+          <rect x="12" y="5" width="3" height="3" fill="#FFFFFF" />
+          <rect x="12" y="5" width="2" height="2" fill="#0F172A" />
+          {/* White Snout & Nose */}
+          <rect x="7" y="7" width="5" height="4" fill="#F8FAFC" />
+          <rect x="8.5" y="7.5" width="2" height="2" fill="#0F172A" />
+          {/* Munching Toasted Marshmallow on Stick */}
+          <g transform={`translate(14, ${soloTick % 2 === 0 ? 7 : 9})`}>
+            <rect x="0" y="2" width="6" height="1" fill="#78350F" />
+            <rect x="4" y="0" width="4" height="5" fill="#FEF3C7" stroke="#D97706" strokeWidth="0.5" />
+            <rect x="5" y="1" width="2" height="1" fill="#78350F" />
+          </g>
+          {/* Striped Ringed Tail */}
+          <g transform={`translate(-6, ${soloTick % 2 === 0 ? 10 : 8})`}>
+            <rect x="0" y="0" width="7" height="4" fill="#475569" />
+            <rect x="2" y="0" width="2" height="4" fill="#0F172A" />
+            <rect x="5" y="0" width="2" height="4" fill="#0F172A" />
+          </g>
+          {/* Paws */}
+          <rect x="4" y="20" width="4" height="2" fill="#334155" />
+          <rect x="11" y="20" width="4" height="2" fill="#334155" />
+        </g>
+      )}
+
       {/* Eyes Outlines & Color */}
       <rect x={frogX} y={frogY} width="5" height="5" fill={skin.outline} />
       <rect x={frogX + 11} y={frogY} width="5" height="5" fill={skin.outline} />
@@ -808,6 +899,61 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {/* Camping Set: Field Scout Parka */}
+      {config.outfitId === 'field_scout_parka' && (
+        <g>
+          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#365314" />
+          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#4D7C0F" />
+          {/* Khaki Hood Trim / Collar */}
+          <rect x={frogX - 2} y={frogY + 7} width="20" height="3" fill="#CA8A04" />
+          {/* Zipper Line & Scout Emblems */}
+          <rect x={frogX + 7} y={frogY + 8} width="2" height="12" fill="#1E293B" />
+          <rect x={frogX + 2} y={frogY + 11} width="3" height="3" fill="#FEF08A" stroke="#B45309" strokeWidth="0.4" />
+          <rect x={frogX + 11} y={frogY + 11} width="3" height="3" fill="#FB923C" stroke="#78350F" strokeWidth="0.4" />
+          {/* Pockets */}
+          <rect x={frogX + 1} y={frogY + 15} width="4" height="3" fill="#365314" />
+          <rect x={frogX + 11} y={frogY + 15} width="4" height="3" fill="#365314" />
+        </g>
+      )}
+
+      {/* Camping Set: Flannel Camp Vest */}
+      {config.outfitId === 'flannel_camp_vest' && (
+        <g>
+          {/* Buffalo Plaid Red & Black Sleeves */}
+          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#DC2626" />
+          <rect x={frogX - 3} y={frogY + 9} width="3" height="3" fill="#18181B" />
+          <rect x={frogX - 3} y={frogY + 14} width="3" height="3" fill="#18181B" />
+          <rect x={frogX + 16} y={frogY + 9} width="3" height="3" fill="#18181B" />
+          <rect x={frogX + 16} y={frogY + 14} width="3" height="3" fill="#18181B" />
+          {/* Cozy Sherpa Camp Vest Body */}
+          <rect x={frogX - 1} y={frogY + 8} width="18" height="12" fill="#78350F" />
+          <rect x={frogX + 1} y={frogY + 7} width="14" height="12" fill="#B45309" />
+          {/* Fleece Collar & Brass Snaps */}
+          <rect x={frogX + 2} y={frogY + 8} width="12" height="2" fill="#FEF3C7" />
+          <rect x={frogX + 7} y={frogY + 11} width="2" height="2" fill="#FACC15" />
+          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#FACC15" />
+          <rect x={frogX + 7} y={frogY + 17} width="2" height="2" fill="#FACC15" />
+        </g>
+      )}
+
+      {/* Camping Set: Cozy Sleeping Bag Cocoon */}
+      {config.outfitId === 'cozy_sleeping_bag' && (
+        <g>
+          {/* Puffy Quilted Sleeping Bag */}
+          <rect x={frogX - 4} y={frogY + 8} width="24" height="15" fill="#0369A1" />
+          <rect x={frogX - 2} y={frogY + 7} width="20" height="16" fill="#0284C7" />
+          {/* Drawstring Top Collar */}
+          <rect x={frogX - 2} y={frogY + 7} width="20" height="2" fill="#38BDF8" />
+          <rect x={frogX + 7} y={frogY + 7} width="2" height="3" fill="#FACC15" />
+          {/* Quilted Baffle Lines */}
+          <rect x={frogX - 2} y={frogY + 11} width="20" height="1" fill="#075985" />
+          <rect x={frogX - 2} y={frogY + 15} width="20" height="1" fill="#075985" />
+          <rect x={frogX - 2} y={frogY + 19} width="20" height="1" fill="#075985" />
+          {/* Warm Orange Interior Flap */}
+          <rect x={frogX + 4} y={frogY + 9} width="8" height="3" fill="#F97316" />
+        </g>
+      )}
+
       {/* GLASSES / FACE ACCESSORY */}
       {config.glassesId === 'reading' && (
         <g>
@@ -942,6 +1088,40 @@ export const PixelFrogSolo: React.FC<{
           ) : (
             <rect x={frogX + 7} y={frogY + 1} width="2" height="2" fill="#FDE047" />
           )}
+        </g>
+      )}
+
+      {/* Camping Set: Campfire Warm Amber Glow & Ember Sparkles */}
+      {config.glassesId === 'campfire_warm_glow' && (
+        <g>
+          {/* Warm Rosy Bonfire Cheeks */}
+          <rect x={frogX - 2} y={frogY + 9} width="4" height="3" fill="#F97316" opacity="0.85" />
+          <rect x={frogX + 14} y={frogY + 9} width="4" height="3" fill="#F97316" opacity="0.85" />
+          <rect x={frogX - 1} y={frogY + 10} width="2" height="1" fill="#FDE047" />
+          <rect x={frogX + 15} y={frogY + 10} width="2" height="1" fill="#FDE047" />
+          {/* Animated Warm Embers Drifting Up */}
+          <rect x={frogX + 7} y={frogY - (soloTick % 2 === 0 ? 3 : 5)} width="2" height="2" fill="#F59E0B" />
+          <rect x={frogX - 4} y={frogY + 2 - (soloTick % 2 === 0 ? 2 : 0)} width="1" height="1" fill="#EF4444" />
+          <rect x={frogX + 19} y={frogY + 1 - (soloTick % 2 === 0 ? 0 : 2)} width="1" height="1" fill="#FACC15" />
+        </g>
+      )}
+
+      {/* Camping Set: Explorer Field Binoculars */}
+      {config.glassesId === 'explorer_binoculars' && (
+        <g>
+          {/* Neck Strap */}
+          <rect x={frogX + 1} y={frogY + 6} width="14" height="1" fill="#78350F" />
+          <rect x={frogX + 3} y={frogY + 7} width="1" height="3" fill="#78350F" />
+          <rect x={frogX + 12} y={frogY + 7} width="1" height="3" fill="#78350F" />
+          {/* Dual Brass Binoculars Hanging on Chest */}
+          <rect x={frogX + 2} y={frogY + 10} width="5" height="7" fill="#B45309" stroke="#78350F" strokeWidth="0.5" />
+          <rect x={frogX + 9} y={frogY + 10} width="5" height="7" fill="#B45309" stroke="#78350F" strokeWidth="0.5" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#78350F" />
+          {/* Glass Lens Highlights */}
+          <rect x={frogX + 3} y={frogY + 14} width="3" height="2" fill="#38BDF8" />
+          <rect x={frogX + 4} y={frogY + 14} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 10} y={frogY + 14} width="3" height="2" fill="#38BDF8" />
+          <rect x={frogX + 11} y={frogY + 14} width="1" height="1" fill="#FFFFFF" />
         </g>
       )}
 
@@ -1201,6 +1381,64 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {/* Camping Set: Ranger Safari Hat */}
+      {config.hatId === 'ranger_safari_hat' && (
+        <g>
+          {/* Wide Canvas Brim */}
+          <rect x={frogX - 4} y={frogY + 1} width="24" height="3" fill="#4D7C0F" />
+          <rect x={frogX - 2} y={frogY + 1} width="20" height="1" fill="#65A30D" />
+          {/* Crown of Hat */}
+          <rect x={frogX} y={frogY - 6} width="16" height="7" fill="#4D7C0F" />
+          <rect x={frogX + 2} y={frogY - 7} width="12" height="2" fill="#365314" />
+          {/* Leather Hatband & Pine Needle Badge */}
+          <rect x={frogX} y={frogY - 1} width="16" height="2" fill="#78350F" />
+          <rect x={frogX + 6} y={frogY - 3} width="4" height="3" fill="#FACC15" stroke="#92400E" strokeWidth="0.4" />
+          <rect x={frogX + 7} y={frogY - 2} width="2" height="1" fill="#15803D" />
+          {/* Chin Cord Loop */}
+          <rect x={frogX - 2} y={frogY + 4} width="1" height="4" fill="#78350F" />
+          <rect x={frogX + 17} y={frogY + 4} width="1" height="4" fill="#78350F" />
+          <rect x={frogX + 7} y={frogY + 8} width="2" height="1" fill="#FDE047" />
+        </g>
+      )}
+
+      {/* Camping Set: Marshmallow Beanie */}
+      {config.hatId === 'marshmallow_beanie' && (
+        <g>
+          {/* Fluffy Pom-Pom at top */}
+          <rect x={frogX + 6} y={frogY - 9} width="4" height="3" fill="#FEF3C7" />
+          <rect x={frogX + 7} y={frogY - 10} width="2" height="1" fill="#FEF3C7" />
+          {/* Mustard Knit Beanie Crown */}
+          <rect x={frogX - 1} y={frogY - 6} width="18" height="8" fill="#D97706" />
+          <rect x={frogX + 1} y={frogY - 7} width="14" height="2" fill="#B45309" />
+          {/* Folded Waffle Cuff */}
+          <rect x={frogX - 2} y={frogY} width="20" height="3" fill="#B45309" />
+          {/* Toasted Marshmallow Patch */}
+          <rect x={frogX + 6} y={frogY - 3} width="4" height="4" fill="#FEF3C7" stroke="#78350F" strokeWidth="0.4" />
+          <rect x={frogX + 7} y={frogY - 2} width="2" height="1" fill="#78350F" />
+        </g>
+      )}
+
+      {/* Camping Set: Night Scout Headlamp */}
+      {config.hatId === 'scout_headlamp' && (
+        <g>
+          {/* Camo Elastic Headband */}
+          <rect x={frogX - 2} y={frogY + 1} width="20" height="2.5" fill="#365314" />
+          <rect x={frogX + 2} y={frogY + 1} width="3" height="2.5" fill="#4D7C0F" />
+          <rect x={frogX + 11} y={frogY + 1} width="3" height="2.5" fill="#4D7C0F" />
+          {/* LED Lamp Body */}
+          <rect x={frogX + 5} y={frogY - 2} width="6" height="5" fill="#18181B" stroke="#374151" strokeWidth="0.4" />
+          {/* Bright Glowing LED Lens */}
+          <rect x={frogX + 6} y={frogY - 1} width="4" height="3" fill="#38BDF8" />
+          <rect x={frogX + 7} y={frogY} width="2" height="1" fill="#FFFFFF" />
+          {/* Illuminated Forward Beam Fan */}
+          <polygon
+            points={`${frogX + 12},${frogY - 1} ${frogX + 26},${frogY - 8} ${frogX + 26},${frogY + 8} ${frogX + 12},${frogY + 2}`}
+            fill="#FEF08A"
+            opacity="0.35"
+          />
+        </g>
+      )}
+
       {/* PROPS / HANDHELD ITEM */}
       {config.activityId === 'tea' && (
         <g>
@@ -1398,6 +1636,57 @@ export const PixelFrogSolo: React.FC<{
           <rect x={frogX + 7} y={frogY + 18} width="2" height="2" fill="#1E293B" />
           <rect x={frogX + 12} y={frogY + 18} width="2" height="2" fill="#BE123C" />
           <rect x={frogX + 14} y={frogY + 17} width="1.5" height="1.5" fill="#BE123C" />
+        </g>
+      )}
+
+      {/* Camping Set: Roasting Marshmallows over Campfire Skewer */}
+      {config.activityId === 'roasting_marshmallow' && (
+        <g>
+          {/* Rustic Wood Branch Skewer */}
+          <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
+          <rect x={frogX + 5} y={frogY + 14} width="15" height="1" fill="#78350F" />
+          <rect x={frogX + 18} y={frogY + 11} width="1" height="6" fill="#78350F" />
+          {/* Golden Toasted Marshmallows */}
+          <rect x={frogX + 13} y={frogY + 12} width="4" height="4" fill="#FEF3C7" stroke="#D97706" strokeWidth="0.4" />
+          <rect x={frogX + 14} y={frogY + 13} width="2" height="2" fill="#B45309" />
+          <rect x={frogX + 18} y={frogY + 9} width="4" height="4" fill="#FFFFFF" stroke="#D97706" strokeWidth="0.4" />
+          <rect x={frogX + 19} y={frogY + 10} width="2" height="1" fill="#FEF3C7" />
+          {/* Steam Wisp */}
+          <rect x={frogX + 16} y={frogY + 7 - (soloTick % 2 === 0 ? 0 : 2)} width="2" height="2" fill="#FFFFFF" opacity="0.75" />
+        </g>
+      )}
+
+      {/* Camping Set: Holding Brass Camp Lantern */}
+      {config.activityId === 'holding_camp_lantern' && (
+        <g>
+          {/* Frog Arm Holding Top Bail */}
+          <rect x={frogX + 8} y={frogY + 13} width="3" height="3" fill={skin.main} />
+          {/* Wire Handle Loop */}
+          <rect x={frogX + 10} y={frogY + 10} width="6" height="1" fill="#64748B" />
+          <rect x={frogX + 10} y={frogY + 11} width="1" height="2" fill="#64748B" />
+          <rect x={frogX + 15} y={frogY + 11} width="1" height="2" fill="#64748B" />
+          {/* Brass Cap & Base */}
+          <rect x={frogX + 9} y={frogY + 12} width="8" height="2" fill="#CA8A04" />
+          <rect x={frogX + 9} y={frogY + 19} width="8" height="2" fill="#CA8A04" />
+          {/* Glowing Glass Globe */}
+          <rect x={frogX + 10} y={frogY + 14} width="6" height="5" fill="#FDE047" stroke="#EAB308" strokeWidth="0.4" />
+          <rect x={frogX + 12} y={frogY + 15} width="2" height="3" fill="#FFFFFF" />
+          {/* Protective Metal Grille */}
+          <rect x={frogX + 12} y={frogY + 14} width="1" height="5" fill="#78350F" opacity="0.6" />
+        </g>
+      )}
+
+      {/* Camping Set: Camp Kettle & Enamel Coffee Mug */}
+      {config.activityId === 'camp_kettle_coffee' && (
+        <g>
+          {/* Frog Paw */}
+          <rect x={frogX + 4} y={frogY + 14} width="3" height="3" fill={skin.main} />
+          {/* Speckled Enamel Camp Mug */}
+          <rect x={frogX + 6} y={frogY + 13} width="6" height="6" fill="#0369A1" stroke="#0284C7" strokeWidth="0.4" />
+          <rect x={frogX + 12} y={frogY + 14} width="2" height="3" fill="#0284C7" />
+          <rect x={frogX + 7} y={frogY + 12} width="4" height="2" fill="#451A03" />
+          {/* Steam puffs */}
+          <rect x={frogX + 8} y={frogY + 8 - (soloTick % 2 === 0 ? 0 : 2)} width="2" height="2" fill="#FFFFFF" opacity="0.8" />
         </g>
       )}
     </svg>
@@ -2980,6 +3269,201 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
         </g>
       )}
 
+      {/* M. WILDERNESS FOREST CAMPGROUND SCENE */}
+      {config.sceneId === 'forest_camp' && (
+        <g id="scene-wilderness-camp">
+          {/* Deep Twilight Evening Sky with Gradient Bands */}
+          <rect x="0" y="0" width="160" height="20" fill="#0c182a" />
+          <rect x="0" y="20" width="160" height="22" fill="#132742" />
+          <rect x="0" y="42" width="160" height="18" fill="#1c3a5e" />
+
+          {/* Glowing Pixel Stars in Twilight Sky */}
+          <rect x="12" y="6" width="1.5" height="1.5" fill="#fef08a" opacity={animTick % 2 === 0 ? 0.9 : 0.4} />
+          <rect x="36" y="10" width="1" height="1" fill="#ffffff" opacity={animTick % 3 === 0 ? 0.8 : 0.3} />
+          <rect x="68" y="5" width="2" height="2" fill="#fde047" opacity={animTick % 2 === 1 ? 0.95 : 0.5} />
+          <rect x="94" y="9" width="1.5" height="1.5" fill="#ffffff" opacity={animTick % 4 === 0 ? 0.9 : 0.4} />
+          <rect x="124" y="4" width="2" height="2" fill="#fef08a" opacity={animTick % 2 === 0 ? 0.9 : 0.5} />
+          <rect x="146" y="12" width="1.5" height="1.5" fill="#ffffff" opacity={animTick % 3 === 1 ? 0.85 : 0.4} />
+
+          {/* Golden Crescent Moon on Top Right */}
+          <g transform="translate(132, 6)">
+            <path d="M 6 0 A 7 7 0 0 0 6 12 A 5 5 0 0 1 6 0 Z" fill="#fef08a" />
+            <circle cx="8" cy="6" r="8" fill="#fef08a" opacity="0.1" />
+          </g>
+
+          {/* Distant Mountain Silhouettes & Deep Forest Tree Layers */}
+          {/* Far Mountain Ridge */}
+          <polygon points="0,48 24,34 56,46 88,30 128,44 160,32 160,54 0,54" fill="#0f261e" opacity="0.65" />
+
+          {/* Midground Tall Pine Trees (Left Group) */}
+          <g id="pine-trees-left">
+            {/* Trunk */}
+            <rect x="8" y="28" width="4" height="34" fill="#451a03" />
+            {/* Layered Pine Canopy Triangles */}
+            <polygon points="10,12 2,24 18,24" fill="#14532d" />
+            <polygon points="10,18 0,32 20,32" fill="#166534" />
+            <polygon points="10,25 -2,42 22,42" fill="#15803d" />
+
+            {/* Tree 2 (Offset) */}
+            <rect x="22" y="32" width="3" height="30" fill="#451a03" />
+            <polygon points="23.5,16 16,28 31,28" fill="#14532d" />
+            <polygon points="23.5,22 14,36 33,36" fill="#166534" />
+          </g>
+
+          {/* Midground Tall Pine Trees (Right Group) */}
+          <g id="pine-trees-right">
+            {/* Trunk */}
+            <rect x="142" y="26" width="4" height="36" fill="#451a03" />
+            <polygon points="144,10 136,22 152,22" fill="#14532d" />
+            <polygon points="144,17 133,31 155,31" fill="#166534" />
+            <polygon points="144,24 130,40 158,40" fill="#15803d" />
+
+            {/* Tree 2 (Right Offset) */}
+            <rect x="126" y="34" width="3" height="28" fill="#451a03" />
+            <polygon points="127.5,18 120,29 135,29" fill="#14532d" />
+            <polygon points="127.5,24 118,37 137,37" fill="#166534" />
+          </g>
+
+          {/* Festive Camp Bunting Flags / Warm String Lights between Trees */}
+          <g id="camp-string-lights">
+            <path d="M 18 26 Q 80 40 136 28" stroke="#78350f" strokeWidth="0.6" fill="none" />
+            {/* Glowing Lantern Bulbs */}
+            <circle cx="32" cy="30" r="1.5" fill="#fef08a" />
+            <circle cx="32" cy="30" r="3.5" fill="#fef08a" opacity="0.25" />
+            <polygon points="46,33 43,38 49,38" fill="#ef4444" />
+            <circle cx="62" cy="35" r="1.5" fill="#fde047" />
+            <circle cx="62" cy="35" r="3.5" fill="#fde047" opacity="0.25" />
+            <polygon points="78,35.5 75,40.5 81,40.5" fill="#3b82f6" />
+            <circle cx="94" cy="34.5" r="1.5" fill="#fef08a" />
+            <circle cx="94" cy="34.5" r="3.5" fill="#fef08a" opacity="0.25" />
+            <polygon points="110,32 107,37 113,37" fill="#10b981" />
+            <circle cx="124" cy="29" r="1.5" fill="#fde047" />
+            <circle cx="124" cy="29" r="3.5" fill="#fde047" opacity="0.25" />
+          </g>
+
+          {/* LEFT SIDE: COZY A-FRAME CANVAS TENT */}
+          <g id="camp-a-frame-tent" transform="translate(6, 32)">
+            {/* Tent Shadow on Ground */}
+            <ellipse cx="24" cy="32" rx="20" ry="4" fill="#0f291e" opacity="0.7" />
+            {/* Outer Olive/Khaki Canvas Roof */}
+            <polygon points="22,0 0,30 44,30" fill="#a16207" stroke="#78350f" strokeWidth="0.8" />
+            <polygon points="22,0 3,30 41,30" fill="#ca8a04" />
+            {/* Tent Ridge Pole & Support Stakes */}
+            <rect x="21" y="-2" width="2" height="32" fill="#451a03" />
+            {/* Front Illuminated Triangle Opening / Cozy Interior Glow */}
+            <polygon points="22,4 9,30 35,30" fill="#fef08a" stroke="#ca8a04" strokeWidth="0.6" />
+            {/* Warm Amber Interior Gradient */}
+            <polygon points="22,8 13,30 31,30" fill="#f59e0b" opacity="0.85" />
+            {/* Sleeping Pad Roll & Lantern inside tent */}
+            <rect x="18" y="24" width="8" height="4" fill="#0284c7" />
+            <rect x="21" y="16" width="3" height="4" fill="#fef9c3" className="animate-pulse" />
+            {/* Rolled Front Tent Flaps */}
+            <polygon points="9,18 6,30 13,30" fill="#854d0e" />
+            <polygon points="35,18 31,30 38,30" fill="#854d0e" />
+            {/* Guy-lines & Ground Pegs */}
+            <line x1="0" y1="30" x2="-4" y2="33" stroke="#cbd5e1" strokeWidth="0.5" />
+            <line x1="44" y1="30" x2="48" y2="33" stroke="#cbd5e1" strokeWidth="0.5" />
+          </g>
+
+          {/* MOSSY WILDERNESS FOREST GROUND FLOOR */}
+          <rect x="0" y="58" width="160" height="42" fill="#143b23" />
+          {/* Layered Rich Earth & Moss Textures */}
+          <rect x="0" y="66" width="160" height="34" fill="#1b4d2e" />
+          <rect x="0" y="78" width="160" height="22" fill="#143e24" />
+
+          {/* Soft Grassy Texture Tufts & Forest Floor Details */}
+          <rect x="8" y="62" width="6" height="2" fill="#22c55e" />
+          <rect x="28" y="72" width="8" height="2" fill="#4ade80" />
+          <rect x="54" y="64" width="7" height="2" fill="#16a34a" />
+          <rect x="98" y="68" width="9" height="2" fill="#22c55e" />
+          <rect x="138" y="63" width="7" height="2" fill="#4ade80" />
+          <rect x="118" y="82" width="8" height="2" fill="#16a34a" />
+
+          {/* Wild Forest Floor Mushrooms & Flowers */}
+          <rect x="52" y="68" width="3" height="3" fill="#ef4444" />
+          <rect x="53" y="67" width="1" height="1" fill="#ffffff" />
+          <rect x="53" y="71" width="1" height="2" fill="#fef3c7" />
+
+          <rect x="144" y="72" width="3" height="3" fill="#f59e0b" />
+          <rect x="145" y="75" width="1" height="2" fill="#fef3c7" />
+
+          {/* RIGHT SIDE: CRACKLING BONFIRE / CAMPFIRE WITH RIVER STONES */}
+          <g id="camp-bonfire" transform="translate(108, 52)">
+            {/* Warm Ambient Glow on Ground */}
+            <ellipse cx="14" cy="18" rx="20" ry="7" fill="#f59e0b" opacity="0.35" className="animate-pulse" />
+            <ellipse cx="14" cy="18" rx="12" ry="4" fill="#fef08a" opacity="0.3" />
+
+            {/* River Stone Fire Ring */}
+            <circle cx="2" cy="18" r="3" fill="#64748b" />
+            <circle cx="7" cy="20" r="3.5" fill="#475569" />
+            <circle cx="14" cy="21" r="3.5" fill="#64748b" />
+            <circle cx="21" cy="20" r="3.5" fill="#475569" />
+            <circle cx="26" cy="18" r="3" fill="#64748b" />
+            <circle cx="24" cy="15" r="2.5" fill="#334155" />
+            <circle cx="4" cy="15" r="2.5" fill="#334155" />
+
+            {/* Crossed Glowing Firewood Logs */}
+            <polygon points="3,19 24,14 25,16 4,21" fill="#451a03" stroke="#78350f" strokeWidth="0.5" />
+            <polygon points="5,14 24,19 23,21 4,16" fill="#78350f" stroke="#451a03" strokeWidth="0.5" />
+            {/* Glowing Red-Hot Charcoal Embers */}
+            <rect x="9" y="16" width="10" height="3" fill="#dc2626" />
+            <rect x="11" y="15" width="6" height="2" fill="#f97316" />
+
+            {/* Animated Crackling Pixel Flames */}
+            {animTick % 2 === 0 ? (
+              <g>
+                <polygon points="14,2 8,16 20,16" fill="#f59e0b" />
+                <polygon points="14,6 10,16 18,16" fill="#facc15" />
+                <polygon points="14,10 12,16 16,16" fill="#ffffff" />
+                {/* Dancing Sparks */}
+                <rect x="12" y="-1" width="1.5" height="1.5" fill="#f59e0b" />
+                <rect x="17" y="2" width="1" height="1" fill="#ef4444" />
+              </g>
+            ) : (
+              <g>
+                <polygon points="13,0 7,16 21,16" fill="#f59e0b" />
+                <polygon points="13,4 9,16 19,16" fill="#facc15" />
+                <polygon points="13,8 11,16 17,16" fill="#ffffff" />
+                {/* Dancing Sparks */}
+                <rect x="15" y="-3" width="1.5" height="1.5" fill="#fde047" />
+                <rect x="9" y="1" width="1" height="1" fill="#f97316" />
+              </g>
+            )}
+          </g>
+
+          {/* RUSTIC WOOD PICNIC TABLE & LOG STOOLS (Center-Left Staging Area) */}
+          <g id="camp-picnic-table" transform="translate(62, 54)">
+            {/* Table Shadow */}
+            <ellipse cx="18" cy="18" rx="20" ry="3" fill="#0f291e" opacity="0.6" />
+            {/* Wooden Log Table Legs */}
+            <rect x="4" y="8" width="4" height="10" fill="#451a03" />
+            <rect x="28" y="8" width="4" height="10" fill="#451a03" />
+            {/* Log Tabletop Plank */}
+            <rect x="0" y="5" width="36" height="4" fill="#78350f" stroke="#451a03" strokeWidth="0.6" />
+            <rect x="2" y="6" width="32" height="1.5" fill="#92400e" />
+
+            {/* Vintage Camp Drip Coffee Kettle & Mug on Table */}
+            <rect x="6" y="0" width="8" height="6" fill="#0284c7" stroke="#0369a1" strokeWidth="0.4" />
+            <rect x="8" y="-2" width="4" height="2" fill="#0369a1" />
+            <rect x="14" y="2" width="3" height="1" fill="#0369a1" />
+            {/* Steam puff */}
+            <rect x="15" y="-3" width="1.5" height="1.5" fill="#ffffff" opacity={animTick % 2 === 0 ? 0.8 : 0.3} />
+
+            {/* Speckled Enamel Tin Mug */}
+            <rect x="22" y="1" width="5" height="5" fill="#dc2626" stroke="#b91c1c" strokeWidth="0.4" />
+            <rect x="27" y="2" width="2" height="3" fill="#b91c1c" />
+            <rect x="23" y="1" width="3" height="1" fill="#451a03" />
+
+            {/* Tree Stump Stools */}
+            <rect x="-8" y="10" width="8" height="8" fill="#78350f" stroke="#451a03" strokeWidth="0.5" />
+            <ellipse cx="-4" cy="10" rx="4" ry="1.5" fill="#92400e" />
+
+            <rect x="36" y="10" width="8" height="8" fill="#78350f" stroke="#451a03" strokeWidth="0.5" />
+            <ellipse cx="40" cy="10" rx="4" ry="1.5" fill="#92400e" />
+          </g>
+        </g>
+      )}
+
             {/* 3. COMPANION VISITOR LAYER (ALL PETS ANIMATED - FULL SIZE EQUAL TO FROG & PURE CRISP PIXEL ART) */}
 
             {/* A. Snail Friend (Crawling on right, equal size to frog, pixel shell, slime trail & hearts) */}
@@ -3487,6 +3971,111 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
               );
             })()}
 
+            {/* Q. Maple the Baby Fawn Companion (Gentle deer fawn resting peacefully in the forest camp) */}
+            {(config.companionId === 'forest_camp_fawn' || config.companionId === 'companion_forest_camp_fawn') && (() => {
+              const fawnBreathe = animTick % 2 === 0 ? 0 : -1;
+              const earTwitch = animTick % 3 === 0;
+
+              return (
+                <g id="companion-forest-fawn" transform={`translate(22, ${50 + fawnBreathe})`}>
+                  {/* Gentle shadow underneath */}
+                  <ellipse cx="14" cy="24" rx="14" ry="4" fill="#0f291e" opacity="0.6" />
+
+                  {/* Body & Warm Chestnut Fur (Width 26, Height 18) */}
+                  <rect x="4" y="10" width="22" height="13" fill="#B45309" />
+                  <rect x="6" y="12" width="18" height="10" fill="#D97706" />
+
+                  {/* White Dappled Camo Spots */}
+                  <rect x="9" y="13" width="2.5" height="2.5" fill="#FEF3C7" />
+                  <rect x="16" y="14" width="2.5" height="2.5" fill="#FEF3C7" />
+                  <rect x="12" y="18" width="2" height="2" fill="#FEF3C7" />
+                  <rect x="19" y="19" width="2.5" height="2.5" fill="#FEF3C7" />
+
+                  {/* Gentle Head & Ears */}
+                  <rect x="14" y="3" width="13" height="11" fill="#D97706" />
+                  {/* Left & Right Ears with Twitches */}
+                  <rect x="13" y={earTwitch ? 0 : 1} width="5" height="5" fill="#B45309" />
+                  <rect x="14" y={earTwitch ? 1 : 2} width="3" height="3" fill="#FEF3C7" />
+                  <rect x="23" y={earTwitch ? 1 : 0} width="5" height="5" fill="#B45309" />
+                  <rect x="24" y={earTwitch ? 2 : 1} width="3" height="3" fill="#FEF3C7" />
+
+                  {/* Gentle Dark Eye with Star Catchlight */}
+                  <rect x="21" y="6" width="4" height="4" fill="#1C1917" />
+                  <rect x="22" y="6" width="1.5" height="1.5" fill="#FFFFFF" />
+
+                  {/* Cute White Snout & Black Button Nose */}
+                  <rect x="24" y="9" width="4" height="4" fill="#FEF3C7" />
+                  <rect x="26" y="9" width="2" height="2" fill="#1C1917" />
+
+                  {/* Soft Rosy Blush Cheek */}
+                  <rect x="18" y="9" width="3" height="2" fill="#FB7185" opacity="0.8" />
+
+                  {/* Fluffy White Tail with Wag */}
+                  <rect x="1" y={animTick % 2 === 0 ? 11 : 13} width="5" height="6" fill="#FEF3C7" />
+
+                  {/* Folded Resting Legs */}
+                  <rect x="5" y="22" width="6" height="3" fill="#92400E" />
+                  <rect x="17" y="22" width="7" height="3" fill="#92400E" />
+                </g>
+              );
+            })()}
+
+            {/* R. Bandit the Camp Raccoon Companion (Sitting near the campfire munching marshmallow) */}
+            {(config.companionId === 'campfire_raccoon' || config.companionId === 'companion_campfire_raccoon') && (() => {
+              const munchY = animTick % 2 === 0 ? 0 : 1;
+              const tailWag = animTick % 2 === 0 ? 0 : -2;
+
+              return (
+                <g id="companion-camp-raccoon" transform={`translate(104, 52)`}>
+                  {/* Soft Ground Shadow */}
+                  <ellipse cx="14" cy="24" rx="13" ry="4" fill="#0f291e" opacity="0.6" />
+
+                  {/* Fluffy Striped Ringed Tail on Left */}
+                  <g transform={`translate(-6, ${8 + tailWag})`}>
+                    <rect x="0" y="0" width="8" height="6" fill="#475569" />
+                    <rect x="2" y="0" width="2.5" height="6" fill="#0F172A" />
+                    <rect x="6" y="0" width="2.5" height="6" fill="#0F172A" />
+                  </g>
+
+                  {/* Chubby Raccoon Body (Width 20, Height 16) */}
+                  <rect x="4" y="9" width="18" height="15" fill="#64748B" />
+                  <rect x="7" y="11" width="12" height="11" fill="#94A3B8" />
+
+                  {/* Round Head & Ears */}
+                  <rect x="5" y="2" width="16" height="11" fill="#64748B" />
+                  <rect x="4" y="0" width="5" height="4" fill="#334155" />
+                  <rect x="5" y="1" width="2.5" height="2.5" fill="#CBD5E1" />
+                  <rect x="17" y="0" width="5" height="4" fill="#334155" />
+                  <rect x="18" y="1" width="2.5" height="2.5" fill="#CBD5E1" />
+
+                  {/* Bandit Black Eye Mask */}
+                  <rect x="4" y="5" width="18" height="5" fill="#0F172A" />
+                  {/* Expressive Curious Eyes */}
+                  <rect x="6" y="6" width="3.5" height="3.5" fill="#FFFFFF" />
+                  <rect x="7.5" y="6.5" width="2" height="2" fill="#0F172A" />
+                  <rect x="15" y="6" width="3.5" height="3.5" fill="#FFFFFF" />
+                  <rect x="15.5" y="6.5" width="2" height="2" fill="#0F172A" />
+
+                  {/* White Snout & Nose */}
+                  <rect x="10" y="9" width="6" height="4" fill="#F8FAFC" />
+                  <rect x="12" y="9.5" width="2.5" height="2" fill="#0F172A" />
+
+                  {/* Munching Toasted Marshmallow on Branch Stick */}
+                  <g transform={`translate(16, ${7 + munchY})`}>
+                    <rect x="0" y="3" width="9" height="1.5" fill="#78350F" />
+                    <rect x="5" y="0" width="5" height="6" fill="#FEF3C7" stroke="#D97706" strokeWidth="0.5" />
+                    <rect x="6.5" y="1.5" width="2.5" height="2" fill="#78350F" />
+                    {/* Steam / Crumb */}
+                    <rect x="10" y="-1" width="1.5" height="1.5" fill="#FFFFFF" opacity={animTick % 2 === 0 ? 0.8 : 0.2} />
+                  </g>
+
+                  {/* Paws */}
+                  <rect x="5" y="23" width="5" height="3" fill="#334155" />
+                  <rect x="14" y="23" width="5" height="3" fill="#334155" />
+                </g>
+              );
+            })()}
+
             {/* 4. FROG CHARACTER (DYNAMICALLY MOVING, HOPPING & INTERACTING ACROSS SCENE) */}
             {(() => {
               const frogY = config.isAnimated && animTick % 2 === 0 ? 56 : 57;
@@ -3815,6 +4404,61 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {/* Camping Set: Field Scout Parka */}
+                      {config.outfitId === 'field_scout_parka' && (
+                        <g id="scene-outfit-scout-parka">
+                          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#365314" />
+                          <rect x={frogX - 1} y={frogY + 7} width="18" height="12" fill="#4D7C0F" />
+                          {/* Khaki Collar & Hood Trim */}
+                          <rect x={frogX - 2} y={frogY + 7} width="20" height="3" fill="#CA8A04" />
+                          {/* Front Zipper & Scout Merit Badges */}
+                          <rect x={frogX + 7} y={frogY + 8} width="2" height="12" fill="#1E293B" />
+                          <rect x={frogX + 2} y={frogY + 11} width="3" height="3" fill="#FEF08A" stroke="#B45309" strokeWidth="0.4" />
+                          <rect x={frogX + 11} y={frogY + 11} width="3" height="3" fill="#FB923C" stroke="#78350F" strokeWidth="0.4" />
+                          {/* Lower Flap Pockets */}
+                          <rect x={frogX + 1} y={frogY + 15} width="4" height="3" fill="#365314" />
+                          <rect x={frogX + 11} y={frogY + 15} width="4" height="3" fill="#365314" />
+                        </g>
+                      )}
+
+                      {/* Camping Set: Flannel Camp Vest */}
+                      {config.outfitId === 'flannel_camp_vest' && (
+                        <g id="scene-outfit-flannel-vest">
+                          {/* Buffalo Plaid Red & Black Checked Sleeves */}
+                          <rect x={frogX - 3} y={frogY + 8} width="22" height="13" fill="#DC2626" />
+                          <rect x={frogX - 3} y={frogY + 9} width="3" height="3" fill="#18181B" />
+                          <rect x={frogX - 3} y={frogY + 14} width="3" height="3" fill="#18181B" />
+                          <rect x={frogX + 16} y={frogY + 9} width="3" height="3" fill="#18181B" />
+                          <rect x={frogX + 16} y={frogY + 14} width="3" height="3" fill="#18181B" />
+                          {/* Cozy Sherpa Camp Vest Body */}
+                          <rect x={frogX - 1} y={frogY + 8} width="18" height="12" fill="#78350F" />
+                          <rect x={frogX + 1} y={frogY + 7} width="14" height="12" fill="#B45309" />
+                          {/* Fluffy Sherpa Fleece Collar & Brass Snaps */}
+                          <rect x={frogX + 2} y={frogY + 8} width="12" height="2" fill="#FEF3C7" />
+                          <rect x={frogX + 7} y={frogY + 11} width="2" height="2" fill="#FACC15" />
+                          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#FACC15" />
+                          <rect x={frogX + 7} y={frogY + 17} width="2" height="2" fill="#FACC15" />
+                        </g>
+                      )}
+
+                      {/* Camping Set: Cozy Sleeping Bag Cocoon */}
+                      {config.outfitId === 'cozy_sleeping_bag' && (
+                        <g id="scene-outfit-sleeping-bag">
+                          {/* Snug Quilted Mummy Sleeping Bag */}
+                          <rect x={frogX - 4} y={frogY + 8} width="24" height="15" fill="#0369A1" />
+                          <rect x={frogX - 2} y={frogY + 7} width="20" height="16" fill="#0284C7" />
+                          {/* Drawstring Neck Collar */}
+                          <rect x={frogX - 2} y={frogY + 7} width="20" height="2" fill="#38BDF8" />
+                          <rect x={frogX + 7} y={frogY + 7} width="2" height="3" fill="#FACC15" />
+                          {/* Quilted Baffle Stitch Lines */}
+                          <rect x={frogX - 2} y={frogY + 11} width="20" height="1" fill="#075985" />
+                          <rect x={frogX - 2} y={frogY + 15} width="20" height="1" fill="#075985" />
+                          <rect x={frogX - 2} y={frogY + 19} width="20" height="1" fill="#075985" />
+                          {/* Warm Orange Flap */}
+                          <rect x={frogX + 4} y={frogY + 9} width="8" height="3" fill="#F97316" />
+                        </g>
+                      )}
+
                       {/* GLASSES / FACE ACCESSORY LAYER */}
                       {config.glassesId === 'reading' && (
                         <g>
@@ -3946,6 +4590,40 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           ) : (
                             <rect x={frogX + 7} y={frogY + 1} width="2" height="2" fill="#FDE047" />
                           )}
+                        </g>
+                      )}
+
+                      {/* Camping Set: Campfire Warm Glow on Cheeks & Drifting Embers */}
+                      {config.glassesId === 'campfire_warm_glow' && (
+                        <g id="scene-glasses-campfire-glow">
+                          {/* Warm Rosy Bonfire Cheeks */}
+                          <rect x={frogX - 2} y={frogY + 9} width="4" height="3" fill="#F97316" opacity="0.85" />
+                          <rect x={frogX + 14} y={frogY + 9} width="4" height="3" fill="#F97316" opacity="0.85" />
+                          <rect x={frogX - 1} y={frogY + 10} width="2" height="1" fill="#FDE047" />
+                          <rect x={frogX + 15} y={frogY + 10} width="2" height="1" fill="#FDE047" />
+                          {/* Animated Drifting Fire Embers */}
+                          <rect x={frogX + 7} y={frogY - (animTick % 2 === 0 ? 3 : 5)} width="2" height="2" fill="#F59E0B" />
+                          <rect x={frogX - 4} y={frogY + 2 - (animTick % 2 === 0 ? 2 : 0)} width="1" height="1" fill="#EF4444" />
+                          <rect x={frogX + 19} y={frogY + 1 - (animTick % 2 === 0 ? 0 : 2)} width="1" height="1" fill="#FACC15" />
+                        </g>
+                      )}
+
+                      {/* Camping Set: Explorer Field Binoculars */}
+                      {config.glassesId === 'explorer_binoculars' && (
+                        <g id="scene-glasses-binoculars">
+                          {/* Hanging Neck Strap */}
+                          <rect x={frogX + 1} y={frogY + 6} width="14" height="1" fill="#78350F" />
+                          <rect x={frogX + 3} y={frogY + 7} width="1" height="3" fill="#78350F" />
+                          <rect x={frogX + 12} y={frogY + 7} width="1" height="3" fill="#78350F" />
+                          {/* Dual Brass Binoculars Body */}
+                          <rect x={frogX + 2} y={frogY + 10} width="5" height="7" fill="#B45309" stroke="#78350F" strokeWidth="0.5" />
+                          <rect x={frogX + 9} y={frogY + 10} width="5" height="7" fill="#B45309" stroke="#78350F" strokeWidth="0.5" />
+                          <rect x={frogX + 6} y={frogY + 12} width="4" height="2" fill="#78350F" />
+                          {/* Clear Glass Lens Highlights */}
+                          <rect x={frogX + 3} y={frogY + 14} width="3" height="2" fill="#38BDF8" />
+                          <rect x={frogX + 4} y={frogY + 14} width="1" height="1" fill="#FFFFFF" />
+                          <rect x={frogX + 10} y={frogY + 14} width="3" height="2" fill="#38BDF8" />
+                          <rect x={frogX + 11} y={frogY + 14} width="1" height="1" fill="#FFFFFF" />
                         </g>
                       )}
 
@@ -4215,6 +4893,60 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 14} y={frogY + 17} width="1.5" height="1.5" fill="#BE123C" />
                           <rect x={frogX + 3} y={frogY + 14} width="2" height="3" fill={skin.main} />
                           <rect x={frogX + 14} y={frogY + 14} width="2" height="3" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 21. Camping Set: Roasting Marshmallows over Campfire */}
+                      {config.activityId === 'roasting_marshmallow' && (
+                        <g id="scene-prop-marshmallow">
+                          {/* Frog Paws Holding Branch */}
+                          <rect x={frogX + 2} y={frogY + 14} width="3" height="3" fill={skin.main} />
+                          {/* Rustic Wood Branch Skewer */}
+                          <rect x={frogX + 4} y={frogY + 14} width="16" height="1.5" fill="#78350F" />
+                          <rect x={frogX + 19} y={frogY + 11} width="1" height="6" fill="#78350F" />
+                          {/* Golden Puffy Toasted Marshmallows */}
+                          <rect x={frogX + 14} y={frogY + 12} width="4.5" height="4.5" fill="#FEF3C7" stroke="#D97706" strokeWidth="0.4" />
+                          <rect x={frogX + 15} y={frogY + 13} width="2" height="2" fill="#B45309" />
+                          <rect x={frogX + 19} y={frogY + 9} width="4.5" height="4.5" fill="#FFFFFF" stroke="#D97706" strokeWidth="0.4" />
+                          <rect x={frogX + 20} y={frogY + 10} width="2" height="1.5" fill="#FEF3C7" />
+                          {/* Sweet Steam Wisp */}
+                          <rect x={frogX + 17} y={frogY + 7 - (animTick % 2 === 0 ? 0 : 2)} width="2" height="2" fill="#FFFFFF" opacity="0.8" />
+                        </g>
+                      )}
+
+                      {/* 22. Camping Set: Holding Camp Lantern */}
+                      {config.activityId === 'holding_camp_lantern' && (
+                        <g id="scene-prop-camp-lantern">
+                          {/* Frog Paw Holding Bail Wire */}
+                          <rect x={frogX + 8} y={frogY + 13} width="3" height="3" fill={skin.main} />
+                          {/* Metal Wire Handle */}
+                          <rect x={frogX + 10} y={frogY + 10} width="6" height="1" fill="#64748B" />
+                          <rect x={frogX + 10} y={frogY + 11} width="1" height="2" fill="#64748B" />
+                          <rect x={frogX + 15} y={frogY + 11} width="1" height="2" fill="#64748B" />
+                          {/* Brass Cap & Base */}
+                          <rect x={frogX + 9} y={frogY + 12} width="8" height="2" fill="#CA8A04" />
+                          <rect x={frogX + 9} y={frogY + 19} width="8" height="2" fill="#CA8A04" />
+                          {/* Glowing Glass Globe */}
+                          <rect x={frogX + 10} y={frogY + 14} width="6" height="5" fill="#FDE047" stroke="#EAB308" strokeWidth="0.4" />
+                          <rect x={frogX + 12} y={frogY + 15} width="2" height="3" fill="#FFFFFF" />
+                          {/* Metal Cage Wire */}
+                          <rect x={frogX + 12} y={frogY + 14} width="1" height="5" fill="#78350F" opacity="0.6" />
+                          {/* Surrounding Ambient Yellow Lantern Glow */}
+                          <circle cx={frogX + 13} cy={frogY + 16} r="8" fill="#FEF08A" opacity={animTick % 2 === 0 ? 0.25 : 0.15} />
+                        </g>
+                      )}
+
+                      {/* 23. Camping Set: Camp Kettle & Enamel Coffee Mug */}
+                      {config.activityId === 'camp_kettle_coffee' && (
+                        <g id="scene-prop-kettle-coffee">
+                          {/* Frog Paw Holding Mug */}
+                          <rect x={frogX + 3} y={frogY + 14} width="3" height="3" fill={skin.main} />
+                          {/* Speckled Enamel Camp Mug */}
+                          <rect x={frogX + 5} y={frogY + 13} width="7" height="7" fill="#0369A1" stroke="#0284C7" strokeWidth="0.4" />
+                          <rect x={frogX + 12} y={frogY + 14} width="2" height="4" fill="#0284C7" />
+                          <rect x={frogX + 6} y={frogY + 12} width="5" height="2" fill="#451A03" />
+                          {/* Steam puffs */}
+                          <rect x={frogX + 8} y={frogY + 8 - (animTick % 2 === 0 ? 0 : 2)} width="2" height="2" fill="#FFFFFF" opacity="0.8" />
                         </g>
                       )}
 
@@ -4494,6 +5226,64 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 6} y={frogY - 7} width="4" height="6" fill="#CA8A04" />
                           <rect x={frogX + 2} y={frogY - 4} width="12" height="3" fill="#CA8A04" />
                           <rect x={frogX + 7} y={frogY - 3} width="2" height="2" fill="#DC2626" />
+                        </g>
+                      )}
+
+                      {/* Camping Set: Ranger Safari Hat */}
+                      {config.hatId === 'ranger_safari_hat' && (
+                        <g id="scene-hat-ranger-safari">
+                          {/* Wide Canvas Brim */}
+                          <rect x={frogX - 4} y={frogY + 1} width="24" height="3" fill="#4D7C0F" />
+                          <rect x={frogX - 2} y={frogY + 1} width="20" height="1" fill="#65A30D" />
+                          {/* Crown of Hat */}
+                          <rect x={frogX} y={frogY - 6} width="16" height="7" fill="#4D7C0F" />
+                          <rect x={frogX + 2} y={frogY - 7} width="12" height="2" fill="#365314" />
+                          {/* Leather Hatband & Pine Tree Badge */}
+                          <rect x={frogX} y={frogY - 1} width="16" height="2" fill="#78350F" />
+                          <rect x={frogX + 6} y={frogY - 3} width="4" height="3" fill="#FACC15" stroke="#92400E" strokeWidth="0.4" />
+                          <rect x={frogX + 7} y={frogY - 2} width="2" height="1" fill="#15803D" />
+                          {/* Chin Cord Loop */}
+                          <rect x={frogX - 2} y={frogY + 4} width="1" height="4" fill="#78350F" />
+                          <rect x={frogX + 17} y={frogY + 4} width="1" height="4" fill="#78350F" />
+                          <rect x={frogX + 7} y={frogY + 8} width="2" height="1" fill="#FDE047" />
+                        </g>
+                      )}
+
+                      {/* Camping Set: Marshmallow Beanie */}
+                      {config.hatId === 'marshmallow_beanie' && (
+                        <g id="scene-hat-marshmallow-beanie">
+                          {/* Fluffy Pom-Pom at top */}
+                          <rect x={frogX + 6} y={frogY - 9} width="4" height="3" fill="#FEF3C7" />
+                          <rect x={frogX + 7} y={frogY - 10} width="2" height="1" fill="#FEF3C7" />
+                          {/* Mustard Knit Beanie Crown */}
+                          <rect x={frogX - 1} y={frogY - 6} width="18" height="8" fill="#D97706" />
+                          <rect x={frogX + 1} y={frogY - 7} width="14" height="2" fill="#B45309" />
+                          {/* Folded Waffle Cuff */}
+                          <rect x={frogX - 2} y={frogY} width="20" height="3" fill="#B45309" />
+                          {/* Toasted Marshmallow Patch */}
+                          <rect x={frogX + 6} y={frogY - 3} width="4" height="4" fill="#FEF3C7" stroke="#78350F" strokeWidth="0.4" />
+                          <rect x={frogX + 7} y={frogY - 2} width="2" height="1" fill="#78350F" />
+                        </g>
+                      )}
+
+                      {/* Camping Set: Night Scout Headlamp */}
+                      {config.hatId === 'scout_headlamp' && (
+                        <g id="scene-hat-scout-headlamp">
+                          {/* Camo Elastic Headband */}
+                          <rect x={frogX - 2} y={frogY + 1} width="20" height="2.5" fill="#365314" />
+                          <rect x={frogX + 2} y={frogY + 1} width="3" height="2.5" fill="#4D7C0F" />
+                          <rect x={frogX + 11} y={frogY + 1} width="3" height="2.5" fill="#4D7C0F" />
+                          {/* LED Lamp Body */}
+                          <rect x={frogX + 5} y={frogY - 2} width="6" height="5" fill="#18181B" stroke="#374151" strokeWidth="0.4" />
+                          {/* Bright Glowing LED Lens */}
+                          <rect x={frogX + 6} y={frogY - 1} width="4" height="3" fill="#38BDF8" />
+                          <rect x={frogX + 7} y={frogY} width="2" height="1" fill="#FFFFFF" />
+                          {/* Illuminated Forward Night Beam Fan */}
+                          <polygon
+                            points={`${frogX + 12},${frogY - 1} ${frogX + 32},${frogY - 10} ${frogX + 32},${frogY + 10} ${frogX + 12},${frogY + 3}`}
+                            fill="#FEF08A"
+                            opacity="0.35"
+                          />
                         </g>
                       )}
                     </g>

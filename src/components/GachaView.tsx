@@ -346,7 +346,7 @@ export const GachaView: React.FC<GachaViewProps> = ({
           <div className="px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-sm flex items-center gap-1.5">
             <Sparkles size={14} className="text-[#5f7a61] dark:text-[#8cb88f]" />
             <h2 className="text-xs font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-              Gacha & Sets
+              Gacha
             </h2>
           </div>
         </div>
@@ -389,10 +389,10 @@ export const GachaView: React.FC<GachaViewProps> = ({
             <ChevronLeft size={15} />
           </button>
 
-          <div className="px-2 flex items-center gap-1.5 min-w-[150px] justify-center text-center">
-            <span className="text-sm">{currentSet.bannerEmoji}</span>
+          <div className="px-2 flex items-center gap-1.5 min-w-[140px] justify-center text-center">
+            <PixelIcon name={currentSet.bannerEmoji} size={16} className="shrink-0" />
             <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8] truncate max-w-[140px]">
-              {currentSet.name.split('&')[0].trim()}
+              {currentSet.name}
             </span>
           </div>
 

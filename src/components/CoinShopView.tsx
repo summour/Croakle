@@ -201,8 +201,14 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
                 Daily Gift
               </span>
             </div>
-            <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d]">
-              Claim <strong className="text-amber-700 dark:text-amber-300 font-bold">+50 Coins</strong> & <strong className="text-amber-700 dark:text-amber-300 font-bold">+1 Gacha Ticket 🎟️</strong> once every day
+            <p className="text-[11px] text-[#8c7e70] dark:text-[#a89b8d] flex items-center flex-wrap gap-1">
+              <span>Claim</span>
+              <strong className="text-amber-700 dark:text-amber-300 font-bold">+50 Coins</strong>
+              <span>&</span>
+              <strong className="text-amber-700 dark:text-amber-300 font-bold inline-flex items-center gap-1">
+                +1 Gacha Ticket <PixelIcon name="ticket" size={13} />
+              </strong>
+              <span>once every day</span>
             </p>
           </div>
         </div>
@@ -223,13 +229,20 @@ export const CoinShopView: React.FC<CoinShopViewProps> = ({
               });
             }
           }}
-          className={`px-4 py-2 rounded-2xl text-xs font-black transition-all active:scale-95 shadow-xs shrink-0 ${
+          className={`px-4 py-2 rounded-2xl text-xs font-black transition-all active:scale-95 shadow-xs shrink-0 inline-flex items-center gap-1.5 ${
             isDailyClaimed
               ? 'bg-black/[0.06] dark:bg-white/[0.08] text-[#8c7e70] dark:text-[#a89b8d] cursor-not-allowed'
               : 'bg-[#5f7a61] hover:bg-[#526b54] text-white cursor-pointer'
           }`}
         >
-          {isDailyClaimed ? 'Claimed Today' : 'Claim Daily Gift 🎁'}
+          {isDailyClaimed ? (
+            'Claimed Today'
+          ) : (
+            <>
+              <span>Claim Daily Gift</span>
+              <PixelIcon name="gift" size={13} />
+            </>
+          )}
         </button>
       </div>
 

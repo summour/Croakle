@@ -40,6 +40,8 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       'konbini_mint',
       'cyber_neon_violet',
       'gameboy_monochrome',
+      'pine_forest_moss',
+      'ember_glow_amber',
     ].includes(key)
   ) {
     const pal = getSkinColors(key as any);
@@ -116,6 +118,61 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           <rect x="7" y="7" width="10" height="10" fill="#FFFFFF" />
           <rect x="9" y="9" width="6" height="6" fill="#CBD5E1" />
           <rect x="11" y="11" width="2" height="2" fill="#94A3B8" />
+        </svg>
+      );
+
+    case 'ranger_safari_hat':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Safari Hat Crown */}
+          <rect x="6" y="6" width="12" height="6" fill="#4B5320" />
+          <rect x="7" y="5" width="10" height="2" fill="#5F6B28" />
+          {/* Dark Leather Hatband */}
+          <rect x="6" y="11" width="12" height="2" fill="#2E1C0C" />
+          {/* Pine / Forest Emblem Pin */}
+          <rect x="11" y="9" width="2" height="3" fill="#D4AF37" />
+          {/* Wide Safari Brim */}
+          <rect x="2" y="12" width="20" height="3" fill="#4B5320" />
+          <rect x="3" y="13" width="18" height="1" fill="#6B7830" />
+          {/* Hanging Chin Cord Loops */}
+          <rect x="4" y="15" width="1" height="4" fill="#D97706" />
+          <rect x="19" y="15" width="1" height="4" fill="#D97706" />
+          <rect x="5" y="18" width="14" height="1" fill="#D97706" />
+        </svg>
+      );
+
+    case 'marshmallow_beanie':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Warm Mustard Yellow Beanie Crown */}
+          <rect x="5" y="5" width="14" height="9" fill="#D97706" />
+          <rect x="7" y="4" width="10" height="2" fill="#F59E0B" />
+          {/* Ribbed Folded Brim */}
+          <rect x="4" y="13" width="16" height="4" fill="#B45309" />
+          <rect x="5" y="14" width="14" height="2" fill="#D97706" />
+          {/* Roasted Marshmallow Patch on Front */}
+          <rect x="9" y="8" width="6" height="4" fill="#FEF3C7" />
+          <rect x="10" y="7" width="4" height="2" fill="#D97706" />
+          <rect x="10" y="9" width="2" height="1" fill="#78350F" />
+          {/* Mini Skewer Stick */}
+          <rect x="12" y="6" width="1" height="6" fill="#92400E" />
+        </svg>
+      );
+
+    case 'scout_headlamp':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Forest Camo Elastic Headband */}
+          <rect x="2" y="9" width="20" height="4" fill="#3F6212" />
+          <rect x="5" y="10" width="3" height="2" fill="#65A30D" />
+          <rect x="12" y="10" width="4" height="2" fill="#1E293B" />
+          <rect x="17" y="10" width="3" height="2" fill="#65A30D" />
+          {/* Central Powerful LED Headlamp Housing */}
+          <rect x="8" y="7" width="8" height="7" fill="#0F172A" />
+          <rect x="9" y="8" width="6" height="5" fill="#38BDF8" />
+          <rect x="10" y="9" width="4" height="3" fill="#FFFFFF" />
+          {/* Glowing Light Beam Sparks */}
+          <rect x="11" y="4" width="2" height="2" fill="#FDE047" />
         </svg>
       );
 
@@ -535,6 +592,68 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // B. OUTFITS
     // -----------------------------------------------------------
+    case 'field_scout_parka':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Heavy Deep Pine Green Parka Body */}
+          <rect x="4" y="6" width="16" height="13" fill="#14532D" />
+          <rect x="5" y="7" width="14" height="11" fill="#166534" />
+          {/* Sherpa Fur Hood Collar */}
+          <rect x="7" y="5" width="10" height="3" fill="#FEF3C7" />
+          <rect x="8" y="6" width="8" height="2" fill="#FDE68A" />
+          {/* Center Zipper & Wind Flap */}
+          <rect x="11" y="6" width="2" height="12" fill="#0F172A" />
+          <rect x="11" y="8" width="1" height="9" fill="#FACC15" />
+          {/* Utility Chest Pockets & Compass Badge */}
+          <rect x="6" y="9" width="4" height="3" fill="#14532D" />
+          <rect x="14" y="9" width="4" height="3" fill="#14532D" />
+          <rect x="7" y="10" width="2" height="2" fill="#F59E0B" />
+          {/* Heavy Hem */}
+          <rect x="4" y="18" width="16" height="2" fill="#0F260C" />
+        </svg>
+      );
+
+    case 'flannel_camp_vest':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Red & Black Buffalo Plaid Long Sleeves */}
+          <rect x="2" y="7" width="4" height="9" fill="#DC2626" />
+          <rect x="3" y="8" width="2" height="7" fill="#18181B" />
+          <rect x="18" y="7" width="4" height="9" fill="#DC2626" />
+          <rect x="19" y="8" width="2" height="7" fill="#18181B" />
+          {/* Forest Sherpa Camp Vest (Tan/Olive) */}
+          <rect x="5" y="6" width="14" height="13" fill="#78350F" />
+          <rect x="6" y="7" width="12" height="11" fill="#B45309" />
+          {/* Plaid Shirt Peeking in Center */}
+          <rect x="10" y="6" width="4" height="12" fill="#DC2626" />
+          <rect x="11" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="11" y="12" width="2" height="2" fill="#18181B" />
+          {/* Brass Snaps */}
+          <rect x="9" y="9" width="1" height="1" fill="#FACC15" />
+          <rect x="9" y="13" width="1" height="1" fill="#FACC15" />
+        </svg>
+      );
+
+    case 'cozy_sleeping_bag':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Deep Evergreen Insulated Sleeping Cocoon */}
+          <rect x="4" y="5" width="16" height="15" fill="#064E3B" />
+          <rect x="5" y="6" width="14" height="13" fill="#047857" />
+          {/* Cozy Soft Inner Lining (Warm Ochre / Orange) */}
+          <rect x="7" y="7" width="10" height="4" fill="#EA580C" />
+          <rect x="8" y="8" width="8" height="3" fill="#F97316" />
+          {/* Drawstring Hood Trim */}
+          <rect x="6" y="5" width="12" height="2" fill="#022C22" />
+          <rect x="9" y="11" width="6" height="1" fill="#022C22" />
+          {/* Puffy Down Baffle Stitching */}
+          <rect x="5" y="13" width="14" height="1" fill="#064E3B" />
+          <rect x="5" y="16" width="14" height="1" fill="#064E3B" />
+          {/* Mini Camp Patch */}
+          <rect x="7" y="14" width="3" height="2" fill="#FBBF24" />
+        </svg>
+      );
+
     case 'arcade_gamer_bomber':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
@@ -830,6 +949,42 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // C. FACE ACCESSORIES & GLASSES
     // -----------------------------------------------------------
+    case 'campfire_warm_glow':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Warm Flickering Campfire Blush on Cheeks */}
+          <rect x="3" y="10" width="5" height="4" fill="#EA580C" opacity="0.9" />
+          <rect x="4" y="11" width="3" height="2" fill="#F97316" />
+          <rect x="16" y="10" width="5" height="4" fill="#EA580C" opacity="0.9" />
+          <rect x="17" y="11" width="3" height="2" fill="#F97316" />
+          {/* Floating Fire Ember Particles */}
+          <rect x="4" y="7" width="2" height="2" fill="#FDE047" />
+          <rect x="18" y="6" width="2" height="2" fill="#FDE047" />
+          <rect x="11" y="4" width="2" height="2" fill="#F97316" />
+          <rect x="2" y="12" width="1" height="1" fill="#FDE047" />
+          <rect x="21" y="11" width="1" height="1" fill="#FDE047" />
+        </>
+      );
+
+    case 'explorer_binoculars':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Field Scout Binoculars on Eyes */}
+          <rect x="3" y="8" width="7" height="6" fill="#14532D" />
+          <rect x="14" y="8" width="7" height="6" fill="#14532D" />
+          <rect x="4" y="9" width="5" height="4" fill="#38BDF8" />
+          <rect x="15" y="9" width="5" height="4" fill="#38BDF8" />
+          <rect x="5" y="9" width="2" height="2" fill="#FFFFFF" />
+          <rect x="16" y="9" width="2" height="2" fill="#FFFFFF" />
+          {/* Center Bridge & Focus Wheel */}
+          <rect x="10" y="9" width="4" height="3" fill="#0F172A" />
+          <rect x="11" y="8" width="2" height="2" fill="#D4AF37" />
+          {/* Hanging Neck Strap */}
+          <rect x="2" y="13" width="2" height="4" fill="#78350F" />
+          <rect x="20" y="13" width="2" height="4" fill="#78350F" />
+        </>
+      );
+
     case 'cyber_pixel_shades':
       return renderAccessoryWithFrogFace(
         <>
@@ -1016,6 +1171,65 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // D. PROPS & ACTIVITIES
     // -----------------------------------------------------------
+    case 'roasting_marshmallow':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Long Wooden Campfire Skewer Stick */}
+          <rect x="2" y="18" width="4" height="4" fill="#78350F" />
+          <rect x="6" y="14" width="4" height="4" fill="#92400E" />
+          <rect x="10" y="10" width="4" height="4" fill="#B45309" />
+          <rect x="14" y="6" width="6" height="4" fill="#D97706" />
+          {/* Two Golden Roasted Marshmallows */}
+          <rect x="12" y="7" width="5" height="5" fill="#FEF3C7" />
+          <rect x="13" y="6" width="3" height="2" fill="#B45309" />
+          <rect x="16" y="4" width="5" height="5" fill="#FEF3C7" />
+          <rect x="17" y="3" width="3" height="2" fill="#78350F" />
+          {/* Flickering Campfire Flame Tips below */}
+          <rect x="4" y="20" width="16" height="3" fill="#EA580C" />
+          <rect x="8" y="18" width="8" height="3" fill="#FBBF24" />
+        </svg>
+      );
+
+    case 'holding_camp_lantern':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Brass Lantern Handle */}
+          <rect x="9" y="3" width="6" height="2" fill="#78350F" />
+          <rect x="7" y="4" width="2" height="4" fill="#92400E" />
+          <rect x="15" y="4" width="2" height="4" fill="#92400E" />
+          {/* Lantern Top Cap & Chimney */}
+          <rect x="7" y="7" width="10" height="3" fill="#1E293B" />
+          <rect x="8" y="6" width="8" height="2" fill="#B45309" />
+          {/* Glowing Amber Glass Globe with Warm Flame */}
+          <rect x="6" y="10" width="12" height="8" fill="#F59E0B" />
+          <rect x="8" y="11" width="8" height="6" fill="#FEF08A" />
+          <rect x="10" y="12" width="4" height="4" fill="#FFFFFF" />
+          {/* Sturdy Metal Base */}
+          <rect x="5" y="18" width="14" height="3" fill="#1E293B" />
+          <rect x="6" y="19" width="12" height="2" fill="#0F172A" />
+        </svg>
+      );
+
+    case 'camp_kettle_coffee':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Vintage Blue Enamel Camp Kettle */}
+          <rect x="5" y="8" width="10" height="10" fill="#0284C7" />
+          <rect x="6" y="9" width="8" height="8" fill="#38BDF8" />
+          {/* Kettle Spout & Steaming Pour */}
+          <rect x="14" y="9" width="4" height="3" fill="#0284C7" />
+          <rect x="17" y="12" width="2" height="6" fill="#78350F" />
+          {/* Coffee Mug receiving drip */}
+          <rect x="15" y="17" width="7" height="5" fill="#475569" />
+          <rect x="16" y="18" width="5" height="3" fill="#78350F" />
+          {/* Kettle Handle & Lid */}
+          <rect x="3" y="9" width="2" height="8" fill="#0F172A" />
+          <rect x="7" y="6" width="6" height="2" fill="#0F172A" />
+          {/* Steam Swirls */}
+          <rect x="18" y="6" width="2" height="3" fill="#E2E8F0" />
+        </svg>
+      );
+
     case 'relaxing':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
@@ -1326,6 +1540,66 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // E. COMPANIONS & PETS (100% PURE CRISP PIXEL ART)
     // -----------------------------------------------------------
+    case 'forest_camp_fawn':
+    case 'fawn':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fawn Long Ears */}
+          <rect x="4" y="3" width="3" height="5" fill="#B45309" />
+          <rect x="5" y="4" width="2" height="3" fill="#FEF3C7" />
+          <rect x="15" y="3" width="3" height="5" fill="#B45309" />
+          <rect x="16" y="4" width="2" height="3" fill="#FEF3C7" />
+          {/* Fawn Head */}
+          <rect x="6" y="6" width="11" height="8" fill="#D97706" />
+          <rect x="7" y="7" width="9" height="6" fill="#F59E0B" />
+          {/* Big Glossy Eyes */}
+          <rect x="7" y="8" width="2" height="3" fill="#18181B" />
+          <rect x="7" y="8" width="1" height="1" fill="#FFFFFF" />
+          <rect x="13" y="8" width="2" height="3" fill="#18181B" />
+          <rect x="13" y="8" width="1" height="1" fill="#FFFFFF" />
+          {/* Muzzle & Nose */}
+          <rect x="8" y="11" width="5" height="3" fill="#FEF3C7" />
+          <rect x="10" y="11" width="2" height="1" fill="#18181B" />
+          {/* Resting Body with White Dappled Spots */}
+          <rect x="5" y="14" width="14" height="7" fill="#B45309" />
+          <rect x="6" y="15" width="12" height="5" fill="#D97706" />
+          <rect x="8" y="15" width="2" height="2" fill="#FFFFFF" />
+          <rect x="12" y="15" width="2" height="2" fill="#FFFFFF" />
+          <rect x="15" y="16" width="2" height="2" fill="#FFFFFF" />
+          {/* Fluffy White Tail */}
+          <rect x="18" y="15" width="3" height="3" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'campfire_raccoon':
+    case 'raccoon':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Pointy Raccoon Ears with White Tips */}
+          <rect x="4" y="2" width="4" height="4" fill="#374151" />
+          <rect x="5" y="3" width="2" height="2" fill="#FFFFFF" />
+          <rect x="16" y="2" width="4" height="4" fill="#374151" />
+          <rect x="17" y="3" width="2" height="2" fill="#FFFFFF" />
+          {/* Head & Mask */}
+          <rect x="5" y="5" width="14" height="8" fill="#9CA3AF" />
+          <rect x="4" y="7" width="16" height="4" fill="#111827" />
+          {/* Sparkling Cute Eyes inside Mask */}
+          <rect x="7" y="8" width="2" height="2" fill="#FFFFFF" />
+          <rect x="8" y="8" width="1" height="1" fill="#18181B" />
+          <rect x="15" y="8" width="2" height="2" fill="#FFFFFF" />
+          <rect x="16" y="8" width="1" height="1" fill="#18181B" />
+          {/* White Snout & Nose */}
+          <rect x="10" y="9" width="4" height="3" fill="#F3F4F6" />
+          <rect x="11" y="9" width="2" height="1" fill="#18181B" />
+          {/* Body Holding Marshmallow */}
+          <rect x="6" y="13" width="12" height="8" fill="#4B5563" />
+          <rect x="9" y="14" width="6" height="4" fill="#FEF3C7" />
+          {/* Striped Ringed Tail */}
+          <rect x="17" y="15" width="5" height="3" fill="#111827" />
+          <rect x="19" y="17" width="4" height="3" fill="#9CA3AF" />
+        </svg>
+      );
+
     case 'companion_none':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
@@ -1593,6 +1867,30 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     // -----------------------------------------------------------
     // F. HABITATS & SCENES (Mini Isometric Pixel Dioramas)
     // -----------------------------------------------------------
+    case 'forest_camp':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Deep Twilight Night Forest Sky */}
+          <rect x="2" y="2" width="20" height="20" fill="#0B191E" />
+          {/* Distant Mountain Ridge & Moon */}
+          <rect x="2" y="6" width="20" height="6" fill="#162D2D" />
+          <rect x="16" y="4" width="3" height="3" fill="#FEF08A" />
+          {/* Pine Trees Silhouettes */}
+          <rect x="3" y="8" width="4" height="9" fill="#0F3D24" />
+          <rect x="18" y="7" width="4" height="10" fill="#0F3D24" />
+          {/* Cozy Canvas A-Frame Camp Tent */}
+          <rect x="5" y="11" width="8" height="8" fill="#065F46" />
+          <rect x="6" y="12" width="6" height="6" fill="#D97706" />
+          <rect x="7" y="13" width="4" height="5" fill="#FEF3C7" />
+          {/* Crackling Campfire & Timber Logs */}
+          <rect x="14" y="15" width="5" height="4" fill="#EA580C" />
+          <rect x="15" y="14" width="3" height="3" fill="#FBBF24" />
+          <rect x="13" y="18" width="7" height="2" fill="#78350F" />
+          {/* Forest Ground */}
+          <rect x="2" y="19" width="20" height="3" fill="#1E3A2F" />
+        </svg>
+      );
+
     case 'convenience_store':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>

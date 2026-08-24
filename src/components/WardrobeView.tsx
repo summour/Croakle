@@ -679,8 +679,8 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                           : 'bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-[#554b3f] dark:text-[#c4b5a5]'
                       }`}
                     >
-                      <PixelIcon name="sets" size={12} />
-                      <span>{set.name.split('&')[0]}</span>
+                      <PixelIcon name={set.bannerEmoji} size={14} />
+                      <span>{set.name}</span>
                       <span className="opacity-75 text-[10px]">({setOwnedCount})</span>
                     </button>
                   );
@@ -705,9 +705,9 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
                     {/* Minimal Theme Header & Quick Wear Button */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
-                        <PixelIcon name="sets" size={14} />
+                        <PixelIcon name={set.bannerEmoji} size={15} />
                         <span className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">
-                          {set.name.split('&')[0]} ({ownedSetItems.length}/{totalSetCount})
+                          {set.name} ({ownedSetItems.length}/{totalSetCount})
                         </span>
                       </div>
 
