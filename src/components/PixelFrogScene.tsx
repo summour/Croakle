@@ -724,7 +724,7 @@ export const PixelFrogSolo: React.FC<{
       )}
 
       {(config.companionId === 'pixel_arcade_ghost' || config.companionId === 'companion_pixel_arcade_ghost') && (
-        <g transform={`translate(${frogX + 22}, ${frogY + (soloTick % 2 === 0 ? 0 : 3)})`}>
+        <g transform={`translate(${frogX + 22}, ${frogY + (soloTick % 2 === 0 ? 0 : 2)})`}>
           {/* 8-Bit Pixel Ghost (Blinky / Inky Style) */}
           <rect x="3" y="2" width="14" height="4" fill="#EC4899" />
           <rect x="1" y="5" width="18" height="11" fill="#EC4899" />
@@ -1714,7 +1714,8 @@ export const PixelFrogSolo: React.FC<{
 
       {config.hatId === 'pixel_vr_visor' && (
         <g>
-          <rect x={frogX - 3} y={frogY - 3} width="22" height="9" fill="#0F172A" stroke="#334155" strokeWidth="0.5" />
+          <rect x={frogX - 3} y={frogY - 3} width="22" height="9" fill="#0F172A" />
+          <rect x={frogX - 2} y={frogY - 2} width="20" height="7" fill="#1E293B" />
           {/* Glowing Animated Cyber Visor Glass */}
           <rect x={frogX - 2} y={frogY - 1} width="20" height="5" fill="#06B6D4" />
           <rect x={frogX + 1} y={frogY} width="14" height="2" fill="#67E8F9" />
@@ -1731,7 +1732,8 @@ export const PixelFrogSolo: React.FC<{
           <rect x={frogX} y={frogY - 8} width="16" height="2" fill="#CBD5E1" />
           <rect x={frogX - 3} y={frogY + 1} width="22" height="2" fill="#64748B" />
           {/* Handheld Mini Controls on Front */}
-          <rect x={frogX + 2} y={frogY - 4} width="5" height="4" fill="#8BAC0F" stroke="#0F380F" strokeWidth="0.5" />
+          <rect x={frogX + 2} y={frogY - 4} width="5" height="4" fill="#0F380F" />
+          <rect x={frogX + 3} y={frogY - 3} width="3" height="2" fill="#8BAC0F" />
           <rect x={frogX + 10} y={frogY - 3} width="2" height="2" fill="#18181B" />
           <rect x={frogX + 14} y={frogY - 4} width="2" height="2" fill="#BE123C" />
           <rect x={frogX + 13} y={frogY - 2} width="2" height="2" fill="#BE123C" />
@@ -2503,24 +2505,25 @@ export const PixelFrogSolo: React.FC<{
 
       {config.activityId === 'arcade_gamepad' && (
         <g>
-          {/* Turbo 8-Bit Game Controller */}
-          <rect x={frogX + 4} y={frogY + 12} width="14" height="8" fill="#18181B" stroke="#3F3F46" strokeWidth="0.5" />
-          <rect x={frogX + 5} y={frogY + 13} width="12" height="6" fill="#27272A" />
+          {/* Turbo 8-Bit Game Controller (Strict Integer Pixel Art) */}
+          <rect x={frogX + 3} y={frogY + 12} width="16" height="9" fill="#09090B" />
+          <rect x={frogX + 4} y={frogY + 13} width="14" height="7" fill="#27272A" />
           {/* Red D-Pad */}
-          <rect x={frogX + 6} y={frogY + 14} width="3" height="1" fill="#DC2626" />
-          <rect x={frogX + 7} y={frogY + 13} width="1" height="3" fill="#DC2626" />
+          <rect x={frogX + 5} y={frogY + 15} width="4" height="2" fill="#DC2626" />
+          <rect x={frogX + 6} y={frogY + 14} width="2" height="4" fill="#DC2626" />
           {/* AB Action Buttons */}
-          <rect x={frogX + 13} y={frogY + 14} width="2" height="2" fill="#EF4444" />
-          <rect x={frogX + 11} y={frogY + 16} width="2" height="2" fill="#FACC15" />
+          <rect x={frogX + 13} y={frogY + 15} width="2" height="2" fill="#EF4444" />
+          <rect x={frogX + 11} y={frogY + 17} width="2" height="2" fill="#FACC15" />
           {/* Controller Cable */}
-          <rect x={frogX + 10} y={frogY + 10} width="1" height="2" fill="#71717A" />
+          <rect x={frogX + 10} y={frogY + 10} width="1" height="3" fill="#71717A" />
         </g>
       )}
 
       {config.activityId === 'claw_machine_prize' && (
         <g>
-          {/* Big Hugged UFO Crane Frog Plush */}
-          <rect x={frogX + 3} y={frogY + 11} width="12" height="10" fill="#4ADE80" stroke="#15803D" strokeWidth="0.5" />
+          {/* Big Hugged UFO Crane Frog Plush (Strict Integer Pixel Art) */}
+          <rect x={frogX + 3} y={frogY + 11} width="12" height="10" fill="#15803D" />
+          <rect x={frogX + 4} y={frogY + 12} width="10" height="8" fill="#4ADE80" />
           <rect x={frogX + 5} y={frogY + 14} width="8" height="5" fill="#FEF08A" />
           {/* Big Plush Eyes */}
           <rect x={frogX + 4} y={frogY + 10} width="3" height="3" fill="#15803D" />
@@ -2534,15 +2537,17 @@ export const PixelFrogSolo: React.FC<{
 
       {config.activityId === 'handheld_gaming' && (
         <g>
-          {/* Retro Pocket Handheld Console */}
-          <rect x={frogX + 6} y={frogY + 11} width="10" height="11" fill="#94A3B8" stroke="#475569" strokeWidth="0.5" />
-          <rect x={frogX + 7} y={frogY + 12} width="8" height="5" fill="#8BAC0F" stroke="#0F380F" strokeWidth="0.5" />
+          {/* Retro Pocket Handheld Console (Strict Integer Pixel Art) */}
+          <rect x={frogX + 6} y={frogY + 11} width="10" height="11" fill="#475569" />
+          <rect x={frogX + 7} y={frogY + 12} width="8" height="9" fill="#94A3B8" />
+          <rect x={frogX + 7} y={frogY + 12} width="8" height="5" fill="#0F380F" />
+          <rect x={frogX + 8} y={frogY + 13} width="6" height="3" fill="#8BAC0F" />
           {/* Pixel Frog character on handheld screen */}
-          <rect x={frogX + 10} y={frogY + 14} width="2" height="2" fill="#0F380F" />
+          <rect x={frogX + 10} y={frogY + 14} width="2" height="1" fill="#0F380F" />
           {/* D-Pad & Red Buttons */}
           <rect x={frogX + 7} y={frogY + 18} width="2" height="2" fill="#1E293B" />
           <rect x={frogX + 12} y={frogY + 18} width="2" height="2" fill="#BE123C" />
-          <rect x={frogX + 14} y={frogY + 17} width="1.5" height="1.5" fill="#BE123C" />
+          <rect x={frogX + 14} y={frogY + 17} width="1" height="1" fill="#BE123C" />
         </g>
       )}
 
@@ -4670,7 +4675,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
         </g>
       )}
 
-      {/* RETRO 8-BIT GAME STORE & ARCADE CENTER (100% PURE PIXEL ART) */}
+      {/* RETRO 8-BIT GAME STORE & ARCADE CENTER (100% STRICT INTEGER PIXEL ART) */}
       {config.sceneId === 'retro_arcade' && (
         <g id="scene-retro-arcade">
           {/* Dark Synthwave Purple Wall (Extended for fullscreen) */}
@@ -4691,8 +4696,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="0" width="160" height="2" fill="#ec4899" />
           <rect x="0" y="12" width="160" height="2" fill="#06b6d4" />
 
-          {/* Neon Signboard: 8-BIT ARCADE (Pure Pixel Art Sign) */}
-          <rect x="26" y="1.5" width="108" height="10" fill="#1e1035" stroke="#ec4899" strokeWidth="0.6" />
+          {/* Neon Signboard: 8-BIT ARCADE (Pure Stepped Pixel Art Sign) */}
+          <rect x="25" y="1" width="110" height="11" fill="#ec4899" />
+          <rect x="26" y="2" width="108" height="9" fill="#1e1035" />
 
           {/* Flashing Neon Pixel Bulbs along top & bottom edges */}
           <g>
@@ -4804,7 +4810,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
           {/* Wall Pixel Art Poster 1: Space Invader Alien Poster */}
           <g transform="translate(54, 16)">
-            <rect x="0" y="0" width="18" height="16" fill="#1e1035" stroke="#3b82f6" strokeWidth="0.5" />
+            <rect x="0" y="0" width="18" height="16" fill="#3b82f6" />
             <rect x="1" y="1" width="16" height="14" fill="#090514" />
             {/* 8-bit Invader in Cyan */}
             <rect x="5" y="3" width="8" height="2" fill="#22d3ee" />
@@ -4817,9 +4823,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <rect x="11" y="12" width="3" height="2" fill="#22d3ee" />
           </g>
 
-          {/* Wall Pixel Art Poster 2: High Score Leaderboard CRT Monitor (100% Pixel Art) */}
+          {/* Wall Pixel Art Poster 2: High Score Leaderboard CRT Monitor (100% Strict Pixel Art) */}
           <g transform="translate(88, 16)">
-            <rect x="0" y="0" width="24" height="16" fill="#09090b" stroke="#a855f7" strokeWidth="0.6" />
+            <rect x="0" y="0" width="24" height="16" fill="#a855f7" />
             <rect x="1" y="1" width="22" height="14" fill="#1e1b4b" />
             {/* Top Pixel Trophy */}
             <rect x="10" y="2" width="4" height="3" fill="#facc15" />
@@ -4830,13 +4836,13 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             {/* Rank 1: Gold Bar + Pixel Frog Icon */}
             <rect x="3" y="8" width="18" height="2" fill="#facc15" />
             <rect x="3" y="8" width="2" height="2" fill="#16a34a" />
-            <rect x="6" y="8.5" width="12" height="1" fill="#713f12" />
+            <rect x="6" y="8" width="12" height="1" fill="#713f12" />
             {/* Rank 2: Cyan Bar */}
             <rect x="3" y="11" width="15" height="2" fill="#38bdf8" />
             <rect x="3" y="11" width="2" height="2" fill="#0369a1" />
-            <rect x="6" y="11.5" width="10" height="1" fill="#0c4a6e" />
+            <rect x="6" y="11" width="10" height="1" fill="#0c4a6e" />
             {/* Rank 3: Magenta Bar */}
-            <rect x="3" y="14" width="12" height="1.5" fill="#ec4899" />
+            <rect x="3" y="14" width="12" height="1" fill="#ec4899" />
           </g>
 
           {/* LEFT SIDE: CLASSIC CRT ARCADE CABINET (Space Frog Fighter) */}
@@ -4846,11 +4852,12 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <rect x="4" y="20" width="28" height="2" fill="#7e22ce" />
             <rect x="4" y="20" width="2" height="44" fill="#7e22ce" />
             <rect x="30" y="20" width="2" height="44" fill="#7e22ce" />
-            {/* Side Cyan Bevel Accent (Stepped Pixels) */}
+            {/* Side Cyan Bevel Accent */}
             <rect x="4" y="20" width="4" height="42" fill="#06b6d4" opacity="0.85" />
 
             {/* Cabinet Marquee Lightbox (Pixel Art Frog-X) */}
-            <rect x="8" y="21" width="23" height="7" fill="#09090b" stroke="#ec4899" strokeWidth="0.5" />
+            <rect x="8" y="21" width="23" height="7" fill="#ec4899" />
+            <rect x="9" y="22" width="21" height="5" fill="#09090b" />
             {/* Pixel Frog Face on Marquee */}
             <g transform="translate(10, 22)">
               <rect x="1" y="0" width="2" height="2" fill="#22c55e" />
@@ -4873,43 +4880,48 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             </g>
 
             {/* Curved CRT Screen Bezel (Stepped Pixel Frame) */}
-            <rect x="9" y="30" width="21" height="15" fill="#030712" stroke="#1f2937" strokeWidth="0.6" />
-            {/* CRT Screen Glow */}
-            <rect x="10.5" y="31.5" width="18" height="12" fill="#0c4a6e" />
+            <rect x="9" y="30" width="21" height="15" fill="#1f2937" />
+            <rect x="10" y="31" width="19" height="13" fill="#0c4a6e" />
             {/* Retro Game Graphics on Screen: Stars & Spaceship */}
             <rect x="12" y="33" width="1" height="1" fill="#ffffff" />
             <rect x="25" y="34" width="1" height="1" fill="#ffffff" />
             <rect x="18" y="39" width="3" height="3" fill="#4ade80" />
-            <rect x="19" y="36" width="1" height="3" fill="#ef4444" className="animate-pulse" />
+            <rect x="19" y="36" width="1" height="3" fill="#ef4444" />
             <rect x="17" y="33" width="5" height="2" fill="#facc15" />
 
             {/* Angled Control Deck Platform */}
-            <rect x="6" y="46" width="26" height="7" fill="#18181b" stroke="#374151" strokeWidth="0.5" />
+            <rect x="6" y="46" width="26" height="7" fill="#374151" />
+            <rect x="7" y="47" width="24" height="5" fill="#18181b" />
             {/* Joystick Stick & Red Pixel Ball */}
-            <rect x="11" y="47.5" width="1" height="3" fill="#9ca3af" />
+            <rect x="11" y="48" width="1" height="3" fill="#9ca3af" />
             <rect x="10" y="46" width="3" height="3" fill="#ef4444" />
             {/* 4 Colored Action Pixel Buttons */}
-            <rect x="17" y="47.5" width="2" height="2" fill="#3b82f6" />
+            <rect x="17" y="48" width="2" height="2" fill="#3b82f6" />
             <rect x="20" y="47" width="2" height="2" fill="#eab308" />
-            <rect x="23" y="47.5" width="2" height="2" fill="#22c55e" />
+            <rect x="23" y="48" width="2" height="2" fill="#22c55e" />
             <rect x="20" y="50" width="2" height="2" fill="#ec4899" />
 
             {/* Lower Coin Door & 100-Yen Slots (Stepped Pixel Art) */}
-            <rect x="10" y="54" width="18" height="9" fill="#09090b" stroke="#475569" strokeWidth="0.5" />
+            <rect x="10" y="54" width="18" height="9" fill="#475569" />
+            <rect x="11" y="55" width="16" height="7" fill="#09090b" />
             <rect x="13" y="56" width="4" height="2" fill="#dc2626" />
-            <rect x="14.5" y="56.5" width="1" height="1" fill="#09090b" />
+            <rect x="14" y="56" width="1" height="1" fill="#09090b" />
             <rect x="20" y="56" width="4" height="2" fill="#dc2626" />
-            <rect x="21.5" y="56.5" width="1" height="1" fill="#09090b" />
+            <rect x="21" y="56" width="1" height="1" fill="#09090b" />
             {/* Coin Return Pocket in Pixel Art */}
             <rect x="15" y="59" width="8" height="3" fill="#18181b" />
             <rect x="17" y="60" width="4" height="1" fill="#475569" />
           </g>
 
-          {/* RIGHT SIDE: JAPANESE NEON UFO CLAW CRANE MACHINE (100% PIXEL ART) */}
+          {/* RIGHT SIDE: JAPANESE NEON UFO CLAW CRANE MACHINE (100% STRICT PIXEL ART) */}
           <g id="arcade-claw-machine-right">
-            {/* Crane Cabinet Frame */}
-            <rect x="126" y="16" width="30" height="48" fill="#831843" stroke="#f43f5e" strokeWidth="0.8" />
-            <rect x="127" y="17" width="28" height="7" fill="#09090b" stroke="#ec4899" strokeWidth="0.5" />
+            {/* Crane Cabinet Outer Frame */}
+            <rect x="126" y="16" width="30" height="48" fill="#f43f5e" />
+            <rect x="127" y="17" width="28" height="46" fill="#831843" />
+
+            {/* UFO Marquee Header */}
+            <rect x="127" y="17" width="28" height="7" fill="#ec4899" />
+            <rect x="128" y="18" width="26" height="5" fill="#09090b" />
 
             {/* Pixel UFO Flying Saucer & "UFO" Marquee Letters */}
             <g transform="translate(131, 18)">
@@ -4933,12 +4945,12 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
               </g>
             </g>
 
-            {/* Clear Glass Prize Chamber */}
-            <rect x="128" y="25" width="26" height="23" fill="#082f49" opacity="0.85" stroke="#38bdf8" strokeWidth="0.6" />
-            <rect x="129" y="26" width="24" height="21" fill="#0369a1" opacity="0.25" />
+            {/* Clear Glass Prize Chamber Frame */}
+            <rect x="128" y="25" width="26" height="23" fill="#38bdf8" />
+            <rect x="129" y="26" width="24" height="21" fill="#082f49" />
 
             {/* Hanging Mechanical Crane Claw (Stepped Pixel Arm & 3-Prong Claw) */}
-            <rect x="139" y="25" width="2" height="7" fill="#94a3b8" />
+            <rect x="139" y="26" width="2" height="6" fill="#94a3b8" />
             <rect x="137" y="32" width="6" height="2" fill="#cbd5e1" />
             {/* Left Prong */}
             <rect x="136" y="34" width="1" height="2" fill="#e2e8f0" />
@@ -4947,11 +4959,12 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <rect x="143" y="34" width="1" height="2" fill="#e2e8f0" />
             <rect x="142" y="36" width="1" height="2" fill="#e2e8f0" />
             {/* Center Prong */}
-            <rect x="139.5" y="34" width="1" height="3" fill="#cbd5e1" />
+            <rect x="139" y="34" width="2" height="3" fill="#cbd5e1" />
 
             {/* Pixel Plush Toys Inside Prize Bin */}
             {/* Green Frog Plush */}
-            <rect x="130" y="40" width="7" height="6" fill="#4ade80" stroke="#15803d" strokeWidth="0.4" />
+            <rect x="130" y="40" width="7" height="6" fill="#15803d" />
+            <rect x="131" y="41" width="5" height="4" fill="#4ade80" />
             <rect x="131" y="39" width="2" height="2" fill="#15803d" />
             <rect x="134" y="39" width="2" height="2" fill="#15803d" />
             {/* Pink Bunny Plush */}
@@ -4959,17 +4972,20 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <rect x="138" y="38" width="2" height="4" fill="#f472b6" />
             <rect x="142" y="38" width="2" height="4" fill="#f472b6" />
             {/* Golden Star Plush */}
-            <rect x="145" y="39" width="6" height="6" fill="#facc15" stroke="#ca8a04" strokeWidth="0.4" />
+            <rect x="145" y="39" width="6" height="6" fill="#ca8a04" />
+            <rect x="146" y="40" width="4" height="4" fill="#facc15" />
             <rect x="147" y="41" width="2" height="2" fill="#ffffff" />
 
             {/* Front Claw Control Panel & Prize Drop Tray */}
-            <rect x="128" y="49" width="26" height="6" fill="#18181b" stroke="#475569" strokeWidth="0.5" />
-            <rect x="133" y="51" width="3" height="3" fill="#ef4444" />
-            <rect x="142" y="50.5" width="4" height="3" fill="#22c55e" />
-            <rect x="148" y="50.5" width="4" height="3" fill="#3b82f6" />
+            <rect x="128" y="49" width="26" height="6" fill="#475569" />
+            <rect x="129" y="50" width="24" height="4" fill="#18181b" />
+            <rect x="133" y="51" width="3" height="2" fill="#ef4444" />
+            <rect x="142" y="51" width="4" height="2" fill="#22c55e" />
+            <rect x="148" y="51" width="4" height="2" fill="#3b82f6" />
 
             {/* Prize Chute Flap at Bottom (Pixel Art) */}
-            <rect x="132" y="56" width="18" height="7" fill="#09090b" stroke="#334155" strokeWidth="0.5" />
+            <rect x="132" y="56" width="18" height="7" fill="#334155" />
+            <rect x="133" y="57" width="16" height="5" fill="#09090b" />
             <rect x="135" y="58" width="12" height="3" fill="#1e1035" />
             <rect x="139" y="59" width="4" height="1" fill="#facc15" />
           </g>
@@ -5011,47 +5027,54 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="36" y="132" width="50" height="24" fill="#3b0764" opacity="0.7" />
           <rect x="126" y="132" width="34" height="24" fill="#3b0764" opacity="0.7" />
 
-          {/* CENTER RHYTHM DANCE STAGE / FROG PLATFORM (DDR Style Stage) */}
+          {/* CENTER RHYTHM DANCE STAGE / FROG PLATFORM (100% Strict Integer Pixel Art) */}
           <g id="arcade-dance-stage">
-            <rect x="48" y="62" width="48" height="18" fill="#18181b" stroke="#06b6d4" strokeWidth="0.8" />
+            <rect x="47" y="61" width="50" height="20" fill="#06b6d4" />
+            <rect x="48" y="62" width="48" height="18" fill="#18181b" />
             <rect x="50" y="64" width="44" height="14" fill="#09090b" />
 
-            {/* 4 Illuminated Neon Arrow Pads (Pure Pixel Steps) */}
+            {/* 4 Illuminated Neon Arrow Pads (Pure 1px Integer Pixel Steps) */}
             {/* UP Arrow (Cyan) */}
-            <rect x="68" y="65" width="8" height="4" fill="#06b6d4" stroke="#67e8f9" strokeWidth="0.4" />
-            <rect x="71.5" y="66" width="1" height="1" fill="#ffffff" />
-            <rect x="70.5" y="67" width="3" height="1" fill="#ffffff" />
+            <rect x="68" y="65" width="8" height="4" fill="#67e8f9" />
+            <rect x="69" y="66" width="6" height="2" fill="#06b6d4" />
+            <rect x="71" y="66" width="2" height="1" fill="#ffffff" />
+            <rect x="70" y="67" width="4" height="1" fill="#ffffff" />
 
             {/* DOWN Arrow (Magenta) */}
-            <rect x="68" y="73" width="8" height="4" fill="#ec4899" stroke="#f472b6" strokeWidth="0.4" />
-            <rect x="70.5" y="74" width="3" height="1" fill="#ffffff" />
-            <rect x="71.5" y="75" width="1" height="1" fill="#ffffff" />
+            <rect x="68" y="73" width="8" height="4" fill="#f472b6" />
+            <rect x="69" y="74" width="6" height="2" fill="#ec4899" />
+            <rect x="70" y="74" width="4" height="1" fill="#ffffff" />
+            <rect x="71" y="75" width="2" height="1" fill="#ffffff" />
 
             {/* LEFT Arrow (Yellow) */}
-            <rect x="52" y="69" width="8" height="4" fill="#eab308" stroke="#fef08a" strokeWidth="0.4" />
-            <rect x="54" y="70.5" width="1" height="1" fill="#ffffff" />
-            <rect x="55" y="69.5" width="1" height="3" fill="#ffffff" />
+            <rect x="52" y="69" width="8" height="4" fill="#fef08a" />
+            <rect x="53" y="70" width="6" height="2" fill="#eab308" />
+            <rect x="54" y="70" width="2" height="1" fill="#ffffff" />
+            <rect x="55" y="69" width="1" height="3" fill="#ffffff" />
 
             {/* RIGHT Arrow (Lime Green) */}
-            <rect x="84" y="69" width="8" height="4" fill="#22c55e" stroke="#86efac" strokeWidth="0.4" />
-            <rect x="89" y="70.5" width="1" height="1" fill="#ffffff" />
-            <rect x="88" y="69.5" width="1" height="3" fill="#ffffff" />
+            <rect x="84" y="69" width="8" height="4" fill="#86efac" />
+            <rect x="85" y="70" width="6" height="2" fill="#22c55e" />
+            <rect x="88" y="70" width="2" height="1" fill="#ffffff" />
+            <rect x="88" y="69" width="1" height="3" fill="#ffffff" />
 
             {/* Center Dance Pad Hub */}
-            <rect x="68" y="69.5" width="8" height="3" fill="#3f3f46" />
+            <rect x="68" y="69" width="8" height="4" fill="#3f3f46" />
             <rect x="71" y="70" width="2" height="2" fill="#facc15" />
           </g>
 
-          {/* Gacha Capsule Toy Dispenser on Right Floor Corner */}
-          <g transform="translate(108, 54)">
+          {/* Gacha Capsule Toy Dispenser on Right Floor Corner (Strict Integer Pixel Art) */}
+          <g transform="translate(112, 54)">
             {/* Base Stand */}
-            <rect x="2" y="14" width="12" height="14" fill="#ef4444" stroke="#991b1b" strokeWidth="0.5" />
+            <rect x="2" y="14" width="12" height="14" fill="#991b1b" />
+            <rect x="3" y="15" width="10" height="12" fill="#ef4444" />
             <rect x="5" y="20" width="6" height="4" fill="#09090b" />
             {/* Turn Crank Knob */}
-            <rect x="6" y="15" width="4" height="4" fill="#e5e7eb" stroke="#4b5563" strokeWidth="0.4" />
-            <rect x="7" y="16" width="2" height="2" fill="#ef4444" />
+            <rect x="6" y="15" width="4" height="4" fill="#4b5563" />
+            <rect x="7" y="16" width="2" height="2" fill="#e5e7eb" />
             {/* Clear Transparent Bubble Globe */}
-            <rect x="1" y="2" width="14" height="12" fill="#38bdf8" opacity="0.5" stroke="#0284c7" strokeWidth="0.5" />
+            <rect x="1" y="2" width="14" height="12" fill="#0284c7" />
+            <rect x="2" y="3" width="12" height="10" fill="#38bdf8" opacity="0.6" />
             {/* Colorful Capsules Inside (Pixel Blocks) */}
             <rect x="4" y="5" width="3" height="3" fill="#eab308" />
             <rect x="9" y="6" width="3" height="3" fill="#ec4899" />
@@ -6678,13 +6701,13 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
               );
             })()}
 
-            {/* O. 8-Bit Pixel Ghost Companion (Blinky floating near arcade machine) */}
+            {/* O. 8-Bit Pixel Ghost Companion (Blinky floating near arcade machine - 100% Strict Integer Pixel Art) */}
             {(config.companionId === 'pixel_arcade_ghost' || config.companionId === 'companion_pixel_arcade_ghost') && (() => {
-              const ghostFloat = Math.sin(animTick * 0.8) * 3;
+              const ghostFloat = animTick % 2 === 0 ? 0 : 2;
               const fringeAlt = animTick % 2 === 0;
 
               return (
-                <g id="companion-pixel-ghost" transform={`translate(108, ${48 + ghostFloat})`}>
+                <g id="companion-pixel-ghost" transform={`translate(100, ${44 + ghostFloat})`}>
                   {/* Neon Glow Pixel Shadow underneath */}
                   <rect x="3" y="24" width="16" height="2" fill="#EC4899" opacity="0.25" />
                   <rect x="6" y="23" width="10" height="4" fill="#EC4899" opacity="0.3" />
@@ -8576,10 +8599,11 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
-                      {/* Pixel VR Visor */}
+                      {/* Pixel VR Visor (Strict Integer Pixel Art) */}
                       {config.hatId === 'pixel_vr_visor' && (
                         <g id="scene-hat-vr-visor">
-                          <rect x={frogX - 3} y={frogY - 3} width="22" height="9" fill="#0F172A" stroke="#334155" strokeWidth="0.5" />
+                          <rect x={frogX - 3} y={frogY - 3} width="22" height="9" fill="#0F172A" />
+                          <rect x={frogX - 2} y={frogY - 2} width="20" height="7" fill="#1E293B" />
                           <rect x={frogX - 2} y={frogY - 1} width="20" height="5" fill="#06B6D4" />
                           <rect x={frogX + 1} y={frogY} width="14" height="2" fill="#67E8F9" />
                           {animTick % 2 === 0 && <rect x={frogX + 5} y={frogY} width="6" height="2" fill="#EC4899" />}
