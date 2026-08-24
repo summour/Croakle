@@ -361,71 +361,86 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'sushi_salmon':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Rice Base */}
-          <rect x="3" y="12" width="18" height="6" fill="#1E293B" />
-          <rect x="4" y="13" width="16" height="4" fill="#FFFFFF" />
+          {/* Fluffy Rice Base */}
+          <rect x="3" y="12" width="18" height="6" fill="#cbd5e1" />
+          <rect x="4" y="13" width="16" height="4" fill="#ffffff" />
           {/* Salmon Sashimi Slab */}
-          <rect x="2" y="6" width="20" height="7" fill="#9A3412" />
-          <rect x="3" y="7" width="18" height="5" fill="#FB923C" />
-          <rect x="3" y="7" width="18" height="1" fill="#FED7AA" />
-          {/* White Marbling Stripes */}
-          <rect x="6" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
-          <rect x="10" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
-          <rect x="14" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
-          <rect x="18" y="8" width="1" height="4" fill="#FFFFFF" opacity="0.9" />
+          <rect x="2" y="6" width="20" height="7" fill="#c2410c" />
+          <rect x="3" y="7" width="18" height="5" fill="#ea580c" />
+          <rect x="3" y="7" width="18" height="3" fill="#fb923c" />
+          <rect x="4" y="6" width="16" height="1" fill="#fed7aa" />
+          {/* White Fat Marbling */}
+          <rect x="6" y="8" width="1" height="4" fill="#fff7ed" />
+          <rect x="10" y="8" width="1" height="4" fill="#fff7ed" />
+          <rect x="14" y="8" width="1" height="4" fill="#fff7ed" />
+          <rect x="18" y="8" width="1" height="4" fill="#fff7ed" />
           {/* Dark Nori Band */}
-          <rect x="10" y="6" width="4" height="12" fill="#0F172A" />
+          <rect x="10" y="6" width="4" height="12" fill="#14532d" />
+          <rect x="11" y="6" width="2" height="12" fill="#166534" />
         </svg>
       );
 
     case 'sushi_maguro':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Rice Base */}
-          <rect x="3" y="12" width="18" height="6" fill="#1E293B" />
-          <rect x="4" y="13" width="16" height="4" fill="#FFFFFF" />
+          {/* Fluffy Rice Base */}
+          <rect x="3" y="12" width="18" height="6" fill="#cbd5e1" />
+          <rect x="4" y="13" width="16" height="4" fill="#ffffff" />
           {/* Ruby Tuna Slab */}
           <rect x="2" y="6" width="20" height="7" fill="#881337" />
-          <rect x="3" y="7" width="18" height="5" fill="#BE123C" />
-          <rect x="4" y="7" width="16" height="2" fill="#E11D48" />
-          <rect x="5" y="8" width="6" height="1" fill="#FDA4AF" />
+          <rect x="3" y="7" width="18" height="5" fill="#be123c" />
+          <rect x="3" y="7" width="18" height="3" fill="#e11d48" />
+          <rect x="4" y="6" width="16" height="1" fill="#f43f5e" />
+          {/* Translucent Glaze Sheen */}
+          <rect x="5" y="8" width="6" height="1" fill="#ffffff" opacity="0.85" />
+          <rect x="13" y="8" width="4" height="1" fill="#fda4af" />
+          {/* Fresh Wasabi */}
+          <rect x="15" y="10" width="2" height="2" fill="#84cc16" />
           {/* Nori Band */}
-          <rect x="10" y="6" width="4" height="12" fill="#0F172A" />
+          <rect x="10" y="6" width="4" height="12" fill="#14532d" />
         </svg>
       );
 
     case 'sushi_ebi':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Rice Base */}
-          <rect x="3" y="12" width="18" height="6" fill="#1E293B" />
-          <rect x="4" y="13" width="16" height="4" fill="#FFFFFF" />
+          {/* Fluffy Rice Base */}
+          <rect x="3" y="12" width="18" height="6" fill="#cbd5e1" />
+          <rect x="4" y="13" width="16" height="4" fill="#ffffff" />
           {/* Butterfly Cut Prawn */}
-          <rect x="3" y="7" width="15" height="6" fill="#C2410C" />
-          <rect x="4" y="8" width="13" height="4" fill="#EA580C" />
-          <rect x="4" y="8" width="13" height="1" fill="#FED7AA" />
-          <rect x="7" y="8" width="2" height="4" fill="#FFFFFF" />
-          <rect x="12" y="8" width="2" height="4" fill="#FFFFFF" />
+          <rect x="3" y="7" width="15" height="6" fill="#c2410c" />
+          <rect x="4" y="8" width="13" height="4" fill="#ea580c" />
+          <rect x="4" y="8" width="13" height="2" fill="#fb923c" />
+          <rect x="5" y="7" width="11" height="1" fill="#fed7aa" />
+          <rect x="6" y="8" width="2" height="4" fill="#ffffff" />
+          <rect x="11" y="8" width="2" height="4" fill="#ffffff" />
           {/* Split Tail Fins */}
-          <rect x="17" y="5" width="4" height="3" fill="#DC2626" />
-          <rect x="17" y="9" width="4" height="3" fill="#DC2626" />
+          <rect x="17" y="6" width="4" height="3" fill="#f43f5e" />
+          <rect x="18" y="7" width="2" height="1" fill="#fda4af" />
+          <rect x="17" y="9" width="4" height="3" fill="#f43f5e" />
+          <rect x="18" y="10" width="2" height="1" fill="#fda4af" />
           {/* Nori Wrap */}
-          <rect x="9" y="7" width="3" height="11" fill="#0F172A" />
+          <rect x="9" y="7" width="3" height="11" fill="#14532d" />
         </svg>
       );
 
     case 'sushi_chef_headband':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Red Twisted Headband */}
-          <rect x="2" y="10" width="20" height="4" fill="#991B1B" />
-          <rect x="3" y="11" width="18" height="2" fill="#DC2626" />
-          {/* White Kanji Emblem in Center */}
-          <rect x="10" y="9" width="4" height="4" fill="#FFFFFF" />
-          <rect x="11" y="10" width="2" height="2" fill="#DC2626" />
-          {/* Side Ties */}
-          <rect x="20" y="12" width="3" height="5" fill="#DC2626" />
-          <rect x="18" y="14" width="2" height="4" fill="#991B1B" />
+          {/* Starched White Headband */}
+          <rect x="2" y="10" width="20" height="4" fill="#cbd5e1" />
+          <rect x="2" y="11" width="20" height="2" fill="#ffffff" />
+          {/* Indigo Wave Motifs */}
+          <rect x="3" y="11" width="2" height="2" fill="#334155" />
+          <rect x="7" y="11" width="2" height="2" fill="#334155" />
+          <rect x="15" y="11" width="2" height="2" fill="#334155" />
+          <rect x="19" y="11" width="2" height="2" fill="#334155" />
+          {/* Center Red Crest */}
+          <rect x="10" y="9" width="4" height="4" fill="#f43f5e" />
+          <rect x="11" y="10" width="2" height="2" fill="#fb7185" />
+          {/* Tied Knot & Side Tails */}
+          <rect x="20" y="9" width="3" height="4" fill="#f8fafc" />
+          <rect x="21" y="12" width="2" height="4" fill="#cbd5e1" />
         </svg>
       );
 
@@ -1910,18 +1925,23 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'sushi_platter':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Wooden Geta Platter */}
-          <rect x="2" y="11" width="20" height="7" fill="#78350F" />
-          <rect x="3" y="12" width="18" height="5" fill="#D97706" />
-          <rect x="5" y="17" width="3" height="3" fill="#451A03" />
-          <rect x="16" y="17" width="3" height="3" fill="#451A03" />
-          {/* Salmon & Tuna Nigiri */}
-          <rect x="4" y="8" width="6" height="4" fill="#FB923C" />
-          <rect x="4" y="10" width="6" height="2" fill="#FFFFFF" />
-          <rect x="11" y="8" width="6" height="4" fill="#E11D48" />
-          <rect x="11" y="10" width="6" height="2" fill="#FFFFFF" />
-          {/* Wasabi */}
-          <rect x="18" y="9" width="3" height="3" fill="#84CC16" />
+          {/* Hinoki Wooden Geta Platter */}
+          <rect x="2" y="11" width="20" height="7" fill="#b45309" />
+          <rect x="3" y="12" width="18" height="5" fill="#fef3c7" />
+          <rect x="3" y="12" width="18" height="1" fill="#fde68a" />
+          <rect x="5" y="17" width="3" height="3" fill="#78350f" />
+          <rect x="16" y="17" width="3" height="3" fill="#78350f" />
+          {/* Salmon Nigiri (Orange + White Fat) */}
+          <rect x="4" y="8" width="6" height="4" fill="#fb923c" />
+          <rect x="5" y="8" width="1" height="3" fill="#fff7ed" />
+          <rect x="4" y="10" width="6" height="2" fill="#ffffff" />
+          {/* Maguro Tuna Nigiri (Ruby Glaze) */}
+          <rect x="11" y="8" width="6" height="4" fill="#be123c" />
+          <rect x="12" y="8" width="3" height="1" fill="#f43f5e" />
+          <rect x="11" y="10" width="6" height="2" fill="#ffffff" />
+          {/* Fresh Wasabi & Pickled Ginger */}
+          <rect x="18" y="9" width="3" height="3" fill="#84cc16" />
+          <rect x="18" y="7" width="2" height="2" fill="#fda4af" />
         </svg>
       );
 
@@ -1929,15 +1949,19 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'tea_whisk':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Wooden Board */}
-          <rect x="2" y="11" width="20" height="8" fill="#78350F" />
-          <rect x="3" y="12" width="18" height="6" fill="#D97706" />
-          {/* Rice Ball / Matcha Scoop */}
-          <rect x="5" y="8" width="8" height="5" fill="#FFFFFF" />
-          <rect x="6" y="7" width="6" height="2" fill="#FB923C" />
-          {/* Chef Knife */}
-          <rect x="13" y="9" width="8" height="3" fill="#E2E8F0" />
-          <rect x="19" y="8" width="3" height="5" fill="#78350F" />
+          {/* Hinoki Prep Board */}
+          <rect x="2" y="11" width="20" height="8" fill="#b45309" />
+          <rect x="3" y="12" width="18" height="6" fill="#fef3c7" />
+          {/* Bamboo Rolling Mat & Nori */}
+          <rect x="4" y="12" width="10" height="5" fill="#65a30d" />
+          <rect x="5" y="13" width="8" height="3" fill="#14532d" />
+          {/* Seasoned Fluffy Rice & Salmon Slice */}
+          <rect x="6" y="13" width="6" height="2" fill="#ffffff" />
+          <rect x="7" y="13" width="4" height="1" fill="#fb923c" />
+          {/* Yanagiba Sashimi Knife */}
+          <rect x="15" y="8" width="2" height="10" fill="#e2e8f0" />
+          <rect x="15" y="8" width="1" height="10" fill="#ffffff" />
+          <rect x="15" y="15" width="2" height="3" fill="#334155" />
         </svg>
       );
 
@@ -2278,34 +2302,38 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
           {/* Pointy Wolf Ears */}
-          <rect x="4" y="1" width="5" height="5" fill="#1E293B" />
-          <rect x="5" y="2" width="2" height="3" fill="#F472B6" />
-          <rect x="15" y="1" width="5" height="5" fill="#1E293B" />
-          <rect x="17" y="2" width="2" height="3" fill="#F472B6" />
+          <rect x="4" y="2" width="4" height="4" fill="#334155" />
+          <rect x="5" y="3" width="2" height="2" fill="#FBCFE8" />
+          <rect x="16" y="2" width="4" height="4" fill="#334155" />
+          <rect x="17" y="3" width="2" height="2" fill="#FBCFE8" />
           {/* Slate Grey Head */}
-          <rect x="5" y="4" width="14" height="9" fill="#334155" />
-          <rect x="6" y="5" width="12" height="7" fill="#475569" />
-          <rect x="7" y="5" width="10" height="2" fill="#64748B" />
-          {/* Amber Glowing Eyes */}
-          <rect x="6" y="7" width="3" height="3" fill="#FACC15" />
-          <rect x="7" y="7" width="1" height="2" fill="#000000" />
-          <rect x="15" y="7" width="3" height="3" fill="#FACC15" />
-          <rect x="16" y="7" width="1" height="2" fill="#000000" />
-          {/* White Snout & Cute Panting Tongue */}
-          <rect x="9" y="8" width="6" height="4" fill="#F8FAFC" />
-          <rect x="11" y="8" width="2" height="2" fill="#0F172A" />
-          <rect x="11" y="11" width="2" height="2" fill="#FB7185" />
-          {/* Crimson Neckerchief Bandana */}
-          <rect x="5" y="13" width="14" height="3" fill="#991B1B" />
-          <rect x="6" y="13" width="12" height="2" fill="#DC2626" />
-          <rect x="11" y="15" width="2" height="2" fill="#EF4444" />
-          {/* Body & Paws */}
-          <rect x="5" y="15" width="14" height="6" fill="#334155" />
-          <rect x="6" y="15" width="12" height="5" fill="#475569" />
-          <rect x="8" y="16" width="8" height="3" fill="#94A3B8" />
-          {/* Fluffy Wagging Tail */}
-          <rect x="18" y="14" width="4" height="4" fill="#475569" />
-          <rect x="19" y="14" width="3" height="2" fill="#94A3B8" />
+          <rect x="4" y="5" width="16" height="8" fill="#475569" />
+          <rect x="5" y="4" width="14" height="2" fill="#64748B" />
+          <rect x="4" y="6" width="2" height="5" fill="#64748B" />
+          {/* Fluffy White Cheek Tufts */}
+          <rect x="2" y="8" width="3" height="4" fill="#F8FAFC" />
+          <rect x="19" y="8" width="3" height="4" fill="#F8FAFC" />
+          {/* Golden Sparkly Eyes */}
+          <rect x="6" y="7" width="3" height="3" fill="#F59E0B" />
+          <rect x="7" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="6" y="7" width="1" height="1" fill="#FFFFFF" />
+          <rect x="15" y="7" width="3" height="3" fill="#F59E0B" />
+          <rect x="15" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="15" y="7" width="1" height="1" fill="#FFFFFF" />
+          {/* Snout & Smile */}
+          <rect x="10" y="8" width="4" height="4" fill="#F8FAFC" />
+          <rect x="11" y="8" width="2" height="2" fill="#18181B" />
+          <rect x="11" y="10" width="2" height="1" fill="#FB7185" />
+          {/* Body with Snow White Bib */}
+          <rect x="5" y="13" width="14" height="7" fill="#475569" />
+          <rect x="8" y="13" width="8" height="6" fill="#F8FAFC" />
+          <rect x="9" y="14" width="6" height="4" fill="#FFFFFF" />
+          {/* Fluffy Tail */}
+          <rect x="17" y="13" width="5" height="5" fill="#475569" />
+          <rect x="19" y="14" width="3" height="3" fill="#F8FAFC" />
+          {/* Soft Paws */}
+          <rect x="6" y="20" width="3" height="2" fill="#334155" />
+          <rect x="15" y="20" width="3" height="2" fill="#334155" />
         </svg>
       );
 
@@ -2341,35 +2369,48 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'sushi_apprentice_cat':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          {/* Calico Cat Ears (Left Ginger, Right Dark Charcoal) */}
-          <rect x="4" y="2" width="5" height="5" fill="#D97706" />
-          <rect x="5" y="3" width="2" height="3" fill="#FDE68A" />
-          <rect x="15" y="2" width="5" height="5" fill="#18181B" />
-          <rect x="17" y="3" width="2" height="3" fill="#FB7185" />
-          {/* Head */}
-          <rect x="5" y="5" width="14" height="9" fill="#E2E8F0" />
-          <rect x="6" y="5" width="12" height="8" fill="#FFFFFF" />
-          <rect x="6" y="5" width="4" height="4" fill="#FB923C" />
-          {/* Red Itamae Chef Headband with Blue Emblem */}
-          <rect x="4" y="5" width="16" height="3" fill="#991B1B" />
-          <rect x="5" y="5" width="14" height="2" fill="#DC2626" />
-          <rect x="11" y="5" width="2" height="2" fill="#1E3A8A" />
-          {/* Sapphire Blue Eyes */}
-          <rect x="7" y="9" width="3" height="3" fill="#1E3A8A" />
-          <rect x="7" y="9" width="1" height="1" fill="#60A5FA" />
-          <rect x="14" y="9" width="3" height="3" fill="#1E3A8A" />
-          <rect x="14" y="9" width="1" height="1" fill="#60A5FA" />
-          <rect x="11" y="10" width="2" height="1" fill="#FB7185" />
+          {/* Calico Cat Ears (Left Ginger #fb923c, Right Slate #334155 with soft pink inner #fda4af) */}
+          <rect x="4" y="2" width="5" height="5" fill="#fb923c" />
+          <rect x="5" y="3" width="2" height="3" fill="#fda4af" />
+          <rect x="15" y="2" width="5" height="5" fill="#334155" />
+          <rect x="17" y="3" width="2" height="3" fill="#fda4af" />
+
+          {/* Cat Head */}
+          <rect x="5" y="5" width="14" height="9" fill="#ffffff" />
+          <rect x="6" y="5" width="12" height="8" fill="#fffbeb" />
+          <rect x="5" y="5" width="4" height="4" fill="#fb923c" />
+          <rect x="15" y="5" width="4" height="3" fill="#334155" />
+
+          {/* Tied Red Chef Hachimaki Headband */}
+          <rect x="4" y="5" width="16" height="3" fill="#f43f5e" />
+          <rect x="5" y="6" width="14" height="1" fill="#fb7185" />
+          <rect x="19" y="4" width="3" height="3" fill="#f43f5e" />
+          <rect x="20" y="6" width="2" height="2" fill="#be123c" />
+
+          {/* Big Storybook Eyes with Sparkle */}
+          <rect x="7" y="9" width="3" height="3" fill="#1e293b" />
+          <rect x="7" y="9" width="1" height="1" fill="#ffffff" />
+          <rect x="14" y="9" width="3" height="3" fill="#1e293b" />
+          <rect x="14" y="9" width="1" height="1" fill="#ffffff" />
+
+          {/* Cute Pink Nose & Cheeks */}
+          <rect x="11" y="10" width="2" height="1" fill="#fb7185" />
+          <rect x="5" y="10" width="2" height="1" fill="#fda4af" />
+          <rect x="17" y="10" width="2" height="1" fill="#fda4af" />
+
           {/* Body with Calico Patches */}
-          <rect x="5" y="13" width="14" height="8" fill="#E2E8F0" />
-          <rect x="6" y="13" width="12" height="7" fill="#FFFFFF" />
-          <rect x="6" y="14" width="4" height="5" fill="#FB923C" />
-          <rect x="14" y="15" width="4" height="4" fill="#1E293B" />
-          {/* Hinoki Platter with Salmon Nigiri Held */}
-          <rect x="13" y="12" width="9" height="4" fill="#78350F" />
-          <rect x="14" y="11" width="7" height="3" fill="#FB923C" />
-          <rect x="15" y="11" width="5" height="1" fill="#FFF7ED" />
-          <rect x="16" y="11" width="2" height="4" fill="#15803D" />
+          <rect x="5" y="13" width="14" height="8" fill="#ffffff" />
+          <rect x="6" y="14" width="12" height="7" fill="#fffbeb" />
+          <rect x="5" y="14" width="4" height="5" fill="#fb923c" />
+          <rect x="14" y="15" width="4" height="4" fill="#475569" />
+
+          {/* Hinoki Tray with Tamago Nigiri Held */}
+          <rect x="12" y="13" width="10" height="3" fill="#ca8a04" />
+          <rect x="13" y="13" width="8" height="1" fill="#fde047" />
+          <rect x="13" y="11" width="8" height="2" fill="#ffffff" />
+          <rect x="13" y="9" width="8" height="3" fill="#facc15" />
+          <rect x="14" y="9" width="6" height="1" fill="#fef08a" />
+          <rect x="16" y="9" width="2" height="5" fill="#14532d" />
         </svg>
       );
 
@@ -2744,32 +2785,89 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
     case 'red_riding_forest':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="2" y="2" width="20" height="20" fill="#064E3B" />
-          {/* Pine Roof */}
-          <rect x="8" y="5" width="8" height="3" fill="#991B1B" />
-          <rect x="6" y="8" width="12" height="4" fill="#991B1B" />
-          <rect x="7" y="12" width="10" height="6" fill="#78350F" />
-          {/* Mushroom */}
-          <rect x="4" y="15" width="4" height="3" fill="#EF4444" />
-          <rect x="5" y="18" width="2" height="2" fill="#FFFFFF" />
-          <rect x="2" y="19" width="20" height="3" fill="#14532D" />
+          {/* Soft Blue Sky */}
+          <rect x="0" y="0" width="24" height="11" fill="#3B82F6" />
+          <rect x="0" y="8" width="24" height="3" fill="#60A5FA" />
+          {/* Fluffy White Cloud */}
+          <rect x="13" y="2" width="7" height="3" fill="#FFFFFF" />
+          <rect x="14" y="4" width="5" height="1" fill="#BFDBFE" />
+          {/* Big Oak Branch on Top Left */}
+          <rect x="0" y="0" width="8" height="6" fill="#14532D" />
+          <rect x="1" y="1" width="6" height="4" fill="#15803D" />
+          <rect x="2" y="1" width="4" height="2" fill="#22C55E" />
+          <rect x="0" y="5" width="3" height="12" fill="#78350F" />
+          <rect x="1" y="6" width="1" height="10" fill="#92400E" />
+          {/* Distant Pine Tree on Right */}
+          <rect x="19" y="4" width="3" height="9" fill="#14532D" />
+          <rect x="20" y="5" width="1" height="6" fill="#22C55E" />
+          <rect x="20" y="12" width="1" height="3" fill="#78350F" />
+          {/* Grandmother Cottage */}
+          <rect x="8" y="5" width="8" height="3" fill="#DC2626" />
+          <rect x="9" y="4" width="6" height="2" fill="#EF4444" />
+          <rect x="9" y="7" width="7" height="6" fill="#FEF3C7" />
+          <rect x="10" y="8" width="2" height="2" fill="#F59E0B" />
+          <rect x="13" y="8" width="2" height="5" fill="#92400E" />
+          {/* Chimney & Smoke */}
+          <rect x="13" y="3" width="2" height="2" fill="#64748B" />
+          <rect x="14" y="1" width="2" height="2" fill="#FFFFFF" opacity="0.8" />
+          {/* Meadow Ground */}
+          <rect x="0" y="11" width="24" height="13" fill="#15803D" />
+          <rect x="0" y="13" width="24" height="11" fill="#16A34A" />
+          {/* Winding Sandy Trail */}
+          <rect x="11" y="12" width="5" height="3" fill="#B45309" />
+          <rect x="8" y="15" width="7" height="4" fill="#B45309" />
+          <rect x="4" y="19" width="11" height="5" fill="#B45309" />
+          <rect x="9" y="15" width="5" height="3" fill="#D97706" />
+          <rect x="5" y="19" width="9" height="3" fill="#D97706" />
+          {/* Red Toadstool on Bottom Left */}
+          <rect x="2" y="18" width="4" height="3" fill="#DC2626" />
+          <rect x="3" y="18" width="1" height="1" fill="#FFFFFF" />
+          <rect x="3" y="21" width="2" height="2" fill="#F8FAFC" />
+          {/* Signpost */}
+          <rect x="18" y="15" width="4" height="2" fill="#92400E" />
+          <rect x="19" y="17" width="2" height="4" fill="#78350F" />
         </svg>
       );
 
     case 'sushi_bar':
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
-          <rect x="2" y="2" width="20" height="20" fill="#0F172A" />
-          <rect x="2" y="2" width="20" height="4" fill="#78350F" />
-          {/* Indigo Noren */}
-          <rect x="4" y="6" width="4" height="5" fill="#1E3A8A" />
-          <rect x="9" y="6" width="4" height="5" fill="#1E3A8A" />
-          <rect x="14" y="6" width="4" height="5" fill="#1E3A8A" />
-          {/* Red Lantern */}
-          <rect x="18" y="8" width="4" height="5" fill="#DC2626" />
-          {/* Hinoki Counter */}
-          <rect x="2" y="14" width="20" height="6" fill="#D97706" />
-          <rect x="6" y="15" width="12" height="4" fill="#FEF3C7" />
+          {/* Warm Shoji Background */}
+          <rect x="2" y="2" width="20" height="20" fill="#fef3c7" />
+          {/* Wood Grid */}
+          <rect x="2" y="7" width="20" height="1" fill="#c49a6c" />
+          <rect x="2" y="12" width="20" height="1" fill="#c49a6c" />
+          <rect x="8" y="2" width="1" height="12" fill="#c49a6c" />
+          <rect x="15" y="2" width="1" height="12" fill="#c49a6c" />
+
+          {/* Top Hinoki Beam */}
+          <rect x="2" y="2" width="20" height="3" fill="#5c3d28" />
+          <rect x="2" y="4" width="20" height="1" fill="#7a4d30" />
+
+          {/* Indigo Noren Curtains with Slits */}
+          <rect x="4" y="5" width="4" height="6" fill="#2d3748" />
+          <rect x="5" y="7" width="2" height="2" fill="#eed3b0" />
+          <rect x="9" y="5" width="4" height="6" fill="#2d3748" />
+          <rect x="10" y="7" width="2" height="2" fill="#eed3b0" />
+          <rect x="14" y="5" width="4" height="6" fill="#2d3748" />
+          <rect x="15" y="7" width="2" height="2" fill="#eed3b0" />
+
+          {/* Soft Red Chochin Lantern */}
+          <rect x="19" y="5" width="3" height="5" fill="#d94e41" />
+          <rect x="20" y="6" width="1" height="3" fill="#fef08a" />
+          <rect x="19" y="10" width="3" height="1" fill="#2d3748" />
+
+          {/* Hinoki Sushi Counter & Neta Display Case */}
+          <rect x="2" y="14" width="20" height="8" fill="#5c3d28" />
+          <rect x="2" y="14" width="20" height="2" fill="#eed3b0" />
+          <rect x="2" y="16" width="20" height="2" fill="#b88656" />
+
+          {/* Glass Neta Case with Fresh Nigiri */}
+          <rect x="5" y="12" width="12" height="3" fill="#4a5568" />
+          <rect x="6" y="12" width="10" height="2" fill="#718096" opacity="0.8" />
+          {/* Salmon & Maguro Nigiri Grains */}
+          <rect x="7" y="13" width="3" height="1" fill="#fb923c" />
+          <rect x="11" y="13" width="3" height="1" fill="#be123c" />
         </svg>
       );
 
