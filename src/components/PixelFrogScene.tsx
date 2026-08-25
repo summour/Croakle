@@ -290,6 +290,38 @@ export const getSkinColors = (skinId?: FrogSkinId | string) => {
         eyeHighlight: '#FDE047',
         eyePupil: '#0F172A',
       };
+    case 'kbbq_caramelized_amber':
+      return {
+        highlight: '#FEF08A',
+        main: '#EA580C',
+        dark: '#C2410C',
+        deep: '#7C2D12',
+        outline: '#451A03',
+        belly: '#FEF3C7',
+        bellyShadow: '#FDE68A',
+        cheeks: '#F87171',
+        cheeksCore: '#DC2626',
+        legs: '#9A3412',
+        legsHighlight: '#EA580C',
+        eyeHighlight: '#FEF08A',
+        eyePupil: '#18181B',
+      };
+    case 'kbbq_gochujang_crimson':
+      return {
+        highlight: '#FCA5A5',
+        main: '#DC2626',
+        dark: '#B91C1C',
+        deep: '#7F1D1D',
+        outline: '#450A0A',
+        belly: '#FFF1F2',
+        bellyShadow: '#FECDD3',
+        cheeks: '#FDA4AF',
+        cheeksCore: '#BE123C',
+        legs: '#991B1B',
+        legsHighlight: '#EF4444',
+        eyeHighlight: '#FEF2F2',
+        eyePupil: '#09090B',
+      };
     case 'classic':
     default:
       return {
@@ -851,6 +883,102 @@ export const PixelFrogSolo: React.FC<{
         </g>
       )}
 
+      {/* Korean BBQ Set: Sizzle the BBQ Piglet */}
+      {(config.companionId === 'kbbq_sizzle_piglet' || config.companionId === 'companion_kbbq_sizzle_piglet') && (
+        <g transform={`translate(${frogX + 22}, ${frogY + 3 + (soloTick % 2 === 0 ? 0 : -1)})`}>
+          {/* Baby Piglet Body */}
+          <rect x="3" y="7" width="16" height="14" fill="#BE185D" />
+          <rect x="4" y="8" width="14" height="12" fill="#F472B6" />
+          <rect x="5" y="9" width="12" height="10" fill="#FBCFE8" />
+          {/* Head & Round Cheeks */}
+          <rect x="4" y="2" width="14" height="9" fill="#F472B6" />
+          <rect x="5" y="3" width="12" height="8" fill="#FBCFE8" />
+          {/* Pointy Pig Ears */}
+          <rect x="3" y="0" width="4" height="4" fill="#BE185D" />
+          <rect x="4" y="1" width="2" height="2" fill="#FDA4AF" />
+          <rect x="15" y="0" width="4" height="4" fill="#BE185D" />
+          <rect x="16" y="1" width="2" height="2" fill="#FDA4AF" />
+          {/* Red Chef Bandana Tied on Forehead */}
+          <rect x="3" y="3" width="16" height="2" fill="#DC2626" />
+          <rect x="4" y="3" width="14" height="1" fill="#EF4444" />
+          <rect x="17" y="2" width="3" height="3" fill="#DC2626" />
+          <rect x="18" y="4" width="2" height="2" fill="#B91C1C" />
+          {/* Big Sparkly Eyes */}
+          <rect x="6" y="5" width="3" height="3" fill="#18181B" />
+          <rect x="6" y="5" width="1" height="1" fill="#FFFFFF" />
+          <rect x="13" y="5" width="3" height="3" fill="#18181B" />
+          <rect x="13" y="5" width="1" height="1" fill="#FFFFFF" />
+          {/* Oval Pig Snout & Nostrils */}
+          <rect x="8" y="7" width="6" height="4" fill="#F472B6" />
+          <rect x="9" y="8" width="4" height="2" fill="#FDA4AF" />
+          <rect x="9" y="8" width="1" height="1" fill="#BE185D" />
+          <rect x="12" y="8" width="1" height="1" fill="#BE185D" />
+          {/* Rosy Cheeks */}
+          <rect x="4" y="8" width="2" height="2" fill="#FB7185" />
+          <rect x="16" y="8" width="2" height="2" fill="#FB7185" />
+          {/* Holding Mini Stainless Steel Grill Tongs & Sizzling Bacon Cube */}
+          <g transform={`translate(15, ${soloTick % 2 === 0 ? 8 : 10})`}>
+            <rect x="0" y="2" width="6" height="1" fill="#94A3B8" />
+            <rect x="0" y="5" width="6" height="1" fill="#94A3B8" />
+            <rect x="5" y="2" width="1" height="4" fill="#64748B" />
+            {/* Grilled Pork Belly Cube */}
+            <rect x="2" y="3" width="3" height="2" fill="#EA580C" />
+            <rect x="2" y="3" width="3" height="1" fill="#FED7AA" />
+            <rect x="3" y="4" width="1" height="1" fill="#7C2D12" />
+          </g>
+          {/* Curly Piggy Tail */}
+          <g transform={`translate(-3, ${soloTick % 2 === 0 ? 12 : 10})`}>
+            <rect x="2" y="0" width="3" height="1" fill="#BE185D" />
+            <rect x="1" y="1" width="1" height="2" fill="#BE185D" />
+            <rect x="2" y="3" width="2" height="1" fill="#BE185D" />
+            <rect x="3" y="2" width="1" height="1" fill="#F472B6" />
+          </g>
+          {/* Little Trotter Feet */}
+          <rect x="6" y="20" width="3" height="2" fill="#BE185D" />
+          <rect x="13" y="20" width="3" height="2" fill="#BE185D" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Onggi Kimchi Ferment Pot */}
+      {(config.companionId === 'kbbq_kimchi_ferment_pot' || config.companionId === 'companion_kbbq_kimchi_ferment_pot') && (
+        <g transform={`translate(${frogX - 26}, ${frogY + 5 + (soloTick % 2 === 0 ? 0 : 1)})`}>
+          {/* Traditional Onggi Earthenware Clay Pot Body */}
+          <rect x="3" y="7" width="18" height="14" fill="#451A03" />
+          <rect x="4" y="8" width="16" height="12" fill="#78350F" />
+          <rect x="5" y="9" width="14" height="10" fill="#92400E" />
+          <rect x="6" y="10" width="12" height="8" fill="#B45309" />
+          {/* Wide Clay Pot Rim & Handle Ridges */}
+          <rect x="2" y="6" width="20" height="2" fill="#451A03" />
+          <rect x="3" y="6" width="18" height="1" fill="#78350F" />
+          <rect x="1" y="11" width="2" height="3" fill="#451A03" />
+          <rect x="21" y="11" width="2" height="3" fill="#451A03" />
+          {/* Earthenware Lid with Round Handle Nob */}
+          <rect x="8" y="0" width="8" height="3" fill="#451A03" />
+          <rect x="9" y="1" width="6" height="1" fill="#92400E" />
+          <rect x="4" y="3" width="16" height="3" fill="#451A03" />
+          <rect x="5" y="4" width="14" height="2" fill="#78350F" />
+          {/* Cute Kawaii Smiling Face on Onggi Pot */}
+          <rect x="7" y="11" width="2" height="2" fill="#18181B" />
+          <rect x="7" y="11" width="1" height="1" fill="#FFFFFF" />
+          <rect x="15" y="11" width="2" height="2" fill="#18181B" />
+          <rect x="15" y="11" width="1" height="1" fill="#FFFFFF" />
+          <rect x="10" y="13" width="4" height="1" fill="#451A03" />
+          <rect x="11" y="14" width="2" height="1" fill="#451A03" />
+          {/* Rosy Kimchi Cheeks */}
+          <rect x="5" y="12" width="2" height="2" fill="#EF4444" opacity="0.8" />
+          <rect x="17" y="12" width="2" height="2" fill="#EF4444" opacity="0.8" />
+          {/* Red Chili Pepper Decal on Belly */}
+          <rect x="10" y="15" width="2" height="3" fill="#DC2626" />
+          <rect x="12" y="16" width="2" height="2" fill="#DC2626" />
+          <rect x="9" y="15" width="1" height="1" fill="#16A34A" />
+          {/* Rising Spicy Fermentation Aroma Steam Wisps */}
+          <rect x="6" y={soloTick % 2 === 0 ? 0 : -2} width="2" height="2" fill="#F87171" opacity="0.75" />
+          <rect x="16" y={soloTick % 2 === 0 ? -2 : 0} width="2" height="2" fill="#FFFFFF" opacity="0.7" />
+          {/* Heavy Clay Base */}
+          <rect x="5" y="21" width="14" height="2" fill="#451A03" />
+        </g>
+      )}
+
       {/* 5-TONE STARDEW COZY FROG BODY & EYE SOCKETS */}
       {/* Eye Domes with Highlights & Depth */}
       <rect x={frogX} y={frogY} width="5" height="5" fill={skin.outline} />
@@ -912,6 +1040,90 @@ export const PixelFrogSolo: React.FC<{
       <rect x={frogX + 14} y={frogY + 22} width="6" height="1" fill={skin.dark} />
 
       {/* OUTFIT LAYER */}
+
+      {/* Korean BBQ Set: Pitmaster Canvas Apron */}
+      {config.outfitId === 'kbbq_pitmaster_apron' && (
+        <g id="preview-outfit-kbbq-apron">
+          {/* Heavy Dark Obsidian Canvas Apron Body */}
+          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#09090B" />
+          <rect x={frogX - 2} y={frogY + 9} width="20" height="11" fill="#18181B" />
+          <rect x={frogX - 1} y={frogY + 10} width="18" height="10" fill="#27272A" />
+          <rect x={frogX} y={frogY + 10} width="16" height="9" fill="#3F3F46" />
+          {/* Leather Harness Cross Straps with Brass Rivets */}
+          <rect x={frogX + 1} y={frogY + 8} width="3" height="4" fill="#78350F" />
+          <rect x={frogX + 12} y={frogY + 8} width="3" height="4" fill="#78350F" />
+          <rect x={frogX + 2} y={frogY + 9} width="1" height="1" fill="#FACC15" />
+          <rect x={frogX + 13} y={frogY + 9} width="1" height="1" fill="#FACC15" />
+          {/* Center Chest Embroidered Flame Crest */}
+          <rect x={frogX + 7} y={frogY + 10} width="2" height="3" fill="#DC2626" />
+          <rect x={frogX + 7} y={frogY + 11} width="2" height="2" fill="#F97316" />
+          <rect x={frogX + 7} y={frogY + 12} width="2" height="1" fill="#FACC15" />
+          {/* Center Kangaroo Utensil Pocket */}
+          <rect x={frogX + 4} y={frogY + 14} width="8" height="5" fill="#18181B" />
+          <rect x={frogX + 5} y={frogY + 15} width="6" height="3" fill="#27272A" />
+          {/* Stainless Steel Probe in Pocket */}
+          <rect x={frogX + 6} y={frogY + 13} width="1" height="3" fill="#E2E8F0" />
+          <rect x={frogX + 6} y={frogY + 12} width="1" height="1" fill="#EF4444" />
+          {/* Red & White Checkered Grill Towel Tucked on Left */}
+          <rect x={frogX - 2} y={frogY + 13} width="4" height="6" fill="#DC2626" />
+          <rect x={frogX - 1} y={frogY + 14} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 1} y={frogY + 14} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX - 2} y={frogY + 16} width="1" height="1" fill="#FFFFFF" />
+          <rect x={frogX} y={frogY + 16} width="1" height="1" fill="#FFFFFF" />
+          {/* Brass Grommet Hem Accents */}
+          <rect x={frogX - 1} y={frogY + 19} width="1" height="1" fill="#FACC15" />
+          <rect x={frogX + 16} y={frogY + 19} width="1" height="1" fill="#FACC15" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Retro Emerald Tracksuit Jacket */}
+      {config.outfitId === 'kbbq_retro_tracksuit' && (
+        <g id="preview-outfit-kbbq-tracksuit">
+          {/* Deep Retro Emerald Green Jacket Body */}
+          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#022C22" />
+          <rect x={frogX - 2} y={frogY + 9} width="20" height="11" fill="#065F46" />
+          <rect x={frogX - 1} y={frogY + 10} width="18" height="10" fill="#047857" />
+          <rect x={frogX} y={frogY + 10} width="16" height="9" fill="#10B981" />
+          {/* High Athletic Tracksuit Collar */}
+          <rect x={frogX + 2} y={frogY + 8} width="12" height="3" fill="#065F46" />
+          <rect x={frogX + 3} y={frogY + 8} width="10" height="2" fill="#10B981" />
+          {/* Dual White Racing Side Stripes */}
+          <rect x={frogX - 2} y={frogY + 10} width="2" height="9" fill="#FFFFFF" />
+          <rect x={frogX + 16} y={frogY + 10} width="2" height="9" fill="#FFFFFF" />
+          {/* Center Silver Brass Zipper Placket & Gold Pull Tag */}
+          <rect x={frogX + 7} y={frogY + 9} width="2" height="11" fill="#064E3B" />
+          <rect x={frogX + 7} y={frogY + 10} width="2" height="10" fill="#E2E8F0" />
+          <rect x={frogX + 7} y={frogY + 10} width="2" height="2" fill="#FACC15" />
+          {/* Ribbed Bottom Waistband with White Stripe */}
+          <rect x={frogX - 2} y={frogY + 19} width="20" height="2" fill="#064E3B" />
+          <rect x={frogX - 1} y={frogY + 19} width="18" height="1" fill="#FFFFFF" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Royal Hanbok Silk Jeogori Vest */}
+      {config.outfitId === 'kbbq_hanbok_vest' && (
+        <g id="preview-outfit-kbbq-hanbok">
+          {/* Deep Royal Midnight Blue Silk Body */}
+          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#0F172A" />
+          <rect x={frogX - 2} y={frogY + 9} width="20" height="11" fill="#1E1B4B" />
+          <rect x={frogX - 1} y={frogY + 10} width="18" height="10" fill="#1E3A8A" />
+          <rect x={frogX} y={frogY + 10} width="16" height="9" fill="#2563EB" />
+          {/* Layered White Silk Crossover Inner Collar (Dongjeong) */}
+          <rect x={frogX + 5} y={frogY + 8} width="6" height="4" fill="#FFFFFF" />
+          <rect x={frogX + 6} y={frogY + 9} width="4" height="2" fill="#F8FAFC" />
+          {/* Crimson & Amber Silk Goreum Tie Knot & Dangling Tassels */}
+          <rect x={frogX + 9} y={frogY + 11} width="3" height="3" fill="#DC2626" />
+          <rect x={frogX + 10} y={frogY + 11} width="1" height="1" fill="#F59E0B" />
+          <rect x={frogX + 10} y={frogY + 14} width="2" height="5" fill="#DC2626" />
+          <rect x={frogX + 11} y={frogY + 17} width="1" height="3" fill="#F59E0B" />
+          {/* Golden Cloud Embroidery Hem Trims */}
+          <rect x={frogX - 2} y={frogY + 18} width="20" height="3" fill="#B45309" />
+          <rect x={frogX - 1} y={frogY + 18} width="18" height="2" fill="#F59E0B" />
+          <rect x={frogX + 1} y={frogY + 18} width="3" height="1" fill="#FEF08A" />
+          <rect x={frogX + 7} y={frogY + 18} width="3" height="1" fill="#FEF08A" />
+          <rect x={frogX + 13} y={frogY + 18} width="3" height="1" fill="#FEF08A" />
+        </g>
+      )}
 
       {/* 1. Traditional Master Kimono / Yukata (Soft Storybook Indigo & Gold Obi) */}
       {config.outfitId === 'kimono' && (
@@ -1522,6 +1734,47 @@ export const PixelFrogSolo: React.FC<{
       )}
 
       {/* GLASSES / FACE ACCESSORY (Soft Storybook Vintage Brass Spectacles) */}
+      {/* Korean BBQ Set: Tasty Grill Blush & Rising Steam */}
+      {config.glassesId === 'kbbq_tasty_blush_steam' && (
+        <g id="preview-glasses-kbbq-blush">
+          {/* Sizzling Rosy Cheeks */}
+          <rect x={frogX - 3} y={frogY + 9} width="5" height="4" fill="#F43F5E" opacity="0.85" />
+          <rect x={frogX - 2} y={frogY + 10} width="3" height="2" fill="#FB7185" />
+          <rect x={frogX + 14} y={frogY + 9} width="5" height="4" fill="#F43F5E" opacity="0.85" />
+          <rect x={frogX + 15} y={frogY + 10} width="3" height="2" fill="#FB7185" />
+          {/* Steamy Savor Wisps Rising */}
+          <rect x={frogX + 1} y={frogY - (soloTick % 2 === 0 ? 3 : 5)} width="2" height="3" fill="#FFFFFF" opacity="0.8" />
+          <rect x={frogX + 13} y={frogY - (soloTick % 2 === 0 ? 5 : 3)} width="2" height="3" fill="#FFFFFF" opacity="0.8" />
+          {/* Joy Sparkle Stars */}
+          <rect x={frogX + 7} y={frogY - 4} width="2" height="2" fill="#FDE047" />
+          <rect x={frogX - 4} y={frogY + 3} width="2" height="2" fill="#FCA5A5" />
+          <rect x={frogX + 18} y={frogY + 3} width="2" height="2" fill="#FCA5A5" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Smoke Shield Tinted Goggles */}
+      {config.glassesId === 'kbbq_smoke_goggles' && (
+        <g id="preview-glasses-kbbq-goggles">
+          {/* Heavy Metallic Goggle Frames */}
+          <rect x={frogX - 2} y={frogY + 5} width="9" height="6" fill="#0F172A" />
+          <rect x={frogX + 9} y={frogY + 5} width="9" height="6" fill="#0F172A" />
+          <rect x={frogX + 6} y={frogY + 6} width="4" height="2" fill="#334155" />
+          {/* Amber Tinted Polycarbonate Lenses */}
+          <rect x={frogX - 1} y={frogY + 6} width="7" height="4" fill="#D97706" />
+          <rect x={frogX} y={frogY + 6} width="5" height="3" fill="#F59E0B" />
+          <rect x={frogX + 10} y={frogY + 6} width="7" height="4" fill="#D97706" />
+          <rect x={frogX + 11} y={frogY + 6} width="5" height="3" fill="#F59E0B" />
+          {/* White Specular Lens Glares */}
+          <rect x={frogX} y={frogY + 6} width="2" height="1" fill="#FEF08A" />
+          <rect x={frogX + 1} y={frogY + 7} width="2" height="1" fill="#FFFFFF" />
+          <rect x={frogX + 11} y={frogY + 6} width="2" height="1" fill="#FEF08A" />
+          <rect x={frogX + 12} y={frogY + 7} width="2" height="1" fill="#FFFFFF" />
+          {/* Elastic Tension Headstrap */}
+          <rect x={frogX - 4} y={frogY + 7} width="2" height="2" fill="#475569" />
+          <rect x={frogX + 18} y={frogY + 7} width="2" height="2" fill="#475569" />
+        </g>
+      )}
+
       {config.glassesId === 'reading' && (
         <g id="preview-glasses-reading">
           {/* Outer Brass Wireframes */}
@@ -1700,6 +1953,66 @@ export const PixelFrogSolo: React.FC<{
       )}
 
       {/* HAT LAYER */}
+      {/* Korean BBQ Set: Grill Master Flaming Headband */}
+      {config.hatId === 'kbbq_grill_master_headband' && (
+        <g id="preview-hat-kbbq-headband">
+          {/* Headband Body */}
+          <rect x={frogX - 3} y={frogY + 1} width="22" height="4" fill="#09090B" />
+          <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#DC2626" />
+          <rect x={frogX - 1} y={frogY + 2} width="18" height="1" fill="#EF4444" />
+          {/* Center Flame / Fire Crest */}
+          <rect x={frogX + 6} y={frogY} width="4" height="5" fill="#DC2626" />
+          <rect x={frogX + 7} y={frogY} width="2" height="4" fill="#F59E0B" />
+          <rect x={frogX + 7} y={frogY + 1} width="2" height="2" fill="#FEF08A" />
+          {/* Tied Knot & Flapping Ribbon Tails on Right */}
+          <rect x={frogX + 18} y={frogY} width="3" height="4" fill="#DC2626" />
+          <rect x={frogX + 19} y={frogY + 3} width="2" height="5" fill="#EF4444" />
+          <rect x={frogX + 20} y={frogY + 5} width="2" height="4" fill="#B91C1C" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Fresh Lettuce Ssam Wrap Hat */}
+      {config.hatId === 'kbbq_lettuce_wrap_hat' && (
+        <g id="preview-hat-kbbq-lettuce">
+          {/* Layered Ruffled Lettuce & Perilla Leaf Base */}
+          <rect x={frogX - 4} y={frogY - 4} width="24" height="6" fill="#14532D" />
+          <rect x={frogX - 3} y={frogY - 5} width="22" height="5" fill="#16A34A" />
+          <rect x={frogX - 2} y={frogY - 5} width="20" height="4" fill="#22C55E" />
+          <rect x={frogX - 1} y={frogY - 6} width="18" height="2" fill="#4ADE80" />
+          {/* Crisp Leaf Ruffle Serrations */}
+          <rect x={frogX - 4} y={frogY - 2} width="2" height="2" fill="#4ADE80" />
+          <rect x={frogX + 2} y={frogY - 6} width="3" height="1" fill="#86EFAC" />
+          <rect x={frogX + 8} y={frogY - 6} width="3" height="1" fill="#86EFAC" />
+          <rect x={frogX + 14} y={frogY - 6} width="3" height="1" fill="#86EFAC" />
+          <rect x={frogX + 18} y={frogY - 2} width="2" height="2" fill="#4ADE80" />
+          {/* Crispy Grilled Pork Belly Cube on Top */}
+          <rect x={frogX + 4} y={frogY - 8} width="6" height="4" fill="#7C2D12" />
+          <rect x={frogX + 5} y={frogY - 8} width="4" height="3" fill="#EA580C" />
+          <rect x={frogX + 5} y={frogY - 7} width="4" height="1" fill="#FED7AA" />
+          <rect x={frogX + 7} y={frogY - 8} width="1" height="3" fill="#451A03" />
+          {/* Spicy Red Ssamjang Sauce Dot & Garlic Slice */}
+          <rect x={frogX + 11} y={frogY - 7} width="3" height="3" fill="#991B1B" />
+          <rect x={frogX + 12} y={frogY - 6} width="1" height="1" fill="#EF4444" />
+          <rect x={frogX + 2} y={frogY - 7} width="2" height="2" fill="#FEF3C7" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Smoked Pitmaster Visor */}
+      {config.hatId === 'kbbq_chef_visor' && (
+        <g id="preview-hat-kbbq-visor">
+          {/* Forehead Band */}
+          <rect x={frogX - 3} y={frogY + 1} width="22" height="4" fill="#0F172A" />
+          <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#1E293B" />
+          {/* Translucent Smoky Charcoal Sun Visor Brim */}
+          <rect x={frogX - 5} y={frogY - 1} width="26" height="3" fill="#334155" opacity="0.9" />
+          <rect x={frogX - 4} y={frogY} width="24" height="2" fill="#475569" opacity="0.9" />
+          <rect x={frogX - 3} y={frogY} width="22" height="1" fill="#94A3B8" opacity="0.75" />
+          {/* Neon Red Flame Emblem Badge on Band */}
+          <rect x={frogX + 6} y={frogY + 1} width="4" height="4" fill="#DC2626" />
+          <rect x={frogX + 7} y={frogY + 2} width="2" height="2" fill="#FACC15" />
+        </g>
+      )}
+
       {config.hatId === 'arcade_joystick_cap' && (
         <g>
           <rect x={frogX - 2} y={frogY - 4} width="20" height="7" fill="#18181B" />
@@ -2293,6 +2606,64 @@ export const PixelFrogSolo: React.FC<{
       )}
 
       {/* PROPS / HANDHELD ITEM */}
+      {/* Korean BBQ Set: Grilling Sizzling Samgyeopsal with Tongs */}
+      {config.activityId === 'grilling_samgyeopsal' && (
+        <g id="preview-activity-grilling-samgyeopsal">
+          {/* Stainless Steel Grill Tongs in Hand */}
+          <rect x={frogX + 6} y={frogY + 11} width="2" height="6" fill="#64748B" />
+          <rect x={frogX + 8} y={frogY + 12} width="6" height="2" fill="#94A3B8" />
+          <rect x={frogX + 8} y={frogY + 16} width="6" height="2" fill="#94A3B8" />
+          <rect x={frogX + 13} y={frogY + 13} width="2" height="4" fill="#CBD5E1" />
+          {/* Sizzling Thick-Cut Pork Belly Slice */}
+          <rect x={frogX + 11} y={frogY + 13} width="8" height="4" fill="#7C2D12" />
+          <rect x={frogX + 12} y={frogY + 13} width="6" height="3" fill="#EA580C" />
+          <rect x={frogX + 12} y={frogY + 14} width="6" height="1" fill="#FED7AA" />
+          <rect x={frogX + 14} y={frogY + 13} width="1" height="3" fill="#451A03" />
+          <rect x={frogX + 16} y={frogY + 13} width="1" height="3" fill="#451A03" />
+          {/* Animated Sizzle Sparks & Steam */}
+          <rect x={frogX + 16} y={frogY + 10 - (soloTick % 2 === 0 ? 0 : 2)} width="2" height="2" fill="#FDE047" />
+          <rect x={frogX + 18} y={frogY + 8 - (soloTick % 2 === 0 ? 2 : 0)} width="2" height="2" fill="#FFFFFF" opacity="0.8" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Munching Fresh Lettuce Ssam Wrap */}
+      {config.activityId === 'eating_ssam_wrap' && (
+        <g id="preview-activity-eating-ssam-wrap">
+          {/* Crisp Green Lettuce / Perilla Wrap Bundle */}
+          <rect x={frogX + 4} y={frogY + 10} width="8" height="8" fill="#14532D" />
+          <rect x={frogX + 5} y={frogY + 11} width="6" height="6" fill="#16A34A" />
+          <rect x={frogX + 6} y={frogY + 12} width="4" height="4" fill="#22C55E" />
+          {/* Savory Pork Belly Filling & Red Gochujang Ssamjang Dot */}
+          <rect x={frogX + 6} y={frogY + 11} width="3" height="2" fill="#EA580C" />
+          <rect x={frogX + 7} y={frogY + 11} width="2" height="1" fill="#FED7AA" />
+          <rect x={frogX + 8} y={frogY + 12} width="2" height="2" fill="#DC2626" />
+          <rect x={frogX + 5} y={frogY + 12} width="2" height="1" fill="#FEF3C7" />
+          {/* Cute Munching Mouth & Crumbs */}
+          <rect x={frogX + 5} y={frogY + 9} width="4" height="2" fill="#BE123C" />
+          <rect x={frogX + 12} y={frogY + 14 - (soloTick % 2 === 0 ? 0 : 1)} width="1" height="1" fill="#22C55E" />
+        </g>
+      )}
+
+      {/* Korean BBQ Set: Traditional Rice Bowl & Long Silver Chopsticks */}
+      {config.activityId === 'holding_rice_and_chopsticks' && (
+        <g id="preview-activity-holding-rice-chopsticks">
+          {/* Stainless Steel Rice Bowl (Left Paw) */}
+          <rect x={frogX + 2} y={frogY + 12} width="8" height="6" fill="#475569" />
+          <rect x={frogX + 3} y={frogY + 13} width="6" height="4" fill="#94A3B8" />
+          <rect x={frogX + 3} y={frogY + 16} width="6" height="1" fill="#334155" />
+          {/* Fluffy Steaming White Rice Dome */}
+          <rect x={frogX + 3} y={frogY + 10} width="6" height="3" fill="#E2E8F0" />
+          <rect x={frogX + 4} y={frogY + 10} width="4" height="2" fill="#FFFFFF" />
+          {/* Rising Rice Steam Puff */}
+          <rect x={frogX + 5} y={frogY + 7 - (soloTick % 2 === 0 ? 0 : 2)} width="2" height="2" fill="#FFFFFF" opacity="0.75" />
+          {/* Long Silver Korean Chopsticks (Right Paw) */}
+          <rect x={frogX + 12} y={frogY + 7} width="1" height="12" fill="#CBD5E1" />
+          <rect x={frogX + 14} y={frogY + 7} width="1" height="12" fill="#CBD5E1" />
+          <rect x={frogX + 12} y={frogY + 7} width="1" height="3" fill="#FFFFFF" />
+          <rect x={frogX + 14} y={frogY + 7} width="1" height="3" fill="#FFFFFF" />
+        </g>
+      )}
+
       {config.activityId === 'tea' && (
         <g>
           {/* Authentic Japanese Ceramic Matcha Chawan (Stoneware Clay Base) */}
@@ -2703,6 +3074,23 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   // Thematic walkable floor & prop destinations for all 13 scenes
   const getSceneDestinations = (sceneId?: string): { x: number; y: number }[] => {
     switch (sceneId) {
+      case 'korean_bbq':
+        return [
+          { x: 38, y: 58 }, // Banchan & Kimchi Side
+          { x: 72, y: 56 }, // Center Sizzling Grill
+          { x: 110, y: 58 }, // Rice & Soju Table Corner
+          { x: 52, y: 72 }, // Stainless Stool Seat
+          { x: 92, y: 70 }, // Ssam Greens Basket
+          { x: 80, y: 60 }, // Ventilation Pipe Station
+        ];
+      case 'forest_camp':
+        return [
+          { x: 36, y: 62 },
+          { x: 72, y: 56 },
+          { x: 110, y: 64 },
+          { x: 56, y: 72 },
+          { x: 88, y: 68 },
+        ];
       case 'retro_arcade':
         return [
           { x: 34, y: 58 }, // CRT Arcade Cabinet 1
@@ -2830,6 +3218,10 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
   const getSceneBubbles = (sceneId?: string): string[] => {
     switch (sceneId) {
+      case 'korean_bbq':
+        return ['♨', '♥', '★', '♫', '✦', '!'];
+      case 'forest_camp':
+        return ['★', '♥', '✦', '♪', '✧', '♫'];
       case 'retro_arcade':
         return ['★', '♥', '⚡', '✦', '♪', '!'];
       case 'convenience_store':
@@ -3185,6 +3577,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
   // Ground base color to fill lower canvas in fullscreen
   const getGroundColor = () => {
     switch (config.sceneId) {
+      case 'korean_bbq':
+        return '#1e1b18';
       case 'retro_arcade':
         return '#0f0728';
       case 'convenience_store':
@@ -3327,9 +3721,9 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
       {/* 2. SCENE LOCATION BACKGROUND LAYERS & FROG CHARACTER */}
       <g transform={yShift ? `translate(0, ${yShift})` : undefined}>
-      {/* 0. COZY BATHHOUSE & SAUNA ROOM (Pokecolo 3D Architecture) */}
+      {/* 0. COZY BATHHOUSE & SAUNA ROOM (Strict Integer Pixel Art & Soft Palette) */}
       {config.sceneId === 'sauna_bathhouse' && (
-        <g>
+        <g id="scene-sauna-bathhouse">
           {/* Ceiling with 3D Perspective Tiles & Recessed Lighting (Fullscreen) */}
           {fullscreen ? (
             <g>
@@ -3358,7 +3752,7 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
 
           {/* Crown Molding Trim */}
           <rect x="0" y="18" width="160" height="4" fill="#8c6a48" />
-          <rect x="0" y="20" width="160" height="1.5" fill="#b08b64" />
+          <rect x="0" y="20" width="160" height="2" fill="#b08b64" />
 
           {/* Back Wall with Warm Stone Bricks */}
           <rect x="0" y="22" width="160" height="48" fill="#d4be9c" />
@@ -3379,11 +3773,15 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="0" y="20" width="20" height="50" fill="#c4ad8a" />
           <rect x="140" y="20" width="20" height="50" fill="#bfa682" />
 
-          {/* Right Wall Decor: Framed Anime Art & Vending Machine */}
-          <rect x="143" y="28" width="14" height="18" fill="#fdf2f8" stroke="#78350f" strokeWidth="0.8" />
-          <rect x="147" y="34" width="6" height="6" fill="#f472b6" opacity="0.6" />
+          {/* Right Wall Decor: Framed Anime Art (Strict Pixel) */}
+          <rect x="142" y="27" width="16" height="20" fill="#78350f" />
+          <rect x="143" y="28" width="14" height="18" fill="#fdf2f8" />
+          <rect x="146" y="33" width="8" height="8" fill="#f472b6" opacity="0.7" />
+          <rect x="148" y="35" width="4" height="4" fill="#ffffff" />
 
-          <rect x="118" y="34" width="18" height="34" fill="#f8fafc" stroke="#64748b" strokeWidth="0.7" />
+          {/* Vending Machine (Strict Pixel) */}
+          <rect x="117" y="33" width="20" height="36" fill="#64748b" />
+          <rect x="118" y="34" width="18" height="34" fill="#f8fafc" />
           <rect x="120" y="37" width="14" height="14" fill="#0284c7" opacity="0.8" />
           <rect x="122" y="41" width="3" height="3" fill="#22c55e" />
           <rect x="126" y="41" width="3" height="3" fill="#ef4444" />
@@ -3391,38 +3789,41 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
           <rect x="122" y="46" width="3" height="3" fill="#38bdf8" />
           <rect x="126" y="46" width="3" height="3" fill="#eab308" />
           <rect x="130" y="46" width="3" height="3" fill="#ec4899" />
-          <rect x="122" y="56" width="10" height="4" fill="#334155" />
+          <rect x="121" y="55" width="12" height="6" fill="#334155" />
 
           {/* Trash Bin */}
           <rect x="137" y="56" width="6" height="11" fill="#71717a" />
 
-          {/* Left Wall Decor: Potted Green Plant */}
-          <rect x="12" y="56" width="6" height="10" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.5" />
+          {/* Left Wall Decor: Potted Green Plant (Strict Pixel) */}
+          <rect x="11" y="55" width="8" height="12" fill="#cbd5e1" />
+          <rect x="12" y="56" width="6" height="10" fill="#ffffff" />
           <rect x="11" y="42" width="8" height="14" fill="#15803d" />
           <rect x="9" y="46" width="6" height="8" fill="#16a34a" />
           <rect x="15" y="46" width="6" height="8" fill="#22c55e" />
 
-          {/* Center Sauna Doorway & View */}
-          <rect x="52" y="34" width="56" height="36" fill="#85532a" stroke="#542e12" strokeWidth="1.5" />
+          {/* Center Sauna Doorway & View (Strict Pixel) */}
+          <rect x="51" y="33" width="58" height="38" fill="#542e12" />
+          <rect x="53" y="35" width="54" height="34" fill="#85532a" />
           <rect x="58" y="38" width="44" height="28" fill="#693b16" />
           <rect x="62" y="40" width="36" height="16" fill="#fef3c7" opacity="0.95" />
           <rect x="65" y="46" width="30" height="4" fill="#b45309" />
           <rect x="68" y="42" width="8" height="4" fill="#d97706" />
           <rect x="85" y="44" width="7" height="4" fill="#475569" />
 
-          {/* Digital LED Sign: 38.0°C (Pure Stepped Pixel 7-Segment Display) */}
-          <rect x="68" y="24" width="24" height="7" fill="#18181b" stroke="#3f3f46" strokeWidth="0.5" />
+          {/* Digital LED Sign: 38.0°C (Strict Stepped Pixel Display) */}
+          <rect x="67" y="23" width="26" height="9" fill="#3f3f46" />
+          <rect x="68" y="24" width="24" height="7" fill="#18181b" />
           <g transform="translate(71, 26)" fill="#ef4444">
             {/* '3' */}
             <rect x="0" y="0" width="3" height="1" />
             <rect x="2" y="0" width="1" height="3" />
-            <rect x="0" y="1.5" width="3" height="1" />
-            <rect x="2" y="1.5" width="1" height="2.5" />
+            <rect x="0" y="1" width="3" height="1" />
+            <rect x="2" y="1" width="1" height="3" />
             <rect x="0" y="3" width="3" height="1" />
             {/* '8' */}
             <rect x="4" y="0" width="3" height="4" />
-            <rect x="5" y="1" width="1" height="0.6" fill="#18181b" />
-            <rect x="5" y="2.4" width="1" height="0.6" fill="#18181b" />
+            <rect x="5" y="1" width="1" height="1" fill="#18181b" />
+            <rect x="5" y="2" width="1" height="1" fill="#18181b" />
             {/* '.' */}
             <rect x="8" y="3" width="1" height="1" />
             {/* '0' */}
@@ -3430,8 +3831,8 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
             <rect x="11" y="1" width="1" height="2" fill="#18181b" />
             {/* '°C' */}
             <rect x="14" y="0" width="1" height="1" />
-            <rect x="15.5" y="0" width="2.5" height="4" />
-            <rect x="16.5" y="1" width="1.5" height="2" fill="#18181b" />
+            <rect x="15" y="0" width="3" height="4" />
+            <rect x="16" y="1" width="2" height="2" fill="#18181b" />
           </g>
 
           {/* Wooden Door Panels & Details */}
@@ -3609,252 +4010,593 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
         </g>
       )}
 
-      {/* B. COZY TREEHOUSE SCENE */}
+      {/* B. COZY TREEHOUSE LOFT (Soft Storybook Palette & Strict Integer Pixel Art) */}
       {config.sceneId === 'treehouse' && (
-        <g>
-          {/* Warm Wood Wall */}
-          <rect x="0" y="0" width="160" height="68" fill="#523218" />
-          <rect x="0" y="22" width="160" height="1" fill="#382110" opacity="0.5" />
-          <rect x="0" y="44" width="160" height="1" fill="#382110" opacity="0.5" />
+        <g id="scene-treehouse">
+          {/* Warm Rustic Wood Plank Wall */}
+          <rect x="0" y="0" width="160" height="68" fill="#784a28" />
+          <rect x="0" y="0" width="160" height="68" fill="#523218" opacity="0.85" />
+          <rect x="0" y="16" width="160" height="1" fill="#382110" />
+          <rect x="0" y="32" width="160" height="1" fill="#382110" />
+          <rect x="0" y="48" width="160" height="1" fill="#382110" />
+          <rect x="0" y="64" width="160" height="1" fill="#382110" />
 
-          {/* Cozy Window Looking Out to Nature */}
-          <rect x="106" y="12" width="40" height="34" fill="#382110" />
-          <rect x="108" y="14" width="36" height="30" fill="#60a5fa" />
-          <rect x="108" y="30" width="36" height="14" fill="#4b6e38" />
-          <rect x="125" y="14" width="2" height="30" fill="#382110" />
+          {/* Cozy Window Looking Out to Forest Pines & Soft Sky */}
+          <rect x="104" y="10" width="44" height="38" fill="#382110" />
+          <rect x="106" y="12" width="40" height="34" fill="#60a5fa" />
+          <rect x="106" y="12" width="40" height="18" fill="#bae6fd" />
+          {/* Distant Evergreen Pine Silhouette through Window */}
+          <rect x="110" y="24" width="14" height="18" fill="#15803d" />
+          <rect x="113" y="18" width="8" height="6" fill="#15803d" />
+          <rect x="124" y="22" width="18" height="20" fill="#166534" />
+          <rect x="129" y="16" width="8" height="6" fill="#166534" />
+          {/* Warm Wooden Window Frame Muntins */}
+          <rect x="124" y="12" width="2" height="34" fill="#382110" />
+          <rect x="106" y="28" width="40" height="2" fill="#382110" />
+          {/* Little potted succulent on window sill */}
+          <rect x="108" y="42" width="8" height="4" fill="#ca8a04" />
+          <rect x="110" y="38" width="4" height="4" fill="#4ade80" />
 
-          {/* Minimalist Bookshelf on Left */}
-          <rect x="16" y="18" width="28" height="36" fill="#382110" />
-          <rect x="18" y="20" width="24" height="8" fill="#29180c" />
-          <rect x="18" y="32" width="24" height="10" fill="#29180c" />
-          {/* Books & Succulent */}
-          <rect x="20" y="22" width="4" height="6" fill="#dc2626" />
-          <rect x="25" y="23" width="3" height="5" fill="#2563eb" />
-          <rect x="29" y="21" width="4" height="7" fill="#16a34a" />
-          <rect x="22" y="34" width="6" height="6" fill="#d97706" />
-          <rect x="30" y="34" width="5" height="4" fill="#84cc16" />
+          {/* Cozy Fireplace with Crackling Ember on Left */}
+          <rect x="12" y="32" width="34" height="36" fill="#475569" />
+          <rect x="14" y="34" width="30" height="34" fill="#334155" />
+          {/* Fireplace Hearth Opening */}
+          <rect x="18" y="44" width="22" height="24" fill="#18181b" />
+          {/* Brick Mantle Top */}
+          <rect x="10" y="30" width="38" height="3" fill="#64748b" />
+          {/* Burning Logs & Pixel Flame */}
+          <rect x="22" y="62" width="14" height="3" fill="#78350f" />
+          <rect x="24" y="54" width="10" height="8" fill="#ea580c" />
+          <rect x="26" y="52" width="6" height="8" fill="#facc15" />
+          <rect x="28" y="50" width="2" height="6" fill="#ffffff" />
+          {/* Animated Warm Hearth Glow */}
+          <rect x="18" y="44" width="22" height="24" fill="#f59e0b" opacity={animTick % 2 === 0 ? 0.15 : 0.25} />
+
+          {/* Minimalist Bookshelf above Hearth */}
+          <rect x="14" y="14" width="30" height="12" fill="#382110" />
+          <rect x="16" y="16" width="26" height="8" fill="#29180c" />
+          {/* Colorful Book Spines */}
+          <rect x="18" y="18" width="3" height="6" fill="#f43f5e" />
+          <rect x="22" y="17" width="4" height="7" fill="#38bdf8" />
+          <rect x="27" y="19" width="3" height="5" fill="#4ade80" />
+          <rect x="31" y="17" width="4" height="7" fill="#fbbf24" />
+          <rect x="36" y="18" width="4" height="6" fill="#a855f7" />
+
+          {/* Hanging String Lights across Ceiling */}
+          <rect x="0" y="4" width="160" height="1" fill="#382110" opacity="0.4" />
+          <rect x="20" y="5" width="2" height="2" fill="#fef08a" />
+          <rect x="45" y="6" width="2" height="2" fill="#fef08a" />
+          <rect x="70" y="5" width="2" height="2" fill="#fef08a" />
+          <rect x="95" y="6" width="2" height="2" fill="#fef08a" />
+          <rect x="120" y="5" width="2" height="2" fill="#fef08a" />
+          <rect x="145" y="6" width="2" height="2" fill="#fef08a" />
 
           {/* Polished Warm Wood Floor */}
           <rect x="0" y="68" width="160" height="32" fill="#784a28" />
           <rect x="0" y="78" width="160" height="1" fill="#523218" />
           <rect x="0" y="88" width="160" height="1" fill="#523218" />
 
-          {/* Minimalist Pixel Round Rug (Frog Stage) */}
-          <rect x="56" y="72" width="48" height="12" fill="#d97706" />
-          <rect x="52" y="74" width="56" height="8" fill="#d97706" />
-          <rect x="58" y="74" width="44" height="8" fill="#fde68a" />
-          <rect x="62" y="72" width="36" height="12" fill="#fde68a" />
+          {/* Cozy Woven Round Rug (Frog Stage) */}
+          <rect x="52" y="72" width="56" height="14" fill="#92400e" />
+          <rect x="54" y="73" width="52" height="12" fill="#d97706" />
+          <rect x="58" y="74" width="44" height="10" fill="#fde68a" />
+          <rect x="62" y="75" width="36" height="8" fill="#fef3c7" />
+          {/* Bohemian Aztec Pattern on Rug */}
+          <rect x="66" y="78" width="4" height="2" fill="#d97706" />
+          <rect x="74" y="78" width="4" height="2" fill="#d97706" />
+          <rect x="82" y="78" width="4" height="2" fill="#d97706" />
+          <rect x="90" y="78" width="4" height="2" fill="#d97706" />
         </g>
       )}
 
-      {/* C. SAKURA BLOSSOM SHRINE SCENE */}
+      {/* C. SAKURA BLOSSOM SHRINE (Soft Storybook Palette & Strict Integer Pixel Art) */}
       {config.sceneId === 'sakura_shrine' && (
-        <g>
-          {/* Mount Fuji Pixel Silhouette */}
-          <rect x="52" y="44" width="56" height="6" fill="#475569" opacity="0.6" />
-          <rect x="60" y="38" width="40" height="6" fill="#475569" opacity="0.6" />
-          <rect x="68" y="32" width="24" height="6" fill="#475569" opacity="0.6" />
-          <rect x="74" y="26" width="12" height="6" fill="#475569" opacity="0.6" />
-          <rect x="74" y="26" width="12" height="4" fill="#f8fafc" />
-          <rect x="72" y="30" width="16" height="2" fill="#f8fafc" />
+        <g id="scene-sakura-shrine">
+          {/* Soft Pastel Dusk Sky Gradient */}
+          <rect x="0" y="-80" width="160" height="144" fill="#fbcfe8" />
+          <rect x="0" y="-80" width="160" height="90" fill="#f472b6" opacity="0.4" />
+          <rect x="0" y="20" width="160" height="44" fill="#fed7aa" opacity="0.6" />
 
-          {/* Minimalist Soft Sakura Canopy */}
-          <rect x="0" y="30" width="48" height="24" fill="#f472b6" opacity="0.75" />
-          <rect x="4" y="26" width="40" height="4" fill="#f472b6" opacity="0.75" />
-          <rect x="112" y="28" width="48" height="26" fill="#f472b6" opacity="0.75" />
-          <rect x="116" y="24" width="40" height="4" fill="#f472b6" opacity="0.75" />
+          {/* Mount Fuji Pixel Silhouette with Snow Cap */}
+          <rect x="44" y="46" width="72" height="18" fill="#475569" opacity="0.5" />
+          <rect x="52" y="38" width="56" height="8" fill="#475569" opacity="0.6" />
+          <rect x="60" y="30" width="40" height="8" fill="#475569" opacity="0.7" />
+          <rect x="68" y="24" width="24" height="6" fill="#475569" opacity="0.8" />
+          {/* Pristine Snow Cap on Fuji */}
+          <rect x="68" y="24" width="24" height="4" fill="#f8fafc" />
+          <rect x="66" y="28" width="28" height="3" fill="#f8fafc" />
+          <rect x="70" y="31" width="6" height="2" fill="#f8fafc" />
+          <rect x="84" y="31" width="6" height="2" fill="#f8fafc" />
 
-          {/* Minimalist Vermillion Torii Silhouette */}
-          <rect x="50" y="24" width="60" height="4" fill="#dc2626" />
-          <rect x="48" y="22" width="64" height="2" fill="#18181b" />
-          <rect x="56" y="28" width="4" height="38" fill="#dc2626" />
-          <rect x="100" y="28" width="4" height="38" fill="#dc2626" />
+          {/* Lush Soft Sakura Blossom Branches */}
+          {/* Left Canopy */}
+          <g id="sakura-left">
+            <rect x="0" y="10" width="54" height="34" fill="#f472b6" />
+            <rect x="4" y="6" width="44" height="8" fill="#fb7185" />
+            <rect x="8" y="14" width="38" height="26" fill="#fbcfe8" />
+            <rect x="14" y="18" width="28" height="18" fill="#ffffff" opacity="0.85" />
+            {/* Dark wood branch */}
+            <rect x="0" y="26" width="22" height="3" fill="#523218" />
+            <rect x="18" y="20" width="12" height="2" fill="#523218" />
+          </g>
 
-          {/* Stone Pathway & Courtyard */}
-          <rect x="0" y="60" width="160" height="40" fill="#475569" />
-          <rect x="0" y="66" width="160" height="34" fill="#64748b" />
-          <rect x="56" y="64" width="48" height="36" fill="#cbd5e1" />
+          {/* Right Canopy */}
+          <g id="sakura-right">
+            <rect x="106" y="10" width="54" height="34" fill="#f472b6" />
+            <rect x="112" y="6" width="44" height="8" fill="#fb7185" />
+            <rect x="114" y="14" width="38" height="26" fill="#fbcfe8" />
+            <rect x="118" y="18" width="28" height="18" fill="#ffffff" opacity="0.85" />
+            {/* Dark wood branch */}
+            <rect x="138" y="26" width="22" height="3" fill="#523218" />
+            <rect x="130" y="20" width="12" height="2" fill="#523218" />
+          </g>
+
+          {/* Stepped Floating Sakura Petals */}
+          <rect x="36" y={animTick % 2 === 0 ? 46 : 48} width="2" height="2" fill="#fbcfe8" />
+          <rect x="48" y={animTick % 2 === 0 ? 54 : 52} width="2" height="2" fill="#fda4af" />
+          <rect x="116" y={animTick % 2 === 0 ? 48 : 50} width="2" height="2" fill="#fbcfe8" />
+          <rect x="128" y={animTick % 2 === 0 ? 56 : 54} width="2" height="2" fill="#fda4af" />
+
+          {/* Majestic Vermillion Torii Gate */}
+          {/* Top Kasagi Beam (Black Cap) */}
+          <rect x="46" y="20" width="68" height="3" fill="#18181b" />
+          {/* Primary Vermillion Kasagi Crossbeam */}
+          <rect x="48" y="23" width="64" height="4" fill="#dc2626" />
+          <rect x="50" y="24" width="60" height="2" fill="#ef4444" />
+          {/* Secondary Nuki Crossbeam */}
+          <rect x="52" y="30" width="56" height="3" fill="#dc2626" />
+          {/* Gakuzuka Tablet Plaque in Center */}
+          <rect x="78" y="27" width="4" height="6" fill="#18181b" />
+          <rect x="79" y="28" width="2" height="4" fill="#facc15" />
+          {/* Vertical Pillars (Hashira) */}
+          <rect x="56" y="27" width="6" height="37" fill="#dc2626" />
+          <rect x="57" y="27" width="2" height="37" fill="#ef4444" />
+          <rect x="98" y="27" width="6" height="37" fill="#dc2626" />
+          <rect x="99" y="27" width="2" height="37" fill="#ef4444" />
+          {/* Black Stone Bases (Daiishi) */}
+          <rect x="54" y="60" width="10" height="4" fill="#334155" />
+          <rect x="96" y="60" width="10" height="4" fill="#334155" />
+
+          {/* Stone Lanterns on Flanks (Toro) */}
+          {/* Left Stone Lantern */}
+          <g id="toro-left" transform="translate(24, 48)">
+            <rect x="2" y="0" width="8" height="2" fill="#475569" />
+            <rect x="3" y="2" width="6" height="5" fill="#fef08a" />
+            <rect x="4" y="3" width="4" height="3" fill="#ffffff" />
+            <rect x="1" y="7" width="10" height="3" fill="#64748b" />
+            <rect x="4" y="10" width="4" height="6" fill="#475569" />
+            <rect x="2" y="16" width="8" height="2" fill="#334155" />
+          </g>
+          {/* Right Stone Lantern */}
+          <g id="toro-right" transform="translate(124, 48)">
+            <rect x="2" y="0" width="8" height="2" fill="#475569" />
+            <rect x="3" y="2" width="6" height="5" fill="#fef08a" />
+            <rect x="4" y="3" width="4" height="3" fill="#ffffff" />
+            <rect x="1" y="7" width="10" height="3" fill="#64748b" />
+            <rect x="4" y="10" width="4" height="6" fill="#475569" />
+            <rect x="2" y="16" width="8" height="2" fill="#334155" />
+          </g>
+
+          {/* Shrine Courtyard Ground & Stone Pathway (Frog Stage) */}
+          <rect x="0" y="64" width="160" height="36" fill="#475569" />
+          <rect x="0" y="68" width="160" height="32" fill="#334155" />
+          {/* Cobblestone Central Pathway */}
+          <rect x="48" y="64" width="64" height="36" fill="#64748b" />
+          <rect x="52" y="66" width="56" height="34" fill="#94a3b8" />
+          <rect x="56" y="68" width="48" height="30" fill="#cbd5e1" />
+          {/* Stepped Flagstone Pavers */}
+          <rect x="58" y="72" width="12" height="8" fill="#e2e8f0" />
+          <rect x="74" y="72" width="12" height="8" fill="#e2e8f0" />
+          <rect x="90" y="72" width="12" height="8" fill="#e2e8f0" />
+          <rect x="66" y="82" width="12" height="8" fill="#e2e8f0" />
+          <rect x="82" y="82" width="12" height="8" fill="#e2e8f0" />
         </g>
       )}
 
-      {/* D. RAINY MUSHROOM MEADOW SCENE */}
+      {/* D. RAINY MUSHROOM MEADOW (Soft Storybook Palette & Strict Integer Pixel Art) */}
       {config.sceneId === 'rainy_meadow' && (
-        <g>
-          {/* Misty Evergreen Trees Pixel Blocks */}
-          <rect x="10" y="44" width="30" height="6" fill="#14532d" opacity="0.5" />
-          <rect x="16" y="36" width="18" height="8" fill="#14532d" opacity="0.5" />
-          <rect x="22" y="28" width="6" height="8" fill="#14532d" opacity="0.5" />
+        <g id="scene-rainy-meadow">
+          {/* Soft Misty Rain Sky Gradient */}
+          <rect x="0" y="-80" width="160" height="140" fill="#94a3b8" />
+          <rect x="0" y="-80" width="160" height="80" fill="#64748b" opacity="0.6" />
+          <rect x="0" y="0" width="160" height="56" fill="#cbd5e1" opacity="0.7" />
 
-          <rect x="120" y="44" width="30" height="6" fill="#14532d" opacity="0.5" />
-          <rect x="126" y="34" width="18" height="10" fill="#14532d" opacity="0.5" />
-          <rect x="132" y="26" width="6" height="8" fill="#14532d" opacity="0.5" />
+          {/* Stepped Falling Rain Streaks */}
+          <g opacity="0.5">
+            <rect x="14" y={animTick % 2 === 0 ? 10 : 16} width="1" height="6" fill="#f8fafc" />
+            <rect x="38" y={animTick % 2 === 0 ? 24 : 30} width="1" height="6" fill="#f8fafc" />
+            <rect x="62" y={animTick % 2 === 0 ? 8 : 14} width="1" height="6" fill="#f8fafc" />
+            <rect x="88" y={animTick % 2 === 0 ? 20 : 26} width="1" height="6" fill="#f8fafc" />
+            <rect x="114" y={animTick % 2 === 0 ? 12 : 18} width="1" height="6" fill="#f8fafc" />
+            <rect x="142" y={animTick % 2 === 0 ? 28 : 34} width="1" height="6" fill="#f8fafc" />
+          </g>
 
-          {/* Meadow Ground */}
+          {/* Misty Evergreen Pine Silhouettes */}
+          <rect x="8" y="42" width="34" height="8" fill="#14532d" opacity="0.6" />
+          <rect x="14" y="34" width="22" height="8" fill="#14532d" opacity="0.6" />
+          <rect x="20" y="26" width="10" height="8" fill="#14532d" opacity="0.6" />
+          <rect x="23" y="20" width="4" height="6" fill="#14532d" opacity="0.6" />
+
+          <rect x="118" y="42" width="34" height="8" fill="#14532d" opacity="0.6" />
+          <rect x="124" y="32" width="22" height="10" fill="#14532d" opacity="0.6" />
+          <rect x="130" y="24" width="10" height="8" fill="#14532d" opacity="0.6" />
+          <rect x="133" y="18" width="4" height="6" fill="#14532d" opacity="0.6" />
+
+          {/* Soft Lush Green Meadow Ground */}
           <rect x="0" y="52" width="160" height="48" fill="#15803d" />
-          <rect x="0" y="62" width="160" height="38" fill="#166534" />
+          <rect x="0" y="60" width="160" height="40" fill="#166534" />
+          <rect x="0" y="74" width="160" height="26" fill="#14532d" />
 
-          {/* Minimalist Red Polka-Dot Mushroom on Left */}
-          <rect x="22" y="48" width="6" height="22" fill="#f5f5f4" />
-          <rect x="12" y="36" width="26" height="14" fill="#dc2626" />
-          <rect x="14" y="34" width="22" height="2" fill="#dc2626" />
-          <rect x="16" y="40" width="4" height="4" fill="#ffffff" />
-          <rect x="26" y="38" width="4" height="4" fill="#ffffff" />
+          {/* Large Red Polka-Dot Amanita Mushroom on Left */}
+          <g id="mushroom-left">
+            {/* White Stalk with Gills */}
+            <rect x="22" y="46" width="8" height="24" fill="#e2e8f0" />
+            <rect x="23" y="46" width="6" height="24" fill="#f8fafc" />
+            <rect x="20" y="48" width="12" height="3" fill="#cbd5e1" />
+            {/* Red Cap */}
+            <rect x="12" y="34" width="28" height="14" fill="#dc2626" />
+            <rect x="14" y="32" width="24" height="2" fill="#dc2626" />
+            <rect x="16" y="30" width="20" height="2" fill="#ef4444" />
+            {/* White Polka Dots */}
+            <rect x="16" y="36" width="4" height="4" fill="#ffffff" />
+            <rect x="26" y="34" width="4" height="4" fill="#ffffff" />
+            <rect x="32" y="38" width="3" height="3" fill="#ffffff" />
+            <rect x="20" y="42" width="3" height="3" fill="#ffffff" />
+          </g>
 
-          {/* Small Mushroom on Right */}
-          <rect x="132" y="56" width="4" height="12" fill="#f5f5f4" />
-          <rect x="126" y="50" width="16" height="8" fill="#ea580c" />
-          <rect x="133" y="52" width="3" height="3" fill="#ffffff" />
+          {/* Small Coral-Orange Mushroom Cluster on Right */}
+          <g id="mushroom-right">
+            {/* Stalk */}
+            <rect x="132" y="54" width="5" height="14" fill="#f8fafc" />
+            {/* Cap */}
+            <rect x="126" y="48" width="18" height="8" fill="#ea580c" />
+            <rect x="128" y="46" width="14" height="2" fill="#f97316" />
+            <rect x="130" y="50" width="3" height="3" fill="#ffffff" />
+            <rect x="138" y="51" width="2" height="2" fill="#ffffff" />
+            {/* Baby mushroom */}
+            <rect x="120" y="60" width="3" height="8" fill="#f8fafc" />
+            <rect x="117" y="56" width="9" height="5" fill="#f59e0b" />
+          </g>
 
           {/* Cozy Mossy Stone Platform (Frog Stage) */}
-          <rect x="58" y="66" width="44" height="16" fill="#3f3f46" />
-          <rect x="62" y="64" width="36" height="6" fill="#65a30d" />
+          <rect x="54" y="66" width="52" height="18" fill="#334155" />
+          <rect x="56" y="67" width="48" height="16" fill="#475569" />
+          {/* Soft Moss Overgrowth */}
+          <rect x="56" y="65" width="48" height="6" fill="#65a30d" />
+          <rect x="58" y="64" width="44" height="4" fill="#84cc16" />
+          <rect x="62" y="64" width="36" height="2" fill="#a3e635" />
+          {/* Tiny Wild Dew Drops */}
+          <rect x="60" y="66" width="2" height="2" fill="#ffffff" />
+          <rect x="88" y="65" width="2" height="2" fill="#ffffff" />
         </g>
       )}
 
-      {/* E. MOUNTAIN HOT SPRING (ONSEN) */}
+      {/* E. MOUNTAIN HOT SPRING (ONSEN - Soft Storybook Palette & Strict Pixel Art) */}
       {config.sceneId === 'onsen' && (
-        <g>
-          {/* Distant Mountain Peak Pixel Blocks */}
-          <rect x="20" y="44" width="80" height="6" fill="#334155" opacity="0.4" />
-          <rect x="40" y="34" width="40" height="10" fill="#334155" opacity="0.4" />
-          <rect x="55" y="26" width="12" height="8" fill="#334155" opacity="0.4" />
+        <g id="scene-onsen">
+          {/* Soft Misty Dusk Sky */}
+          <rect x="0" y="-80" width="160" height="140" fill="#94a3b8" />
+          <rect x="0" y="-80" width="160" height="70" fill="#64748b" opacity="0.7" />
+          <rect x="0" y="0" width="160" height="56" fill="#cbd5e1" opacity="0.6" />
 
-          <rect x="80" y="44" width="80" height="6" fill="#334155" opacity="0.4" />
-          <rect x="100" y="32" width="40" height="12" fill="#334155" opacity="0.4" />
-          <rect x="114" y="24" width="12" height="8" fill="#334155" opacity="0.4" />
+          {/* Distant Mountain Peak Silhouettes with Snow Dust */}
+          <rect x="20" y="44" width="80" height="6" fill="#334155" opacity="0.5" />
+          <rect x="40" y="34" width="40" height="10" fill="#334155" opacity="0.5" />
+          <rect x="54" y="26" width="14" height="8" fill="#334155" opacity="0.5" />
+          <rect x="56" y="26" width="10" height="2" fill="#f8fafc" opacity="0.8" />
 
-          {/* Steaming Mineral Water Basin */}
-          <rect x="0" y="56" width="160" height="44" fill="#3f3f46" />
+          <rect x="80" y="44" width="80" height="6" fill="#334155" opacity="0.5" />
+          <rect x="100" y="32" width="40" height="12" fill="#334155" opacity="0.5" />
+          <rect x="114" y="24" width="12" height="8" fill="#334155" opacity="0.5" />
+          <rect x="116" y="24" width="8" height="2" fill="#f8fafc" opacity="0.8" />
+
+          {/* Rustic Stone Bath Edge Basin */}
+          <rect x="0" y="54" width="160" height="46" fill="#334155" />
+          <rect x="0" y="58" width="160" height="42" fill="#475569" />
+
+          {/* Steaming Crystal Mineral Water Basin */}
+          <rect x="12" y="60" width="136" height="36" fill="#0284c7" />
           <rect x="16" y="62" width="128" height="34" fill="#06b6d4" />
-          <rect x="20" y="66" width="120" height="28" fill="#0891b2" />
+          <rect x="20" y="66" width="120" height="28" fill="#22d3ee" />
+          <rect x="24" y="68" width="112" height="4" fill="#a5f3fc" opacity="0.75" />
 
-          {/* Soothing Steam Puffs Pixel Blocks */}
-          <rect x="37" y={animTick % 2 === 0 ? 52 : 50} width="16" height="4" fill="#ffffff" opacity="0.4" />
-          <rect x="41" y={animTick % 2 === 0 ? 50 : 48} width="8" height="2" fill="#ffffff" opacity="0.4" />
-          <rect x="105" y={animTick % 2 === 0 ? 50 : 48} width="20" height="4" fill="#ffffff" opacity="0.4" />
-          <rect x="110" y={animTick % 2 === 0 ? 48 : 46} width="10" height="2" fill="#ffffff" opacity="0.4" />
+          {/* Stepped Animated Soothing Steam Clouds */}
+          <g fill="#ffffff" opacity="0.5">
+            <rect x="36" y={animTick % 2 === 0 ? 50 : 48} width="16" height="4" />
+            <rect x="40" y={animTick % 2 === 0 ? 46 : 44} width="8" height="3" />
+            <rect x="104" y={animTick % 2 === 0 ? 48 : 46} width="18" height="4" />
+            <rect x="108" y={animTick % 2 === 0 ? 44 : 42} width="10" height="3" />
+          </g>
 
-          {/* Wooden Bucket on Right */}
-          <rect x="124" y="60" width="12" height="8" fill="#d97706" />
-          <rect x="126" y="58" width="6" height="3" fill="#ffffff" />
+          {/* Bamboo Water Spout on Left (Kakei) */}
+          <g id="bamboo-spout" transform="translate(14, 46)">
+            <rect x="4" y="0" width="4" height="16" fill="#15803d" />
+            <rect x="5" y="0" width="2" height="16" fill="#4ade80" />
+            <rect x="6" y="6" width="12" height="3" fill="#16a34a" />
+            <rect x="6" y="7" width="12" height="1" fill="#86efac" />
+            {/* Water Drip */}
+            <rect x="16" y={animTick % 2 === 0 ? 9 : 11} width="2" height="4" fill="#a5f3fc" />
+          </g>
 
-          {/* Smooth Warm River Rock (Frog Stage) */}
-          <rect x="62" y="70" width="36" height="12" fill="#71717a" />
-          <rect x="58" y="74" width="44" height="6" fill="#71717a" />
-          <rect x="66" y="72" width="28" height="8" fill="#a1a1aa" />
+          {/* Hinoki Wooden Bath Bucket & Hand Towel on Right */}
+          <g id="onsen-bucket" transform="translate(126, 56)">
+            <rect x="2" y="4" width="14" height="10" fill="#a16207" />
+            <rect x="3" y="5" width="12" height="8" fill="#ca8a04" />
+            <rect x="2" y="7" width="14" height="1" fill="#1e293b" />
+            <rect x="2" y="11" width="14" height="1" fill="#1e293b" />
+            {/* White Folded Towel */}
+            <rect x="5" y="2" width="8" height="4" fill="#f8fafc" />
+            <rect x="6" y="3" width="6" height="3" fill="#ffffff" />
+          </g>
+
+          {/* Smooth Warm River Rock Platform (Frog Stage) */}
+          <rect x="56" y="68" width="48" height="16" fill="#334155" />
+          <rect x="58" y="70" width="44" height="12" fill="#64748b" />
+          <rect x="62" y="72" width="36" height="8" fill="#94a3b8" />
+          <rect x="66" y="73" width="28" height="4" fill="#cbd5e1" />
         </g>
       )}
 
-      {/* F. STARRY CAMPFIRE HAVEN */}
+      {/* F. STARRY CAMPFIRE HAVEN (Soft Storybook Palette & Strict Pixel Art) */}
       {config.sceneId === 'night_camp' && (
-        <g>
-          {/* Distant Pine Trees in Night */}
-          <rect x="10" y="44" width="30" height="6" fill="#0f172a" />
-          <rect x="16" y="36" width="18" height="8" fill="#0f172a" />
-          <rect x="22" y="28" width="6" height="8" fill="#0f172a" />
+        <g id="scene-night-camp">
+          {/* Deep Twilight Navy Sky with Soft Indigo Gradient */}
+          <rect x="0" y="-80" width="160" height="136" fill="#0f172a" />
+          <rect x="0" y="-80" width="160" height="70" fill="#020617" />
+          <rect x="0" y="24" width="160" height="32" fill="#1e1b4b" opacity="0.6" />
 
-          <rect x="120" y="44" width="30" height="6" fill="#0f172a" />
-          <rect x="126" y="34" width="18" height="10" fill="#0f172a" />
-          <rect x="132" y="26" width="6" height="8" fill="#0f172a" />
+          {/* Stepped Twinkling Stars */}
+          <rect x="18" y="10" width="2" height="2" fill="#fef08a" />
+          <rect x="19" y="9" width="1" height="4" fill="#fef9c3" />
+          <rect x="42" y="18" width="2" height="2" fill="#fef08a" />
+          <rect x="76" y="8" width="3" height="3" fill="#fde047" />
+          <rect x="77" y="7" width="1" height="5" fill="#ffffff" />
+          <rect x="110" y="14" width="2" height="2" fill="#fef08a" />
+          <rect x="138" y="10" width="2" height="2" fill="#fef08a" />
+          <rect x="139" y="9" width="1" height="4" fill="#fef9c3" />
+          <rect x="148" y="22" width="2" height="2" fill="#fef08a" />
 
-          {/* Forest Ground */}
+          {/* Distant Pine Tree Mountain Ridge Silhouettes */}
+          <rect x="6" y="40" width="36" height="12" fill="#1e293b" />
+          <rect x="12" y="32" width="24" height="10" fill="#1e293b" />
+          <rect x="18" y="24" width="12" height="8" fill="#1e293b" />
+          <rect x="22" y="18" width="4" height="6" fill="#1e293b" />
+
+          <rect x="116" y="38" width="40" height="14" fill="#1e293b" />
+          <rect x="122" y="28" width="28" height="12" fill="#1e293b" />
+          <rect x="128" y="20" width="16" height="10" fill="#1e293b" />
+          <rect x="134" y="14" width="4" height="6" fill="#1e293b" />
+
+          {/* Deep Night Forest Ground */}
           <rect x="0" y="52" width="160" height="48" fill="#1e293b" />
-          <rect x="0" y="62" width="160" height="38" fill="#0f172a" />
+          <rect x="0" y="60" width="160" height="40" fill="#0f172a" />
+          <rect x="0" y="76" width="160" height="24" fill="#020617" />
 
-          {/* Minimalist A-Frame Tent on Right Pixel Blocks */}
-          <rect x="112" y="66" width="40" height="12" fill="#0284c7" />
-          <rect x="120" y="54" width="24" height="12" fill="#0284c7" />
-          <rect x="128" y="46" width="8" height="8" fill="#0284c7" />
-          <rect x="124" y="64" width="16" height="14" fill="#0f172a" />
-          <rect x="128" y="58" width="8" height="6" fill="#0f172a" />
+          {/* Cozy Glowing Canvas Tent on Right */}
+          <g id="camp-tent" transform="translate(108, 38)">
+            {/* Outer A-Frame Canvas Wall */}
+            <rect x="4" y="28" width="44" height="12" fill="#0369a1" />
+            <rect x="10" y="18" width="32" height="12" fill="#0284c7" />
+            <rect x="16" y="10" width="20" height="10" fill="#38bdf8" />
+            <rect x="22" y="4" width="8" height="8" fill="#7dd3fc" />
+            {/* Tent Interior Opening */}
+            <rect x="18" y="24" width="16" height="16" fill="#0f172a" />
+            <rect x="20" y="20" width="12" height="6" fill="#0f172a" />
+            {/* Glowing Lantern Warm Interior Light */}
+            <rect x="22" y="28" width="8" height="10" fill="#f59e0b" opacity="0.85" />
+            <rect x="24" y="30" width="4" height="6" fill="#fef08a" />
+            {/* Tent Guy Lines & Pegs */}
+            <rect x="2" y="38" width="2" height="2" fill="#94a3b8" />
+            <rect x="48" y="38" width="2" height="2" fill="#94a3b8" />
+          </g>
 
-          {/* Minimalist Crackling Campfire on Left */}
-          <rect x="22" y="74" width="16" height="3" fill="#78350f" />
-          <rect x="26" y="68" width="8" height="6" fill="#ea580c" />
-          <rect x="28" y="60" width="4" height="8" fill="#ea580c" />
-          <rect x="28" y="64" width="4" height="8" fill="#facc15" />
+          {/* Crackling Warm Campfire on Left */}
+          <g id="campfire" transform="translate(18, 54)">
+            {/* Stone Ring */}
+            <rect x="2" y="20" width="24" height="6" fill="#475569" />
+            <rect x="4" y="18" width="20" height="4" fill="#64748b" />
+            {/* Timber Firewood Logs */}
+            <rect x="6" y="18" width="16" height="4" fill="#78350f" />
+            <rect x="8" y="16" width="12" height="4" fill="#92400e" />
+            {/* Animated Stepped Fire Flames */}
+            <rect x="10" y={animTick % 2 === 0 ? 8 : 10} width="8" height="10" fill="#ea580c" />
+            <rect x="12" y={animTick % 2 === 0 ? 4 : 6} width="4" height="8" fill="#f59e0b" />
+            <rect x="13" y={animTick % 2 === 0 ? 2 : 4} width="2" height="6" fill="#fef08a" />
+            {/* Floating Fire Ember Pixels */}
+            <rect x={animTick % 2 === 0 ? 11 : 14} y={animTick % 2 === 0 ? 0 : 2} width="1" height="1" fill="#fde047" />
+          </g>
 
-          {/* Cozy Camp Mat (Frog Stage) */}
-          <rect x="60" y="68" width="40" height="16" fill="#dc2626" />
-          <rect x="64" y="70" width="32" height="12" fill="#f87171" />
+          {/* Cozy Woven Plaid Camp Mat Platform (Frog Stage) */}
+          <rect x="54" y="68" width="52" height="16" fill="#991b1b" />
+          <rect x="56" y="70" width="48" height="12" fill="#dc2626" />
+          <rect x="58" y="72" width="44" height="8" fill="#ef4444" />
+          {/* Plaid Pattern Lines */}
+          <rect x="54" y="74" width="52" height="1" fill="#fef08a" opacity="0.6" />
+          <rect x="66" y="68" width="1" height="16" fill="#fef08a" opacity="0.6" />
+          <rect x="80" y="68" width="1" height="16" fill="#fef08a" opacity="0.6" />
+          <rect x="94" y="68" width="1" height="16" fill="#fef08a" opacity="0.6" />
         </g>
       )}
 
-      {/* G. WASHI TEAROOM LOFT */}
+      {/* G. WASHI TEAROOM LOFT (Soft Storybook Palette & Strict Pixel Art) */}
       {config.sceneId === 'tearoom' && (
-        <g>
-          {/* Shoji Paper Wall */}
+        <g id="scene-tearoom">
+          {/* Shoji Paper Wall Background in Soft Warm Beige */}
           <rect x="0" y="0" width="160" height="62" fill="#fef3c7" />
-          <rect x="0" y="0" width="160" height="3" fill="#523218" />
-          <rect x="0" y="20" width="160" height="1" fill="#523218" opacity="0.6" />
-          <rect x="0" y="40" width="160" height="1" fill="#523218" opacity="0.6" />
-          <rect x="0" y="60" width="160" height="3" fill="#523218" />
-          <rect x="40" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
-          <rect x="80" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
-          <rect x="120" y="0" width="1" height="62" fill="#523218" opacity="0.6" />
+          {/* Dark Walnut Top Cornice */}
+          <rect x="0" y="0" width="160" height="4" fill="#523218" />
+          <rect x="0" y="4" width="160" height="2" fill="#784a28" />
 
-          {/* Bonsai Plant on Right */}
-          <rect x="130" y="40" width="12" height="6" fill="#1c1917" />
-          <rect x="134" y="32" width="3" height="8" fill="#78350f" />
-          <rect x="128" y="24" width="14" height="10" fill="#15803d" />
-          <rect x="131" y="21" width="8" height="3" fill="#15803d" />
+          {/* Shoji Wood Lattice Screen Grid */}
+          <g opacity="0.45">
+            <rect x="0" y="18" width="160" height="1" fill="#78350f" />
+            <rect x="0" y="32" width="160" height="1" fill="#78350f" />
+            <rect x="0" y="46" width="160" height="1" fill="#78350f" />
+            <rect x="0" y="60" width="160" height="2" fill="#78350f" />
+            <rect x="28" y="0" width="1" height="62" fill="#78350f" />
+            <rect x="56" y="0" width="1" height="62" fill="#78350f" />
+            <rect x="84" y="0" width="1" height="62" fill="#78350f" />
+            <rect x="112" y="0" width="1" height="62" fill="#78350f" />
+            <rect x="140" y="0" width="1" height="62" fill="#78350f" />
+          </g>
 
-          {/* Tatami Mats */}
+          {/* Hanging Japanese Calligraphy Scroll on Left (Kakejiku) */}
+          <g id="tearoom-scroll" transform="translate(12, 10)">
+            <rect x="2" y="0" width="14" height="2" fill="#523218" />
+            <rect x="3" y="2" width="12" height="38" fill="#d4be9c" />
+            <rect x="5" y="6" width="8" height="28" fill="#ffffff" />
+            {/* Kanji Character Brush Strokes (和 - Harmony) */}
+            <rect x="8" y="10" width="2" height="8" fill="#18181b" />
+            <rect x="6" y="14" width="6" height="2" fill="#18181b" />
+            <rect x="7" y="20" width="4" height="4" fill="#18181b" />
+            <rect x="2" y="40" width="14" height="3" fill="#523218" />
+          </g>
+
+          {/* Traditional Ceramic Bonsai Pine Pot on Right (Tokonoma) */}
+          <g id="tearoom-bonsai" transform="translate(126, 30)">
+            <rect x="4" y="18" width="16" height="8" fill="#1c1917" />
+            <rect x="5" y="19" width="14" height="6" fill="#292524" />
+            <rect x="6" y="26" width="3" height="2" fill="#1c1917" />
+            <rect x="15" y="26" width="3" height="2" fill="#1c1917" />
+            {/* Gnarled Pine Trunk */}
+            <rect x="10" y="10" width="4" height="10" fill="#78350f" />
+            <rect x="7" y="6" width="5" height="6" fill="#78350f" />
+            <rect x="12" y="4" width="6" height="4" fill="#78350f" />
+            {/* Lush Pine Needle Foliage Cloud Pads */}
+            <rect x="2" y="2" width="12" height="8" fill="#15803d" />
+            <rect x="4" y="0" width="8" height="4" fill="#16a34a" />
+            <rect x="10" y="0" width="12" height="6" fill="#15803d" />
+            <rect x="12" y="-2" width="8" height="4" fill="#4ade80" />
+          </g>
+
+          {/* Traditional Woven Tatami Mats Floor */}
           <rect x="0" y="62" width="160" height="38" fill="#d9f99d" />
-          <rect x="0" y="76" width="160" height="2" fill="#365314" />
+          <rect x="0" y="62" width="160" height="2" fill="#65a30d" />
+          <rect x="0" y="78" width="160" height="3" fill="#365314" />
+          <rect x="80" y="62" width="3" height="38" fill="#365314" />
 
-          {/* Low Wooden Table (Frog Stage) */}
-          <rect x="58" y="66" width="44" height="14" fill="#78350f" />
-          <rect x="62" y="64" width="36" height="3" fill="#b45309" />
+          {/* Low Hinoki Wooden Chashitsu Table (Frog Stage) */}
+          <rect x="52" y="66" width="56" height="16" fill="#78350f" />
+          <rect x="54" y="65" width="52" height="4" fill="#b45309" />
+          <rect x="56" y="64" width="48" height="2" fill="#d97706" />
+          {/* Ceramic Matcha Bowl & Whisk (Chasen) on Table */}
+          <rect x="62" y="60" width="6" height="5" fill="#18181b" />
+          <rect x="63" y="61" width="4" height="2" fill="#22c55e" />
+          <rect x="72" y="61" width="4" height="4" fill="#fde68a" />
+          <rect x="90" y="61" width="6" height="4" fill="#f43f5e" />
         </g>
       )}
 
-      {/* H. CELESTIAL CLOUD PALACE */}
+      {/* H. CELESTIAL CLOUD PALACE (Soft Storybook Palette & Strict Pixel Art) */}
       {config.sceneId === 'cloud_palace' && (
-        <g>
-          {/* Golden Starlight Particles */}
-          <rect x="27" y="23" width="3" height="3" fill="#fef08a" />
-          <rect x="131" y="19" width="3" height="3" fill="#fef08a" />
-          <rect x="78" y="14" width="4" height="4" fill="#facc15" />
+        <g id="scene-cloud-palace">
+          {/* Pastel Twilight Gradient Sky */}
+          <rect x="0" y="-80" width="160" height="144" fill="#c084fc" />
+          <rect x="0" y="-80" width="160" height="80" fill="#818cf8" />
+          <rect x="0" y="16" width="160" height="48" fill="#f472b6" opacity="0.6" />
+          <rect x="0" y="44" width="160" height="22" fill="#fed7aa" opacity="0.7" />
 
-          {/* Dreamy Cloud Platform */}
+          {/* Majestic Rainbow Arch in Distance */}
+          <g opacity="0.6">
+            <rect x="18" y="24" width="124" height="2" fill="#f43f5e" />
+            <rect x="22" y="26" width="116" height="2" fill="#fb923c" />
+            <rect x="26" y="28" width="108" height="2" fill="#fde047" />
+            <rect x="30" y="30" width="100" height="2" fill="#4ade80" />
+            <rect x="34" y="32" width="92" height="2" fill="#38bdf8" />
+            <rect x="38" y="34" width="84" height="2" fill="#a855f7" />
+          </g>
+
+          {/* Stepped Glowing Golden Star Clusters */}
+          <rect x="24" y="14" width="3" height="3" fill="#fef08a" />
+          <rect x="25" y="13" width="1" height="5" fill="#ffffff" />
+          <rect x="68" y="10" width="4" height="4" fill="#fef08a" />
+          <rect x="69" y="9" width="2" height="6" fill="#ffffff" />
+          <rect x="136" y="16" width="3" height="3" fill="#fef08a" />
+          <rect x="137" y="15" width="1" height="5" fill="#ffffff" />
+
+          {/* Dreamy Fluffy Cloud Floor & Platform (Frog Stage) */}
           <rect x="0" y="66" width="160" height="34" fill="#ede9fe" />
-          {/* Cloud Puffs (Crisp Pixel Blocks) */}
-          <rect x="21" y="52" width="28" height="20" fill="#ffffff" />
-          <rect x="25" y="48" width="20" height="4" fill="#ffffff" />
-          <rect x="49" y="48" width="32" height="24" fill="#ffffff" />
-          <rect x="55" y="44" width="20" height="4" fill="#ffffff" />
-          <rect x="79" y="48" width="32" height="24" fill="#ffffff" />
-          <rect x="85" y="44" width="20" height="4" fill="#ffffff" />
-          <rect x="111" y="52" width="28" height="20" fill="#ffffff" />
-          <rect x="115" y="48" width="20" height="4" fill="#ffffff" />
+          <rect x="0" y="78" width="160" height="22" fill="#ddd6fe" />
+
+          {/* Stepped Fluffy Cumulus Cloud Puffs */}
+          {/* Cloud Left */}
+          <rect x="12" y="52" width="34" height="22" fill="#ffffff" />
+          <rect x="16" y="48" width="26" height="6" fill="#ffffff" />
+          <rect x="20" y="44" width="18" height="6" fill="#ffffff" />
+          <rect x="12" y="70" width="34" height="4" fill="#e0e7ff" />
+
+          {/* Cloud Center Platform (Frog Stage) */}
+          <rect x="46" y="50" width="68" height="24" fill="#ffffff" />
+          <rect x="52" y="44" width="56" height="8" fill="#ffffff" />
+          <rect x="60" y="40" width="40" height="6" fill="#ffffff" />
+          <rect x="46" y="70" width="68" height="4" fill="#e0e7ff" />
+
+          {/* Cloud Right */}
+          <rect x="114" y="52" width="34" height="22" fill="#ffffff" />
+          <rect x="118" y="48" width="26" height="6" fill="#ffffff" />
+          <rect x="122" y="44" width="18" height="6" fill="#ffffff" />
+          <rect x="114" y="70" width="34" height="4" fill="#e0e7ff" />
         </g>
       )}
 
-      {/* I. MISTY EMERALD BAMBOO GROVE */}
+      {/* I. MISTY EMERALD BAMBOO GROVE (Soft Storybook Palette & Strict Pixel Art) */}
       {config.sceneId === 'bamboo_grove' && (
-        <g>
-          {/* Bamboo Stalks */}
-          <rect x="20" y="0" width="6" height="74" fill="#15803d" />
-          <rect x="35" y="0" width="4" height="74" fill="#166534" opacity="0.6" />
-          <rect x="125" y="0" width="6" height="74" fill="#15803d" />
-          <rect x="140" y="0" width="4" height="74" fill="#166534" opacity="0.6" />
+        <g id="scene-bamboo-grove">
+          {/* Soft Misty Emerald Forest Canopy Sky */}
+          <rect x="0" y="-80" width="160" height="144" fill="#065f46" />
+          <rect x="0" y="-80" width="160" height="80" fill="#047857" />
+          <rect x="0" y="16" width="160" height="48" fill="#10b981" opacity="0.6" />
+          <rect x="0" y="44" width="160" height="22" fill="#6ee7b7" opacity="0.5" />
 
-          {/* Soft Paper Lantern */}
-          <rect x="26" y="20" width="2" height="2" fill="#78350f" />
-          <rect x="28" y="22" width="2" height="2" fill="#78350f" />
-          <rect x="30" y="24" width="2" height="2" fill="#78350f" />
-          <rect x="32" y="26" width="2" height="2" fill="#78350f" />
-          <rect x="34" y="28" width="2" height="2" fill="#78350f" />
-          <rect x="35" y="30" width="8" height="10" fill="#dc2626" />
-          <rect x="37" y="33" width="4" height="4" fill="#fef08a" />
+          {/* Towering Bamboo Stalks (Multi-layered Depth) */}
+          {/* Back Layer Stalks */}
+          <rect x="12" y="-40" width="4" height="106" fill="#047857" opacity="0.6" />
+          <rect x="44" y="-40" width="4" height="106" fill="#047857" opacity="0.6" />
+          <rect x="116" y="-40" width="4" height="106" fill="#047857" opacity="0.6" />
+          <rect x="144" y="-40" width="4" height="106" fill="#047857" opacity="0.6" />
 
-          {/* Mossy Stepping Stone Pathway */}
-          <rect x="0" y="66" width="160" height="34" fill="#14532d" />
-          <rect x="54" y="72" width="52" height="14" fill="#475569" />
-          <rect x="58" y="70" width="44" height="18" fill="#475569" />
-          <rect x="58" y="73" width="44" height="12" fill="#64748b" />
-          <rect x="62" y="71" width="36" height="16" fill="#64748b" />
+          {/* Forefront Primary Bamboo Stalks */}
+          {/* Stalk 1 */}
+          <rect x="22" y="-40" width="8" height="106" fill="#065f46" />
+          <rect x="23" y="-40" width="5" height="106" fill="#10b981" />
+          <rect x="24" y="-40" width="2" height="106" fill="#6ee7b7" />
+          {/* Nodes */}
+          <rect x="20" y="10" width="12" height="2" fill="#064e3b" />
+          <rect x="20" y="34" width="12" height="2" fill="#064e3b" />
+          <rect x="20" y="58" width="12" height="2" fill="#064e3b" />
+
+          {/* Stalk 2 */}
+          <rect x="128" y="-40" width="8" height="106" fill="#065f46" />
+          <rect x="129" y="-40" width="5" height="106" fill="#10b981" />
+          <rect x="130" y="-40" width="2" height="106" fill="#6ee7b7" />
+          {/* Nodes */}
+          <rect x="126" y="16" width="12" height="2" fill="#064e3b" />
+          <rect x="126" y="40" width="12" height="2" fill="#064e3b" />
+          <rect x="126" y="64" width="12" height="2" fill="#064e3b" />
+
+          {/* Hanging Traditional Chouchin Paper Lantern */}
+          <g id="bamboo-lantern" transform="translate(30, 24)">
+            <rect x="2" y="0" width="2" height="8" fill="#78350f" />
+            <rect x="0" y="8" width="6" height="2" fill="#1e293b" />
+            <rect x="-2" y="10" width="10" height="12" fill="#dc2626" />
+            <rect x="-1" y="11" width="8" height="10" fill="#ef4444" />
+            <rect x="1" y="13" width="4" height="6" fill="#fef08a" />
+            <rect x="2" y="14" width="2" height="4" fill="#ffffff" />
+            <rect x="0" y="22" width="6" height="2" fill="#1e293b" />
+            <rect x="2" y="24" width="2" height="4" fill="#dc2626" />
+          </g>
+
+          {/* Mossy River Ground & Stone Steps (Frog Stage) */}
+          <rect x="0" y="66" width="160" height="34" fill="#064e3b" />
+          <rect x="0" y="70" width="160" height="30" fill="#065f46" />
+
+          {/* Stepped River Cobblestones Platform (Frog Stage) */}
+          <rect x="52" y="70" width="56" height="16" fill="#334155" />
+          <rect x="54" y="71" width="52" height="14" fill="#475569" />
+          <rect x="58" y="72" width="44" height="10" fill="#64748b" />
+          {/* Soft River Moss Patches */}
+          <rect x="56" y="70" width="14" height="3" fill="#10b981" />
+          <rect x="86" y="71" width="16" height="3" fill="#10b981" />
         </g>
       )}
 
@@ -6183,6 +6925,356 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
         </g>
       )}
 
+      {/* N. KOREAN BBQ RESTAURANT SCENE (100% STRICT INTEGER PIXEL ART) */}
+      {config.sceneId === 'korean_bbq' && (
+        <g id="scene-korean-bbq">
+          {/* 1. Background Restaurant Atmosphere & Slatted Walnut Wooden Paneling */}
+          <rect x="0" y="0" width="160" height="56" fill="#181311" />
+          {/* Vertical Warm Dark Slats */}
+          {Array.from({ length: 20 }).map((_, i) => (
+            <g key={i}>
+              <rect x={i * 8} y="0" width="1" height="56" fill="#0c0a09" />
+              <rect x={i * 8 + 1} y="0" width="1" height="56" fill="#291e1a" />
+              <rect x={i * 8 + 2} y="0" width="5" height="56" fill="#1c1412" />
+              <rect x={i * 8 + 7} y="0" width="1" height="56" fill="#140e0c" />
+            </g>
+          ))}
+          {/* Top Wooden Trim Beam */}
+          <rect x="0" y="0" width="160" height="4" fill="#291e1a" />
+          <rect x="0" y="4" width="160" height="1" fill="#0c0a09" />
+
+          {/* Glowing Retro K-BBQ Neon Wall Sign (삼겹살 K-BBQ) with Neon Glow */}
+          <g id="kbbq-neon-sign" transform="translate(18, 10)">
+            {/* Neon Backing Plaque */}
+            <rect x="0" y="0" width="52" height="20" fill="#09090b" />
+            <rect x="1" y="1" width="50" height="18" fill="#18181b" />
+            {/* Outer Neon Glow Rim */}
+            <rect x="2" y="2" width="48" height="1" fill="#f43f5e" opacity={animTick % 2 === 0 ? 0.8 : 1.0} />
+            <rect x="2" y="17" width="48" height="1" fill="#f43f5e" opacity={animTick % 2 === 0 ? 0.8 : 1.0} />
+            <rect x="2" y="3" width="1" height="14" fill="#f43f5e" opacity={animTick % 2 === 0 ? 0.8 : 1.0} />
+            <rect x="49" y="3" width="1" height="14" fill="#f43f5e" opacity={animTick % 2 === 0 ? 0.8 : 1.0} />
+            {/* Korean Pixel Characters: '삼겹살' (Samgyeopsal) in Neon Pink */}
+            {/* '삼' */}
+            <rect x="6" y="5" width="8" height="1" fill="#fb7185" />
+            <rect x="10" y="6" width="1" height="4" fill="#fb7185" />
+            <rect x="6" y="8" width="5" height="1" fill="#fb7185" />
+            <rect x="7" y="11" width="6" height="3" fill="#fb7185" />
+            <rect x="9" y="12" width="2" height="1" fill="#18181b" />
+            {/* '겹' */}
+            <rect x="18" y="5" width="7" height="1" fill="#fb7185" />
+            <rect x="18" y="6" width="1" height="4" fill="#fb7185" />
+            <rect x="18" y="8" width="6" height="1" fill="#fb7185" />
+            <rect x="24" y="6" width="1" height="5" fill="#fb7185" />
+            <rect x="19" y="11" width="5" height="3" fill="#fb7185" />
+            <rect x="21" y="12" width="1" height="1" fill="#18181b" />
+            {/* '살' */}
+            <rect x="29" y="5" width="7" height="1" fill="#fb7185" />
+            <rect x="32" y="6" width="1" height="4" fill="#fb7185" />
+            <rect x="29" y="8" width="4" height="1" fill="#fb7185" />
+            <rect x="30" y="11" width="5" height="3" fill="#fb7185" />
+            {/* 'K-BBQ' in Neon Cyan */}
+            <rect x="38" y="7" width="2" height="6" fill="#38bdf8" />
+            <rect x="40" y="8" width="1" height="2" fill="#38bdf8" />
+            <rect x="41" y="10" width="1" height="3" fill="#38bdf8" />
+            <rect x="43" y="9" width="2" height="1" fill="#38bdf8" />
+            <rect x="46" y="7" width="3" height="6" fill="#38bdf8" />
+            <rect x="47" y="8" width="1" height="1" fill="#18181b" />
+            <rect x="47" y="11" width="1" height="1" fill="#18181b" />
+          </g>
+
+          {/* Stainless Steel Overhead Exhaust Duct & Ventilation Hood Pipe */}
+          <g id="kbbq-exhaust-hood" transform="translate(71, 0)">
+            {/* Ceiling Flange */}
+            <rect x="4" y="0" width="10" height="3" fill="#334155" />
+            <rect x="5" y="0" width="8" height="2" fill="#64748b" />
+            {/* Telescoping Vertical Duct Pipe */}
+            <rect x="6" y="3" width="6" height="28" fill="#1e293b" />
+            <rect x="7" y="3" width="4" height="28" fill="#475569" />
+            <rect x="8" y="3" width="2" height="28" fill="#94a3b8" />
+            <rect x="9" y="3" width="1" height="28" fill="#cbd5e1" />
+            {/* Chrome Joint Ring Couplers */}
+            <rect x="5" y="10" width="8" height="2" fill="#64748b" />
+            <rect x="7" y="10" width="4" height="2" fill="#f8fafc" />
+            <rect x="5" y="20" width="8" height="2" fill="#64748b" />
+            <rect x="7" y="20" width="4" height="2" fill="#f8fafc" />
+            {/* Flared Bell Hood Collector over Grill */}
+            <rect x="3" y="31" width="12" height="3" fill="#334155" />
+            <rect x="1" y="34" width="16" height="4" fill="#475569" />
+            <rect x="0" y="38" width="18" height="2" fill="#64748b" />
+            <rect x="1" y="38" width="16" height="1" fill="#cbd5e1" />
+            <rect x="4" y="34" width="6" height="4" fill="#94a3b8" />
+            <rect x="6" y="34" width="2" height="4" fill="#ffffff" />
+            {/* Animated Smoke Suction into Hood */}
+            <rect x="7" y={30 - ((animTick * 2) % 6)} width="2" height="2" fill="#ffffff" opacity={0.6} />
+            <rect x="9" y={28 - ((animTick * 2 + 2) % 6)} width="2" height="2" fill="#e2e8f0" opacity={0.5} />
+          </g>
+
+          {/* Warm Amber Restaurant Light Bulbs with Cages on Left & Right */}
+          <g id="kbbq-warm-lamps">
+            {/* Left Lamp */}
+            <rect x="10" y="0" width="1" height="8" fill="#78350f" />
+            <rect x="8" y="8" width="5" height="3" fill="#b45309" />
+            <rect x="9" y="11" width="3" height="3" fill="#facc15" />
+            <rect x="10" y="12" width="1" height="1" fill="#ffffff" />
+            <rect x="6" y="9" width="9" height="7" fill="#fef08a" opacity={0.15 + (animTick % 2) * 0.05} />
+            {/* Right Lamp */}
+            <rect x="145" y="0" width="1" height="8" fill="#78350f" />
+            <rect x="143" y="8" width="5" height="3" fill="#b45309" />
+            <rect x="144" y="11" width="3" height="3" fill="#facc15" />
+            <rect x="145" y="12" width="1" height="1" fill="#ffffff" />
+            <rect x="141" y="9" width="9" height="7" fill="#fef08a" opacity={0.15 + (animTick % 2) * 0.05} />
+          </g>
+
+          {/* 2. Restaurant Flooring - Charcoal Slate Tiles with Perspective Grid */}
+          <rect x="0" y="56" width="160" height="44" fill="#18181b" />
+          {/* Tiled Floor Horizontal Lines */}
+          <rect x="0" y="56" width="160" height="1" fill="#27272a" />
+          <rect x="0" y="66" width="160" height="1" fill="#27272a" />
+          <rect x="0" y="77" width="160" height="1" fill="#27272a" />
+          <rect x="0" y="89" width="160" height="1" fill="#27272a" />
+          {/* Tiled Floor Vertical Lines */}
+          {Array.from({ length: 11 }).map((_, i) => (
+            <rect key={i} x={i * 16} y="56" width="1" height="44" fill="#27272a" />
+          ))}
+
+          {/* 3. Authentic Round Stainless Steel Korean BBQ Table (Centrally Located) */}
+          <g id="kbbq-dining-table" transform="translate(18, 50)">
+            {/* Heavy Stainless Steel Center Table Pillar Base & Footrests */}
+            <rect x="52" y="24" width="20" height="18" fill="#09090b" />
+            <rect x="54" y="24" width="16" height="17" fill="#1e293b" />
+            <rect x="58" y="24" width="8" height="17" fill="#334155" />
+            <rect x="61" y="24" width="2" height="17" fill="#64748b" />
+            <rect x="46" y="39" width="32" height="3" fill="#09090b" />
+            <rect x="48" y="39" width="28" height="2" fill="#334155" />
+
+            {/* Stepped Stainless Steel Round Table Top Rim */}
+            <rect x="6" y="8" width="112" height="18" fill="#0f172a" />
+            <rect x="2" y="10" width="120" height="14" fill="#0f172a" />
+            <rect x="0" y="12" width="124" height="10" fill="#0f172a" />
+            {/* Stainless Steel Metallic Shading & Sheen */}
+            <rect x="2" y="10" width="120" height="12" fill="#334155" />
+            <rect x="4" y="9" width="116" height="13" fill="#475569" />
+            <rect x="6" y="8" width="112" height="13" fill="#64748b" />
+            <rect x="8" y="8" width="108" height="11" fill="#94a3b8" />
+            <rect x="10" y="8" width="104" height="9" fill="#cbd5e1" />
+            {/* Table Surface Specular Metallic Glare Strip */}
+            <rect x="14" y="9" width="96" height="2" fill="#e2e8f0" />
+            <rect x="20" y="9" width="40" height="1" fill="#ffffff" />
+            <rect x="80" y="9" width="24" height="1" fill="#ffffff" />
+
+            {/* A. Central Sunken Charcoal Grill Pit (เตาย่างเกาหลี) */}
+            <g id="kbbq-center-grill" transform="translate(44, 7)">
+              {/* Cast Iron Sunken Bezel Ring */}
+              <rect x="2" y="1" width="32" height="15" fill="#09090b" />
+              <rect x="0" y="3" width="36" height="11" fill="#09090b" />
+              <rect x="2" y="2" width="32" height="13" fill="#18181b" />
+              <rect x="4" y="3" width="28" height="11" fill="#27272a" />
+
+              {/* Glowing Red-Hot Hardwood Charcoal Embers Beneath Grate */}
+              <rect x="6" y="4" width="24" height="9" fill="#7f1d1d" />
+              <rect x="8" y="5" width="20" height="7" fill="#b91c1c" />
+              <rect x="10" y="6" width="16" height="5" fill="#dc2626" />
+              <rect x="13" y="7" width="10" height="3" fill="#ea580c" />
+              <rect x="16" y="8" width="4" height="2" fill="#facc15" />
+              <rect x="17" y="8" width="2" height="1" fill="#fef08a" />
+
+              {/* Stainless Steel Wire Mesh / Slotted Cast Iron Grill Grate */}
+              {Array.from({ length: 8 }).map((_, gi) => (
+                <rect key={gi} x={6 + gi * 3} y="4" width="1" height="9" fill="#09090b" />
+              ))}
+              <rect x="6" y="6" width="24" height="1" fill="#09090b" />
+              <rect x="6" y="9" width="24" height="1" fill="#09090b" />
+
+              {/* Sizzling Thick-Cut Samgyeopsal (Pork Belly / Bacon Strips) on Grill */}
+              {/* Strip 1 (Left Grilled Strip) */}
+              <rect x="8" y="5" width="8" height="3" fill="#7c2d12" />
+              <rect x="9" y="5" width="6" height="2" fill="#ea580c" />
+              <rect x="9" y="6" width="6" height="1" fill="#fed7aa" />
+              <rect x="11" y="5" width="1" height="3" fill="#451a03" />
+              <rect x="13" y="5" width="1" height="3" fill="#451a03" />
+              {/* Strip 2 (Right Crispy Strip) */}
+              <rect x="18" y="7" width="10" height="4" fill="#7c2d12" />
+              <rect x="19" y="7" width="8" height="3" fill="#c2410c" />
+              <rect x="19" y="8" width="8" height="1" fill="#fed7aa" />
+              <rect x="21" y="7" width="1" height="4" fill="#451a03" />
+              <rect x="24" y="7" width="1" height="4" fill="#451a03" />
+              {/* Grilled Garlic Slices & Sliced Green Chili */}
+              <rect x="8" y="9" width="3" height="2" fill="#fef3c7" />
+              <rect x="9" y="10" width="1" height="1" fill="#b45309" />
+              <rect x="12" y="9" width="3" height="2" fill="#fef3c7" />
+              <rect x="20" y="5" width="3" height="2" fill="#15803d" />
+              <rect x="21" y="5" width="1" height="1" fill="#4ade80" />
+
+              {/* Animated Sizzle Sparks & Rising Smoke Puffs */}
+              {animTick % 2 === 0 ? (
+                <g id="kbbq-sizzle-frame-a">
+                  <rect x="12" y="2" width="2" height="2" fill="#fde047" />
+                  <rect x="22" y="3" width="2" height="2" fill="#ef4444" />
+                  <rect x="15" y="-1" width="3" height="2" fill="#ffffff" opacity={0.8} />
+                  <rect x="17" y="-3" width="2" height="2" fill="#ffffff" opacity={0.6} />
+                </g>
+              ) : (
+                <g id="kbbq-sizzle-frame-b">
+                  <rect x="16" y="2" width="2" height="2" fill="#fde047" />
+                  <rect x="10" y="3" width="2" height="2" fill="#f97316" />
+                  <rect x="18" y="-1" width="3" height="2" fill="#ffffff" opacity={0.8} />
+                  <rect x="14" y="-3" width="2" height="2" fill="#ffffff" opacity={0.6} />
+                </g>
+              )}
+            </g>
+
+            {/* B. Surrounding Banchan Side Dishes & Authentic Tableware (มีจานมีอาหารมากมายล้อม) */}
+
+            {/* Dish 1: Fresh Fermented Napa Cabbage Kimchi (Far Left) */}
+            <g id="banchan-kimchi" transform="translate(10, 8)">
+              {/* White Ceramic Banchan Dish */}
+              <rect x="0" y="2" width="12" height="6" fill="#cbd5e1" />
+              <rect x="1" y="1" width="10" height="7" fill="#f8fafc" />
+              <rect x="2" y="2" width="8" height="5" fill="#ffffff" />
+              {/* Rich Red Chili Gochugaru Glazed Kimchi Cabbage & Scallions */}
+              <rect x="3" y="3" width="6" height="3" fill="#be123c" />
+              <rect x="4" y="3" width="5" height="2" fill="#dc2626" />
+              <rect x="4" y="4" width="4" height="2" fill="#ef4444" />
+              <rect x="5" y="3" width="2" height="1" fill="#f87171" />
+              <rect x="7" y="4" width="1" height="1" fill="#16a34a" />
+              <rect x="3" y="4" width="1" height="1" fill="#15803d" />
+            </g>
+
+            {/* Dish 2: Yellow Pickled Radish (Danmuji) (Upper Left) */}
+            <g id="banchan-danmuji" transform="translate(26, 6)">
+              <rect x="0" y="1" width="10" height="5" fill="#cbd5e1" />
+              <rect x="1" y="0" width="8" height="6" fill="#f8fafc" />
+              <rect x="2" y="1" width="6" height="4" fill="#ffffff" />
+              {/* Bright Yellow Radish Half-Moons */}
+              <rect x="3" y="2" width="4" height="2" fill="#eab308" />
+              <rect x="3" y="2" width="3" height="1" fill="#fde047" />
+              <rect x="4" y="3" width="3" height="1" fill="#fef08a" />
+            </g>
+
+            {/* Dish 3: Two-Compartment Dipping Sauce Tray (Ssamjang & Sesame Oil Salt) (Lower Left) */}
+            <g id="banchan-dipping-sauces" transform="translate(24, 14)">
+              <rect x="0" y="1" width="16" height="5" fill="#475569" />
+              <rect x="1" y="0" width="14" height="6" fill="#64748b" />
+              <rect x="2" y="1" width="12" height="4" fill="#94a3b8" />
+              {/* Left Well: Reddish Brown Savory Ssamjang */}
+              <rect x="3" y="2" width="4" height="2" fill="#7f1d1d" />
+              <rect x="3" y="2" width="3" height="1" fill="#b91c1c" />
+              <rect x="4" y="3" width="1" height="1" fill="#f59e0b" />
+              {/* Divider */}
+              <rect x="7" y="1" width="2" height="4" fill="#64748b" />
+              {/* Right Well: Golden Fragrant Sesame Oil & Coarse Sea Salt */}
+              <rect x="9" y="2" width="4" height="2" fill="#ca8a04" />
+              <rect x="9" y="2" width="3" height="1" fill="#eab308" />
+              <rect x="10" y="3" width="1" height="1" fill="#ffffff" />
+              <rect x="12" y="2" width="1" height="1" fill="#ffffff" />
+            </g>
+
+            {/* Dish 4: Woven Basket with Crisp Green Ssam Leaves & Perilla (Upper Center-Right) */}
+            <g id="banchan-ssam-basket" transform="translate(82, 6)">
+              {/* Woven Brown Ssam Basket */}
+              <rect x="0" y="2" width="14" height="7" fill="#451a03" />
+              <rect x="1" y="1" width="12" height="8" fill="#78350f" />
+              <rect x="2" y="3" width="10" height="5" fill="#92400e" />
+              {/* Fresh Ruffled Lettuce & Perilla Leaves */}
+              <rect x="2" y="1" width="10" height="4" fill="#14532d" />
+              <rect x="3" y="0" width="8" height="4" fill="#15803d" />
+              <rect x="4" y="0" width="6" height="3" fill="#22c55e" />
+              <rect x="5" y="1" width="4" height="1" fill="#86efac" />
+              {/* Whole Red Chili Pepper on Top */}
+              <rect x="8" y="2" width="4" height="2" fill="#dc2626" />
+              <rect x="12" y="2" width="1" height="1" fill="#15803d" />
+            </g>
+
+            {/* Dish 5: Traditional Korean Stainless Covered Rice Bowl (ถ้วยข้าว) (Far Right) */}
+            <g id="banchan-rice-bowl" transform="translate(100, 8)">
+              {/* Stainless Steel Rice Bowl Body */}
+              <rect x="0" y="2" width="12" height="7" fill="#334155" />
+              <rect x="1" y="3" width="10" height="5" fill="#64748b" />
+              <rect x="2" y="3" width="8" height="4" fill="#94a3b8" />
+              <rect x="3" y="6" width="6" height="1" fill="#475569" />
+              {/* Steaming Fluffy White Rice */}
+              <rect x="2" y="1" width="8" height="3" fill="#e2e8f0" />
+              <rect x="3" y="0" width="6" height="3" fill="#ffffff" />
+              <rect x="4" y="0" width="4" height="1" fill="#f8fafc" />
+              {/* Rising Hot Rice Steam Wisps */}
+              <rect x="5" y={animTick % 2 === 0 ? -3 : -5} width="2" height="2" fill="#ffffff" opacity={0.8} />
+              <rect x="7" y={animTick % 2 === 0 ? -5 : -3} width="2" height="2" fill="#ffffff" opacity={0.6} />
+              {/* Stainless Steel Lid resting tilted against bowl */}
+              <rect x="11" y="2" width="2" height="6" fill="#cbd5e1" />
+              <rect x="12" y="1" width="1" height="7" fill="#f8fafc" />
+            </g>
+
+            {/* Dish 6: Flat Stainless Steel Korean Sujeo Set (Chopsticks & Long Spoon) (ตะเกียบ) (Lower Right) */}
+            <g id="banchan-chopsticks-sujeo" transform="translate(84, 15)">
+              {/* Dark Ceramic Chopstick Rest (Hashioki) */}
+              <rect x="2" y="3" width="4" height="2" fill="#09090b" />
+              <rect x="3" y="3" width="2" height="1" fill="#334155" />
+              {/* Flat Silver Long Chopsticks Pair */}
+              <rect x="0" y="2" width="14" height="1" fill="#cbd5e1" />
+              <rect x="0" y="4" width="14" height="1" fill="#cbd5e1" />
+              <rect x="2" y="2" width="6" height="1" fill="#ffffff" />
+              <rect x="2" y="4" width="6" height="1" fill="#ffffff" />
+              {/* Long Silver Korean Spoon */}
+              <rect x="0" y="0" width="10" height="1" fill="#94a3b8" />
+              <rect x="10" y="-1" width="4" height="3" fill="#cbd5e1" />
+              <rect x="11" y="0" width="2" height="1" fill="#ffffff" />
+            </g>
+
+            {/* Green Glass Soju Bottle & Stainless Steel Cup (Right Side) */}
+            <g id="table-soju-bottle" transform="translate(114, 5)">
+              {/* Green Soju Bottle Neck & Cap */}
+              <rect x="2" y="0" width="3" height="2" fill="#15803d" />
+              <rect x="2" y="0" width="3" height="1" fill="#86efac" />
+              <rect x="1" y="2" width="5" height="2" fill="#166534" />
+              {/* Green Bottle Body & White Label */}
+              <rect x="0" y="4" width="7" height="9" fill="#15803d" />
+              <rect x="1" y="5" width="5" height="7" fill="#22c55e" />
+              <rect x="1" y="6" width="5" height="4" fill="#ffffff" />
+              <rect x="2" y="7" width="3" height="2" fill="#15803d" />
+              {/* Stainless Steel Water Cup */}
+              <rect x="8" y="8" width="4" height="5" fill="#475569" />
+              <rect x="9" y="8" width="2" height="4" fill="#cbd5e1" />
+              <rect x="9" y="8" width="1" height="1" fill="#ffffff" />
+            </g>
+          </g>
+
+          {/* Round Stainless Steel Stool Seats (Left & Right of Table) */}
+          {/* Left Drum Stool */}
+          <g id="kbbq-stool-left" transform="translate(6, 68)">
+            <rect x="1" y="0" width="16" height="4" fill="#09090b" />
+            <rect x="0" y="1" width="18" height="3" fill="#18181b" />
+            <rect x="2" y="0" width="14" height="3" fill="#334155" />
+            <rect x="3" y="0" width="12" height="2" fill="#64748b" />
+            <rect x="4" y="0" width="10" height="1" fill="#cbd5e1" />
+            {/* Cushion Vinyl Seat Top */}
+            <rect x="4" y="1" width="10" height="1" fill="#be123c" />
+            {/* Drum Cylinder Base */}
+            <rect x="2" y="4" width="14" height="14" fill="#09090b" />
+            <rect x="3" y="4" width="12" height="13" fill="#18181b" />
+            <rect x="5" y="4" width="8" height="13" fill="#334155" />
+            <rect x="7" y="4" width="2" height="13" fill="#64748b" />
+            <rect x="1" y="17" width="16" height="2" fill="#09090b" />
+          </g>
+
+          {/* Right Drum Stool */}
+          <g id="kbbq-stool-right" transform="translate(136, 68)">
+            <rect x="1" y="0" width="16" height="4" fill="#09090b" />
+            <rect x="0" y="1" width="18" height="3" fill="#18181b" />
+            <rect x="2" y="0" width="14" height="3" fill="#334155" />
+            <rect x="3" y="0" width="12" height="2" fill="#64748b" />
+            <rect x="4" y="0" width="10" height="1" fill="#cbd5e1" />
+            {/* Cushion Vinyl Seat Top */}
+            <rect x="4" y="1" width="10" height="1" fill="#be123c" />
+            {/* Drum Cylinder Base */}
+            <rect x="2" y="4" width="14" height="14" fill="#09090b" />
+            <rect x="3" y="4" width="12" height="13" fill="#18181b" />
+            <rect x="5" y="4" width="8" height="13" fill="#334155" />
+            <rect x="7" y="4" width="2" height="13" fill="#64748b" />
+            <rect x="1" y="17" width="16" height="2" fill="#09090b" />
+          </g>
+        </g>
+      )}
+
             {/* 3. COMPANION VISITOR LAYER (ALL PETS ANIMATED - FULL SIZE EQUAL TO FROG & PURE CRISP PIXEL ART) */}
 
             {/* A. Snail Friend (Master Denden - Soft Storybook Mochi Snail with Caramel Shell & Clover) */}
@@ -6887,6 +7979,117 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                   {/* Paws */}
                   <rect x="5" y="23" width="5" height="3" fill="#334155" />
                   <rect x="14" y="23" width="5" height="3" fill="#334155" />
+                </g>
+              );
+            })()}
+
+            {/* S. Sizzle Piglet Companion (Cute golden piglet in pitmaster chef hat) */}
+            {(config.companionId === 'kbbq_sizzle_piglet' || config.companionId === 'companion_kbbq_sizzle_piglet') && (() => {
+              const oinkY = animTick % 2 === 0 ? 0 : 1;
+              const tailWiggle = animTick % 2 === 0 ? 0 : -1;
+
+              return (
+                <g id="companion-kbbq-piglet" transform={`translate(106, 54)`}>
+                  {/* Ground Shadow */}
+                  <rect x="2" y="22" width="22" height="2" fill="#2d150b" opacity="0.4" />
+                  <rect x="5" y="21" width="16" height="4" fill="#2d150b" opacity="0.6" />
+
+                  {/* Curly Piggy Tail */}
+                  <g transform={`translate(-3, ${10 + tailWiggle})`}>
+                    <rect x="0" y="0" width="4" height="2" fill="#f472b6" />
+                    <rect x="0" y="2" width="2" height="3" fill="#f472b6" />
+                    <rect x="2" y="3" width="3" height="2" fill="#f472b6" />
+                  </g>
+
+                  {/* Chubby Pink Piggy Body */}
+                  <rect x="3" y="8" width="18" height="13" fill="#f472b6" />
+                  <rect x="4" y="9" width="16" height="11" fill="#fbcfe8" />
+                  <rect x="5" y="10" width="14" height="9" fill="#fdf2f8" />
+
+                  {/* Head & Flapped Piggy Ears */}
+                  <rect x="6" y="3" width="15" height="10" fill="#f472b6" />
+                  <rect x="7" y="4" width="13" height="8" fill="#fbcfe8" />
+                  <rect x="5" y="1" width="4" height="4" fill="#ec4899" />
+                  <rect x="6" y="2" width="2" height="2" fill="#fbcfe8" />
+                  <rect x="17" y="1" width="4" height="4" fill="#ec4899" />
+                  <rect x="18" y="2" width="2" height="2" fill="#fbcfe8" />
+
+                  {/* Mini Pitmaster Chef Hat on Head */}
+                  <rect x="10" y="-3" width="7" height="3" fill="#ffffff" />
+                  <rect x="9" y="-5" width="9" height="3" fill="#f8fafc" />
+                  <rect x="10" y="-6" width="7" height="2" fill="#ffffff" />
+                  <rect x="11" y="-2" width="5" height="1" fill="#e11d48" />
+
+                  {/* Big Sparkly Eyes */}
+                  <rect x="9" y="6" width="3" height="3" fill="#18181b" />
+                  <rect x="9" y="6" width="1" height="1" fill="#ffffff" />
+                  <rect x="16" y="6" width="3" height="3" fill="#18181b" />
+                  <rect x="16" y="6" width="1" height="1" fill="#ffffff" />
+
+                  {/* Cute Piggy Snout */}
+                  <rect x="11" y="8 + oinkY" width="6" height="4" fill="#ec4899" />
+                  <rect x="12" y="9 + oinkY" width="4" height="2" fill="#f472b6" />
+                  <rect x="12" y="9 + oinkY" width="1" height="1" fill="#9d174d" />
+                  <rect x="14" y="9 + oinkY" width="1" height="1" fill="#9d174d" />
+
+                  {/* Rosy Cheeks */}
+                  <rect x="6" y="9" width="3" height="2" fill="#fb7185" opacity="0.8" />
+                  <rect x="18" y="9" width="3" height="2" fill="#fb7185" opacity="0.8" />
+
+                  {/* Tiny Grilled Bacon Skewer Held in Paw */}
+                  <g transform="translate(18, 9)">
+                    <rect x="0" y="3" width="7" height="1" fill="#78350f" />
+                    <rect x="3" y="1" width="3" height="4" fill="#be123c" />
+                    <rect x="4" y="2" width="1" height="2" fill="#fecdd3" />
+                  </g>
+
+                  {/* Trotter Paws */}
+                  <rect x="5" y="20" width="4" height="3" fill="#db2777" />
+                  <rect x="14" y="20" width="4" height="3" fill="#db2777" />
+                </g>
+              );
+            })()}
+
+            {/* T. Kimchi Ferment Pot Companion (Traditional Onggi earthenware pot with spicy bubbles) */}
+            {(config.companionId === 'kbbq_kimchi_ferment_pot' || config.companionId === 'companion_kbbq_kimchi_ferment_pot') && (() => {
+              const bubbleOffset = (animTick % 3) * 2;
+
+              return (
+                <g id="companion-kbbq-kimchi-pot" transform={`translate(108, 55)`}>
+                  {/* Ground Shadow */}
+                  <rect x="1" y="21" width="20" height="2" fill="#2d150b" opacity="0.4" />
+                  <rect x="3" y="20" width="16" height="4" fill="#2d150b" opacity="0.6" />
+
+                  {/* Onggi Earthenware Clay Body */}
+                  <rect x="3" y="7" width="16" height="14" fill="#451a03" />
+                  <rect x="4" y="8" width="14" height="12" fill="#78350f" />
+                  <rect x="5" y="9" width="12" height="10" fill="#92400e" />
+                  <rect x="6" y="10" width="10" height="7" fill="#b45309" />
+
+                  {/* Traditional Onggi Glaze Highlights */}
+                  <rect x="6" y="10" width="2" height="6" fill="#d97706" />
+                  <rect x="7" y="11" width="1" height="4" fill="#fde68a" />
+
+                  {/* Pot Lip & Domed Clay Lid */}
+                  <rect x="2" y="5" width="18" height="3" fill="#451a03" />
+                  <rect x="3" y="6" width="16" height="1" fill="#78350f" />
+                  <rect x="4" y="2" width="14" height="4" fill="#451a03" />
+                  <rect x="5" y="3" width="12" height="2" fill="#78350f" />
+                  <rect x="9" y="0" width="4" height="3" fill="#451a03" />
+                  <rect x="10" y="1" width="2" height="1" fill="#92400e" />
+
+                  {/* Crimson Straw Ribbon Seal & Knot */}
+                  <rect x="2" y="7" width="18" height="2" fill="#be123c" />
+                  <rect x="3" y="7" width="16" height="1" fill="#e11d48" />
+                  <rect x="9" y="8" width="4" height="4" fill="#be123c" />
+                  <rect x="10" y="9" width="2" height="2" fill="#f43f5e" />
+
+                  {/* Floating Spicy Kimchi Aroma Bubbles */}
+                  <g fill="#e11d48" opacity="0.85">
+                    <rect x="5" y={-bubbleOffset} width="2" height="2" />
+                    <rect x="14" y={-2 - bubbleOffset} width="2" height="2" fill="#f97316" />
+                    <rect x="10" y={-5 - bubbleOffset} width="1" height="1" fill="#facc15" />
+                  </g>
                 </g>
               );
             })()}
@@ -7658,6 +8861,77 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                         </g>
                       )}
 
+                      {/* 24. K-BBQ Pitmaster Heavy Denim/Leather Apron */}
+                      {config.outfitId === 'kbbq_pitmaster_apron' && (
+                        <g id="scene-outfit-kbbq-apron">
+                          {/* Inner Red Shirt Layer */}
+                          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#991b1b" />
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#dc2626" />
+                          {/* Heavy Charcoal Denim Apron Bib & Skirt */}
+                          <rect x={frogX - 1} y={frogY + 10} width="18" height="11" fill="#18181b" />
+                          <rect x={frogX} y={frogY + 10} width="16" height="10" fill="#27272a" />
+                          <rect x={frogX + 1} y={frogY + 11} width="14" height="8" fill="#3f3f46" />
+                          {/* Cross-back Leather Straps with Brass Buckles */}
+                          <rect x={frogX + 1} y={frogY + 8} width="2" height="4" fill="#78350f" />
+                          <rect x={frogX + 13} y={frogY + 8} width="2" height="4" fill="#78350f" />
+                          <rect x={frogX + 1} y={frogY + 10} width="2" height="1" fill="#facc15" />
+                          <rect x={frogX + 13} y={frogY + 10} width="2" height="1" fill="#facc15" />
+                          {/* Large Front Kangaroo Tool Pocket */}
+                          <rect x={frogX + 2} y={frogY + 14} width="12" height="5" fill="#18181b" />
+                          <rect x={frogX + 3} y={frogY + 15} width="10" height="3" fill="#27272a" />
+                          {/* Mini Metal Tongs Sticking Out of Pocket */}
+                          <rect x={frogX + 4} y={frogY + 13} width="2" height="3" fill="#94a3b8" />
+                          <rect x={frogX + 4} y={frogY + 13} width="1" height="1" fill="#ffffff" />
+                          {/* Red Grill Master Towel Hanging */}
+                          <rect x={frogX + 10} y={frogY + 14} width="3" height="5" fill="#dc2626" />
+                          <rect x={frogX + 11} y={frogY + 15} width="1" height="4" fill="#ef4444" />
+                        </g>
+                      )}
+
+                      {/* 25. K-BBQ Cozy Smoke-Resistant Fleece Hoodie */}
+                      {config.outfitId === 'kbbq_cozy_smoke_hoodie' && (
+                        <g id="scene-outfit-kbbq-hoodie">
+                          {/* Ash Smoke Grey Fleece Body */}
+                          <rect x={frogX - 4} y={frogY + 9} width="24" height="12" fill="#334155" />
+                          <rect x={frogX - 3} y={frogY + 9} width="22" height="11" fill="#475569" />
+                          <rect x={frogX - 2} y={frogY + 10} width="20" height="10" fill="#64748b" />
+                          <rect x={frogX - 1} y={frogY + 10} width="18" height="9" fill="#94a3b8" />
+                          {/* Oversized Padded Drawstring Hood Collar */}
+                          <rect x={frogX - 2} y={frogY + 7} width="20" height="4" fill="#334155" />
+                          <rect x={frogX - 1} y={frogY + 8} width="18" height="2" fill="#64748b" />
+                          {/* Crimson Flame Drawstrings */}
+                          <rect x={frogX + 4} y={frogY + 10} width="1" height="4" fill="#e11d48" />
+                          <rect x={frogX + 11} y={frogY + 10} width="1" height="4" fill="#e11d48" />
+                          {/* Center Embroidered Flame Insignia */}
+                          <rect x={frogX + 6} y={frogY + 11} width="4" height="3" fill="#e11d48" />
+                          <rect x={frogX + 7} y={frogY + 12} width="2" height="2" fill="#facc15" />
+                          {/* Ribbed Hem & Cuffs */}
+                          <rect x={frogX - 2} y={frogY + 18} width="20" height="2" fill="#334155" />
+                          <rect x={frogX - 1} y={frogY + 18} width="18" height="1" fill="#475569" />
+                        </g>
+                      )}
+
+                      {/* 26. K-BBQ Banchan Master Tailored Vest & Crimson Apron */}
+                      {config.outfitId === 'kbbq_banchan_chef_vest' && (
+                        <g id="scene-outfit-kbbq-vest">
+                          {/* Crisp White Inner Chef Shirt */}
+                          <rect x={frogX - 3} y={frogY + 9} width="22" height="12" fill="#94a3b8" />
+                          <rect x={frogX - 2} y={frogY + 9} width="20" height="11" fill="#f8fafc" />
+                          <rect x={frogX - 1} y={frogY + 10} width="18" height="10" fill="#ffffff" />
+                          {/* Deep Wine-Maroon Tailored Vest */}
+                          <rect x={frogX - 2} y={frogY + 9} width="6" height="10" fill="#4c0519" />
+                          <rect x={frogX - 1} y={frogY + 10} width="4" height="8" fill="#881337" />
+                          <rect x={frogX + 12} y={frogY + 9} width="6" height="10" fill="#4c0519" />
+                          <rect x={frogX + 13} y={frogY + 10} width="4" height="8" fill="#881337" />
+                          {/* Gold Button Fasteners */}
+                          <rect x={frogX + 7} y={frogY + 11} width="2" height="2" fill="#facc15" />
+                          <rect x={frogX + 7} y={frogY + 14} width="2" height="2" fill="#facc15" />
+                          <rect x={frogX + 7} y={frogY + 17} width="2" height="2" fill="#facc15" />
+                          {/* Golden Pocket Trim with Tiny Tasting Spoon */}
+                          <rect x={frogX + 13} y={frogY + 14} width="3" height="1" fill="#fde047" />
+                        </g>
+                      )}
+
                       {/* GLASSES / FACE ACCESSORY LAYER (Cozy 16-bit / 32-bit Pixel Art) */}
 
                       {/* 1. Vintage Wire-Rimmed Reading Spectacles */}
@@ -8014,6 +9288,64 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           <rect x={frogX + 10} y={frogY + 12} width="4" height="3" fill="#0284C7" />
                           <rect x={frogX + 11} y={frogY + 12} width="2" height="2" fill="#38BDF8" />
                           <rect x={frogX + 11} y={frogY + 12} width="1" height="1" fill="#FFFFFF" />
+                        </g>
+                      )}
+
+                      {/* 16. K-BBQ Sizzle-Proof Safety Goggles */}
+                      {config.glassesId === 'kbbq_sizzle_safety_goggles' && (
+                        <g id="scene-glasses-kbbq-goggles">
+                          {/* Elastic Headband Strap */}
+                          <rect x={frogX - 3} y={frogY + 6} width="3" height="2" fill="#18181b" />
+                          <rect x={frogX + 16} y={frogY + 6} width="3" height="2" fill="#18181b" />
+                          {/* Left Eye Goggle Frame & Orange Lens */}
+                          <rect x={frogX - 1} y={frogY + 5} width="8" height="6" fill="#18181b" />
+                          <rect x={frogX} y={frogY + 6} width="6" height="4" fill="#ea580c" />
+                          <rect x={frogX + 1} y={frogY + 6} width="4" height="3" fill="#f97316" />
+                          <rect x={frogX + 1} y={frogY + 6} width="2" height="2" fill="#fed7aa" />
+                          <rect x={frogX + 1} y={frogY + 6} width="1" height="1" fill="#ffffff" />
+                          {/* Right Eye Goggle Frame & Orange Lens */}
+                          <rect x={frogX + 9} y={frogY + 5} width="8" height="6" fill="#18181b" />
+                          <rect x={frogX + 10} y={frogY + 6} width="6" height="4" fill="#ea580c" />
+                          <rect x={frogX + 11} y={frogY + 6} width="4" height="3" fill="#f97316" />
+                          <rect x={frogX + 11} y={frogY + 6} width="2" height="2" fill="#fed7aa" />
+                          <rect x={frogX + 11} y={frogY + 6} width="1" height="1" fill="#ffffff" />
+                          {/* Nose Bridge Connector */}
+                          <rect x={frogX + 7} y={frogY + 6} width="2" height="2" fill="#18181b" />
+                          <rect x={frogX + 7} y={frogY + 6} width="2" height="1" fill="#3f3f46" />
+                        </g>
+                      )}
+
+                      {/* 17. K-BBQ Blushing Cheeks & Floating Sizzle Steam */}
+                      {config.glassesId === 'kbbq_bbq_blush_steam' && (
+                        <g id="scene-glasses-kbbq-steam-blush">
+                          {/* Hot Radiant Cheeks */}
+                          <rect x={frogX - 3} y={frogY + 9} width="5" height="4" fill="#e11d48" opacity="0.8" />
+                          <rect x={frogX - 2} y={frogY + 10} width="3" height="2" fill="#fb7185" />
+                          <rect x={frogX + 14} y={frogY + 9} width="5" height="4" fill="#e11d48" opacity="0.8" />
+                          <rect x={frogX + 15} y={frogY + 10} width="3" height="2" fill="#fb7185" />
+                          {/* Floating Animated Steam Puffs */}
+                          <g fill="#ffffff" opacity={animTick % 2 === 0 ? 0.8 : 0.4}>
+                            <rect x={frogX - 2} y={frogY + 4 - (animTick % 3)} width="2" height="2" />
+                            <rect x={frogX - 3} y={frogY + 2 - (animTick % 3)} width="2" height="2" />
+                            <rect x={frogX + 16} y={frogY + 3 - (animTick % 3)} width="2" height="2" />
+                            <rect x={frogX + 17} y={frogY + 1 - (animTick % 3)} width="2" height="2" />
+                          </g>
+                        </g>
+                      )}
+
+                      {/* 18. K-BBQ Smoke-Tinted Sunglasses */}
+                      {config.glassesId === 'kbbq_smoke_tint_shades' && (
+                        <g id="scene-glasses-kbbq-smoke-shades">
+                          {/* Metallic Frame */}
+                          <rect x={frogX - 3} y={frogY + 5} width="22" height="2" fill="#71717a" />
+                          <rect x={frogX - 2} y={frogY + 5} width="8" height="6" fill="#18181b" />
+                          <rect x={frogX - 1} y={frogY + 6} width="6" height="4" fill="#3f3f46" />
+                          <rect x={frogX - 1} y={frogY + 7} width="6" height="2" fill="#27272a" />
+                          <rect x={frogX} y={frogY + 6} width="2" height="1" fill="#cbd5e1" />
+                          <rect x={frogX + 10} y={frogY + 5} width="8" height="6" fill="#18181b" />
+                          <rect x={frogX + 11} y={frogY + 6} width="6" height="4" fill="#3f3f46" />
+                          <rect x={frogX + 11} y={frogY + 7} width="6" height="2" fill="#27272a" />
+                          <rect x={frogX + 12} y={frogY + 6} width="2" height="1" fill="#cbd5e1" />
                         </g>
                       )}
 
@@ -8582,6 +9914,76 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                           {/* Frog Paws Holding Mug */}
                           <rect x={frogX + 2} y={frogY + 14} width="3" height="4" fill={skin.main} />
                           <rect x={frogX + 3} y={frogY + 14} width="1" height="3" fill={skin.highlight || '#86EFAC'} />
+                        </g>
+                      )}
+
+                      {/* 24. K-BBQ BBQ Tongs with Sizzling Bacon Flip */}
+                      {config.activityId === 'kbbq_tongs_bacon_flip' && (
+                        <g id="scene-prop-kbbq-tongs">
+                          {/* Steel BBQ Tongs Arms */}
+                          <rect x={frogX + 6} y={frogY + 14} width="12" height="2" fill="#475569" />
+                          <rect x={frogX + 7} y={frogY + 14} width="11" height="1" fill="#94a3b8" />
+                          <rect x={frogX + 16} y={frogY + 10} width="2" height="6" fill="#475569" />
+                          <rect x={frogX + 18} y={frogY + 10} width="3" height="2" fill="#94a3b8" />
+                          <rect x={frogX + 18} y={frogY + 14} width="3" height="2" fill="#94a3b8" />
+                          {/* Sizzling Marbled Pork Belly Bacon Strip (Clamped) */}
+                          <rect x={frogX + 17} y={frogY + 7} width="6" height="8" fill="#be123c" />
+                          <rect x={frogX + 18} y={frogY + 8} width="4" height="6" fill="#f43f5e" />
+                          <rect x={frogX + 18} y={frogY + 9} width="4" height="2" fill="#fecdd3" />
+                          <rect x={frogX + 18} y={frogY + 12} width="4" height="1" fill="#78350f" />
+                          {/* Sizzle Sparkles & Steam */}
+                          <g fill="#facc15" opacity={animTick % 2 === 0 ? 0.9 : 0.4}>
+                            <rect x={frogX + 23} y={frogY + 6 - (animTick % 2)} width="2" height="2" />
+                            <rect x={frogX + 16} y={frogY + 5 - (animTick % 2)} width="1" height="1" fill="#ffffff" />
+                            <rect x={frogX + 21} y={frogY + 3 - (animTick % 2)} width="2" height="2" fill="#f97316" />
+                          </g>
+                          {/* Frog Paws Gripping Tongs */}
+                          <rect x={frogX + 4} y={frogY + 13} width="3" height="4" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 25. K-BBQ Stainless Rice Bowl & Metal Chopsticks */}
+                      {config.activityId === 'kbbq_chopsticks_rice_bowl' && (
+                        <g id="scene-prop-kbbq-rice-bowl">
+                          {/* Stainless Steel Rice Bowl Body */}
+                          <rect x={frogX + 2} y={frogY + 13} width="11" height="7" fill="#475569" />
+                          <rect x={frogX + 3} y={frogY + 14} width="9" height="5" fill="#94a3b8" />
+                          <rect x={frogX + 4} y={frogY + 14} width="7" height="4" fill="#cbd5e1" />
+                          <rect x={frogX + 4} y={frogY + 15} width="2" height="2" fill="#ffffff" />
+                          {/* Fluffy Steaming White Rice Mound */}
+                          <rect x={frogX + 4} y={frogY + 11} width="7" height="3" fill="#ffffff" />
+                          <rect x={frogX + 5} y={frogY + 10} width="5" height="2" fill="#ffffff" />
+                          {/* Metal Chopsticks Held Upright */}
+                          <rect x={frogX + 12} y={frogY + 8} width="1" height="12" fill="#64748b" />
+                          <rect x={frogX + 14} y={frogY + 8} width="1" height="12" fill="#94a3b8" />
+                          <rect x={frogX + 12} y={frogY + 8} width="1" height="4" fill="#ffffff" />
+                          {/* Rising Rice Steam */}
+                          <rect x={frogX + 6} y={frogY + 7 - (animTick % 2)} width="2" height="2" fill="#ffffff" opacity="0.75" />
+                          {/* Frog Paws Supporting Bowl */}
+                          <rect x={frogX} y={frogY + 14} width="3" height="4" fill={skin.main} />
+                          <rect x={frogX + 10} y={frogY + 14} width="3" height="4" fill={skin.main} />
+                        </g>
+                      )}
+
+                      {/* 26. K-BBQ Fresh Lettuce Ssam Wrap */}
+                      {config.activityId === 'kbbq_lettuce_ssam_wrap' && (
+                        <g id="scene-prop-kbbq-ssam">
+                          {/* Crisp Green Lettuce Leaf Cup */}
+                          <rect x={frogX + 3} y={frogY + 12} width="12" height="8" fill="#15803d" />
+                          <rect x={frogX + 4} y={frogY + 13} width="10" height="6" fill="#22c55e" />
+                          <rect x={frogX + 5} y={frogY + 14} width="8" height="4" fill="#86efac" />
+                          {/* Grilled Pork Belly Chunk Inside */}
+                          <rect x={frogX + 6} y={frogY + 13} width="5" height="4" fill="#991b1b" />
+                          <rect x={frogX + 7} y={frogY + 14} width="3" height="2" fill="#f43f5e" />
+                          {/* Ssamjang Chili-Soybean Paste Dollop */}
+                          <rect x={frogX + 9} y={frogY + 13} width="3" height="3" fill="#c2410c" />
+                          <rect x={frogX + 10} y={frogY + 14} width="1" height="1" fill="#ea580c" />
+                          {/* Garlic Slice & Green Pepper */}
+                          <rect x={frogX + 5} y={frogY + 14} width="2" height="2" fill="#fef08a" />
+                          <rect x={frogX + 8} y={frogY + 12} width="2" height="2" fill="#166534" />
+                          {/* Frog Paws Holding Ssam Bouquet */}
+                          <rect x={frogX + 1} y={frogY + 14} width="3" height="4" fill={skin.main} />
+                          <rect x={frogX + 13} y={frogY + 14} width="3" height="4" fill={skin.main} />
                         </g>
                       )}
 
@@ -9180,6 +10582,66 @@ export const PixelFrogScene: React.FC<PixelFrogSceneProps> = ({
                             <rect x={frogX + 22} y={frogY - 7} width="5" height="16" />
                             <rect x={frogX + 27} y={frogY - 10} width="5" height="22" />
                           </g>
+                        </g>
+                      )}
+
+                      {/* 24. K-BBQ Grill Master Tied Hachimaki Headband */}
+                      {config.hatId === 'kbbq_grill_master_headband' && (
+                        <g id="scene-hat-kbbq-headband">
+                          {/* White Starched Headband Wrap */}
+                          <rect x={frogX - 3} y={frogY + 1} width="22" height="4" fill="#94a3b8" />
+                          <rect x={frogX - 2} y={frogY + 2} width="20" height="2" fill="#ffffff" />
+                          {/* Crimson Charcoal Fire & Grill Flame Emblem at Center */}
+                          <rect x={frogX + 6} y={frogY + 1} width="4" height="4" fill="#be123c" />
+                          <rect x={frogX + 7} y={frogY + 2} width="2" height="2" fill="#facc15" />
+                          {/* Flapping Tied Headband Tails on Side */}
+                          <rect x={frogX + 18} y={frogY} width="3" height="3" fill="#ffffff" />
+                          <rect x={frogX + 19} y={frogY + 3} width="2" height="4" fill="#f8fafc" />
+                          <rect x={frogX + 20} y={frogY + 6} width="2" height="3" fill="#cbd5e1" />
+                        </g>
+                      )}
+
+                      {/* 25. K-BBQ Sizzling Pork Belly Slice Hat */}
+                      {config.hatId === 'kbbq_pork_belly_slice' && (
+                        <g id="scene-hat-kbbq-pork-belly">
+                          {/* Shadow Base on Frog Head */}
+                          <rect x={frogX - 2} y={frogY - 2} width="20" height="2" fill="#4c0519" />
+                          {/* Thick Layered Samgyeopsal Bacon Slab */}
+                          <rect x={frogX - 3} y={frogY - 7} width="22" height="6" fill="#881337" />
+                          {/* Top Crispy Brown / Lean Layer */}
+                          <rect x={frogX - 2} y={frogY - 7} width="20" height="2" fill="#e11d48" />
+                          <rect x={frogX - 1} y={frogY - 7} width="18" height="1" fill="#f43f5e" />
+                          {/* Creamy White Fat Marbling Stripe */}
+                          <rect x={frogX - 2} y={frogY - 5} width="20" height="2" fill="#ffe4e6" />
+                          <rect x={frogX} y={frogY - 5} width="16" height="1" fill="#ffffff" />
+                          {/* Juicy Crimson Bottom Meat Layer */}
+                          <rect x={frogX - 2} y={frogY - 3} width="20" height="2" fill="#be123c" />
+                          {/* Sizzle Glaze Highlights */}
+                          <rect x={frogX + 2} y={frogY - 7} width="3" height="1" fill="#ffffff" />
+                          <rect x={frogX + 11} y={frogY - 7} width="3" height="1" fill="#ffffff" />
+                          {/* Floating Animated Grill Steam/Sizzle */}
+                          <g fill="#facc15" opacity={animTick % 2 === 0 ? 0.9 : 0.4}>
+                            <rect x={frogX + 5} y={frogY - 10 - (animTick % 2)} width="2" height="2" />
+                            <rect x={frogX + 12} y={frogY - 9 - (animTick % 2)} width="1" height="2" fill="#ffffff" />
+                          </g>
+                        </g>
+                      )}
+
+                      {/* 26. K-BBQ Whole Garlic Clove Roasted Cap */}
+                      {config.hatId === 'kbbq_garlic_clove_cap' && (
+                        <g id="scene-hat-kbbq-garlic">
+                          {/* Plump Bulbous Cream Clove Base */}
+                          <rect x={frogX + 1} y={frogY - 1} width="14" height="3" fill="#a16207" />
+                          <rect x={frogX + 2} y={frogY - 6} width="12" height="6" fill="#ca8a04" />
+                          <rect x={frogX + 3} y={frogY - 7} width="10" height="7" fill="#fef3c7" />
+                          <rect x={frogX + 4} y={frogY - 8} width="8" height="7" fill="#ffffff" />
+                          {/* Roasted Golden Grill Marks on Garlic */}
+                          <rect x={frogX + 5} y={frogY - 4} width="2" height="3" fill="#d97706" />
+                          <rect x={frogX + 9} y={frogY - 5} width="2" height="3" fill="#d97706" />
+                          {/* Pointed Clove Tip & Green Sprout Shoot */}
+                          <rect x={frogX + 6} y={frogY - 9} width="4" height="2" fill="#fef3c7" />
+                          <rect x={frogX + 7} y={frogY - 11} width="2" height="3" fill="#16a34a" />
+                          <rect x={frogX + 8} y={frogY - 12} width="2" height="2" fill="#4ade80" />
                         </g>
                       )}
                     </g>

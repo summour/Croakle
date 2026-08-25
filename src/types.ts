@@ -208,6 +208,7 @@ export function getMoodConfig(value: number | null | undefined): MoodConfig | un
 // -------------------------------------------------------------
 
 export type SceneLocationId =
+  | 'korean_bbq'
   | 'forest_camp'
   | 'retro_arcade'
   | 'convenience_store'
@@ -226,6 +227,9 @@ export type SceneLocationId =
 
 export type FrogActivityId =
   | 'relaxing'
+  | 'grilling_samgyeopsal'
+  | 'eating_ssam_wrap'
+  | 'holding_rice_and_chopsticks'
   | 'roasting_marshmallow'
   | 'holding_camp_lantern'
   | 'camp_kettle_coffee'
@@ -254,6 +258,9 @@ export type FrogActivityId =
 
 export type FrogHatId =
   | 'none'
+  | 'kbbq_grill_master_headband'
+  | 'kbbq_lettuce_wrap_hat'
+  | 'kbbq_chef_visor'
   | 'ranger_safari_hat'
   | 'marshmallow_beanie'
   | 'scout_headlamp'
@@ -286,6 +293,9 @@ export type FrogHatId =
 
 export type FrogOutfitId =
   | 'none'
+  | 'kbbq_pitmaster_apron'
+  | 'kbbq_retro_tracksuit'
+  | 'kbbq_hanbok_vest'
   | 'field_scout_parka'
   | 'flannel_camp_vest'
   | 'cozy_sleeping_bag'
@@ -312,6 +322,8 @@ export type FrogOutfitId =
 
 export type FrogGlassesId =
   | 'none'
+  | 'kbbq_tasty_blush_steam'
+  | 'kbbq_smoke_goggles'
   | 'campfire_warm_glow'
   | 'explorer_binoculars'
   | 'cyber_pixel_shades'
@@ -330,6 +342,8 @@ export type FrogGlassesId =
 
 export type FrogSkinId =
   | 'classic'
+  | 'kbbq_caramelized_amber'
+  | 'kbbq_gochujang_crimson'
   | 'pine_forest_moss'
   | 'ember_glow_amber'
   | 'cyber_neon_violet'
@@ -348,6 +362,8 @@ export type FrogSkinId =
 
 export type FrogCompanionId =
   | 'none'
+  | 'kbbq_sizzle_piglet'
+  | 'kbbq_kimchi_ferment_pot'
   | 'forest_camp_fawn'
   | 'campfire_raccoon'
   | 'pixel_arcade_ghost'
@@ -404,6 +420,7 @@ export interface SceneOptionInfo<T> {
 }
 
 export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
+  { id: 'korean_bbq', name: 'Sizzling Korean BBQ Grill', emoji: '🥩', desc: 'Glowing tabletop grill, sizzling bacon pork belly, full banchan array, chopsticks & fluffy rice', tag: 'K-BBQ' },
   { id: 'forest_camp', name: 'Wilderness Pine Forest Camp', emoji: '⛺', desc: 'Cozy A-frame tent, crackling bonfire, lantern glow & starry pine woods', tag: 'Camping' },
   { id: 'retro_arcade', name: '8-Bit Retro Arcade Game Center', emoji: '🕹️', desc: 'Neon CRT cabinets, prize claw machine, dance mat & pixel high scores', tag: 'Retro' },
   { id: 'convenience_store', name: '24h Neon Konbini Store', emoji: '🏪', desc: 'Glowing drink fridges, snack shelves & checkout counter', tag: 'Neon' },
@@ -423,6 +440,9 @@ export const SCENE_LOCATIONS: SceneOptionInfo<SceneLocationId>[] = [
 
 export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
   { id: 'relaxing', name: 'Peaceful Chilling', emoji: '🐸', desc: 'Smiling cute with warm rosy cheeks', tag: 'Rest' },
+  { id: 'grilling_samgyeopsal', name: 'Grilling Sizzling Pork Belly', emoji: '🥩', desc: 'Flipping crisp samgyeopsal bacon over charcoal grill with long silver tongs', tag: 'K-BBQ' },
+  { id: 'eating_ssam_wrap', name: 'Crisp Lettuce Ssam Wrap', emoji: '🥬', desc: 'Munching a fresh perilla & lettuce parcel packed with pork, rice & red ssamjang', tag: 'K-BBQ' },
+  { id: 'holding_rice_and_chopsticks', name: 'Steaming Rice & Silver Chopsticks', emoji: '🍚', desc: 'Holding stainless steel bowl of hot fluffy white rice & slim metal chopsticks', tag: 'K-BBQ' },
   { id: 'roasting_marshmallow', name: 'Roasting Marshmallows', emoji: '🍢', desc: 'Toasting golden fluffy marshmallows over glowing embers', tag: 'Camp' },
   { id: 'holding_camp_lantern', name: 'Brass Campfire Lantern', emoji: '🏮', desc: 'Guiding the trail with a warm glowing storm lantern', tag: 'Camp' },
   { id: 'camp_kettle_coffee', name: 'Campfire Drip Kettle', emoji: '☕', desc: 'Brewing steaming aromatic forest drip coffee', tag: 'Camp' },
@@ -452,6 +472,9 @@ export const FROG_ACTIVITIES: SceneOptionInfo<FrogActivityId>[] = [
 
 export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
   { id: 'none', name: 'Natural (No Hat)', emoji: '✨', desc: 'Classic cute frog head', tag: 'Simple' },
+  { id: 'kbbq_grill_master_headband', name: 'K-BBQ Pitmaster Headband', emoji: '🔥', desc: 'Flame-embroidered tied head wrap for true grill masters', tag: 'K-BBQ' },
+  { id: 'kbbq_lettuce_wrap_hat', name: 'Fresh Lettuce Ssam Crown', emoji: '🥬', desc: 'Crisp perilla & lettuce leaf perched on head with pork belly & ssamjang', tag: 'K-BBQ' },
+  { id: 'kbbq_chef_visor', name: 'Smoky Grill Chef Visor', emoji: '🧢', desc: 'Charcoal translucent sun visor with neon BBQ flame badge', tag: 'K-BBQ' },
   { id: 'ranger_safari_hat', name: 'Wilderness Ranger Hat', emoji: '🤠', desc: 'Olive canvas safari brim with pinecone badge & cord', tag: 'Camp' },
   { id: 'marshmallow_beanie', name: 'Campfire Waffle Beanie', emoji: '🧶', desc: 'Warm mustard knit beanie with toasted marshmallow patch', tag: 'Camp' },
   { id: 'scout_headlamp', name: 'Explorer LED Headlamp', emoji: '🔦', desc: 'High-power night scout headlamp with elastic band', tag: 'Camp' },
@@ -485,6 +508,9 @@ export const FROG_HATS: SceneOptionInfo<FrogHatId>[] = [
 
 export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
   { id: 'none', name: 'No Outfit (Natural)', emoji: '🌱', desc: 'Pure classic frog appearance', tag: 'Simple' },
+  { id: 'kbbq_pitmaster_apron', name: 'K-BBQ Pitmaster Apron', emoji: '🦺', desc: 'Heavy black canvas grillmaster apron with brass clips, towel loop & flame patch', tag: 'K-BBQ' },
+  { id: 'kbbq_retro_tracksuit', name: 'Retro Diner Tracksuit', emoji: '🥋', desc: 'Vintage emerald green tracksuit with crisp white racing stripes', tag: 'Retro' },
+  { id: 'kbbq_hanbok_vest', name: 'Modern Hanbok Vest', emoji: '👘', desc: 'Midnight navy silk jeogori vest with golden embroidery & tassel knots', tag: 'Tradition' },
   { id: 'field_scout_parka', name: 'Wilderness Scout Parka', emoji: '🧥', desc: 'Earthy green mountain parka with compass badge & utility cargo pockets', tag: 'Camp' },
   { id: 'flannel_camp_vest', name: 'Lumberjack Fleece Vest', emoji: '🦺', desc: 'Buffalo red-black plaid flannel shirt with sherpa fleece vest', tag: 'Camp' },
   { id: 'cozy_sleeping_bag', name: 'Snug Mummy Sleeping Bag', emoji: '🏕️', desc: 'Toasty insulated forest green down sleeping cocoon', tag: 'Camp' },
@@ -512,6 +538,8 @@ export const FROG_OUTFITS: SceneOptionInfo<FrogOutfitId>[] = [
 
 export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
   { id: 'none', name: 'No Glasses', emoji: '✨', desc: 'Clear natural eyes', tag: 'Simple' },
+  { id: 'kbbq_tasty_blush_steam', name: 'Sizzling Feast Blush & Steam', emoji: '♨️', desc: 'Rosy blushing cheeks with hot sizzling smoke wisps & sparkle stars', tag: 'K-BBQ' },
+  { id: 'kbbq_smoke_goggles', name: 'Grillmaster Smoke Goggles', emoji: '🥽', desc: 'Protective tinted grillmaster visor goggles with metallic frame', tag: 'K-BBQ' },
   { id: 'campfire_warm_glow', name: 'Campfire Rosy Glow', emoji: '🔥', desc: 'Warm bonfire embers reflecting on cute rosy cheeks', tag: 'Camp' },
   { id: 'explorer_binoculars', name: 'Field Scout Binoculars', emoji: '🔭', desc: 'Compact wilderness birdwatching binoculars around neck', tag: 'Camp' },
   { id: 'cyber_pixel_shades', name: 'Deal-With-It Pixel Shades', emoji: '🕶️', desc: 'Legendary 8-bit stepped pixel sunglasses with cyan gleam', tag: 'Retro' },
@@ -531,6 +559,8 @@ export const FROG_GLASSES: SceneOptionInfo<FrogGlassesId>[] = [
 
 export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
   { id: 'classic', name: 'Classic Moss Green', emoji: '🐸', desc: 'Original peaceful woodland green hue', tag: 'Classic' },
+  { id: 'kbbq_caramelized_amber', name: 'Caramelized Honey Amber', emoji: '🍯', desc: 'Glistening honey caramelized glazed BBQ glaze tone', tag: 'K-BBQ' },
+  { id: 'kbbq_gochujang_crimson', name: 'Sweet Gochujang Crimson', emoji: '🌶️', desc: 'Vibrant sweet & spicy Korean chili pepper red glow', tag: 'K-BBQ' },
   { id: 'pine_forest_moss', name: 'Deep Pine Needle Green', emoji: '🌲', desc: 'Rich evergreen pine forest moss tone with golden speckles', tag: 'Camp' },
   { id: 'ember_glow_amber', name: 'Campfire Ember Warmth', emoji: '🔥', desc: 'Luminous warm honey flame amber glow', tag: 'Camp' },
   { id: 'cyber_neon_violet', name: 'Synthwave Cyber Violet', emoji: '🟣', desc: 'Electric neon purple frog with glowing mint belly', tag: 'Retro' },
@@ -550,6 +580,8 @@ export const FROG_SKINS: SceneOptionInfo<FrogSkinId>[] = [
 
 export const FROG_COMPANIONS: SceneOptionInfo<FrogCompanionId>[] = [
   { id: 'none', name: 'Solo Time', emoji: '🌱', desc: 'Quiet peaceful sanctuary alone', tag: 'Solitude' },
+  { id: 'kbbq_sizzle_piglet', name: 'Sizzle the Chef Piglet', emoji: '🐷', desc: 'Cute rosy chibi piglet wearing a chef bandana & cheering with mini tongs', tag: 'K-BBQ' },
+  { id: 'kbbq_kimchi_ferment_pot', name: 'Onggi the Ferment Pot', emoji: '🏺', desc: 'Traditional earthenware clay kimchi pot with cute smiling face & steam', tag: 'K-BBQ' },
   { id: 'forest_camp_fawn', name: 'Maple the Camping Fawn', emoji: '🦌', desc: 'Gentle baby deer curled beside the tent with white spots', tag: 'Camp' },
   { id: 'campfire_raccoon', name: 'Bandit the Camp Raccoon', emoji: '🦝', desc: 'Cheeky masked raccoon nibbling toasted campfire bread', tag: 'Camp' },
   { id: 'pixel_arcade_ghost', name: 'Blinky the 8-Bit Ghost', emoji: '👻', desc: 'Playful floating pixel maze ghost with bobbing animation', tag: 'Retro' },

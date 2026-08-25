@@ -42,6 +42,10 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
       'gameboy_monochrome',
       'pine_forest_moss',
       'ember_glow_amber',
+      'golden_bbq_honey',
+      'skin_golden_bbq_honey',
+      'kbbq_caramelized_amber',
+      'kbbq_gochujang_crimson',
     ].includes(key)
   ) {
     const pal = getSkinColors(key as any);
@@ -734,6 +738,122 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'kbbq_grill_master_headband':
+    case 'grill_master_headband':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Crimson Red Chef Headband Band */}
+          <rect x="2" y="8" width="20" height="4" fill="#991B1B" />
+          <rect x="2" y="9" width="20" height="2" fill="#DC2626" />
+          <rect x="3" y="9" width="18" height="1" fill="#EF4444" />
+          {/* Gold BBQ Flame Kanji / Emblem at Center */}
+          <rect x="10" y="7" width="4" height="6" fill="#78350F" />
+          <rect x="10" y="7" width="4" height="5" fill="#FACC15" />
+          <rect x="11" y="8" width="2" height="3" fill="#FEF08A" />
+          <rect x="11" y="10" width="2" height="1" fill="#EA580C" />
+          {/* Tied Ribbon Knot & Dangling Tails on Right */}
+          <rect x="19" y="6" width="3" height="4" fill="#991B1B" />
+          <rect x="20" y="7" width="2" height="3" fill="#DC2626" />
+          <rect x="20" y="10" width="2" height="5" fill="#DC2626" />
+          <rect x="21" y="11" width="1" height="4" fill="#EF4444" />
+        </svg>
+      );
+
+    case 'kbbq_lettuce_wrap_hat':
+    case 'lettuce_wrap_hat':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Crisp Frilly Ssam Lettuce Crown */}
+          <rect x="3" y="9" width="18" height="10" fill="#14532D" />
+          <rect x="4" y="8" width="16" height="10" fill="#16A34A" />
+          <rect x="5" y="7" width="14" height="8" fill="#22C55E" />
+          <rect x="6" y="6" width="12" height="6" fill="#4ADE80" />
+          {/* Frilly Leaf Tips */}
+          <rect x="3" y="6" width="3" height="4" fill="#22C55E" />
+          <rect x="18" y="6" width="3" height="4" fill="#22C55E" />
+          <rect x="9" y="4" width="6" height="3" fill="#4ADE80" />
+          {/* Samgyeopsal Pork Belly Strip on top */}
+          <rect x="7" y="10" width="10" height="4" fill="#7C2D12" />
+          <rect x="7" y="10" width="10" height="2" fill="#EA580C" />
+          <rect x="8" y="11" width="8" height="1" fill="#FED7AA" />
+          <rect x="7" y="12" width="10" height="2" fill="#BE123C" />
+          {/* Ssamjang Red Paste & Garlic Clove Pin */}
+          <rect x="12" y="9" width="3" height="2" fill="#DC2626" />
+          <rect x="8" y="9" width="2" height="2" fill="#FEF08A" />
+          <rect x="8" y="9" width="1" height="1" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'kbbq_chef_visor':
+    case 'chef_visor':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Translucent Charcoal Smoke Sun Visor Crown */}
+          <rect x="3" y="10" width="18" height="4" fill="#09090B" />
+          <rect x="4" y="9" width="16" height="3" fill="#18181B" />
+          <rect x="5" y="9" width="14" height="2" fill="#27272A" />
+          {/* Neon Red/Orange BBQ Flame Crest on Front */}
+          <rect x="10" y="6" width="4" height="5" fill="#DC2626" />
+          <rect x="11" y="7" width="2" height="3" fill="#FACC15" />
+          <rect x="11" y="9" width="2" height="1" fill="#FEF08A" />
+          {/* Wide Curved Visor Bill */}
+          <rect x="2" y="13" width="20" height="4" fill="#09090B" />
+          <rect x="3" y="13" width="18" height="3" fill="#27272A" />
+          <rect x="4" y="14" width="16" height="1" fill="#EF4444" />
+          <rect x="5" y="14" width="14" height="1" fill="#38BDF8" opacity="0.6" />
+        </svg>
+      );
+
+    case 'kbbq_pork_belly_slice':
+    case 'pork_belly_slice':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Thick Cut Raw Pork Belly (Samgyeopsal) Sits atop Head */}
+          {/* Dark Red Rim */}
+          <rect x="2" y="7" width="20" height="9" fill="#7F1D1D" />
+          <rect x="3" y="8" width="18" height="7" fill="#BE123C" />
+          {/* Meat Layer 1 (Ruby Red) */}
+          <rect x="3" y="8" width="18" height="2" fill="#E11D48" />
+          {/* Fat Layer 1 (Cream White) */}
+          <rect x="3" y="10" width="18" height="2" fill="#FFFFFF" />
+          <rect x="4" y="10" width="16" height="1" fill="#FFFBEB" />
+          {/* Meat Layer 2 (Crimson Coral) */}
+          <rect x="3" y="12" width="18" height="2" fill="#F43F5E" />
+          {/* Fat Layer 2 (Ivory) */}
+          <rect x="4" y="14" width="16" height="1" fill="#FFF1F2" />
+          {/* Shiny Meat Glaze Glint */}
+          <rect x="5" y="8" width="3" height="1" fill="#FFE4E6" />
+          <rect x="13" y="8" width="4" height="1" fill="#FFE4E6" />
+        </svg>
+      );
+
+    case 'kbbq_garlic_clove_cap':
+    case 'garlic_clove_cap':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Roasted Golden Whole Garlic Bulb & Green Sprout */}
+          {/* Green Sprout Tip */}
+          <rect x="11" y="2" width="2" height="4" fill="#15803D" />
+          <rect x="12" y="1" width="1" height="3" fill="#22C55E" />
+          <rect x="10" y="3" width="1" height="2" fill="#4ADE80" />
+          {/* Golden Roasted Garlic Bulb Body */}
+          <rect x="5" y="6" width="14" height="13" fill="#78350F" />
+          <rect x="6" y="7" width="12" height="11" fill="#D97706" />
+          <rect x="7" y="8" width="10" height="9" fill="#FEF08A" />
+          <rect x="8" y="9" width="8" height="7" fill="#FFFBEB" />
+          {/* Individual Clove Segment Curves */}
+          <rect x="9" y="8" width="1" height="9" fill="#F59E0B" />
+          <rect x="14" y="8" width="1" height="9" fill="#F59E0B" />
+          {/* Roasted Char Marks */}
+          <rect x="7" y="14" width="2" height="2" fill="#92400E" />
+          <rect x="15" y="13" width="2" height="2" fill="#92400E" />
+          <rect x="11" y="16" width="2" height="1" fill="#78350F" />
+          {/* Roasted Brown Root Base */}
+          <rect x="8" y="18" width="8" height="2" fill="#78350F" />
+          <rect x="9" y="19" width="6" height="1" fill="#451A03" />
+        </svg>
+      );
+
     // -----------------------------------------------------------
     // B. OUTFITS & COSTUMES (Cozy 16-bit / 32-bit Pixel Art)
     // -----------------------------------------------------------
@@ -1343,6 +1463,137 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'kbbq_pitmaster_apron':
+    case 'pitmaster_apron':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Heavy Black Drill Pitmaster Apron with Brass Hardware */}
+          {/* Neck Loop Strap */}
+          <rect x="8" y="3" width="8" height="3" fill="#27272A" />
+          <rect x="9" y="3" width="6" height="2" fill="#18181B" />
+          {/* Apron Bib & Body */}
+          <rect x="4" y="6" width="16" height="15" fill="#09090B" />
+          <rect x="5" y="7" width="14" height="13" fill="#18181B" />
+          <rect x="6" y="8" width="12" height="11" fill="#27272A" />
+          {/* Red BBQ Flame Emblem on Chest */}
+          <rect x="10" y="8" width="4" height="4" fill="#DC2626" />
+          <rect x="11" y="9" width="2" height="2" fill="#FACC15" />
+          <rect x="11" y="10" width="1" height="1" fill="#FEF08A" />
+          {/* Waist Tie Belt & Large Front Pocket with Tongs Loop */}
+          <rect x="3" y="13" width="18" height="2" fill="#3F3F46" />
+          <rect x="7" y="14" width="10" height="5" fill="#18181B" />
+          <rect x="8" y="15" width="8" height="3" fill="#09090B" />
+          {/* Steel Grill Tongs & Thermometer peeking out */}
+          <rect x="8" y="12" width="2" height="4" fill="#94A3B8" />
+          <rect x="8" y="12" width="1" height="4" fill="#E2E8F0" />
+          <rect x="13" y="13" width="1" height="3" fill="#EF4444" />
+        </svg>
+      );
+
+    case 'kbbq_retro_tracksuit':
+    case 'retro_tracksuit':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Retro Emerald Green Tracksuit Jacket */}
+          <rect x="3" y="5" width="18" height="14" fill="#022C22" />
+          <rect x="4" y="5" width="16" height="13" fill="#065F46" />
+          <rect x="5" y="6" width="14" height="12" fill="#047857" />
+          <rect x="6" y="6" width="12" height="11" fill="#10B981" />
+          {/* High Athletic Collar */}
+          <rect x="6" y="4" width="12" height="3" fill="#065F46" />
+          <rect x="7" y="4" width="10" height="2" fill="#10B981" />
+          {/* Dual White Racing Side Stripes */}
+          <rect x="4" y="6" width="2" height="12" fill="#FFFFFF" />
+          <rect x="18" y="6" width="2" height="12" fill="#FFFFFF" />
+          {/* Center Silver Zipper with Gold Pull */}
+          <rect x="11" y="5" width="2" height="13" fill="#022C22" />
+          <rect x="11" y="6" width="1" height="11" fill="#E2E8F0" />
+          <rect x="11" y="6" width="2" height="2" fill="#FACC15" />
+          {/* Ribbed Bottom Hem */}
+          <rect x="4" y="17" width="16" height="2" fill="#022C22" />
+          <rect x="5" y="17" width="14" height="1" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'kbbq_hanbok_vest':
+    case 'hanbok_vest':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Royal Midnight Blue Silk Korean Hanbok Vest */}
+          <rect x="3" y="5" width="18" height="14" fill="#0F172A" />
+          <rect x="4" y="5" width="16" height="13" fill="#1E1B4B" />
+          <rect x="5" y="6" width="14" height="12" fill="#1E3A8A" />
+          <rect x="6" y="6" width="12" height="11" fill="#2563EB" />
+          {/* Layered White Silk Crossover Inner Collar (Dongjeong) */}
+          <rect x="8" y="4" width="8" height="5" fill="#FFFFFF" />
+          <rect x="9" y="5" width="6" height="3" fill="#F8FAFC" />
+          {/* Crimson & Amber Silk Goreum Tie Knot & Dangling Tassels */}
+          <rect x="12" y="8" width="4" height="3" fill="#DC2626" />
+          <rect x="13" y="8" width="2" height="2" fill="#F59E0B" />
+          <rect x="13" y="11" width="2" height="6" fill="#DC2626" />
+          <rect x="14" y="14" width="1" height="4" fill="#F59E0B" />
+          {/* Golden Cloud Embroidery Hem Trims */}
+          <rect x="4" y="16" width="16" height="3" fill="#B45309" />
+          <rect x="5" y="16" width="14" height="2" fill="#F59E0B" />
+          <rect x="6" y="16" width="3" height="1" fill="#FEF08A" />
+          <rect x="11" y="16" width="3" height="1" fill="#FEF08A" />
+          <rect x="15" y="16" width="3" height="1" fill="#FEF08A" />
+        </svg>
+      );
+
+    case 'kbbq_cozy_smoke_hoodie':
+    case 'cozy_smoke_hoodie':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Charcoal Smoke Grey Fleece Hoodie */}
+          <rect x="3" y="5" width="18" height="14" fill="#18181B" />
+          <rect x="4" y="5" width="16" height="13" fill="#27272A" />
+          <rect x="5" y="6" width="14" height="12" fill="#3F3F46" />
+          <rect x="6" y="6" width="12" height="11" fill="#52525B" />
+          <rect x="7" y="7" width="10" height="9" fill="#71717A" />
+          {/* Thick Hood Collar Folds */}
+          <rect x="5" y="4" width="4" height="4" fill="#27272A" />
+          <rect x="15" y="4" width="4" height="4" fill="#27272A" />
+          {/* Red/Orange Grill Flame Logo Printed on Chest */}
+          <rect x="9" y="8" width="6" height="4" fill="#EA580C" />
+          <rect x="10" y="8" width="4" height="3" fill="#FACC15" />
+          <rect x="11" y="9" width="2" height="1" fill="#FFFFFF" />
+          {/* Kangaroo Pouch Pocket */}
+          <rect x="6" y="12" width="12" height="5" fill="#27272A" />
+          <rect x="7" y="13" width="10" height="3" fill="#3F3F46" />
+          {/* White Woven Drawstrings */}
+          <rect x="9" y="8" width="1" height="4" fill="#FFFFFF" />
+          <rect x="14" y="8" width="1" height="4" fill="#FFFFFF" />
+          {/* Ribbed Bottom Hem */}
+          <rect x="5" y="17" width="14" height="2" fill="#18181B" />
+        </svg>
+      );
+
+    case 'kbbq_banchan_chef_vest':
+    case 'banchan_chef_vest':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Traditional Deep Burgundy Korean Waiter/Chef Vest */}
+          {/* White Inner Shirt & Collar */}
+          <rect x="8" y="4" width="8" height="6" fill="#E2E8F0" />
+          <rect x="9" y="4" width="6" height="5" fill="#FFFFFF" />
+          <rect x="11" y="6" width="2" height="3" fill="#DC2626" />
+          {/* Burgundy Silk Vest Body */}
+          <rect x="3" y="6" width="18" height="14" fill="#450A0A" />
+          <rect x="4" y="7" width="16" height="12" fill="#7F1D1D" />
+          <rect x="5" y="8" width="14" height="10" fill="#991B1B" />
+          <rect x="6" y="8" width="12" height="9" fill="#B91C1C" />
+          {/* Golden Braided Norigae Knot on Lapel */}
+          <rect x="7" y="9" width="3" height="4" fill="#78350F" />
+          <rect x="7" y="9" width="3" height="3" fill="#FACC15" />
+          <rect x="8" y="12" width="1" height="4" fill="#FEF08A" />
+          {/* Brass Front Buttons */}
+          <rect x="11" y="10" width="2" height="2" fill="#FACC15" />
+          <rect x="11" y="13" width="2" height="2" fill="#FACC15" />
+          <rect x="11" y="16" width="2" height="2" fill="#FACC15" />
+        </svg>
+      );
+
     // -----------------------------------------------------------
     // C. FACE ACCESSORIES & GLASSES (Cozy 16-bit / 32-bit Pixel Art)
     // -----------------------------------------------------------
@@ -1675,6 +1926,78 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           <rect x="5" y="9" width="3" height="3" fill="#E2E8F0" />
           <rect x="6" y="8" width="1" height="5" fill="#FFFFFF" />
           <rect x="4" y="10" width="5" height="1" fill="#FFFFFF" />
+        </>
+      );
+
+    case 'kbbq_smoke_goggles':
+    case 'smoke_goggles':
+    case 'kbbq_sizzle_safety_goggles':
+    case 'sizzle_safety_goggles':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Heavy Yellow Industrial Sizzle Splash Goggles */}
+          <rect x="1" y="8" width="22" height="7" fill="#713F12" />
+          <rect x="2" y="8" width="20" height="6" fill="#CA8A04" />
+          <rect x="3" y="9" width="18" height="5" fill="#EAB308" />
+          {/* Dual Clear Impact Glass Lenses with Sparkle Sheen */}
+          <rect x="4" y="9" width="6" height="4" fill="#0284C7" />
+          <rect x="5" y="10" width="4" height="3" fill="#38BDF8" />
+          <rect x="5" y="10" width="2" height="1" fill="#FFFFFF" />
+          <rect x="14" y="9" width="6" height="4" fill="#0284C7" />
+          <rect x="15" y="10" width="4" height="3" fill="#38BDF8" />
+          <rect x="15" y="10" width="2" height="1" fill="#FFFFFF" />
+          {/* Center Bridge & Black Rubber Strap */}
+          <rect x="11" y="9" width="2" height="3" fill="#713F12" />
+          <rect x="0" y="10" width="2" height="2" fill="#18181B" />
+          <rect x="22" y="10" width="2" height="2" fill="#18181B" />
+        </>
+      );
+
+    case 'kbbq_tasty_blush_steam':
+    case 'tasty_blush_steam':
+    case 'kbbq_bbq_blush_steam':
+    case 'bbq_blush_steam':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Rosy BBQ Warmth Cheeks + Sizzling Steam Wisps */}
+          {/* Rosy Heat Blush */}
+          <rect x="2" y="10" width="6" height="5" fill="#BE123C" opacity="0.75" />
+          <rect x="3" y="11" width="4" height="3" fill="#FB7185" />
+          <rect x="4" y="12" width="2" height="1" fill="#FFE4E6" />
+          <rect x="16" y="10" width="6" height="5" fill="#BE123C" opacity="0.75" />
+          <rect x="17" y="11" width="4" height="3" fill="#FB7185" />
+          <rect x="18" y="12" width="2" height="1" fill="#FFE4E6" />
+          {/* Rising Aromatic BBQ Steam Swirls */}
+          <rect x="5" y="3" width="2" height="4" fill="#FFFFFF" opacity="0.85" />
+          <rect x="6" y="5" width="2" height="3" fill="#F1F5F9" opacity="0.7" />
+          <rect x="16" y="2" width="2" height="5" fill="#FFFFFF" opacity="0.85" />
+          <rect x="15" y="4" width="2" height="3" fill="#F1F5F9" opacity="0.7" />
+          {/* Golden Sizzle Sparkle */}
+          <rect x="11" y="2" width="2" height="2" fill="#FACC15" />
+        </>
+      );
+
+    case 'kbbq_smoke_tint_shades':
+    case 'smoke_tint_shades':
+      return renderAccessoryWithFrogFace(
+        <>
+          {/* Golden Wire-Rimmed Gradient Smoke-Tinted Sunglasses */}
+          {/* Gold Wire Frame & Bridge */}
+          <rect x="2" y="8" width="20" height="1" fill="#78350F" />
+          <rect x="3" y="8" width="18" height="1" fill="#FACC15" />
+          <rect x="11" y="8" width="2" height="2" fill="#FACC15" />
+          {/* Left Smoked Lens with Sunset Amber Gradient */}
+          <rect x="3" y="9" width="7" height="6" fill="#18181B" />
+          <rect x="4" y="9" width="5" height="5" fill="#78350F" />
+          <rect x="4" y="11" width="5" height="3" fill="#EA580C" />
+          <rect x="4" y="13" width="5" height="1" fill="#FACC15" />
+          <rect x="4" y="9" width="2" height="1" fill="#FFFFFF" />
+          {/* Right Smoked Lens */}
+          <rect x="14" y="9" width="7" height="6" fill="#18181B" />
+          <rect x="15" y="9" width="5" height="5" fill="#78350F" />
+          <rect x="15" y="11" width="5" height="3" fill="#EA580C" />
+          <rect x="15" y="13" width="5" height="1" fill="#FACC15" />
+          <rect x="15" y="9" width="2" height="1" fill="#FFFFFF" />
         </>
       );
 
@@ -2134,6 +2457,94 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           <rect x="18" y="4" width="1" height="12" fill="#38BDF8" />
           <rect x="17" y="15" width="3" height="3" fill="#EF4444" />
           <rect x="17" y="17" width="3" height="1" fill="#FFFFFF" />
+        </svg>
+      );
+
+    case 'grilling_samgyeopsal':
+    case 'kbbq_grilling_samgyeopsal':
+    case 'kbbq_tongs_bacon_flip':
+    case 'tongs_bacon_flip':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Stainless Steel Grill Tongs gripping Sizzling Pork Belly / Bacon */}
+          {/* Tongs Handles */}
+          <rect x="2" y="18" width="6" height="3" fill="#334155" />
+          <rect x="5" y="14" width="5" height="4" fill="#64748B" />
+          <rect x="8" y="10" width="5" height="4" fill="#94A3B8" />
+          <rect x="11" y="6" width="6" height="4" fill="#CBD5E1" />
+          {/* Upper Jaw of Tongs */}
+          <rect x="15" y="5" width="6" height="2" fill="#E2E8F0" />
+          <rect x="19" y="5" width="2" height="4" fill="#94A3B8" />
+          {/* Lower Jaw of Tongs */}
+          <rect x="13" y="12" width="7" height="2" fill="#E2E8F0" />
+          <rect x="18" y="10" width="2" height="4" fill="#94A3B8" />
+          {/* Sizzling Grilled Pork Belly Slice between Jaws */}
+          <rect x="14" y="7" width="8" height="4" fill="#7C2D12" />
+          <rect x="14" y="7" width="8" height="2" fill="#EA580C" />
+          <rect x="15" y="8" width="6" height="1" fill="#FED7AA" />
+          <rect x="14" y="9" width="8" height="2" fill="#BE123C" />
+          {/* Grill Sizzle Sparks */}
+          <rect x="19" y="2" width="2" height="2" fill="#FACC15" />
+          <rect x="13" y="3" width="1" height="2" fill="#EF4444" />
+        </svg>
+      );
+
+    case 'holding_rice_and_chopsticks':
+    case 'kbbq_holding_rice_and_chopsticks':
+    case 'kbbq_chopsticks_rice_bowl':
+    case 'chopsticks_rice_bowl':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Stainless Steel Korean Rice Bowl (Gonggibap) with Lid & Metal Chopsticks */}
+          {/* Stainless Rice Bowl Body */}
+          <rect x="3" y="12" width="14" height="9" fill="#334155" />
+          <rect x="4" y="12" width="12" height="8" fill="#64748B" />
+          <rect x="5" y="13" width="10" height="6" fill="#94A3B8" />
+          <rect x="6" y="13" width="8" height="5" fill="#CBD5E1" />
+          <rect x="7" y="14" width="6" height="3" fill="#E2E8F0" />
+          {/* Steaming Fluffy White Pearl Rice inside */}
+          <rect x="4" y="10" width="12" height="3" fill="#FFFFFF" />
+          <rect x="5" y="9" width="10" height="2" fill="#FFFFFF" />
+          <rect x="7" y="8" width="6" height="2" fill="#FFFFFF" />
+          {/* Aromatic Steam */}
+          <rect x="6" y="4" width="2" height="3" fill="#E2E8F0" opacity="0.8" />
+          <rect x="10" y="3" width="2" height="4" fill="#E2E8F0" opacity="0.8" />
+          {/* Pair of Sleek Flat Stainless Steel Chopsticks (Jeotgarak) */}
+          <rect x="12" y="2" width="2" height="18" fill="#475569" />
+          <rect x="13" y="2" width="1" height="18" fill="#CBD5E1" />
+          <rect x="15" y="4" width="2" height="16" fill="#475569" />
+          <rect x="16" y="4" width="1" height="16" fill="#CBD5E1" />
+          {/* Picked up Kimchi / Meat Cube between chopsticks */}
+          <rect x="12" y="6" width="5" height="3" fill="#DC2626" />
+          <rect x="13" y="7" width="3" height="1" fill="#FEF08A" />
+        </svg>
+      );
+
+    case 'eating_ssam_wrap':
+    case 'kbbq_eating_ssam_wrap':
+    case 'kbbq_lettuce_ssam_wrap':
+    case 'lettuce_ssam_wrap':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Fresh Crispy Green Lettuce Ssam Wrap with Grilled Meat, Ssamjang & Garlic */}
+          {/* Outer Frilly Green Lettuce Leaves */}
+          <rect x="2" y="8" width="20" height="13" fill="#14532D" />
+          <rect x="3" y="9" width="18" height="11" fill="#166534" />
+          <rect x="4" y="10" width="16" height="9" fill="#15803D" />
+          <rect x="5" y="11" width="14" height="7" fill="#22C55E" />
+          <rect x="6" y="12" width="12" height="5" fill="#4ADE80" />
+          {/* Grilled Pork Belly Slice inside */}
+          <rect x="7" y="11" width="10" height="4" fill="#7C2D12" />
+          <rect x="8" y="11" width="8" height="2" fill="#EA580C" />
+          <rect x="9" y="12" width="6" height="1" fill="#FED7AA" />
+          {/* Red Savory Ssamjang Chili Bean Paste */}
+          <rect x="11" y="9" width="4" height="3" fill="#991B1B" />
+          <rect x="12" y="10" width="2" height="2" fill="#DC2626" />
+          {/* Sliced Golden Garlic Clove & Green Pepper Ring */}
+          <rect x="7" y="9" width="3" height="3" fill="#FEF08A" />
+          <rect x="8" y="10" width="1" height="1" fill="#FFFBEB" />
+          <rect x="15" y="10" width="3" height="3" fill="#15803D" />
+          <rect x="16" y="11" width="1" height="1" fill="#86EFAC" />
         </svg>
       );
 
@@ -2714,6 +3125,87 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
         </svg>
       );
 
+    case 'kbbq_sizzle_piglet':
+    case 'sizzle_piglet':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ground Soft Shadow */}
+          <rect x="3" y="20" width="18" height="2" fill="#000000" opacity="0.2" />
+          {/* Sizzle Sparkle */}
+          <rect x="19" y="3" width="2" height="2" fill="#FACC15" />
+          {/* Cute Piglet Floppy Ears */}
+          <rect x="4" y="5" width="3" height="4" fill="#DB2777" />
+          <rect x="5" y="6" width="2" height="3" fill="#F472B6" />
+          <rect x="17" y="5" width="3" height="4" fill="#DB2777" />
+          <rect x="17" y="6" width="2" height="3" fill="#F472B6" />
+          {/* Head & Body (Rosy Peach Pink) */}
+          <rect x="5" y="8" width="14" height="11" fill="#BE185D" />
+          <rect x="6" y="8" width="12" height="10" fill="#F472B6" />
+          <rect x="7" y="9" width="10" height="8" fill="#FBCFE8" />
+          {/* Pitmaster Red Tied Bandana on Head */}
+          <rect x="6" y="7" width="12" height="2" fill="#DC2626" />
+          <rect x="7" y="7" width="10" height="1" fill="#EF4444" />
+          <rect x="17" y="6" width="2" height="2" fill="#DC2626" />
+          {/* Glossy Black Eyes with Catchlights */}
+          <rect x="7" y="11" width="2" height="2" fill="#18181B" />
+          <rect x="7" y="11" width="1" height="1" fill="#FFFFFF" />
+          <rect x="15" y="11" width="2" height="2" fill="#18181B" />
+          <rect x="15" y="11" width="1" height="1" fill="#FFFFFF" />
+          {/* Rosy Cheeks */}
+          <rect x="5" y="13" width="2" height="2" fill="#F43F5E" opacity="0.8" />
+          <rect x="17" y="13" width="2" height="2" fill="#F43F5E" opacity="0.8" />
+          {/* Cute Oval Snout with Two Nostrils */}
+          <rect x="10" y="12" width="4" height="3" fill="#DB2777" />
+          <rect x="10" y="12" width="4" height="2.5" fill="#F472B6" />
+          <rect x="11" y="13" width="1" height="1" fill="#831843" />
+          <rect x="13" y="13" width="1" height="1" fill="#831843" />
+          {/* Tiny Trotter Feet */}
+          <rect x="7" y="18" width="3" height="3" fill="#BE185D" />
+          <rect x="7" y="20" width="3" height="1" fill="#831843" />
+          <rect x="14" y="18" width="3" height="3" fill="#BE185D" />
+          <rect x="14" y="20" width="3" height="1" fill="#831843" />
+        </svg>
+      );
+
+    case 'kbbq_kimchi_ferment_pot':
+    case 'kimchi_ferment_pot':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ground Soft Shadow */}
+          <rect x="4" y="20" width="16" height="2" fill="#000000" opacity="0.25" />
+          {/* Rising Fermentation Steam */}
+          <rect x="6" y="1" width="2" height="3" fill="#F87171" opacity="0.75" />
+          <rect x="16" y="0" width="2" height="4" fill="#FFFFFF" opacity="0.7" />
+          {/* Onggi Earthenware Clay Pot Lid */}
+          <rect x="9" y="3" width="6" height="2" fill="#451A03" />
+          <rect x="10" y="3" width="4" height="1" fill="#92400E" />
+          <rect x="5" y="5" width="14" height="3" fill="#451A03" />
+          <rect x="6" y="6" width="12" height="2" fill="#78350F" />
+          {/* Wide Clay Pot Rim */}
+          <rect x="4" y="8" width="16" height="2" fill="#451A03" />
+          <rect x="5" y="8" width="14" height="1" fill="#78350F" />
+          {/* Pot Body (Traditional Korean Earthenware Onggi) */}
+          <rect x="5" y="10" width="14" height="10" fill="#451A03" />
+          <rect x="6" y="10" width="12" height="9" fill="#78350F" />
+          <rect x="7" y="11" width="10" height="7" fill="#92400E" />
+          {/* Cute Smiling Face on Pot */}
+          <rect x="8" y="12" width="2" height="2" fill="#18181B" />
+          <rect x="8" y="12" width="1" height="1" fill="#FFFFFF" />
+          <rect x="14" y="12" width="2" height="2" fill="#18181B" />
+          <rect x="14" y="12" width="1" height="1" fill="#FFFFFF" />
+          <rect x="10" y="14" width="4" height="1" fill="#451A03" />
+          {/* Rosy Cheeks */}
+          <rect x="7" y="13" width="1" height="1" fill="#EF4444" />
+          <rect x="16" y="13" width="1" height="1" fill="#EF4444" />
+          {/* Red Chili Pepper Decal on Belly */}
+          <rect x="11" y="16" width="2" height="2" fill="#DC2626" />
+          <rect x="12" y="17" width="1" height="1" fill="#DC2626" />
+          <rect x="11" y="15" width="1" height="1" fill="#16A34A" />
+          {/* Base */}
+          <rect x="6" y="19" width="12" height="2" fill="#451A03" />
+        </svg>
+      );
+
     // -----------------------------------------------------------
     // F. HABITATS & SCENES (Mini Isometric Pixel Dioramas)
     // -----------------------------------------------------------
@@ -2826,6 +3318,82 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           {/* Signpost */}
           <rect x="18" y="15" width="4" height="2" fill="#92400E" />
           <rect x="19" y="17" width="2" height="4" fill="#78350F" />
+        </svg>
+      );
+
+    case 'kbbq_sizzle_piglet':
+    case 'sizzle_piglet':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ground Soft Shadow */}
+          <rect x="3" y="20" width="18" height="2" fill="#000000" opacity="0.2" />
+          {/* Pointy Piggy Ears */}
+          <rect x="3" y="2" width="4" height="5" fill="#BE185D" />
+          <rect x="4" y="3" width="2" height="3" fill="#FDA4AF" />
+          <rect x="17" y="2" width="4" height="5" fill="#BE185D" />
+          <rect x="18" y="3" width="2" height="3" fill="#FDA4AF" />
+          {/* Head & Round Cheeks */}
+          <rect x="4" y="4" width="16" height="10" fill="#F472B6" />
+          <rect x="5" y="5" width="14" height="8" fill="#FBCFE8" />
+          {/* Red Chef Bandana tied across Forehead */}
+          <rect x="3" y="5" width="18" height="3" fill="#DC2626" />
+          <rect x="4" y="5" width="16" height="1" fill="#EF4444" />
+          <rect x="19" y="4" width="3" height="3" fill="#DC2626" />
+          <rect x="20" y="6" width="2" height="2" fill="#B91C1C" />
+          {/* Sparkly Glossy Eyes */}
+          <rect x="6" y="7" width="3" height="3" fill="#18181B" />
+          <rect x="6" y="7" width="1" height="1" fill="#FFFFFF" />
+          <rect x="15" y="7" width="3" height="3" fill="#18181B" />
+          <rect x="15" y="7" width="1" height="1" fill="#FFFFFF" />
+          {/* Snout & Nostrils */}
+          <rect x="9" y="9" width="6" height="4" fill="#F472B6" />
+          <rect x="10" y="10" width="4" height="2" fill="#FDA4AF" />
+          <rect x="10" y="10" width="1" height="1" fill="#BE185D" />
+          <rect x="13" y="10" width="1" height="1" fill="#BE185D" />
+          {/* Rosy Cheeks */}
+          <rect x="4" y="10" width="2" height="2" fill="#FB7185" />
+          <rect x="18" y="10" width="2" height="2" fill="#FB7185" />
+          {/* Chubby Piglet Body */}
+          <rect x="5" y="13" width="14" height="7" fill="#F472B6" />
+          <rect x="6" y="14" width="12" height="5" fill="#FBCFE8" />
+          {/* Mini Tongs & Grilled Bacon Cube */}
+          <rect x="1" y="13" width="5" height="1" fill="#94A3B8" />
+          <rect x="1" y="15" width="5" height="1" fill="#94A3B8" />
+          <rect x="3" y="14" width="3" height="2" fill="#EA580C" />
+          {/* Trotters */}
+          <rect x="6" y="20" width="3" height="2" fill="#BE185D" />
+          <rect x="15" y="20" width="3" height="2" fill="#BE185D" />
+        </svg>
+      );
+
+    case 'kbbq_kimchi_ferment_pot':
+    case 'kimchi_ferment_pot':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Ground Soft Shadow */}
+          <rect x="3" y="21" width="18" height="2" fill="#000000" opacity="0.2" />
+          {/* Traditional Onggi Earthenware Clay Pot Body */}
+          <rect x="4" y="6" width="16" height="14" fill="#451A03" />
+          <rect x="5" y="7" width="14" height="12" fill="#78350F" />
+          <rect x="6" y="8" width="12" height="10" fill="#92400E" />
+          <rect x="7" y="9" width="10" height="8" fill="#B45309" />
+          {/* Onggi Ceramic Dome Lid */}
+          <rect x="6" y="3" width="12" height="3" fill="#451A03" />
+          <rect x="7" y="4" width="10" height="2" fill="#78350F" />
+          <rect x="10" y="2" width="4" height="2" fill="#451A03" />
+          <rect x="11" y="2" width="2" height="1" fill="#B45309" />
+          {/* Cute Friendly Onggi Spirit Face */}
+          <rect x="7" y="11" width="2" height="2" fill="#FEF3C7" />
+          <rect x="8" y="11" width="1" height="1" fill="#18181B" />
+          <rect x="15" y="11" width="2" height="2" fill="#FEF3C7" />
+          <rect x="15" y="11" width="1" height="1" fill="#18181B" />
+          <rect x="11" y="13" width="2" height="1" fill="#FEF3C7" />
+          <rect x="6" y="13" width="2" height="1" fill="#EF4444" />
+          <rect x="16" y="13" width="2" height="1" fill="#EF4444" />
+          {/* Fermenting Aromatic Kimchi Steam & Chili Pepper Icon */}
+          <rect x="9" y="0" width="2" height="2" fill="#FFFFFF" opacity="0.8" />
+          <rect x="14" y="1" width="2" height="2" fill="#EF4444" />
+          <rect x="15" y="0" width="1" height="1" fill="#22C55E" />
         </svg>
       );
 
@@ -2995,6 +3563,37 @@ export const PixelItemThumbnail: React.FC<PixelItemThumbnailProps> = ({
           <rect x="13" y="3" width="4" height="18" fill="#22C55E" />
           <rect x="7" y="7" width="6" height="6" fill="#DC2626" />
           <rect x="9" y="9" width="2" height="2" fill="#FEF08A" />
+        </svg>
+      );
+
+    case 'korean_bbq':
+    case 'kbbq':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...pixelStyle} className={className}>
+          {/* Dark Cozy Korean BBQ Restaurant Scene with Neon Glow */}
+          <rect x="2" y="2" width="20" height="20" fill="#18181B" />
+          {/* Neon K-BBQ Sign (Pink & Cyan) */}
+          <rect x="5" y="4" width="14" height="3" fill="#831843" />
+          <rect x="6" y="5" width="12" height="1" fill="#F43F5E" />
+          <rect x="8" y="5" width="3" height="1" fill="#38BDF8" />
+          {/* Metallic Overhead Exhaust Hood Pipe */}
+          <rect x="11" y="7" width="2" height="4" fill="#64748B" />
+          <rect x="9" y="10" width="6" height="2" fill="#94A3B8" />
+          {/* Round Stainless Steel BBQ Table */}
+          <rect x="2" y="13" width="20" height="8" fill="#334155" />
+          <rect x="3" y="13" width="18" height="2" fill="#64748B" />
+          <rect x="4" y="14" width="16" height="1" fill="#CBD5E1" />
+          {/* Center Charcoal Grill Pit with Glowing Embers & Meat */}
+          <rect x="8" y="13" width="8" height="4" fill="#09090B" />
+          <rect x="9" y="14" width="6" height="2" fill="#DC2626" />
+          <rect x="10" y="14" width="4" height="1" fill="#FACC15" />
+          {/* Sizzling Pork Slices on Grill */}
+          <rect x="10" y="14" width="2" height="1" fill="#7C2D12" />
+          <rect x="12" y="14" width="2" height="1" fill="#EA580C" />
+          {/* Banchan Side Dishes (Kimchi, Lettuce, Rice Bowl) */}
+          <rect x="4" y="14" width="3" height="2" fill="#DC2626" />
+          <rect x="17" y="14" width="3" height="2" fill="#FFFFFF" />
+          <rect x="5" y="16" width="3" height="2" fill="#15803D" />
         </svg>
       );
 
