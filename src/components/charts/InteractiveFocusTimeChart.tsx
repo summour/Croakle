@@ -36,10 +36,10 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
   }
 
   const categoryConfig: Record<string, { label: string; color: string; bg: string; darkBg: string }> = {
-    focus: { label: 'Focus', color: '#5f7a61', bg: 'bg-[#5f7a61]', darkBg: 'dark:bg-[#7d9d80]' },
-    study: { label: 'Study', color: '#d98236', bg: 'bg-[#d98236]', darkBg: 'dark:bg-[#e89b58]' },
-    work: { label: 'Work', color: '#b86f52', bg: 'bg-[#b86f52]', darkBg: 'dark:bg-[#d68767]' },
-    break: { label: 'Break', color: '#4a828a', bg: 'bg-[#4a828a]', darkBg: 'dark:bg-[#68a8b1]' },
+    focus: { label: 'Focus', color: '#007AFF', bg: 'bg-[#007AFF]', darkBg: 'dark:bg-[#007AFF]' },
+    study: { label: 'Study', color: '#FF9500', bg: 'bg-[#FF9500]', darkBg: 'dark:bg-[#FF9500]' },
+    work: { label: 'Work', color: '#34C759', bg: 'bg-[#34C759]', darkBg: 'dark:bg-[#34C759]' },
+    break: { label: 'Break', color: '#AF52DE', bg: 'bg-[#AF52DE]', darkBg: 'dark:bg-[#AF52DE]' },
   };
 
   const dayStats = dateList.map(({ iso, dayName, dayNum }) => {
@@ -88,17 +88,17 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
       {/* Category Overview Progress Bar & Legend */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-semibold text-[#2d2823] dark:text-[#f4efe8] flex items-center gap-1.5">
-            <Clock size={13} className="text-[#5f7a61]" />
+          <span className="font-semibold text-zinc-950 dark:text-white flex items-center gap-1.5">
+            <Clock size={13} className="text-[#007AFF]" />
             <span>Total: {Math.floor(totalRangeMinutes / 60)}h {totalRangeMinutes % 60}m</span>
           </span>
-          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+          <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
             Past {daysRange} Days
           </span>
         </div>
 
         {/* Multi-segmented bar */}
-        <div className="w-full h-2 rounded-full overflow-hidden bg-[#ede6dc]/70 dark:bg-[#2c2722] border border-black/[0.02] dark:border-white/[0.04] flex">
+        <div className="w-full h-2 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-black/[0.02] dark:border-white/[0.04] flex">
           {Object.entries(categoryTotals).map(([type, mins]) => {
             if (mins <= 0 || totalRangeMinutes <= 0) return null;
             const pct = Math.round((mins / totalRangeMinutes) * 100);
@@ -119,10 +119,10 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
             const mins = categoryTotals[type] || 0;
             if (mins <= 0 && totalRangeMinutes > 0) return null;
             return (
-              <div key={type} className="flex items-center gap-1 text-[#8c7e70] dark:text-[#a89b8d]">
+              <div key={type} className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
                 <span className={`w-1.5 h-1.5 rounded-full ${cfg.bg} ${cfg.darkBg}`} />
                 <span>{cfg.label}:</span>
-                <strong className="text-[#2d2823] dark:text-[#f4efe8]">{mins}m</strong>
+                <strong className="text-zinc-950 dark:text-white">{mins}m</strong>
               </div>
             );
           })}
@@ -130,7 +130,7 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
       </div>
 
       {/* 7-Day Interactive Stacked Bar Chart */}
-      <div className="p-3 sm:p-3.5 rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.05]">
+      <div className="p-3 sm:p-3.5 rounded-[22px] bg-zinc-100/40 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800">
         <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
           {dayStats.map((st) => {
             const isSelected = activeDate === st.iso;
@@ -146,35 +146,35 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
                 onClick={() => handleBarTap(st.iso)}
                 className={`flex flex-col items-center gap-1.5 p-1 sm:p-1.5 rounded-[16px] transition-all duration-150 ios-tap ${
                   isSelected
-                    ? 'bg-black/[0.05] dark:bg-white/[0.08]'
-                    : 'hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
+                    ? 'bg-white dark:bg-zinc-800 shadow-xs ring-1 ring-black/5 dark:ring-white/10'
+                    : 'hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50'
                 }`}
               >
                 {/* Stacked Bar Container */}
-                <div className="w-full bg-[#ede6dc]/70 dark:bg-[#2c2722] h-24 sm:h-28 rounded-[12px] flex flex-col justify-end p-1 overflow-hidden border border-black/[0.02] dark:border-white/[0.03]">
-                  {st.breakMins > 0 && (
-                    <div className="w-full bg-[#4a828a] dark:bg-[#68a8b1] rounded-[6px]" style={{ height: `${breakH}%` }} />
+                <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-24 sm:h-28 rounded-[12px] flex flex-col justify-end p-1 overflow-hidden border border-black/[0.02] dark:border-white/[0.03]">
+                  {st.breakH > 0 && (
+                    <div className="w-full bg-[#AF52DE] rounded-[6px]" style={{ height: `${breakH}%` }} />
                   )}
                   {st.workMins > 0 && (
-                    <div className="w-full bg-[#b86f52] dark:bg-[#d68767] rounded-[6px]" style={{ height: `${workH}%` }} />
+                    <div className="w-full bg-[#34C759] rounded-[6px]" style={{ height: `${workH}%` }} />
                   )}
                   {st.studyMins > 0 && (
-                    <div className="w-full bg-[#d98236] dark:bg-[#e89b58] rounded-[6px]" style={{ height: `${studyH}%` }} />
+                    <div className="w-full bg-[#FF9500] rounded-[6px]" style={{ height: `${studyH}%` }} />
                   )}
                   {st.focusMins > 0 && (
-                    <div className="w-full bg-[#5f7a61] dark:bg-[#7d9d80] rounded-[8px]" style={{ height: `${focusH}%` }} />
+                    <div className="w-full bg-[#007AFF] rounded-[8px]" style={{ height: `${focusH}%` }} />
                   )}
                   {st.totalMins === 0 && (
-                    <div className="w-full h-1 bg-black/[0.06] dark:bg-white/[0.08] rounded-full" />
+                    <div className="w-full h-1 bg-zinc-200 dark:bg-zinc-700 rounded-full" />
                   )}
                 </div>
 
                 <span className={`text-xs font-bold ${
-                  isSelected ? 'text-[#5f7a61] dark:text-[#8fc493]' : 'text-[#2d2823] dark:text-[#f4efe8]'
+                  isSelected ? 'text-[#007AFF]' : 'text-zinc-950 dark:text-white'
                 }`}>
                   {st.dayName}
                 </span>
-                <span className="text-[11px] font-medium text-[#8c7e70] dark:text-[#a89b8d]">
+                <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">
                   {st.dayNum}
                 </span>
               </button>
@@ -185,17 +185,17 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
 
       {/* Selected Day Inspector Card */}
       {activeStats && (
-        <div className="rounded-[20px] bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] p-3.5 flex items-center justify-between animate-in fade-in duration-150">
+        <div className="rounded-[20px] bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 p-3.5 flex items-center justify-between animate-in fade-in duration-150">
           <div>
-            <strong className="text-xs font-bold text-[#2d2823] dark:text-[#f4efe8] block leading-tight">
+            <strong className="text-xs font-bold text-zinc-950 dark:text-white block leading-tight">
               {activeStats.dayName}, Day {activeStats.dayNum} ({activeStats.iso})
             </strong>
-            <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+            <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
               {activeStats.daySessions.length} session{activeStats.daySessions.length !== 1 ? 's' : ''} logged
             </span>
           </div>
 
-          <div className="px-2 py-0.5 rounded-full bg-[#5f7a61]/10 text-[#5f7a61] dark:text-[#8fc493] text-[11px] font-bold border border-[#5f7a61]/20">
+          <div className="px-2.5 py-0.5 rounded-full bg-[#007AFF]/10 text-[#007AFF] text-[11px] font-bold border border-[#007AFF]/20">
             {Math.floor(activeStats.totalMins / 60)}h {activeStats.totalMins % 60}m
           </div>
         </div>

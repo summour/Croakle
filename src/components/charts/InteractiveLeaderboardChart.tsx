@@ -94,10 +94,10 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
                 setFilterMode(t.id);
                 soundEngine.playTapSound();
               }}
-              className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all ios-tap whitespace-nowrap border ${
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ios-tap whitespace-nowrap border ${
                 filterMode === t.id
-                  ? 'bg-black/[0.06] dark:bg-white/[0.08] text-[#2d2823] dark:text-[#f4efe8] border-black/10 dark:border-white/12'
-                  : 'bg-black/[0.02] dark:bg-white/[0.03] text-[#8c7e70] dark:text-[#a89b8d] border-transparent opacity-60'
+                  ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 border-zinc-950 dark:border-white shadow-xs'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700'
               }`}
             >
               {t.label}
@@ -106,13 +106,13 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
         </div>
 
         {/* Sort */}
-        <div className="flex items-center gap-1 bg-black/[0.03] dark:bg-white/[0.05] p-0.5 rounded-full border border-black/[0.04] dark:border-white/[0.06]">
-          <span className="text-[9.5px] font-medium text-[#8c7e70] pl-2 pr-1">Sort:</span>
+        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-full border border-zinc-200 dark:border-zinc-700">
+          <span className="text-[10px] font-medium text-zinc-400 pl-2 pr-1">Sort:</span>
           <button
             type="button"
             onClick={() => setSortBy('rate')}
-            className={`px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${
-              sortBy === 'rate' ? 'bg-[#5f7a61] text-white' : 'text-[#8c7e70]'
+            className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition ${
+              sortBy === 'rate' ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'text-zinc-500 dark:text-zinc-400'
             }`}
           >
             % Goal
@@ -120,8 +120,8 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
           <button
             type="button"
             onClick={() => setSortBy('checks')}
-            className={`px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${
-              sortBy === 'checks' ? 'bg-[#5f7a61] text-white' : 'text-[#8c7e70]'
+            className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition ${
+              sortBy === 'checks' ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'text-zinc-500 dark:text-zinc-400'
             }`}
           >
             Checks
@@ -132,7 +132,7 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
       {/* Habit List */}
       <div className="space-y-2">
         {filtered.length === 0 ? (
-          <div className="py-6 text-center text-xs text-[#8c7e70] dark:text-[#a89b8d] bg-black/[0.02] dark:bg-white/[0.02] rounded-[18px] p-4">
+          <div className="py-8 text-center text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-50 dark:bg-zinc-900 rounded-[22px] p-4 border border-zinc-200 dark:border-zinc-800">
             No habits match this filter.
           </div>
         ) : (
@@ -143,33 +143,33 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
             return (
               <div
                 key={stat.habit.id}
-                className={`rounded-[18px] border transition-all duration-150 overflow-hidden ${
+                className={`rounded-[22px] border transition-all duration-150 overflow-hidden ${
                   isSelected
-                    ? 'bg-black/[0.03] dark:bg-white/[0.05] border-[#5f7a61]/30 shadow-2xs'
-                    : 'bg-black/[0.015] dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.05] hover:bg-black/[0.025]'
+                    ? 'bg-zinc-50 dark:bg-zinc-900 border-[#007AFF]/40 shadow-xs'
+                    : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50/80 dark:hover:bg-zinc-850'
                 }`}
               >
                 {/* Main Row */}
                 <div
                   onClick={() => handleRowClick(stat.habit.id)}
-                  className="p-3 sm:p-3.5 flex items-center justify-between gap-3 cursor-pointer ios-tap"
+                  className="p-3.5 flex items-center justify-between gap-3 cursor-pointer ios-tap"
                 >
                   <div className="flex items-center gap-2.5 min-w-0 flex-1">
                     <div className={`w-7 h-7 rounded-[10px] flex items-center justify-center font-bold text-xs shrink-0 ${
                       isRank1
-                        ? 'bg-[#c28f3a] text-white'
-                        : 'bg-black/[0.04] dark:bg-white/[0.06] text-[#8c7e70]'
+                        ? 'bg-[#FF9500] text-white shadow-xs'
+                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400'
                     }`}>
                       {isRank1 ? <Trophy size={13} /> : idx + 1}
                     </div>
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <strong className="text-xs font-bold text-[#2d2823] dark:text-[#f4efe8] truncate">
+                        <strong className="text-xs font-bold text-zinc-950 dark:text-white truncate">
                           {stat.habit.name}
                         </strong>
                       </div>
-                      <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                      <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
                         Goal: {stat.habit.goal}d/wk • {stat.monthChecks}/{stat.monthlyTarget} checks
                       </span>
                     </div>
@@ -178,24 +178,24 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
                   {/* Progress bar */}
                   <div className="flex items-center gap-2.5 shrink-0">
                     <div className="w-20 sm:w-28 flex flex-col items-end gap-1">
-                      <div className="w-full bg-[#ede6dc]/70 dark:bg-[#2c2722] h-2 rounded-full overflow-hidden border border-black/[0.02] dark:border-white/[0.03]">
+                      <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-2 rounded-full overflow-hidden border border-black/[0.02] dark:border-white/[0.03]">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ${
                             stat.goalPercent >= 100
-                              ? 'bg-[#c28f3a]'
-                              : 'bg-[#5f7a61] dark:bg-[#7d9d80]'
+                              ? 'bg-[#FF9500]'
+                              : 'bg-[#007AFF]'
                           }`}
                           style={{ width: `${Math.min(100, stat.goalPercent)}%` }}
                         />
                       </div>
-                      <span className="text-[11px] font-bold text-[#2d2823] dark:text-[#f4efe8]">
+                      <span className="text-[11px] font-bold text-zinc-950 dark:text-white">
                         {stat.goalPercent}%
                       </span>
                     </div>
 
                     <button
                       type="button"
-                      className="p-0.5 text-[#8c7e70]"
+                      className="p-0.5 text-zinc-400 dark:text-zinc-500"
                     >
                       {isSelected ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
                     </button>
@@ -204,20 +204,20 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
 
                 {/* Expanded 31-day activity strip */}
                 {isSelected && (
-                  <div className="px-3.5 pb-3.5 pt-1.5 space-y-2.5 border-t border-black/[0.03] dark:border-white/[0.04] bg-white/40 dark:bg-black/20 animate-in fade-in duration-150">
+                  <div className="px-3.5 pb-3.5 pt-1.5 space-y-2.5 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 animate-in fade-in duration-150">
                     <div className="flex items-center justify-between text-[10.5px] pt-1">
-                      <span className="text-[#8c7e70] dark:text-[#a89b8d]">
+                      <span className="text-zinc-400 dark:text-zinc-500">
                         Monthly Activity (Days 1–{daysInMonth}):
                       </span>
                       {stat.currentStreak > 0 && (
-                        <span className="font-semibold text-[#5f7a61] dark:text-[#8fc493]">
+                        <span className="font-semibold text-[#007AFF]">
                           🔥 {stat.currentStreak} day streak
                         </span>
                       )}
                     </div>
 
                     {/* Dot matrix */}
-                    <div className="flex flex-wrap gap-1 p-2 rounded-[14px] bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.02] dark:border-white/[0.03]">
+                    <div className="flex flex-wrap gap-1 p-2.5 rounded-[16px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
                       {Array.from({ length: daysInMonth }, (_, dayIdx) => {
                         const isDone = Boolean(stat.days[dayIdx]);
                         return (
@@ -225,8 +225,8 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
                             key={dayIdx}
                             className={`w-5 h-5 rounded-[6px] flex items-center justify-center text-[8.5px] font-bold transition-all ${
                               isDone
-                                ? 'bg-[#5f7a61] text-white shadow-2xs'
-                                : 'bg-black/[0.04] dark:bg-white/[0.05] text-[#8c7e70] opacity-40'
+                                ? 'bg-[#007AFF] text-white shadow-2xs'
+                                : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600'
                             }`}
                             title={`Day ${dayIdx + 1}: ${isDone ? 'Done' : 'Missed'}`}
                           >
@@ -236,9 +236,9 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
                       })}
                     </div>
 
-                    <div className="flex items-center justify-between text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
-                      <span>Lifetime: <strong className="text-[#2d2823] dark:text-[#f4efe8]">{stat.lifetime}</strong></span>
-                      <span>Month rate: <strong className="text-[#2d2823] dark:text-[#f4efe8]">{stat.actualMonthRate}%</strong></span>
+                    <div className="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500">
+                      <span>Lifetime: <strong className="text-zinc-950 dark:text-white">{stat.lifetime}</strong></span>
+                      <span>Month rate: <strong className="text-zinc-950 dark:text-white">{stat.actualMonthRate}%</strong></span>
                     </div>
                   </div>
                 )}

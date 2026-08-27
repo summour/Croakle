@@ -188,7 +188,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-24" {...swipeHandlers}>
+    <div className="space-y-4 pb-28" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Mood / Habits / Projects */}
       {onNavigate && (
         <SubNavTabs
@@ -203,7 +203,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       )}
 
       {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
+      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
         <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
@@ -211,7 +211,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               id="project-prev-week"
               type="button"
               onClick={handleGoPrevWeek}
-              className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
               aria-label="Previous Week"
               title="Previous Week"
             >
@@ -219,10 +219,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             </button>
 
             <div className="flex items-center gap-2">
-              <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
-              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#b86f52]/10 text-[#b86f52] dark:bg-[#d68767]/20 dark:text-[#d68767]">
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                 {currentWeek?.label}
               </span>
             </div>
@@ -231,7 +231,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               id="project-next-week"
               type="button"
               onClick={handleGoNextWeek}
-              className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
               aria-label="Next Week"
               title="Next Week"
             >
@@ -241,7 +241,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
           {/* Quick Weeks Segment (W1 .. W5) - iOS Segmented Bar */}
           {monthWeeks.length > 1 && (
-            <div className="flex items-center gap-1 p-1 bg-black/[0.03] dark:bg-white/[0.05] rounded-[18px]">
+            <div className="flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
               {monthWeeks.map((mw, idx) => {
                 const isActive = idx === activeWeekIndex;
                 return (
@@ -254,8 +254,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     }}
                     className={`flex-1 py-1 px-1.5 rounded-[14px] text-center transition-all duration-200 ios-tap ${
                       isActive
-                        ? 'bg-white dark:bg-[#25201b] text-[#2d2823] dark:text-[#f4efe8] font-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
-                        : 'text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] font-semibold'
+                        ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white font-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
+                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 font-semibold'
                     }`}
                   >
                     <span className="text-[11px] block leading-tight">{mw.label}</span>
@@ -267,7 +267,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           )}
 
           {/* 7-Day Interactive Strip */}
-          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
+          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
@@ -278,12 +278,12 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   onClick={() => onSelectDate(wd.date)}
                   className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
                     !wd.inMonth
-                      ? 'opacity-25 text-[#8c7e70]'
+                      ? 'opacity-25 text-zinc-400'
                       : isSelected
-                      ? 'bg-[#b86f52] text-white dark:bg-[#d68767] dark:text-[#171513] font-black shadow-[0_4px_12px_rgba(184,111,82,0.3)] scale-[1.05]'
+                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
                       : wd.isCurrentDay
-                      ? 'bg-black/[0.05] dark:bg-white/[0.08] text-[#2d2823] dark:text-[#f4efe8] font-bold border border-black/[0.08] dark:border-white/[0.12]'
-                      : 'text-[#574d42] dark:text-[#d4c8bc] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] font-semibold'
+                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
                   }`}
                 >
                   <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
@@ -300,7 +300,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             id="CroakleOpenAddProject"
             type="button"
             onClick={handleOpenAdd}
-            className="flex-1 py-2.5 px-4 rounded-[20px] bg-[#b86f52] hover:bg-[#a25d43] dark:bg-[#d68767] dark:hover:bg-[#c27656] text-white dark:text-[#171513] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(184,111,82,0.25)] transition-all ios-tap"
+            className="flex-1 py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
           >
             <Plus size={16} className="shrink-0" />
             <span>Add Project</span>
@@ -310,8 +310,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             onClick={() => setShowArchived(!showArchived)}
             className={`py-2.5 px-3 rounded-[20px] border font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-all shrink-0 whitespace-nowrap ios-tap ${
               showArchived
-                ? 'bg-[#28231d] text-[#fbf8f5] border-[#3d362e]'
-                : 'bg-white/80 dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb] border-black/[0.06] dark:border-white/[0.1] hover:bg-white dark:hover:bg-white/[0.14]'
+                ? 'bg-zinc-900 text-white border-zinc-800'
+                : 'bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800'
             }`}
           >
             <Archive size={14} className="shrink-0" />
@@ -321,7 +321,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             id="CroakleOpenReorderProject"
             type="button"
             onClick={() => setIsReorderOpen(true)}
-            className="py-2.5 px-3 rounded-[20px] bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] border border-black/[0.06] dark:border-white/[0.1] font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
+            className="py-2.5 px-3 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
             title="Reorder Projects"
           >
             <ArrowUpDown size={14} />
@@ -333,16 +333,16 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       {/* Project List */}
       <div className="ios-glass-card p-4 sm:p-5 space-y-4">
         {displayedProjects.length === 0 ? (
-          <div className="text-center py-8 text-[#8c7e70] dark:text-[#a89b8d] space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-3xl bg-[#f5efe6] dark:bg-[#282420] border border-[#e8ded1] dark:border-[#383129] flex items-center justify-center p-2 shadow-xs">
-              <BambooScrollDockIcon size={36} className="text-[#b87333]" />
+          <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-3">
+            <div className="w-16 h-16 mx-auto rounded-3xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-2 shadow-xs text-zinc-500 dark:text-zinc-400">
+              <BambooScrollDockIcon size={36} />
             </div>
             <div>
-              <p className="font-bold text-sm text-[#2d2823] dark:text-[#f2eee9]">
+              <p className="font-bold text-sm text-zinc-950 dark:text-white">
                 {showArchived ? 'No completed projects yet' : 'No active projects right now'}
               </p>
               <p className="text-xs mt-0.5">
-                {showArchived ? 'Finished projects will be archived here' : 'Tap "+ Add New Project" to get started'}
+                {showArchived ? 'Finished projects will be archived here' : 'Tap "+ Add Project" to get started'}
               </p>
             </div>
           </div>
@@ -359,9 +359,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   key={project.id}
                   className={`p-4 rounded-[24px] border ${
                     project.completed
-                      ? 'border-black/[0.04] dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.02] opacity-70'
-                      : 'border-black/[0.05] dark:border-white/[0.08] bg-white/70 dark:bg-white/[0.04]'
-                  } space-y-3 shadow-xs`}
+                      ? 'border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 opacity-70'
+                      : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)]'
+                  } space-y-3`}
                 >
                   <div className="flex items-center justify-between">
                     <button
@@ -369,16 +369,16 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       onClick={() => handleOpenEdit(originalIndex)}
                       className="text-left group flex items-center gap-2 min-w-0"
                     >
-                      <span className={`font-black text-sm text-[#2d2823] dark:text-[#f4efe8] group-hover:underline truncate ${project.completed ? 'line-through text-[#8c7e70]' : ''}`}>
+                      <span className={`font-black text-sm text-zinc-950 dark:text-white group-hover:underline truncate ${project.completed ? 'line-through text-zinc-400' : ''}`}>
                         {project.name}
                       </span>
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-black/[0.05] dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb]">
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                         {completedCount}/{project.goal} days/week
                       </span>
                     </button>
 
                     {isGoalMet && (
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[#f8efe8] dark:bg-[#342721] text-[#b86f52] dark:text-[#d68767] shadow-2xs flex items-center gap-1">
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-[#007AFF] dark:text-[#3894FF] border border-blue-200 dark:border-blue-800/40 shadow-2xs flex items-center gap-1">
                         <span>Goal Met</span>
                         <PixelPartyPopperIcon size={11} />
                       </span>
@@ -386,7 +386,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   </div>
 
                   {project.description && (
-                    <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] line-clamp-1">{project.description}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">{project.description}</p>
                   )}
 
                   {/* 7 Days Checkbox squircle buttons */}
@@ -403,10 +403,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
                           className={`h-11 rounded-[16px] flex items-center justify-center transition-all ios-tap ${
                             project.completed
-                              ? 'opacity-30 cursor-not-allowed bg-black/[0.03] dark:bg-white/[0.02]'
+                              ? 'opacity-30 cursor-not-allowed bg-zinc-100 dark:bg-zinc-800'
                               : isDone
-                              ? 'bg-[#b86f52] text-white dark:bg-[#d68767] dark:text-[#171513] shadow-[0_4px_12px_rgba(184,111,82,0.3)] scale-[0.98] font-bold'
-                              : 'bg-white dark:bg-[#211e1b] border border-black/[0.08] dark:border-white/[0.1] hover:border-[#b86f52]'
+                              ? 'bg-[#007AFF] text-white shadow-[0_4px_12px_rgba(0,122,255,0.35)] scale-[0.98] font-bold'
+                              : 'bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#007AFF]'
                           }`}
                         >
                           {isDone ? <PixelCheckIcon size={18} /> : null}
@@ -423,14 +423,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
       {/* Add Project Dialog */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9]">Add Project</h2>
+              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Add Project</h2>
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white"
+                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300"
               >
                 <X size={18} />
               </button>
@@ -438,19 +438,19 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Project Name</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Project Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Mobile App MVP"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] font-medium focus:outline-none focus:ring-2 focus:ring-[#b86f52] text-sm"
+                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
                   Goal Per Week: {newGoal} sessions/days
                 </label>
                 <input
@@ -459,23 +459,23 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   max="7"
                   value={newGoal}
                   onChange={(e) => setNewGoal(Number(e.target.value))}
-                  className="w-full accent-[#b86f52] cursor-pointer"
+                  className="w-full accent-black dark:accent-white cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Description</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
                 <textarea
                   rows={2}
                   placeholder="e.g. Design wireframes and code core endpoints"
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] text-sm focus:outline-none focus:ring-2 focus:ring-[#b86f52] resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Priority</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
                     <button
@@ -484,8 +484,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       onClick={() => setNewPriority(p)}
                       className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${
                         newPriority === p
-                          ? 'border-[#b86f52] bg-[#b86f52] text-white shadow-xs'
-                          : 'border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#5c5042] dark:text-[#d4c8bc]'
+                          ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black shadow-xs'
+                          : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300'
                       }`}
                     >
                       {p}
@@ -496,7 +496,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-2xl bg-[#b86f52] hover:bg-[#a25d43] text-white font-extrabold text-sm shadow-md transition"
+                className="w-full py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-sm shadow-md transition"
               >
                 Confirm
               </button>
@@ -514,9 +514,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               setDeleteConfirm(false);
             }
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
         >
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
               {deleteConfirm ? (
                 <div className="flex items-center gap-1.5">
@@ -534,7 +534,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   <button
                     type="button"
                     onClick={() => setDeleteConfirm(false)}
-                    className="px-2 py-1.5 rounded-xl bg-[#eee5d8] dark:bg-[#383129] text-[#4a4036] dark:text-[#e0d6cb] font-bold text-xs"
+                    className="px-2 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs"
                   >
                     Cancel
                   </button>
@@ -548,14 +548,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   <Trash2 size={14} /> Delete
                 </button>
               )}
-              <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9]">Project Details</h2>
+              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Project Details</h2>
               <button
                 type="button"
                 onClick={() => {
                   setEditingIndex(null);
                   setDeleteConfirm(false);
                 }}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white transition"
+                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300 transition"
               >
                 <X size={18} />
               </button>
@@ -563,18 +563,18 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Project Name</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Project Name</label>
                 <input
                   type="text"
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] font-medium focus:outline-none focus:ring-2 focus:ring-[#b86f52] text-sm"
+                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
                   Goal Per Week: {editGoal} sessions/days
                 </label>
                 <input
@@ -583,22 +583,22 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   max="7"
                   value={editGoal}
                   onChange={(e) => setEditGoal(Number(e.target.value))}
-                  className="w-full accent-[#b86f52] cursor-pointer"
+                  className="w-full accent-black dark:accent-white cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Description</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
                 <textarea
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] text-sm focus:outline-none focus:ring-2 focus:ring-[#b86f52] resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Priority</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
                     <button
@@ -607,8 +607,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       onClick={() => setEditPriority(p)}
                       className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${
                         editPriority === p
-                          ? 'border-[#b86f52] bg-[#b86f52] text-white shadow-xs'
-                          : 'border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#5c5042] dark:text-[#d4c8bc]'
+                          ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black shadow-xs'
+                          : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300'
                       }`}
                     >
                       {p}
@@ -620,7 +620,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <button
                   type="submit"
-                  className="py-3 rounded-2xl bg-[#b86f52] hover:bg-[#a25d43] text-white font-extrabold text-sm shadow-md transition"
+                  className="py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-sm shadow-md transition"
                 >
                   Update
                 </button>
@@ -631,7 +631,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     setEditingIndex(null);
                     setDeleteConfirm(false);
                   }}
-                  className="py-3 rounded-2xl bg-[#eee5d8] hover:bg-[#e1d5c4] dark:bg-[#383129] dark:hover:bg-[#473e35] text-[#2d2823] dark:text-[#f2eee9] font-bold text-sm transition flex items-center justify-center gap-1.5"
+                  className="py-3.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-sm transition flex items-center justify-center gap-1.5"
                 >
                   <PixelCheckCircleIcon size={16} />
                   {projects[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
@@ -648,23 +648,23 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsReorderOpen(false);
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
         >
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9] flex items-center gap-2">
-                  <ArrowUpDown size={20} className="text-[#b86f52] dark:text-[#d98236]" />
+                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white flex items-center gap-2">
+                  <ArrowUpDown size={20} className="text-[#007AFF]" />
                   Reorder Projects
                 </h2>
-                <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] mt-0.5">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                   Drag items or use the quick buttons to customize order
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsReorderOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white transition"
+                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300 transition"
               >
                 <X size={18} />
               </button>
@@ -672,13 +672,13 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
             {/* Quick Sort Helpers */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] font-bold">
-              <span className="text-[#8c7e70] dark:text-[#a89b8d] text-[10px] uppercase tracking-wider font-extrabold shrink-0 mr-1">
+              <span className="text-zinc-400 uppercase tracking-wider font-extrabold shrink-0 mr-1 text-[10px]">
                 Quick Sort:
               </span>
               <button
                 type="button"
                 onClick={handleSortProjectsAZ}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#b86f52] dark:hover:border-[#d98236] transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2.5 py-1 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-black dark:hover:border-white transition flex items-center gap-1 shrink-0 ios-tap"
               >
                 <ArrowDownAZ size={12} />
                 <span>A → Z</span>
@@ -686,15 +686,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               <button
                 type="button"
                 onClick={handleSortProjectsByPriority}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#b86f52] dark:hover:border-[#d98236] transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2.5 py-1 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-black dark:hover:border-white transition flex items-center gap-1 shrink-0 ios-tap"
               >
-                <Sparkles size={12} className="text-[#d98236]" />
+                <Sparkles size={12} className="text-[#FFCC00]" />
                 <span>By Priority</span>
               </button>
               <button
                 type="button"
                 onClick={() => onReorderProjects([...projects].reverse())}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#b86f52] dark:hover:border-[#d98236] transition shrink-0 ios-tap"
+                className="px-2.5 py-1 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-black dark:hover:border-white transition shrink-0 ios-tap"
               >
                 Reverse
               </button>
@@ -732,28 +732,28 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     }}
                     className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border transition-all duration-150 select-none ${
                       isDragging
-                        ? 'opacity-40 scale-[0.98] border-[#b86f52] dark:border-[#d98236] bg-[#b86f52]/10'
+                        ? 'opacity-40 scale-[0.98] border-black dark:border-white bg-zinc-100 dark:bg-zinc-800'
                         : isDragOver
-                        ? 'border-2 border-[#b86f52] dark:border-[#d98236] bg-[#b86f52]/5 shadow-md'
-                        : 'bg-white dark:bg-[#2a221b] border-[#ebdccb] dark:border-[#3a3026] hover:border-[#cfbdab] shadow-2xs'
+                        ? 'border-2 border-[#007AFF] bg-blue-50 dark:bg-blue-950/20 shadow-md'
+                        : 'bg-zinc-50/50 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 shadow-2xs'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0 pr-2">
                       {/* Drag Handle */}
                       <div 
-                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-[#a89b8d] hover:text-[#b86f52] dark:hover:text-[#d98236] transition"
+                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition"
                         title="Drag to reorder"
                       >
                         <GripVertical size={16} />
                       </div>
 
                       {/* Number Position Badge */}
-                      <span className="w-6 h-6 rounded-full bg-[#f4ece1] dark:bg-[#383027] text-[#5c5042] dark:text-[#d1c5b8] font-black text-[11px] flex items-center justify-center shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black text-[11px] flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
 
                       <div className="min-w-0">
-                        <p className={`font-bold text-sm text-[#2d2823] dark:text-[#f2eee9] truncate ${proj.completed ? 'line-through text-[#8c7e70]' : ''}`}>
+                        <p className={`font-bold text-sm text-zinc-950 dark:text-white truncate ${proj.completed ? 'line-through text-zinc-400' : ''}`}>
                           {proj.name}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5">
@@ -768,7 +768,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                           >
                             {proj.priority}
                           </span>
-                          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
                             {proj.targetWeeklyDays}d/wk
                           </span>
                         </div>
@@ -783,7 +783,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         disabled={idx === 0}
                         onClick={() => handleMoveProjectToTop(idx)}
                         title="Move to top"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
                       >
                         <ChevronsUp size={13} />
                       </button>
@@ -794,7 +794,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         disabled={idx === 0}
                         onClick={() => handleMoveProject(idx, idx - 1)}
                         title="Move up"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
                       >
                         <ChevronUp size={14} />
                       </button>
@@ -805,7 +805,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         disabled={idx === projects.length - 1}
                         onClick={() => handleMoveProject(idx, idx + 1)}
                         title="Move down"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
                       >
                         <ChevronDown size={14} />
                       </button>
@@ -816,7 +816,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                         disabled={idx === projects.length - 1}
                         onClick={() => handleMoveProjectToBottom(idx)}
                         title="Move to bottom"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
                       >
                         <ChevronsDown size={13} />
                       </button>
@@ -829,7 +829,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             <button
               type="button"
               onClick={() => setIsReorderOpen(false)}
-              className="w-full py-3 rounded-2xl bg-[#b86f52] hover:bg-[#a25d43] dark:bg-[#d98236] dark:hover:bg-[#c27028] text-white dark:text-[#171513] font-black text-sm shadow-md transition ios-tap"
+              className="w-full py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-sm shadow-md transition ios-tap"
             >
               Done
             </button>

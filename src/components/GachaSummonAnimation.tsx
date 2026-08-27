@@ -526,7 +526,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
 
             {/* Central Pedestal & Thumbnail */}
             <div className="relative my-3 flex flex-col items-center justify-center">
-              <div className="relative w-36 h-36 flex items-center justify-center bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-2xl shadow-inner">
+              <div className="relative w-36 h-36 flex items-center justify-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-inner">
                 {/* Floating Item Thumbnail */}
                 <motion.div
                   animate={{ y: [0, -4, 0] }}
@@ -544,11 +544,11 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
               {/* Status Tag: NEW vs DUP */}
               <div className="mt-2.5">
                 {currentResult.isNew ? (
-                  <div className="bg-[#5F7A61] text-white px-3 py-0.5 rounded-full font-pixel text-[8.5px] tracking-wider uppercase shadow-xs">
+                  <div className="bg-[#34C759] text-white px-3 py-0.5 rounded-full font-pixel text-[8.5px] tracking-wider uppercase shadow-xs">
                     NEW UNLOCKED
                   </div>
                 ) : (
-                  <div className="bg-[#EAE4DC] dark:bg-[#2C2723] text-[#786E64] dark:text-[#B5ADA3] border border-[#DBD2C5] dark:border-[#3E3832] px-2.5 py-0.5 rounded-full font-pixel text-[8px] tracking-wider uppercase">
+                  <div className="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700 px-2.5 py-0.5 rounded-full font-pixel text-[8px] tracking-wider uppercase">
                     DUP (+{currentResult.duplicateRefundCoins || 20} COINS)
                   </div>
                 )}
@@ -556,26 +556,26 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
             </div>
 
             {/* Item Info Box */}
-            <div className="bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-xl p-3 space-y-1 text-left">
+            <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 space-y-1 text-left">
               <div className="flex items-center justify-between">
-                <span className="font-silkscreen text-[8.5px] text-[#A89F91] tracking-widest uppercase">
+                <span className="font-silkscreen text-[8.5px] text-zinc-400 dark:text-zinc-500 tracking-widest uppercase">
                   [{getCategoryLabel(currentResult.item.category)}]
                 </span>
-                <span className="font-pixel text-[8.5px] text-amber-500 dark:text-amber-400">
+                <span className="font-pixel text-[8.5px] text-[#FF9500]">
                   {currentGrade === 'SR' ? '★★★' : currentGrade === 'R' ? '★★☆' : '★☆☆'}
                 </span>
               </div>
-              <h3 className="font-pixel text-xs text-[#292524] dark:text-[#F5F5F4]">
+              <h3 className="font-pixel text-xs text-zinc-950 dark:text-white">
                 {currentResult.item.name}
               </h3>
-              <p className="font-silkscreen text-[9.5px] text-[#78716C] dark:text-[#A8A29E] line-clamp-2 leading-relaxed">
+              <p className="font-silkscreen text-[9.5px] text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
                 {currentResult.item.desc}
               </p>
             </div>
 
             {/* Footer Prompt */}
             <div className="mt-3 text-center">
-              <span className="font-silkscreen text-[9px] text-[#A89F91] tracking-widest uppercase animate-pulse">
+              <span className="font-silkscreen text-[9px] text-zinc-400 dark:text-zinc-500 tracking-widest uppercase animate-pulse">
                 TAP TO CONTINUE
               </span>
             </div>
@@ -592,15 +592,15 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="bg-[#FAF7F2] dark:bg-[#23201D] border border-[#E8E2D9] dark:border-[#38332E] max-w-xs w-full p-4 sm:p-5 rounded-3xl shadow-xl z-10 space-y-3.5 text-center"
+            className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 max-w-xs w-full p-4 sm:p-5 rounded-3xl shadow-xl z-10 space-y-3.5 text-center"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Banner */}
-            <div className="pb-1 border-b border-[#E8E2D9] dark:border-[#38332E]">
-              <h2 className="font-pixel text-xs text-[#5F5244] dark:text-[#E7E2DA] tracking-wider uppercase">
+            <div className="pb-1 border-b border-zinc-200 dark:border-zinc-800">
+              <h2 className="font-pixel text-xs text-zinc-950 dark:text-white tracking-wider uppercase">
                 ✦ SUMMON REWARDS ✦
               </h2>
-              <p className="font-silkscreen text-[8.5px] text-[#A89F91] mt-0.5 tracking-wider uppercase">
+              <p className="font-silkscreen text-[8.5px] text-zinc-400 dark:text-zinc-500 mt-0.5 tracking-wider uppercase">
                 {results.length === 1
                   ? '1 ITEM ACQUIRED'
                   : `${results.length} ITEMS OBTAINED`}
@@ -609,20 +609,20 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
 
             {/* SINGLE RESULT VIEW */}
             {results.length === 1 ? (
-              <div className="bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-2xl p-3.5 flex flex-col items-center justify-center space-y-2">
+              <div className="bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3.5 flex flex-col items-center justify-center space-y-2">
                 {(() => {
                   const single = results[0];
                   const grade = getGachaGrade(single.item);
                   return (
                     <>
-                      <div className="relative w-20 h-20 rounded-xl flex items-center justify-center bg-white dark:bg-[#292522] border border-[#E0D9CE] dark:border-[#3A342E] shadow-xs">
+                      <div className="relative w-20 h-20 rounded-xl flex items-center justify-center bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xs">
                         <span
                           className={`absolute top-1 left-1 font-pixel text-[7.5px] px-1 rounded-sm ${
                             grade === 'SR'
-                              ? 'bg-amber-100 text-amber-900'
+                              ? 'bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200'
                               : grade === 'R'
-                              ? 'bg-emerald-100 text-emerald-900'
-                              : 'bg-stone-100 text-stone-700'
+                              ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-200'
+                              : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
                           }`}
                         >
                           {grade}
@@ -637,19 +637,19 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                       </div>
 
                       <div className="space-y-0.5">
-                        <span className="font-silkscreen text-[8px] text-[#A89F91] tracking-wider uppercase">
+                        <span className="font-silkscreen text-[8px] text-zinc-400 dark:text-zinc-500 tracking-wider uppercase">
                           [{getCategoryLabel(single.item.category)}]
                         </span>
-                        <h4 className="font-pixel text-[11px] text-[#292524] dark:text-[#F5F5F4]">
+                        <h4 className="font-pixel text-[11px] text-zinc-950 dark:text-white">
                           {single.item.name}
                         </h4>
                         <div>
                           {single.isNew ? (
-                            <span className="inline-block bg-[#5F7A61] text-white px-2 py-0.5 rounded-full font-pixel text-[7.5px] uppercase">
+                            <span className="inline-block bg-[#34C759] text-white px-2 py-0.5 rounded-full font-pixel text-[7.5px] uppercase">
                               NEW ITEM
                             </span>
                           ) : (
-                            <span className="inline-block bg-[#EAE4DC] dark:bg-[#2C2723] text-[#786E64] dark:text-[#B5ADA3] px-2 py-0.5 rounded-full font-pixel text-[7px] uppercase">
+                            <span className="inline-block bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded-full font-pixel text-[7px] uppercase">
                               DUP (+{single.duplicateRefundCoins || 20} COINS)
                             </span>
                           )}
@@ -661,18 +661,18 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
               </div>
             ) : (
               /* MULTI 10X GRID VIEW */
-              <div className="grid grid-cols-5 gap-1.5 p-2 bg-[#F3EFEA] dark:bg-[#1E1B18] border border-[#E2DBD1] dark:border-[#36302A] rounded-2xl max-h-[38vh] overflow-y-auto">
+              <div className="grid grid-cols-5 gap-1.5 p-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl max-h-[38vh] overflow-y-auto">
                 {results.map((res, idx) => {
                   const grade = getGachaGrade(res.item);
                   return (
                     <div
                       key={idx}
-                      className={`relative aspect-square rounded-xl border flex items-center justify-center p-1 bg-white dark:bg-[#292522] ${
+                      className={`relative aspect-square rounded-xl border flex items-center justify-center p-1 bg-white dark:bg-zinc-900 ${
                         grade === 'SR'
-                          ? 'border-amber-300 dark:border-amber-700'
+                          ? 'border-amber-400 dark:border-amber-600'
                           : grade === 'R'
-                          ? 'border-emerald-300 dark:border-emerald-700'
-                          : 'border-[#E0D9CE] dark:border-[#3A342E]'
+                          ? 'border-emerald-400 dark:border-emerald-600'
+                          : 'border-zinc-200 dark:border-zinc-700'
                       }`}
                     >
                       {/* Grade Badge */}
@@ -682,7 +682,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                             ? 'bg-amber-100 text-amber-900'
                             : grade === 'R'
                             ? 'bg-emerald-100 text-emerald-900'
-                            : 'bg-stone-100 text-stone-700'
+                            : 'bg-zinc-100 text-zinc-700'
                         }`}
                       >
                         {grade}
@@ -690,7 +690,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
 
                       {/* NEW Badge */}
                       {res.isNew && (
-                        <span className="absolute bottom-0.5 right-0.5 font-pixel text-[5px] bg-[#5F7A61] text-white px-0.5 rounded-xs">
+                        <span className="absolute bottom-0.5 right-0.5 font-pixel text-[5px] bg-[#34C759] text-white px-0.5 rounded-xs">
                           NEW
                         </span>
                       )}
@@ -720,7 +720,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                     if (hapticEnabled) triggerHaptic();
                     onSpinAgain();
                   }}
-                  className="flex-1 py-2 bg-[#B86F52] hover:bg-[#A35E43] text-white font-pixel text-[9px] rounded-xl shadow-sm uppercase transition cursor-pointer"
+                  className="flex-1 py-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-950 dark:text-white border border-zinc-200 dark:border-zinc-700 font-pixel text-[9px] rounded-xl shadow-xs uppercase transition cursor-pointer"
                 >
                   {spinAgainLabel ? `↺ ${spinAgainLabel}` : `↺ SPIN (${spinAgainCost})`}
                 </button>
@@ -734,7 +734,7 @@ export const GachaSummonAnimation: React.FC<GachaSummonAnimationProps> = ({
                   if (hapticEnabled) triggerHaptic();
                   onComplete();
                 }}
-                className="flex-1 py-2 bg-[#5F7A61] hover:bg-[#526B54] text-white font-pixel text-[9px] rounded-xl shadow-sm uppercase transition cursor-pointer"
+                className="flex-1 py-2.5 bg-zinc-950 dark:bg-white hover:bg-zinc-900 text-white dark:text-zinc-950 font-pixel text-[9px] rounded-xl shadow-xs uppercase transition cursor-pointer"
               >
                 ✓ DONE
               </button>

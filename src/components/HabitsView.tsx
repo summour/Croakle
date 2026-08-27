@@ -201,7 +201,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-24" {...swipeHandlers}>
+    <div className="space-y-4 pb-28" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Mood / Habits / Projects */}
       {onNavigate && (
         <SubNavTabs
@@ -216,7 +216,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
       )}
 
       {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
+      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
         <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               id="habit-prev-week"
               type="button"
               onClick={handleGoPrevWeek}
-              className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
               aria-label="Previous Week"
               title="Previous Week"
             >
@@ -232,10 +232,10 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             </button>
 
             <div className="flex items-center gap-2">
-              <strong id="CroakleTrackMonth" className="text-base sm:text-lg font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              <strong id="CroakleTrackMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
-              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#5f7a61]/10 text-[#5f7a61] dark:bg-[#7d9d80]/20 dark:text-[#7d9d80]">
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                 {currentWeek?.label}
               </span>
             </div>
@@ -244,7 +244,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               id="habit-next-week"
               type="button"
               onClick={handleGoNextWeek}
-              className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
               aria-label="Next Week"
               title="Next Week"
             >
@@ -254,7 +254,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
           {/* Quick Weeks Segment (W1 .. W5) - iOS Segmented Bar */}
           {monthWeeks.length > 1 && (
-            <div className="flex items-center gap-1 p-1 bg-black/[0.03] dark:bg-white/[0.05] rounded-[18px]">
+            <div className="flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
               {monthWeeks.map((mw, idx) => {
                 const isActive = idx === activeWeekIndex;
                 return (
@@ -267,8 +267,8 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                     }}
                     className={`flex-1 py-1 px-1.5 rounded-[14px] text-center transition-all duration-200 ios-tap ${
                       isActive
-                        ? 'bg-white dark:bg-[#25201b] text-[#2d2823] dark:text-[#f4efe8] font-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
-                        : 'text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] font-semibold'
+                        ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white font-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
+                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 font-semibold'
                     }`}
                   >
                     <span className="text-[11px] block leading-tight">{mw.label}</span>
@@ -280,7 +280,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           )}
 
           {/* 7-Day Interactive Strip */}
-          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-black/[0.04] dark:border-white/[0.06]">
+          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
@@ -291,12 +291,12 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   onClick={() => onSelectDate(wd.date)}
                   className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
                     !wd.inMonth
-                      ? 'opacity-25 text-[#8c7e70]'
+                      ? 'opacity-25 text-zinc-400'
                       : isSelected
-                      ? 'bg-[#5f7a61] text-white dark:bg-[#7d9d80] dark:text-[#171513] font-black shadow-[0_4px_12px_rgba(95,122,97,0.3)] scale-[1.05]'
+                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
                       : wd.isCurrentDay
-                      ? 'bg-black/[0.05] dark:bg-white/[0.08] text-[#2d2823] dark:text-[#f4efe8] font-bold border border-black/[0.08] dark:border-white/[0.12]'
-                      : 'text-[#574d42] dark:text-[#d4c8bc] hover:bg-black/[0.03] dark:hover:bg-white/[0.05] font-semibold'
+                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
                   }`}
                 >
                   <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
@@ -313,7 +313,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             id="CroakleOpenAddHabit"
             type="button"
             onClick={handleOpenAdd}
-            className="flex-1 py-2.5 px-4 rounded-[20px] bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(95,122,97,0.25)] transition-all ios-tap"
+            className="flex-1 py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
           >
             <Plus size={16} className="shrink-0" />
             <span>Add Habit</span>
@@ -323,8 +323,8 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             onClick={() => setShowArchived(!showArchived)}
             className={`py-2.5 px-3 rounded-[20px] border font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-all shrink-0 whitespace-nowrap ios-tap ${
               showArchived
-                ? 'bg-[#28231d] text-[#fbf8f5] border-[#3d362e]'
-                : 'bg-white/80 dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb] border-black/[0.06] dark:border-white/[0.1] hover:bg-white dark:hover:bg-white/[0.14]'
+                ? 'bg-zinc-900 text-white border-zinc-800'
+                : 'bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800'
             }`}
           >
             <Archive size={14} className="shrink-0" />
@@ -334,7 +334,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             id="CroakleOpenReorderHabit"
             type="button"
             onClick={() => setIsReorderOpen(true)}
-            className="py-2.5 px-3 rounded-[20px] bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] border border-black/[0.06] dark:border-white/[0.1] font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
+            className="py-2.5 px-3 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
             title="Reorder Habits"
           >
             <ArrowUpDown size={14} />
@@ -346,12 +346,12 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
       {/* Main Habits List Container */}
       <div className="ios-glass-card p-4 sm:p-5 space-y-4">
         {displayedHabits.length === 0 ? (
-          <div className="text-center py-8 text-[#8c7e70] dark:text-[#a89b8d] space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-[24px] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center p-2 shadow-2xs">
+          <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-3">
+            <div className="w-16 h-16 mx-auto rounded-[24px] bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-2 shadow-2xs text-zinc-500 dark:text-zinc-400">
               <CloverIcon size={36} />
             </div>
             <div>
-              <p className="font-bold text-sm text-[#2d2823] dark:text-[#f4efe8]">
+              <p className="font-bold text-sm text-zinc-950 dark:text-white">
                 {showArchived ? 'No completed habits yet' : 'No active habits right now'}
               </p>
               <p className="text-xs mt-0.5">
@@ -381,9 +381,9 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   key={habit.id || originalIndex}
                   className={`p-4 rounded-[24px] border ${
                     habit.completed
-                      ? 'border-black/[0.04] dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.02] opacity-70'
-                      : 'border-black/[0.05] dark:border-white/[0.08] bg-white/70 dark:bg-white/[0.04]'
-                  } space-y-3 shadow-xs`}
+                      ? 'border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 opacity-70'
+                      : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)]'
+                  } space-y-3`}
                 >
                   <div className="flex items-center justify-between">
                     <button
@@ -391,16 +391,16 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                       onClick={() => handleOpenEdit(originalIndex)}
                       className="text-left group flex items-center gap-2 min-w-0"
                     >
-                      <span className={`font-black text-sm text-[#2d2823] dark:text-[#f4efe8] group-hover:underline truncate ${habit.completed ? 'line-through text-[#8c7e70]' : ''}`}>
+                      <span className={`font-black text-sm text-zinc-950 dark:text-white group-hover:underline truncate ${habit.completed ? 'line-through text-zinc-400' : ''}`}>
                         {habit.name}
                       </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb]">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                         {completedThisWeek}/{habit.goal} days
                       </span>
                     </button>
 
                     {isGoalMet && (
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-[#e8f2e9] dark:bg-[#223324] text-[#466948] dark:text-[#8fc493] shadow-2xs flex items-center gap-1">
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-[#34C759] dark:text-[#30D158] border border-emerald-200 dark:border-emerald-800/40 shadow-2xs flex items-center gap-1">
                         <span>Goal Met</span>
                         <PixelSparkleIcon size={11} />
                       </span>
@@ -408,7 +408,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   </div>
 
                   {habit.description && (
-                    <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] line-clamp-1">{habit.description}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">{habit.description}</p>
                   )}
 
                   {/* 7-Day Habit Tracker Buttons */}
@@ -427,10 +427,10 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
                           className={`h-11 rounded-[16px] flex items-center justify-center transition-all duration-200 ios-tap ${
                             !isCurrentMonthDay || habit.completed
-                              ? 'opacity-25 cursor-not-allowed bg-black/[0.02] dark:bg-white/[0.02]'
+                              ? 'opacity-25 cursor-not-allowed bg-zinc-100 dark:bg-zinc-800'
                               : isDone
-                              ? 'bg-[#5f7a61] text-white dark:bg-[#7d9d80] dark:text-[#171513] shadow-[0_4px_12px_rgba(95,122,97,0.3)] scale-[0.98] font-black'
-                              : 'bg-white/80 dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.1] hover:border-[#5f7a61] dark:hover:border-[#7d9d80]'
+                              ? 'bg-[#34C759] text-white shadow-[0_4px_12px_rgba(52,199,89,0.35)] scale-[0.98] font-black'
+                              : 'bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#34C759] dark:hover:border-[#34C759]'
                           }`}
                         >
                           {isDone ? <PixelCheckIcon size={18} /> : null}
@@ -447,17 +447,17 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
       {/* Add Habit Dialog Modal */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/15 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <CloverIcon size={22} />
-                <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9]">Add Habit</h2>
+                <CloverIcon size={22} className="text-zinc-900 dark:text-white" />
+                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Add Habit</h2>
               </div>
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white"
+                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white"
               >
                 <X size={18} />
               </button>
@@ -465,19 +465,19 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
             <form onSubmit={handleAddSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Habit Name</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Habit Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Read 20 pages"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] font-medium focus:outline-none focus:ring-2 focus:ring-[#5f7a61] text-sm"
+                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF] text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
                   Goal Per Week: {newGoal} days
                 </label>
                 <input
@@ -486,44 +486,56 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   max="7"
                   value={newGoal}
                   onChange={(e) => setNewGoal(Number(e.target.value))}
-                  className="w-full accent-[#5f7a61] cursor-pointer"
+                  className="w-full accent-[#007AFF] cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Description</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
                 <textarea
                   rows={2}
                   placeholder="e.g. Science fiction or philosophy"
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] text-sm focus:outline-none focus:ring-2 focus:ring-[#5f7a61] resize-none"
+                  className="w-full px-4 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Priority</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
                 <div className="grid grid-cols-3 gap-2">
-                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setNewPriority(p)}
-                      className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${
-                        newPriority === p
-                          ? 'border-[#5f7a61] bg-[#5f7a61] text-white shadow-xs'
-                          : 'border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#5c5042] dark:text-[#d4c8bc]'
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
+                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => {
+                    const isSelected = newPriority === p;
+                    const colorClasses = 
+                      p === 'high'
+                        ? isSelected
+                          ? 'border-[#FF3B30] bg-[#FF3B30] text-white shadow-xs'
+                          : 'border-zinc-200 dark:border-zinc-800 bg-red-50/40 dark:bg-red-950/20 text-[#FF3B30]'
+                        : p === 'medium'
+                        ? isSelected
+                          ? 'border-[#FF9500] bg-[#FF9500] text-white shadow-xs'
+                          : 'border-zinc-200 dark:border-zinc-800 bg-amber-50/40 dark:bg-amber-950/20 text-[#FF9500]'
+                        : isSelected
+                        ? 'border-[#007AFF] bg-[#007AFF] text-white shadow-xs'
+                        : 'border-zinc-200 dark:border-zinc-800 bg-blue-50/40 dark:bg-blue-950/20 text-[#007AFF]';
+
+                    return (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setNewPriority(p)}
+                        className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${colorClasses}`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] text-white font-extrabold text-sm shadow-md transition"
+                className="w-full py-3 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-sm shadow-md transition"
               >
                 Confirm
               </button>
@@ -541,9 +553,9 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               setDeleteConfirm(false);
             }
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
         >
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/15 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
               {deleteConfirm ? (
                 <div className="flex items-center gap-1.5">
@@ -554,14 +566,14 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                       setEditingIndex(null);
                       setDeleteConfirm(false);
                     }}
-                    className="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs flex items-center gap-1.5 shadow-xs transition"
+                    className="px-3 py-1.5 rounded-xl bg-[#FF3B30] hover:bg-red-700 text-white font-black text-xs flex items-center gap-1.5 shadow-xs transition"
                   >
                     <Trash2 size={13} /> Confirm Delete
                   </button>
                   <button
                     type="button"
                     onClick={() => setDeleteConfirm(false)}
-                    className="px-2 py-1.5 rounded-xl bg-[#eee5d8] dark:bg-[#383129] text-[#4a4036] dark:text-[#e0d6cb] font-bold text-xs"
+                    className="px-2 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs"
                   >
                     Cancel
                   </button>
@@ -570,19 +582,19 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setDeleteConfirm(true)}
-                  className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-bold text-xs flex items-center gap-1.5 transition"
+                  className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-[#FF3B30] font-bold text-xs flex items-center gap-1.5 transition"
                 >
                   <Trash2 size={14} /> Delete
                 </button>
               )}
-              <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9]">Habit Details</h2>
+              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Habit Details</h2>
               <button
                 type="button"
                 onClick={() => {
                   setEditingIndex(null);
                   setDeleteConfirm(false);
                 }}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white transition"
+                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition"
               >
                 <X size={18} />
               </button>
@@ -590,18 +602,18 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Habit Name</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Habit Name</label>
                 <input
                   type="text"
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] font-medium focus:outline-none focus:ring-2 focus:ring-[#5f7a61] text-sm"
+                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF] text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
                   Goal Per Week: {editGoal} days
                 </label>
                 <input
@@ -609,45 +621,57 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   min="1"
                   max="7"
                   value={editGoal}
-                  onChange={(e) => setEditGoal(Number(e.target.value))}
-                  className="w-full accent-[#5f7a61] cursor-pointer"
+                  onChange={(e) => setNewGoal(Number(e.target.value))}
+                  className="w-full accent-[#007AFF] cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Description</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
                 <textarea
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2 rounded-xl border border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#2d2823] dark:text-[#f2eee9] text-sm focus:outline-none focus:ring-2 focus:ring-[#5f7a61] resize-none"
+                  className="w-full px-4 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#8c7e70] dark:text-[#a89b8d] mb-1">Priority</label>
+                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
                 <div className="grid grid-cols-3 gap-2">
-                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setEditPriority(p)}
-                      className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${
-                        editPriority === p
-                          ? 'border-[#5f7a61] bg-[#5f7a61] text-white shadow-xs'
-                          : 'border-[#ebdccb] dark:border-[#3a3026] bg-white dark:bg-[#2a221b] text-[#5c5042] dark:text-[#d4c8bc]'
-                      }`}
-                    >
-                      {p}
-                    </button>
-                  ))}
+                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => {
+                    const isSelected = editPriority === p;
+                    const colorClasses = 
+                      p === 'high'
+                        ? isSelected
+                          ? 'border-[#FF3B30] bg-[#FF3B30] text-white shadow-xs'
+                          : 'border-zinc-200 dark:border-zinc-800 bg-red-50/40 dark:bg-red-950/20 text-[#FF3B30]'
+                        : p === 'medium'
+                        ? isSelected
+                          ? 'border-[#FF9500] bg-[#FF9500] text-white shadow-xs'
+                          : 'border-zinc-200 dark:border-zinc-800 bg-amber-50/40 dark:bg-amber-950/20 text-[#FF9500]'
+                        : isSelected
+                        ? 'border-[#007AFF] bg-[#007AFF] text-white shadow-xs'
+                        : 'border-zinc-200 dark:border-zinc-800 bg-blue-50/40 dark:bg-blue-950/20 text-[#007AFF]';
+
+                    return (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setEditPriority(p)}
+                        className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${colorClasses}`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <button
                   type="submit"
-                  className="py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] text-white font-extrabold text-sm shadow-md transition"
+                  className="py-3 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-sm shadow-md transition"
                 >
                   Update
                 </button>
@@ -660,7 +684,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                     setEditingIndex(null);
                     setDeleteConfirm(false);
                   }}
-                  className="py-3 rounded-2xl bg-[#eee5d8] hover:bg-[#e1d5c4] dark:bg-[#383129] dark:hover:bg-[#473e35] text-[#2d2823] dark:text-[#f2eee9] font-bold text-sm transition flex items-center justify-center gap-1.5"
+                  className="py-3 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-white font-bold text-sm transition flex items-center justify-center gap-1.5"
                 >
                   <PixelCheckCircleIcon size={16} />
                   {habits[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
@@ -677,23 +701,23 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsReorderOpen(false);
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
         >
-          <div className="bg-[#faf6ef] dark:bg-[#211a14] border-2 border-[#e3d3bd] dark:border-[#382d22] rounded-3xl p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/15 rounded-[32px] p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-black tracking-tight text-[#2d2823] dark:text-[#f2eee9] flex items-center gap-2">
-                  <ArrowUpDown size={20} className="text-[#5f7a61] dark:text-[#7d9d80]" />
+                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white flex items-center gap-2">
+                  <ArrowUpDown size={20} className="text-[#007AFF]" />
                   Reorder Habits
                 </h2>
-                <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] mt-0.5">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
                   Drag items or use the quick buttons to customize order
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsReorderOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#eee5d8] dark:bg-[#383129] flex items-center justify-center text-[#5c5042] hover:text-[#2d2823] dark:hover:text-white transition"
+                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition"
               >
                 <X size={18} />
               </button>
@@ -701,13 +725,13 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
             {/* Quick Sort Helpers */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] font-bold">
-              <span className="text-[#8c7e70] dark:text-[#a89b8d] text-[10px] uppercase tracking-wider font-extrabold shrink-0 mr-1">
+              <span className="text-zinc-400 uppercase tracking-wider text-[10px] font-extrabold shrink-0 mr-1">
                 Quick Sort:
               </span>
               <button
                 type="button"
                 onClick={handleSortHabitsAZ}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#5f7a61] dark:hover:border-[#7d9d80] transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:border-zinc-400 transition flex items-center gap-1 shrink-0 ios-tap"
               >
                 <ArrowDownAZ size={12} />
                 <span>A → Z</span>
@@ -715,15 +739,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               <button
                 type="button"
                 onClick={handleSortHabitsByPriority}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#5f7a61] dark:hover:border-[#7d9d80] transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:border-zinc-400 transition flex items-center gap-1 shrink-0 ios-tap"
               >
-                <Sparkles size={12} className="text-[#d98236]" />
+                <Sparkles size={12} className="text-[#FF9500]" />
                 <span>By Priority</span>
               </button>
               <button
                 type="button"
                 onClick={() => onReorderHabits([...habits].reverse())}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#2a221b] border border-[#ebdccb] dark:border-[#3a3026] text-[#4a4036] dark:text-[#e0d6cb] hover:border-[#5f7a61] dark:hover:border-[#7d9d80] transition shrink-0 ios-tap"
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:border-zinc-400 transition shrink-0 ios-tap"
               >
                 Reverse
               </button>
@@ -761,43 +785,43 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                     }}
                     className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border transition-all duration-150 select-none ${
                       isDragging
-                        ? 'opacity-40 scale-[0.98] border-[#5f7a61] dark:border-[#7d9d80] bg-[#5f7a61]/10'
+                        ? 'opacity-40 scale-[0.98] border-[#007AFF] bg-[#007AFF]/10'
                         : isDragOver
-                        ? 'border-2 border-[#5f7a61] dark:border-[#7d9d80] bg-[#5f7a61]/5 shadow-md'
-                        : 'bg-white dark:bg-[#2a221b] border-[#ebdccb] dark:border-[#3a3026] hover:border-[#cfbdab] shadow-2xs'
+                        ? 'border-2 border-[#007AFF] bg-[#007AFF]/5 shadow-md'
+                        : 'bg-white dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700/80 shadow-2xs'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0 pr-2">
                       {/* Drag Handle */}
                       <div 
-                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-[#a89b8d] hover:text-[#5f7a61] dark:hover:text-[#7d9d80] transition"
+                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition"
                         title="Drag to reorder"
                       >
                         <GripVertical size={16} />
                       </div>
 
                       {/* Number Position Badge */}
-                      <span className="w-6 h-6 rounded-full bg-[#f4ece1] dark:bg-[#383027] text-[#5c5042] dark:text-[#d1c5b8] font-black text-[11px] flex items-center justify-center shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black text-[11px] flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
 
                       <div className="min-w-0">
-                        <p className={`font-bold text-sm text-[#2d2823] dark:text-[#f2eee9] truncate ${habit.completed ? 'line-through text-[#8c7e70]' : ''}`}>
+                        <p className={`font-bold text-sm text-zinc-950 dark:text-white truncate ${habit.completed ? 'line-through text-zinc-400' : ''}`}>
                           {habit.name}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <span
                             className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-md ${
                               habit.priority === 'high'
-                                ? 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300'
+                                ? 'bg-red-50 text-[#FF3B30] border border-red-200 dark:bg-red-950/40 dark:border-red-900'
                                 : habit.priority === 'medium'
-                                ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300'
-                                : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                                ? 'bg-amber-50 text-[#FF9500] border border-amber-200 dark:bg-amber-950/40 dark:border-amber-900'
+                                : 'bg-blue-50 text-[#007AFF] border border-blue-200 dark:bg-blue-950/40 dark:border-blue-900'
                             }`}
                           >
                             {habit.priority}
                           </span>
-                          <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                          <span className="text-[10px] text-zinc-400">
                             {habit.goalDaysPerWeek}d/wk
                           </span>
                         </div>
@@ -812,7 +836,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                         disabled={idx === 0}
                         onClick={() => handleMoveHabitToTop(idx)}
                         title="Move to top"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
                       >
                         <ChevronsUp size={13} />
                       </button>
@@ -823,7 +847,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                         disabled={idx === 0}
                         onClick={() => handleMoveHabit(idx, idx - 1)}
                         title="Move up"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
                       >
                         <ChevronUp size={14} />
                       </button>
@@ -834,7 +858,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                         disabled={idx === habits.length - 1}
                         onClick={() => handleMoveHabit(idx, idx + 1)}
                         title="Move down"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
                       >
                         <ChevronDown size={14} />
                       </button>
@@ -845,7 +869,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                         disabled={idx === habits.length - 1}
                         onClick={() => handleMoveHabitToBottom(idx)}
                         title="Move to bottom"
-                        className="w-7 h-7 rounded-lg bg-[#f5efe6] dark:bg-[#383129] hover:bg-[#ebdccb] dark:hover:bg-[#4a3f33] disabled:opacity-20 disabled:hover:bg-[#f5efe6] text-[#4a4036] dark:text-[#e0d6cb] flex items-center justify-center transition"
+                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
                       >
                         <ChevronsDown size={13} />
                       </button>
@@ -858,7 +882,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             <button
               type="button"
               onClick={() => setIsReorderOpen(false)}
-              className="w-full py-3 rounded-2xl bg-[#5f7a61] hover:bg-[#4f6751] dark:bg-[#7d9d80] dark:hover:bg-[#6c8c6f] text-white dark:text-[#171513] font-black text-sm shadow-md transition ios-tap"
+              className="w-full py-3 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-sm shadow-md transition ios-tap"
             >
               Done
             </button>

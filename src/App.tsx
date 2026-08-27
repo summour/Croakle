@@ -62,7 +62,7 @@ import { soundEngine, triggerHaptic } from './utils/audioUtils';
 import confetti from 'canvas-confetti';
 
 export function App() {
-  const [activePage, setActivePage] = useState<PageType>('menu');
+  const [activePage, setActivePage] = useState<PageType>('mood');
 
   // Today Date & Active View Dates
   const [todayDate] = useState(new Date());
@@ -753,34 +753,41 @@ export function App() {
   return (
     <main
       id="croakle-app"
-      className="h-[100dvh] h-screen w-screen bg-[var(--bg-color)] text-[#2e271f] dark:text-[#f4efe8] transition-colors font-sans selection:bg-[#5f7a61]/20 relative overflow-hidden flex flex-col items-center justify-center p-0"
+      className="h-[100dvh] h-screen w-screen bg-white dark:bg-black text-zinc-950 dark:text-zinc-50 transition-colors font-sans selection:bg-[#007AFF]/20 relative overflow-hidden flex flex-col items-center justify-center p-0"
     >
       {/* MASTER UNIFIED CONTAINER */}
       <div
         id="croakle-master-frame"
-        className="relative z-10 w-full max-w-xl h-full flex flex-col bg-[var(--bg-color)] overflow-hidden transition-all duration-300"
+        className="relative z-10 w-full max-w-xl h-full flex flex-col bg-white dark:bg-black overflow-hidden transition-all duration-300"
       >
         {/* Scrollable Viewport Container: Locked inside master box */}
         <div
           id="croakle-scroll-area"
           className={
-            activePage === 'menu' || activePage === 'shop' || activePage === 'dressup'
+            activePage === 'shop' || activePage === 'dressup'
               ? 'flex-1 w-full h-full relative overflow-hidden flex flex-col'
-              : 'flex-1 w-full px-4 pt-3.5 pb-24 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
+              : 'flex-1 w-full px-4 pt-3.5 pb-28 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
           }
         >
           {activePage === 'menu' && (
-            <HomeDashboard
+            <HabitsView
+              habits={habitStore.habitTemplates}
+              monthData={currentMonthData}
+              year={trackYear}
+              monthIndex={trackMonth}
+              selectedDate={selectedDate}
+              onSelectDate={handleSelectDate}
+              onPrevMonth={handlePrevMonth}
+              onNextMonth={handleNextMonth}
+              onPrevWeek={handlePrevWeek}
+              onNextWeek={handleNextWeek}
+              onToggleHabitDay={handleToggleHabitDay}
+              onAddHabit={handleAddHabit}
+              onUpdateHabit={handleUpdateHabit}
+              onDeleteHabit={handleDeleteHabit}
+              onToggleCompleteHabit={handleToggleCompleteHabit}
+              onReorderHabits={handleReorderHabits}
               onNavigate={setActivePage}
-              pixelScene={pixelScene}
-              onUpdatePixelScene={handleUpdatePixelScene}
-              shopState={shopState}
-              onGachaPullResults={handleGachaPullResults}
-              onToggleWishlist={handleToggleWishlist}
-              onEarnCoins={earnCoins}
-              todayDate={todayDate}
-              soundEnabled={settings.soundEnabled}
-              hapticEnabled={settings.hapticEnabled}
             />
           )}
 
@@ -897,7 +904,7 @@ export function App() {
               onGachaPullResults={handleGachaPullResults}
               onToggleWishlist={handleToggleWishlist}
               onOpenCoins={() => setActivePage('coins')}
-              onBack={() => setActivePage('menu')}
+              onBack={() => setActivePage('settings')}
               soundEnabled={settings.soundEnabled}
               hapticEnabled={settings.hapticEnabled}
             />
@@ -911,7 +918,7 @@ export function App() {
               onToggleWishlist={handleToggleWishlist}
               onOpenCoins={() => setActivePage('coins')}
               onNavigateGacha={() => setActivePage('shop')}
-              onBack={() => setActivePage('menu')}
+              onBack={() => setActivePage('settings')}
               soundEnabled={settings.soundEnabled}
               hapticEnabled={settings.hapticEnabled}
             />
@@ -922,7 +929,7 @@ export function App() {
               shopState={shopState}
               onEarnCoins={earnCoins}
               onClaimDailyReward={handleClaimDailyReward}
-              onBack={() => setActivePage('menu')}
+              onBack={() => setActivePage('settings')}
               soundEnabled={settings.soundEnabled}
               hapticEnabled={settings.hapticEnabled}
             />

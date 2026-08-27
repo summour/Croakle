@@ -126,16 +126,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       </div>
 
       {/* AI Habit Coach / Insights */}
-      <div className="bg-[#1c1916]/90 dark:bg-black/70 text-[#fbf8f5] rounded-[32px] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.18)] border border-white/10 space-y-4 backdrop-blur-2xl">
+      <div className="ios-glass-card p-5 space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <CloverIcon size={20} className="text-[#8fc493]" />
-            <h2 className="font-black text-base tracking-tight">Croakle Mindful Coach & Insights</h2>
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-1 shadow-2xs">
+              <CloverIcon size={18} />
+            </div>
+            <div>
+              <h2 className="font-black text-sm text-zinc-950 dark:text-white">Croakle Mindful Coach & Insights</h2>
+            </div>
           </div>
           <button
             type="button"
             onClick={generateAIInsights}
-            className="px-4 py-2 rounded-full bg-white text-[#1c1916] hover:bg-white/90 font-black text-xs flex items-center gap-1.5 transition shadow-xs ios-tap"
+            className="px-4 py-2 rounded-full bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-950 dark:text-white font-black text-xs flex items-center gap-1.5 transition border border-zinc-200 dark:border-zinc-700 shadow-2xs ios-tap"
           >
             <RefreshCw size={13} />
             Analyze
@@ -143,11 +147,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {aiInsight ? (
-          <p className="text-sm text-[#e0d6cb] leading-relaxed bg-white/10 p-4 rounded-[20px] border border-white/10 backdrop-blur-md">
+          <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-[20px] border border-zinc-200 dark:border-zinc-700">
             {aiInsight}
           </p>
         ) : (
-          <p className="text-xs text-[#a89b8d]">
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
             Click "Analyze" to generate mindful behavioral summaries, habit stacking ideas, and project balance tips.
           </p>
         )}
@@ -158,12 +162,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div className="ios-glass-card p-5 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-[14px] bg-[#5f7a61]/10 dark:bg-[#7d9d80]/15 border border-[#5f7a61]/20 flex items-center justify-center p-1 shadow-2xs">
+              <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-1 shadow-2xs">
                 <PixelZenPondIcon size={18} />
               </div>
               <div>
-                <h2 className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Pixel Sanctuary Habitat</h2>
-                <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+                <h2 className="font-black text-sm text-zinc-950 dark:text-white">Pixel Sanctuary Habitat</h2>
+                <p className="text-xs text-zinc-600 dark:text-zinc-400">
                   Customize your retro frog diorama, companions and animation effects.
                 </p>
               </div>
@@ -177,16 +181,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               onClick={() => onUpdatePixelScene({ isAnimated: !pixelScene.isAnimated })}
               className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition ios-tap ${
                 pixelScene.isAnimated
-                  ? 'bg-[#5f7a61]/10 border-[#5f7a61] text-[#2d2823] dark:text-[#f4efe8]'
-                  : 'bg-white/60 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-[#8c7e70]'
+                  ? 'bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-600 text-zinc-950 dark:text-white shadow-2xs'
+                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 opacity-70'
               }`}
             >
               <div className="flex items-center gap-2">
-                <Sparkles size={14} className="text-[#5f7a61]" />
+                <Sparkles size={14} className="text-zinc-700 dark:text-zinc-300" />
                 <span>Pixel Animation</span>
               </div>
               <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
-                pixelScene.isAnimated ? 'bg-[#5f7a61] text-white' : 'bg-black/10 dark:bg-white/10'
+                pixelScene.isAnimated ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'
               }`}>
                 {pixelScene.isAnimated ? 'ON' : 'OFF'}
               </span>
@@ -197,16 +201,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               onClick={() => onUpdatePixelScene({ syncWithMood: !pixelScene.syncWithMood })}
               className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition ios-tap ${
                 pixelScene.syncWithMood
-                  ? 'bg-[#5f7a61]/10 border-[#5f7a61] text-[#2d2823] dark:text-[#f4efe8]'
-                  : 'bg-white/60 dark:bg-white/[0.04] border-black/[0.06] dark:border-white/[0.08] text-[#8c7e70]'
+                  ? 'bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-600 text-zinc-950 dark:text-white shadow-2xs'
+                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 opacity-70'
               }`}
             >
               <div className="flex items-center gap-2">
-                <FrogFaceDockIcon size={14} className="text-[#5f7a61]" />
+                <FrogFaceDockIcon size={14} />
                 <span>Mood Reaction</span>
               </div>
               <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
-                pixelScene.syncWithMood ? 'bg-[#5f7a61] text-white' : 'bg-black/10 dark:bg-white/10'
+                pixelScene.syncWithMood ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'
               }`}>
                 {pixelScene.syncWithMood ? 'ON' : 'OFF'}
               </span>
@@ -218,12 +222,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {/* Backup & Restore Card */}
       <div className="ios-glass-card p-5 space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-[14px] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center shadow-2xs">
-            <BambooScrollDockIcon size={18} className="text-[#849b5c]" />
+          <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shadow-2xs">
+            <BambooScrollDockIcon size={18} />
           </div>
           <div>
-            <h2 className="font-black text-sm text-[#2d2823] dark:text-[#f4efe8]">Backup & Restore</h2>
-            <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+            <h2 className="font-black text-sm text-zinc-950 dark:text-white">Backup & Restore</h2>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">
               Export and import all habits, mood logs, notes, and time sessions as a JSON file.
             </p>
           </div>
@@ -233,7 +237,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <button
             type="button"
             onClick={handleExport}
-            className="py-3 px-4 rounded-[20px] bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] font-black text-xs flex items-center justify-center gap-2 transition border border-black/[0.06] dark:border-white/[0.1] shadow-2xs ios-tap"
+            className="py-3 px-4 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-950 dark:text-white font-black text-xs flex items-center justify-center gap-2 transition border border-zinc-200 dark:border-zinc-800 shadow-2xs ios-tap"
           >
             <Download size={15} /> Export JSON
           </button>
@@ -241,7 +245,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="py-3 px-4 rounded-[20px] bg-white/80 dark:bg-white/[0.08] hover:bg-white dark:hover:bg-white/[0.14] text-[#4a4036] dark:text-[#e0d6cb] font-black text-xs flex items-center justify-center gap-2 transition border border-black/[0.06] dark:border-white/[0.1] shadow-2xs ios-tap"
+            className="py-3 px-4 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-950 dark:text-white font-black text-xs flex items-center justify-center gap-2 transition border border-zinc-200 dark:border-zinc-800 shadow-2xs ios-tap"
           >
             <Upload size={15} /> Import JSON
           </button>
@@ -255,7 +259,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {importStatus && (
-          <p className="text-xs font-bold text-[#5f7a61] dark:text-[#8fc493] p-2.5 rounded-[16px] bg-[#5f7a61]/10 dark:bg-[#5f7a61]/20 border border-[#5f7a61]/30 text-center">
+          <p className="text-xs font-bold text-zinc-950 dark:text-white p-2.5 rounded-[16px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-center">
             {importStatus}
           </p>
         )}
@@ -263,8 +267,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* Reset Data */}
       <div className="ios-glass-card p-5 space-y-3">
-        <h2 className="font-black text-sm text-[#b86f52]">Reset Data</h2>
-        <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+        <h2 className="font-black text-sm text-zinc-950 dark:text-white">Reset Data</h2>
+        <p className="text-xs text-zinc-600 dark:text-zinc-400">
           Restore all habit and journal data to default demo presets.
         </p>
         {resetConfirm ? (
@@ -282,7 +286,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => setResetConfirm(false)}
-              className="py-2.5 px-4 rounded-[18px] bg-black/[0.05] dark:bg-white/[0.08] text-[#4a4036] dark:text-[#e0d6cb] font-bold text-xs ios-tap"
+              className="py-2.5 px-4 rounded-[18px] bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs ios-tap hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
             >
               Cancel
             </button>
@@ -291,7 +295,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <button
             type="button"
             onClick={() => setResetConfirm(true)}
-            className="w-full py-2.5 rounded-[18px] bg-[#b86f52]/10 hover:bg-[#b86f52]/20 text-[#b86f52] font-black text-xs flex items-center justify-center gap-2 transition border border-[#b86f52]/20 ios-tap"
+            className="w-full py-3 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-950 dark:text-white font-black text-xs flex items-center justify-center gap-2 transition border border-zinc-200 dark:border-zinc-800 shadow-2xs ios-tap"
           >
             <Trash2 size={15} /> Reset to Defaults
           </button>

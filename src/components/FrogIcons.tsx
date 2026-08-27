@@ -7,257 +7,318 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 }
 
 // -------------------------------------------------------------
-// PIXEL ART CROAKLE MOOD ICONS (5-TIER 24x24 / 32x32 Grid)
+// PIXEL ART CROAKLE MOOD ICONS (Based on 16-Frog Pixel Sheet)
 // -------------------------------------------------------------
 
-/** 5 - Rad / Excited (Yellow Theme): Pixel Art Frog happily eating with golden rice bowl & sparkles */
+/** 5 - Rad / Sparkle Eyes (Yellow Theme): Pixel Frog with sparkling star eyes & open laughing mouth */
 export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     shapeRendering="crispEdges"
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Sparkles Top Right */}
-    <rect x="19" y="1" width="1" height="1" fill="#FACC15" />
-    <rect x="18" y="2" width="3" height="1" fill="#FACC15" />
-    <rect x="19" y="3" width="1" height="1" fill="#FACC15" />
-    {/* Sparkles Top Left */}
-    <rect x="3" y="4" width="1" height="1" fill="#EAB308" />
-    <rect x="2" y="5" width="3" height="1" fill="#EAB308" />
-    <rect x="3" y="6" width="1" height="1" fill="#EAB308" />
+    {/* Floating Sparkles Top Left */}
+    <rect x="1" y="1" width="1" height="2" fill="#0D226B" />
+    <rect x="0" y="2" width="3" height="1" fill="#0D226B" />
+    <rect x="1" y="2" width="1" height="1" fill="#FDE047" />
+    <rect x="2" y="0" width="1" height="1" fill="#84E42B" />
 
-    {/* Eyes Top Outlines & White Reflections */}
-    <rect x="5" y="4" width="4" height="4" fill="#2D3A20" />
-    <rect x="15" y="4" width="4" height="4" fill="#2D3A20" />
-    <rect x="6" y="5" width="2" height="2" fill="#75A65A" />
-    <rect x="16" y="5" width="2" height="2" fill="#75A65A" />
-    <rect x="6" y="5" width="1" height="1" fill="#FFFFFF" />
-    <rect x="16" y="5" width="1" height="1" fill="#FFFFFF" />
+    {/* Floating Sparkles Top Right */}
+    <rect x="18" y="1" width="1" height="2" fill="#0D226B" />
+    <rect x="17" y="2" width="3" height="1" fill="#0D226B" />
+    <rect x="18" y="2" width="1" height="1" fill="#FDE047" />
+    <rect x="17" y="0" width="1" height="1" fill="#84E42B" />
 
-    {/* Frog Head Body Main */}
-    <rect x="4" y="8" width="16" height="8" fill="#75A65A" />
-    <rect x="3" y="9" width="1" height="6" fill="#2D3A20" />
-    <rect x="20" y="9" width="1" height="6" fill="#2D3A20" />
-    <rect x="8" y="7" width="8" height="1" fill="#2D3A20" />
+    {/* Dark Navy Outline */}
+    <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="3" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="4" width="4" height="1" fill="#0D226B" />
+    <rect x="12" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="11" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="16" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="2" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="17" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="3" y="13" width="14" height="1" fill="#0D226B" />
+    <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
+    <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Happy Squinting Eyes */}
-    <rect x="6" y="9" width="3" height="1" fill="#2D3A20" />
-    <rect x="15" y="9" width="3" height="1" fill="#2D3A20" />
+    {/* Frog Green Main Body Fill */}
+    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
+    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
 
-    {/* Rosy Golden Cheeks */}
-    <rect x="4" y="11" width="2" height="1" fill="#EAB308" />
-    <rect x="18" y="11" width="2" height="1" fill="#EAB308" />
+    {/* Bottom-Right Shadow Emerald */}
+    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
+    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
+    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
 
-    {/* Smiling Mouth */}
-    <rect x="10" y="12" width="4" height="1" fill="#2D3A20" />
-    <rect x="9" y="11" width="1" height="1" fill="#2D3A20" />
-    <rect x="14" y="11" width="1" height="1" fill="#2D3A20" />
+    {/* Pink Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
+    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
 
-    {/* Belly */}
-    <rect x="8" y="13" width="8" height="3" fill="#FEF9C3" />
+    {/* Left Eye Sparkle Star */}
+    <rect x="5" y="2" width="1" height="3" fill="#FDE047" />
+    <rect x="4" y="3" width="3" height="1" fill="#FDE047" />
+    <rect x="5" y="3" width="1" height="1" fill="#FFFFFF" />
+    <rect x="4" y="2" width="1" height="1" fill="#0D226B" />
+    <rect x="6" y="2" width="1" height="1" fill="#0D226B" />
+    <rect x="4" y="4" width="1" height="1" fill="#0D226B" />
+    <rect x="6" y="4" width="1" height="1" fill="#0D226B" />
 
-    {/* Golden Rice Bowl */}
-    <rect x="7" y="16" width="10" height="4" fill="#EAB308" />
-    <rect x="6" y="16" width="1" height="3" fill="#854D0E" />
-    <rect x="17" y="16" width="1" height="3" fill="#854D0E" />
-    <rect x="8" y="20" width="8" height="1" fill="#854D0E" />
-    {/* Steaming Rice in Bowl */}
-    <rect x="8" y="15" width="8" height="1" fill="#FFFFFF" />
-    <rect x="10" y="14" width="4" height="1" fill="#FFFFFF" />
+    {/* Right Eye Sparkle Star */}
+    <rect x="13" y="2" width="1" height="3" fill="#FDE047" />
+    <rect x="12" y="3" width="3" height="1" fill="#FDE047" />
+    <rect x="13" y="3" width="1" height="1" fill="#FFFFFF" />
+    <rect x="12" y="2" width="1" height="1" fill="#0D226B" />
+    <rect x="14" y="2" width="1" height="1" fill="#0D226B" />
+    <rect x="12" y="4" width="1" height="1" fill="#0D226B" />
+    <rect x="14" y="4" width="1" height="1" fill="#0D226B" />
 
-    {/* Chopsticks */}
-    <rect x="15" y="13" width="5" height="1" fill="#A16207" />
-    <rect x="14" y="14" width="5" height="1" fill="#A16207" />
+    {/* Open Laughing Mouth */}
+    <rect x="7" y="6" width="6" height="1" fill="#0D226B" />
+    <rect x="7" y="7" width="6" height="2" fill="#0D226B" />
+    <rect x="8" y="7" width="4" height="2" fill="#D92B54" />
+    <rect x="8" y="8" width="4" height="1" fill="#FFA0B8" />
   </svg>
 );
 
-/** 4 - Good / Content (Sakura Pink Theme): Pixel Art Frog sitting peacefully reading pink book */
+/** 4 - Good / Happy (Sakura Theme): Pixel Frog with joyful open smile & bright round eyes */
 export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     shapeRendering="crispEdges"
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Sakura Sparkles */}
-    <rect x="2" y="3" width="1" height="1" fill="#F472B6" />
-    <rect x="21" y="4" width="1" height="1" fill="#EC4899" />
+    {/* Dark Navy Outline */}
+    <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="3" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="4" width="4" height="1" fill="#0D226B" />
+    <rect x="12" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="11" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="16" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="2" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="17" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="3" y="13" width="14" height="1" fill="#0D226B" />
+    <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
+    <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Eyes Top Outlines */}
-    <rect x="5" y="4" width="4" height="4" fill="#2D3A20" />
-    <rect x="15" y="4" width="4" height="4" fill="#2D3A20" />
-    <rect x="6" y="5" width="2" height="2" fill="#75A65A" />
-    <rect x="16" y="5" width="2" height="2" fill="#75A65A" />
+    {/* Frog Green Main Body Fill */}
+    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
+    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
 
-    {/* Frog Head & Body */}
-    <rect x="4" y="8" width="16" height="8" fill="#75A65A" />
-    <rect x="3" y="9" width="1" height="6" fill="#2D3A20" />
-    <rect x="20" y="9" width="1" height="6" fill="#2D3A20" />
-    <rect x="8" y="7" width="8" height="1" fill="#2D3A20" />
+    {/* Bottom-Right Shadow Emerald */}
+    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
+    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
+    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
 
-    {/* Calm Eyes */}
-    <rect x="6" y="9" width="3" height="1" fill="#2D3A20" />
-    <rect x="8" y="10" width="1" height="1" fill="#2D3A20" />
-    <rect x="15" y="9" width="3" height="1" fill="#2D3A20" />
-    <rect x="15" y="10" width="1" height="1" fill="#2D3A20" />
+    {/* Pink Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
+    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
 
-    {/* Sweet Pink Cheeks */}
-    <rect x="4" y="11" width="2" height="1" fill="#EC4899" />
-    <rect x="18" y="11" width="2" height="1" fill="#EC4899" />
+    {/* Left Eye */}
+    <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="4" y="3" width="2" height="1" fill="#5076F2" />
+    <rect x="4" y="3" width="1" height="1" fill="#FFFFFF" />
 
-    {/* Gentle Smile */}
-    <rect x="11" y="12" width="2" height="1" fill="#2D3A20" />
+    {/* Right Eye */}
+    <rect x="13" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="13" y="3" width="2" height="1" fill="#5076F2" />
+    <rect x="13" y="3" width="1" height="1" fill="#FFFFFF" />
 
-    {/* Sakura Pink Open Book in Hands */}
-    <rect x="5" y="15" width="14" height="6" fill="#FDF2F8" />
-    <rect x="4" y="15" width="1" height="6" fill="#DB2777" />
-    <rect x="19" y="15" width="1" height="6" fill="#DB2777" />
-    <rect x="11" y="15" width="2" height="6" fill="#DB2777" />
-    <rect x="5" y="21" width="14" height="1" fill="#DB2777" />
-
-    {/* Frog Hands Holding Book */}
-    <rect x="4" y="16" width="2" height="2" fill="#75A65A" />
-    <rect x="18" y="16" width="2" height="2" fill="#75A65A" />
+    {/* Open Happy Laughing Smile Mouth */}
+    <rect x="7" y="6" width="6" height="1" fill="#0D226B" />
+    <rect x="7" y="7" width="6" height="2" fill="#0D226B" />
+    <rect x="8" y="7" width="4" height="2" fill="#D92B54" />
+    <rect x="8" y="8" width="4" height="1" fill="#FFA0B8" />
   </svg>
 );
 
-/** 3 - Meh / Pensive (Green Theme): Pixel Art Frog with green lotus leaf hat & matcha cup */
+/** 3 - Meh / Chill (Green Theme): Pixel Frog with skeptical side-glance & tiny neutral mouth */
 export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     shapeRendering="crispEdges"
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Lotus Leaf Hat Top */}
-    <rect x="11" y="2" width="2" height="2" fill="#2D3A20" />
-    <rect x="6" y="4" width="12" height="2" fill="#4F793A" />
-    <rect x="3" y="6" width="18" height="2" fill="#6B9B52" />
-    <rect x="2" y="7" width="20" height="1" fill="#2D3A20" />
+    {/* Dark Navy Outline */}
+    <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="3" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="4" width="4" height="1" fill="#0D226B" />
+    <rect x="12" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="11" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="16" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="2" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="17" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="3" y="13" width="14" height="1" fill="#0D226B" />
+    <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
+    <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Frog Head Body */}
-    <rect x="4" y="8" width="16" height="8" fill="#75A65A" />
-    <rect x="3" y="9" width="1" height="6" fill="#2D3A20" />
-    <rect x="20" y="9" width="1" height="6" fill="#2D3A20" />
+    {/* Frog Green Main Body Fill */}
+    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
+    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
 
-    {/* Straight Line Meh Squint Eyes */}
-    <rect x="6" y="10" width="3" height="1" fill="#2D3A20" />
-    <rect x="15" y="10" width="3" height="1" fill="#2D3A20" />
+    {/* Bottom-Right Shadow Emerald */}
+    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
+    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
+    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
 
-    {/* Neutral Flat Mouth */}
-    <rect x="10" y="13" width="4" height="1" fill="#2D3A20" />
+    {/* Pink Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
+    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
 
-    {/* Folded Arms */}
-    <rect x="6" y="16" width="12" height="2" fill="#5E8847" />
-    <rect x="5" y="17" width="14" height="1" fill="#2D3A20" />
+    {/* Left Eye */}
+    <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="4" y="3" width="2" height="1" fill="#5076F2" />
 
-    {/* Matcha Tea Cup on Side */}
-    <rect x="18" y="17" width="3" height="4" fill="#BBF7D0" />
-    <rect x="18" y="21" width="3" height="1" fill="#166534" />
-    <rect x="19" y="16" width="1" height="1" fill="#15803D" />
+    {/* Right Eye */}
+    <rect x="13" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="13" y="3" width="2" height="1" fill="#5076F2" />
+
+    {/* Tiny Neutral Dot Mouth */}
+    <rect x="9" y="7" width="2" height="1" fill="#0D226B" />
   </svg>
 );
 
-/** 2 - Bad / Weary (Blue Theme): Pixel Art Frog resting under blue blanket with ice pack */
+/** 2 - Bad / Sad (Blue Theme): Pixel Frog with sad downward frown */
 export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     shapeRendering="crispEdges"
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Ice pack on head */}
-    <rect x="11" y="3" width="2" height="1" fill="#0284C7" />
-    <rect x="9" y="4" width="6" height="2" fill="#38BDF8" />
-    <rect x="10" y="5" width="4" height="1" fill="#BAE6FD" />
+    {/* Dark Navy Outline */}
+    <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="3" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="4" width="4" height="1" fill="#0D226B" />
+    <rect x="12" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="11" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="16" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="2" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="17" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="3" y="13" width="14" height="1" fill="#0D226B" />
+    <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
+    <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Frog Head on Pillow */}
-    <rect x="4" y="6" width="16" height="6" fill="#75A65A" />
-    <rect x="3" y="7" width="1" height="4" fill="#2D3A20" />
-    <rect x="20" y="7" width="1" height="4" fill="#2D3A20" />
+    {/* Frog Green Main Body Fill */}
+    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
+    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
 
-    {/* Weary / Sleepy Eyes */}
-    <rect x="6" y="8" width="3" height="1" fill="#2D3A20" />
-    <rect x="7" y="9" width="1" height="1" fill="#2D3A20" />
-    <rect x="15" y="8" width="3" height="1" fill="#2D3A20" />
-    <rect x="16" y="9" width="1" height="1" fill="#2D3A20" />
+    {/* Bottom-Right Shadow Emerald */}
+    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
+    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
+    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
 
-    {/* Small tired mouth */}
-    <rect x="11" y="10" width="2" height="1" fill="#2D3A20" />
+    {/* Pink Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
+    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
 
-    {/* Soft Pillow Behind */}
-    <rect x="2" y="11" width="20" height="2" fill="#E0F2FE" />
-    <rect x="1" y="12" width="22" height="1" fill="#0369A1" />
+    {/* Left Eye */}
+    <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="4" y="3" width="2" height="1" fill="#5076F2" />
 
-    {/* Cozy Blue Quilt Blanket */}
-    <rect x="2" y="13" width="20" height="8" fill="#0284C7" />
-    <rect x="3" y="15" width="18" height="1" fill="#38BDF8" />
-    <rect x="3" y="18" width="18" height="1" fill="#38BDF8" />
-    <rect x="1" y="13" width="1" height="8" fill="#0369A1" />
-    <rect x="22" y="13" width="1" height="8" fill="#0369A1" />
-    <rect x="2" y="21" width="20" height="1" fill="#0369A1" />
+    {/* Right Eye */}
+    <rect x="13" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="13" y="3" width="2" height="1" fill="#5076F2" />
+
+    {/* Downward Sad Curved Frown Mouth */}
+    <rect x="8" y="7" width="4" height="1" fill="#0D226B" />
+    <rect x="7" y="8" width="1" height="2" fill="#0D226B" />
+    <rect x="12" y="8" width="1" height="2" fill="#0D226B" />
   </svg>
 );
 
-/** 1 - Awful / Overwhelmed (Black Theme): Pixel Art Frog under dark umbrella with raindrops */
+/** 1 - Awful / Crying Waterfall Tears (Blue/Cyan Theme): Pixel Frog weeping streams of tears */
 export const FrogMoodAwful: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 20 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     shapeRendering="crispEdges"
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Pixel Rain Drops */}
-    <rect x="2" y="3" width="1" height="2" fill="#71717A" />
-    <rect x="21" y="2" width="1" height="2" fill="#71717A" />
-    <rect x="19" y="8" width="1" height="2" fill="#71717A" />
-    <rect x="4" y="10" width="1" height="2" fill="#71717A" />
+    {/* Dark Navy Outline */}
+    <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="3" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="4" width="4" height="1" fill="#0D226B" />
+    <rect x="12" y="2" width="4" height="1" fill="#0D226B" />
+    <rect x="11" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="16" y="3" width="1" height="2" fill="#0D226B" />
+    <rect x="2" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="17" y="5" width="1" height="7" fill="#0D226B" />
+    <rect x="3" y="13" width="14" height="1" fill="#0D226B" />
+    <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
+    <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Dark Obsidian Umbrella */}
-    <rect x="11" y="4" width="2" height="1" fill="#09090B" />
-    <rect x="7" y="5" width="10" height="2" fill="#27272A" />
-    <rect x="3" y="7" width="18" height="2" fill="#27272A" />
-    <rect x="2" y="9" width="20" height="1" fill="#09090B" />
-    <rect x="11" y="9" width="1" height="9" fill="#18181B" />
+    {/* Frog Green Main Body Fill */}
+    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
+    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
+    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
 
-    {/* Crouched Frog */}
-    <rect x="6" y="13" width="11" height="6" fill="#75A65A" />
-    <rect x="5" y="14" width="1" height="4" fill="#2D3A20" />
-    <rect x="17" y="14" width="1" height="4" fill="#2D3A20" />
+    {/* Bottom-Right Shadow Emerald */}
+    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
+    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
+    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
 
-    {/* Sad Drooping Eyes */}
-    <rect x="8" y="15" width="2" height="1" fill="#2D3A20" />
-    <rect x="9" y="16" width="1" height="1" fill="#2D3A20" />
-    <rect x="13" y="15" width="2" height="1" fill="#2D3A20" />
-    <rect x="13" y="16" width="1" height="1" fill="#2D3A20" />
+    {/* Pink Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
+    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
 
-    {/* Tear */}
-    <rect x="7" y="16" width="1" height="1" fill="#93C5FD" />
+    {/* Left Eye */}
+    <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="4" y="3" width="2" height="1" fill="#5076F2" />
 
-    {/* Ground Rain Puddle */}
-    <rect x="4" y="20" width="16" height="2" fill="#52525B" />
-    <rect x="6" y="22" width="12" height="1" fill="#3F3F46" />
+    {/* Right Eye */}
+    <rect x="13" y="3" width="3" height="2" fill="#0D226B" />
+    <rect x="13" y="3" width="2" height="1" fill="#5076F2" />
+
+    {/* Waterfall Tears Stream Left */}
+    <rect x="4" y="5" width="2" height="8" fill="#38BDF8" />
+    <rect x="4" y="5" width="1" height="7" fill="#BAE6FD" />
+
+    {/* Waterfall Tears Stream Right */}
+    <rect x="14" y="5" width="2" height="8" fill="#38BDF8" />
+    <rect x="14" y="5" width="1" height="7" fill="#BAE6FD" />
+
+    {/* Downward Sad Curved Frown Mouth */}
+    <rect x="8" y="7" width="4" height="1" fill="#0D226B" />
+    <rect x="7" y="8" width="1" height="2" fill="#0D226B" />
+    <rect x="12" y="8" width="1" height="2" fill="#0D226B" />
   </svg>
 );
 

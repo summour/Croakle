@@ -261,13 +261,14 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-24" {...swipeHandlers}>
+    <div className="space-y-4 pb-28" {...swipeHandlers}>
       {/* Top Segmented Sub-Navigation for Analytics/Settings */}
       {onNavigate && (
         <SubNavTabs
           activePage="analysis"
           onNavigate={onNavigate}
           tabs={[
+            { id: 'timer', label: 'Timer', icon: <PocketTimerDockIcon size={15} /> },
             { id: 'analysis', label: 'Analytics', icon: <ToriiStatsDockIcon size={15} /> },
             { id: 'settings', label: 'Settings', icon: <WoodGearDockIcon size={15} /> },
           ]}
@@ -275,29 +276,29 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
       )}
 
       {/* Header & Month Navigator (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-[#fdfbf7]/90 dark:bg-[#161311]/90 backdrop-blur-2xl pt-1 pb-1 space-y-3">
+      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-3">
         <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
           <div className="flex items-center justify-between">
             <button
               type="button"
               onClick={onPrevMonth}
-              className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.15] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
               aria-label="Previous Month"
             >
               <ChevronLeft size={18} />
             </button>
             <div className="text-center">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#8c7e70] dark:text-[#a89b8d]">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                 Journey Analytics
               </p>
-              <strong className="text-base sm:text-lg font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8] block">
+              <strong className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white block">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
             </div>
             <button
               type="button"
               onClick={onNextMonth}
-              className="w-8 h-8 rounded-full bg-black/[0.04] hover:bg-black/[0.08] dark:bg-white/[0.08] dark:hover:bg-white/[0.15] flex items-center justify-center font-bold text-[#4a4036] dark:text-[#e0d6cb] transition-all ios-tap"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
               aria-label="Next Month"
             >
               <ChevronRight size={18} />
@@ -305,7 +306,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           </div>
 
           {/* Segmented Filter Navigation Tabs */}
-          <div className="grid grid-cols-4 gap-1 p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-[18px] border border-black/[0.03] dark:border-white/[0.04]">
+          <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
             {(
               [
                 { id: 'overview', label: 'Overview', icon: <ToriiStatsDockIcon size={13} className="shrink-0" /> },
@@ -322,8 +323,8 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                   onClick={() => setActiveTab(tab.id)}
                   className={`min-w-0 py-1.5 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center gap-1 ${
                     isActive
-                      ? 'bg-white dark:bg-[#28231d] text-[#2d2823] dark:text-[#f4efe8] shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
-                      : 'text-[#8c7e70] dark:text-[#a89b8d] hover:text-[#2d2823] dark:hover:text-[#f4efe8]'
+                      ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
+                      : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                   }`}
                 >
                   {tab.icon}
@@ -344,52 +345,52 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="ios-glass-card p-3.5 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Habit Rate</span>
-                <CloverIcon size={15} />
+                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Habit Rate</span>
+                <CloverIcon size={15} className="text-[#007AFF]" />
               </div>
-              <strong className="text-2xl font-black text-[#5f7a61] dark:text-[#7d9d80] block">
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {overallMonthPercent}%
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {actualHabitChecks} / {totalPossibleChecks} checks
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Avg Mood</span>
+                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Avg Mood</span>
                 <FrogMoodIcon value={4} size={15} />
               </div>
-              <strong className="text-2xl font-black text-[#b86f52] dark:text-[#d68767] block">
-                {avgMoodStr} <span className="text-xs text-[#8c7e70] font-bold">/ 5</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
+                {avgMoodStr} <span className="text-xs text-zinc-400 font-bold">/ 5</span>
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {recordedMoodsCount} days recorded
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Active Projects</span>
-                <BambooScrollDockIcon size={15} className="text-[#849b5c]" />
+                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Active Projects</span>
+                <BambooScrollDockIcon size={15} className="text-[#FF9500]" />
               </div>
-              <strong className="text-2xl font-black text-[#2d2823] dark:text-[#f4efe8] block">
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {activeProjects.length}
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {totalProjectMonthChecks} check-ins
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Focus Time</span>
-                <PocketTimerDockIcon size={15} className="text-[#c28f3a]" />
+                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Focus Time</span>
+                <PocketTimerDockIcon size={15} className="text-[#007AFF]" />
               </div>
-              <strong className="text-2xl font-black text-[#c28f3a] block">
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {totalFocusHours}h
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {monthSessions.length} sessions logged
               </span>
             </div>
@@ -399,12 +400,12 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <ToriiStatsDockIcon size={18} className="text-[#5f7a61]" />
-                <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+                <ToriiStatsDockIcon size={18} className="text-zinc-950 dark:text-white" />
+                <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
                   Interactive Habit, Mood & Focus Flow
                 </h3>
               </div>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+              <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
                 {MONTH_NAMES[monthIndex]} 1–{daysInMonth}
               </span>
             </div>
@@ -421,24 +422,24 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Monthly Highlights Summary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="ios-glass-card p-4 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">
-                <Trophy size={16} className="text-[#c28f3a]" />
+              <div className="flex items-center gap-2 text-xs font-black text-zinc-950 dark:text-white">
+                <Trophy size={16} className="text-[#FF9500]" />
                 <span>Top Habit this Month</span>
               </div>
-              <p className="text-sm font-black text-[#5f7a61] dark:text-[#7d9d80] truncate">
+              <p className="text-sm font-black text-zinc-950 dark:text-white truncate">
                 {bestHabitName}
               </p>
-              <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 {bestHabitCount > 0 ? `Completed on ${bestHabitCount} days (${Math.round((bestHabitCount / daysInMonth) * 100)}%)` : 'No checks logged yet'}
               </p>
             </div>
 
             <div className="ios-glass-card p-4 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">
-                <Sparkles size={16} className="text-[#b86f52]" />
+              <div className="flex items-center gap-2 text-xs font-black text-zinc-950 dark:text-white">
+                <Sparkles size={16} className="text-[#007AFF]" />
                 <span>Mood Balance</span>
               </div>
-              <p className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8] flex items-center gap-1.5">
+              <p className="text-sm font-black text-zinc-950 dark:text-white flex items-center gap-1.5">
                 {dominantMoodObj ? (
                   <>
                     <FrogMoodIcon value={dominantMoodObj.value} size={20} />
@@ -448,7 +449,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                   <span>No mood entries yet</span>
                 )}
               </p>
-              <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 {positivityRate}% positive rating days ({positiveMoodCount} of {recordedMoodsCount} recorded)
               </p>
             </div>
@@ -464,31 +465,31 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Habits Summary Cards */}
           <div className="grid grid-cols-3 gap-3">
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Overall Rate</span>
-              <strong className="text-2xl font-black text-[#5f7a61] dark:text-[#7d9d80] block">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Overall Rate</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {overallMonthPercent}%
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {actualHabitChecks} checks
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Active Habits</span>
-              <strong className="text-2xl font-black text-[#2d2823] dark:text-[#f4efe8] block">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Active Habits</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {activeOrTrackedHabits.length}
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 tracked this month
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Top Habit</span>
-              <strong className="text-sm font-black text-[#5f7a61] dark:text-[#7d9d80] block truncate mt-1">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Top Habit</span>
+              <strong className="text-sm font-black text-zinc-950 dark:text-white block truncate mt-1">
                 {bestHabitName}
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {bestHabitCount > 0 ? `${bestHabitCount} days` : '—'}
               </span>
             </div>
@@ -497,10 +498,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Interactive Leaderboard & Performance Chart */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
                 Habit Consistency & Performance
               </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+              <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
                 Tap habit to inspect activity
               </span>
             </div>
@@ -523,27 +524,27 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Mood KPIs */}
           <div className="grid grid-cols-3 gap-3">
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Avg Mood Score</span>
-              <strong className="text-2xl font-black text-[#b86f52] dark:text-[#d68767] block">
-                {avgMoodStr} <span className="text-xs text-[#8c7e70] font-bold">/ 5</span>
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Avg Mood Score</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
+                {avgMoodStr} <span className="text-xs text-zinc-400 font-bold">/ 5</span>
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {recordedMoodsCount} days logged
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Positivity Rate</span>
-              <strong className="text-2xl font-black text-[#5f7a61] dark:text-[#7d9d80] block">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Positivity Rate</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {positivityRate}%
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 Rad & Good days
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Dominant Mood</span>
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Dominant Mood</span>
               <div className="flex items-center gap-1.5 mt-1">
                 {dominantMoodObj ? (
                   <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black border ${dominantMoodObj.bgLight} ${dominantMoodObj.bgDark} ${dominantMoodObj.borderLight} ${dominantMoodObj.borderDark} ${dominantMoodObj.textColorLight} ${dominantMoodObj.textColorDark}`}>
@@ -551,10 +552,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                     <span>{dominantMoodObj.label}</span>
                   </span>
                 ) : (
-                  <strong className="text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">None</strong>
+                  <strong className="text-xs font-black text-zinc-950 dark:text-white">None</strong>
                 )}
               </div>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 {maxMoodCount > 0 ? `${maxMoodCount} days` : 'No logs'}
               </span>
             </div>
@@ -563,10 +564,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Interactive Mood Trend & Flow Curve */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
                 Monthly Mood Trend & Flow
               </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+              <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
                 Tap point to inspect
               </span>
             </div>
@@ -581,17 +582,17 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Mood Calendar Matrix */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
                 Monthly Mood Calendar
               </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+              <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
                 {MONTH_NAMES[monthIndex]} {year}
               </span>
             </div>
 
             <div className="grid grid-cols-7 gap-1 text-center">
               {CALENDAR_HEADER_DAYS.map((d) => (
-                <span key={d} className="text-[10px] font-black text-[#8c7e70] dark:text-[#a89b8d] py-1">
+                <span key={d} className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 py-1">
                   {d}
                 </span>
               ))}
@@ -612,7 +613,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                     className={`h-8 rounded-xl flex items-center justify-center text-xs font-black transition-all border ${
                       moodObj
                         ? `${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} shadow-2xs`
-                        : 'bg-black/[0.02] dark:bg-white/[0.02] border-transparent text-[#8c7e70] dark:text-[#a89b8d]'
+                        : 'bg-zinc-100 dark:bg-zinc-800/50 border-transparent text-zinc-500 dark:text-zinc-400'
                     }`}
                   >
                     {moodObj ? (
@@ -630,18 +631,18 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
           {/* Habit & Mood Correlation Card */}
           <div className="ios-glass-card p-4 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-black text-[#2d2823] dark:text-[#f4efe8]">
-              <Heart size={16} className="text-[#c45a46]" />
+            <div className="flex items-center gap-2 text-xs font-black text-zinc-950 dark:text-white">
+              <Heart size={16} className="text-[#FF2D55]" />
               <span>Habit & Mood Synergy</span>
             </div>
             {positiveDayAvgHabitRate !== null && normalDayAvgHabitRate !== null ? (
-              <p className="text-xs text-[#4a4036] dark:text-[#d4c8bc] leading-relaxed">
-                On <strong className="text-[#5f7a61]">Rad/Good</strong> mood days, your habit completion was{' '}
-                <strong className="text-[#5f7a61]">{positiveDayAvgHabitRate}%</strong>, compared to{' '}
-                <strong className="text-[#b86f52]">{normalDayAvgHabitRate}%</strong> on lower mood days.
+              <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                On <strong className="text-[#007AFF]">Rad/Good</strong> mood days, your habit completion was{' '}
+                <strong className="text-[#007AFF]">{positiveDayAvgHabitRate}%</strong>, compared to{' '}
+                <strong className="text-zinc-500">{normalDayAvgHabitRate}%</strong> on lower mood days.
               </p>
             ) : (
-              <p className="text-xs text-[#8c7e70] dark:text-[#a89b8d] leading-relaxed">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
                 Log both your habits and daily mood for a few days to discover personal productivity and mood correlations.
               </p>
             )}
@@ -657,31 +658,31 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Projects KPI Grid */}
           <div className="grid grid-cols-3 gap-3">
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Active Projects</span>
-              <strong className="text-2xl font-black text-[#5f7a61] dark:text-[#7d9d80] block">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Active Projects</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {activeProjects.length}
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 in progress
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Completed</span>
-              <strong className="text-2xl font-black text-[#c28f3a] block">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Completed</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {completedProjects.length}
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 milestones reached
               </span>
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">Total Check-ins</span>
-              <strong className="text-2xl font-black text-[#2d2823] dark:text-[#f4efe8] block">
+              <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400">Total Check-ins</span>
+              <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {totalProjectMonthChecks}
               </strong>
-              <span className="text-[10px] font-bold text-[#8c7e70] dark:text-[#a89b8d] block truncate">
+              <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 block truncate">
                 this month
               </span>
             </div>
@@ -690,16 +691,16 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Project by Project In-Depth Breakdown */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-black text-sm tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
+              <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
                 Projects Progress & Weekly Adherence
               </h3>
-              <span className="text-[11px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+              <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
                 {activeOrTrackedProjects.length} Projects Tracked
               </span>
             </div>
 
             {activeOrTrackedProjects.length === 0 ? (
-              <div className="py-8 text-center text-xs text-[#8c7e70] dark:text-[#a89b8d]">
+              <div className="py-8 text-center text-xs text-zinc-400 dark:text-zinc-500">
                 No active projects tracked for {MONTH_NAMES[monthIndex]} {year}.
               </div>
             ) : (
@@ -707,37 +708,37 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                 {activeOrTrackedProjects.map((p) => (
                   <div
                     key={p.id}
-                    className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.06] space-y-2.5"
+                    className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 space-y-2.5"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <BambooProjectDockIcon size={16} className="text-[#b86f52]" />
-                        <strong className="text-sm font-black text-[#2d2823] dark:text-[#f4efe8]">{p.name}</strong>
+                        <BambooProjectDockIcon size={16} className="text-[#FF9500]" />
+                        <strong className="text-sm font-black text-zinc-950 dark:text-white">{p.name}</strong>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
                           p.completed
-                            ? 'bg-[#5f7a61]/15 text-[#5f7a61] dark:bg-[#7d9d80]/20 dark:text-[#7d9d80]'
-                            : 'bg-[#f5efe6] dark:bg-[#282420] text-[#8c7e70] dark:text-[#a89b8d]'
+                            ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950'
+                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
                         }`}>
                           {p.completed ? 'Completed' : p.priority}
                         </span>
-                        <span className="text-xs font-black text-[#5f7a61] dark:text-[#7d9d80]">
+                        <span className="text-xs font-black text-[#007AFF]">
                           {p.goalAdherence}% Goal Met
                         </span>
                       </div>
                     </div>
 
-                    <div className="w-full bg-[#f5efe6] dark:bg-[#282420] h-2 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/[0.06]">
+                    <div className="w-full bg-zinc-200 dark:bg-zinc-700 h-2 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#b86f52] dark:bg-[#d68767] rounded-full transition-all duration-500"
+                        className="h-full bg-zinc-950 dark:bg-white rounded-full transition-all duration-500"
                         style={{ width: `${p.goalAdherence}%` }}
                       />
                     </div>
 
-                    <div className="flex items-center justify-between text-xs text-[#8c7e70] dark:text-[#a89b8d] pt-1">
+                    <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 pt-1">
                       <span>Goal: {p.goal} days/week</span>
-                      <span className="font-bold text-[#2d2823] dark:text-[#f4efe8]">
+                      <span className="font-bold text-zinc-950 dark:text-white">
                         {p.monthChecks} check-ins across {p.totalWeeks} weeks
                       </span>
                     </div>
