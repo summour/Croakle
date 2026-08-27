@@ -30,17 +30,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 18
+
+      - name: Clean cache
+        run: npm cache clean --force
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
         env:
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Build
-        run: npm run build
+      - name: Build with verbose output
+        run: npm run build 2>&1
         env:
           NODE_OPTIONS: --max-old-space-size=4096
+          DEBUG: vite:*
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
