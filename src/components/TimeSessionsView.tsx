@@ -8,14 +8,17 @@ import {
   Trash2,
   Edit3,
   X,
-  Sparkles,
-  Target,
-  Flame,
   ChevronLeft,
   ChevronRight,
   Calendar,
+  Clock,
+  CheckCircle2,
+  Sparkles,
+  Tag,
+  AlignLeft,
+  Search,
 } from 'lucide-react';
-import { PocketTimerDockIcon, LanternToolIcon, PixelLightbulbIcon, PixelCheckIcon } from './FrogIcons';
+import { PocketTimerDockIcon, LanternToolIcon } from './FrogIcons';
 import { InteractiveFocusTimeChart } from './charts/InteractiveFocusTimeChart';
 import {
   getTodayIso,
@@ -24,6 +27,8 @@ import {
   formatFriendlyDate,
   getWeekDates,
   parseIsoDate,
+  formatTimeWithSeconds,
+  formatDateTimeWithSeconds,
   DAY_SHORT_NAMES,
 } from '../utils/dateUtils';
 
@@ -64,12 +69,13 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingSession, setEditingSession] = useState<TimeSession | null>(null);
   const [deletingSessionId, setDeletingSessionId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Form state for manual add / edit
   const [formSubject, setFormSubject] = useState('');
   const [formDate, setFormDate] = useState(getTodayIso());
   const [formStartTime, setFormStartTime] = useState('09:00');
-  const [formDuration, setFormDuration] = useState(45);
+  const [formDuration, setFormDuration] = useState(25);
   const [formType, setFormType] = useState<'focus' | 'study' | 'break' | 'work'>('focus');
   const [formSourceType, setFormSourceType] = useState<'habit' | 'project' | ''>('');
   const [formSourceId, setFormSourceId] = useState('');
@@ -86,10 +92,14 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   };
 
   const handleOpenAdd = () => {
+    const now = new Date();
+    const currentH = String(now.getHours()).padStart(2, '0');
+    const currentM = String(now.getMinutes()).padStart(2, '0');
+
     setFormSubject('');
     setFormDate(selectedDate);
-    setFormStartTime('09:00');
-    setFormDuration(45);
+    setFormStartTime(`${currentH}:${currentM}`);
+    setFormDuration(25);
     setFormType('focus');
     setFormSourceType('');
     setFormSourceId('');
@@ -104,15 +114,28 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
     const [h, m] = formStartTime.split(':').map(Number);
     const startMin = (h || 0) * 60 + (m || 0);
 
+    const [y, mon, d] = formDate.split('-').map(Number);
+    const startDt = new Date(y, (mon || 1) - 1, d, h || 0, m || 0, 0);
+    const endDt = new Date(startDt.getTime() + (Number(formDuration) || 25) * 60000);
+
+    const startTimeStr = formatTimeWithSeconds(startDt);
+    const endTimeStr = formatTimeWithSeconds(endDt);
+    const startedAtFormatted = formatDateTimeWithSeconds(startDt);
+
     onAddSession({
       subject: formSubject.trim(),
       date: formDate,
       startMinute: startMin,
-      duration: Number(formDuration) || 30,
+      duration: Number(formDuration) || 25,
       type: formType,
       sourceType: formSourceType,
       sourceId: formSourceId,
       notes: formNotes.trim(),
+      startedAtTimestamp: startDt.getTime(),
+      startedAtFormatted,
+      startTimeStr,
+      startDateStr: formDate,
+      endTimeStr,
     });
 
     setIsAddOpen(false);
@@ -137,24 +160,38 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
     const [h, m] = formStartTime.split(':').map(Number);
     const startMin = (h || 0) * 60 + (m || 0);
 
+    const [y, mon, d] = formDate.split('-').map(Number);
+    const startDt = new Date(y, (mon || 1) - 1, d, h || 0, m || 0, 0);
+    const endDt = new Date(startDt.getTime() + (Number(formDuration) || 25) * 60000);
+
+    const startTimeStr = formatTimeWithSeconds(startDt);
+    const endTimeStr = formatTimeWithSeconds(endDt);
+    const startedAtFormatted = formatDateTimeWithSeconds(startDt);
+
     onUpdateSession(editingSession.id, {
       subject: formSubject.trim(),
       date: formDate,
       startMinute: startMin,
-      duration: Number(formDuration) || 30,
+      duration: Number(formDuration) || 25,
       type: formType,
       sourceType: formSourceType,
       sourceId: formSourceId,
       notes: formNotes.trim(),
+      startedAtTimestamp: startDt.getTime(),
+      startedAtFormatted,
+      startTimeStr,
+      startDateStr: formDate,
+      endTimeStr,
     });
 
     setEditingSession(null);
   };
 
-  // Filter sessions for selected date
+  // Filter sessions for selected date & search query
   const daySessions = sessions
     .filter((s) => s.date === selectedDate)
-    .sort((a, b) => a.startMinute - b.startMinute);
+    .filter((s) => !searchQuery.trim() || s.subject.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => (b.startedAtTimestamp || (b.startMinute * 60000)) - (a.startedAtTimestamp || (a.startMinute * 60000)));
 
   const totalMinutes = daySessions.reduce((acc, s) => acc + s.duration, 0);
 
@@ -189,56 +226,73 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
     setSelectedDate(todayIso);
   };
 
-  // Target duration calculation for progress ring if set
+  // Target duration calculation for progress bar
   const targetSecs = (activeTimer.targetDurationMinutes || 0) * 60;
   const progressPercent = targetSecs > 0 ? Math.min(100, Math.round((elapsedSeconds / targetSecs) * 100)) : 0;
 
   const timerPresets = [
-    { label: '15m Short', mins: 15 },
-    { label: '25m Pomodoro', mins: 25 },
-    { label: '45m Deep Work', mins: 45 },
-    { label: '60m Flow', mins: 60 },
+    { label: '15m', mins: 15 },
+    { label: '25m', mins: 25 },
+    { label: '45m', mins: 45 },
+    { label: '60m', mins: 60 },
     { label: 'Stopwatch', mins: 0 },
   ];
 
+  // Start Date & Time Display String for active timer
+  const initialStartTimestamp = activeTimer.initialStartedAt;
+  const formattedStartInfo = initialStartTimestamp
+    ? formatDateTimeWithSeconds(initialStartTimestamp)
+    : null;
+
+  const typeLabels = {
+    focus: 'Focus',
+    study: 'Study',
+    work: 'Work',
+    break: 'Break',
+  };
+
   return (
-    <div className="space-y-5 pb-28">
-      {/* Live Focus Timer Card - iOS 26 High Contrast Glass Styling */}
-      <div className="pt-1 pb-1">
-        <div className="relative overflow-hidden bg-white/90 dark:bg-zinc-900/90 text-zinc-950 dark:text-white rounded-[32px] p-5 sm:p-6 shadow-sm border border-zinc-200 dark:border-zinc-800 space-y-4 backdrop-blur-2xl transition-colors">
+    <div className="space-y-4 pb-28 max-w-lg mx-auto">
+      {/* 1. SIMPLE & MINIMALIST FOCUS TIMER CARD */}
+      <div className="pt-1">
+        <div className="relative overflow-hidden bg-white dark:bg-zinc-900/95 text-zinc-950 dark:text-white rounded-[28px] p-5 sm:p-6 shadow-sm border border-zinc-200/80 dark:border-zinc-800 space-y-4 transition-all">
           
-          {/* Header Row */}
-          <div className="relative z-10 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-black/[0.04] dark:border-white/[0.06] text-zinc-900 dark:text-white">
-                <PocketTimerDockIcon size={18} />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <h2 className="font-black text-xs uppercase tracking-wider text-zinc-900 dark:text-white">Continuous Focus Timer</h2>
-                {activeTimer.isRunning && (
-                  <span className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34C759] opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34C759]" />
-                  </span>
-                )}
-              </div>
+          {/* Top Bar: Subject Name & Type Selector */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <input
+                type="text"
+                placeholder="ชื่อกิจกรรม / What are you working on?"
+                value={activeTimer.subject}
+                onChange={(e) => onUpdateTimerConfig({ subject: e.target.value })}
+                className="w-full bg-transparent text-base sm:text-lg font-bold text-zinc-950 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none truncate"
+              />
             </div>
 
-            {/* Type Selector */}
-            <select
-              value={activeTimer.type}
-              onChange={(e) => onUpdateTimerConfig({ type: e.target.value as any })}
-              className="bg-zinc-100 dark:bg-zinc-800 text-xs font-black text-zinc-900 dark:text-zinc-100 px-3 py-1.5 rounded-full border border-black/[0.05] dark:border-white/10 focus:outline-none backdrop-blur-md transition hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer"
-            >
-              <option value="focus" className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">Focus</option>
-              <option value="study" className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">Study</option>
-              <option value="work" className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">Work</option>
-              <option value="break" className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white">Break</option>
-            </select>
+            {/* Type selector */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {(['focus', 'study', 'work', 'break'] as const).map((t) => {
+                const isActive = activeTimer.type === t;
+                return (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => onUpdateTimerConfig({ type: t })}
+                    className={`text-[11px] font-bold px-2.5 py-1 rounded-full transition-all capitalize ${
+                      isActive
+                        ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-xs'
+                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                    }`}
+                  >
+                    {typeLabels[t]}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Preset Buttons */}
-          <div className="relative z-10 flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {timerPresets.map((p) => {
               const isSelected = activeTimer.targetDurationMinutes === p.mins;
               return (
@@ -246,10 +300,10 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   key={p.label}
                   type="button"
                   onClick={() => onUpdateTimerConfig({ targetDurationMinutes: p.mins })}
-                  className={`text-[11px] font-black px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ios-tap ${
+                  className={`text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap transition-all ${
                     isSelected
-                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-sm scale-[1.02]'
-                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-black/[0.04] dark:border-white/[0.06] hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                      ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-bold'
+                      : 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
                   }`}
                 >
                   {p.label}
@@ -258,59 +312,72 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
             })}
           </div>
 
-          {/* Subject Input & Giant Timer Display */}
-          <div className="relative z-10 text-center py-2 space-y-2">
-            <div className="flex items-center justify-center gap-1.5 max-w-xs mx-auto">
-              <input
-                type="text"
-                placeholder="What are you focusing on?"
-                value={activeTimer.subject}
-                onChange={(e) => onUpdateTimerConfig({ subject: e.target.value })}
-                className="text-center bg-transparent text-sm font-bold text-zinc-950 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 border-b border-zinc-200 dark:border-zinc-800 pb-1 focus:outline-none focus:border-zinc-950 dark:focus:border-white w-full transition"
-              />
-            </div>
-
-            <div className="relative inline-block py-1">
-              <div className="text-5xl sm:text-6xl md:text-7xl font-black font-mono tracking-tighter text-zinc-950 dark:text-white tabular-nums">
-                {formatTimerDisplay(elapsedSeconds)}
-              </div>
-              {targetSecs > 0 && (
-                <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mt-1">
-                  Target: {activeTimer.targetDurationMinutes} mins ({progressPercent}%)
-                </p>
-              )}
+          {/* Main Clean Digits Display */}
+          <div className="text-center py-2 space-y-1">
+            <div className="text-6xl sm:text-7xl font-extrabold font-mono tracking-tight text-zinc-950 dark:text-white tabular-nums">
+              {formatTimerDisplay(elapsedSeconds)}
             </div>
 
             {/* Target Progress Bar */}
             {targetSecs > 0 && (
-              <div className="w-full max-w-xs mx-auto h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden border border-black/[0.04] dark:border-white/10">
-                <div
-                  className="h-full bg-zinc-950 dark:bg-white rounded-full transition-all duration-300 shadow-xs"
-                  style={{ width: `${progressPercent}%` }}
-                />
+              <div className="w-full max-w-xs mx-auto pt-2 space-y-1">
+                <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full transition-all duration-300"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+                <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
+                  เป้าหมาย: {activeTimer.targetDurationMinutes} นาที ({progressPercent}%)
+                </p>
               </div>
             )}
           </div>
 
+          {/* RECORDED START TIME & DATE BANNER */}
+          <div className="rounded-xl px-3.5 py-2 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200/60 dark:border-zinc-800/60 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 min-w-0">
+              <Clock size={14} className="text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <div className="truncate">
+                {formattedStartInfo ? (
+                  <span className="text-zinc-800 dark:text-zinc-200 font-medium">
+                    เริ่มเมื่อ: <strong className="font-bold text-zinc-950 dark:text-white">{formattedStartInfo}</strong>
+                  </span>
+                ) : (
+                  <span className="text-zinc-500 dark:text-zinc-400">
+                    {formatFriendlyDate(todayIso)} • พร้อมเริ่มจับเวลา
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {activeTimer.isRunning && (
+              <span className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                กำลังจับเวลา
+              </span>
+            )}
+          </div>
+
           {/* Controls Bar */}
-          <div className="relative z-10 flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-2.5 pt-1">
             {!activeTimer.isRunning ? (
               <button
                 type="button"
                 onClick={elapsedSeconds > 0 ? onResumeTimer : onStartTimer}
-                className="px-7 py-3 rounded-full bg-zinc-950 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-black text-sm flex items-center gap-2 shadow-md transition-all transform active:scale-95 ios-tap"
+                className="flex-1 max-w-[200px] py-3 rounded-full bg-zinc-950 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition active:scale-98"
               >
-                <Play size={17} className="fill-current ml-0.5" />
-                <span>{elapsedSeconds > 0 ? 'Resume Focus' : 'Start Focus'}</span>
+                <Play size={16} className="fill-current ml-0.5" />
+                <span>{elapsedSeconds > 0 ? 'จับเวลาต่อ' : 'เริ่มจับเวลา'}</span>
               </button>
             ) : (
               <button
                 type="button"
                 onClick={onPauseTimer}
-                className="px-7 py-3 rounded-full bg-[#FF9500] hover:bg-[#E08500] text-white font-black text-sm flex items-center gap-2 shadow-md transition-all transform active:scale-95 ios-tap"
+                className="flex-1 max-w-[200px] py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xs transition active:scale-98"
               >
-                <Pause size={17} className="fill-current" />
-                <span>Pause</span>
+                <Pause size={16} className="fill-current" />
+                <span>พักชั่วคราว</span>
               </button>
             )}
 
@@ -319,73 +386,64 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                 <button
                   type="button"
                   onClick={onFinishTimer}
-                  className="px-5 py-3 rounded-full bg-[#34C759] hover:bg-[#2EB04E] text-white font-black text-xs sm:text-sm flex items-center gap-1.5 transition shadow-md ios-tap"
-                  title="Finish and log session"
+                  className="px-5 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm flex items-center gap-1.5 transition shadow-xs active:scale-98"
+                  title="บันทึกข้อมูลเวลาและวันที่"
                 >
-                  <PixelCheckIcon size={16} /> <span>Save</span>
+                  <CheckCircle2 size={16} /> <span>บันทึก</span>
                 </button>
                 <button
                   type="button"
                   onClick={onResetTimer}
-                  className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition ios-tap"
-                  title="Reset Timer"
+                  className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition"
+                  title="รีเซ็ตตัวจับเวลา"
                 >
                   <RotateCcw size={16} />
                 </button>
               </>
             )}
           </div>
-
-          <div className="relative z-10 text-center flex items-center justify-center gap-1.5">
-            <PixelLightbulbIcon size={14} className="text-[#FF9500]" />
-            <p className="text-[11px] text-zinc-400 dark:text-zinc-500 font-medium">
-              Continuous background timer tracks accurately even when switching to other pages
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* Date Selector & Day Summary Card */}
-      <div className="ios-glass-card p-5 space-y-4">
-        {/* Header with Title and Add Button */}
+      {/* 2. DATE SELECTOR & SESSION LOGS */}
+      <div className="bg-white dark:bg-zinc-900/95 text-zinc-950 dark:text-white rounded-[28px] p-5 shadow-sm border border-zinc-200/80 dark:border-zinc-800 space-y-4">
+        
+        {/* Header & Add Button */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-black/[0.04] dark:border-white/[0.06] flex items-center justify-center shadow-2xs">
-              <PocketTimerDockIcon size={18} className="text-[#007AFF]" />
-            </div>
-            <div>
-              <p className="text-[10.5px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                Time Log
-              </p>
-              <h3 className="text-lg font-black tracking-tight text-zinc-950 dark:text-white">Sessions Log</h3>
-            </div>
+          <div>
+            <h3 className="text-base font-extrabold text-zinc-950 dark:text-white">
+              ประวัติการจับเวลา (History Log)
+            </h3>
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              บันทึกเวลาและวันที่เริ่มต้นของแต่ละเซสชัน
+            </p>
           </div>
+
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-[14px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 text-xs font-black transition shadow-xs ios-tap"
-            title="Add Session Manually"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 text-xs font-bold transition"
           >
-            <Plus size={16} />
-            <span>Add Session</span>
+            <Plus size={14} />
+            <span>เพิ่มเอง</span>
           </button>
         </div>
 
-        {/* Day Stepper & Quick Date Navigation */}
-        <div className="flex items-center justify-between gap-2 p-2 rounded-[20px] bg-zinc-100/70 dark:bg-zinc-800/70 border border-black/[0.04] dark:border-white/[0.06]">
+        {/* Day Navigation Bar */}
+        <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200/60 dark:border-zinc-800">
           <button
             type="button"
             onClick={handlePrevDay}
-            className="p-2 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition ios-tap shrink-0"
+            className="p-1.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition shrink-0"
             title="Previous Day"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
 
           <div className="flex items-center gap-2 min-w-0 justify-center flex-1">
-            <label className="relative flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition text-center min-w-0">
-              <Calendar size={15} className="text-[#007AFF] shrink-0" />
-              <span className="text-xs sm:text-sm font-black text-zinc-950 dark:text-white truncate">
+            <label className="relative flex items-center gap-1.5 cursor-pointer px-2 py-1 rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 transition text-center min-w-0">
+              <Calendar size={14} className="text-zinc-600 dark:text-zinc-300 shrink-0" />
+              <span className="text-xs sm:text-sm font-bold text-zinc-950 dark:text-white truncate">
                 {formatFriendlyDate(selectedDate)}
               </span>
               <input
@@ -400,10 +458,9 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               <button
                 type="button"
                 onClick={handleJumpToday}
-                className="px-2.5 py-1 rounded-lg bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-[11px] font-black hover:bg-zinc-300 transition shrink-0 ios-tap"
-                title="Jump to Today"
+                className="px-2 py-0.5 rounded-md bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-[11px] font-bold hover:bg-zinc-300 transition shrink-0"
               >
-                Today
+                วันนี้
               </button>
             )}
           </div>
@@ -411,179 +468,129 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
           <button
             type="button"
             onClick={handleNextDay}
-            className="p-2 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition ios-tap shrink-0"
+            className="p-1.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition shrink-0"
             title="Next Day"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
         </div>
 
-        {/* 7-Day Interactive Week Strip */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between px-1">
-            <span className="text-[10.5px] font-bold text-zinc-400 dark:text-zinc-500">
-              Week View
-            </span>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={handlePrevWeek}
-                className="text-[10px] font-bold px-2 py-0.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 transition"
-              >
-                ◀ Prev Week
-              </button>
-              <button
-                type="button"
-                onClick={handleNextWeek}
-                className="text-[10px] font-bold px-2 py-0.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 transition"
-              >
-                Next Week ▶
-              </button>
-            </div>
-          </div>
+        {/* 7-Day Compact Week Bar */}
+        <div className="grid grid-cols-7 gap-1 p-1 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200/50 dark:border-zinc-800/50">
+          {weekDays.map((wd) => {
+            const isSelected = wd.iso === selectedDate;
+            const isToday = wd.iso === todayIso;
+            const stats = getDaySessionStats(wd.iso);
+            const dayLabel = DAY_SHORT_NAMES[wd.dayIndex];
+            const dayNum = wd.date.getDate();
 
-          <div className="grid grid-cols-7 gap-1 sm:gap-1.5 p-1.5 rounded-[22px] bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800">
-            {weekDays.map((wd) => {
-              const isSelected = wd.iso === selectedDate;
-              const isToday = wd.iso === todayIso;
-              const stats = getDaySessionStats(wd.iso);
-              const dayLabel = DAY_SHORT_NAMES[wd.dayIndex];
-              const dayNum = wd.date.getDate();
-
-              return (
-                <button
-                  key={wd.iso}
-                  type="button"
-                  onClick={() => setSelectedDate(wd.iso)}
-                  className={`py-2 px-1 rounded-[16px] flex flex-col items-center justify-center transition-all duration-200 ios-tap relative select-none ${
-                    isSelected
-                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-sm font-black scale-[1.02]'
-                      : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
-                  }`}
-                >
-                  {isToday && !isSelected && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-950 dark:bg-white absolute top-1.5" />
-                  )}
+            return (
+              <button
+                key={wd.iso}
+                type="button"
+                onClick={() => setSelectedDate(wd.iso)}
+                className={`py-1.5 px-0.5 rounded-xl flex flex-col items-center justify-center transition-all relative select-none ${
+                  isSelected
+                    ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-bold shadow-xs'
+                    : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
+                }`}
+              >
+                {isToday && !isSelected && (
+                  <span className="w-1 h-1 rounded-full bg-zinc-950 dark:bg-white absolute top-1" />
+                )}
+                <span className={`text-[10px] ${isSelected ? 'opacity-80' : 'text-zinc-400'}`}>
+                  {dayLabel}
+                </span>
+                <span className="text-xs font-bold leading-tight">
+                  {dayNum}
+                </span>
+                {stats.count > 0 && (
                   <span
-                    className={`text-[10px] uppercase font-bold tracking-tight ${
-                      isSelected ? 'text-white/80 dark:text-zinc-950/80 font-black' : 'text-zinc-400 dark:text-zinc-500'
+                    className={`text-[9px] mt-0.5 px-1 rounded-full ${
+                      isSelected
+                        ? 'bg-white/20 dark:bg-black/20 text-white dark:text-zinc-950'
+                        : 'text-zinc-500 dark:text-zinc-400'
                     }`}
                   >
-                    {dayLabel}
+                    {stats.totalMins}m
                   </span>
-                  <span
-                    className={`text-sm sm:text-base mt-0.5 leading-none ${
-                      isSelected ? 'text-white dark:text-zinc-950 font-black' : 'font-extrabold text-zinc-900 dark:text-zinc-100'
-                    }`}
-                  >
-                    {dayNum}
-                  </span>
-
-                  {/* Activity Indicator: Session count / dots */}
-                  <div className="h-3 flex items-center justify-center mt-0.5">
-                    {stats.count > 0 ? (
-                      <span
-                        className={`text-[9px] font-black px-1 rounded-full leading-tight ${
-                          isSelected
-                            ? 'bg-white/30 dark:bg-zinc-950/30 text-white dark:text-zinc-950'
-                            : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200'
-                        }`}
-                      >
-                        {stats.totalMins}m
-                      </span>
-                    ) : (
-                      <span className="w-1 h-1 rounded-full opacity-0" />
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Total Time Badge */}
-        <div className="p-3.5 rounded-[20px] bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between shadow-2xs">
-          <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400">
-            Total Focus Time:
+        {/* Total Time Summary */}
+        <div className="px-3.5 py-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-800 flex items-center justify-between text-xs">
+          <span className="text-zinc-500 dark:text-zinc-400 font-medium">
+            รวมเวลาโฟกัส ({daySessions.length} เซสชัน):
           </span>
-          <strong className="text-sm font-black text-zinc-950 dark:text-white">
-            {Math.floor(totalMinutes / 60)}h {totalMinutes % 60}m ({daySessions.length} {daySessions.length === 1 ? 'session' : 'sessions'})
+          <strong className="text-zinc-950 dark:text-white font-bold">
+            {Math.floor(totalMinutes / 60)} ชม. {totalMinutes % 60} นาที ({totalMinutes}m)
           </strong>
         </div>
 
-        {/* Interactive Focus Session & Category Analytics Chart */}
-        {sessions.length > 0 && (
-          <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <PocketTimerDockIcon size={16} className="text-[#FF9500]" />
-                <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
-                  Focus Activity & Categories
-                </h3>
-              </div>
-              <span className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500">
-                Tap bar to inspect
-              </span>
-            </div>
-            <InteractiveFocusTimeChart
-              sessions={sessions}
-              selectedDate={selectedDate}
-              onSelectDate={(iso) => setSelectedDate(iso)}
-            />
-          </div>
-        )}
-
         {/* Sessions List */}
-        <div className="space-y-3">
+        <div className="space-y-2.5 pt-1">
           {daySessions.length === 0 ? (
-            <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-3">
-              <div className="w-16 h-16 mx-auto rounded-[24px] bg-zinc-100 dark:bg-zinc-800 border border-black/[0.04] dark:border-white/[0.06] flex items-center justify-center p-2 shadow-2xs">
-                <LanternToolIcon size={34} />
-              </div>
-              <div>
-                <p className="font-bold text-sm text-zinc-950 dark:text-white">
-                  {isSelectedToday ? 'No sessions recorded today' : `No sessions recorded for ${formatFriendlyDate(selectedDate)}`}
-                </p>
-                <p className="text-xs mt-0.5">Start the focus timer above or manually log a session.</p>
-              </div>
+            <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-2">
+              <LanternToolIcon size={28} className="mx-auto opacity-50" />
+              <p className="text-xs font-medium">
+                {isSelectedToday ? 'ยังไม่มีข้อมูลการจับเวลาสำหรับวันนี้' : `ยังไม่มีข้อมูลสำหรับ ${formatFriendlyDate(selectedDate)}`}
+              </p>
+              <p className="text-[11px] opacity-75">
+                กดเริ่มจับเวลาด้านบนเพื่อบันทึกวันและเวลาแบบอัตโนมัติ
+              </p>
             </div>
           ) : (
             daySessions.map((session) => {
-              const endMin = session.startMinute + session.duration;
+              const startFormatted = session.startedAtFormatted || (
+                session.startTimeStr
+                  ? `${session.date} เวลา ${session.startTimeStr}`
+                  : `${session.date} เวลา ${formatTimeMinutes(session.startMinute)}`
+              );
+
               return (
                 <div
                   key={session.id}
-                  className="p-4 rounded-[22px] border border-zinc-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/70 flex items-center justify-between gap-3 shadow-xs"
+                  className="p-3.5 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-start justify-between gap-3 shadow-2xs hover:border-zinc-300 dark:hover:border-zinc-700 transition"
                 >
-                  <div className="min-w-0 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-black text-sm text-zinc-950 dark:text-white truncate">
+                  <div className="min-w-0 space-y-1 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-sm text-zinc-950 dark:text-white truncate">
                         {session.subject}
                       </span>
-                      <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700">
-                        {session.type}
+                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                        {typeLabels[session.type] || session.type}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 text-xs text-zinc-400 dark:text-zinc-500 font-medium">
+
+                    {/* Prominent Start Date & Time Record Badge */}
+                    <div className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 font-medium">
+                      <Clock size={13} className="text-zinc-400 shrink-0" />
                       <span>
-                        {formatTimeMinutes(session.startMinute)} – {formatTimeMinutes(endMin)}
+                        เริ่ม: <strong className="text-zinc-900 dark:text-white">{startFormatted}</strong>
                       </span>
-                      <span>•</span>
-                      <span>{session.duration} mins</span>
+                      {session.endTimeStr && (
+                        <span className="text-zinc-400">➔ {session.endTimeStr}</span>
+                      )}
                     </div>
-                    {session.notes && (
-                      <p className="text-xs text-zinc-500 dark:text-zinc-400">{session.notes}</p>
-                    )}
+
+                    <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500">
+                      <span>ระยะเวลา: <strong className="text-zinc-700 dark:text-zinc-300 font-semibold">{session.duration} นาที</strong></span>
+                      {session.notes && <span>• {session.notes}</span>}
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0">
+                  {/* Actions */}
+                  <div className="flex items-center gap-1 shrink-0 pt-0.5">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(session)}
-                      className="p-2 rounded-full text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition ios-tap"
-                      title="Edit"
+                      className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+                      title="แก้ไข"
                     >
-                      <Edit3 size={15} />
+                      <Edit3 size={14} />
                     </button>
                     {deletingSessionId === session.id ? (
                       <div className="flex items-center gap-1">
@@ -593,26 +600,26 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                             onDeleteSession(session.id);
                             setDeletingSessionId(null);
                           }}
-                          className="px-2 py-0.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[11px] font-black"
+                          className="px-2 py-0.5 rounded-md bg-red-600 hover:bg-red-700 text-white text-[11px] font-bold"
                         >
-                          Delete
+                          ลบ
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeletingSessionId(null)}
-                          className="px-1.5 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-[11px] font-bold"
+                          className="px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-[11px]"
                         >
-                          Cancel
+                          ยกเลิก
                         </button>
                       </div>
                     ) : (
                       <button
                         type="button"
                         onClick={() => setDeletingSessionId(session.id)}
-                        className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500"
-                        title="Delete"
+                        className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+                        title="ลบ"
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={14} />
                       </button>
                     )}
                   </div>
@@ -623,13 +630,13 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
         </div>
       </div>
 
-      {/* Add / Edit Session Modal */}
+      {/* 3. ADD / EDIT SESSION MODAL */}
       {(isAddOpen || editingSession) && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">
-                {editingSession ? 'Edit Session' : 'Add Time Session'}
+              <h2 className="text-base sm:text-lg font-bold text-zinc-950 dark:text-white">
+                {editingSession ? 'แก้ไขข้อมูลเซสชัน' : 'บันทึกเซสชันเวลา'}
               </h2>
               <button
                 type="button"
@@ -637,42 +644,77 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   setIsAddOpen(false);
                   setEditingSession(null);
                 }}
-                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-950 dark:hover:text-white"
+                className="w-7 h-7 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-950 dark:hover:text-white"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
-            <form onSubmit={editingSession ? handleEditSubmit : handleAddSubmit} className="space-y-4">
+            <form onSubmit={editingSession ? handleEditSubmit : handleAddSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Subject / Activity</label>
+                <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                  ชื่อกิจกรรม (Subject)
+                </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Reading Chapter 3"
+                  placeholder="เช่น อ่านหนังสือ, ทบทวนบทเรียน"
                   value={formSubject}
                   onChange={(e) => setFormSubject(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-sm text-zinc-950 dark:text-white focus:outline-none focus:border-zinc-950 dark:focus:border-white"
+                  className="w-full px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-sm text-zinc-950 dark:text-white focus:outline-none focus:border-zinc-950 dark:focus:border-white"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Date</label>
+                  <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                    วันที่เริ่ม
+                  </label>
                   <input
                     type="date"
                     required
                     value={formDate}
                     onChange={(e) => setFormDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Category</label>
+                  <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                    เวลาที่เริ่ม (Start Time)
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    value={formStartTime}
+                    onChange={(e) => setFormStartTime(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                    ระยะเวลา (นาที)
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="720"
+                    required
+                    value={formDuration}
+                    onChange={(e) => setFormDuration(Number(e.target.value))}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                    ประเภท
+                  </label>
                   <select
                     value={formType}
                     onChange={(e) => setFormType(e.target.value as any)}
-                    className="w-full px-3 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white capitalize"
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white capitalize"
                   >
                     <option value="focus">Focus</option>
                     <option value="study">Study</option>
@@ -682,52 +724,29 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Start Time</label>
-                  <input
-                    type="time"
-                    required
-                    value={formStartTime}
-                    onChange={(e) => setFormStartTime(e.target.value)}
-                    className="w-full px-3 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
-                    Duration (mins)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="720"
-                    required
-                    value={formDuration}
-                    onChange={(e) => setFormDuration(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
-                  />
-                </div>
-              </div>
-
               {/* Link to habit or project */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Linked Item</label>
+                  <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                    เชื่อมโยงกับ
+                  </label>
                   <select
                     value={formSourceType}
                     onChange={(e) => {
                       setFormSourceType(e.target.value as any);
                       setFormSourceId('');
                     }}
-                    className="w-full px-3 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white capitalize"
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
                   >
-                    <option value="">None (Custom)</option>
-                    <option value="habit">Habit</option>
-                    <option value="project">Project</option>
+                    <option value="">ไม่มี (กำหนดเอง)</option>
+                    <option value="habit">นิสัย (Habit)</option>
+                    <option value="project">โปรเจกต์ (Project)</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Select Item</label>
+                  <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                    เลือกรายการ
+                  </label>
                   <select
                     disabled={!formSourceType}
                     value={formSourceId}
@@ -741,9 +760,9 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                         if (p && !formSubject) setFormSubject(p.name);
                       }
                     }}
-                    className="w-full px-3 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white disabled:opacity-40"
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white disabled:opacity-40"
                   >
-                    <option value="">Choose item...</option>
+                    <option value="">เลือกรายการ...</option>
                     {formSourceType === 'habit' &&
                       habits.map((h) => (
                         <option key={h.id} value={h.id}>
@@ -761,21 +780,23 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Session Notes</label>
+                <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                  บันทึกเพิ่มเติม (Notes)
+                </label>
                 <textarea
                   rows={2}
-                  placeholder="Summary of what was achieved..."
+                  placeholder="รายละเอียดสิ่งที่ทำสำเร็จ..."
                   value={formNotes}
                   onChange={(e) => setFormNotes(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-sm text-zinc-950 dark:text-white focus:outline-none focus:border-zinc-950 dark:focus:border-white resize-none"
+                  className="w-full px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white focus:outline-none focus:border-zinc-950 dark:focus:border-white resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-black text-sm shadow-xs transition"
+                className="w-full py-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-sm shadow-xs transition"
               >
-                {editingSession ? 'Save Changes' : 'Save Session'}
+                {editingSession ? 'บันทึกการแก้ไข' : 'บันทึกเซสชัน'}
               </button>
             </form>
           </div>

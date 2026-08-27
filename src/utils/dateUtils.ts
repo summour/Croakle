@@ -111,6 +111,36 @@ export function formatTimeMinutes(minutes: number): string {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
+export function formatTimeWithSeconds(dateOrTimestamp: Date | number): string {
+  const d = typeof dateOrTimestamp === 'number' ? new Date(dateOrTimestamp) : dateOrTimestamp;
+  const h = String(d.getHours()).padStart(2, '0');
+  const m = String(d.getMinutes()).padStart(2, '0');
+  const s = String(d.getSeconds()).padStart(2, '0');
+  return `${h}:${m}:${s}`;
+}
+
+export function formatDateTimeWithSeconds(dateOrTimestamp: Date | number): string {
+  const d = typeof dateOrTimestamp === 'number' ? new Date(dateOrTimestamp) : dateOrTimestamp;
+  const day = d.getDate();
+  const month = MONTH_NAMES[d.getMonth()]?.slice(0, 3) || '';
+  const year = d.getFullYear();
+  const timeStr = formatTimeWithSeconds(d);
+  return `${day} ${month} ${year}, ${timeStr}`;
+}
+
+export function formatThaiDateTime(dateOrTimestamp: Date | number): string {
+  const d = typeof dateOrTimestamp === 'number' ? new Date(dateOrTimestamp) : dateOrTimestamp;
+  const thaiMonths = [
+    'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
+    'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
+  ];
+  const day = d.getDate();
+  const month = thaiMonths[d.getMonth()] || '';
+  const year = d.getFullYear() + 543;
+  const timeStr = formatTimeWithSeconds(d);
+  return `${day} ${month} ${year} เวลา ${timeStr} น.`;
+}
+
 export interface MonthWeekDay {
   date: Date;
   iso: string;

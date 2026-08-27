@@ -43,7 +43,13 @@ import {
   loadShopState,
   saveShopState,
 } from './utils/storage';
-import { getTodayIso, getDaysInMonth } from './utils/dateUtils';
+import {
+  getTodayIso,
+  getDaysInMonth,
+  formatIsoDate,
+  formatTimeWithSeconds,
+  formatDateTimeWithSeconds,
+} from './utils/dateUtils';
 import { BottomDock } from './components/BottomDock';
 import { HomeDashboard } from './components/HomeDashboard';
 import { HabitsView } from './components/HabitsView';
@@ -640,10 +646,12 @@ export function App() {
   const handleStartTimer = () => {
     if (settings.soundEnabled) soundEngine.playTapSound();
     if (settings.hapticEnabled) triggerHaptic();
+    const now = Date.now();
     setActiveTimer((prev) => ({
       ...prev,
       isRunning: true,
-      startedAt: Date.now(),
+      startedAt: now,
+      initialStartedAt: prev.initialStartedAt || now,
       accumulatedSeconds: 0,
     }));
   };
@@ -666,10 +674,12 @@ export function App() {
   const handleResumeTimer = () => {
     if (settings.soundEnabled) soundEngine.playTapSound();
     if (settings.hapticEnabled) triggerHaptic();
+    const now = Date.now();
     setActiveTimer((prev) => ({
       ...prev,
       isRunning: true,
-      startedAt: Date.now(),
+      startedAt: now,
+      initialStartedAt: prev.initialStartedAt || now,
     }));
   };
 
@@ -679,6 +689,7 @@ export function App() {
       ...prev,
       isRunning: false,
       startedAt: null,
+      initialStartedAt: null,
       accumulatedSeconds: 0,
     }));
   };
@@ -690,25 +701,38 @@ export function App() {
         : 0
     );
 
-    if (totalSecs < 10) {
-      alert('Focus session was less than 10 seconds. Not recorded.');
+    if (totalSecs < 5) {
+      alert('Focus session was less than 5 seconds. Not recorded.');
       handleResetTimer();
       return;
     }
 
     const durationMinutes = Math.max(1, Math.round(totalSecs / 60));
-    const now = new Date();
-    const startMinutes = now.getHours() * 60 + now.getMinutes() - durationMinutes;
+    const finishTimestamp = Date.now();
+    const startTimestamp = activeTimer.initialStartedAt || (finishTimestamp - totalSecs * 1000);
+    const startDateObj = new Date(startTimestamp);
+    const finishDateObj = new Date(finishTimestamp);
+
+    const startMinutes = startDateObj.getHours() * 60 + startDateObj.getMinutes();
+    const startIso = formatIsoDate(startDateObj);
+    const startTimeStr = formatTimeWithSeconds(startDateObj);
+    const endTimeStr = formatTimeWithSeconds(finishDateObj);
+    const startedAtFormatted = formatDateTimeWithSeconds(startDateObj);
 
     handleAddSession({
       subject: activeTimer.subject.trim() || 'Focus Session',
-      date: getTodayIso(),
+      date: startIso,
       startMinute: Math.max(0, startMinutes),
       duration: durationMinutes,
       type: activeTimer.type,
       sourceType: activeTimer.sourceType,
       sourceId: activeTimer.sourceId,
-      notes: `Recorded with Continuous Timer (${durationMinutes}m)`,
+      notes: `Started at ${startTimeStr} (${durationMinutes}m)`,
+      startedAtTimestamp: startTimestamp,
+      startedAtFormatted,
+      startTimeStr,
+      startDateStr: startIso,
+      endTimeStr,
     });
 
     earnCoins(20, `Focus Session Completed (${durationMinutes}m) ⏱️`);

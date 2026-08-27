@@ -221,13 +221,18 @@ export function loadSessionsState(): TimeSession[] {
       subject: s.subject || s.title || 'Session',
       date: s.date || formatIsoDate(new Date()),
       startMinute: Number(s.startMinute) || 540, // 9:00 AM
-      duration: Math.max(5, Number(s.duration) || 30),
+      duration: Math.max(1, Number(s.duration) || 30),
       type: s.type || 'focus',
       color: s.color || '#3b82f6',
       sourceType: s.sourceType || '',
       sourceId: s.sourceId || '',
       sourceName: s.sourceName || '',
       notes: s.notes || '',
+      startedAtTimestamp: typeof s.startedAtTimestamp === 'number' ? s.startedAtTimestamp : undefined,
+      startedAtFormatted: s.startedAtFormatted || undefined,
+      startTimeStr: s.startTimeStr || undefined,
+      startDateStr: s.startDateStr || undefined,
+      endTimeStr: s.endTimeStr || undefined,
     }));
   } catch {
     return [];
@@ -270,6 +275,7 @@ export function loadActiveTimerState(): ActiveTimerState {
       subject: parsed.subject || 'Deep Work',
       type: parsed.type || 'focus',
       startedAt: typeof parsed.startedAt === 'number' ? parsed.startedAt : null,
+      initialStartedAt: typeof parsed.initialStartedAt === 'number' ? parsed.initialStartedAt : null,
       accumulatedSeconds: Number(parsed.accumulatedSeconds) || 0,
       targetDurationMinutes: Number(parsed.targetDurationMinutes) || 25,
       sourceType: parsed.sourceType || '',

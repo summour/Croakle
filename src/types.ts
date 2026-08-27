@@ -65,6 +65,11 @@ export interface TimeSession {
   sourceId?: string;
   sourceName?: string;
   notes?: string;
+  startedAtTimestamp?: number; // exact epoch timestamp when timer was first started (e.g. 1787834567000)
+  startedAtFormatted?: string; // formatted start date & time (e.g. "27 Aug 2026, 19:16:33")
+  startTimeStr?: string; // exact start time string (e.g. "19:16:33")
+  startDateStr?: string; // start date ISO string (e.g. "2026-08-27")
+  endTimeStr?: string; // exact completion time string (e.g. "19:41:33")
 }
 
 export interface ActiveTimerState {
@@ -72,6 +77,7 @@ export interface ActiveTimerState {
   subject: string;
   type: 'focus' | 'study' | 'break' | 'work';
   startedAt: number | null; // Date.now() timestamp when resumed/started
+  initialStartedAt?: number | null; // Date.now() timestamp when session was first started
   accumulatedSeconds: number; // seconds elapsed prior to current run
   targetDurationMinutes?: number; // optional target duration e.g. 25
   sourceType?: 'habit' | 'project' | '';
@@ -83,6 +89,7 @@ export const DEFAULT_ACTIVE_TIMER: ActiveTimerState = {
   subject: 'Deep Work',
   type: 'focus',
   startedAt: null,
+  initialStartedAt: null,
   accumulatedSeconds: 0,
   targetDurationMinutes: 25,
   sourceType: '',
