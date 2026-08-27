@@ -10,7 +10,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
 // PIXEL ART CROAKLE MOOD ICONS (Based on 16-Frog Pixel Sheet)
 // -------------------------------------------------------------
 
-/** 5 - Rad / Sparkle Eyes (Yellow Theme): Pixel Frog with sparkling star eyes & open laughing mouth */
+/** 5 - Rad / Sparkle Eyes (Yellow / Neon Theme): Pixel Frog with electric yellow skin, sparkling star eyes & open laughing mouth */
 export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -26,13 +26,13 @@ export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="1" y="1" width="1" height="2" fill="#0D226B" />
     <rect x="0" y="2" width="3" height="1" fill="#0D226B" />
     <rect x="1" y="2" width="1" height="1" fill="#FDE047" />
-    <rect x="2" y="0" width="1" height="1" fill="#84E42B" />
+    <rect x="2" y="0" width="1" height="1" fill="#FEF08A" />
 
     {/* Floating Sparkles Top Right */}
     <rect x="18" y="1" width="1" height="2" fill="#0D226B" />
     <rect x="17" y="2" width="3" height="1" fill="#0D226B" />
     <rect x="18" y="2" width="1" height="1" fill="#FDE047" />
-    <rect x="17" y="0" width="1" height="1" fill="#84E42B" />
+    <rect x="17" y="0" width="1" height="1" fill="#FEF08A" />
 
     {/* Dark Navy Outline */}
     <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
@@ -48,34 +48,34 @@ export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Frog Green Main Body Fill */}
-    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
-    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
+    {/* Electric Neon Yellow Main Body Fill (เหลือง) */}
+    <rect x="4" y="3" width="4" height="2" fill="#FDE047" />
+    <rect x="12" y="3" width="4" height="2" fill="#FDE047" />
+    <rect x="3" y="5" width="14" height="7" fill="#FDE047" />
+    <rect x="4" y="12" width="12" height="1" fill="#FDE047" />
 
-    {/* Bottom-Right Shadow Emerald */}
-    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
-    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
-    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
+    {/* Bottom-Right Warm Amber Shadow */}
+    <rect x="13" y="8" width="4" height="4" fill="#EAB308" />
+    <rect x="11" y="10" width="2" height="2" fill="#EAB308" />
+    <rect x="13" y="12" width="3" height="1" fill="#CA8A04" />
 
-    {/* Pink Blush Cheeks */}
-    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
-    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
+    {/* Coral / Rose Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FB7185" />
+    <rect x="15" y="7" width="2" height="1" fill="#FB7185" />
 
     {/* Left Eye Sparkle Star */}
-    <rect x="5" y="2" width="1" height="3" fill="#FDE047" />
-    <rect x="4" y="3" width="3" height="1" fill="#FDE047" />
-    <rect x="5" y="3" width="1" height="1" fill="#FFFFFF" />
+    <rect x="5" y="2" width="1" height="3" fill="#FFFFFF" />
+    <rect x="4" y="3" width="3" height="1" fill="#FFFFFF" />
+    <rect x="5" y="3" width="1" height="1" fill="#FEF08A" />
     <rect x="4" y="2" width="1" height="1" fill="#0D226B" />
     <rect x="6" y="2" width="1" height="1" fill="#0D226B" />
     <rect x="4" y="4" width="1" height="1" fill="#0D226B" />
     <rect x="6" y="4" width="1" height="1" fill="#0D226B" />
 
     {/* Right Eye Sparkle Star */}
-    <rect x="13" y="2" width="1" height="3" fill="#FDE047" />
-    <rect x="12" y="3" width="3" height="1" fill="#FDE047" />
-    <rect x="13" y="3" width="1" height="1" fill="#FFFFFF" />
+    <rect x="13" y="2" width="1" height="3" fill="#FFFFFF" />
+    <rect x="12" y="3" width="3" height="1" fill="#FFFFFF" />
+    <rect x="13" y="3" width="1" height="1" fill="#FEF08A" />
     <rect x="12" y="2" width="1" height="1" fill="#0D226B" />
     <rect x="14" y="2" width="1" height="1" fill="#0D226B" />
     <rect x="12" y="4" width="1" height="1" fill="#0D226B" />
@@ -89,7 +89,7 @@ export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ..
   </svg>
 );
 
-/** 4 - Good / Happy (Sakura Theme): Pixel Frog with joyful open smile & bright round eyes */
+/** 4 - Good / Happy (Pink / Neon Theme): Pixel Frog with sweet sakura neon pink skin, joyful open smile & bright round eyes */
 export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -115,20 +115,20 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Frog Green Main Body Fill */}
-    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
-    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
+    {/* Vibrant Sakura Neon Pink Main Body Fill (ชมพู) */}
+    <rect x="4" y="3" width="4" height="2" fill="#F472B6" />
+    <rect x="12" y="3" width="4" height="2" fill="#F472B6" />
+    <rect x="3" y="5" width="14" height="7" fill="#F472B6" />
+    <rect x="4" y="12" width="12" height="1" fill="#F472B6" />
 
-    {/* Bottom-Right Shadow Emerald */}
-    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
-    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
-    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
+    {/* Bottom-Right Raspberry Magenta Shadow */}
+    <rect x="13" y="8" width="4" height="4" fill="#DB2777" />
+    <rect x="11" y="10" width="2" height="2" fill="#DB2777" />
+    <rect x="13" y="12" width="3" height="1" fill="#BE185D" />
 
-    {/* Pink Blush Cheeks */}
-    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
-    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
+    {/* Soft Rosy Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#FDA4AF" />
+    <rect x="15" y="7" width="2" height="1" fill="#FDA4AF" />
 
     {/* Left Eye */}
     <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
@@ -148,7 +148,7 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
   </svg>
 );
 
-/** 3 - Meh / Chill (Green Theme): Pixel Frog with skeptical side-glance & tiny neutral mouth */
+/** 3 - Meh / Chill (Green / Neon Theme): Pixel Frog with lime neon green skin, skeptical side-glance & tiny neutral mouth */
 export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -174,16 +174,16 @@ export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Frog Green Main Body Fill */}
+    {/* Vibrant Fresh Lime / Neon Green Main Body Fill (เขียว) */}
     <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
     <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
     <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
     <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
 
-    {/* Bottom-Right Shadow Emerald */}
-    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
-    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
-    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
+    {/* Bottom-Right Forest Emerald Shadow */}
+    <rect x="13" y="8" width="4" height="4" fill="#16A34A" />
+    <rect x="11" y="10" width="2" height="2" fill="#16A34A" />
+    <rect x="13" y="12" width="3" height="1" fill="#15803D" />
 
     {/* Pink Blush Cheeks */}
     <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
@@ -202,7 +202,7 @@ export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ..
   </svg>
 );
 
-/** 2 - Bad / Sad (Blue Theme): Pixel Frog with sad downward frown */
+/** 2 - Bad / Sad (Blue / Sky Blue / Neon Theme): Pixel Frog with electric sky blue skin & sad downward frown */
 export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -228,20 +228,20 @@ export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Frog Green Main Body Fill */}
-    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
-    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
+    {/* Electric Sky Blue / Neon Cyan Main Body Fill (ฟ้า) */}
+    <rect x="4" y="3" width="4" height="2" fill="#38BDF8" />
+    <rect x="12" y="3" width="4" height="2" fill="#38BDF8" />
+    <rect x="3" y="5" width="14" height="7" fill="#38BDF8" />
+    <rect x="4" y="12" width="12" height="1" fill="#38BDF8" />
 
-    {/* Bottom-Right Shadow Emerald */}
-    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
-    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
-    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
+    {/* Bottom-Right Cobalt Shadow */}
+    <rect x="13" y="8" width="4" height="4" fill="#0284C7" />
+    <rect x="11" y="10" width="2" height="2" fill="#0284C7" />
+    <rect x="13" y="12" width="3" height="1" fill="#0369A1" />
 
-    {/* Pink Blush Cheeks */}
-    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
-    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
+    {/* Soft Blush Cheeks */}
+    <rect x="3" y="7" width="2" height="1" fill="#BAE6FD" />
+    <rect x="15" y="7" width="2" height="1" fill="#BAE6FD" />
 
     {/* Left Eye */}
     <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
@@ -258,7 +258,7 @@ export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ..
   </svg>
 );
 
-/** 1 - Awful / Crying Waterfall Tears (Blue/Cyan Theme): Pixel Frog weeping streams of tears */
+/** 1 - Awful / Crying Waterfall Tears (Black / Dark Obsidian & Neon Cyan Tears Theme): Pixel Frog with sleek black skin & streaming neon tears */
 export const FrogMoodAwful: React.FC<IconProps> = ({ size = 32, className = '', ...props }) => (
   <svg
     width={size}
@@ -270,55 +270,55 @@ export const FrogMoodAwful: React.FC<IconProps> = ({ size = 32, className = '', 
     className={`inline-block shrink-0 ${className}`}
     {...props}
   >
-    {/* Dark Navy Outline */}
-    <rect x="4" y="2" width="4" height="1" fill="#0D226B" />
-    <rect x="3" y="3" width="1" height="2" fill="#0D226B" />
-    <rect x="8" y="3" width="1" height="2" fill="#0D226B" />
-    <rect x="8" y="4" width="4" height="1" fill="#0D226B" />
-    <rect x="12" y="2" width="4" height="1" fill="#0D226B" />
-    <rect x="11" y="3" width="1" height="2" fill="#0D226B" />
-    <rect x="16" y="3" width="1" height="2" fill="#0D226B" />
-    <rect x="2" y="5" width="1" height="7" fill="#0D226B" />
-    <rect x="17" y="5" width="1" height="7" fill="#0D226B" />
-    <rect x="3" y="13" width="14" height="1" fill="#0D226B" />
-    <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
-    <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
+    {/* Dark Midnight Outline */}
+    <rect x="4" y="2" width="4" height="1" fill="#09090B" />
+    <rect x="3" y="3" width="1" height="2" fill="#09090B" />
+    <rect x="8" y="3" width="1" height="2" fill="#09090B" />
+    <rect x="8" y="4" width="4" height="1" fill="#09090B" />
+    <rect x="12" y="2" width="4" height="1" fill="#09090B" />
+    <rect x="11" y="3" width="1" height="2" fill="#09090B" />
+    <rect x="16" y="3" width="1" height="2" fill="#09090B" />
+    <rect x="2" y="5" width="1" height="7" fill="#09090B" />
+    <rect x="17" y="5" width="1" height="7" fill="#09090B" />
+    <rect x="3" y="13" width="14" height="1" fill="#09090B" />
+    <rect x="4" y="12" width="3" height="1" fill="#09090B" />
+    <rect x="13" y="12" width="3" height="1" fill="#09090B" />
 
-    {/* Frog Green Main Body Fill */}
-    <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
-    <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
-    <rect x="4" y="12" width="12" height="1" fill="#84E42B" />
+    {/* Sleek Dark Obsidian / Charcoal Black Main Body Fill (ดำ) */}
+    <rect x="4" y="3" width="4" height="2" fill="#3F3F46" />
+    <rect x="12" y="3" width="4" height="2" fill="#3F3F46" />
+    <rect x="3" y="5" width="14" height="7" fill="#3F3F46" />
+    <rect x="4" y="12" width="12" height="1" fill="#3F3F46" />
 
-    {/* Bottom-Right Shadow Emerald */}
-    <rect x="13" y="8" width="4" height="4" fill="#44995C" />
-    <rect x="11" y="10" width="2" height="2" fill="#44995C" />
-    <rect x="13" y="12" width="3" height="1" fill="#44995C" />
+    {/* Bottom-Right Jet Black Shadow */}
+    <rect x="13" y="8" width="4" height="4" fill="#18181B" />
+    <rect x="11" y="10" width="2" height="2" fill="#18181B" />
+    <rect x="13" y="12" width="3" height="1" fill="#09090B" />
 
-    {/* Pink Blush Cheeks */}
-    <rect x="3" y="7" width="2" height="1" fill="#FFA0B8" />
-    <rect x="15" y="7" width="2" height="1" fill="#FFA0B8" />
+    {/* Muted Slate Mauve Blush */}
+    <rect x="3" y="7" width="2" height="1" fill="#71717A" />
+    <rect x="15" y="7" width="2" height="1" fill="#71717A" />
 
     {/* Left Eye */}
-    <rect x="4" y="3" width="3" height="2" fill="#0D226B" />
-    <rect x="4" y="3" width="2" height="1" fill="#5076F2" />
+    <rect x="4" y="3" width="3" height="2" fill="#09090B" />
+    <rect x="4" y="3" width="2" height="1" fill="#60A5FA" />
 
     {/* Right Eye */}
-    <rect x="13" y="3" width="3" height="2" fill="#0D226B" />
-    <rect x="13" y="3" width="2" height="1" fill="#5076F2" />
+    <rect x="13" y="3" width="3" height="2" fill="#09090B" />
+    <rect x="13" y="3" width="2" height="1" fill="#60A5FA" />
 
-    {/* Waterfall Tears Stream Left */}
-    <rect x="4" y="5" width="2" height="8" fill="#38BDF8" />
+    {/* Radiant Neon Cyan Waterfall Tears Stream Left */}
+    <rect x="4" y="5" width="2" height="8" fill="#00F0FF" />
     <rect x="4" y="5" width="1" height="7" fill="#BAE6FD" />
 
-    {/* Waterfall Tears Stream Right */}
-    <rect x="14" y="5" width="2" height="8" fill="#38BDF8" />
+    {/* Radiant Neon Cyan Waterfall Tears Stream Right */}
+    <rect x="14" y="5" width="2" height="8" fill="#00F0FF" />
     <rect x="14" y="5" width="1" height="7" fill="#BAE6FD" />
 
     {/* Downward Sad Curved Frown Mouth */}
-    <rect x="8" y="7" width="4" height="1" fill="#0D226B" />
-    <rect x="7" y="8" width="1" height="2" fill="#0D226B" />
-    <rect x="12" y="8" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="7" width="4" height="1" fill="#09090B" />
+    <rect x="7" y="8" width="1" height="2" fill="#09090B" />
+    <rect x="12" y="8" width="1" height="2" fill="#09090B" />
   </svg>
 );
 
