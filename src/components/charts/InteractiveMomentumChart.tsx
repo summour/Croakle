@@ -512,9 +512,8 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             {/* Habits list */}
             <div className="p-2.5 rounded-[14px] bg-white/60 dark:bg-black/20 border border-black/[0.03] dark:border-white/[0.04] space-y-1">
               <div className="flex items-center justify-between text-[10.5px] font-medium text-[#8c7e70] dark:text-[#a89b8d]">
-                <span className="flex items-center gap-1">
-                  <CloverIcon size={12} />
-                  <span>Habits ({selectedData.completedHabitsCount}/{selectedData.totalHabitsCount})</span>
+                <span className="font-bold">
+                  Habits ({selectedData.completedHabitsCount}/{selectedData.totalHabitsCount})
                 </span>
                 {selectedData.completedHabitsCount === selectedData.totalHabitsCount && selectedData.totalHabitsCount > 0 && (
                   <span className="text-[#5f7a61] dark:text-[#8fc493] font-semibold">100% Done</span>
@@ -551,9 +550,8 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
 
             {/* Focus time */}
             <div className="p-2.5 rounded-[14px] bg-white/60 dark:bg-black/20 border border-black/[0.03] dark:border-white/[0.04] flex items-center justify-between">
-              <span className="flex items-center gap-1 text-[10.5px] font-medium text-[#8c7e70] dark:text-[#a89b8d]">
-                <PocketTimerDockIcon size={12} className="text-[#c28f3a]" />
-                <span>Focus Duration</span>
+              <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+                Focus Duration
               </span>
               <strong className="text-xs font-bold text-[#c28f3a]">
                 {selectedData.totalFocusMinutes > 0

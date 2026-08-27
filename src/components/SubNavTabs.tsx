@@ -4,7 +4,7 @@ import { PageType } from '../types';
 interface SubNavTabsProps {
   activePage: PageType;
   onNavigate: (page: PageType) => void;
-  tabs: { id: PageType; label: string; icon: React.ReactNode }[];
+  tabs: { id: PageType; label: string; icon?: React.ReactNode }[];
 }
 
 export const SubNavTabs: React.FC<SubNavTabsProps> = ({ activePage, onNavigate, tabs }) => {
@@ -24,7 +24,6 @@ export const SubNavTabs: React.FC<SubNavTabsProps> = ({ activePage, onNavigate, 
                 : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
             }`}
           >
-            {tab.icon}
             <span className="truncate tracking-tight">{tab.label}</span>
           </button>
         );
@@ -32,4 +31,3 @@ export const SubNavTabs: React.FC<SubNavTabsProps> = ({ activePage, onNavigate, 
     </nav>
   );
 };
-

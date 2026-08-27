@@ -533,8 +533,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
         {/* Sessions List */}
         <div className="space-y-2.5 pt-1">
           {daySessions.length === 0 ? (
-            <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-2">
-              <LanternToolIcon size={28} className="mx-auto opacity-50" />
+            <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-1.5">
               <p className="text-xs font-medium">
                 {isSelectedToday ? 'ยังไม่มีข้อมูลการจับเวลาสำหรับวันนี้' : `ยังไม่มีข้อมูลสำหรับ ${formatFriendlyDate(selectedDate)}`}
               </p>

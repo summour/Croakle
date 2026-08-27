@@ -268,7 +268,6 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           activePage="analysis"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'timer', label: 'Timer', icon: <PocketTimerDockIcon size={15} /> },
             { id: 'analysis', label: 'Analytics', icon: <ToriiStatsDockIcon size={15} /> },
             { id: 'settings', label: 'Settings', icon: <WoodGearDockIcon size={15} /> },
           ]}
@@ -309,10 +308,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
             {(
               [
-                { id: 'overview', label: 'Overview', icon: <ToriiStatsDockIcon size={13} className="shrink-0" /> },
-                { id: 'moods', label: 'Mood', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
-                { id: 'habits', label: 'Habits', icon: <HabitCloverDockIcon size={13} className="shrink-0" /> },
-                { id: 'projects', label: 'Projects', icon: <BambooProjectDockIcon size={13} className="shrink-0" /> },
+                { id: 'overview', label: 'Overview' },
+                { id: 'moods', label: 'Mood' },
+                { id: 'habits', label: 'Habits' },
+                { id: 'projects', label: 'Projects' },
               ] as const
             ).map((tab) => {
               const isActive = activeTab === tab.id;
@@ -321,13 +320,12 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`min-w-0 py-1.5 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center gap-1 ${
+                  className={`min-w-0 py-2 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center ${
                     isActive
                       ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
                       : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                   }`}
                 >
-                  {tab.icon}
                   <span className="truncate">{tab.label}</span>
                 </button>
               );
@@ -344,10 +342,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Key KPI Stats Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="ios-glass-card p-3.5 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Habit Rate</span>
-                <CloverIcon size={15} className="text-[#007AFF]" />
-              </div>
+              <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 block">Habit Rate</span>
               <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {overallMonthPercent}%
               </strong>
@@ -357,10 +352,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Avg Mood</span>
-                <FrogMoodIcon value={4} size={15} />
-              </div>
+              <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 block">Avg Mood</span>
               <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {avgMoodStr} <span className="text-xs text-zinc-400 font-bold">/ 5</span>
               </strong>
@@ -370,10 +362,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Active Projects</span>
-                <BambooScrollDockIcon size={15} className="text-[#FF9500]" />
-              </div>
+              <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 block">Active Projects</span>
               <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {activeProjects.length}
               </strong>
@@ -383,10 +372,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
 
             <div className="ios-glass-card p-3.5 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400">Focus Time</span>
-                <PocketTimerDockIcon size={15} className="text-[#007AFF]" />
-              </div>
+              <span className="text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 block">Focus Time</span>
               <strong className="text-2xl font-black text-zinc-950 dark:text-white block">
                 {totalFocusHours}h
               </strong>
@@ -399,12 +385,9 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Combined Interactive Momentum Curve */}
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <ToriiStatsDockIcon size={18} className="text-zinc-950 dark:text-white" />
-                <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
-                  Interactive Habit, Mood & Focus Flow
-                </h3>
-              </div>
+              <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
+                Interactive Habit, Mood & Focus Flow
+              </h3>
               <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
                 {MONTH_NAMES[monthIndex]} 1–{daysInMonth}
               </span>
@@ -422,8 +405,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           {/* Monthly Highlights Summary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="ios-glass-card p-4 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-black text-zinc-950 dark:text-white">
-                <Trophy size={16} className="text-[#FF9500]" />
+              <div className="text-xs font-black text-zinc-950 dark:text-white">
                 <span>Top Habit this Month</span>
               </div>
               <p className="text-sm font-black text-zinc-950 dark:text-white truncate">
@@ -435,16 +417,12 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             </div>
 
             <div className="ios-glass-card p-4 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-black text-zinc-950 dark:text-white">
-                <Sparkles size={16} className="text-[#007AFF]" />
+              <div className="text-xs font-black text-zinc-950 dark:text-white">
                 <span>Mood Balance</span>
               </div>
               <p className="text-sm font-black text-zinc-950 dark:text-white flex items-center gap-1.5">
                 {dominantMoodObj ? (
-                  <>
-                    <FrogMoodIcon value={dominantMoodObj.value} size={20} />
-                    <span>Mostly {dominantMoodObj.label}</span>
-                  </>
+                  <span>Mostly {dominantMoodObj.label}</span>
                 ) : (
                   <span>No mood entries yet</span>
                 )}

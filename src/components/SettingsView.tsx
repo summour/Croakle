@@ -115,26 +115,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       )}
 
       {/* Header */}
-      <div className="ios-glass-card p-5 flex items-center justify-between">
-        <div>
-          <p className="text-[10.5px] font-bold uppercase tracking-wider text-[#8c7e70] dark:text-[#a89b8d]">Preferences & System</p>
-          <h1 className="text-2xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">Settings</h1>
-        </div>
-        <div className="w-10 h-10 rounded-[16px] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] flex items-center justify-center p-2 shadow-2xs">
-          <WoodGearDockIcon size={22} className="text-[#8c7e70]" />
-        </div>
+      <div className="ios-glass-card p-5">
+        <p className="text-[10.5px] font-bold uppercase tracking-wider text-[#8c7e70] dark:text-[#a89b8d]">Preferences & System</p>
+        <h1 className="text-2xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">Settings</h1>
       </div>
 
       {/* AI Habit Coach / Insights */}
       <div className="ios-glass-card p-5 space-y-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-1 shadow-2xs">
-              <CloverIcon size={18} />
-            </div>
-            <div>
-              <h2 className="font-black text-sm text-zinc-950 dark:text-white">Croakle Mindful Coach & Insights</h2>
-            </div>
+          <div>
+            <h2 className="font-black text-sm text-zinc-950 dark:text-white">Croakle Mindful Coach & Insights</h2>
           </div>
           <button
             type="button"
@@ -160,18 +150,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       {/* Pixel Sanctuary Habitat Preferences */}
       {pixelScene && onUpdatePixelScene && (
         <div className="ios-glass-card p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-1 shadow-2xs">
-                <PixelZenPondIcon size={18} />
-              </div>
-              <div>
-                <h2 className="font-black text-sm text-zinc-950 dark:text-white">Pixel Sanctuary Habitat</h2>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                  Customize your retro frog diorama, companions and animation effects.
-                </p>
-              </div>
-            </div>
+          <div>
+            <h2 className="font-black text-sm text-zinc-950 dark:text-white">Pixel Sanctuary Habitat</h2>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+              Customize your retro frog diorama, companions and animation effects.
+            </p>
           </div>
 
           {/* Quick Toggles */}
@@ -186,7 +169,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               }`}
             >
               <div className="flex items-center gap-2">
-                <Sparkles size={14} className="text-zinc-700 dark:text-zinc-300" />
                 <span>Pixel Animation</span>
               </div>
               <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
@@ -206,7 +188,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               }`}
             >
               <div className="flex items-center gap-2">
-                <FrogFaceDockIcon size={14} />
                 <span>Mood Reaction</span>
               </div>
               <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
@@ -221,16 +202,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
       {/* Backup & Restore Card */}
       <div className="ios-glass-card p-5 space-y-4">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-[14px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shadow-2xs">
-            <BambooScrollDockIcon size={18} />
-          </div>
-          <div>
-            <h2 className="font-black text-sm text-zinc-950 dark:text-white">Backup & Restore</h2>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-              Export and import all habits, mood logs, notes, and time sessions as a JSON file.
-            </p>
-          </div>
+        <div>
+          <h2 className="font-black text-sm text-zinc-950 dark:text-white">Backup & Restore</h2>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            Export and import all habits, mood logs, notes, and time sessions as a JSON file.
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

@@ -324,11 +324,11 @@ export const NotesView: React.FC<NotesViewProps> = ({
           {/* Category Filter Tabs */}
           <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
             {(['all', 'mood', 'habit', 'project'] as const).map((tab) => {
-              const tabConfig: Record<string, { label: string; icon: React.ReactNode }> = {
-                all: { label: 'All', icon: <WashiJournalDockIcon size={13} className="shrink-0" /> },
-                mood: { label: 'Mood', icon: <FrogFaceDockIcon size={13} className="shrink-0" /> },
-                habit: { label: 'Habits', icon: <HabitCloverDockIcon size={13} className="shrink-0" /> },
-                project: { label: 'Projects', icon: <BambooProjectDockIcon size={13} className="shrink-0" /> },
+              const tabConfig: Record<string, { label: string }> = {
+                all: { label: 'All' },
+                mood: { label: 'Mood' },
+                habit: { label: 'Habits' },
+                project: { label: 'Projects' },
               };
               const config = tabConfig[tab];
               const isActive = filterType === tab;
@@ -337,13 +337,12 @@ export const NotesView: React.FC<NotesViewProps> = ({
                   key={tab}
                   type="button"
                   onClick={() => setFilterType(tab)}
-                  className={`min-w-0 py-1.5 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center gap-1 ${
+                  className={`min-w-0 py-2 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center ${
                     isActive
                       ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
                       : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                   }`}
                 >
-                  {config.icon}
                   <span className="truncate">{config.label}</span>
                 </button>
               );
@@ -453,10 +452,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
       {/* Date-Grouped Notes Timeline */}
       <div className="space-y-4 pt-1">
         {filteredNotes.length === 0 ? (
-          <div className="ios-glass-card p-8 text-center text-zinc-400 dark:text-zinc-500 space-y-3">
-            <div className="flex justify-center opacity-60">
-              <WashiJournalDockIcon size={40} className="text-zinc-400" />
-            </div>
+          <div className="ios-glass-card p-8 text-center text-zinc-400 dark:text-zinc-500 space-y-2">
             <div>
               <p className="font-bold text-sm text-zinc-950 dark:text-white">No entries found</p>
               <p className="text-xs mt-0.5 text-zinc-500 dark:text-zinc-400">
