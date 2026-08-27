@@ -300,7 +300,8 @@ export function loadPixelSceneState(): PixelSceneConfig {
     if (!raw) return { ...DEFAULT_PIXEL_SCENE };
     const parsed = JSON.parse(raw);
     return {
-      sceneId: parsed.sceneId || 'zen_pond',
+      frogName: parsed.frogName || 'Croakle',
+      sceneId: parsed.sceneId || 'sauna_bathhouse',
       activityId: parsed.activityId || 'relaxing',
       hatId: parsed.hatId || 'lotus',
       outfitId: parsed.outfitId || 'none',

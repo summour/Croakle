@@ -6,15 +6,10 @@ import {
   MonthData,
   Project,
   PixelSceneConfig,
-  SCENE_LOCATIONS,
-  FROG_ACTIVITIES,
-  FROG_HATS,
-  FROG_COMPANIONS,
-  FROG_WEATHERS,
 } from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
-import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Sparkles, Sliders, Volume2, VolumeX } from 'lucide-react';
-import { WoodGearDockIcon, CloverIcon, BambooScrollDockIcon, FrogFaceDockIcon, ToriiStatsDockIcon, PixelZenPondIcon } from './FrogIcons';
+import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Check, Sparkles } from 'lucide-react';
+import { WoodGearDockIcon, ToriiStatsDockIcon, FrogMoodRad } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 
 interface SettingsViewProps {
@@ -42,11 +37,27 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onResetData,
   onNavigate,
 }) => {
-  const [copiedBackup, setCopiedBackup] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [resetConfirm, setResetConfirm] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
+  const [frogNameInput, setFrogNameInput] = useState(pixelScene?.frogName || 'Croakle');
+  const [userNameInput, setUserNameInput] = useState(settings.userName || '');
+  const [nameSaved, setNameSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSaveNames = () => {
+    const trimmedFrog = frogNameInput.trim();
+    if (trimmedFrog && onUpdatePixelScene) {
+      onUpdatePixelScene({ frogName: trimmedFrog });
+    }
+    onUpdateSettings({
+      ...settings,
+      frogName: trimmedFrog || 'Croakle',
+      userName: userNameInput.trim(),
+    });
+    setNameSaved(true);
+    setTimeout(() => setNameSaved(false), 2000);
+  };
 
   const handleExport = () => {
     const json = exportFullBackup();
@@ -71,7 +82,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         setImportStatus('Backup restored successfully!');
         onDataImported();
       } else {
-        setImportStatus('Error: Invalid backup file format.');
+        setImportStatus('Error: Invalid backup file.');
       }
       setTimeout(() => setImportStatus(null), 4000);
     };
@@ -80,29 +91,26 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   const generateAIInsights = () => {
-    // Generate helpful and thoughtful behavioral feedback
-    const activeHabits = habits.length;
     const completedDays = monthData.habits.reduce(
       (acc, h) => acc + h.days.reduce((dAcc, d) => dAcc + (d ? 1 : 0), 0),
       0
     );
-    const activeProj = projects.filter((p) => !p.completed).length;
 
     let advice = '';
     if (completedDays > 20) {
-      advice = `Outstanding consistency! You've logged ${completedDays} habit completions this month. Your high priority habits are showing steady momentum. Keep setting protected time blocks for ${habits[0]?.name || 'your focus habits'}.`;
+      advice = `Outstanding consistency! You have logged ${completedDays} habit check-ins this month. Keep your daily momentum steady.`;
     } else if (completedDays > 5) {
-      advice = `Great start! You've built a baseline with ${completedDays} checks. To increase momentum, try habit stacking: anchor '${habits[0]?.name || 'your core habit'}' directly to a daily fixed event like morning tea.`;
+      advice = `Great start with ${completedDays} completions. Try habit stacking by pairing your priority habit with your morning routine.`;
     } else {
-      advice = `Every journey begins with a single checkmark. Pick just ONE high-priority habit today ('${habits[0]?.name || 'a simple habit'}') and aim for a 3-day micro streak.`;
+      advice = `Pick one high-priority habit today and aim for a 3-day streak to build steady momentum.`;
     }
 
     setAiInsight(advice);
   };
 
   return (
-    <div className="space-y-4 pb-24">
-      {/* Top Segmented Sub-Navigation for Analytics/Settings */}
+    <div className="space-y-3.5 pb-24">
+      {/* Top Navigation */}
       {onNavigate && (
         <SubNavTabs
           activePage="settings"
@@ -115,115 +123,166 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       )}
 
       {/* Header */}
-      <div className="ios-glass-card p-5">
-        <p className="text-[10.5px] font-bold uppercase tracking-wider text-[#8c7e70] dark:text-[#a89b8d]">Preferences & System</p>
-        <h1 className="text-2xl font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">Settings</h1>
+      <div className="ios-glass-card p-3.5 sm:p-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-black tracking-tight text-zinc-950 dark:text-white">Settings</h1>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">Preferences & Profile</p>
+        </div>
       </div>
 
-      {/* AI Habit Coach / Insights */}
-      <div className="ios-glass-card p-5 space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="font-black text-sm text-zinc-950 dark:text-white">Croakle Mindful Coach & Insights</h2>
-          </div>
-          <button
-            type="button"
-            onClick={generateAIInsights}
-            className="px-4 py-2 rounded-full bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 text-zinc-950 dark:text-white font-black text-xs flex items-center gap-1.5 transition border border-zinc-200 dark:border-zinc-700 shadow-2xs ios-tap"
-          >
-            <RefreshCw size={13} />
-            Analyze
-          </button>
+      {/* Profile & Pet Customization */}
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+        <div className="flex items-center gap-2">
+          <FrogMoodRad size={20} />
+          <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Profile & Pet</h2>
         </div>
 
-        {aiInsight ? (
-          <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-[20px] border border-zinc-200 dark:border-zinc-700">
-            {aiInsight}
-          </p>
-        ) : (
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            Click "Analyze" to generate mindful behavioral summaries, habit stacking ideas, and project balance tips.
-          </p>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
+              Frog Name
+            </label>
+            <input
+              type="text"
+              value={frogNameInput}
+              onChange={(e) => setFrogNameInput(e.target.value)}
+              placeholder="Croakle"
+              maxLength={24}
+              className="w-full px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-zinc-950/20 dark:focus:ring-white/20"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
+              User Name (Optional)
+            </label>
+            <input
+              type="text"
+              value={userNameInput}
+              onChange={(e) => setUserNameInput(e.target.value)}
+              placeholder="Your name"
+              maxLength={24}
+              className="w-full px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-zinc-950/20 dark:focus:ring-white/20"
+            />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleSaveNames}
+          className="w-full py-2 px-3 rounded-xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 text-xs font-black flex items-center justify-center gap-1.5 transition active:scale-[0.98]"
+        >
+          {nameSaved ? <Check size={14} className="text-emerald-400 dark:text-emerald-600" /> : null}
+          <span>{nameSaved ? 'Saved!' : 'Save Profile'}</span>
+        </button>
       </div>
 
-      {/* Pixel Sanctuary Habitat Preferences */}
-      {pixelScene && onUpdatePixelScene && (
-        <div className="ios-glass-card p-5 space-y-4">
-          <div>
-            <h2 className="font-black text-sm text-zinc-950 dark:text-white">Pixel Sanctuary Habitat</h2>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
-              Customize your retro frog diorama, companions and animation effects.
-            </p>
-          </div>
+      {/* Preferences & Toggles */}
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+        <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Preferences</h2>
 
-          {/* Quick Toggles */}
-          <div className="grid grid-cols-2 gap-2.5 pt-1">
+        <div className="grid grid-cols-2 gap-2">
+          {/* Sound */}
+          <button
+            type="button"
+            onClick={() => onUpdateSettings({ ...settings, soundEnabled: !settings.soundEnabled })}
+            className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
+          >
+            <span>Sound Effects</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+              settings.soundEnabled ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
+            }`}>
+              {settings.soundEnabled ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
+          {/* Haptic */}
+          <button
+            type="button"
+            onClick={() => onUpdateSettings({ ...settings, hapticEnabled: !settings.hapticEnabled })}
+            className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
+          >
+            <span>Haptics</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+              settings.hapticEnabled ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
+            }`}>
+              {settings.hapticEnabled ? 'ON' : 'OFF'}
+            </span>
+          </button>
+
+          {/* Animation */}
+          {pixelScene && onUpdatePixelScene && (
             <button
               type="button"
               onClick={() => onUpdatePixelScene({ isAnimated: !pixelScene.isAnimated })}
-              className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition ios-tap ${
-                pixelScene.isAnimated
-                  ? 'bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-600 text-zinc-950 dark:text-white shadow-2xs'
-                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 opacity-70'
-              }`}
+              className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
             >
-              <div className="flex items-center gap-2">
-                <span>Pixel Animation</span>
-              </div>
-              <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
-                pixelScene.isAnimated ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'
+              <span>Animations</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+                pixelScene.isAnimated ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
               }`}>
                 {pixelScene.isAnimated ? 'ON' : 'OFF'}
               </span>
             </button>
+          )}
 
+          {/* Mood Reaction */}
+          {pixelScene && onUpdatePixelScene && (
             <button
               type="button"
               onClick={() => onUpdatePixelScene({ syncWithMood: !pixelScene.syncWithMood })}
-              className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition ios-tap ${
-                pixelScene.syncWithMood
-                  ? 'bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-600 text-zinc-950 dark:text-white shadow-2xs'
-                  : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 opacity-70'
-              }`}
+              className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
             >
-              <div className="flex items-center gap-2">
-                <span>Mood Reaction</span>
-              </div>
-              <span className={`text-[10.5px] px-2 py-0.5 rounded-full font-black ${
-                pixelScene.syncWithMood ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500'
+              <span>Mood Sync</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
+                pixelScene.syncWithMood ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
               }`}>
                 {pixelScene.syncWithMood ? 'ON' : 'OFF'}
               </span>
             </button>
-          </div>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Backup & Restore Card */}
-      <div className="ios-glass-card p-5 space-y-4">
-        <div>
-          <h2 className="font-black text-sm text-zinc-950 dark:text-white">Backup & Restore</h2>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            Export and import all habits, mood logs, notes, and time sessions as a JSON file.
+      {/* Habit Insights */}
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Mindful Coach</h2>
+          <button
+            type="button"
+            onClick={generateAIInsights}
+            className="px-2.5 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-[11px] flex items-center gap-1 transition"
+          >
+            <RefreshCw size={11} />
+            Analyze
+          </button>
+        </div>
+
+        {aiInsight && (
+          <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed bg-zinc-50 dark:bg-zinc-800/60 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700">
+            {aiInsight}
           </p>
-        </div>
+        )}
+      </div>
 
-        <div className="grid grid-cols-2 gap-3">
+      {/* Data Management */}
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-2.5">
+        <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Data & Backup</h2>
+
+        <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={handleExport}
-            className="py-3 px-4 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-950 dark:text-white font-black text-xs flex items-center justify-center gap-2 transition border border-zinc-200 dark:border-zinc-800 shadow-2xs ios-tap"
+            className="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition border border-zinc-200 dark:border-zinc-700"
           >
-            <Download size={15} /> Export JSON
+            <Download size={13} /> Export JSON
           </button>
 
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="py-3 px-4 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-950 dark:text-white font-black text-xs flex items-center justify-center gap-2 transition border border-zinc-200 dark:border-zinc-800 shadow-2xs ios-tap"
+            className="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition border border-zinc-200 dark:border-zinc-700"
           >
-            <Upload size={15} /> Import JSON
+            <Upload size={13} /> Import JSON
           </button>
           <input
             ref={fileInputRef}
@@ -235,47 +294,43 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {importStatus && (
-          <p className="text-xs font-bold text-zinc-950 dark:text-white p-2.5 rounded-[16px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-center">
+          <p className="text-[11px] font-bold text-zinc-900 dark:text-white p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-center">
             {importStatus}
           </p>
         )}
-      </div>
 
-      {/* Reset Data */}
-      <div className="ios-glass-card p-5 space-y-3">
-        <h2 className="font-black text-sm text-zinc-950 dark:text-white">Reset Data</h2>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
-          Restore all habit and journal data to default demo presets.
-        </p>
-        {resetConfirm ? (
-          <div className="flex items-center gap-2">
+        {/* Reset */}
+        <div className="pt-1">
+          {resetConfirm ? (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onResetData();
+                  setResetConfirm(false);
+                }}
+                className="flex-1 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs flex items-center justify-center gap-1.5 transition"
+              >
+                <Trash2 size={13} /> Confirm Reset
+              </button>
+              <button
+                type="button"
+                onClick={() => setResetConfirm(false)}
+                className="py-2 px-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs hover:bg-zinc-200 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
             <button
               type="button"
-              onClick={() => {
-                onResetData();
-                setResetConfirm(false);
-              }}
-              className="flex-1 py-2.5 rounded-[18px] bg-red-600 hover:bg-red-700 text-white font-black text-xs flex items-center justify-center gap-2 shadow-xs transition ios-tap"
+              onClick={() => setResetConfirm(true)}
+              className="w-full py-2 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 text-xs font-bold flex items-center justify-center gap-1.5 transition"
             >
-              <Trash2 size={15} /> Yes, Reset Everything
+              <Trash2 size={13} /> Reset to Defaults
             </button>
-            <button
-              type="button"
-              onClick={() => setResetConfirm(false)}
-              className="py-2.5 px-4 rounded-[18px] bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs ios-tap hover:bg-zinc-200 dark:hover:bg-zinc-700 transition"
-            >
-              Cancel
-            </button>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setResetConfirm(true)}
-            className="w-full py-3 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-950 dark:text-white font-black text-xs flex items-center justify-center gap-2 transition border border-zinc-200 dark:border-zinc-800 shadow-2xs ios-tap"
-          >
-            <Trash2 size={15} /> Reset to Defaults
-          </button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

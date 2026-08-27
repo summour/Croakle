@@ -56,7 +56,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
   return (
     <footer
       id="croakle-bottom-dock"
-      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] max-w-sm bg-white/90 dark:bg-zinc-900/90 backdrop-blur-3xl border border-black/10 dark:border-white/15 rounded-full p-1.5 shadow-[0_20px_48px_-12px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.04)] flex items-center justify-center gap-1.5 transition-all duration-300"
+      className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] max-w-sm bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl border border-black/10 dark:border-white/15 rounded-full p-1 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.15)] flex items-center justify-center gap-1 transition-all duration-300"
     >
       {groups.map((group) => {
         const Icon = group.icon;
@@ -74,18 +74,18 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
             }}
             title={group.label}
             aria-label={group.label}
-            className={`flex items-center justify-center w-12 h-11 sm:w-13 sm:h-12 rounded-full transition-all duration-200 ios-tap relative ${
+            className={`flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-200 ios-tap relative ${
               isActive
-                ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-[0_4px_14px_rgba(0,0,0,0.18)] scale-[1.04]'
+                ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-md scale-[1.03]'
                 : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'
             }`}
           >
             <div className="relative flex items-center justify-center">
-              <Icon size={24} className={`transition-transform duration-200 ${isActive ? 'scale-110' : ''}`} />
+              <Icon size={20} className={`transition-transform duration-200 ${isActive ? 'scale-105' : ''}`} />
               {group.id === 'time' && isTimerRunning && (
-                <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span className="absolute -top-1 -right-1 flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#34C759] border-2 border-white dark:border-zinc-900" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 border border-white dark:border-zinc-900" />
                 </span>
               )}
             </div>

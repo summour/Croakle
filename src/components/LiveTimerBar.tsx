@@ -66,16 +66,16 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
               </span>
             </div>
             <p className="text-[10px] text-[#a89b8d] flex items-center gap-1 mt-0.5">
-              <span>{activeTimer.isRunning ? 'กำลังจับเวลา' : 'พักชั่วคราว'}</span>
+              <span>{activeTimer.isRunning ? 'Focusing' : 'Paused'}</span>
               {activeTimer.initialStartedAt && (
                 <>
                   <span>•</span>
-                  <span>เริ่ม {new Date(activeTimer.initialStartedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span>Started {new Date(activeTimer.initialStartedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </>
               )}
               <span>•</span>
               <span className="text-[#d6c7b8] group-hover:underline flex items-center gap-0.5">
-                เปิด <ChevronRight size={10} />
+                Open <ChevronRight size={10} />
               </span>
             </p>
           </div>

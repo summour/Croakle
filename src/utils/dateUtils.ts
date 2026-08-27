@@ -129,16 +129,7 @@ export function formatDateTimeWithSeconds(dateOrTimestamp: Date | number): strin
 }
 
 export function formatThaiDateTime(dateOrTimestamp: Date | number): string {
-  const d = typeof dateOrTimestamp === 'number' ? new Date(dateOrTimestamp) : dateOrTimestamp;
-  const thaiMonths = [
-    'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.',
-    'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'
-  ];
-  const day = d.getDate();
-  const month = thaiMonths[d.getMonth()] || '';
-  const year = d.getFullYear() + 543;
-  const timeStr = formatTimeWithSeconds(d);
-  return `${day} ${month} ${year} เวลา ${timeStr} น.`;
+  return formatDateTimeWithSeconds(dateOrTimestamp);
 }
 
 export interface MonthWeekDay {

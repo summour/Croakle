@@ -51,7 +51,6 @@ import {
   formatDateTimeWithSeconds,
 } from './utils/dateUtils';
 import { BottomDock } from './components/BottomDock';
-import { HomeDashboard } from './components/HomeDashboard';
 import { HabitsView } from './components/HabitsView';
 import { ProjectsView } from './components/ProjectsView';
 import { MoodView } from './components/MoodView';
@@ -790,10 +789,10 @@ export function App() {
           className={
             activePage === 'shop' || activePage === 'dressup'
               ? 'flex-1 w-full h-full relative overflow-hidden flex flex-col'
-              : 'flex-1 w-full px-4 pt-3.5 pb-28 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
+              : 'flex-1 w-full px-3.5 pt-3 pb-24 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden'
           }
         >
-          {activePage === 'menu' && (
+          {activePage === 'best' && (
             <HabitsView
               habits={habitStore.habitTemplates}
               monthData={currentMonthData}

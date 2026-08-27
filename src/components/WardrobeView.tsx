@@ -376,10 +376,15 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
           )}
 
           <div className="px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#1a1613]/95 backdrop-blur-md border border-black/10 dark:border-white/15 shadow-sm flex items-center gap-1.5">
-            <Shirt size={14} className="text-[#5f7a61] dark:text-[#8cb88f]" />
-            <h2 className="text-xs font-black tracking-tight text-[#2d2823] dark:text-[#f4efe8]">
-              Wardrobe
-            </h2>
+            <Shirt size={14} className="text-[#5f7a61] dark:text-[#8cb88f] shrink-0" />
+            <input
+              type="text"
+              value={previewConfig.frogName || ''}
+              placeholder="Name pet..."
+              onChange={(e) => setPreviewConfig((p) => ({ ...p, frogName: e.target.value }))}
+              className="bg-transparent text-xs font-black text-[#2d2823] dark:text-[#f4efe8] focus:outline-none w-20 sm:w-28 placeholder:text-zinc-400 placeholder:font-normal truncate"
+              title="Click to rename your companion"
+            />
           </div>
         </div>
 
@@ -410,7 +415,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
               ? 'hover:bg-white dark:hover:bg-black/90 cursor-pointer opacity-100'
               : 'opacity-35 cursor-not-allowed pointer-events-none'
           }`}
-          title="Undo (ยกเลิก)"
+          title="Undo"
         >
           <Undo2 size={14} />
         </button>
@@ -425,7 +430,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
               ? 'hover:bg-white dark:hover:bg-black/90 cursor-pointer opacity-100'
               : 'opacity-35 cursor-not-allowed pointer-events-none'
           }`}
-          title="Redo (ทำซ้ำ)"
+          title="Redo"
         >
           <Redo2 size={14} />
         </button>
@@ -435,7 +440,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
           type="button"
           onClick={handleSurpriseMix}
           className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition cursor-pointer"
-          title="Random Mix (สุ่มชุด)"
+          title="Random Mix"
         >
           <Shuffle size={14} />
         </button>
@@ -445,7 +450,7 @@ export const WardrobeView: React.FC<WardrobeViewProps> = ({
           type="button"
           onClick={handleResetLook}
           className="w-8 h-8 rounded-full bg-white/95 dark:bg-[#1a1613]/95 hover:bg-white dark:hover:bg-black/90 backdrop-blur-md text-[#2d2823] dark:text-[#f4efe8] border border-black/10 dark:border-white/15 flex items-center justify-center shadow-sm active:scale-90 transition cursor-pointer"
-          title="Reset (คืนค่าเดิม)"
+          title="Reset"
         >
           <RotateCcw size={14} />
         </button>

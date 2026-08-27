@@ -1,4 +1,4 @@
-export type PageType = 'menu' | 'track' | 'project' | 'best' | 'mood' | 'notes' | 'time' | 'analysis' | 'shop' | 'dressup' | 'coins' | 'settings';
+export type PageType = 'track' | 'project' | 'best' | 'mood' | 'notes' | 'time' | 'analysis' | 'shop' | 'dressup' | 'coins' | 'settings';
 
 export type PriorityType = 'high' | 'medium' | 'low';
 
@@ -101,20 +101,22 @@ export interface AppSettings {
   soundEnabled: boolean;
   hapticEnabled: boolean;
   aiKey?: string;
+  frogName?: string;
+  userName?: string;
 }
 
 export const DEFAULT_HABITS: HabitTemplate[] = [
-  { id: 'h1', name: 'Read & Learn', goal: 5, description: 'Mindful reading in the cozy loft for 30 minutes', priority: 'high' },
-  { id: 'h2', name: 'Nature Walk & Stretch', goal: 4, description: 'Gentle walk outdoors and morning stretches', priority: 'medium' },
-  { id: 'h3', name: 'Sleep by 11:00 PM', goal: 6, description: 'Wind down, dim lights, and rest well', priority: 'high' },
-  { id: 'h4', name: 'Hydrate (8 Glasses)', goal: 7, description: 'Fresh water throughout the day', priority: 'medium' },
-  { id: 'h5', name: 'Organize Workspace', goal: 3, description: 'Keep the desk and books tidy', priority: 'low' },
+  { id: 'h1', name: 'Read & Learn', goal: 5, description: '30 mins daily', priority: 'high' },
+  { id: 'h2', name: 'Morning Walk', goal: 4, description: 'Fresh air & stretch', priority: 'medium' },
+  { id: 'h3', name: 'Sleep by 11 PM', goal: 6, description: 'Rest well', priority: 'high' },
+  { id: 'h4', name: 'Drink Water', goal: 7, description: '8 glasses', priority: 'medium' },
+  { id: 'h5', name: 'Organize Desk', goal: 3, description: 'Keep tidy', priority: 'low' },
 ];
 
 export const DEFAULT_PROJECTS: Project[] = [
-  { id: 'p1', name: 'Mindful Reading List', goal: 4, description: 'Explore books on mindfulness, craft, and reflection', priority: 'high', completed: false, weeklyDays: {} },
-  { id: 'p2', name: 'Workspace & Studio Setup', goal: 3, description: 'Design an ergonomic and peaceful creative workspace', priority: 'medium', completed: false, weeklyDays: {} },
-  { id: 'p3', name: 'Daily Reflection Journal', goal: 5, description: 'Write gratitude and evening thoughts every night', priority: 'low', completed: false, weeklyDays: {} },
+  { id: 'p1', name: 'Mindful Reading', goal: 4, description: 'Finish current book', priority: 'high', completed: false, weeklyDays: {} },
+  { id: 'p2', name: 'Studio Setup', goal: 3, description: 'Organize workspace', priority: 'medium', completed: false, weeklyDays: {} },
+  { id: 'p3', name: 'Daily Journal', goal: 5, description: 'Evening reflection', priority: 'low', completed: false, weeklyDays: {} },
 ];
 
 export interface MoodConfig {
@@ -393,6 +395,7 @@ export type FrogCompanionId =
 export type FrogWeatherId = 'auto' | 'sunny' | 'golden' | 'starry' | 'rainy' | 'petals';
 
 export interface PixelSceneConfig {
+  frogName?: string;
   sceneId: SceneLocationId;
   activityId: FrogActivityId;
   hatId: FrogHatId;
@@ -406,6 +409,7 @@ export interface PixelSceneConfig {
 }
 
 export const DEFAULT_PIXEL_SCENE: PixelSceneConfig = {
+  frogName: 'Croakle',
   sceneId: 'sauna_bathhouse',
   activityId: 'relaxing',
   hatId: 'lotus',
