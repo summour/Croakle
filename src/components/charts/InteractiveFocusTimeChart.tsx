@@ -152,7 +152,7 @@ export const InteractiveFocusTimeChart: React.FC<InteractiveFocusTimeChartProps>
               >
                 {/* Stacked Bar Container */}
                 <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-24 sm:h-28 rounded-[12px] flex flex-col justify-end p-1 overflow-hidden border border-black/[0.02] dark:border-white/[0.03]">
-                  {st.breakH > 0 && (
+                  {st.breakMins > 0 && (
                     <div className="w-full bg-[#AF52DE] rounded-[6px]" style={{ height: `${breakH}%` }} />
                   )}
                   {st.workMins > 0 && (

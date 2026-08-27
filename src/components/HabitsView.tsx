@@ -822,7 +822,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                             {habit.priority}
                           </span>
                           <span className="text-[10px] text-zinc-400">
-                            {habit.goalDaysPerWeek}d/wk
+                            {habit.goal || 7}d/wk
                           </span>
                         </div>
                       </div>

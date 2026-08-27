@@ -131,16 +131,7 @@ export function App() {
   };
 
   const handleEquipItem = (item: ShopItem) => {
-    const patch: Partial<PixelSceneConfig> = {};
-    if (item.category === 'outfit') patch.outfitId = item.itemId as FrogOutfitId;
-    if (item.category === 'hat') patch.hatId = item.itemId as FrogHatId;
-    if (item.category === 'glasses') patch.glassesId = item.itemId as FrogGlassesId;
-    if (item.category === 'skin') patch.skinId = item.itemId as FrogSkinId;
-    if (item.category === 'prop') patch.activityId = item.itemId as FrogActivityId;
-    if (item.category === 'scene') patch.sceneId = item.itemId as SceneLocationId;
-    if (item.category === 'companion') patch.companionId = item.itemId as FrogCompanionId;
-
-    handleUpdatePixelScene(patch);
+    handleUpdatePixelScene({ [item.slot]: item.value });
   };
 
   const handleClaimDailyReward = () => {

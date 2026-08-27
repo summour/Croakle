@@ -39,6 +39,7 @@ export interface Project {
   completed: boolean;
   completedWeekKey?: string;
   weeklyDays: Record<string, boolean[]>; // weekKey (e.g. "2026-W34") -> 7 booleans
+  targetWeeklyDays?: number;
 }
 
 export interface NoteItem {
@@ -224,6 +225,7 @@ export type SceneLocationId =
   | 'red_riding_forest'
   | 'sushi_bar'
   | 'sauna_bathhouse'
+  | 'indoor'
   | 'zen_pond'
   | 'treehouse'
   | 'sakura_shrine'
@@ -252,6 +254,11 @@ export type FrogActivityId =
   | 'woodcutter_axe'
   | 'eating_sushi'
   | 'sushi_crafting'
+  | 'sushi_platter'
+  | 'tea_whisk'
+  | 'kbbq_tongs_bacon_flip'
+  | 'kbbq_chopsticks_rice_bowl'
+  | 'kbbq_lettuce_ssam_wrap'
   | 'reading'
   | 'tea'
   | 'eating'
@@ -270,6 +277,8 @@ export type FrogHatId =
   | 'kbbq_grill_master_headband'
   | 'kbbq_lettuce_wrap_hat'
   | 'kbbq_chef_visor'
+  | 'kbbq_pork_belly_slice'
+  | 'kbbq_garlic_clove_cap'
   | 'ranger_safari_hat'
   | 'marshmallow_beanie'
   | 'scout_headlamp'
@@ -305,6 +314,8 @@ export type FrogOutfitId =
   | 'kbbq_pitmaster_apron'
   | 'kbbq_retro_tracksuit'
   | 'kbbq_hanbok_vest'
+  | 'kbbq_cozy_smoke_hoodie'
+  | 'kbbq_banchan_chef_vest'
   | 'field_scout_parka'
   | 'flannel_camp_vest'
   | 'cozy_sleeping_bag'
@@ -333,6 +344,9 @@ export type FrogGlassesId =
   | 'none'
   | 'kbbq_tasty_blush_steam'
   | 'kbbq_smoke_goggles'
+  | 'kbbq_sizzle_safety_goggles'
+  | 'kbbq_bbq_blush_steam'
+  | 'kbbq_smoke_tint_shades'
   | 'campfire_warm_glow'
   | 'explorer_binoculars'
   | 'cyber_pixel_shades'

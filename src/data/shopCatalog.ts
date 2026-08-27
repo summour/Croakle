@@ -1,6 +1,6 @@
 import { ShopItem, ShopCategory } from '../types';
 
-export const SHOP_CATEGORIES: { id: ShopCategory; label: string; thaiLabel: string; icon: string }[] = [
+export const SHOP_CATEGORIES: { id: ShopCategory; label: string; thaiLabel?: string; icon: string }[] = [
   { id: 'hats', label: 'Hats', icon: '👒' },
   { id: 'outfits', label: 'Outfits', icon: '👘' },
   { id: 'accessories', label: 'Glasses & Face', icon: '👓' },
