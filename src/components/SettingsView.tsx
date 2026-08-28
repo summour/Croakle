@@ -8,8 +8,7 @@ import {
   PixelSceneConfig,
 } from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
-import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Sparkles } from 'lucide-react';
-import { WoodGearDockIcon, ToriiStatsDockIcon } from './FrogIcons';
+import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Sparkles, BarChart3, Settings } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
 
 interface SettingsViewProps {
@@ -99,8 +98,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           activePage="settings"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'analysis', label: 'Analytics', icon: <ToriiStatsDockIcon size={15} /> },
-            { id: 'settings', label: 'Settings', icon: <WoodGearDockIcon size={15} /> },
+            { id: 'analysis', label: 'Analytics', icon: <BarChart3 size={15} /> },
+            { id: 'settings', label: 'Settings', icon: <Settings size={15} /> },
           ]}
         />
       )}

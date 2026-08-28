@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { PageType, MonthData, MOOD_LEVELS } from '../types';
 import { MONTH_NAMES, CALENDAR_HEADER_DAYS, getDaysInMonth } from '../utils/dateUtils';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
-import { FrogMoodIcon, FrogFaceDockIcon, HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
+import { ChevronLeft, ChevronRight, X, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
+import { FrogMoodIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
@@ -70,9 +70,9 @@ export const MoodView: React.FC<MoodViewProps> = ({
           activePage="mood"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood', icon: <FrogFaceDockIcon size={15} /> },
-            { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
-            { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
+            { id: 'mood', label: 'Mood', icon: <Smile size={14} /> },
+            { id: 'track', label: 'Habits', icon: <CheckCircle2 size={14} /> },
+            { id: 'project', label: 'Projects', icon: <FolderKanban size={14} /> },
           ]}
         />
       )}

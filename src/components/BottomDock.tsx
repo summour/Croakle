@@ -1,12 +1,6 @@
 import React from 'react';
 import { PageType } from '../types';
-import {
-  HabitCloverDockIcon,
-  WashiJournalDockIcon,
-  PocketTimerDockIcon,
-  ToriiStatsDockIcon,
-  WoodGearDockIcon,
-} from './FrogIcons';
+import { CheckSquare, FileText, Timer, BarChart3, Settings } from 'lucide-react';
 
 interface BottomDockProps {
   activePage: PageType;
@@ -19,44 +13,44 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     id: PageType;
     activeKeys: PageType[];
     label: string;
-    icon: React.ComponentType<{ className?: string; size?: number }>;
+    icon: React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>;
   }[] = [
     {
       id: 'mood',
       activeKeys: ['mood', 'track', 'project', 'best'],
       label: 'Trackers',
-      icon: HabitCloverDockIcon,
+      icon: CheckSquare,
     },
     {
       id: 'notes',
       activeKeys: ['notes'],
       label: 'Journal',
-      icon: WashiJournalDockIcon,
+      icon: FileText,
     },
     {
       id: 'time',
       activeKeys: ['time'],
       label: 'Focus',
-      icon: PocketTimerDockIcon,
+      icon: Timer,
     },
     {
       id: 'analysis',
       activeKeys: ['analysis'],
-      label: 'Insights',
-      icon: ToriiStatsDockIcon,
+      label: 'Analytics',
+      icon: BarChart3,
     },
     {
       id: 'settings',
       activeKeys: ['settings'],
       label: 'Settings',
-      icon: WoodGearDockIcon,
+      icon: Settings,
     },
   ];
 
   return (
     <footer
       id="croakle-bottom-dock"
-      className="absolute bottom-3 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[280px] max-w-sm bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl border border-black/10 dark:border-white/15 rounded-full p-1 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.15)] flex items-center justify-center gap-1 transition-all duration-300"
+      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[260px] max-w-sm bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl border border-zinc-200/80 dark:border-zinc-800 rounded-full p-1.5 shadow-lg shadow-zinc-950/5 flex items-center justify-center gap-1 transition-all duration-200"
     >
       {groups.map((group) => {
         const Icon = group.icon;
@@ -74,18 +68,21 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
             }}
             title={group.label}
             aria-label={group.label}
-            className={`flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full transition-all duration-200 ios-tap relative ${
+            className={`flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full transition-all duration-150 ios-tap relative ${
               isActive
-                ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-md scale-[1.03]'
-                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08]'
+                ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold'
+                : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
             }`}
           >
             <div className="relative flex items-center justify-center">
-              <Icon size={20} className={`transition-transform duration-200 ${isActive ? 'scale-105' : ''}`} />
+              <Icon
+                size={20}
+                strokeWidth={isActive ? 2.2 : 1.7}
+              />
               {group.id === 'time' && isTimerRunning && (
                 <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 border border-white dark:border-zinc-900" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-950 dark:bg-white opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-950 dark:bg-white border border-white dark:border-zinc-900" />
                 </span>
               )}
             </div>
@@ -95,5 +92,6 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     </footer>
   );
 };
+
 
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, PriorityType, MOOD_LEVELS } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
 import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
@@ -208,9 +208,9 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           activePage="track"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood', icon: <FrogFaceDockIcon size={15} /> },
-            { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
-            { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
+            { id: 'mood', label: 'Mood', icon: <Smile size={14} /> },
+            { id: 'track', label: 'Habits', icon: <CheckCircle2 size={14} /> },
+            { id: 'project', label: 'Projects', icon: <FolderKanban size={14} /> },
           ]}
         />
       )}

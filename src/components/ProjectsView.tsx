@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, Project, PriorityType } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, formatIsoDate } from '../utils/dateUtils';
-import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Archive, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ } from 'lucide-react';
+import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Archive, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
 import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
@@ -195,9 +195,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           activePage="project"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood', icon: <FrogFaceDockIcon size={15} /> },
-            { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
-            { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
+            { id: 'mood', label: 'Mood', icon: <Smile size={14} /> },
+            { id: 'track', label: 'Habits', icon: <CheckCircle2 size={14} /> },
+            { id: 'project', label: 'Projects', icon: <FolderKanban size={14} /> },
           ]}
         />
       )}

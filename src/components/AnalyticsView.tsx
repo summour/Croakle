@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, Project, NoteItem, TimeSession, MOOD_LEVELS } from '../types';
 import { MONTH_NAMES, CALENDAR_HEADER_DAYS, DAY_SHORT_NAMES, getDaysInMonth, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
-import { ChevronLeft, ChevronRight, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart, BarChart3, Settings } from 'lucide-react';
 import {
   ToriiStatsDockIcon,
   EmaTabIcon,
@@ -268,8 +268,8 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           activePage="analysis"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'analysis', label: 'Analytics', icon: <ToriiStatsDockIcon size={15} /> },
-            { id: 'settings', label: 'Settings', icon: <WoodGearDockIcon size={15} /> },
+            { id: 'analysis', label: 'Analytics', icon: <BarChart3 size={15} /> },
+            { id: 'settings', label: 'Settings', icon: <Settings size={15} /> },
           ]}
         />
       )}

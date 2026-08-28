@@ -1,7 +1,6 @@
 import React from 'react';
 import { ActiveTimerState } from '../types';
-import { Play, Pause, ChevronRight } from 'lucide-react';
-import { PocketTimerDockIcon, PixelCheckIcon } from './FrogIcons';
+import { Play, Pause, ChevronRight, Timer, Check } from 'lucide-react';
 
 interface LiveTimerBarProps {
   activeTimer: ActiveTimerState;
@@ -29,10 +28,10 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
     : `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
   const typeColorMap = {
-    focus: 'bg-[#5f7a61] text-[#e8f2e9] border-[#7d9d80]/40',
-    study: 'bg-[#4f6d85] text-[#e4f0f8] border-[#6b8da8]/40',
-    work: 'bg-[#b86f52] text-[#fbeee8] border-[#d68767]/40',
-    break: 'bg-[#8a7258] text-[#f7f2ea] border-[#ab9174]/40',
+    focus: 'bg-blue-500/10 text-[#007AFF] border-blue-500/20',
+    study: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+    work: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    break: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
   };
 
   return (
@@ -42,30 +41,30 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
     >
       <div 
         onClick={onOpenTimer}
-        className="cursor-pointer bg-[#221c17]/92 dark:bg-[#120f0d]/94 text-[#f6f1eb] backdrop-blur-2xl border border-white/25 dark:border-white/12 rounded-[28px] p-2.5 sm:p-3 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.6),0_4px_12px_rgba(0,0,0,0.3),inset_0_1.5px_2px_rgba(255,255,255,0.25)] flex items-center justify-between gap-2.5 transition-all hover:scale-[1.01] active:scale-[0.99] ios-tap group"
+        className="cursor-pointer bg-white/85 dark:bg-zinc-900/90 text-zinc-900 dark:text-white backdrop-blur-2xl border border-white/80 dark:border-white/15 rounded-[28px] p-2.5 sm:p-3 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.9)] dark:shadow-[0_20px_48px_rgba(0,0,0,0.7)] flex items-center justify-between gap-2.5 transition-all hover:scale-[1.01] active:scale-[0.99] ios-tap group"
       >
         {/* Left: Pulsing Icon & Subject Info */}
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="relative w-9 h-9 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/15 flex items-center justify-center shrink-0 shadow-2xs">
-            <PocketTimerDockIcon size={18} className="text-[#8fc493]" />
+          <div className="relative w-9 h-9 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/15 flex items-center justify-center shrink-0 shadow-2xs">
+            <Timer size={18} className="text-[#007AFF] dark:text-[#0A84FF]" />
             {activeTimer.isRunning && (
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#221c17] dark:border-[#120f0d] animate-ping opacity-75" />
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white dark:border-zinc-900 animate-ping opacity-75" />
             )}
-            <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#221c17] dark:border-[#120f0d] ${
-              activeTimer.isRunning ? 'bg-emerald-400' : 'bg-amber-400'
+            <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-zinc-900 ${
+              activeTimer.isRunning ? 'bg-emerald-500' : 'bg-amber-400'
             }`} />
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="font-black text-xs text-white truncate max-w-[120px] sm:max-w-[160px]">
+              <span className="font-bold text-xs text-zinc-900 dark:text-white truncate max-w-[120px] sm:max-w-[160px]">
                 {activeTimer.subject || 'Focus Session'}
               </span>
-              <span className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded-md border ${typeColorMap[activeTimer.type] || typeColorMap.focus}`}>
+              <span className={`text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-md border ${typeColorMap[activeTimer.type] || typeColorMap.focus}`}>
                 {activeTimer.type}
               </span>
             </div>
-            <p className="text-[10px] text-[#a89b8d] flex items-center gap-1 mt-0.5">
+            <p className="text-[10px] text-zinc-500 dark:text-zinc-400 flex items-center gap-1 mt-0.5">
               <span>{activeTimer.isRunning ? 'Focusing' : 'Paused'}</span>
               {activeTimer.initialStartedAt && (
                 <>
@@ -74,7 +73,7 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
                 </>
               )}
               <span>•</span>
-              <span className="text-[#d6c7b8] group-hover:underline flex items-center gap-0.5">
+              <span className="text-[#007AFF] dark:text-[#0A84FF] group-hover:underline flex items-center gap-0.5 font-medium">
                 Open <ChevronRight size={10} />
               </span>
             </p>
@@ -82,7 +81,7 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
         </div>
 
         {/* Center/Right: Live Timer Digits */}
-        <div className="font-mono font-black text-lg tracking-tight text-[#fbf8f5] px-2 tabular-nums">
+        <div className="font-mono font-bold text-lg tracking-tight text-zinc-900 dark:text-white px-2 tabular-nums">
           {formattedTime}
         </div>
 
@@ -93,7 +92,7 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
             type="button"
             onClick={onTogglePlayPause}
             title={activeTimer.isRunning ? 'Pause Timer' : 'Resume Timer'}
-            className="w-8 h-8 rounded-full bg-white/12 hover:bg-white/20 text-white flex items-center justify-center transition ios-tap"
+            className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 flex items-center justify-center transition ios-tap"
           >
             {activeTimer.isRunning ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
           </button>
@@ -104,9 +103,9 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
               type="button"
               onClick={onFinishSession}
               title="Finish & Save Session"
-              className="w-8 h-8 rounded-full bg-[#5f7a61] hover:bg-[#4f6751] text-white flex items-center justify-center shadow-xs transition ios-tap"
+              className="w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-xs transition ios-tap"
             >
-              <PixelCheckIcon size={15} />
+              <Check size={14} strokeWidth={2.5} />
             </button>
           )}
         </div>
