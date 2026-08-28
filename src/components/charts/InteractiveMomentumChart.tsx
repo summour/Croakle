@@ -107,11 +107,11 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
 
   // Chart dimensions
   const svgWidth = 720;
-  const svgHeight = 180;
+  const svgHeight = 220;
   const padLeft = 32;
-  const padRight = 32;
-  const padTop = 22;
-  const padBottom = 28;
+  const padRight = 18;
+  const padTop = 18;
+  const padBottom = 22;
 
   const innerW = svgWidth - padLeft - padRight;
   const innerH = svgHeight - padTop - padBottom;
@@ -285,11 +285,11 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
       {/* Main SVG Flow Canvas */}
       <div
         ref={containerRef}
-        className="relative w-full rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] p-3 border border-black/[0.04] dark:border-white/[0.05] overflow-hidden cursor-crosshair touch-none"
+        className="relative w-full rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] p-2.5 sm:p-3 border border-black/[0.04] dark:border-white/[0.05] overflow-hidden cursor-crosshair touch-none"
       >
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          className="w-full h-36 sm:h-44 overflow-visible"
+          className="w-full h-auto aspect-[720/220] overflow-visible"
           onPointerDown={handleSvgPointer}
           onPointerMove={(e) => {
             if (e.buttons === 1) handleSvgPointer(e);

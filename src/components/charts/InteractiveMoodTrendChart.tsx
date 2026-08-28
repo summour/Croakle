@@ -50,11 +50,11 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
 
   // Chart dimensions
   const svgWidth = 720;
-  const svgHeight = compact ? 130 : 160;
+  const svgHeight = compact ? 160 : 210;
   const padLeft = 32;
-  const padRight = 32;
-  const padTop = 20;
-  const padBottom = 26;
+  const padRight = 18;
+  const padTop = 18;
+  const padBottom = 22;
 
   const innerW = svgWidth - padLeft - padRight;
   const innerH = svgHeight - padTop - padBottom;
@@ -158,8 +158,11 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
       </div>
 
       {/* Main SVG Mood Canvas */}
-      <div className="w-full rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] p-3 border border-black/[0.04] dark:border-white/[0.05] overflow-hidden relative">
-        <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-32 sm:h-40 overflow-visible">
+      <div className="w-full rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] p-2.5 sm:p-3 border border-black/[0.04] dark:border-white/[0.05] overflow-hidden relative">
+        <svg
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          className={`w-full h-auto ${compact ? 'aspect-[720/160]' : 'aspect-[720/210]'} overflow-visible`}
+        >
           <defs>
             <filter id="neonTrendGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
