@@ -263,18 +263,6 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
   return (
     <div className="space-y-4 pb-28" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Analytics/Settings */}
-      {onNavigate && (
-        <SubNavTabs
-          activePage="analysis"
-          onNavigate={onNavigate}
-          tabs={[
-            { id: 'analysis', label: 'Analytics', icon: <BarChart3 size={15} /> },
-            { id: 'settings', label: 'Settings', icon: <Settings size={15} /> },
-          ]}
-        />
-      )}
-
       {/* Header & Month Navigator (Sticky Locked) */}
       <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-3">
         <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
@@ -569,42 +557,50 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-7 gap-1 text-center">
-              {CALENDAR_HEADER_DAYS.map((d) => (
-                <span key={d} className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 py-1">
-                  {d}
-                </span>
-              ))}
+            {/* Natural Fit Calendar Grid */}
+            <div className="space-y-1.5">
+              <div className="grid grid-cols-7 gap-1 sm:gap-1.5 text-center">
+                {CALENDAR_HEADER_DAYS.map((d) => (
+                  <span key={d} className="text-[10.5px] font-bold text-zinc-400 dark:text-zinc-500 py-0.5">
+                    {d}
+                  </span>
+                ))}
+              </div>
 
-              {/* Offset for first day of month */}
-              {Array.from({ length: new Date(year, monthIndex, 1).getDay() }).map((_, i) => (
-                <div key={`empty-${i}`} className="h-8" />
-              ))}
+              <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
+                {/* Offset for first day of month */}
+                {Array.from({ length: new Date(year, monthIndex, 1).getDay() }).map((_, i) => (
+                  <div key={`empty-${i}`} className="h-10 sm:h-12 pointer-events-none opacity-0" />
+                ))}
 
-              {/* Month Days */}
-              {Array.from({ length: daysInMonth }, (_, i) => {
-                const dayNum = i + 1;
-                const moodVal = monthData.moods[i];
-                const moodObj = moodVal ? MOOD_LEVELS.find((m) => m.value === moodVal) : null;
-                return (
-                  <div
-                    key={dayNum}
-                    className={`h-8 rounded-xl flex items-center justify-center text-xs font-black transition-all border ${
-                      moodObj
-                        ? `${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} shadow-2xs`
-                        : 'bg-zinc-100 dark:bg-zinc-800/50 border-transparent text-zinc-500 dark:text-zinc-400'
-                    }`}
-                  >
-                    {moodObj ? (
-                      <div className="flex items-center justify-center" title={`Day ${dayNum}: ${moodObj.label}`}>
-                        <FrogMoodIcon value={moodObj.value} size={18} />
+                {/* Month Days */}
+                {Array.from({ length: daysInMonth }, (_, i) => {
+                  const dayNum = i + 1;
+                  const moodVal = monthData.moods[i];
+                  const moodObj = moodVal ? MOOD_LEVELS.find((m) => m.value === moodVal) : null;
+                  return (
+                    <div
+                      key={dayNum}
+                      className="h-10 sm:h-12 rounded-xl flex flex-col items-center justify-between p-1 transition-all bg-zinc-100/80 dark:bg-zinc-800/60 border border-zinc-200/60 dark:border-zinc-700/60 select-none"
+                    >
+                      {/* Day Number */}
+                      <span className="text-[9.5px] sm:text-[10px] font-bold leading-none text-zinc-500 dark:text-zinc-400">
+                        {dayNum}
+                      </span>
+
+                      {/* Frog Mood Icon */}
+                      <div
+                        className="flex-1 w-full flex items-center justify-center min-h-0"
+                        title={moodObj ? `Day ${dayNum}: ${moodObj.label}` : `Day ${dayNum}`}
+                      >
+                        {moodObj ? (
+                          <FrogMoodIcon value={moodObj.value} size={22} className="scale-95 sm:scale-100" />
+                        ) : null}
                       </div>
-                    ) : (
-                      <span className="text-[10px] opacity-60 font-medium">{dayNum}</span>
-                    )}
-                  </div>
-                );
-              })}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

@@ -92,18 +92,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   return (
     <div className="space-y-3.5 pb-24">
-      {/* Top Navigation */}
-      {onNavigate && (
-        <SubNavTabs
-          activePage="settings"
-          onNavigate={onNavigate}
-          tabs={[
-            { id: 'analysis', label: 'Analytics', icon: <BarChart3 size={15} /> },
-            { id: 'settings', label: 'Settings', icon: <Settings size={15} /> },
-          ]}
-        />
-      )}
-
       {/* Header */}
       <div className="ios-glass-card p-3.5 sm:p-4 flex items-center justify-between">
         <div>
