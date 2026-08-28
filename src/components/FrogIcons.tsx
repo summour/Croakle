@@ -2384,4 +2384,93 @@ export const PixelGachaTicketIcon: React.FC<IconProps> = ({ size = 20, className
   </svg>
 );
 
+/** 
+ * Pixel Frog Wearing Golden Crown (Selected Checked Frog)
+ * Matching the exact Golden Crown Frog in Row 1, Col 3 of user sprite sheet
+ */
+export const PixelFrogCrownIcon: React.FC<IconProps> = ({ size = 28, className = '', ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 20 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    shapeRendering="crispEdges"
+    className={`inline-block shrink-0 ${className}`}
+    {...props}
+  >
+    {/* --- Golden Crown --- */}
+    {/* Crown Dark Outline */}
+    <rect x="8" y="0" width="1" height="1" fill="#0D226B" />
+    <rect x="10" y="1" width="1" height="1" fill="#0D226B" />
+    <rect x="12" y="0" width="1" height="1" fill="#0D226B" />
+    <rect x="7" y="1" width="1" height="3" fill="#0D226B" />
+    <rect x="13" y="1" width="1" height="3" fill="#0D226B" />
+    <rect x="9" y="2" width="1" height="1" fill="#0D226B" />
+    <rect x="11" y="2" width="1" height="1" fill="#0D226B" />
+    <rect x="8" y="4" width="5" height="1" fill="#0D226B" />
+
+    {/* Crown Gold Fill & Highlights */}
+    <rect x="8" y="1" width="1" height="3" fill="#FACC15" />
+    <rect x="10" y="2" width="1" height="2" fill="#FACC15" />
+    <rect x="12" y="1" width="1" height="3" fill="#FACC15" />
+    <rect x="9" y="3" width="3" height="1" fill="#FACC15" />
+    <rect x="8" y="1" width="1" height="1" fill="#FEF08A" />
+    <rect x="12" y="1" width="1" height="1" fill="#FEF08A" />
+    <rect x="9" y="3" width="1" height="1" fill="#EAB308" />
+    <rect x="11" y="3" width="1" height="1" fill="#EAB308" />
+
+    {/* --- Frog Body Dark Navy / Indigo Outline --- */}
+    <rect x="4" y="3" width="4" height="1" fill="#0D226B" />
+    <rect x="3" y="4" width="1" height="2" fill="#0D226B" />
+    <rect x="8" y="4" width="1" height="2" fill="#0D226B" />
+    <rect x="12" y="4" width="1" height="2" fill="#0D226B" />
+    <rect x="13" y="3" width="4" height="1" fill="#0D226B" />
+    <rect x="17" y="4" width="1" height="2" fill="#0D226B" />
+    <rect x="2" y="6" width="1" height="8" fill="#0D226B" />
+    <rect x="18" y="6" width="1" height="8" fill="#0D226B" />
+    <rect x="3" y="14" width="15" height="1" fill="#0D226B" />
+    <rect x="4" y="13" width="3" height="1" fill="#0D226B" />
+    <rect x="14" y="13" width="3" height="1" fill="#0D226B" />
+
+    {/* --- Frog Green Skin Fill --- */}
+    <rect x="4" y="4" width="4" height="2" fill="#84E42B" />
+    <rect x="13" y="4" width="4" height="2" fill="#84E42B" />
+    <rect x="3" y="6" width="15" height="8" fill="#84E42B" />
+    <rect x="4" y="13" width="13" height="1" fill="#84E42B" />
+
+    {/* --- Frog Shading (Bottom Right Forest Green & Blue-Shadow) --- */}
+    <rect x="14" y="9" width="4" height="4" fill="#65A30D" />
+    <rect x="12" y="11" width="2" height="2" fill="#65A30D" />
+    <rect x="14" y="13" width="3" height="1" fill="#4D7C0F" />
+    <rect x="3" y="13" width="1" height="1" fill="#4D7C0F" />
+    <rect x="17" y="13" width="1" height="1" fill="#4D7C0F" />
+
+    {/* --- Cheerful Pink Blush Cheeks --- */}
+    <rect x="3" y="8" width="2" height="1" fill="#FDA4AF" />
+    <rect x="16" y="8" width="2" height="1" fill="#FDA4AF" />
+
+    {/* --- Left Eye (Round with Pupil & White Highlight) --- */}
+    <rect x="4" y="4" width="3" height="2" fill="#0D226B" />
+    <rect x="4" y="4" width="2" height="1" fill="#5076F2" />
+    <rect x="4" y="4" width="1" height="1" fill="#FFFFFF" />
+
+    {/* --- Right Eye (Round with Pupil & White Highlight) --- */}
+    <rect x="14" y="4" width="3" height="2" fill="#0D226B" />
+    <rect x="14" y="4" width="2" height="1" fill="#5076F2" />
+    <rect x="14" y="4" width="1" height="1" fill="#FFFFFF" />
+
+    {/* --- Joyful Laughing Open Smile Mouth --- */}
+    <rect x="7" y="7" width="7" height="1" fill="#0D226B" />
+    <rect x="7" y="8" width="7" height="2" fill="#0D226B" />
+    <rect x="8" y="8" width="5" height="2" fill="#D92B54" />
+    <rect x="8" y="9" width="5" height="1" fill="#FFA0B8" />
+
+    {/* --- Little Bottom Feet Base --- */}
+    <rect x="4" y="13" width="3" height="1" fill="#65A30D" />
+    <rect x="14" y="13" width="3" height="1" fill="#4D7C0F" />
+  </svg>
+);
+
+
 

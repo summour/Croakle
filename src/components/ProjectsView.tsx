@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageType, Project, PriorityType } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, formatIsoDate } from '../utils/dateUtils';
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Archive, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
-import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
+import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon, PixelFrogCrownIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 import { CalendarPickerModal } from './CalendarPickerModal';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
@@ -387,7 +387,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   )}
 
                   {/* 7 Days Checkbox squircle buttons */}
-                  <div className="grid grid-cols-7 gap-1.5">
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
                     {weekDays.map((wd, dayIdx) => {
                       const isDone = Boolean(weekChecks[dayIdx]);
 
@@ -398,15 +398,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                           disabled={project.completed}
                           onClick={() => handleToggleDay(originalIndex, dayIdx)}
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
-                          className={`h-11 rounded-[16px] flex items-center justify-center transition-all ios-tap ${
+                          className={`aspect-square w-full rounded-[14px] sm:rounded-[16px] flex items-center justify-center transition-all ios-tap ${
                             project.completed
-                              ? 'opacity-30 cursor-not-allowed bg-zinc-100 dark:bg-zinc-800'
+                              ? 'opacity-30 cursor-not-allowed bg-transparent border border-dashed border-zinc-200 dark:border-zinc-800'
                               : isDone
-                              ? 'bg-[#007AFF] text-white shadow-[0_4px_12px_rgba(0,122,255,0.35)] scale-[0.98] font-bold'
-                              : 'bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#007AFF]'
+                              ? 'bg-transparent border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 active:scale-95'
+                              : 'bg-transparent border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 active:scale-95'
                           }`}
                         >
-                          {isDone ? <PixelCheckIcon size={18} /> : null}
+                          {isDone ? <PixelFrogCrownIcon size={34} className="w-7 h-7 sm:w-8 sm:h-8 animate-in zoom-in-75 duration-150" /> : null}
                         </button>
                       );
                     })}

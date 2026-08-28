@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, PriorityType, MOOD_LEVELS } from '../types';
 import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
-import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
+import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon, PixelFrogCrownIcon } from './FrogIcons';
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
 import { CalendarPickerModal } from './CalendarPickerModal';
@@ -409,7 +409,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   )}
 
                   {/* 7-Day Habit Tracker Buttons */}
-                  <div className="grid grid-cols-7 gap-1.5">
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
                     {weekDays.map((wd) => {
                       const isCurrentMonthDay = wd.inMonth;
                       const dayNumber = wd.date.getDate();
@@ -422,15 +422,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                           disabled={!isCurrentMonthDay || habit.completed}
                           onClick={() => handleToggleDay(originalIndex, wd.date)}
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
-                          className={`h-11 rounded-[16px] flex items-center justify-center transition-all duration-200 ios-tap ${
+                          className={`aspect-square w-full rounded-[14px] sm:rounded-[16px] flex items-center justify-center transition-all duration-200 ios-tap ${
                             !isCurrentMonthDay || habit.completed
-                              ? 'opacity-25 cursor-not-allowed bg-zinc-100 dark:bg-zinc-800'
+                              ? 'opacity-25 cursor-not-allowed bg-transparent border border-dashed border-zinc-200 dark:border-zinc-800'
                               : isDone
-                              ? 'bg-[#34C759] text-white shadow-[0_4px_12px_rgba(52,199,89,0.35)] scale-[0.98] font-black'
-                              : 'bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#34C759] dark:hover:border-[#34C759]'
+                              ? 'bg-transparent border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 active:scale-95'
+                              : 'bg-transparent border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 active:scale-95'
                           }`}
                         >
-                          {isDone ? <PixelCheckIcon size={18} /> : null}
+                          {isDone ? <PixelFrogCrownIcon size={34} className="w-7 h-7 sm:w-8 sm:h-8 animate-in zoom-in-75 duration-150" /> : null}
                         </button>
                       );
                     })}
