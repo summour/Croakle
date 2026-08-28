@@ -20,6 +20,7 @@ import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import { InteractiveMomentumChart } from './charts/InteractiveMomentumChart';
 import { InteractiveMoodTrendChart } from './charts/InteractiveMoodTrendChart';
 import { InteractiveLeaderboardChart } from './charts/InteractiveLeaderboardChart';
+import { InteractiveProjectsProgressChart } from './charts/InteractiveProjectsProgressChart';
 
 interface AnalyticsViewProps {
   habits: HabitTemplate[];
@@ -670,60 +671,18 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           <div className="ios-glass-card p-4 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-black text-sm tracking-tight text-zinc-950 dark:text-white">
-                Projects Progress & Weekly Adherence
+                Projects Progress & Performance
               </h3>
               <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
-                {activeOrTrackedProjects.length} Projects Tracked
+                {projects.length} Projects Tracked
               </span>
             </div>
 
-            {activeOrTrackedProjects.length === 0 ? (
-              <div className="py-8 text-center text-xs text-zinc-400 dark:text-zinc-500">
-                No active projects tracked for {MONTH_NAMES[monthIndex]} {year}.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {activeOrTrackedProjects.map((p) => (
-                  <div
-                    key={p.id}
-                    className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 space-y-2.5"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <BambooProjectDockIcon size={16} className="text-[#FF9500]" />
-                        <strong className="text-sm font-black text-zinc-950 dark:text-white">{p.name}</strong>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                          p.completed
-                            ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950'
-                            : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
-                        }`}>
-                          {p.completed ? 'Completed' : p.priority}
-                        </span>
-                        <span className="text-xs font-black text-[#007AFF]">
-                          {p.goalAdherence}% Goal Met
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="w-full bg-zinc-200 dark:bg-zinc-700 h-2 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-zinc-950 dark:bg-white rounded-full transition-all duration-500"
-                        style={{ width: `${p.goalAdherence}%` }}
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 pt-1">
-                      <span>Goal: {p.goal} days/week</span>
-                      <span className="font-bold text-zinc-950 dark:text-white">
-                        {p.monthChecks} check-ins across {p.totalWeeks} weeks
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <InteractiveProjectsProgressChart
+              year={year}
+              monthIndex={monthIndex}
+              projects={projects}
+            />
           </div>
         </div>
       )}

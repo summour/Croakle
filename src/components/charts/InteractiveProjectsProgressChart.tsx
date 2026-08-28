@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { HabitTemplate, MonthData } from '../../types';
+import { Project } from '../../types';
+import { getWeekKey } from '../../utils/dateUtils';
 import { soundEngine, triggerHaptic } from '../../utils/audioUtils';
 
-interface InteractiveLeaderboardChartProps {
+interface InteractiveProjectsProgressChartProps {
   year: number;
   monthIndex: number;
-  habits: HabitTemplate[];
-  monthData: MonthData;
+  projects: Project[];
 }
 
-export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartProps> = ({
+export const InteractiveProjectsProgressChart: React.FC<InteractiveProjectsProgressChartProps> = ({
   year,
   monthIndex,
-  habits,
-  monthData,
+  projects,
 }) => {
   const [filterMode, setFilterMode] = useState<'all' | 'top' | 'growing'>('all');
   const [sortBy, setSortBy] = useState<'rate' | 'checks'>('rate');
@@ -21,17 +20,31 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
   const weeksInMonth = Math.ceil(daysInMonth / 7);
 
-  // Process habit stats
-  const habitStats = habits.map((habit, originalIndex) => {
-    const monthHabit = monthData.habits[originalIndex];
-    const days = monthHabit?.days || [];
+  // Process project stats
+  const projectStats = projects.map((project, originalIndex) => {
+    // Generate daily activity for this month (1 to daysInMonth)
+    const days: boolean[] = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayDate = new Date(year, monthIndex, day);
+      const dayOfWeek = dayDate.getDay(); // 0: Sun, 1: Mon...
+      const dayIndex = (dayOfWeek + 6) % 7; // 0: Mon, 6: Sun
+      const weekKey = getWeekKey(dayDate);
+      const isChecked = Boolean(project.weeklyDays?.[weekKey]?.[dayIndex]);
+      days.push(isChecked);
+    }
+
     const monthChecks = days.reduce((acc, d) => acc + (d ? 1 : 0), 0);
-    const monthlyTarget = Math.min(daysInMonth, habit.goal * weeksInMonth);
+    const monthlyTarget = Math.min(daysInMonth, (project.goal || 3) * weeksInMonth);
     const goalPercent = monthlyTarget > 0 ? Math.round((monthChecks / monthlyTarget) * 100) : 0;
     const actualMonthRate = daysInMonth > 0 ? Math.round((monthChecks / daysInMonth) * 100) : 0;
-    const lifetime = (monthHabit?.lifetime || 0) + monthChecks;
 
-    // Streak
+    // Lifetime across all tracked weeks
+    const lifetime = Object.values(project.weeklyDays || {}).reduce(
+      (acc, weekArr) => acc + (Array.isArray(weekArr) ? weekArr.filter(Boolean).length : 0),
+      0
+    );
+
+    // Current streak
     let currentStreak = 0;
     for (let d = days.length - 1; d >= 0; d--) {
       if (days[d]) {
@@ -42,7 +55,7 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
     }
 
     return {
-      habit,
+      project,
       originalIndex,
       days,
       monthChecks,
@@ -51,11 +64,11 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
       actualMonthRate,
       lifetime,
       currentStreak,
-      isArchived: Boolean(habit.completed),
+      isArchived: Boolean(project.completed),
     };
   });
 
-  const filtered = habitStats.filter((stat) => {
+  const filtered = projectStats.filter((stat) => {
     if (stat.isArchived && stat.monthChecks === 0) return false;
     if (filterMode === 'top') return stat.goalPercent >= 80;
     if (filterMode === 'growing') return stat.goalPercent < 80;
@@ -74,7 +87,7 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
           {(
             [
-              { id: 'all', label: 'All Habits' },
+              { id: 'all', label: 'All Projects' },
               { id: 'top', label: 'Top (≥80%)' },
               { id: 'growing', label: 'In Progress' },
             ] as const
@@ -98,8 +111,8 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
           ))}
         </div>
 
-        {/* Sort */}
-        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-full border border-zinc-200 dark:border-zinc-700">
+        {/* Sort buttons */}
+        <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800/80 p-0.5 rounded-full border border-zinc-200/80 dark:border-zinc-700/80">
           <span className="text-[10px] font-medium text-zinc-400 pl-2 pr-1">Sort:</span>
           <button
             type="button"
@@ -128,17 +141,17 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
         </div>
       </div>
 
-      {/* Habit List */}
+      {/* Projects List */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
           <div className="py-8 text-center text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-50 dark:bg-zinc-900 rounded-[22px] p-4 border border-zinc-200 dark:border-zinc-800">
-            No habits match this filter.
+            No projects match this filter.
           </div>
         ) : (
           filtered.map((stat, idx) => {
             return (
               <div
-                key={stat.habit.id}
+                key={stat.project.id}
                 className="rounded-[22px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-xs space-y-2.5 p-3.5"
               >
                 {/* Header Row */}
@@ -150,10 +163,10 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
 
                     <div className="min-w-0">
                       <strong className="text-xs font-bold text-zinc-950 dark:text-white truncate block">
-                        {stat.habit.name}
+                        {stat.project.name}
                       </strong>
                       <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
-                        Goal: {stat.habit.goal}d/wk • {stat.monthChecks}/{stat.monthlyTarget} checks
+                        Goal: {stat.project.goal}d/wk • {stat.monthChecks}/{stat.monthlyTarget} checks
                       </span>
                     </div>
                   </div>
@@ -206,8 +219,12 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
                   </div>
 
                   <div className="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500 pt-0.5">
-                    <span>Lifetime: <strong className="text-zinc-950 dark:text-white">{stat.lifetime}</strong></span>
-                    <span>Month rate: <strong className="text-zinc-950 dark:text-white">{stat.actualMonthRate}%</strong></span>
+                    <span>
+                      Lifetime: <strong className="text-zinc-950 dark:text-white">{stat.lifetime}</strong>
+                    </span>
+                    <span>
+                      Month rate: <strong className="text-zinc-950 dark:text-white">{stat.actualMonthRate}%</strong>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -218,4 +235,3 @@ export const InteractiveLeaderboardChart: React.FC<InteractiveLeaderboardChartPr
     </div>
   );
 };
-

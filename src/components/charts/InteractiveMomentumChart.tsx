@@ -130,6 +130,19 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
     return padTop + innerH - normalized * innerH;
   };
 
+  // Build Mood Path for valid points
+  const validMoodPoints = dailyData
+    .map((d, i) => ({
+      x: getX(i),
+      y: d.moodValue !== null ? getYMood(d.moodValue) : null,
+      ...d,
+    }))
+    .filter((p): p is typeof p & { y: number; moodValue: number } => p.y !== null);
+
+  const moodLinePath = validMoodPoints.length > 1
+    ? `M ${validMoodPoints[0].x} ${validMoodPoints[0].y} ` + validMoodPoints.slice(1).map((p) => `L ${p.x} ${p.y}`).join(' ')
+    : '';
+
   // Build Habit Path
   const habitPoints = dailyData.map((d, i) => ({
     x: getX(i),
@@ -185,11 +198,11 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             onClick={() => setShowHabits(!showHabits)}
             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all ios-tap border ${
               showHabits
-                ? 'bg-[#5f7a61]/12 border-[#5f7a61]/30 text-[#455c47] dark:text-[#8fc493]'
-                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-[#8c7e70] dark:text-[#a89b8d] opacity-50'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
+                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-zinc-400 dark:text-zinc-500 opacity-60'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-[#5f7a61]" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span>Habits</span>
           </button>
 
@@ -198,11 +211,11 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             onClick={() => setShowMood(!showMood)}
             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all ios-tap border ${
               showMood
-                ? 'bg-[#d98236]/12 border-[#d98236]/30 text-[#b56521] dark:text-[#e89b58]'
-                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-[#8c7e70] dark:text-[#a89b8d] opacity-50'
+                ? 'bg-pink-500/10 border-pink-500/30 text-pink-700 dark:text-pink-300'
+                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-zinc-400 dark:text-zinc-500 opacity-60'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-[#d98236]" />
+            <span className="w-2 h-2 rounded-full bg-[#FF2A85]" />
             <span>Mood</span>
           </button>
 
@@ -211,11 +224,11 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             onClick={() => setShowFocus(!showFocus)}
             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all ios-tap border ${
               showFocus
-                ? 'bg-[#c28f3a]/12 border-[#c28f3a]/30 text-[#966b22] dark:text-[#e0ad58]'
-                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-[#8c7e70] dark:text-[#a89b8d] opacity-50'
+                ? 'bg-blue-500/10 border-blue-500/30 text-blue-700 dark:text-blue-300'
+                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-zinc-400 dark:text-zinc-500 opacity-60'
             }`}
           >
-            <span className="w-2 h-2 rounded-xs bg-[#c28f3a]" />
+            <span className="w-2 h-2 rounded-xs bg-[#007AFF]" />
             <span>Focus</span>
           </button>
 
@@ -224,18 +237,18 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             onClick={() => setShowAverage(!showAverage)}
             className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all ios-tap border ${
               showAverage
-                ? 'bg-black/[0.05] dark:bg-white/[0.06] border-black/10 dark:border-white/12 text-[#2d2823] dark:text-[#f4efe8]'
-                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-[#8c7e70] dark:text-[#a89b8d] opacity-50'
+                ? 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200'
+                : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-zinc-400 dark:text-zinc-500 opacity-60'
             }`}
           >
-            <span className="w-2 h-0.5 bg-[#8c7e70]" />
+            <span className="w-2 h-0.5 bg-zinc-500 dark:bg-zinc-400 rounded-full" />
             <span>Avg {overallMonthRate}%</span>
           </button>
         </div>
 
         {/* Minimal Stepper */}
         {selectedDay && (
-          <div className="flex items-center gap-1 bg-black/[0.03] dark:bg-white/[0.05] p-0.5 rounded-full border border-black/[0.04] dark:border-white/[0.06]">
+          <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800/80 p-0.5 rounded-full border border-zinc-200/80 dark:border-zinc-700/80 text-zinc-800 dark:text-zinc-200">
             <button
               type="button"
               onClick={() => {
@@ -244,12 +257,12 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
                 soundEngine.playTapSound();
               }}
               disabled={selectedDay <= 1}
-              className="p-1 rounded-full hover:bg-black/[0.05] dark:hover:bg-white/[0.08] disabled:opacity-20 text-[#4a4036] dark:text-[#e0d6cb] transition"
+              className="p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 transition"
               title="Previous Day"
             >
               <ChevronLeft size={13} />
             </button>
-            <span className="text-[11px] font-bold px-1 text-[#2d2823] dark:text-[#f4efe8]">
+            <span className="text-[11px] font-bold px-1.5 tabular-nums text-zinc-800 dark:text-zinc-200">
               Day {selectedDay}
             </span>
             <button
@@ -260,7 +273,7 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
                 soundEngine.playTapSound();
               }}
               disabled={selectedDay >= daysInMonth}
-              className="p-1 rounded-full hover:bg-black/[0.05] dark:hover:bg-white/[0.08] disabled:opacity-20 text-[#4a4036] dark:text-[#e0d6cb] transition"
+              className="p-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 transition"
               title="Next Day"
             >
               <ChevronRight size={13} />
@@ -284,13 +297,31 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
         >
           <defs>
             <linearGradient id="momentumHabitGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#5f7a61" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#5f7a61" stopOpacity="0.00" />
+              <stop offset="0%" stopColor="#10B981" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#10B981" stopOpacity="0.00" />
             </linearGradient>
 
             <linearGradient id="momentumFocusGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#c28f3a" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#c28f3a" stopOpacity="0.08" />
+              <stop offset="0%" stopColor="#007AFF" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#007AFF" stopOpacity="0.06" />
+            </linearGradient>
+
+            {/* Neon Mood Glow Filter */}
+            <filter id="neonMoodGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            {/* Vibrant Neon Mood Line Gradient */}
+            <linearGradient id="neonMoodLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#B026FF" />
+              <stop offset="25%" stopColor="#00E5FF" />
+              <stop offset="50%" stopColor="#00E676" />
+              <stop offset="75%" stopColor="#FF2A85" />
+              <stop offset="100%" stopColor="#FFE500" />
             </linearGradient>
           </defs>
 
@@ -329,8 +360,8 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
                 y1={avgY}
                 x2={svgWidth - padRight}
                 y2={avgY}
-                stroke="#5f7a61"
-                strokeOpacity="0.5"
+                stroke="#10B981"
+                strokeOpacity="0.6"
                 strokeWidth="1.2"
                 strokeDasharray="3 3"
               />
@@ -368,31 +399,66 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             <path
               d={habitLinePath}
               fill="none"
-              stroke="#5f7a61"
+              stroke="#10B981"
               strokeWidth="2.2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           )}
 
-          {/* Mood Points */}
+          {/* Mood Neon Connecting Line */}
+          {showMood && moodLinePath && (
+            <>
+              <path
+                d={moodLinePath}
+                fill="none"
+                stroke="url(#neonMoodLineGrad)"
+                strokeWidth="3.5"
+                strokeOpacity="0.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter="url(#neonMoodGlow)"
+              />
+              <path
+                d={moodLinePath}
+                fill="none"
+                stroke="url(#neonMoodLineGrad)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </>
+          )}
+
+          {/* Mood Neon Points */}
           {showMood &&
             dailyData.map((d, i) => {
-              if (!d.moodValue) return null;
+              if (!d.moodValue || !d.moodObj) return null;
               const x = getX(i);
               const y = getYMood(d.moodValue);
               const isSelected = selectedDay === d.day;
               return (
-                <circle
-                  key={`mood-point-${d.day}`}
-                  cx={x}
-                  cy={y}
-                  r={isSelected ? 5 : 3.5}
-                  fill={d.moodObj?.color || '#d98236'}
-                  stroke="#ffffff"
-                  strokeWidth={isSelected ? 2 : 1}
-                  className="transition-all"
-                />
+                <g key={`mood-point-${d.day}`}>
+                  {/* Subtle glowing halo */}
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r={isSelected ? 9 : 6}
+                    fill={d.moodObj.color}
+                    fillOpacity={isSelected ? 0.45 : 0.25}
+                    filter="url(#neonMoodGlow)"
+                  />
+                  {/* Core neon point */}
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r={isSelected ? 5.5 : 3.8}
+                    fill={d.moodObj.color}
+                    stroke="#ffffff"
+                    strokeWidth={isSelected ? 2.2 : 1.2}
+                    className="transition-all"
+                  />
+                </g>
               );
             })}
 
@@ -495,7 +561,15 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
             {/* Metric chips */}
             <div className="flex items-center gap-2">
               {selectedData.moodObj && (
-                <div className="px-2 py-0.5 rounded-full flex items-center gap-1 bg-[#d98236]/10 text-[#b56521] dark:text-[#e89b58] text-[11px] font-semibold border border-[#d98236]/20">
+                <div
+                  className="px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-[11px] font-bold border transition-all"
+                  style={{
+                    backgroundColor: `${selectedData.moodObj.color}15`,
+                    borderColor: `${selectedData.moodObj.color}40`,
+                    color: selectedData.moodObj.color,
+                    boxShadow: `0 0 10px ${selectedData.moodObj.color}25`,
+                  }}
+                >
                   <FrogMoodIcon value={selectedData.moodObj.value} size={14} />
                   <span>{selectedData.moodObj.label}</span>
                 </div>
