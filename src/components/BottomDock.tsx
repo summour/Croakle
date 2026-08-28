@@ -47,7 +47,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     },
     {
       id: 'settings',
-      activeKeys: ['settings', 'shop', 'dressup', 'coins'],
+      activeKeys: ['settings'],
       label: 'Settings',
       icon: WoodGearDockIcon,
     },

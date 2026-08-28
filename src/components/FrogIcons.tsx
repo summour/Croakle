@@ -1,5 +1,4 @@
 import React from 'react';
-import { PixelItemThumbnail } from './PixelItemThumbnail';
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number;
@@ -1233,12 +1232,17 @@ export const PixelTabWeatherIcon: React.FC<IconProps> = (props) => <PixelWeather
 
 /** Master Pixel Option Icon Renderer */
 export const PixelOptionIcon: React.FC<{ id: string; category?: string; size?: number; className?: string }> = ({
-  id,
-  category,
   size = 24,
   className = '',
 }) => {
-  return <PixelItemThumbnail id={id} category={category} size={size} className={className} />;
+  return (
+    <div
+      style={{ width: size, height: size }}
+      className={`inline-flex items-center justify-center rounded bg-emerald-500/10 text-emerald-600 ${className}`}
+    >
+      <span className="text-xs font-mono">🐸</span>
+    </div>
+  );
 };
 
 /** Pixel Checkmark Icon */
