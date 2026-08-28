@@ -11,8 +11,6 @@ import {
   LayoutList,
   Layers,
   Calendar,
-  ChevronDown,
-  ChevronUp,
 } from 'lucide-react';
 import {
   WashiJournalDockIcon,
@@ -72,7 +70,6 @@ export const NotesView: React.FC<NotesViewProps> = ({
   const [scopeMode, setScopeMode] = useState<'week' | 'month' | 'day' | 'all'>('month');
   const [viewDensity, setViewDensity] = useState<'comfortable' | 'compact'>('comfortable');
   const [searchQuery, setSearchQuery] = useState('');
-  const [expandedNoteIds, setExpandedNoteIds] = useState<Record<string, boolean>>({});
   const [visibleLimit, setVisibleLimit] = useState<number>(35);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -203,10 +200,6 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
     return groups;
   }, [filteredNotes, visibleLimit]);
-
-  const toggleExpand = (id: string) => {
-    setExpandedNoteIds((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
 
   const handleOpenAdd = () => {
     const initialType = filterType === 'all' ? 'habit' : filterType;
@@ -526,41 +519,39 @@ export const NotesView: React.FC<NotesViewProps> = ({
             return (
               <div key={group.date} className="space-y-2">
                 {/* Date Group Header */}
-                <div className="flex items-center justify-between px-1">
+                <div className="flex items-center justify-between px-1 pt-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-zinc-950 dark:bg-white" />
-                    <strong className="text-xs font-black text-zinc-950 dark:text-white tracking-tight">
+                    <span className="w-2.5 h-2.5 rounded-full bg-zinc-950 dark:bg-white" />
+                    <strong className="text-sm sm:text-base font-black text-zinc-950 dark:text-white tracking-tight">
                       {friendlyHeader}
                     </strong>
                   </div>
-                  <span className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60">
                     {group.items.length} {group.items.length === 1 ? 'entry' : 'entries'}
                   </span>
                 </div>
 
                 {/* Group Items */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {group.items.map((note) => {
-                    const isExpanded = !!expandedNoteIds[note.id];
                     const content = getResolvedContent(note);
-                    const isLong = content.length > 120 || content.includes('\n');
 
                     return (
                       <div
                         key={note.id}
-                        className={`ios-glass-card transition-all relative group border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 ${
-                          viewDensity === 'compact' ? 'p-3' : 'p-3.5 sm:p-4 space-y-2.5'
+                        className={`rounded-[22px] sm:rounded-[24px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] dark:shadow-none transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 ${
+                          viewDensity === 'compact' ? 'p-3.5 space-y-2' : 'p-4 sm:p-5 space-y-3'
                         }`}
                       >
                         {/* Header info row */}
-                        <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center justify-between gap-2 pb-1 border-b border-zinc-100 dark:border-zinc-800/80">
                           <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                            <span className="text-[11px] sm:text-xs font-black uppercase px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700/80">
                               {note.type}
                             </span>
 
                             {note.sourceName && (
-                              <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#007AFF] dark:bg-blue-950/40 dark:text-[#3894FF] border border-blue-200 dark:border-blue-800/40 truncate max-w-[150px]">
+                              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-[#007AFF] dark:bg-blue-950/40 dark:text-[#3894FF] border border-blue-200/80 dark:border-blue-800/40 truncate max-w-[180px]">
                                 {note.sourceName}
                               </span>
                             )}
@@ -569,8 +560,8 @@ export const NotesView: React.FC<NotesViewProps> = ({
                               const moodObj = MOOD_LEVELS.find((m) => m.value === note.moodValue);
                               if (!moodObj) return null;
                               return (
-                                <span className={`text-[10.5px] font-black px-2.5 py-0.5 rounded-full border flex items-center gap-1 shadow-2xs ${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} ${moodObj.textColorLight} ${moodObj.textColorDark}`}>
-                                  <FrogMoodIcon value={moodObj.value} size={14} />
+                                <span className={`text-xs font-black px-2.5 py-1 rounded-full border flex items-center gap-1.5 shadow-2xs ${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} ${moodObj.textColorLight} ${moodObj.textColorDark}`}>
+                                  <FrogMoodIcon value={moodObj.value} size={15} />
                                   <span>{moodObj.label}</span>
                                 </span>
                               );
@@ -578,14 +569,14 @@ export const NotesView: React.FC<NotesViewProps> = ({
                           </div>
 
                           {/* Actions */}
-                          <div className="flex items-center gap-0.5 shrink-0">
+                          <div className="flex items-center gap-1 shrink-0">
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(note)}
-                              className="p-1 rounded-lg text-zinc-400 hover:text-zinc-950 dark:hover:text-white transition-all ios-tap"
+                              className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all ios-tap"
                               title="Edit"
                             >
-                              <Edit3 size={14} />
+                              <Edit3 size={15} />
                             </button>
                             {deletingNoteId === note.id ? (
                               <div className="flex items-center gap-1">
@@ -595,14 +586,14 @@ export const NotesView: React.FC<NotesViewProps> = ({
                                     onDeleteNote(note.id);
                                     setDeletingNoteId(null);
                                   }}
-                                  className="px-2 py-0.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-[10px] font-black transition-all ios-tap"
+                                  className="px-2.5 py-1 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black transition-all ios-tap"
                                 >
                                   Delete
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => setDeletingNoteId(null)}
-                                  className="px-1.5 py-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-[10px] font-bold transition-all ios-tap"
+                                  className="px-2 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all ios-tap"
                                 >
                                   Cancel
                                 </button>
@@ -611,10 +602,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
                               <button
                                 type="button"
                                 onClick={() => setDeletingNoteId(note.id)}
-                                className="p-1 rounded-lg text-zinc-400 hover:text-red-500 transition-all ios-tap"
+                                className="p-1.5 rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all ios-tap"
                                 title="Delete"
                               >
-                                <Trash2 size={14} />
+                                <Trash2 size={15} />
                               </button>
                             )}
                           </div>
@@ -622,32 +613,16 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
                         {/* Title if present */}
                         {note.title && (
-                          <h3 className="font-black text-sm text-zinc-950 dark:text-white tracking-tight">
+                          <h3 className="font-black text-base sm:text-lg text-zinc-950 dark:text-white tracking-tight leading-snug">
                             {note.title}
                           </h3>
                         )}
 
                         {/* Body Text / Content */}
                         <div className="pt-0.5">
-                          <p
-                            className={`text-xs sm:text-[13.5px] leading-relaxed text-zinc-800 dark:text-zinc-200 font-medium whitespace-pre-wrap ${
-                              viewDensity === 'compact' && !isExpanded ? 'line-clamp-1' : ''
-                            } ${!isExpanded && isLong && viewDensity === 'comfortable' ? 'line-clamp-3' : ''}`}
-                          >
+                          <p className="text-sm sm:text-base leading-relaxed sm:leading-relaxed text-zinc-850 dark:text-zinc-100 font-normal whitespace-pre-wrap break-words">
                             {content}
                           </p>
-
-                          {/* Read More / Show Less Toggle */}
-                          {isLong && (
-                            <button
-                              type="button"
-                              onClick={() => toggleExpand(note.id)}
-                              className="mt-1 text-[11px] font-bold text-[#007AFF] hover:underline flex items-center gap-0.5 ios-tap"
-                            >
-                              <span>{isExpanded ? 'Show less' : 'Read more'}</span>
-                              {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                            </button>
-                          )}
                         </div>
                       </div>
                     );
