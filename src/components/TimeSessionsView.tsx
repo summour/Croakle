@@ -10,6 +10,7 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Calendar,
   Clock,
   CheckCircle2,
@@ -253,142 +254,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
   return (
     <div className="space-y-3.5 pb-24 max-w-lg mx-auto">
-      {/* 1. COMPACT FOCUS TIMER CARD */}
-      <div className="ios-glass-card p-4 sm:p-5 space-y-3.5">
-        {/* Top: Name Input & Type Selector */}
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between gap-2 border-b border-zinc-200/70 dark:border-zinc-800 pb-2">
-            <input
-              type="text"
-              placeholder="Session Name (e.g. Deep Work)"
-              value={activeTimer.subject}
-              onChange={(e) => onUpdateTimerConfig({ subject: e.target.value })}
-              className="w-full bg-transparent text-base font-bold text-zinc-950 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none truncate"
-            />
-            {activeTimer.isRunning && (
-              <span className="flex items-center gap-1 text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Focusing
-              </span>
-            )}
-          </div>
-
-          {/* Type Selector & Preset Row */}
-          <div className="flex items-center justify-between gap-1.5 flex-wrap">
-            <div className="flex items-center gap-1">
-              {(['focus', 'study', 'work', 'break'] as const).map((t) => {
-                const isActive = activeTimer.type === t;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => onUpdateTimerConfig({ type: t })}
-                    className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-all ${
-                      isActive
-                        ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-xs'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
-                    }`}
-                  >
-                    {typeLabels[t]}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {timerPresets.map((p) => {
-                const isSelected = activeTimer.targetDurationMinutes === p.mins;
-                return (
-                  <button
-                    key={p.label}
-                    type="button"
-                    onClick={() => onUpdateTimerConfig({ targetDurationMinutes: p.mins })}
-                    className={`text-[11px] font-bold px-2 py-0.5 rounded-full transition-all ${
-                      isSelected
-                        ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
-                    }`}
-                  >
-                    {p.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Main Digits Display */}
-        <div className="text-center py-2 space-y-1">
-          <div className="text-5xl sm:text-6xl font-black font-mono tracking-tight text-zinc-950 dark:text-white tabular-nums">
-            {formatTimerDisplay(elapsedSeconds)}
-          </div>
-
-          {/* Target Progress */}
-          {targetSecs > 0 ? (
-            <div className="w-full max-w-xs mx-auto pt-1 space-y-1">
-              <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full transition-all duration-300"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold">
-                Target: {activeTimer.targetDurationMinutes}m ({progressPercent}%)
-              </p>
-            </div>
-          ) : (
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold">
-              {formattedStartInfo ? `Started: ${formattedStartInfo}` : 'Ready to focus'}
-            </p>
-          )}
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex items-center justify-center gap-2 pt-1">
-          {!activeTimer.isRunning ? (
-            <button
-              type="button"
-              onClick={elapsedSeconds > 0 ? onResumeTimer : onStartTimer}
-              className="flex-1 max-w-[180px] py-2.5 rounded-xl bg-zinc-950 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98"
-            >
-              <Play size={14} className="fill-current ml-0.5" />
-              <span>{elapsedSeconds > 0 ? 'Resume' : 'Start Focus'}</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onPauseTimer}
-              className="flex-1 max-w-[180px] py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98"
-            >
-              <Pause size={14} className="fill-current" />
-              <span>Pause</span>
-            </button>
-          )}
-
-          {elapsedSeconds > 0 && (
-            <>
-              <button
-                type="button"
-                onClick={onFinishTimer}
-                className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 transition shadow-xs active:scale-98"
-                title="Save Session"
-              >
-                <CheckCircle2 size={14} /> <span>Save</span>
-              </button>
-              <button
-                type="button"
-                onClick={onResetTimer}
-                className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition"
-                title="Reset Timer"
-              >
-                <RotateCcw size={14} />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* 2. DATE SELECTOR & SESSION LOGS */}
+      {/* 1. TOP: FOCUS HISTORY & DATE/WEEK NAVIGATOR */}
       <div className="ios-glass-card p-4 sm:p-5 space-y-3">
         {/* Header & Add Button */}
         <div className="flex items-center justify-between">
@@ -498,7 +364,147 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
             );
           })}
         </div>
+      </div>
 
+      {/* 2. MIDDLE: COMPACT FOCUS TIMER CARD */}
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+        {/* Top: Name Input */}
+        <div className="flex items-center justify-between gap-2 border-b border-zinc-200/70 dark:border-zinc-800 pb-2">
+          <input
+            type="text"
+            placeholder="Session Name (e.g. Deep Work)"
+            value={activeTimer.subject}
+            onChange={(e) => onUpdateTimerConfig({ subject: e.target.value })}
+            className="w-full bg-transparent text-sm font-bold text-zinc-950 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none truncate"
+          />
+          {activeTimer.isRunning && (
+            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Focusing
+            </span>
+          )}
+        </div>
+
+        {/* Dropdown Selectors: Category & Duration */}
+        <div className="grid grid-cols-2 gap-2">
+          {/* Category Dropdown */}
+          <div className="relative">
+            <label className="block text-[9.5px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">
+              Category
+            </label>
+            <div className="relative">
+              <select
+                value={activeTimer.type}
+                onChange={(e) => onUpdateTimerConfig({ type: e.target.value as any })}
+                className="w-full appearance-none bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/70 dark:hover:bg-zinc-700/80 border border-zinc-200/70 dark:border-zinc-700/70 text-zinc-900 dark:text-zinc-100 font-bold text-xs rounded-xl px-2.5 py-1.5 pr-7 transition cursor-pointer focus:outline-none"
+              >
+                <option value="focus">Focus</option>
+                <option value="study">Study</option>
+                <option value="work">Work</option>
+                <option value="break">Break</option>
+              </select>
+              <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Duration Dropdown */}
+          <div className="relative">
+            <label className="block text-[9.5px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">
+              Duration
+            </label>
+            <div className="relative">
+              <select
+                value={activeTimer.targetDurationMinutes}
+                onChange={(e) => onUpdateTimerConfig({ targetDurationMinutes: Number(e.target.value) })}
+                className="w-full appearance-none bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/70 dark:hover:bg-zinc-700/80 border border-zinc-200/70 dark:border-zinc-700/70 text-zinc-900 dark:text-zinc-100 font-bold text-xs rounded-xl px-2.5 py-1.5 pr-7 transition cursor-pointer focus:outline-none"
+              >
+                <option value={15}>15 mins</option>
+                <option value={25}>25 mins (Pomodoro)</option>
+                <option value={30}>30 mins</option>
+                <option value={45}>45 mins</option>
+                <option value={60}>60 mins (1 hr)</option>
+                <option value={90}>90 mins</option>
+                <option value={120}>120 mins (2 hrs)</option>
+                <option value={0}>Stopwatch (Count up)</option>
+              </select>
+              <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Main Digits Display (Compact) */}
+        <div className="text-center py-1 space-y-1">
+          <div className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-zinc-950 dark:text-white tabular-nums">
+            {formatTimerDisplay(elapsedSeconds)}
+          </div>
+
+          {/* Target Progress */}
+          {targetSecs > 0 ? (
+            <div className="w-full max-w-xs mx-auto pt-0.5 space-y-1">
+              <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full transition-all duration-300"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold">
+                Target: {activeTimer.targetDurationMinutes}m ({progressPercent}%)
+              </p>
+            </div>
+          ) : (
+            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold">
+              {formattedStartInfo ? `Started: ${formattedStartInfo}` : 'Ready to focus'}
+            </p>
+          )}
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex items-center justify-center gap-2 pt-0.5">
+          {!activeTimer.isRunning ? (
+            <button
+              type="button"
+              onClick={elapsedSeconds > 0 ? onResumeTimer : onStartTimer}
+              className="flex-1 max-w-[170px] py-2 rounded-xl bg-zinc-950 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98"
+            >
+              <Play size={13} className="fill-current ml-0.5" />
+              <span>{elapsedSeconds > 0 ? 'Resume' : 'Start Focus'}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onPauseTimer}
+              className="flex-1 max-w-[170px] py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98"
+            >
+              <Pause size={13} className="fill-current" />
+              <span>Pause</span>
+            </button>
+          )}
+
+          {elapsedSeconds > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={onFinishTimer}
+                className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 transition shadow-xs active:scale-98"
+                title="Save Session"
+              >
+                <CheckCircle2 size={13} /> <span>Save</span>
+              </button>
+              <button
+                type="button"
+                onClick={onResetTimer}
+                className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition"
+                title="Reset Timer"
+              >
+                <RotateCcw size={13} />
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* 3. BOTTOM: LOGGED SESSIONS LIST */}
+      <div className="ios-glass-card p-4 sm:p-5 space-y-3">
         {/* Total Time Summary */}
         <div className="px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center justify-between text-xs">
           <span className="text-zinc-500 dark:text-zinc-400 font-medium">
