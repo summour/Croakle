@@ -70,9 +70,9 @@ export const MoodView: React.FC<MoodViewProps> = ({
           activePage="mood"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood', icon: <Smile size={14} /> },
-            { id: 'track', label: 'Habits', icon: <CheckCircle2 size={14} /> },
-            { id: 'project', label: 'Projects', icon: <FolderKanban size={14} /> },
+            { id: 'mood', label: 'Mood' },
+            { id: 'track', label: 'Habits' },
+            { id: 'project', label: 'Projects' },
           ]}
         />
       )}

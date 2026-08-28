@@ -70,9 +70,9 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
           activePage="best"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'track', label: 'Habits', icon: <HabitCloverDockIcon size={15} /> },
-            { id: 'project', label: 'Projects', icon: <BambooProjectDockIcon size={15} /> },
-            { id: 'best', label: 'Leaderboard', icon: <Trophy size={14} className="text-[#FF9500]" /> },
+            { id: 'track', label: 'Habits' },
+            { id: 'project', label: 'Projects' },
+            { id: 'best', label: 'Leaderboard' },
           ]}
         />
       )}

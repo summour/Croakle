@@ -4,6 +4,7 @@ import { DAY_SHORT_NAMES, MONTH_NAMES, getWeekDates, getMonthWeeks, getWeekKey, 
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Archive, Trophy, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
 import { BambooScrollDockIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelPartyPopperIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
+import { CalendarPickerModal } from './CalendarPickerModal';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
 
@@ -45,6 +46,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   onNavigate,
 }) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
   const [draggedProjectIdx, setDraggedProjectIdx] = useState<number | null>(null);
   const [dragOverProjectIdx, setDragOverProjectIdx] = useState<number | null>(null);
@@ -195,9 +197,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           activePage="project"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood', icon: <Smile size={14} /> },
-            { id: 'track', label: 'Habits', icon: <CheckCircle2 size={14} /> },
-            { id: 'project', label: 'Projects', icon: <FolderKanban size={14} /> },
+            { id: 'mood', label: 'Mood' },
+            { id: 'track', label: 'Habits' },
+            { id: 'project', label: 'Projects' },
           ]}
         />
       )}
@@ -218,14 +220,19 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               <ChevronLeft size={18} />
             </button>
 
-            <div className="flex items-center gap-2">
-              <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
+            <button
+              type="button"
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-2.5 py-1 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+              title="Click to open calendar"
+            >
+              <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
               <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                 {currentWeek?.label}
               </span>
-            </div>
+            </button>
 
             <button
               id="project-next-week"
@@ -238,33 +245,6 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               <ChevronRight size={18} />
             </button>
           </div>
-
-          {/* Quick Weeks Segment (W1 .. W5) - iOS Segmented Bar */}
-          {monthWeeks.length > 1 && (
-            <div className="flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
-              {monthWeeks.map((mw, idx) => {
-                const isActive = idx === activeWeekIndex;
-                return (
-                  <button
-                    key={`project-week-tab-${mw.weekNumber}`}
-                    type="button"
-                    onClick={() => {
-                      const target = mw.days.find((d) => d.inMonth)?.date || mw.days[0].date;
-                      onSelectDate(target);
-                    }}
-                    className={`flex-1 py-1 px-1.5 rounded-[14px] text-center transition-all duration-200 ios-tap ${
-                      isActive
-                        ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white font-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
-                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 font-semibold'
-                    }`}
-                  >
-                    <span className="text-[11px] block leading-tight">{mw.label}</span>
-                    <span className="text-[9px] opacity-60 block leading-none mt-0.5">{mw.rangeLabel}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
 
           {/* 7-Day Interactive Strip */}
           <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
@@ -836,6 +816,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Full Month Calendar Picker Modal */}
+      <CalendarPickerModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        selectedDate={selectedDate}
+        onSelectDate={onSelectDate}
+        title="Project Calendar"
+      />
     </div>
   );
 };

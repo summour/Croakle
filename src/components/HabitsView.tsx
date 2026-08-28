@@ -4,6 +4,7 @@ import { DAY_SHORT_NAMES, MONTH_NAMES, getDaysInMonth, getWeekDates, getMonthWee
 import { FrogMoodIcon, CloverIcon, ThreeLeafCloverIcon, HabitCloverDockIcon, BambooProjectDockIcon, PixelSparkleIcon, PixelCheckIcon, PixelCheckCircleIcon, FrogFaceDockIcon } from './FrogIcons';
 import { Plus, ArrowUpDown, ChevronLeft, ChevronRight, Trash2, X, Tag, ListPlus, Trophy, Calendar, Grid, Archive, GripVertical, ChevronUp, ChevronDown, ChevronsUp, ChevronsDown, Sparkles, ArrowDownAZ, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
 import { SubNavTabs } from './SubNavTabs';
+import { CalendarPickerModal } from './CalendarPickerModal';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
 
@@ -47,6 +48,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
   onNavigate,
 }) => {
   const [showArchived, setShowArchived] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isReorderOpen, setIsReorderOpen] = useState(false);
   const [draggedHabitIdx, setDraggedHabitIdx] = useState<number | null>(null);
@@ -208,9 +210,9 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           activePage="track"
           onNavigate={onNavigate}
           tabs={[
-            { id: 'mood', label: 'Mood', icon: <Smile size={14} /> },
-            { id: 'track', label: 'Habits', icon: <CheckCircle2 size={14} /> },
-            { id: 'project', label: 'Projects', icon: <FolderKanban size={14} /> },
+            { id: 'mood', label: 'Mood' },
+            { id: 'track', label: 'Habits' },
+            { id: 'project', label: 'Projects' },
           ]}
         />
       )}
@@ -231,14 +233,19 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               <ChevronLeft size={18} />
             </button>
 
-            <div className="flex items-center gap-2">
-              <strong id="CroakleTrackMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
+            <button
+              type="button"
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex items-center gap-2 px-2.5 py-1 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+              title="Click to open calendar"
+            >
+              <strong id="CroakleTrackMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
               <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                 {currentWeek?.label}
               </span>
-            </div>
+            </button>
 
             <button
               id="habit-next-week"
@@ -251,33 +258,6 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               <ChevronRight size={18} />
             </button>
           </div>
-
-          {/* Quick Weeks Segment (W1 .. W5) - iOS Segmented Bar */}
-          {monthWeeks.length > 1 && (
-            <div className="flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
-              {monthWeeks.map((mw, idx) => {
-                const isActive = idx === activeWeekIndex;
-                return (
-                  <button
-                    key={`week-tab-${mw.weekNumber}`}
-                    type="button"
-                    onClick={() => {
-                      const target = mw.days.find((d) => d.inMonth)?.date || mw.days[0].date;
-                      onSelectDate(target);
-                    }}
-                    className={`flex-1 py-1 px-1.5 rounded-[14px] text-center transition-all duration-200 ios-tap ${
-                      isActive
-                        ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white font-black shadow-[0_2px_8px_rgba(0,0,0,0.06)] scale-[1.02]'
-                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 font-semibold'
-                    }`}
-                  >
-                    <span className="text-[11px] block leading-tight">{mw.label}</span>
-                    <span className="text-[9px] opacity-60 block leading-none mt-0.5">{mw.rangeLabel}</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
 
           {/* 7-Day Interactive Strip */}
           <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
@@ -889,6 +869,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Full Month Calendar Picker Modal */}
+      <CalendarPickerModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        selectedDate={selectedDate}
+        onSelectDate={onSelectDate}
+        title="Habit Calendar"
+      />
     </div>
   );
 };

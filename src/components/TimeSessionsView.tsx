@@ -21,16 +21,20 @@ import {
 } from 'lucide-react';
 import { PocketTimerDockIcon, LanternToolIcon } from './FrogIcons';
 import { InteractiveFocusTimeChart } from './charts/InteractiveFocusTimeChart';
+import { CalendarPickerModal } from './CalendarPickerModal';
 import {
   getTodayIso,
   formatTimeMinutes,
   addDaysIso,
   formatFriendlyDate,
   getWeekDates,
+  getMonthWeeks,
   parseIsoDate,
+  formatIsoDate,
   formatTimeWithSeconds,
   formatDateTimeWithSeconds,
   DAY_SHORT_NAMES,
+  MONTH_NAMES,
 } from '../utils/dateUtils';
 
 interface TimeSessionsViewProps {
@@ -67,6 +71,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   onDeleteSession,
 }) => {
   const [selectedDate, setSelectedDate] = useState(getTodayIso());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingSession, setEditingSession] = useState<TimeSession | null>(null);
   const [deletingSessionId, setDeletingSessionId] = useState<string | null>(null);
@@ -199,32 +204,25 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   const todayIso = getTodayIso();
   const isSelectedToday = selectedDate === todayIso;
   const selectedDateObj = parseIsoDate(selectedDate);
-  const weekDays = getWeekDates(selectedDateObj);
+  const monthIndex = selectedDateObj.getMonth();
+  const year = selectedDateObj.getFullYear();
+  const monthWeeks = getMonthWeeks(year, monthIndex);
+  const activeWeekIndex = monthWeeks.findIndex((w) =>
+    w.days.some((d) => formatIsoDate(d.date) === selectedDate)
+  );
+  const currentWeek = monthWeeks[activeWeekIndex >= 0 ? activeWeekIndex : 0] || monthWeeks[0];
+  const weekDays = currentWeek?.days || [];
 
-  const getDaySessionStats = (iso: string) => {
-    const dayList = sessions.filter((s) => s.date === iso);
-    const totalMins = dayList.reduce((acc, s) => acc + s.duration, 0);
-    return { count: dayList.length, totalMins };
+  const handleGoPrevWeek = () => {
+    const d = parseIsoDate(selectedDate);
+    d.setDate(d.getDate() - 7);
+    setSelectedDate(formatIsoDate(d));
   };
 
-  const handlePrevDay = () => {
-    setSelectedDate((curr) => addDaysIso(curr, -1));
-  };
-
-  const handleNextDay = () => {
-    setSelectedDate((curr) => addDaysIso(curr, 1));
-  };
-
-  const handlePrevWeek = () => {
-    setSelectedDate((curr) => addDaysIso(curr, -7));
-  };
-
-  const handleNextWeek = () => {
-    setSelectedDate((curr) => addDaysIso(curr, 7));
-  };
-
-  const handleJumpToday = () => {
-    setSelectedDate(todayIso);
+  const handleGoNextWeek = () => {
+    const d = parseIsoDate(selectedDate);
+    d.setDate(d.getDate() + 7);
+    setSelectedDate(formatIsoDate(d));
   };
 
   // Target duration calculation for progress bar
@@ -254,101 +252,69 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
   return (
     <div className="space-y-3.5 pb-24 max-w-lg mx-auto">
-      {/* 1. TOP: TIMER & DATE/WEEK NAVIGATOR */}
-      <div className="ios-glass-card p-4 sm:p-5 space-y-3">
-        {/* Header */}
+      {/* 1. TOP: DATE / WEEK NAVIGATOR (Unified iOS 26 Glass UI) */}
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+        {/* Top Row: Week Navigation */}
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">
-            Timer
-          </h3>
-        </div>
-
-        {/* Day Navigation Bar */}
-        <div className="flex items-center justify-between gap-1.5 p-1 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200/60 dark:border-zinc-700/60">
           <button
+            id="timer-prev-week"
             type="button"
-            onClick={handlePrevDay}
-            className="p-1 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition shrink-0"
-            title="Previous Day"
+            onClick={handleGoPrevWeek}
+            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+            aria-label="Previous Week"
+            title="Previous Week"
           >
-            <ChevronLeft size={14} />
+            <ChevronLeft size={18} />
           </button>
-
-          <div className="flex items-center gap-2 min-w-0 justify-center flex-1">
-            <label className="relative flex items-center gap-1.5 cursor-pointer px-2 py-0.5 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition text-center min-w-0">
-              <Calendar size={13} className="text-zinc-600 dark:text-zinc-300 shrink-0" />
-              <span className="text-xs font-bold text-zinc-950 dark:text-white truncate">
-                {formatFriendlyDate(selectedDate)}
-              </span>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
-                className="sr-only"
-              />
-            </label>
-
-            {!isSelectedToday && (
-              <button
-                type="button"
-                onClick={handleJumpToday}
-                className="px-1.5 py-0.5 rounded-md bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-[10px] font-bold hover:bg-zinc-300 transition shrink-0"
-              >
-                Today
-              </button>
-            )}
-          </div>
 
           <button
             type="button"
-            onClick={handleNextDay}
-            className="p-1 rounded-lg text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition shrink-0"
-            title="Next Day"
+            onClick={() => setIsCalendarOpen(true)}
+            className="flex items-center gap-2 px-2.5 py-1 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+            title="Click to open calendar"
           >
-            <ChevronRight size={14} />
+            <strong className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+              {MONTH_NAMES[monthIndex]} {year}
+            </strong>
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+              {currentWeek?.label}
+            </span>
+          </button>
+
+          <button
+            id="timer-next-week"
+            type="button"
+            onClick={handleGoNextWeek}
+            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+            aria-label="Next Week"
+            title="Next Week"
+          >
+            <ChevronRight size={18} />
           </button>
         </div>
 
-        {/* 7-Day Compact Week Bar */}
-        <div className="grid grid-cols-7 gap-1 p-1 rounded-xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200/50 dark:border-zinc-700/50">
+        {/* 7-Day Interactive Strip */}
+        <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
           {weekDays.map((wd) => {
-            const isSelected = wd.iso === selectedDate;
-            const isToday = wd.iso === todayIso;
-            const stats = getDaySessionStats(wd.iso);
-            const dayLabel = DAY_SHORT_NAMES[wd.dayIndex];
-            const dayNum = wd.date.getDate();
-
+            const isSelected = formatIsoDate(wd.date) === selectedDate;
+            const dayName = DAY_SHORT_NAMES[wd.dayIndex];
             return (
               <button
                 key={wd.iso}
                 type="button"
-                onClick={() => setSelectedDate(wd.iso)}
-                className={`py-1 px-0.5 rounded-lg flex flex-col items-center justify-center transition-all relative select-none ${
-                  isSelected
-                    ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-bold shadow-xs'
-                    : 'hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400'
+                onClick={() => setSelectedDate(formatIsoDate(wd.date))}
+                className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
+                  !wd.inMonth
+                    ? 'opacity-25 text-zinc-400'
+                    : isSelected
+                    ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
+                    : wd.isCurrentDay
+                    ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
+                    : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
                 }`}
               >
-                {isToday && !isSelected && (
-                  <span className="w-1 h-1 rounded-full bg-zinc-950 dark:bg-white absolute top-1" />
-                )}
-                <span className={`text-[9px] ${isSelected ? 'opacity-80' : 'text-zinc-400'}`}>
-                  {dayLabel}
-                </span>
-                <span className="text-[11px] font-bold leading-tight">
-                  {dayNum}
-                </span>
-                {stats.count > 0 && (
-                  <span
-                    className={`text-[8.5px] mt-0.5 px-1 rounded-full ${
-                      isSelected
-                        ? 'bg-white/20 dark:bg-black/20 text-white dark:text-zinc-950'
-                        : 'text-zinc-500 dark:text-zinc-400'
-                    }`}
-                  >
-                    {stats.totalMins}m
-                  </span>
-                )}
+                <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
+                <span className="text-sm font-black">{wd.date.getDate()}</span>
               </button>
             );
           })}
@@ -785,6 +751,15 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Full Month Calendar Picker Modal */}
+      <CalendarPickerModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        selectedDate={selectedDateObj}
+        onSelectDate={(d) => setSelectedDate(formatIsoDate(d))}
+        title="Timer Calendar"
+      />
     </div>
   );
 };
