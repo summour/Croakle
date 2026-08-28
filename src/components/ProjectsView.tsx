@@ -268,6 +268,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+              const weekKeyForDay = getWeekKey(wd.date);
+              const hasActivity = projects.some(
+                (p) => p.weeklyDays?.[weekKeyForDay]?.[wd.dayIndex] === true
+              );
+
               return (
                 <button
                   key={wd.iso}
@@ -285,6 +290,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 >
                   <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
                   <span className="text-sm font-black">{wd.date.getDate()}</span>
+                  {hasActivity && (
+                    <span
+                      className={`w-1 h-1 rounded-full ${
+                        isSelected
+                          ? 'bg-white dark:bg-zinc-950'
+                          : 'bg-zinc-950 dark:bg-white'
+                      }`}
+                    />
+                  )}
                 </button>
               );
             })}

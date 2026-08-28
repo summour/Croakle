@@ -321,6 +321,8 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
           {weekDays.map((wd) => {
             const isSelected = formatIsoDate(wd.date) === selectedDate;
             const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+            const hasActivity = sessions.some((s) => s.date === wd.iso);
+
             return (
               <button
                 key={wd.iso}
@@ -338,6 +340,15 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               >
                 <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
                 <span className="text-sm font-black">{wd.date.getDate()}</span>
+                {hasActivity && (
+                  <span
+                    className={`w-1 h-1 rounded-full ${
+                      isSelected
+                        ? 'bg-white dark:bg-zinc-950'
+                        : 'bg-zinc-950 dark:bg-white'
+                    }`}
+                  />
+                )}
               </button>
             );
           })}

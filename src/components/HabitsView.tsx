@@ -281,6 +281,14 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+              const dayOfMonth = wd.date.getDate();
+              const hasActivity =
+                wd.inMonth &&
+                (monthData.habits?.some((h) => h?.days?.[dayOfMonth - 1]) ||
+                  (monthData.moods &&
+                    monthData.moods[dayOfMonth - 1] !== undefined &&
+                    monthData.moods[dayOfMonth - 1] !== null));
+
               return (
                 <button
                   key={wd.iso}
@@ -297,7 +305,16 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   }`}
                 >
                   <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
-                  <span className="text-sm font-black">{wd.date.getDate()}</span>
+                  <span className="text-sm font-black">{dayOfMonth}</span>
+                  {hasActivity && (
+                    <span
+                      className={`w-1 h-1 rounded-full ${
+                        isSelected
+                          ? 'bg-white dark:bg-zinc-950'
+                          : 'bg-zinc-950 dark:bg-white'
+                      }`}
+                    />
+                  )}
                 </button>
               );
             })}
