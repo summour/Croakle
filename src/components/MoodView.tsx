@@ -167,23 +167,23 @@ export const MoodView: React.FC<MoodViewProps> = ({
         {/* Divider */}
         <hr className="border-zinc-200 dark:border-zinc-800 my-2" />
 
-        {/* Bottom 5 Mood Count Cards (Clean Neutral Design) */}
-        <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5 pt-1">
+        {/* Bottom 5 Mood Count Cards (Compact & Neat Design) */}
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
           {MOOD_LEVELS.map((m) => (
             <div
               key={m.value}
-              className="p-2 sm:p-3.5 rounded-[22px] sm:rounded-[26px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 text-center flex flex-col items-center justify-center shadow-2xs transition-all hover:bg-zinc-50 dark:hover:bg-zinc-850"
+              className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-[14px] sm:rounded-[18px] border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/80 text-center flex flex-col items-center justify-center shadow-2xs transition-all hover:bg-zinc-50 dark:hover:bg-zinc-850"
             >
               {/* Direct Frog Icon */}
-              <div className="my-1 sm:my-1.5 flex items-center justify-center">
-                <FrogMoodIcon value={m.value} size={34} className="sm:scale-125 transition-transform" />
+              <div className="mb-1 flex items-center justify-center">
+                <FrogMoodIcon value={m.value} size={22} className="w-5 h-5 sm:w-6 sm:h-6 transition-transform" />
               </div>
               {/* Label */}
-              <span className="text-[11px] sm:text-xs font-bold block tracking-tight text-zinc-600 dark:text-zinc-400">
+              <span className="text-[10px] sm:text-[11px] font-bold block tracking-tight text-zinc-500 dark:text-zinc-400 leading-none">
                 {m.label}
               </span>
               {/* Count */}
-              <strong className="text-sm sm:text-lg font-black block mt-0.5 text-zinc-950 dark:text-white">
+              <strong className="text-xs sm:text-sm font-black block mt-1 text-zinc-950 dark:text-white leading-none">
                 {moodCounts[m.value] || 0}
               </strong>
             </div>
