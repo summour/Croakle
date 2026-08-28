@@ -10,7 +10,7 @@ export interface UseSwipeMonthOptions {
 export function useSwipeMonth({
   onPrevMonth,
   onNextMonth,
-  threshold = 40,
+  threshold = 35,
   maxDuration = 800,
 }: UseSwipeMonthOptions) {
   const pointerStartRef = useRef<{ x: number; y: number; time: number; isMouseDown: boolean } | null>(null);
@@ -44,7 +44,7 @@ export function useSwipeMonth({
     pointerStartRef.current = null;
     pointerDeltaRef.current = { x: 0, y: 0 };
 
-    if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 1.15 && elapsed <= maxDuration) {
+    if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 0.9 && elapsed <= maxDuration) {
       if (dx < 0) {
         onNextMonth();
       } else {
@@ -55,7 +55,6 @@ export function useSwipeMonth({
 
   // Mouse / Pointer Handlers
   const onMouseDown = (e: React.MouseEvent) => {
-    // Only left click
     if (e.button !== 0) return;
     pointerStartRef.current = {
       x: e.clientX,
@@ -81,7 +80,7 @@ export function useSwipeMonth({
     pointerStartRef.current = null;
     pointerDeltaRef.current = { x: 0, y: 0 };
 
-    if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 1.15 && elapsed <= maxDuration) {
+    if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 0.9 && elapsed <= maxDuration) {
       if (dx < 0) {
         onNextMonth();
       } else {

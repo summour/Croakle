@@ -219,7 +219,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
       {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
       <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
-        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button

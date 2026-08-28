@@ -22,6 +22,7 @@ import {
 import { PocketTimerDockIcon, LanternToolIcon } from './FrogIcons';
 import { InteractiveFocusTimeChart } from './charts/InteractiveFocusTimeChart';
 import { CalendarPickerModal } from './CalendarPickerModal';
+import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import {
   getTodayIso,
   formatTimeMinutes,
@@ -225,6 +226,11 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
     setSelectedDate(formatIsoDate(d));
   };
 
+  const swipeHandlers = useSwipeMonth({
+    onPrevMonth: handleGoPrevWeek,
+    onNextMonth: handleGoNextWeek,
+  });
+
   // Target duration calculation for progress bar
   const targetSecs = (activeTimer.targetDurationMinutes || 0) * 60;
   const progressPercent = targetSecs > 0 ? Math.min(100, Math.round((elapsedSeconds / targetSecs) * 100)) : 0;
@@ -251,9 +257,9 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   };
 
   return (
-    <div className="space-y-3.5 pb-24 max-w-lg mx-auto">
+    <div className="space-y-3.5 pb-24 max-w-lg mx-auto" {...swipeHandlers}>
       {/* 1. TOP: DATE / WEEK NAVIGATOR (Unified iOS 26 Glass UI) */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
         {/* Top Row: Week Navigation */}
         <div className="flex items-center justify-between">
           <button
