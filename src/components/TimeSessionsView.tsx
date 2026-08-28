@@ -226,9 +226,21 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
     setSelectedDate(formatIsoDate(d));
   };
 
+  const handleGoPrevDay = () => {
+    const d = parseIsoDate(selectedDate);
+    d.setDate(d.getDate() - 1);
+    setSelectedDate(formatIsoDate(d));
+  };
+
+  const handleGoNextDay = () => {
+    const d = parseIsoDate(selectedDate);
+    d.setDate(d.getDate() + 1);
+    setSelectedDate(formatIsoDate(d));
+  };
+
   const swipeHandlers = useSwipeMonth({
-    onPrevMonth: handleGoPrevWeek,
-    onNextMonth: handleGoNextWeek,
+    onPrev: handleGoPrevDay,
+    onNext: handleGoNextDay,
   });
 
   // Target duration calculation for progress bar

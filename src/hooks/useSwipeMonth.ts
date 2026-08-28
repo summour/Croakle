@@ -1,8 +1,10 @@
 import { useRef } from 'react';
 
 export interface UseSwipeMonthOptions {
-  onPrevMonth: () => void;
-  onNextMonth: () => void;
+  onPrevMonth?: () => void;
+  onNextMonth?: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
   threshold?: number;
   maxDuration?: number;
 }
@@ -10,9 +12,13 @@ export interface UseSwipeMonthOptions {
 export function useSwipeMonth({
   onPrevMonth,
   onNextMonth,
+  onPrev,
+  onNext,
   threshold = 35,
   maxDuration = 800,
 }: UseSwipeMonthOptions) {
+  const triggerPrev = onPrev || onPrevMonth;
+  const triggerNext = onNext || onNextMonth;
   const pointerStartRef = useRef<{ x: number; y: number; time: number; isMouseDown: boolean } | null>(null);
   const pointerDeltaRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -46,9 +52,9 @@ export function useSwipeMonth({
 
     if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 0.9 && elapsed <= maxDuration) {
       if (dx < 0) {
-        onNextMonth();
+        triggerNext?.();
       } else {
-        onPrevMonth();
+        triggerPrev?.();
       }
     }
   };
@@ -82,9 +88,9 @@ export function useSwipeMonth({
 
     if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 0.9 && elapsed <= maxDuration) {
       if (dx < 0) {
-        onNextMonth();
+        triggerNext?.();
       } else {
-        onPrevMonth();
+        triggerPrev?.();
       }
     }
   };

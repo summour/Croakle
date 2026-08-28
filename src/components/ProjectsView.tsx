@@ -184,9 +184,21 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
     }
   };
 
+  const handleGoPrevDay = () => {
+    const d = new Date(selectedDate);
+    d.setDate(d.getDate() - 1);
+    onSelectDate(d);
+  };
+
+  const handleGoNextDay = () => {
+    const d = new Date(selectedDate);
+    d.setDate(d.getDate() + 1);
+    onSelectDate(d);
+  };
+
   const swipeHandlers = useSwipeMonth({
-    onPrevMonth: handleGoPrevWeek,
-    onNextMonth: handleGoNextWeek,
+    onPrev: handleGoPrevDay,
+    onNext: handleGoNextDay,
   });
 
   return (
