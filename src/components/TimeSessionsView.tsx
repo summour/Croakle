@@ -288,15 +288,20 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
           <button
             type="button"
             onClick={() => setIsCalendarOpen(true)}
-            className="flex items-center gap-2 px-2.5 py-1 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+            className="flex flex-col items-center px-2.5 py-0.5 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
             title="Click to open calendar"
           >
-            <strong className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
-              {MONTH_NAMES[monthIndex]} {year}
-            </strong>
-            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-              {currentWeek?.label}
-            </span>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              Focus Sessions
+            </p>
+            <div className="flex items-center gap-2">
+              <strong className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+                {MONTH_NAMES[monthIndex]} {year}
+              </strong>
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                {currentWeek?.label}
+              </span>
+            </div>
           </button>
 
           <button

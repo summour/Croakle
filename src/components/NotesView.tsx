@@ -275,10 +275,15 @@ export const NotesView: React.FC<NotesViewProps> = ({
               <ChevronLeft size={18} />
             </button>
 
-            <div className="flex items-center gap-2">
-              <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
-                {MONTH_NAMES[monthIndex]} {year}
-              </strong>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="text-center">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  Daily Journal
+                </p>
+                <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white block leading-tight">
+                  {MONTH_NAMES[monthIndex]} {year}
+                </strong>
+              </div>
               <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-zinc-900 rounded-full border border-black/[0.04] dark:border-white/[0.06]">
                 <button
                   type="button"

@@ -89,7 +89,10 @@ export const MoodView: React.FC<MoodViewProps> = ({
             <ChevronLeft size={18} />
           </button>
           <div className="text-center">
-            <strong id="CroakleMoodMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              Mood Check-in
+            </p>
+            <strong id="CroakleMoodMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white block leading-tight">
               {MONTH_NAMES[monthIndex]} {year}
             </strong>
           </div>
