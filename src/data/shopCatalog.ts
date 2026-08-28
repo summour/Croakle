@@ -391,3 +391,5 @@ export const SHOP_ITEMS: ShopItem[] = [
     defaultUnlocked: true,
   },
 ];
+
+export const SHOP_CATALOG = SHOP_ITEMS;
