@@ -116,11 +116,11 @@ export const MoodView: React.FC<MoodViewProps> = ({
           ))}
         </div>
 
-        {/* Calendar Squircle Grid */}
-        <div className="grid grid-cols-7 gap-1.5 sm:gap-2.5">
+        {/* Calendar Squircle Grid (Square Cells) */}
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
           {/* Empty spacer cells before day 1 */}
           {Array.from({ length: firstDayIndex }).map((_, i) => (
-            <div key={`empty-${i}`} className="min-h-[58px] sm:min-h-[72px] opacity-0 pointer-events-none" />
+            <div key={`empty-${i}`} className="aspect-square opacity-0 pointer-events-none" />
           ))}
 
           {/* Days 1..daysInMonth */}
@@ -136,7 +136,7 @@ export const MoodView: React.FC<MoodViewProps> = ({
                 key={`day-${dayNum}`}
                 type="button"
                 onClick={() => setSelectedDay(dayNum)}
-                className={`relative min-h-[58px] sm:min-h-[72px] rounded-[18px] sm:rounded-[22px] flex flex-col justify-between p-1.5 sm:p-2 transition-all duration-150 ios-tap ${
+                className={`relative aspect-square w-full rounded-[14px] sm:rounded-[18px] flex flex-col justify-between p-1 sm:p-1.5 transition-all duration-150 ios-tap ${
                   isToday || isChosen
                     ? 'border-2 border-zinc-950 dark:border-white bg-zinc-50 dark:bg-zinc-800/80 shadow-xs'
                     : 'border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 hover:bg-zinc-50 dark:hover:bg-zinc-850 hover:border-zinc-300'
@@ -144,7 +144,7 @@ export const MoodView: React.FC<MoodViewProps> = ({
               >
                 {/* Day Number in Top-Left Corner */}
                 <span
-                  className={`text-[11px] sm:text-xs font-bold leading-none pl-0.5 pt-0.5 ${
+                  className={`text-[10px] sm:text-xs font-bold leading-none pl-0.5 pt-0.5 ${
                     isToday || isChosen
                       ? 'text-zinc-950 dark:text-white'
                       : 'text-zinc-600 dark:text-zinc-400'
@@ -154,9 +154,9 @@ export const MoodView: React.FC<MoodViewProps> = ({
                 </span>
 
                 {/* Mood Icon in Center */}
-                <div className="flex-1 flex items-center justify-center py-1">
+                <div className="flex-1 flex items-center justify-center -mt-1.5 sm:-mt-1">
                   {moodValue && moodObj ? (
-                    <FrogMoodIcon value={moodValue} size={28} className="sm:scale-130 transition-transform" />
+                    <FrogMoodIcon value={moodValue} size={32} className="w-7 h-7 sm:w-8.5 sm:h-8.5 transition-transform drop-shadow-xs" />
                   ) : null}
                 </div>
               </button>

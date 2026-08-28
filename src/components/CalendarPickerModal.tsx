@@ -210,7 +210,7 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
                 key={cell.iso}
                 type="button"
                 onClick={() => handleSelectDay(cell.date)}
-                className={`h-9 w-full rounded-xl flex flex-col items-center justify-center font-bold text-xs transition-all relative ${
+                className={`aspect-square w-full rounded-xl flex flex-col items-center justify-center font-bold text-xs transition-all relative ${
                   cell.isSelected
                     ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-md scale-105 z-10'
                     : isCurrent
