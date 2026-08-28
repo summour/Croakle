@@ -8,12 +8,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  ChevronDown,
-  ChevronUp,
   LayoutList,
   Layers,
-  Sparkles,
   Calendar,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import {
   WashiJournalDockIcon,
@@ -22,9 +21,17 @@ import {
   FrogFaceDockIcon,
   FrogMoodIcon,
 } from './FrogIcons';
-import { SubNavTabs } from './SubNavTabs';
+import { CalendarPickerModal } from './CalendarPickerModal';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
-import { getTodayIso, MONTH_NAMES, formatFriendlyDate } from '../utils/dateUtils';
+import {
+  DAY_SHORT_NAMES,
+  MONTH_NAMES,
+  getMonthWeeks,
+  getWeekKey,
+  formatIsoDate,
+  getTodayIso,
+  formatFriendlyDate,
+} from '../utils/dateUtils';
 
 interface NotesViewProps {
   notes: NoteItem[];
@@ -32,8 +39,12 @@ interface NotesViewProps {
   projects?: Project[];
   year?: number;
   monthIndex?: number;
+  selectedDate?: Date;
+  onSelectDate?: (date: Date) => void;
   onPrevMonth?: () => void;
   onNextMonth?: () => void;
+  onPrevWeek?: () => void;
+  onNextWeek?: () => void;
   onAddNote: (note: Omit<NoteItem, 'id' | 'createdAt'>) => void;
   onUpdateNote: (id: string, note: Partial<NoteItem>) => void;
   onDeleteNote: (id: string) => void;
@@ -46,20 +57,24 @@ export const NotesView: React.FC<NotesViewProps> = ({
   projects = [],
   year = new Date().getFullYear(),
   monthIndex = new Date().getMonth(),
+  selectedDate = new Date(),
+  onSelectDate,
   onPrevMonth,
   onNextMonth,
+  onPrevWeek,
+  onNextWeek,
   onAddNote,
   onUpdateNote,
   onDeleteNote,
   onNavigate,
 }) => {
   const [filterType, setFilterType] = useState<'all' | 'habit' | 'project' | 'mood'>('all');
-  const [scopeMode, setScopeMode] = useState<'month' | 'all'>('month');
-  const [selectedDayFilter, setSelectedDayFilter] = useState<string>('all');
+  const [scopeMode, setScopeMode] = useState<'week' | 'month' | 'day' | 'all'>('month');
   const [viewDensity, setViewDensity] = useState<'comfortable' | 'compact'>('comfortable');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedNoteIds, setExpandedNoteIds] = useState<Record<string, boolean>>({});
   const [visibleLimit, setVisibleLimit] = useState<number>(35);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<NoteItem | null>(null);
@@ -72,19 +87,81 @@ export const NotesView: React.FC<NotesViewProps> = ({
   const [formMoodValue, setFormMoodValue] = useState<number | undefined>(undefined);
   const [formTitle, setFormTitle] = useState('');
   const [formText, setFormText] = useState('');
-  const [formDate, setFormDate] = useState(getTodayIso());
+  const [formDate, setFormDate] = useState(formatIsoDate(selectedDate));
 
   const currentMonthPrefix = `${year}-${String(monthIndex + 1).padStart(2, '0')}`;
+  const selectedDateIso = formatIsoDate(selectedDate);
+
+  // Calculate weeks in month for calendar strip
+  const monthWeeks = useMemo(() => getMonthWeeks(year, monthIndex), [year, monthIndex]);
+  const activeWeekIndex = useMemo(() => {
+    const idx = monthWeeks.findIndex((w) =>
+      w.days.some((d) => formatIsoDate(d.date) === selectedDateIso)
+    );
+    return idx >= 0 ? idx : 0;
+  }, [monthWeeks, selectedDateIso]);
+
+  const currentWeek = monthWeeks[activeWeekIndex] || monthWeeks[0];
+  const weekDays = currentWeek?.days || [];
+
+  // Map notes count per ISO date
+  const notesCountByDate = useMemo(() => {
+    const counts: Record<string, number> = {};
+    notes.forEach((n) => {
+      counts[n.date] = (counts[n.date] || 0) + 1;
+    });
+    return counts;
+  }, [notes]);
+
+  const handleGoPrevWeek = () => {
+    if (onPrevWeek) {
+      onPrevWeek();
+    } else if (onSelectDate) {
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate() - 7);
+      onSelectDate(d);
+    }
+  };
+
+  const handleGoNextWeek = () => {
+    if (onNextWeek) {
+      onNextWeek();
+    } else if (onSelectDate) {
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate() + 7);
+      onSelectDate(d);
+    }
+  };
+
+  const handleGoPrevDay = () => {
+    if (onSelectDate) {
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate() - 1);
+      onSelectDate(d);
+    }
+  };
+
+  const handleGoNextDay = () => {
+    if (onSelectDate) {
+      const d = new Date(selectedDate);
+      d.setDate(d.getDate() + 1);
+      onSelectDate(d);
+    }
+  };
 
   // Filter notes
   const filteredNotes = useMemo(() => {
+    const weekIsoSet = new Set(weekDays.map((wd) => wd.iso));
+
     return notes.filter((n) => {
-      // Month scope filter
-      if (scopeMode === 'month' && !n.date.startsWith(currentMonthPrefix)) {
+      // Scope filter
+      if (scopeMode === 'day' && n.date !== selectedDateIso) {
         return false;
       }
-      // Specific day chip filter
-      if (selectedDayFilter !== 'all' && n.date !== selectedDayFilter) {
+      if (scopeMode === 'week' && !weekIsoSet.has(n.date)) {
+        return false;
+      }
+      if (scopeMode === 'month' && !n.date.startsWith(currentMonthPrefix)) {
         return false;
       }
       // Category filter
@@ -103,19 +180,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
       }
       return true;
     });
-  }, [notes, scopeMode, currentMonthPrefix, selectedDayFilter, filterType, searchQuery]);
-
-  // Extract unique active days for horizontal quick picker
-  const monthAvailableDays = useMemo(() => {
-    const dayCounts: Record<string, number> = {};
-    notes.forEach((n) => {
-      if (scopeMode === 'month' && !n.date.startsWith(currentMonthPrefix)) return;
-      dayCounts[n.date] = (dayCounts[n.date] || 0) + 1;
-    });
-    return Object.entries(dayCounts)
-      .sort((a, b) => b[0].localeCompare(a[0]))
-      .map(([date, count]) => ({ date, count }));
-  }, [notes, scopeMode, currentMonthPrefix]);
+  }, [notes, scopeMode, selectedDateIso, weekDays, currentMonthPrefix, filterType, searchQuery]);
 
   // Group filtered notes by date
   const groupedNotes = useMemo(() => {
@@ -151,12 +216,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
     setFormMoodValue(undefined);
     setFormTitle('');
     setFormText('');
-    const today = getTodayIso();
-    if (today.startsWith(currentMonthPrefix)) {
-      setFormDate(today);
-    } else {
-      setFormDate(`${currentMonthPrefix}-01`);
-    }
+    setFormDate(selectedDateIso);
     setIsAddOpen(true);
   };
 
@@ -214,19 +274,6 @@ export const NotesView: React.FC<NotesViewProps> = ({
     setEditingNote(null);
   };
 
-  const getCategoryIcon = (type: string) => {
-    switch (type) {
-      case 'habit':
-        return <HabitCloverDockIcon size={14} className="text-[#007AFF]" />;
-      case 'project':
-        return <BambooProjectDockIcon size={14} className="text-[#FF9500]" />;
-      case 'mood':
-        return <FrogFaceDockIcon size={14} className="text-[#FF2D55]" />;
-      default:
-        return <WashiJournalDockIcon size={14} className="text-zinc-500" />;
-    }
-  };
-
   const getResolvedContent = (note: NoteItem) => {
     if (note.text && note.text.trim().length > 0) {
       return note.text;
@@ -255,203 +302,209 @@ export const NotesView: React.FC<NotesViewProps> = ({
   };
 
   const swipeHandlers = useSwipeMonth({
-    onPrevMonth: onPrevMonth || (() => {}),
-    onNextMonth: onNextMonth || (() => {}),
+    onPrev: handleGoPrevDay,
+    onNext: handleGoNextDay,
   });
 
   return (
-    <div className="space-y-3 pb-28" {...swipeHandlers}>
-      {/* Top Controls Header (Sticky Locked) */}
+    <div className="space-y-4 pb-28" {...swipeHandlers}>
+      {/* Sticky iOS Glass Header with Week Navigation & 7-Day Strip */}
       <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
-        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 shadow-xs">
-          {/* Top Row: Month Navigation & Scope Toggle */}
+        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+          {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
+              id="notes-prev-week"
               type="button"
-              onClick={onPrevMonth}
+              onClick={handleGoPrevWeek}
               className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
-              aria-label="Previous Month"
+              aria-label="Previous Week"
+              title="Previous Week"
             >
               <ChevronLeft size={18} />
             </button>
 
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="text-center">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                  Daily Journal
-                </p>
-                <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white block leading-tight">
-                  {MONTH_NAMES[monthIndex]} {year}
-                </strong>
-              </div>
-              <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-zinc-900 rounded-full border border-black/[0.04] dark:border-white/[0.06]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setScopeMode('month');
-                    setSelectedDayFilter('all');
-                  }}
-                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-black transition-all ios-tap ${
-                    scopeMode === 'month'
-                      ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                      : 'text-zinc-500 dark:text-zinc-400'
-                  }`}
-                >
-                  This Month
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setScopeMode('all');
-                    setSelectedDayFilter('all');
-                  }}
-                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-black transition-all ios-tap ${
-                    scopeMode === 'all'
-                      ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                      : 'text-zinc-500 dark:text-zinc-400'
-                  }`}
-                >
-                  All
-                </button>
-              </div>
-            </div>
-
             <button
               type="button"
-              onClick={onNextMonth}
+              onClick={() => setIsCalendarOpen(true)}
+              className="flex flex-col items-center px-2.5 py-0.5 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+              title="Click to open calendar"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Daily Journal
+              </p>
+              <div className="flex items-center gap-2">
+                <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+                  {MONTH_NAMES[monthIndex]} {year}
+                </strong>
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                  {currentWeek?.label}
+                </span>
+              </div>
+            </button>
+
+            <button
+              id="notes-next-week"
+              type="button"
+              onClick={handleGoNextWeek}
               className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
-              aria-label="Next Month"
+              aria-label="Next Week"
+              title="Next Week"
             >
               <ChevronRight size={18} />
             </button>
           </div>
 
-          {/* Category Filter Tabs */}
-          <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
-            {(['all', 'mood', 'habit', 'project'] as const).map((tab) => {
-              const tabConfig: Record<string, { label: string }> = {
-                all: { label: 'All' },
-                mood: { label: 'Mood' },
-                habit: { label: 'Habits' },
-                project: { label: 'Projects' },
-              };
-              const config = tabConfig[tab];
-              const isActive = filterType === tab;
+          {/* 7-Day Interactive Strip */}
+          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            {weekDays.map((wd) => {
+              const isSelected = formatIsoDate(wd.date) === selectedDateIso;
+              const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+              const noteCount = notesCountByDate[wd.iso] || 0;
+
               return (
                 <button
-                  key={tab}
+                  key={wd.iso}
                   type="button"
-                  onClick={() => setFilterType(tab)}
-                  className={`min-w-0 py-2 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center ${
-                    isActive
-                      ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
-                      : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                  onClick={() => {
+                    if (onSelectDate) onSelectDate(wd.date);
+                  }}
+                  className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
+                    !wd.inMonth
+                      ? 'opacity-25 text-zinc-400'
+                      : isSelected
+                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
+                      : wd.isCurrentDay
+                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
+                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
                   }`}
                 >
-                  <span className="truncate">{config.label}</span>
+                  <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
+                  <span className="text-sm font-black">{wd.date.getDate()}</span>
+                  {noteCount > 0 && (
+                    <span
+                      className={`w-1 h-1 rounded-full ${
+                        isSelected
+                          ? 'bg-white dark:bg-zinc-950'
+                          : 'bg-zinc-950 dark:bg-white'
+                      }`}
+                    />
+                  )}
                 </button>
               );
             })}
           </div>
-
-          {/* Search & Layout Density Toggle Bar */}
-          <div className="flex items-center justify-between gap-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
-            <div className="relative flex-1">
-              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Search notes, habits, moods..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 rounded-[14px] bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 dark:focus:border-white"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
-                >
-                  <X size={12} />
-                </button>
-              )}
-            </div>
-
-            {/* Density switch: Comfortable vs Compact */}
-            <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-zinc-900 rounded-[12px] shrink-0 border border-black/[0.04] dark:border-white/[0.06]">
-              <button
-                type="button"
-                onClick={() => setViewDensity('comfortable')}
-                title="Comfortable Reading Mode"
-                className={`p-1.5 rounded-[10px] transition-all ios-tap ${
-                  viewDensity === 'comfortable'
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                    : 'text-zinc-400 hover:text-zinc-900'
-                }`}
-              >
-                <Layers size={14} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewDensity('compact')}
-                title="Compact List Mode"
-                className={`p-1.5 rounded-[10px] transition-all ios-tap ${
-                  viewDensity === 'compact'
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                    : 'text-zinc-400 hover:text-zinc-900'
-                }`}
-              >
-                <LayoutList size={14} />
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Date Picker Chips (Horizontal Scroll for Effortless Browsing) */}
-          {monthAvailableDays.length > 1 && (
-            <div className="flex items-center gap-1.5 overflow-x-auto py-1 no-scrollbar border-t border-zinc-100 dark:border-zinc-800">
-              <button
-                type="button"
-                onClick={() => setSelectedDayFilter('all')}
-                className={`px-2.5 py-1 rounded-full text-[10.5px] font-black shrink-0 transition-all ios-tap flex items-center gap-1 ${
-                  selectedDayFilter === 'all'
-                    ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs'
-                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950'
-                }`}
-              >
-                <span>All Days</span>
-                <span className="opacity-80">({filteredNotes.length})</span>
-              </button>
-
-              {monthAvailableDays.map(({ date, count }) => {
-                const isSelected = selectedDayFilter === date;
-                const dNum = date.split('-')[2];
-                return (
-                  <button
-                    key={date}
-                    type="button"
-                    onClick={() => setSelectedDayFilter(isSelected ? 'all' : date)}
-                    className={`px-2.5 py-1 rounded-full text-[10.5px] font-black shrink-0 transition-all ios-tap flex items-center gap-1 ${
-                      isSelected
-                        ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-xs'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950'
-                    }`}
-                  >
-                    <span>Day {dNum}</span>
-                    <span className="opacity-80 font-normal">({count})</span>
-                  </button>
-                );
-              })}
-            </div>
-          )}
         </div>
 
-        {/* Action Button: Add Note */}
-        <button
-          type="button"
-          onClick={handleOpenAdd}
-          className="w-full py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
-        >
-          <Plus size={16} /> New Journal Entry
-        </button>
+        {/* Action Bar: New Entry & Scope Selector */}
+        <div className="flex items-center gap-2">
+          <button
+            id="CroakleOpenAddNote"
+            type="button"
+            onClick={handleOpenAdd}
+            className="flex-1 py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
+          >
+            <Plus size={16} className="shrink-0" />
+            <span>New Entry</span>
+          </button>
+
+          {/* Scope Segment: Day / Week / Month / All */}
+          <div className="flex items-center p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[20px] border border-black/[0.04] dark:border-white/[0.06] shrink-0">
+            {(['day', 'week', 'month', 'all'] as const).map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setScopeMode(s)}
+                className={`px-2.5 py-1 rounded-[16px] text-[11px] font-black capitalize transition-all ios-tap ${
+                  scopeMode === s
+                    ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
+                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                }`}
+              >
+                {s === 'day' ? 'Day' : s === 'week' ? 'Week' : s === 'month' ? 'Month' : 'All'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category Filter Tabs */}
+        <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
+          {(['all', 'mood', 'habit', 'project'] as const).map((tab) => {
+            const tabConfig: Record<string, { label: string }> = {
+              all: { label: 'All' },
+              mood: { label: 'Mood' },
+              habit: { label: 'Habits' },
+              project: { label: 'Projects' },
+            };
+            const config = tabConfig[tab];
+            const isActive = filterType === tab;
+            return (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setFilterType(tab)}
+                className={`min-w-0 py-2 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center ${
+                  isActive
+                    ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
+                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                }`}
+              >
+                <span className="truncate">{config.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Search & Layout Density Toggle Bar */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="relative flex-1">
+            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search notes, habits, moods..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-8 pr-3 py-1.5 rounded-[14px] bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 dark:focus:border-white"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+              >
+                <X size={12} />
+              </button>
+            )}
+          </div>
+
+          {/* Density switch: Comfortable vs Compact */}
+          <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-zinc-900 rounded-[12px] shrink-0 border border-black/[0.04] dark:border-white/[0.06]">
+            <button
+              type="button"
+              onClick={() => setViewDensity('comfortable')}
+              title="Comfortable Reading Mode"
+              className={`p-1.5 rounded-[10px] transition-all ios-tap ${
+                viewDensity === 'comfortable'
+                  ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
+                  : 'text-zinc-400 hover:text-zinc-900'
+              }`}
+            >
+              <Layers size={14} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewDensity('compact')}
+              title="Compact List Mode"
+              className={`p-1.5 rounded-[10px] transition-all ios-tap ${
+                viewDensity === 'compact'
+                  ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
+                  : 'text-zinc-400 hover:text-zinc-900'
+              }`}
+            >
+              <LayoutList size={14} />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Date-Grouped Notes Timeline */}
@@ -502,9 +555,8 @@ export const NotesView: React.FC<NotesViewProps> = ({
                         {/* Header info row */}
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 flex items-center gap-1">
-                              {getCategoryIcon(note.type)}
-                              <span>{note.type}</span>
+                            <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                              {note.type}
                             </span>
 
                             {note.sourceName && (
@@ -800,6 +852,18 @@ export const NotesView: React.FC<NotesViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Full Month Calendar Picker Modal */}
+      <CalendarPickerModal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        selectedDate={selectedDate}
+        onSelectDate={(date) => {
+          if (onSelectDate) onSelectDate(date);
+          setIsCalendarOpen(false);
+        }}
+        title="Journal Calendar"
+      />
     </div>
   );
 };

@@ -397,9 +397,8 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                     </button>
 
                     {isGoalMet && (
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-[#34C759] dark:text-[#30D158] border border-emerald-200 dark:border-emerald-800/40 shadow-2xs flex items-center gap-1">
-                        <span>Goal Met</span>
-                        <PixelSparkleIcon size={11} />
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-2xs">
+                        Goal Met
                       </span>
                     )}
                   </div>

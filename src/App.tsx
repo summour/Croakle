@@ -682,8 +682,12 @@ export function App() {
               projects={projects}
               year={trackYear}
               monthIndex={trackMonth}
+              selectedDate={selectedDate}
+              onSelectDate={handleSelectDate}
               onPrevMonth={handlePrevMonth}
               onNextMonth={handleNextMonth}
+              onPrevWeek={handlePrevWeek}
+              onNextWeek={handleNextWeek}
               onAddNote={handleAddNote}
               onUpdateNote={handleUpdateNote}
               onDeleteNote={handleDeleteNote}

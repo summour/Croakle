@@ -375,9 +375,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     </button>
 
                     {isGoalMet && (
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-[#007AFF] dark:text-[#3894FF] border border-blue-200 dark:border-blue-800/40 shadow-2xs flex items-center gap-1">
-                        <span>Goal Met</span>
-                        <PixelPartyPopperIcon size={11} />
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-2xs">
+                        Goal Met
                       </span>
                     )}
                   </div>
