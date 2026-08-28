@@ -254,24 +254,13 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
   return (
     <div className="space-y-3.5 pb-24 max-w-lg mx-auto">
-      {/* 1. TOP: FOCUS HISTORY & DATE/WEEK NAVIGATOR */}
+      {/* 1. TOP: TIMER & DATE/WEEK NAVIGATOR */}
       <div className="ios-glass-card p-4 sm:p-5 space-y-3">
-        {/* Header & Add Button */}
+        {/* Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">
-              Focus History
-            </h3>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleOpenAdd}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 text-[11px] font-bold transition"
-          >
-            <Plus size={12} />
-            <span>Add Manual</span>
-          </button>
+          <h3 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">
+            Timer
+          </h3>
         </div>
 
         {/* Day Navigation Bar */}
@@ -505,6 +494,22 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
       {/* 3. BOTTOM: LOGGED SESSIONS LIST */}
       <div className="ios-glass-card p-4 sm:p-5 space-y-3">
+        {/* Header & Add Button */}
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">
+            Focus History
+          </h3>
+
+          <button
+            type="button"
+            onClick={handleOpenAdd}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 text-[11px] font-bold transition active:scale-95"
+          >
+            <Plus size={12} />
+            <span>Add Manual</span>
+          </button>
+        </div>
+
         {/* Total Time Summary */}
         <div className="px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center justify-between text-xs">
           <span className="text-zinc-500 dark:text-zinc-400 font-medium">
