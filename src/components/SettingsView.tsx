@@ -8,8 +8,8 @@ import {
   PixelSceneConfig,
 } from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
-import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Check, Sparkles } from 'lucide-react';
-import { WoodGearDockIcon, ToriiStatsDockIcon, FrogMoodRad } from './FrogIcons';
+import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { WoodGearDockIcon, ToriiStatsDockIcon } from './FrogIcons';
 import { SubNavTabs } from './SubNavTabs';
 
 interface SettingsViewProps {
@@ -40,24 +40,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [resetConfirm, setResetConfirm] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
-  const [frogNameInput, setFrogNameInput] = useState(pixelScene?.frogName || 'Croakle');
-  const [userNameInput, setUserNameInput] = useState(settings.userName || '');
-  const [nameSaved, setNameSaved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleSaveNames = () => {
-    const trimmedFrog = frogNameInput.trim();
-    if (trimmedFrog && onUpdatePixelScene) {
-      onUpdatePixelScene({ frogName: trimmedFrog });
-    }
-    onUpdateSettings({
-      ...settings,
-      frogName: trimmedFrog || 'Croakle',
-      userName: userNameInput.trim(),
-    });
-    setNameSaved(true);
-    setTimeout(() => setNameSaved(false), 2000);
-  };
 
   const handleExport = () => {
     const json = exportFullBackup();
@@ -126,54 +109,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       <div className="ios-glass-card p-3.5 sm:p-4 flex items-center justify-between">
         <div>
           <h1 className="text-lg font-black tracking-tight text-zinc-950 dark:text-white">Settings</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Preferences & Profile</p>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">Preferences & Data</p>
         </div>
-      </div>
-
-      {/* Profile & Pet Customization */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
-        <div className="flex items-center gap-2">
-          <FrogMoodRad size={20} />
-          <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Profile & Pet</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-          <div>
-            <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
-              Frog Name
-            </label>
-            <input
-              type="text"
-              value={frogNameInput}
-              onChange={(e) => setFrogNameInput(e.target.value)}
-              placeholder="Croakle"
-              maxLength={24}
-              className="w-full px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-zinc-950/20 dark:focus:ring-white/20"
-            />
-          </div>
-          <div>
-            <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
-              User Name (Optional)
-            </label>
-            <input
-              type="text"
-              value={userNameInput}
-              onChange={(e) => setUserNameInput(e.target.value)}
-              placeholder="Your name"
-              maxLength={24}
-              className="w-full px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-zinc-950/20 dark:focus:ring-white/20"
-            />
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleSaveNames}
-          className="w-full py-2 px-3 rounded-xl bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 text-xs font-black flex items-center justify-center gap-1.5 transition active:scale-[0.98]"
-        >
-          {nameSaved ? <Check size={14} className="text-emerald-400 dark:text-emerald-600" /> : null}
-          <span>{nameSaved ? 'Saved!' : 'Save Profile'}</span>
-        </button>
       </div>
 
       {/* Preferences & Toggles */}
