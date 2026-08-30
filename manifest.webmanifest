@@ -9,10 +9,10 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/Croakle/croakle-logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/Croakle/croakle-icon-512.png?v=3",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
