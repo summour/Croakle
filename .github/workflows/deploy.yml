@@ -6,13 +6,11 @@ on:
     branches: ["main", "master"]
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -34,6 +32,13 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+      - name: Generate PNG app icons for iOS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert -w 180 -h 180 public/croakle-logo.svg -o dist/croakle-icon-180.png
+          rsvg-convert -w 512 -h 512 public/croakle-logo.svg -o dist/croakle-icon-512.png
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
