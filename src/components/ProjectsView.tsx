@@ -218,8 +218,8 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
       {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
       {/* TOP: DATE / WEEK NAVIGATOR (Minimalist Variation 12) */}
-      <div className="sticky top-0 z-20 bg-[#F8F7F4] dark:bg-[#1D1B18] pt-1 pb-1 space-y-2.5">
-        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      <div className="sticky top-0 z-20 bg-[#F8F7F4]/95 dark:bg-[#1D1B18]/95 backdrop-blur-md pt-1 pb-1 space-y-2">
+        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 space-y-2.5 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
@@ -294,13 +294,15 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 >
                   <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
                   <span className="text-sm font-bold">{dayOfMonth}</span>
-                  {hasActivity && (
-                    <span
-                      className={`w-1.5 h-1.5 mt-0.5 ${
-                        isSelected ? 'bg-white' : 'bg-[#E63946]'
-                      }`}
-                    />
-                  )}
+                  <span
+                    className={`w-1.5 h-1.5 mt-0.5 ${
+                      hasActivity
+                        ? isSelected
+                          ? 'bg-white'
+                          : 'bg-[#E63946]'
+                        : 'invisible'
+                    }`}
+                  />
                 </button>
               );
             })}

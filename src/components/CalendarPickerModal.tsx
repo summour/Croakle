@@ -212,7 +212,7 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
                 onClick={() => handleSelectDay(cell.date)}
                 className={`aspect-square w-full border flex flex-col items-center justify-center font-bold text-xs transition-all relative cursor-pointer ${
                   cell.isSelected
-                    ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18] border-[#1D1B18] dark:border-[#F8F7F4]'
+                    ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-[#F8F7F4]'
                     : cell.isToday
                     ? 'border-[#E63946] text-[#1D1B18] dark:text-[#F8F7F4] bg-white dark:bg-[#1D1B18]'
                     : isCurrent

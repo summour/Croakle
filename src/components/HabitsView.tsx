@@ -306,13 +306,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                 >
                   <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
                   <span className="text-sm font-bold">{dayOfMonth}</span>
-                  {hasActivity && (
-                    <span
-                      className={`w-1.5 h-1.5 mt-0.5 ${
-                        isSelected ? 'bg-white' : 'bg-[#E63946]'
-                      }`}
-                    />
-                  )}
+                  <span
+                    className={`w-1.5 h-1.5 mt-0.5 ${
+                      hasActivity
+                        ? isSelected
+                          ? 'bg-white'
+                          : 'bg-[#E63946]'
+                        : 'invisible'
+                    }`}
+                  />
                 </button>
               );
             })}
@@ -462,37 +464,34 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
       {/* Add Habit Dialog Modal */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/15 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CloverIcon size={22} className="text-zinc-900 dark:text-white" />
-                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Add Habit</h2>
-              </div>
+        <div className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 sm:p-6 w-full max-w-md space-y-4 font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">
+              <h2 className="text-base font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">Add Habit</h2>
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white"
+                className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] cursor-pointer"
               >
-                <X size={18} />
+                <X size={14} />
               </button>
             </div>
 
-            <form onSubmit={handleAddSubmit} className="space-y-4">
+            <form onSubmit={handleAddSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Habit Name</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Habit Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Read 20 pages"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF] text-sm"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                   Goal Per Week: {newGoal} days
                 </label>
                 <input
@@ -501,56 +500,44 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   max="7"
                   value={newGoal}
                   onChange={(e) => setNewGoal(Number(e.target.value))}
-                  className="w-full accent-[#007AFF] cursor-pointer"
+                  className="w-full accent-[#E63946] cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Description</label>
                 <textarea
                   rows={2}
                   placeholder="e.g. Science fiction or philosophy"
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full px-4 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF] resize-none"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => {
-                    const isSelected = newPriority === p;
-                    const colorClasses = 
-                      p === 'high'
-                        ? isSelected
-                          ? 'border-[#FF3B30] bg-[#FF3B30] text-white shadow-xs'
-                          : 'border-zinc-200 dark:border-zinc-800 bg-red-50/40 dark:bg-red-950/20 text-[#FF3B30]'
-                        : p === 'medium'
-                        ? isSelected
-                          ? 'border-[#FF9500] bg-[#FF9500] text-white shadow-xs'
-                          : 'border-zinc-200 dark:border-zinc-800 bg-amber-50/40 dark:bg-amber-950/20 text-[#FF9500]'
-                        : isSelected
-                        ? 'border-[#007AFF] bg-[#007AFF] text-white shadow-xs'
-                        : 'border-zinc-200 dark:border-zinc-800 bg-blue-50/40 dark:bg-blue-950/20 text-[#007AFF]';
-
-                    return (
-                      <button
-                        key={p}
-                        type="button"
-                        onClick={() => setNewPriority(p)}
-                        className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${colorClasses}`}
-                      >
-                        {p}
-                      </button>
-                    );
-                  })}
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Priority</label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setNewPriority(p)}
+                      className={`py-1.5 border text-[10px] font-bold uppercase transition cursor-pointer ${
+                        newPriority === p
+                          ? 'border-[#E63946] bg-[#E63946] text-white'
+                          : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-sm shadow-md transition"
+                className="w-full py-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider transition cursor-pointer"
               >
                 Confirm
               </button>
@@ -568,67 +555,69 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               setDeleteConfirm(false);
             }
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4"
         >
-          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/15 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              {deleteConfirm ? (
-                <div className="flex items-center gap-1.5">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 sm:p-6 w-full max-w-md space-y-4 font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">
+              <h2 className="text-base font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">Habit Details</h2>
+              <div className="flex items-center gap-1.5">
+                {deleteConfirm ? (
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onDeleteHabit(editingIndex);
+                        setEditingIndex(null);
+                        setDeleteConfirm(false);
+                      }}
+                      className="px-2 py-1 border border-[#E63946] bg-[#E63946] text-white font-bold text-[10px] uppercase flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 size={11} /> Confirm
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteConfirm(false)}
+                      className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-[10px] uppercase cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
                   <button
                     type="button"
-                    onClick={() => {
-                      onDeleteHabit(editingIndex);
-                      setEditingIndex(null);
-                      setDeleteConfirm(false);
-                    }}
-                    className="px-3 py-1.5 rounded-xl bg-[#FF3B30] hover:bg-red-700 text-white font-black text-xs flex items-center gap-1.5 shadow-xs transition"
+                    onClick={() => setDeleteConfirm(true)}
+                    className="px-2 py-1 border border-[#E63946]/40 text-[#E63946] hover:border-[#E63946] font-bold text-[10px] uppercase flex items-center gap-1 transition cursor-pointer"
                   >
-                    <Trash2 size={13} /> Confirm Delete
+                    <Trash2 size={11} /> Delete
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeleteConfirm(false)}
-                    className="px-2 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
+                )}
                 <button
                   type="button"
-                  onClick={() => setDeleteConfirm(true)}
-                  className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-[#FF3B30] font-bold text-xs flex items-center gap-1.5 transition"
+                  onClick={() => {
+                    setEditingIndex(null);
+                    setDeleteConfirm(false);
+                  }}
+                  className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] cursor-pointer"
                 >
-                  <Trash2 size={14} /> Delete
+                  <X size={14} />
                 </button>
-              )}
-              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Habit Details</h2>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingIndex(null);
-                  setDeleteConfirm(false);
-                }}
-                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition"
-              >
-                <X size={18} />
-              </button>
+              </div>
             </div>
 
-            <form onSubmit={handleEditSubmit} className="space-y-4">
+            <form onSubmit={handleEditSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Habit Name</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Habit Name</label>
                 <input
                   type="text"
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-[#007AFF] text-sm"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                   Goal Per Week: {editGoal} days
                 </label>
                 <input
@@ -636,57 +625,45 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   min="1"
                   max="7"
                   value={editGoal}
-                  onChange={(e) => setNewGoal(Number(e.target.value))}
-                  className="w-full accent-[#007AFF] cursor-pointer"
+                  onChange={(e) => setEditGoal(Number(e.target.value))}
+                  className="w-full accent-[#E63946] cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Description</label>
                 <textarea
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF] resize-none"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => {
-                    const isSelected = editPriority === p;
-                    const colorClasses = 
-                      p === 'high'
-                        ? isSelected
-                          ? 'border-[#FF3B30] bg-[#FF3B30] text-white shadow-xs'
-                          : 'border-zinc-200 dark:border-zinc-800 bg-red-50/40 dark:bg-red-950/20 text-[#FF3B30]'
-                        : p === 'medium'
-                        ? isSelected
-                          ? 'border-[#FF9500] bg-[#FF9500] text-white shadow-xs'
-                          : 'border-zinc-200 dark:border-zinc-800 bg-amber-50/40 dark:bg-amber-950/20 text-[#FF9500]'
-                        : isSelected
-                        ? 'border-[#007AFF] bg-[#007AFF] text-white shadow-xs'
-                        : 'border-zinc-200 dark:border-zinc-800 bg-blue-50/40 dark:bg-blue-950/20 text-[#007AFF]';
-
-                    return (
-                      <button
-                        key={p}
-                        type="button"
-                        onClick={() => setEditPriority(p)}
-                        className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${colorClasses}`}
-                      >
-                        {p}
-                      </button>
-                    );
-                  })}
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Priority</label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setEditPriority(p)}
+                      className={`py-1.5 border text-[10px] font-bold uppercase transition cursor-pointer ${
+                        editPriority === p
+                          ? 'border-[#E63946] bg-[#E63946] text-white'
+                          : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   type="submit"
-                  className="py-3 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-sm shadow-md transition"
+                  className="py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider transition cursor-pointer"
                 >
                   Update
                 </button>
@@ -699,9 +676,9 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                     setEditingIndex(null);
                     setDeleteConfirm(false);
                   }}
-                  className="py-3 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-950 dark:text-white font-bold text-sm transition flex items-center justify-center gap-1.5"
+                  className="py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold font-oswald uppercase text-xs tracking-wider transition flex items-center justify-center gap-1 cursor-pointer"
                 >
-                  <PixelCheckCircleIcon size={16} />
+                  <PixelCheckCircleIcon size={14} />
                   {habits[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
                 </button>
               </div>
@@ -716,7 +693,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsReorderOpen(false);
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4"
         >
           <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-4 sm:p-5 w-full max-w-lg space-y-3 font-mono animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-start justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">

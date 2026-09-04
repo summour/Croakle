@@ -311,7 +311,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                   onClick={() => setActiveTab(tab.id)}
                   className={`min-w-0 py-1.5 px-1 text-[10px] font-bold uppercase transition cursor-pointer flex items-center justify-center ${
                     isActive
-                      ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]'
+                      ? 'bg-[#E63946] text-white font-bold'
                       : 'text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
                   }`}
                 >

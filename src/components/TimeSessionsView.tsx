@@ -271,7 +271,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   return (
     <div className="space-y-3.5 pb-24 max-w-lg mx-auto" {...swipeHandlers}>
       {/* 1. TOP: DATE / WEEK NAVIGATOR */}
-      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 space-y-2.5 touch-pan-y" {...swipeHandlers}>
         {/* Top Row: Week Navigation */}
         <div className="flex items-center justify-between">
           <button
@@ -340,15 +340,15 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               >
                 <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
                 <span className="text-sm font-extrabold">{wd.date.getDate()}</span>
-                {hasActivity && (
-                  <span
-                    className={`w-1.5 h-1.5 mt-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] ${
-                      isSelected
+                <span
+                  className={`w-1.5 h-1.5 mt-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] ${
+                    hasActivity
+                      ? isSelected
                         ? 'bg-[#F8F7F4]'
                         : 'bg-[#E63946]'
-                    }`}
-                  />
-                )}
+                      : 'invisible'
+                  }`}
+                />
               </button>
             );
           })}

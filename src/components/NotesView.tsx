@@ -301,10 +301,9 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
   return (
     <div className="space-y-4 pb-28" {...swipeHandlers}>
-      {/* Sticky iOS Glass Header with Week Navigation & 7-Day Strip */}
       {/* Sticky Header with Week Navigation & 7-Day Strip */}
-      <div className="sticky top-0 z-20 bg-[#F8F7F4] dark:bg-[#1D1B18] pt-1 pb-1 space-y-2.5">
-        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      <div className="sticky top-0 z-20 bg-[#F8F7F4]/95 dark:bg-[#1D1B18]/95 backdrop-blur-md pt-1 pb-1 space-y-2">
+        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 space-y-2.5 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
@@ -354,6 +353,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === selectedDateIso;
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+              const dayOfMonth = wd.date.getDate();
               const noteCount = notesCountByDate[wd.iso] || 0;
 
               return (
@@ -363,27 +363,27 @@ export const NotesView: React.FC<NotesViewProps> = ({
                   onClick={() => {
                     if (onSelectDate) onSelectDate(wd.date);
                   }}
-                  className={`py-1.5 text-center flex flex-col items-center gap-0.5 border transition-all duration-100 font-mono text-xs cursor-pointer ${
+                  className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono transition-all duration-100 cursor-pointer border ${
                     !wd.inMonth
-                      ? 'opacity-25 border-transparent text-[#1D1B18]/40 dark:text-[#F8F7F4]/40'
+                      ? 'opacity-30 border-dashed border-[#1D1B18] dark:border-[#F8F7F4]'
                       : isSelected
-                      ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18] border-[#1D1B18] dark:border-[#F8F7F4] font-bold'
+                      ? 'bg-[#E63946] text-white font-bold border-[#1D1B18] dark:border-[#F8F7F4]'
                       : wd.isCurrentDay
-                      ? 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-[#E63946] font-bold'
-                      : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
+                      ? 'bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold border-[#1D1B18] dark:border-[#F8F7F4]'
+                      : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-[#1D1B18] dark:border-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
                   }`}
                 >
-                  <span className="text-[9px] uppercase opacity-70">{dayName}</span>
-                  <span className="font-bold">{wd.date.getDate()}</span>
-                  {noteCount > 0 && (
-                    <span
-                      className={`w-1 h-1 ${
-                        isSelected
-                          ? 'bg-[#F8F7F4] dark:bg-[#1D1B18]'
+                  <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
+                  <span className="text-sm font-bold">{dayOfMonth}</span>
+                  <span
+                    className={`w-1.5 h-1.5 mt-0.5 ${
+                      noteCount > 0
+                        ? isSelected
+                          ? 'bg-white'
                           : 'bg-[#E63946]'
-                      }`}
-                    />
-                  )}
+                        : 'invisible'
+                    }`}
+                  />
                 </button>
               );
             })}
@@ -411,7 +411,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 onClick={() => setScopeMode(s)}
                 className={`px-2 py-1 text-[10px] font-bold uppercase transition-all cursor-pointer ${
                   scopeMode === s
-                    ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                    ? 'bg-[#E63946] text-white'
                     : 'text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
                 }`}
               >
@@ -439,7 +439,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 onClick={() => setFilterType(tab)}
                 className={`min-w-0 py-1.5 px-1 font-mono text-[10px] font-bold uppercase transition-all cursor-pointer flex items-center justify-center ${
                   isActive
-                    ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                    ? 'bg-[#E63946] text-white'
                     : 'text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
                 }`}
               >
@@ -479,8 +479,8 @@ export const NotesView: React.FC<NotesViewProps> = ({
               title="Comfortable Reading Mode"
               className={`p-1.5 transition-all cursor-pointer ${
                 viewDensity === 'comfortable'
-                  ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
-                  : 'text-[#1D1B18]/40 hover:text-[#1D1B18]'
+                  ? 'bg-[#E63946] text-white'
+                  : 'text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
               }`}
             >
               <Layers size={14} />
@@ -491,8 +491,8 @@ export const NotesView: React.FC<NotesViewProps> = ({
               title="Compact List Mode"
               className={`p-1.5 transition-all cursor-pointer ${
                 viewDensity === 'compact'
-                  ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
-                  : 'text-[#1D1B18]/40 hover:text-[#1D1B18]'
+                  ? 'bg-[#E63946] text-white'
+                  : 'text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
               }`}
             >
               <LayoutList size={14} />
@@ -762,7 +762,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                           onClick={() => setFormMoodValue(m.value)}
                           className={`py-2 px-1 border flex flex-col items-center gap-1 transition-all cursor-pointer ${
                             isSelected
-                              ? 'border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                              ? 'border-[#1D1B18] dark:border-[#F8F7F4] bg-[#E63946] text-white'
                               : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
                           }`}
                         >

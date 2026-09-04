@@ -138,7 +138,13 @@ export const MoodView: React.FC<MoodViewProps> = ({
                 type="button"
                 onClick={() => setSelectedDay(dayNum)}
                 className={`relative aspect-square w-full flex flex-col items-center justify-center p-1 transition-all duration-100 cursor-pointer border ${
-                  isToday
+                  hasMood
+                    ? isChosen
+                      ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-[#F8F7F4] ring-1 ring-[#1D1B18] dark:ring-[#F8F7F4]'
+                      : isToday
+                      ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-white'
+                      : 'bg-[#E63946] text-white border-[#E63946]'
+                    : isToday
                     ? 'border border-[#E63946] bg-white dark:bg-[#1D1B18]'
                     : isChosen
                     ? 'border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320]'
@@ -147,8 +153,10 @@ export const MoodView: React.FC<MoodViewProps> = ({
               >
                 {/* Day Number */}
                 <span
-                  className={`font-mono font-bold leading-none text-[#1D1B18] dark:text-[#F8F7F4] ${
-                    hasMood ? 'text-[9px] sm:text-[10px] mb-0.5' : 'text-xs sm:text-sm'
+                  className={`font-mono font-bold leading-none ${
+                    hasMood
+                      ? 'text-white text-[9px] sm:text-[10px] mb-0.5'
+                      : 'text-[#1D1B18] dark:text-[#F8F7F4] text-xs sm:text-sm'
                   }`}
                 >
                   {dayNum}
