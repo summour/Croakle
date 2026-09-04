@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MonthData, MOOD_LEVELS } from '../../types';
 import { MONTH_NAMES } from '../../utils/dateUtils';
-import { FrogMoodIcon } from '../FrogIcons';
+import { getMoodTheme } from '../../utils/moodConfig';
 import { soundEngine, triggerHaptic } from '../../utils/audioUtils';
 import { X } from 'lucide-react';
 
@@ -240,26 +240,27 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
       </div>
 
       {/* Selected Day Inspector Card */}
-      {selectedPoint && selectedPoint.moodObj && (
-        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 flex items-center justify-between animate-in fade-in duration-150">
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-6 h-6 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center"
-              style={{
-                backgroundColor: `${selectedPoint.moodObj.color}20`,
-              }}
-            >
-              <FrogMoodIcon value={selectedPoint.moodObj.value} size={16} />
+      {selectedPoint && selectedPoint.moodObj && (() => {
+        const theme = getMoodTheme(selectedPoint.moodObj.value);
+        return (
+          <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 flex items-center justify-between animate-in fade-in duration-150">
+            <div className="flex items-center gap-2.5">
+              <div
+                className={`w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center font-black text-[9px] ${
+                  theme ? `${theme.cellBg} ${theme.cellTextColor}` : 'bg-gray-200 text-[#1F1B1A]'
+                }`}
+              >
+                {theme ? theme.abbr : selectedPoint.moodObj.label.slice(0, 2)}
+              </div>
+              <div>
+                <strong className="text-xs font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4] block leading-tight">
+                  Day {selectedPoint.day} — {selectedPoint.moodObj.label} ({selectedPoint.moodValue}/5)
+                </strong>
+                <span className="text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+                  {MONTH_NAMES[monthIndex]} {selectedPoint.day}, {year}
+                </span>
+              </div>
             </div>
-            <div>
-              <strong className="text-xs font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4] block leading-tight">
-                Day {selectedPoint.day} — {selectedPoint.moodObj.label} ({selectedPoint.moodValue}/5)
-              </strong>
-              <span className="text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
-                {MONTH_NAMES[monthIndex]} {selectedPoint.day}, {year}
-              </span>
-            </div>
-          </div>
 
           <div
             className="px-2 py-0.5 text-[10px] font-bold font-oswald uppercase border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]"
@@ -267,7 +268,8 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
             {selectedPoint.moodObj.label}
           </div>
         </div>
-      )}
+        );
+      })()}
     </div>
   );
 };

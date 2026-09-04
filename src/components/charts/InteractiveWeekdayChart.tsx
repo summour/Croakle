@@ -107,7 +107,7 @@ export const InteractiveWeekdayChart: React.FC<InteractiveWeekdayChartProps> = (
   return (
     <div className="space-y-3 select-none">
       {/* 7-Column Interactive Bars Container */}
-      <div className="p-3 sm:p-3.5 rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.05]">
+      <div className="p-3 sm:p-3.5 rounded-2xl bg-white dark:bg-[#252320] border-[2px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[3px_3px_0px_#1F1B1A]">
         <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
           {weekdayStats.map((st) => {
             const isSelected = selectedDayOfWeek === st.dayOfWeek;
@@ -118,33 +118,33 @@ export const InteractiveWeekdayChart: React.FC<InteractiveWeekdayChartProps> = (
                 key={st.dayName}
                 type="button"
                 onClick={() => handleSelectDay(st.dayOfWeek)}
-                className={`flex flex-col items-center gap-1.5 p-1 sm:p-1.5 rounded-[16px] transition-all duration-150 ios-tap ${
+                className={`flex flex-col items-center gap-1.5 p-1 sm:p-1.5 rounded-xl transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'bg-black/[0.05] dark:bg-white/[0.08]'
-                    : 'hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
+                    ? 'bg-[#FEF08A] text-[#1F1B1A] border-[1.5px] border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A]'
+                    : 'hover:bg-zinc-100 dark:hover:bg-[#1D1B18]'
                 }`}
               >
                 {/* Bar Track & Fill */}
-                <div className="w-full bg-[#ede6dc]/70 dark:bg-[#2c2722] h-24 sm:h-28 rounded-[12px] flex flex-col justify-end p-1 overflow-hidden border border-black/[0.02] dark:border-white/[0.03]">
+                <div className="w-full bg-[#E5E2DC] dark:bg-[#1D1B18] h-24 sm:h-28 rounded-xl flex flex-col justify-end p-1 overflow-hidden border-[1.5px] border-[#1F1B1A]">
                   <div
-                    className={`w-full rounded-[8px] transition-all duration-300 ${
+                    className={`w-full rounded-lg transition-all duration-300 ${
                       isSelected
-                        ? 'bg-[#5f7a61] dark:bg-[#7d9d80]'
+                        ? 'bg-[#E02921]'
                         : isBest
-                        ? 'bg-[#5f7a61] opacity-90'
-                        : 'bg-[#5f7a61]/70 dark:bg-[#7d9d80]/70'
+                        ? 'bg-[#0074DB]'
+                        : 'bg-[#0074DB]/80 dark:bg-[#0074DB]'
                     }`}
                     style={{ height: `${Math.max(6, st.overallRate)}%` }}
                   />
                 </div>
 
                 <span className={`text-xs font-bold ${
-                  isSelected ? 'text-[#5f7a61] dark:text-[#8fc493]' : 'text-[#2d2823] dark:text-[#f4efe8]'
+                  isSelected ? 'text-[#1F1B1A]' : 'text-[#1F1B1A] dark:text-[#F8F7F4]'
                 }`}>
                   {st.dayName}
                 </span>
 
-                <span className="text-[11px] font-medium text-[#8c7e70] dark:text-[#a89b8d]">
+                <span className="text-[11px] font-bold text-[#1F1B1A]/70 dark:text-[#F8F7F4]/70">
                   {st.overallRate}%
                 </span>
               </button>
@@ -155,23 +155,23 @@ export const InteractiveWeekdayChart: React.FC<InteractiveWeekdayChartProps> = (
 
       {/* Selected Day Inspector Card */}
       {selectedStats && (
-        <div className="rounded-[20px] bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] p-3.5 space-y-2.5 animate-in fade-in duration-150">
-          <div className="flex items-center justify-between pb-2 border-b border-black/[0.04] dark:border-white/[0.05]">
+        <div className="rounded-2xl bg-white dark:bg-[#252320] border-[2px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[3px_3px_0px_#1F1B1A] p-3.5 space-y-2.5 animate-in fade-in duration-150">
+          <div className="flex items-center justify-between pb-2 border-b-[2px] border-[#1F1B1A]/20 dark:border-[#F8F7F4]/20">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-[10px] bg-[#5f7a61]/12 dark:bg-[#7d9d80]/20 flex items-center justify-center font-bold text-xs text-[#5f7a61] dark:text-[#8fc493]">
+              <div className="w-7 h-7 rounded-xl bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] flex items-center justify-center font-bold text-xs text-[#1F1B1A]">
                 {selectedStats.dayName}
               </div>
               <div>
-                <strong className="text-xs font-bold text-[#2d2823] dark:text-[#f4efe8] block leading-tight">
+                <strong className="text-xs font-bold text-[#1F1B1A] dark:text-[#F8F7F4] block leading-tight">
                   {selectedStats.fullName} Average
                 </strong>
-                <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60">
                   {selectedStats.countOfThisWeekday} {selectedStats.fullName}s in this month
                 </span>
               </div>
             </div>
 
-            <div className="px-2 py-0.5 rounded-full bg-[#5f7a61]/10 text-[#5f7a61] dark:text-[#8fc493] text-[11px] font-bold border border-[#5f7a61]/20">
+            <div className="px-2.5 py-0.5 rounded-lg bg-[#FEF08A] text-[#1F1B1A] text-[11px] font-bold border-[1.5px] border-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]">
               {selectedStats.overallRate}% <span className="font-normal text-[10px] opacity-75">({selectedStats.actualChecks}/{selectedStats.possibleChecks})</span>
             </div>
           </div>
@@ -179,27 +179,27 @@ export const InteractiveWeekdayChart: React.FC<InteractiveWeekdayChartProps> = (
           {/* Habit breakdown */}
           <div className="space-y-1">
             {selectedStats.habitBreakdowns.length === 0 ? (
-              <p className="text-[10.5px] text-[#8c7e70]">No habits tracked.</p>
+              <p className="text-[10.5px] text-[#1F1B1A]/60 font-bold">No habits tracked.</p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-0.5">
                 {selectedStats.habitBreakdowns.map(({ habit, checksForHabit, totalPossible, rate }) => (
                   <div
                     key={habit.id}
-                    className="p-2 rounded-[14px] bg-white/60 dark:bg-black/20 border border-black/[0.03] dark:border-white/[0.04] flex items-center justify-between text-xs"
+                    className="p-2.5 rounded-xl bg-[#FFFEF7] dark:bg-[#1D1B18] border-[1.5px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[1.5px_1.5px_0px_#1F1B1A] flex items-center justify-between text-xs"
                   >
-                    <span className="font-medium text-[#2d2823] dark:text-[#f4efe8] truncate max-w-[130px]">
+                    <span className="font-bold text-[#1F1B1A] dark:text-[#F8F7F4] truncate max-w-[130px]">
                       {habit.name}
                     </span>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+                      <span className="text-[10px] font-bold text-[#1F1B1A]/70 dark:text-[#F8F7F4]/70">
                         {checksForHabit}/{totalPossible}
                       </span>
-                      <span className={`font-semibold text-[10px] px-1.5 py-0.2 rounded-md ${
+                      <span className={`font-bold text-[10px] px-1.5 py-0.5 rounded-lg border border-[#1F1B1A] ${
                         rate >= 75
-                          ? 'bg-[#5f7a61]/10 text-[#5f7a61] dark:text-[#8fc493]'
+                          ? 'bg-[#22C55E] text-[#1F1B1A]'
                           : rate >= 50
-                          ? 'bg-[#d98236]/10 text-[#b56521] dark:text-[#e89b58]'
-                          : 'bg-black/[0.03] text-[#8c7e70] dark:bg-white/[0.04]'
+                          ? 'bg-[#FEF08A] text-[#1F1B1A]'
+                          : 'bg-zinc-200 text-[#1F1B1A]'
                       }`}>
                         {rate}%
                       </span>

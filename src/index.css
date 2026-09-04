@@ -1,30 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&display=swap');
 @import "tailwindcss";
 
-.font-pixel {
-  font-family: 'Press Start 2P', 'Silkscreen', monospace, monospace;
+:root {
+  --font-standard: 'Plus Jakarta Sans', 'Prompt', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
+html, body, button, input, select, textarea {
+  font-family: var(--font-standard);
+}
+
+.font-pixel,
 .font-silkscreen {
-  font-family: 'Silkscreen', 'Press Start 2P', monospace, monospace;
+  font-family: var(--font-standard) !important;
 }
 
 .font-display {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-standard) !important;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .font-body {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-standard) !important;
 }
 
 .font-oswald {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-standard) !important;
 }
 
 .font-mono {
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-standard) !important;
 }
 
 .pixel-art-rendering {
@@ -41,62 +45,62 @@
 @layer base {
   :root {
     color-scheme: light;
-    --bg: #F8F7F4;
-    --ink: #1D1B18;
-    --accent: #E63946;
-    --bg-color: #F8F7F4;
-    --bg-pattern-color: #ECEAE4;
-    --card-bg: #FFFFFF;
-    --card-warm: #F8F7F4;
-    --text-color: #1D1B18;
-    --text-muted: #555558;
-    --border-color: #1D1B18;
-    --primary-blue: #1D1B18;
-    --primary-red: #E63946;
-    --primary-green: #2A9D8F;
-    --primary-yellow: #E9C46A;
+    --bg: #D32018;
+    --ink: #1F1B1A;
+    --accent: #E02921;
+    --bg-color: #D32018;
+    --bg-pattern-color: #BB1912;
+    --card-bg: #FED843;
+    --card-warm: #FEF08A;
+    --text-color: #1F1B1A;
+    --text-muted: #5D3F3B;
+    --border-color: #1F1B1A;
+    --primary-blue: #0074DB;
+    --primary-red: #E02921;
+    --primary-green: #22C55E;
+    --primary-yellow: #FEF08A;
   }
 
   .dark {
     color-scheme: dark;
-    --bg: #141312;
+    --bg: #2B0A08;
     --ink: #F8F7F4;
-    --accent: #E63946;
-    --bg-color: #141312;
-    --bg-pattern-color: #1D1B18;
+    --accent: #E02921;
+    --bg-color: #2B0A08;
+    --bg-pattern-color: #1D0605;
     --card-bg: #1D1B18;
     --card-warm: #23211E;
     --text-color: #F8F7F4;
     --text-muted: #A09D98;
     --border-color: #F8F7F4;
-    --primary-blue: #F8F7F4;
-    --primary-red: #FF4D5A;
-    --primary-green: #2A9D8F;
-    --primary-yellow: #E9C46A;
+    --primary-blue: #0088FF;
+    --primary-red: #E02921;
+    --primary-green: #22C55E;
+    --primary-yellow: #FEF08A;
   }
 
   .dim {
     color-scheme: dark;
-    --bg: #141312;
+    --bg: #2B0A08;
     --ink: #F8F7F4;
-    --accent: #E63946;
-    --bg-color: #141312;
-    --bg-pattern-color: #1D1B18;
+    --accent: #E02921;
+    --bg-color: #2B0A08;
+    --bg-pattern-color: #1D0605;
     --card-bg: #1D1B18;
     --card-warm: #23211E;
     --text-color: #F8F7F4;
     --text-muted: #A09D98;
     --border-color: #F8F7F4;
-    --primary-blue: #F8F7F4;
-    --primary-red: #FF4D5A;
-    --primary-green: #2A9D8F;
-    --primary-yellow: #E9C46A;
+    --primary-blue: #0088FF;
+    --primary-red: #E02921;
+    --primary-green: #22C55E;
+    --primary-yellow: #FEF08A;
   }
 
   body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-standard);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
@@ -109,8 +113,8 @@
   }
 
   h1, h2, h3, h4, h5, h6, strong, b, [role="heading"] {
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: -0.03em;
+    font-family: var(--font-standard);
+    letter-spacing: -0.01em;
     font-weight: 700;
   }
 
@@ -132,159 +136,214 @@ button, input, select, a, [role="button"] {
   user-select: none;
 }
 
-/* Variation 12: Minimalist Master Container */
+/* Master Frame container */
 .variation-container {
-  border: 1px solid var(--ink);
-  background: #FFFFFF;
+  border: 2.5px solid var(--ink);
+  background: var(--card-bg);
+  border-radius: 1.5rem;
+  box-shadow: 6px 6px 0px 0px var(--ink);
 }
 .dark .variation-container {
-  border: 1px solid var(--ink);
+  border: 2.5px solid var(--ink);
   background: #1D1B18;
+  box-shadow: 6px 6px 0px 0px #000000;
 }
 
-/* Variation 12: Minimalist Clean Cards (1px solid ink, no heavy drop-shadows) */
-.ios-glass-card {
+/* Neo-Pop Clean Cards with solid borders and hard offset sticker drop-shadows */
+.ios-glass-card, .card {
   background: #FFFFFF;
-  border: 1px solid var(--ink);
-  border-radius: 0px;
+  border: 2.5px solid var(--ink);
+  border-radius: 1.25rem;
+  box-shadow: 4px 4px 0px 0px var(--ink);
   will-change: transform;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.dark .ios-glass-card {
+.dark .ios-glass-card, .dark .card {
   background: #1D1B18;
-  border: 1px solid var(--ink);
+  border: 2.5px solid var(--ink);
+  box-shadow: 4px 4px 0px 0px #000000;
 }
 
-/* Variation 12: Habit Cards */
+/* Neo-Pop Habit Cards */
 .habit-card {
-  border: 1px solid var(--ink);
-  padding: 1.25rem 1.5rem;
+  border: 2.5px solid var(--ink);
+  border-radius: 1.25rem;
+  box-shadow: 4px 4px 0px 0px var(--ink);
+  padding: 1.15rem 1.25rem;
   margin-bottom: 1rem;
-  background: #FFFFFF;
+  background: #FED843;
+  color: #1F1B1A;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.habit-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px 0px var(--ink);
 }
 
 .dark .habit-card {
-  background: #1D1B18;
-  border: 1px solid var(--ink);
+  background: #FED843;
+  color: #1F1B1A;
+  border: 2.5px solid #1F1B1A;
+  box-shadow: 4px 4px 0px 0px #000000;
 }
 
 .habit-title {
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.25rem;
+  font-family: var(--font-standard);
+  font-size: 0.95rem;
   font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  color: #1F1B1A;
 }
 
 .day-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-top: 1rem;
+  gap: 6px;
+  margin-top: 0.85rem;
 }
 
 .day-cell {
   aspect-ratio: 1;
-  border: 1px solid var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 0.75rem;
+  box-shadow: 2px 2px 0px 0px var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-standard);
   font-weight: 700;
   cursor: pointer;
   background: #FFFFFF;
   color: var(--ink);
-  transition: all 0.1s ease;
+  transition: all 0.12s ease;
+}
+
+.day-cell:active {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 0.5px 0.5px 0px 0px var(--ink);
 }
 
 .dark .day-cell {
-  background: #1D1B18;
+  background: #252320;
   color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0px 0px #000000;
 }
 
 .day-cell.active {
   background: var(--accent) !important;
   color: #FFFFFF !important;
   border-color: var(--ink) !important;
+  box-shadow: 2px 2px 0px 0px var(--ink);
 }
 
-/* Variation 12: Add button */
+/* Neo-Pop Action Buttons */
 .add-btn {
-  background: var(--ink);
-  color: var(--bg);
-  border: 1px solid var(--ink);
-  padding: 0.5rem 1rem;
-  font-size: 0.8rem;
-  font-family: 'Space Mono', monospace;
+  background: #FEF08A;
+  color: #1F1B1A;
+  border: 2px solid var(--ink);
+  border-radius: 0.75rem;
+  box-shadow: 2px 2px 0px 0px var(--ink);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-family: var(--font-standard);
   font-weight: 700;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: opacity 0.1s ease;
+  letter-spacing: 0.04em;
+  transition: all 0.12s ease;
 }
 .add-btn:hover {
-  opacity: 0.9;
+  background: #FED843;
 }
 .add-btn:active {
-  transform: scale(0.99);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px var(--ink);
 }
 
-/* Variation 12: Timer Display */
+/* Timer Display */
 .timer-display {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-standard);
   font-size: 3.5rem;
   text-align: center;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-  padding: 1rem 0;
-  font-weight: 700;
+  padding: 0.75rem 0;
+  font-weight: 800;
   letter-spacing: -0.02em;
 }
 
-/* Variation 12: Primary Action Button (.btn) */
+/* Primary Action Button (.btn) */
 .btn {
   width: 100%;
   padding: 0.75rem 1.25rem;
-  background: var(--ink);
-  color: var(--bg);
-  border: 1px solid var(--ink);
-  font-family: 'Oswald', sans-serif;
+  background: var(--accent);
+  color: #FFFFFF;
+  border: 2px solid var(--ink);
+  border-radius: 0.85rem;
+  box-shadow: 3px 3px 0px 0px var(--ink);
+  font-family: var(--font-standard);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: opacity 0.12s ease, transform 0.1s ease;
+  transition: all 0.12s ease;
 }
 .btn:hover {
-  opacity: 0.9;
+  filter: brightness(1.05);
 }
 .btn:active {
-  transform: scale(0.99);
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px var(--ink);
 }
 
-/* Variation 12: Day Cell */
+/* Day Cell Pill */
 .variation-day {
-  border: 1px solid var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 0.75rem;
+  box-shadow: 2px 2px 0px 0px var(--ink);
   padding: 0.5rem;
   text-align: center;
   font-size: 0.75rem;
   text-transform: uppercase;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-standard);
   background: #FFFFFF;
   color: var(--ink);
-  transition: all 0.1s ease;
+  transition: all 0.12s ease;
 }
 .variation-day.active {
   background: var(--accent);
-  color: var(--bg);
+  color: #FFFFFF;
   font-weight: bold;
   border-color: var(--ink);
+}
+
+/* Washi tape accent badge */
+.washi-tape-yellow {
+  background: #FEF08A;
+  color: #1F1B1A;
+  border: 1.5px solid #1F1B1A;
+  box-shadow: 1.5px 1.5px 0px #1F1B1A;
+}
+
+.washi-tape-blue {
+  background: #BAE6FD;
+  color: #005BAF;
+  border: 1.5px solid #1F1B1A;
+  box-shadow: 1.5px 1.5px 0px #1F1B1A;
+}
+
+.washi-tape-red {
+  background: #FFDAD5;
+  color: #930005;
+  border: 1.5px solid #1F1B1A;
+  box-shadow: 1.5px 1.5px 0px #1F1B1A;
 }
 
 /* Variation 12: Footer Nav */
@@ -294,7 +353,7 @@ button, input, select, a, [role="button"] {
   align-items: center;
   border-top: 1px solid var(--ink);
   padding: 1rem 1.5rem;
-  font-family: 'Space Mono', monospace;
+  font-family: var(--font-standard);
 }
 .nav-item {
   font-size: 0.7rem;
@@ -304,18 +363,17 @@ button, input, select, a, [role="button"] {
   cursor: pointer;
 }
 
-/* Bottom Dock Tray (Variation 12 Minimalist: 1px solid ink, flat, no thick shadow) */
+/* Bottom Dock Tray: Neo-Pop Solid border with hard offset shadow */
 .ios-glass-dock {
-  background: #FFFFFF;
-  border: 1px solid var(--ink);
-  border-radius: 0px;
+  background: #D32018;
+  border-top: 2.5px solid var(--ink);
+  border-radius: 1.25rem 1.25rem 0 0;
   will-change: transform;
 }
 
 .dark .ios-glass-dock {
-  background: #161619;
-  border: 2px solid var(--ink);
-  box-shadow: 5px 5px 0px 0px var(--ink);
+  background: #2B0A08;
+  border-top: 2.5px solid var(--ink);
 }
 
 /* Tactile Stamp Cushion Micro-Interactions */
@@ -334,24 +392,25 @@ button, input, select, a, [role="button"] {
   background: #FFFFFF;
   border: 2px solid var(--ink);
   box-shadow: 2px 2px 0px 0px var(--ink);
-  border-radius: 0px;
+  border-radius: 9999px;
 }
 
 .dark .ios-glass-pill {
   background: #1F1F23;
   border: 2px solid var(--ink);
-  box-shadow: 2px 2px 0px 0px var(--ink);
+  box-shadow: 2px 2px 0px 0px #000000;
+  border-radius: 9999px;
 }
 
 /* Variation 1 Styled Action Buttons */
 .kissa-btn-primary {
   background-color: var(--accent);
   color: #FFFFFF;
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-standard);
   font-weight: 800;
   border: 2px solid var(--ink);
   box-shadow: 3px 3px 0px 0px var(--ink);
-  border-radius: 0px;
+  border-radius: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -364,11 +423,11 @@ button, input, select, a, [role="button"] {
 .kissa-btn-secondary {
   background-color: var(--ink);
   color: var(--bg);
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-standard);
   font-weight: 800;
   border: 2px solid var(--ink);
   box-shadow: 3px 3px 0px 0px var(--accent);
-  border-radius: 0px;
+  border-radius: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -381,11 +440,11 @@ button, input, select, a, [role="button"] {
 .kissa-btn-honey {
   background-color: #E9C46A;
   color: var(--ink);
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-standard);
   font-weight: 800;
   border: 2px solid var(--ink);
   box-shadow: 3px 3px 0px 0px var(--ink);
-  border-radius: 0px;
+  border-radius: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -400,9 +459,9 @@ button, input, select, a, [role="button"] {
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  border: 1px solid var(--ink);
-  border-radius: 0px;
-  font-family: 'Space Mono', monospace;
+  border: 1.5px solid var(--ink);
+  border-radius: 0.6rem;
+  font-family: var(--font-standard);
   font-weight: 700;
   font-size: 11px;
   text-transform: uppercase;
@@ -412,7 +471,7 @@ button, input, select, a, [role="button"] {
 
 .kissa-stamp {
   border: 2px dashed var(--ink);
-  border-radius: 0px;
+  border-radius: 0.75rem;
 }
 
 /* Smooth modal zoom & fade */

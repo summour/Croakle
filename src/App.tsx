@@ -586,31 +586,31 @@ export function App() {
   return (
     <main
       id="croakle-app"
-      className="h-[100dvh] h-screen w-screen bg-[#F8F7F4] dark:bg-[#141312] text-[#1D1B18] dark:text-[#F8F7F4] transition-colors font-mono selection:bg-[#E63946] selection:text-[#F8F7F4] relative overflow-hidden flex flex-col items-center justify-center p-0 sm:p-4"
+      className="h-[100dvh] h-screen w-screen transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative overflow-hidden flex flex-col items-center justify-center p-0 sm:p-4"
+      style={{
+        backgroundColor: settings.theme === 'dark' ? '#2B0A08' : '#D32018',
+        backgroundImage: settings.theme === 'dark'
+          ? 'radial-gradient(#1A0605 1.5px, transparent 1.5px)'
+          : 'radial-gradient(#BB1912 1.5px, transparent 1.5px)',
+        backgroundSize: '24px 24px',
+      }}
     >
-      {/* MASTER UNIFIED CONTAINER (Variation 12: 500px, 1px solid ink) */}
+      {/* MASTER UNIFIED CONTAINER: Neo-Pop 500px, 2.5px solid dark border, rounded corners & sticker shadow */}
       <div
         id="croakle-master-frame"
-        className="relative z-10 w-full max-w-[500px] h-full sm:h-[900px] max-h-[100dvh] sm:max-h-[96vh] flex flex-col bg-white dark:bg-[#1D1B18] border-x-0 sm:border border-[#1D1B18] dark:border-[#F8F7F4] overflow-hidden transition-all duration-300"
+        className="relative z-10 w-full max-w-[500px] h-full sm:h-[900px] max-h-[100dvh] sm:max-h-[96vh] flex flex-col bg-[#D32018] dark:bg-[#2B0A08] border-x-0 sm:border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] sm:rounded-[28px] sm:shadow-[6px_6px_0px_#1F1B1A] dark:sm:shadow-[6px_6px_0px_#000000] overflow-hidden transition-all duration-300"
       >
-        {/* Variation 12 Header */}
-        <header className="shrink-0 px-6 sm:px-8 py-5 sm:py-6 border-b border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-[-0.04em] font-display text-[#1D1B18] dark:text-[#F8F7F4] uppercase leading-none">
-              CROAKLE
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] uppercase font-bold tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
-              {activePage.toUpperCase()}
-            </span>
-          </div>
+        {/* Neo-Pop Header */}
+        <header className="shrink-0 px-5 sm:px-6 py-3.5 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white drop-shadow-[2px_2px_0px_#1F1B1A] uppercase leading-none">
+            CROAKLE
+          </h1>
         </header>
 
-        {/* Scrollable Viewport Container (Variation 12: .scroll-area) */}
+        {/* Scrollable Viewport Container */}
         <div
           id="croakle-scroll-area"
-          className="scroll-area flex-1 w-full px-4 sm:px-6 pt-4 pb-6 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="scroll-area flex-1 w-full px-4 sm:px-5 pt-4 pb-6 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-[#D32018] dark:bg-[#2B0A08]"
         >
           {activePage === 'best' && (
             <HabitsView

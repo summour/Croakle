@@ -135,14 +135,16 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 space-y-4"
+        className="w-full max-w-sm bg-[#0074DB] dark:bg-[#1D4ED8] text-white border-[3px] border-[#1F1B1A] rounded-3xl shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] p-5 space-y-4 animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between pb-2 border-b border-[#1D1B18] dark:border-[#F8F7F4]">
+        <div className="flex items-center justify-between pb-2.5 border-b-[2px] border-[#1F1B1A]/40 dark:border-white/30">
           <div className="flex items-center gap-2">
-            <CalendarIcon size={16} className="text-[#1D1B18] dark:text-[#F8F7F4]" />
-            <h3 className="text-base font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">
+            <div className="w-7 h-7 rounded-lg bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] flex items-center justify-center shadow-[1px_1px_0px_#1F1B1A]">
+              <CalendarIcon size={14} className="text-[#1F1B1A]" />
+            </div>
+            <h3 className="text-base font-bold font-oswald text-white uppercase tracking-wider">
               {title}
             </h3>
           </div>
@@ -151,14 +153,14 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
             <button
               type="button"
               onClick={handleJumpToday}
-              className="px-2.5 py-1 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] text-[10px] font-bold uppercase transition hover:bg-[#F8F7F4] dark:hover:bg-[#252320] cursor-pointer"
+              className="px-2.5 py-1 rounded-xl border-[1.5px] border-[#1F1B1A] bg-[#FEF08A] text-[#1F1B1A] text-[10px] font-bold uppercase transition hover:-translate-y-0.5 shadow-[1.5px_1.5px_0px_#1F1B1A] cursor-pointer"
             >
               Today
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="p-1 border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] transition cursor-pointer"
+              className="w-7 h-7 rounded-xl border-[1.5px] border-[#1F1B1A] bg-white dark:bg-[#252320] text-[#1F1B1A] dark:text-[#F8F7F4] hover:bg-[#E02921] hover:text-white transition cursor-pointer flex items-center justify-center shadow-[1.5px_1.5px_0px_#1F1B1A]"
               aria-label="Close"
             >
               <X size={14} />
@@ -171,21 +173,21 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
           <button
             type="button"
             onClick={handlePrevMonth}
-            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+            className="w-8 h-8 rounded-xl border-[1.5px] border-[#1F1B1A] bg-white dark:bg-[#252320] flex items-center justify-center text-[#1F1B1A] dark:text-[#F8F7F4] shadow-[1.5px_1.5px_0px_#1F1B1A] transition cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
             aria-label="Previous Month"
           >
             <ChevronLeft size={16} />
           </button>
 
-          <div className="flex items-center gap-1.5 font-bold font-oswald text-base text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-tight">
+          <div className="flex items-center gap-1.5 font-bold font-oswald text-base text-white uppercase tracking-tight">
             <span>{MONTH_NAMES[viewMonth]}</span>
-            <span className="text-[#1D1B18]/50 dark:text-[#F8F7F4]/50">{viewYear}</span>
+            <span className="text-white/70">{viewYear}</span>
           </div>
 
           <button
             type="button"
             onClick={handleNextMonth}
-            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+            className="w-8 h-8 rounded-xl border-[1.5px] border-[#1F1B1A] bg-white dark:bg-[#252320] flex items-center justify-center text-[#1F1B1A] dark:text-[#F8F7F4] shadow-[1.5px_1.5px_0px_#1F1B1A] transition cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
             aria-label="Next Month"
           >
             <ChevronRight size={16} />
@@ -193,7 +195,7 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
         </div>
 
         {/* Days of Week Header (Mo Tu We Th Fr Sa Su) */}
-        <div className="grid grid-cols-7 gap-1 text-center font-mono font-bold text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-wider">
+        <div className="grid grid-cols-7 gap-1 text-center font-mono font-bold text-[10px] text-white/90 uppercase tracking-wider">
           {DAY_SHORT_NAMES.map((d) => (
             <div key={d} className="py-1">
               {d}
@@ -210,19 +212,19 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
                 key={cell.iso}
                 type="button"
                 onClick={() => handleSelectDay(cell.date)}
-                className={`aspect-square w-full border flex flex-col items-center justify-center font-bold text-xs transition-all relative cursor-pointer ${
+                className={`aspect-square w-full rounded-xl border-[1.5px] flex flex-col items-center justify-center font-bold text-xs transition-all relative cursor-pointer ${
                   cell.isSelected
-                    ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-[#F8F7F4]'
+                    ? 'bg-[#E02921] text-white border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
                     : cell.isToday
-                    ? 'border-[#E63946] text-[#1D1B18] dark:text-[#F8F7F4] bg-white dark:bg-[#1D1B18]'
+                    ? 'border-[#1F1B1A] text-[#1F1B1A] bg-[#FEF08A] shadow-[1.5px_1.5px_0px_#1F1B1A]'
                     : isCurrent
-                    ? 'border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4]'
-                    : 'border-transparent text-[#1D1B18]/25 dark:text-[#F8F7F4]/25'
+                    ? 'border-[#1F1B1A] hover:bg-[#FEF08A] text-[#1F1B1A] dark:text-[#F8F7F4] bg-white dark:bg-[#1D1B18] shadow-[1px_1px_0px_#1F1B1A]'
+                    : 'border-transparent text-white/30 opacity-30 pointer-events-none'
                 }`}
               >
                 <span>{cell.dayNum}</span>
                 {cell.isToday && !cell.isSelected && (
-                  <span className="w-1 h-1 bg-[#E63946] absolute bottom-1" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E02921] absolute bottom-1" />
                 )}
               </button>
             );

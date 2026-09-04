@@ -3,7 +3,6 @@ import { PageType, HabitTemplate, MonthData } from '../types';
 import { MONTH_NAMES, getDaysInMonth } from '../utils/dateUtils';
 import { ChevronLeft, ChevronRight, Trophy, Sparkles } from 'lucide-react';
 import { HabitCloverDockIcon, BambooProjectDockIcon } from './FrogIcons';
-import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import { InteractiveLeaderboardChart } from './charts/InteractiveLeaderboardChart';
 
@@ -64,42 +63,29 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
 
   return (
     <div className="space-y-4 pb-24" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Habits/Projects/Rankings */}
-      {onNavigate && (
-        <SubNavTabs
-          activePage="best"
-          onNavigate={onNavigate}
-          tabs={[
-            { id: 'track', label: 'Habits' },
-            { id: 'project', label: 'Projects' },
-            { id: 'best', label: 'Leaderboard' },
-          ]}
-        />
-      )}
-
       {/* Month Header Navigation (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-[#F8F7F4] dark:bg-[#1D1B18] pt-1 pb-1">
-        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-transparent pt-1 pb-1">
+        <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3.5 sm:p-4 flex items-center justify-between">
           <button
             type="button"
             onClick={onPrevMonth}
-            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+            className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
             aria-label="Previous Month"
           >
             <ChevronLeft size={16} />
           </button>
           <div className="text-center">
-            <p className="text-[9px] font-mono font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-widest">
+            <p className="text-[9px] font-mono font-bold text-white/80 uppercase tracking-widest">
               Leaderboard & Rankings
             </p>
-            <strong id="CroakleBestMonth" className="text-lg font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
+            <strong id="CroakleBestMonth" className="text-lg font-bold font-oswald tracking-tight uppercase text-white">
               {MONTH_NAMES[monthIndex]} {year}
             </strong>
           </div>
           <button
             type="button"
             onClick={onNextMonth}
-            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+            className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
             aria-label="Next Month"
           >
             <ChevronRight size={16} />
@@ -108,15 +94,15 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
       </div>
 
       {/* Interactive Leaderboard Visualizer */}
-      <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A] p-4 space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Trophy size={16} className="text-[#E63946]" />
-            <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+            <Trophy size={16} className="text-[#E02921]" />
+            <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1F1B1A]">
               Consistency Chart
             </h3>
           </div>
-          <span className="text-[10px] font-mono font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">
+          <span className="text-[10px] font-mono font-bold text-[#1F1B1A]/70 uppercase">
             Tap habit for breakdown
           </span>
         </div>
@@ -130,16 +116,16 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
       </div>
 
       {/* Summary Card */}
-      <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A] p-4 space-y-3">
         <div className="flex items-center gap-2">
-          <Trophy size={18} className="text-[#E63946]" />
-          <h2 className="font-bold font-oswald text-base uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+          <Trophy size={18} className="text-[#E02921]" />
+          <h2 className="font-bold font-oswald text-base uppercase tracking-tight text-[#1F1B1A]">
             Habit Consistency Leaderboard
           </h2>
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-2 text-[10px] font-mono font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-wider pb-2 border-b border-[#1D1B18] dark:border-[#F8F7F4]">
+        <div className="grid grid-cols-12 gap-2 text-[10px] font-mono font-bold text-[#1F1B1A]/70 uppercase tracking-wider pb-2 border-b-[2px] border-[#1F1B1A]/20">
           <span className="col-span-5">Habit</span>
           <span className="col-span-3 text-center">Progress</span>
           <span className="col-span-2 text-center">Month</span>
@@ -147,10 +133,10 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
         </div>
 
         {/* Habits List */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {habitStats.length === 0 ? (
-            <div className="py-8 text-center text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 space-y-1">
-              <p className="font-bold font-oswald text-sm uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
+            <div className="py-8 text-center text-[#1F1B1A]/70 space-y-1">
+              <p className="font-bold font-oswald text-sm uppercase text-[#1F1B1A]">
                 No active habit data for this month
               </p>
               <p className="text-xs font-mono">
@@ -163,41 +149,41 @@ export const BestHabitsView: React.FC<BestHabitsViewProps> = ({
               return (
                 <div
                   key={stat.habit.id}
-                  className={`grid grid-cols-12 gap-2 items-center p-2.5 border transition ${
+                  className={`grid grid-cols-12 gap-2 items-center p-3 rounded-xl border-[2px] transition shadow-[2px_2px_0px_#1F1B1A] ${
                     isTop
-                      ? 'border-[#E63946] bg-white dark:bg-[#1D1B18]'
-                      : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-white dark:bg-[#1D1B18]'
+                      ? 'border-[#1F1B1A] bg-white text-[#1F1B1A]'
+                      : 'border-[#1F1B1A] bg-white/90 text-[#1F1B1A]'
                   }`}
                 >
                   <div className="col-span-5 min-w-0 flex items-center gap-1.5">
-                    {isTop && <Sparkles size={12} className="text-[#E63946] shrink-0" />}
-                    <span className="font-mono font-bold text-xs text-[#1D1B18] dark:text-[#F8F7F4] truncate">
+                    {isTop && <Sparkles size={13} className="text-[#E02921] shrink-0 fill-current" />}
+                    <span className="font-mono font-bold text-xs text-[#1F1B1A] truncate">
                       {stat.habit.name}
                     </span>
                     {stat.habit.completed && (
-                      <span className="text-[8px] font-mono font-bold px-1 py-0.2 border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 shrink-0 uppercase">
+                      <span className="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-full border border-[#1F1B1A] bg-white text-[#1F1B1A]/70 shrink-0 uppercase">
                         Done
                       </span>
                     )}
                   </div>
 
                   <div className="col-span-3 flex flex-col items-center">
-                    <div className="w-full bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4] h-2 overflow-hidden">
+                    <div className="w-full bg-[#EAE8E3] dark:bg-[#252320] border-[1.5px] border-[#1F1B1A] h-2.5 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-[#1D1B18] dark:bg-[#F8F7F4] transition-all duration-300"
+                        className="h-full bg-[#E02921] transition-all duration-300 rounded-full"
                         style={{ width: `${Math.min(100, stat.goalPercent)}%` }}
                       />
                     </div>
-                    <span className="text-[9px] font-mono font-bold mt-1 text-[#1D1B18] dark:text-[#F8F7F4]">
+                    <span className="text-[9px] font-mono font-bold mt-1 text-[#1F1B1A] dark:text-[#F8F7F4]">
                       {stat.goalPercent}%
                     </span>
                   </div>
 
-                  <div className="col-span-2 text-center font-mono font-bold text-xs text-[#1D1B18] dark:text-[#F8F7F4]">
+                  <div className="col-span-2 text-center font-mono font-bold text-xs text-[#1F1B1A] dark:text-[#F8F7F4]">
                     {stat.monthChecks}
                   </div>
 
-                  <div className="col-span-2 text-center font-mono text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+                  <div className="col-span-2 text-center font-mono text-[10px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60">
                     {stat.lifetime}
                   </div>
                 </div>

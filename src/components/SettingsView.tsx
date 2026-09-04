@@ -8,8 +8,7 @@ import {
   PixelSceneConfig,
 } from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
-import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Sparkles, BarChart3, Settings } from 'lucide-react';
-import { SubNavTabs } from './SubNavTabs';
+import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Sparkles, BarChart3, Settings, Check, AlertCircle } from 'lucide-react';
 
 interface SettingsViewProps {
   settings: AppSettings;
@@ -91,29 +90,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   return (
-    <div className="space-y-3 pb-24 font-mono">
+    <div className="space-y-4 pb-28 font-mono">
       {/* Header */}
-      <div className="card p-3.5 sm:p-4 flex items-center justify-between bg-white dark:bg-[#1D1B18]">
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] p-4 flex items-center justify-between bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A]">
         <div>
-          <h1 className="text-xl font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">Settings</h1>
-          <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Preferences & Data</p>
+          <h1 className="text-xl font-bold font-oswald tracking-tight uppercase text-[#1F1B1A]">Settings</h1>
+          <p className="text-xs text-[#1F1B1A]/70 uppercase">Preferences & Data</p>
         </div>
       </div>
 
       {/* Preferences & Toggles */}
-      <div className="card p-3.5 sm:p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
-        <h2 className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">Preferences</h2>
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] p-4 space-y-3.5 bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A]">
+        <h2 className="text-xs font-bold font-oswald text-[#1F1B1A] uppercase tracking-wider">Preferences</h2>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           {/* Sound */}
           <button
             type="button"
             onClick={() => onUpdateSettings({ ...settings, soundEnabled: !settings.soundEnabled })}
-            className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+            className="p-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-white/90 shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
           >
-            <span className="text-[11px] uppercase">Sound</span>
-            <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
-              settings.soundEnabled ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
+            <span className="text-[11px] uppercase text-[#1F1B1A]">Sound</span>
+            <span className={`text-[9px] px-2 py-0.5 rounded-lg border border-[#1F1B1A] font-bold uppercase shadow-[1px_1px_0px_#1F1B1A] ${
+              settings.soundEnabled ? 'bg-[#FEF08A] text-[#1F1B1A]' : 'bg-transparent text-[#1F1B1A]/50'
             }`}>
               {settings.soundEnabled ? 'ON' : 'OFF'}
             </span>
@@ -123,11 +122,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <button
             type="button"
             onClick={() => onUpdateSettings({ ...settings, hapticEnabled: !settings.hapticEnabled })}
-            className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+            className="p-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-white/90 shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
           >
-            <span className="text-[11px] uppercase">Haptics</span>
-            <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
-              settings.hapticEnabled ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
+            <span className="text-[11px] uppercase text-[#1F1B1A]">Haptics</span>
+            <span className={`text-[9px] px-2 py-0.5 rounded-lg border border-[#1F1B1A] font-bold uppercase shadow-[1px_1px_0px_#1F1B1A] ${
+              settings.hapticEnabled ? 'bg-[#FEF08A] text-[#1F1B1A]' : 'bg-transparent text-[#1F1B1A]/50'
             }`}>
               {settings.hapticEnabled ? 'ON' : 'OFF'}
             </span>
@@ -138,11 +137,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => onUpdatePixelScene({ isAnimated: !pixelScene.isAnimated })}
-              className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+              className="p-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-white/90 shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
             >
-              <span className="text-[11px] uppercase">Animate</span>
-              <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
-                pixelScene.isAnimated ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
+              <span className="text-[11px] uppercase text-[#1F1B1A]">Animate</span>
+              <span className={`text-[9px] px-2 py-0.5 rounded-lg border border-[#1F1B1A] font-bold uppercase shadow-[1px_1px_0px_#1F1B1A] ${
+                pixelScene.isAnimated ? 'bg-[#FEF08A] text-[#1F1B1A]' : 'bg-transparent text-[#1F1B1A]/50'
               }`}>
                 {pixelScene.isAnimated ? 'ON' : 'OFF'}
               </span>
@@ -154,11 +153,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => onUpdatePixelScene({ syncWithMood: !pixelScene.syncWithMood })}
-              className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+              className="p-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-white/90 shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
             >
-              <span className="text-[11px] uppercase">Mood Sync</span>
-              <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
-                pixelScene.syncWithMood ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
+              <span className="text-[11px] uppercase text-[#1F1B1A]">Mood Sync</span>
+              <span className={`text-[9px] px-2 py-0.5 rounded-lg border border-[#1F1B1A] font-bold uppercase shadow-[1px_1px_0px_#1F1B1A] ${
+                pixelScene.syncWithMood ? 'bg-[#FEF08A] text-[#1F1B1A]' : 'bg-transparent text-[#1F1B1A]/50'
               }`}>
                 {pixelScene.syncWithMood ? 'ON' : 'OFF'}
               </span>
@@ -168,45 +167,45 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       </div>
 
       {/* Habit Insights */}
-      <div className="card p-3.5 sm:p-4 space-y-2.5 bg-white dark:bg-[#1D1B18]">
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] p-4 space-y-3 bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A]">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">Coach Insights</h2>
+          <h2 className="text-xs font-bold font-oswald text-[#1F1B1A] uppercase tracking-wider">Coach Insights</h2>
           <button
             type="button"
             onClick={generateAIInsights}
-            className="px-2.5 py-1 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-[10px] uppercase flex items-center gap-1 transition cursor-pointer"
+            className="px-3 py-1.5 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-[#1F1B1A] font-bold text-[10px] uppercase flex items-center gap-1.5 transition cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5"
           >
-            <RefreshCw size={10} />
+            <RefreshCw size={11} />
             Analyze
           </button>
         </div>
 
         {aiInsight && (
-          <p className="text-xs text-[#1D1B18] dark:text-[#F8F7F4] leading-relaxed bg-[#F8F7F4] dark:bg-[#252320] p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4]">
+          <p className="text-xs text-[#1F1B1A] leading-relaxed bg-white p-3 rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A]">
             {aiInsight}
           </p>
         )}
       </div>
 
       {/* Data Management */}
-      <div className="card p-3.5 sm:p-4 space-y-2.5 bg-white dark:bg-[#1D1B18]">
-        <h2 className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">Data & Backup</h2>
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] p-4 space-y-3 bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A]">
+        <h2 className="text-xs font-bold font-oswald text-[#1F1B1A] uppercase tracking-wider">Data & Backup</h2>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2.5">
           <button
             type="button"
             onClick={handleExport}
-            className="py-2 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
+            className="py-2.5 px-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white hover:bg-white/80 text-[#1F1B1A] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer uppercase shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
           >
-            <Download size={13} /> Export JSON
+            <Download size={14} /> Export JSON
           </button>
 
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="py-2 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
+            className="py-2.5 px-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white hover:bg-white/80 text-[#1F1B1A] font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer uppercase shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
           >
-            <Upload size={13} /> Import JSON
+            <Upload size={14} /> Import JSON
           </button>
           <input
             ref={fileInputRef}
@@ -218,13 +217,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {importStatus && (
-          <p className="text-[10px] font-bold text-[#1D1B18] dark:text-[#F8F7F4] p-2 bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4] text-center uppercase">
-            {importStatus}
-          </p>
+          <div className="w-full py-2.5 px-3 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-[#1F1B1A] font-bold text-xs flex items-center justify-center gap-2 uppercase shadow-[2px_2px_0px_#1F1B1A]">
+            {importStatus.startsWith('Error') ? (
+              <AlertCircle size={14} className="shrink-0 text-[#E02921]" />
+            ) : (
+              <Check size={14} className="shrink-0 text-[#1F1B1A]" />
+            )}
+            <span>{importStatus}</span>
+          </div>
         )}
 
         {/* Reset */}
-        <div className="pt-1">
+        <div className="pt-2">
           {resetConfirm ? (
             <div className="flex items-center gap-2">
               <button
@@ -233,14 +237,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   onResetData();
                   setResetConfirm(false);
                 }}
-                className="flex-1 py-1.5 border border-[#E63946] bg-[#E63946] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
+                className="flex-1 py-2 rounded-xl border-[2px] border-[#1F1B1A] bg-[#E02921] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
               >
-                <Trash2 size={13} /> Confirm Reset
+                <Trash2 size={14} /> Confirm Reset
               </button>
               <button
                 type="button"
                 onClick={() => setResetConfirm(false)}
-                className="py-1.5 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-xs hover:bg-[#F8F7F4] dark:hover:bg-[#252320] transition cursor-pointer uppercase"
+                className="py-2 px-4 rounded-xl border-[2px] border-[#1F1B1A] bg-white text-[#1F1B1A] font-bold text-xs hover:bg-white/80 transition cursor-pointer uppercase shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
               >
                 Cancel
               </button>
@@ -249,9 +253,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => setResetConfirm(true)}
-              className="w-full py-1.5 border border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
+              className="w-full py-2 rounded-xl border-[2px] border-[#E02921] text-[#E02921] hover:bg-[#E02921] hover:text-white bg-white text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer uppercase shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
             >
-              <Trash2 size={13} /> Reset to Defaults
+              <Trash2 size={14} /> Reset to Defaults
             </button>
           )}
         </div>

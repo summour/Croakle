@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { PageType, MonthData, MOOD_LEVELS } from '../types';
-import { MONTH_NAMES, CALENDAR_HEADER_DAYS, getDaysInMonth } from '../utils/dateUtils';
-import { ChevronLeft, ChevronRight, X, Smile, CheckCircle2, FolderKanban } from 'lucide-react';
-import { FrogMoodIcon } from './FrogIcons';
-import { SubNavTabs } from './SubNavTabs';
+import { PageType, MonthData } from '../types';
+import { MONTH_NAMES, getDaysInMonth } from '../utils/dateUtils';
+import { ChevronLeft, ChevronRight, X, Trash2, Check } from 'lucide-react';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import confetti from 'canvas-confetti';
+import { MOOD_THEMES, getMoodTheme } from '../utils/moodConfig';
 
 interface MoodViewProps {
   monthData: MonthData;
@@ -24,7 +23,6 @@ export const MoodView: React.FC<MoodViewProps> = ({
   onPrevMonth,
   onNextMonth,
   onSetMoodDay,
-  onNavigate,
 }) => {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
@@ -64,42 +62,29 @@ export const MoodView: React.FC<MoodViewProps> = ({
 
   return (
     <div className="space-y-4 pb-28" {...swipeHandlers}>
-      {/* Top Segmented Sub-Navigation for Mood / Habits / Projects */}
-      {onNavigate && (
-        <SubNavTabs
-          activePage="mood"
-          onNavigate={onNavigate}
-          tabs={[
-            { id: 'mood', label: 'Mood' },
-            { id: 'track', label: 'Habits' },
-            { id: 'project', label: 'Projects' },
-          ]}
-        />
-      )}
-
-      {/* Month Header Card */}
-      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 sm:p-3.5 flex items-center justify-between">
+      {/* Month Header Card (Blue like the other views) */}
+      <div className="border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3.5 sm:p-4 flex items-center justify-between">
         <button
           type="button"
           onClick={onPrevMonth}
-          className="w-7 h-7 sm:w-8 sm:h-8 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+          className="w-8 h-8 sm:w-9 sm:h-9 border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] rounded-xl shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
           aria-label="Previous Month"
           title="Previous Month"
         >
           <ChevronLeft size={16} />
         </button>
         <div className="text-center">
-          <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+          <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/80">
             Daily Mood Log
           </p>
-          <strong id="CroakleMoodMonth" className="text-lg sm:text-xl font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4] block leading-tight mt-0.5">
+          <strong id="CroakleMoodMonth" className="text-lg sm:text-xl font-bold font-oswald tracking-tight uppercase text-white block leading-tight mt-0.5">
             {MONTH_NAMES[monthIndex]} {year}
           </strong>
         </div>
         <button
           type="button"
           onClick={onNextMonth}
-          className="w-7 h-7 sm:w-8 sm:h-8 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+          className="w-8 h-8 sm:w-9 sm:h-9 border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] rounded-xl shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
           aria-label="Next Month"
           title="Next Month"
         >
@@ -107,10 +92,10 @@ export const MoodView: React.FC<MoodViewProps> = ({
         </button>
       </div>
 
-      {/* Clean Calendar Card */}
-      <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-3.5 sm:p-4 select-none touch-pan-y space-y-3">
+      {/* Clean Calendar Card (Yellow) */}
+      <div className="bg-[#FED843] text-[#1F1B1A] border-[2.5px] border-[#1F1B1A] rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-4 select-none touch-pan-y space-y-3">
         {/* Day Headers (SU MO TU WE TH FR SA) */}
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center font-bold font-mono text-[10px] sm:text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-wider">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center font-bold font-mono text-[10px] sm:text-xs text-[#1F1B1A]/80 uppercase tracking-wider">
           {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((d) => (
             <span key={d}>{d}</span>
           ))}
@@ -127,50 +112,60 @@ export const MoodView: React.FC<MoodViewProps> = ({
           {Array.from({ length: daysInMonth }).map((_, i) => {
             const dayNum = i + 1;
             const moodValue = monthData.moods[i];
-            const moodObj = MOOD_LEVELS.find((m) => m.value === moodValue);
+            const moodTheme = getMoodTheme(moodValue);
             const isToday = isCurrentMonth && today.getDate() === dayNum;
             const isChosen = selectedDay === dayNum;
-            const hasMood = Boolean(moodValue && moodObj);
+            const hasMood = Boolean(moodValue && moodTheme);
 
             return (
               <button
                 key={`day-${dayNum}`}
                 type="button"
                 onClick={() => setSelectedDay(dayNum)}
-                className={`relative aspect-square w-full flex flex-col items-center justify-center p-1 transition-all duration-100 cursor-pointer border ${
-                  hasMood
-                    ? isChosen
-                      ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-[#F8F7F4] ring-1 ring-[#1D1B18] dark:ring-[#F8F7F4]'
-                      : isToday
-                      ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-white'
-                      : 'bg-[#E63946] text-white border-[#E63946]'
-                    : isToday
-                    ? 'border border-[#E63946] bg-white dark:bg-[#1D1B18]'
+                className={`relative aspect-square w-full flex flex-col items-center justify-between p-1 rounded-xl transition-all duration-100 cursor-pointer border-[2px] border-[#1F1B1A] ${
+                  hasMood && moodTheme
+                    ? `${moodTheme.cellBg} ${moodTheme.cellTextColor} shadow-[2px_2px_0px_#1F1B1A] ${
+                        isChosen ? 'ring-2 ring-[#1F1B1A] -translate-y-0.5' : ''
+                      }`
                     : isChosen
-                    ? 'border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320]'
-                    : 'border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-white dark:bg-[#1D1B18] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
+                    ? 'bg-[#1F1B1A] text-white shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
+                    : isToday
+                    ? 'bg-white text-[#1F1B1A] font-extrabold shadow-[2px_2px_0px_#1F1B1A] ring-2 ring-[#E02921]'
+                    : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] hover:bg-white/80 shadow-[1px_1px_0px_#1F1B1A]'
                 }`}
               >
-                {/* Day Number */}
-                <span
-                  className={`font-mono font-bold leading-none ${
-                    hasMood
-                      ? 'text-white text-[9px] sm:text-[10px] mb-0.5'
-                      : 'text-[#1D1B18] dark:text-[#F8F7F4] text-xs sm:text-sm'
-                  }`}
-                >
-                  {dayNum}
-                </span>
-
-                {/* Mood Icon in Center */}
-                {hasMood && moodObj && (
-                  <div className="flex items-center justify-center">
-                    <FrogMoodIcon
-                      value={moodValue!}
-                      size={20}
-                      className="w-4 h-4 sm:w-5 sm:h-5"
+                {/* Day Number Header */}
+                <div className="w-full flex items-center justify-between px-0.5 leading-none">
+                  <span
+                    className={`font-mono font-bold leading-none ${
+                      hasMood
+                        ? 'text-[10px] sm:text-xs'
+                        : 'text-xs sm:text-sm'
+                    }`}
+                  >
+                    {dayNum}
+                  </span>
+                  {isToday && (
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        hasMood ? 'bg-white ring-1 ring-[#1F1B1A]' : 'bg-[#E02921]'
+                      }`}
+                      title="Today"
                     />
+                  )}
+                </div>
+
+                {/* Mood Tag: Single letter without translucent background */}
+                {hasMood && moodTheme ? (
+                  <div className="w-full flex items-center justify-center my-auto">
+                    <span
+                      className={`text-sm sm:text-base font-black font-mono leading-none ${moodTheme.cellTextColor}`}
+                    >
+                      {moodTheme.letter || moodTheme.abbr[0]}
+                    </span>
                   </div>
+                ) : (
+                  <div className="h-2" />
                 )}
               </button>
             );
@@ -178,71 +173,111 @@ export const MoodView: React.FC<MoodViewProps> = ({
         </div>
 
         {/* Divider */}
-        <hr className="border-[#1D1B18]/15 dark:border-[#F8F7F4]/20 my-2" />
+        <hr className="border-[#1F1B1A]/25 my-2" />
 
-        {/* Bottom 5 Mood Count Cards */}
+        {/* Bottom 5 Mood Count Cards (Solid Color Cards with Abbreviations, No Pale Colors) */}
         <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
-          {MOOD_LEVELS.map((m) => (
-            <div
-              key={m.value}
-              className="py-2 px-1 sm:py-2 sm:px-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-center flex flex-col items-center justify-center transition-all hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
-            >
-              <FrogMoodIcon value={m.value} size={20} className="w-5 h-5 mb-1" />
-              <span className="font-mono text-[9px] font-bold text-[#1D1B18]/70 dark:text-[#F8F7F4]/70">
-                {moodCounts[m.value] || 0}
-              </span>
-            </div>
-          ))}
+          {MOOD_THEMES.map((theme) => {
+            const count = moodCounts[theme.value] || 0;
+            return (
+              <div
+                key={theme.value}
+                className={`py-2 px-1 sm:py-2.5 sm:px-1.5 border-[2px] border-[#1F1B1A] rounded-xl shadow-[2.5px_2.5px_0px_#1F1B1A] ${theme.cellBg} ${theme.cellTextColor} text-center flex flex-col items-center justify-center transition-all hover:-translate-y-0.5`}
+              >
+                {/* Mood Abbreviation */}
+                <span className="text-[10px] sm:text-xs font-black font-mono tracking-wider uppercase leading-none mb-1">
+                  {theme.abbr}
+                </span>
+                {/* Count */}
+                <span className="font-mono text-sm sm:text-base font-black leading-none">
+                  {count}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Select Mood Modal */}
       {selectedDay !== null && (
-        <div className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 sm:p-6 w-full max-w-sm space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
-                Mood for {MONTH_NAMES[monthIndex]} {selectedDay}, {year}
+        <div className="fixed inset-0 z-50 bg-[#1F1B1A]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#FFFEF7] dark:bg-[#1D1B18] border-[3px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-3xl shadow-[6px_6px_0px_#1F1B1A] p-5 sm:p-6 w-full max-w-sm space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b-[2px] border-[#1F1B1A]/20 pb-2">
+              <h2 className="text-base sm:text-lg font-bold uppercase tracking-tight text-[#1F1B1A] dark:text-[#F8F7F4]">
+                Mood: {MONTH_NAMES[monthIndex]} {selectedDay}, {year}
               </h2>
               <button
                 type="button"
                 onClick={() => setSelectedDay(null)}
-                className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] cursor-pointer"
+                className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] dark:border-[#F8F7F4] flex items-center justify-center text-[#1F1B1A] dark:text-[#F8F7F4] bg-white hover:bg-[#FEF08A] shadow-[2px_2px_0px_#1F1B1A] cursor-pointer"
               >
                 <X size={16} />
               </button>
             </div>
 
             <div className="grid grid-cols-5 gap-2 pt-2">
-              {MOOD_LEVELS.map((mood) => {
-                const isSelected = monthData.moods[selectedDay - 1] === mood.value;
+              {MOOD_THEMES.map((theme) => {
+                const isSelected = monthData.moods[selectedDay - 1] === theme.value;
+
                 return (
                   <button
-                    key={mood.value}
+                    key={theme.value}
                     type="button"
-                    onClick={() => handleSelectMood(mood.value)}
-                    className={`py-3 px-1 border flex flex-col items-center justify-center gap-1.5 transition cursor-pointer ${
+                    onClick={() => handleSelectMood(isSelected ? null : theme.value)}
+                    title={isSelected ? 'Click to remove' : `${theme.label} (${theme.abbr})`}
+                    className={`py-2.5 px-1 border-[2px] rounded-xl flex flex-col items-center justify-center gap-1.5 transition cursor-pointer ${
                       isSelected
-                        ? 'border-[#E63946] bg-[#E63946] text-[#F8F7F4]'
-                        : 'border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
+                        ? `border-[#1F1B1A] ${theme.cellBg} ${theme.cellTextColor} shadow-[3px_3px_0px_#1F1B1A] -translate-y-1 ring-2 ring-[#1F1B1A]`
+                        : 'border-[#1F1B1A] bg-white dark:bg-[#252320] text-[#1F1B1A] dark:text-[#F8F7F4] shadow-[2px_2px_0px_#1F1B1A] hover:-translate-y-0.5'
                     }`}
                   >
-                    <FrogMoodIcon value={mood.value} size={28} />
-                    <span className="text-[10px] font-bold font-oswald uppercase">
-                      {mood.label}
+                    {/* Color Swatch Badge: 1 letter abbreviation */}
+                    <div
+                      className={`w-7 h-7 rounded-lg border-[1.5px] border-[#1F1B1A] flex items-center justify-center font-black font-mono text-xs shadow-[1px_1px_0px_#1F1B1A] ${
+                        isSelected ? 'bg-white text-[#1F1B1A]' : `${theme.cellBg} ${theme.cellTextColor}`
+                      }`}
+                    >
+                      {isSelected ? <Check size={14} className="stroke-[3]" /> : (theme.letter || theme.abbr[0])}
+                    </div>
+
+                    <span className="text-[10px] font-bold uppercase leading-none">
+                      {theme.label}
                     </span>
+
+                    {isSelected && (
+                      <span className="text-[8px] font-bold bg-black/20 text-white px-1 py-0.5 rounded leading-none">
+                        Remove
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
 
-            <button
-              type="button"
-              onClick={() => handleSelectMood(null)}
-              className="w-full py-2 border border-[#1D1B18] dark:border-[#F8F7F4] text-xs font-bold font-oswald uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 bg-[#F8F7F4] dark:bg-[#252320] hover:bg-white dark:hover:bg-[#1D1B18] transition cursor-pointer"
-            >
-              Clear Mood
-            </button>
+            <p className="text-[11px] text-center text-[#1F1B1A]/70 dark:text-[#F8F7F4]/70">
+              {monthData.moods[selectedDay - 1] 
+                ? 'Tap selected mood again to remove, or use button below'
+                : 'Select mood for this day'}
+            </p>
+
+            {monthData.moods[selectedDay - 1] ? (
+              <button
+                type="button"
+                onClick={() => handleSelectMood(null)}
+                className="w-full py-2.5 rounded-xl border-[2px] border-[#1F1B1A] text-xs font-bold uppercase text-white bg-[#E02921] hover:bg-[#C8231B] shadow-[2px_2px_0px_#1F1B1A] transition cursor-pointer flex items-center justify-center gap-2 active:translate-x-0.5 active:translate-y-0.5"
+              >
+                <Trash2 size={15} />
+                <span>Clear Mood</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setSelectedDay(null)}
+                className="w-full py-2.5 rounded-xl border-[2px] border-[#1F1B1A] dark:border-[#F8F7F4] text-xs font-bold uppercase text-[#1F1B1A] dark:text-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] hover:bg-white dark:hover:bg-[#1D1B18] shadow-[2px_2px_0px_#1F1B1A] transition cursor-pointer"
+              >
+                Close
+              </button>
+            )}
           </div>
         </div>
       )}

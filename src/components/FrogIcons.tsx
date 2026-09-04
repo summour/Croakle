@@ -47,7 +47,7 @@ export const FrogMoodRad: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Electric Neon Yellow Main Body Fill (เหลือง) */}
+    {/* Electric Neon Yellow Main Body Fill (Yellow) */}
     <rect x="4" y="3" width="4" height="2" fill="#FDE047" />
     <rect x="12" y="3" width="4" height="2" fill="#FDE047" />
     <rect x="3" y="5" width="14" height="7" fill="#FDE047" />
@@ -114,7 +114,7 @@ export const FrogMoodGood: React.FC<IconProps> = ({ size = 32, className = '', .
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Vibrant Sakura Neon Pink Main Body Fill (ชมพู) */}
+    {/* Vibrant Sakura Neon Pink Main Body Fill (Pink) */}
     <rect x="4" y="3" width="4" height="2" fill="#F472B6" />
     <rect x="12" y="3" width="4" height="2" fill="#F472B6" />
     <rect x="3" y="5" width="14" height="7" fill="#F472B6" />
@@ -173,7 +173,7 @@ export const FrogMoodMeh: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Vibrant Fresh Lime / Neon Green Main Body Fill (เขียว) */}
+    {/* Vibrant Fresh Lime / Neon Green Main Body Fill (Green) */}
     <rect x="4" y="3" width="4" height="2" fill="#84E42B" />
     <rect x="12" y="3" width="4" height="2" fill="#84E42B" />
     <rect x="3" y="5" width="14" height="7" fill="#84E42B" />
@@ -227,7 +227,7 @@ export const FrogMoodBad: React.FC<IconProps> = ({ size = 32, className = '', ..
     <rect x="4" y="12" width="3" height="1" fill="#0D226B" />
     <rect x="13" y="12" width="3" height="1" fill="#0D226B" />
 
-    {/* Electric Sky Blue / Neon Cyan Main Body Fill (ฟ้า) */}
+    {/* Electric Sky Blue / Neon Cyan Main Body Fill (Blue) */}
     <rect x="4" y="3" width="4" height="2" fill="#38BDF8" />
     <rect x="12" y="3" width="4" height="2" fill="#38BDF8" />
     <rect x="3" y="5" width="14" height="7" fill="#38BDF8" />
@@ -283,7 +283,7 @@ export const FrogMoodAwful: React.FC<IconProps> = ({ size = 32, className = '', 
     <rect x="4" y="12" width="3" height="1" fill="#09090B" />
     <rect x="13" y="12" width="3" height="1" fill="#09090B" />
 
-    {/* Sleek Dark Obsidian / Charcoal Black Main Body Fill (ดำ) */}
+    {/* Sleek Dark Obsidian / Charcoal Black Main Body Fill (Black) */}
     <rect x="4" y="3" width="4" height="2" fill="#3F3F46" />
     <rect x="12" y="3" width="4" height="2" fill="#3F3F46" />
     <rect x="3" y="5" width="14" height="7" fill="#3F3F46" />
@@ -2102,27 +2102,17 @@ export const PixelDialogueBox: React.FC<{
     onClick={onClick}
     className={`relative inline-flex flex-col items-center cursor-pointer select-none transition-transform active:scale-95 ${className}`}
   >
-    {/* Retro RPG Dialogue Container (Crisp pixel stepped border) */}
-    <div className="relative px-3.5 py-1.5 bg-[#FFFDF7] dark:bg-[#1E1915] text-[#332219] dark:text-[#F3EFE6] text-xs font-black tracking-wide border-2 border-[#3D2C22] shadow-[0_3px_0_#271911] rounded-none">
-      {/* 4 Corner Pixel Cutouts / Highlights */}
-      <span className="absolute -top-[2px] -left-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
-      <span className="absolute -top-[2px] -right-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
-      <span className="absolute -bottom-[2px] -left-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
-      <span className="absolute -bottom-[2px] -right-[2px] w-[3px] h-[3px] bg-[#3D2C22]" />
-      
-      {/* Inner Highlight line */}
-      <span className="absolute inset-[1px] border border-white/50 dark:border-white/10 pointer-events-none" />
-      
-      <div className="relative flex items-center gap-1.5 drop-shadow-xs">
+    {/* Neo-Pop Dialogue Container */}
+    <div className="relative px-3.5 py-1.5 bg-[#FFFDF7] dark:bg-[#1E1915] text-[#1F1B1A] dark:text-[#F3EFE6] text-xs font-black tracking-wide border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] rounded-xl">
+      <div className="relative flex items-center gap-1.5">
         <span>{text}</span>
         {icon && <span className="inline-flex items-center shrink-0">{icon}</span>}
       </div>
     </div>
     
-    {/* Downward Pixel Tail */}
+    {/* Downward Pointer */}
     <div className="flex flex-col items-center -mt-[1px]">
-      <span className="w-2.5 h-1 bg-[#3D2C22]" />
-      <span className="w-1.5 h-1 bg-[#3D2C22]" />
+      <span className="w-2 h-1 bg-[#1F1B1A] rounded-b-sm" />
     </div>
   </div>
 );

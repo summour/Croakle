@@ -12,43 +12,50 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     id: PageType;
     activeKeys: PageType[];
     label: string;
+    title: string;
   }[] = [
     {
       id: 'mood',
       activeKeys: ['mood'],
-      label: 'Mood',
+      label: 'MOOD',
+      title: 'Mood Tracker',
     },
     {
       id: 'track',
       activeKeys: ['track', 'best'],
-      label: 'Habits',
+      label: 'HAB',
+      title: 'Habits Tracker',
     },
     {
       id: 'project',
       activeKeys: ['project'],
-      label: 'Projects',
+      label: 'PROJ',
+      title: 'Projects',
     },
     {
       id: 'time',
       activeKeys: ['time'],
-      label: 'Focus',
+      label: 'FOC',
+      title: 'Focus Timer',
     },
     {
       id: 'notes',
       activeKeys: ['notes', 'analysis'],
-      label: 'Journal',
+      label: 'JRNL',
+      title: 'Journal & Notes',
     },
     {
       id: 'settings',
       activeKeys: ['settings'],
-      label: 'Settings',
+      label: 'SET',
+      title: 'Settings',
     },
   ];
 
   return (
     <footer
       id="croakle-bottom-dock"
-      className="shrink-0 w-full bg-white dark:bg-[#1D1B18] border-t border-[#1D1B18] dark:border-[#F8F7F4] px-4 sm:px-6 py-3.5 flex items-center justify-between z-30 transition-colors"
+      className="shrink-0 w-full bg-[#D32018] dark:bg-[#2B0A08] border-t-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] px-1 sm:px-3 py-2 sm:py-2.5 flex items-center justify-around gap-1 z-30 transition-colors"
     >
       {groups.map((group) => {
         const isActive = group.activeKeys.includes(activePage);
@@ -59,16 +66,14 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
             id={`dock-nav-${group.id}`}
             type="button"
             onClick={() => onSelectPage(group.id)}
-            className={`nav-item text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.1em] font-bold py-1 transition-all cursor-pointer relative ${
+            title={group.title}
+            className={`nav-item flex-1 max-w-[64px] sm:max-w-[76px] text-center text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-tight sm:tracking-wider transition-all cursor-pointer relative rounded-xl whitespace-nowrap py-1.5 px-1 sm:px-2 ${
               isActive
-                ? 'text-[#1D1B18] dark:text-[#F8F7F4] border-b-2 border-[#E63946]'
-                : 'text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4] border-b-2 border-transparent'
+                ? 'bg-[#FEF08A] text-[#1F1B1A] border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
+                : 'text-white/85 hover:text-white hover:bg-black/20 border-[2px] border-transparent'
             }`}
           >
             <span>{group.label}</span>
-            {group.id === 'time' && isTimerRunning && (
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E63946] ml-1 align-middle animate-pulse" />
-            )}
           </button>
         );
       })}

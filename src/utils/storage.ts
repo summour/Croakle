@@ -78,10 +78,6 @@ export function getOrCreateMonthData(
 
   if (!state.months[key]) {
     const defaultMoods = new Array(daysCount).fill(null);
-    if (year === 2026 && monthIndex === 8) {
-      defaultMoods[7] = 4; // Day 8: Pink frog
-      defaultMoods[8] = 2; // Day 9: Blue frog
-    }
     state.months[key] = {
       habits: state.habitTemplates.map((template) => ({
         id: template.id,
@@ -96,15 +92,6 @@ export function getOrCreateMonthData(
       moods: defaultMoods,
     };
   } else {
-    // Seed day 8 and 9 if empty for September 2026
-    if (year === 2026 && monthIndex === 8 && Array.isArray(state.months[key].moods)) {
-      if (state.months[key].moods[7] === null || state.months[key].moods[7] === undefined) {
-        state.months[key].moods[7] = 4;
-      }
-      if (state.months[key].moods[8] === null || state.months[key].moods[8] === undefined) {
-        state.months[key].moods[8] = 2;
-      }
-    }
     // Synchronize habits with current templates
     const existingHabits = state.months[key].habits || [];
     state.months[key].habits = state.habitTemplates.map((template) => {

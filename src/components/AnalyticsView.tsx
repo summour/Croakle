@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PageType, HabitTemplate, MonthData, Project, NoteItem, TimeSession, MOOD_LEVELS } from '../types';
+import { getMoodTheme } from '../utils/moodConfig';
 import { MONTH_NAMES, CALENDAR_HEADER_DAYS, DAY_SHORT_NAMES, getDaysInMonth, getMonthWeeks, formatIsoDate } from '../utils/dateUtils';
 import { ChevronLeft, ChevronRight, Trophy, Sparkles, TrendingUp, Calendar, Clock, BookOpen, Flame, Heart, BarChart3, Settings } from 'lucide-react';
 import {
@@ -15,7 +16,6 @@ import {
   PocketTimerDockIcon,
   WashiJournalDockIcon,
 } from './FrogIcons';
-import { SubNavTabs } from './SubNavTabs';
 import { useSwipeMonth } from '../hooks/useSwipeMonth';
 import { InteractiveMomentumChart } from './charts/InteractiveMomentumChart';
 import { InteractiveMoodTrendChart } from './charts/InteractiveMoodTrendChart';
@@ -264,29 +264,29 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
   return (
     <div className="space-y-4 pb-28 font-mono" {...swipeHandlers}>
       {/* Header & Month Navigator (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-[#F8F7F4] dark:bg-[#1D1B18] pt-1 pb-1 space-y-2">
-        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3">
+      <div className="sticky top-0 z-20 bg-transparent pt-1 pb-1 space-y-2">
+        <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3.5 sm:p-4 space-y-3">
           <div className="flex items-center justify-between">
             <button
               type="button"
               onClick={onPrevMonth}
-              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+              className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
               aria-label="Previous Month"
             >
               <ChevronLeft size={16} />
             </button>
             <div className="text-center">
-              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/80">
                 Journey Analytics
               </p>
-              <strong className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4] block">
+              <strong className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-white block">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
             </div>
             <button
               type="button"
               onClick={onNextMonth}
-              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+              className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
               aria-label="Next Month"
             >
               <ChevronRight size={16} />
@@ -294,7 +294,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           </div>
 
           {/* Segmented Filter Navigation Tabs */}
-          <div className="grid grid-cols-4 gap-1 p-1 bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4]">
+          <div className="grid grid-cols-4 gap-1 p-1 bg-white/20 dark:bg-black/25 border-[2px] border-[#1F1B1A] rounded-xl shadow-[2px_2px_0px_#1F1B1A]">
             {(
               [
                 { id: 'overview', label: 'Overview' },
@@ -309,10 +309,10 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`min-w-0 py-1.5 px-1 text-[10px] font-bold uppercase transition cursor-pointer flex items-center justify-center ${
+                  className={`min-w-0 py-1.5 px-1 rounded-lg text-[10px] font-bold uppercase transition cursor-pointer flex items-center justify-center ${
                     isActive
-                      ? 'bg-[#E63946] text-white font-bold'
-                      : 'text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
+                      ? 'bg-[#FEF08A] text-[#1F1B1A] border-[1.5px] border-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]'
+                      : 'text-white/90 hover:bg-white/20 hover:text-white'
                   }`}
                 >
                   <span className="truncate">{tab.label}</span>
@@ -329,55 +329,55 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
       {activeTab === 'overview' && (
         <div className="space-y-4">
           {/* Key KPI Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 block uppercase">Habit Rate</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Habit Rate</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {overallMonthPercent}%
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {actualHabitChecks} / {totalPossibleChecks} checks
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 block uppercase">Avg Mood</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
-                {avgMoodStr} <span className="text-xs text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 font-mono">/ 5</span>
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Avg Mood</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
+                {avgMoodStr} <span className="text-xs text-[#1F1B1A]/40 dark:text-[#F8F7F4]/40 font-mono">/ 5</span>
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {recordedMoodsCount} days logged
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 block uppercase">Projects</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Projects</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {activeProjects.length}
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {totalProjectMonthChecks} check-ins
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 block uppercase">Focus Time</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Focus Time</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {totalFocusHours}h
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {monthSessions.length} sessions
               </span>
             </div>
           </div>
 
           {/* Combined Interactive Momentum Curve */}
-          <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+          <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-3 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[4px_4px_0px_#1F1B1A]">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1F1B1A] dark:text-[#F8F7F4]">
                 Habit, Mood & Focus Flow
               </h3>
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">
                 {MONTH_NAMES[monthIndex]} 1–{daysInMonth}
               </span>
             </div>
@@ -393,30 +393,30 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
 
           {/* Monthly Highlights Summary */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="card p-3.5 space-y-1.5 bg-white dark:bg-[#1D1B18]">
-              <div className="text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-1.5 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <div className="text-[10px] font-bold uppercase text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60">
                 <span>Top Habit this Month</span>
               </div>
-              <p className="text-sm font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4] truncate">
+              <p className="text-sm font-bold font-oswald uppercase text-[#1F1B1A] dark:text-[#F8F7F4] truncate">
                 {bestHabitName}
               </p>
-              <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+              <p className="text-xs text-[#1F1B1A]/70 dark:text-[#F8F7F4]/70">
                 {bestHabitCount > 0 ? `Completed on ${bestHabitCount} days (${Math.round((bestHabitCount / daysInMonth) * 100)}%)` : 'No checks logged yet'}
               </p>
             </div>
 
-            <div className="card p-3.5 space-y-1.5 bg-white dark:bg-[#1D1B18]">
-              <div className="text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-1.5 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <div className="text-[10px] font-bold uppercase text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60">
                 <span>Mood Balance</span>
               </div>
-              <p className="text-sm font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4] flex items-center gap-1.5">
+              <p className="text-sm font-bold font-oswald uppercase text-[#1F1B1A] dark:text-[#F8F7F4] flex items-center gap-1.5">
                 {dominantMoodObj ? (
                   <span>Mostly {dominantMoodObj.label}</span>
                 ) : (
                   <span>No mood entries yet</span>
                 )}
               </p>
-              <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+              <p className="text-xs text-[#1F1B1A]/70 dark:text-[#F8F7F4]/70">
                 {positivityRate}% positive rating days ({positiveMoodCount} of {recordedMoodsCount} recorded)
               </p>
             </div>
@@ -430,45 +430,45 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
       {activeTab === 'habits' && (
         <div className="space-y-4">
           {/* Habits Summary Cards */}
-          <div className="grid grid-cols-3 gap-2">
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Overall Rate</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">Overall Rate</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {overallMonthPercent}%
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {actualHabitChecks} checks
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Active</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">Active</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {activeOrTrackedHabits.length}
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 habits tracked
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Top Habit</span>
-              <strong className="text-sm font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block truncate mt-1">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">Top Habit</span>
+              <strong className="text-sm font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block truncate mt-1">
                 {bestHabitName}
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {bestHabitCount > 0 ? `${bestHabitCount} days` : '—'}
               </span>
             </div>
           </div>
 
           {/* Interactive Leaderboard & Performance Chart */}
-          <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+          <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-3 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[4px_4px_0px_#1F1B1A]">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1F1B1A] dark:text-[#F8F7F4]">
                 Consistency & Performance
               </h3>
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">
                 Tap habit to inspect
               </span>
             </div>
@@ -489,51 +489,51 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
       {activeTab === 'moods' && (
         <div className="space-y-4">
           {/* Mood KPIs */}
-          <div className="grid grid-cols-3 gap-2">
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Avg Score</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
-                {avgMoodStr} <span className="text-xs text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 font-mono">/ 5</span>
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Avg Score</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
+                {avgMoodStr} <span className="text-xs text-[#1F1B1A]/40 dark:text-[#F8F7F4]/40 font-mono">/ 5</span>
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {recordedMoodsCount} days logged
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Positivity</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Positivity</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {positivityRate}%
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 Rad & Good days
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Dominant</span>
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block uppercase">Dominant</span>
               <div className="flex items-center gap-1 mt-1">
                 {dominantMoodObj ? (
-                  <span className="text-xs font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
+                  <span className="text-xs font-bold font-oswald uppercase text-[#1F1B1A] dark:text-[#F8F7F4]">
                     {dominantMoodObj.label}
                   </span>
                 ) : (
-                  <strong className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4]">None</strong>
+                  <strong className="text-xs font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4]">None</strong>
                 )}
               </div>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 {maxMoodCount > 0 ? `${maxMoodCount} days` : 'No logs'}
               </span>
             </div>
           </div>
 
           {/* Interactive Mood Trend & Flow Curve */}
-          <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+          <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-3 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[4px_4px_0px_#1F1B1A]">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1F1B1A] dark:text-[#F8F7F4]">
                 Monthly Mood Trend
               </h3>
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">
                 Tap point to inspect
               </span>
             </div>
@@ -546,12 +546,12 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           </div>
 
           {/* Mood Calendar Matrix */}
-          <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+          <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-3 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[4px_4px_0px_#1F1B1A]">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1F1B1A] dark:text-[#F8F7F4]">
                 Monthly Mood Calendar
               </h3>
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">
                 {MONTH_NAMES[monthIndex]} {year}
               </span>
             </div>
@@ -560,13 +560,13 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
             <div className="space-y-1.5">
               <div className="grid grid-cols-7 gap-1 text-center">
                 {CALENDAR_HEADER_DAYS.map((d) => (
-                  <span key={d} className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase py-0.5">
+                  <span key={d} className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase py-0.5">
                     {d}
                   </span>
                 ))}
               </div>
 
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-1.5">
                 {/* Offset for first day of month */}
                 {Array.from({ length: new Date(year, monthIndex, 1).getDay() }).map((_, i) => (
                   <div key={`empty-${i}`} className="h-9 sm:h-11 pointer-events-none opacity-0" />
@@ -576,24 +576,28 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
                 {Array.from({ length: daysInMonth }, (_, i) => {
                   const dayNum = i + 1;
                   const moodVal = monthData.moods[i];
-                  const moodObj = moodVal ? MOOD_LEVELS.find((m) => m.value === moodVal) : null;
+                  const moodTheme = getMoodTheme(moodVal);
                   return (
                     <div
                       key={dayNum}
-                      className="h-9 sm:h-11 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex flex-col items-center justify-between p-1 bg-white dark:bg-[#1D1B18] select-none"
+                      className={`h-9 sm:h-11 rounded-xl border-[1.5px] border-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A] flex flex-col items-center justify-between p-1 select-none ${
+                        moodTheme ? `${moodTheme.cellBg} ${moodTheme.cellTextColor}` : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4]'
+                      }`}
                     >
                       {/* Day Number */}
-                      <span className="text-[9px] font-bold leading-none text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+                      <span className={`text-[9px] font-bold leading-none ${moodTheme ? 'opacity-90' : 'text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60'}`}>
                         {dayNum}
                       </span>
 
-                      {/* Frog Mood Icon */}
+                      {/* Mood Abbreviation */}
                       <div
                         className="flex-1 w-full flex items-center justify-center min-h-0"
-                        title={moodObj ? `Day ${dayNum}: ${moodObj.label}` : `Day ${dayNum}`}
+                        title={moodTheme ? `Day ${dayNum}: ${moodTheme.label}` : `Day ${dayNum}`}
                       >
-                        {moodObj ? (
-                          <FrogMoodIcon value={moodObj.value} size={18} />
+                        {moodTheme ? (
+                          <span className={`text-[8.5px] font-black uppercase leading-none ${moodTheme.cellTextColor}`}>
+                            {moodTheme.letter || moodTheme.abbr[0]}
+                          </span>
                         ) : null}
                       </div>
                     </div>
@@ -604,19 +608,19 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
           </div>
 
           {/* Habit & Mood Correlation Card */}
-          <div className="card p-3.5 space-y-1.5 bg-white dark:bg-[#1D1B18]">
-            <div className="flex items-center gap-2 text-xs font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
-              <Heart size={14} className="text-[#E63946]" />
+          <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-1.5 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+            <div className="flex items-center gap-2 text-xs font-bold font-oswald uppercase text-[#1F1B1A] dark:text-[#F8F7F4]">
+              <Heart size={14} className="text-[#E02921]" />
               <span>Habit & Mood Synergy</span>
             </div>
             {positiveDayAvgHabitRate !== null && normalDayAvgHabitRate !== null ? (
-              <p className="text-xs text-[#1D1B18] dark:text-[#F8F7F4] leading-relaxed">
-                On <strong className="text-[#E63946]">Rad/Good</strong> mood days, your habit completion was{' '}
-                <strong className="text-[#E63946]">{positiveDayAvgHabitRate}%</strong>, compared to{' '}
-                <strong className="text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">{normalDayAvgHabitRate}%</strong> on lower mood days.
+              <p className="text-xs text-[#1F1B1A] dark:text-[#F8F7F4] leading-relaxed">
+                On <strong className="text-[#E02921]">Rad/Good</strong> mood days, your habit completion was{' '}
+                <strong className="text-[#E02921]">{positiveDayAvgHabitRate}%</strong>, compared to{' '}
+                <strong className="text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60">{normalDayAvgHabitRate}%</strong> on lower mood days.
               </p>
             ) : (
-              <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 leading-relaxed">
+              <p className="text-xs text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 leading-relaxed">
                 Log both your habits and daily mood for a few days to discover personal productivity and mood correlations.
               </p>
             )}
@@ -630,45 +634,45 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
       {activeTab === 'projects' && (
         <div className="space-y-4">
           {/* Projects KPI Grid */}
-          <div className="grid grid-cols-3 gap-2">
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Active</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+          <div className="grid grid-cols-3 gap-2.5">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">Active</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {activeProjects.length}
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 in progress
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Completed</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">Completed</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {completedProjects.length}
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 milestones
               </span>
             </div>
 
-            <div className="card p-3 space-y-1 bg-white dark:bg-[#1D1B18]">
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Check-ins</span>
-              <strong className="text-xl font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] block">
+            <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-3.5 space-y-1 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[3px_3px_0px_#1F1B1A]">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">Check-ins</span>
+              <strong className="text-xl font-bold font-oswald text-[#1F1B1A] dark:text-[#F8F7F4] block">
                 {totalProjectMonthChecks}
               </strong>
-              <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 block truncate">
+              <span className="text-[9px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 block truncate">
                 this month
               </span>
             </div>
           </div>
 
           {/* Project by Project In-Depth Breakdown */}
-          <div className="card p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+          <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] p-4 space-y-3 bg-[#FFFEF7] dark:bg-[#1D1B18] shadow-[4px_4px_0px_#1F1B1A]">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
+              <h3 className="font-bold font-oswald text-sm uppercase tracking-tight text-[#1F1B1A] dark:text-[#F8F7F4]">
                 Projects Progress & Performance
               </h3>
-              <span className="text-[10px] font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">
+              <span className="text-[10px] font-bold text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 uppercase">
                 {projects.length} Projects Tracked
               </span>
             </div>

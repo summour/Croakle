@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { HabitTemplate, MonthData, TimeSession, MOOD_LEVELS } from '../../types';
 import { MONTH_NAMES, DAY_SHORT_NAMES } from '../../utils/dateUtils';
-import { FrogMoodIcon, CloverIcon, PocketTimerDockIcon } from '../FrogIcons';
+import { getMoodTheme } from '../../utils/moodConfig';
+import { CloverIcon, PocketTimerDockIcon } from '../FrogIcons';
 import { ChevronLeft, ChevronRight, CheckCircle, XCircle } from 'lucide-react';
 import { soundEngine, triggerHaptic } from '../../utils/audioUtils';
 
@@ -285,7 +286,7 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
       {/* Main SVG Flow Canvas */}
       <div
         ref={containerRef}
-        className="relative w-full rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] p-2.5 sm:p-3 border border-black/[0.04] dark:border-white/[0.05] overflow-hidden cursor-crosshair touch-none"
+        className="relative w-full rounded-2xl bg-white dark:bg-[#252320] p-2.5 sm:p-3 border-[2px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[3px_3px_0px_#1F1B1A] overflow-hidden cursor-crosshair touch-none"
       >
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
@@ -545,14 +546,14 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
 
       {/* Selected Day Inspector Card */}
       {selectedData && (
-        <div className="rounded-[20px] bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] p-3.5 space-y-2.5 animate-in fade-in duration-150">
-          <div className="flex items-center justify-between pb-2 border-b border-black/[0.04] dark:border-white/[0.05]">
+        <div className="rounded-2xl bg-white dark:bg-[#252320] border-[2px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[3px_3px_0px_#1F1B1A] p-3.5 space-y-2.5 animate-in fade-in duration-150">
+          <div className="flex items-center justify-between pb-2 border-b-[2px] border-[#1F1B1A]/20 dark:border-[#F8F7F4]/20">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-[10px] bg-[#5f7a61]/12 dark:bg-[#7d9d80]/20 flex items-center justify-center font-bold text-xs text-[#455c47] dark:text-[#8fc493]">
+              <div className="w-7 h-7 rounded-xl bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] flex items-center justify-center font-bold text-xs text-[#1F1B1A]">
                 {selectedData.day}
               </div>
               <div>
-                <strong className="text-xs font-bold text-[#2d2823] dark:text-[#f4efe8] block leading-tight">
+                <strong className="text-xs font-bold text-[#1F1B1A] dark:text-[#F8F7F4] block leading-tight">
                   {selectedData.dayName}, {MONTH_NAMES[monthIndex]} {selectedData.day}, {year}
                 </strong>
               </div>
@@ -560,22 +561,23 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
 
             {/* Metric chips */}
             <div className="flex items-center gap-2">
-              {selectedData.moodObj && (
-                <div
-                  className="px-2.5 py-0.5 rounded-full flex items-center gap-1.5 text-[11px] font-bold border transition-all"
-                  style={{
-                    backgroundColor: `${selectedData.moodObj.color}15`,
-                    borderColor: `${selectedData.moodObj.color}40`,
-                    color: selectedData.moodObj.color,
-                    boxShadow: `0 0 10px ${selectedData.moodObj.color}25`,
-                  }}
-                >
-                  <FrogMoodIcon value={selectedData.moodObj.value} size={14} />
-                  <span>{selectedData.moodObj.label}</span>
-                </div>
-              )}
+              {selectedData.moodObj && (() => {
+                const theme = getMoodTheme(selectedData.moodObj.value);
+                return (
+                  <div
+                    className={`px-2 py-0.5 rounded-lg flex items-center gap-1.5 text-[11px] font-bold border-[1.5px] border-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A] transition-all ${
+                      theme ? `${theme.cellBg} ${theme.cellTextColor}` : 'bg-[#FEF08A] text-[#1F1B1A]'
+                    }`}
+                  >
+                    <span className="font-mono font-black text-[9px] uppercase px-1 rounded bg-black/20 text-white leading-none">
+                      {theme?.abbr || selectedData.moodObj.label.slice(0, 2)}
+                    </span>
+                    <span>{selectedData.moodObj.label}</span>
+                  </div>
+                );
+              })()}
 
-              <div className="px-2 py-0.5 rounded-full bg-[#5f7a61]/10 text-[#5f7a61] dark:text-[#8fc493] text-[11px] font-bold border border-[#5f7a61]/20">
+              <div className="px-2.5 py-0.5 rounded-lg bg-[#FEF08A] text-[#1F1B1A] text-[11px] font-bold border-[1.5px] border-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]">
                 {selectedData.habitRate}%
               </div>
             </div>
@@ -584,13 +586,13 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
           {/* Habit & Focus Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             {/* Habits list */}
-            <div className="p-2.5 rounded-[14px] bg-white/60 dark:bg-black/20 border border-black/[0.03] dark:border-white/[0.04] space-y-1">
-              <div className="flex items-center justify-between text-[10.5px] font-medium text-[#8c7e70] dark:text-[#a89b8d]">
-                <span className="font-bold">
+            <div className="p-2.5 rounded-xl bg-[#FFFEF7] dark:bg-[#1D1B18] border-[1.5px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[1.5px_1.5px_0px_#1F1B1A] space-y-1">
+              <div className="flex items-center justify-between text-[10.5px] font-bold text-[#1F1B1A]/80 dark:text-[#F8F7F4]/80">
+                <span>
                   Habits ({selectedData.completedHabitsCount}/{selectedData.totalHabitsCount})
                 </span>
                 {selectedData.completedHabitsCount === selectedData.totalHabitsCount && selectedData.totalHabitsCount > 0 && (
-                  <span className="text-[#5f7a61] dark:text-[#8fc493] font-semibold">100% Done</span>
+                  <span className="text-[#22C55E] font-bold">100% Done</span>
                 )}
               </div>
 
@@ -599,35 +601,35 @@ export const InteractiveMomentumChart: React.FC<InteractiveMomentumChartProps> =
                   {selectedData.completedList.map((hName) => (
                     <span
                       key={hName}
-                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-[#5f7a61]/10 text-[#3e5640] dark:text-[#8fc493] text-[10px] font-medium"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#22C55E]/20 text-[#1F1B1A] dark:text-[#F8F7F4] border border-[#1F1B1A] text-[10px] font-bold"
                     >
-                      <CheckCircle size={9} className="text-[#5f7a61]" />
+                      <CheckCircle size={10} className="text-[#22C55E]" />
                       <span className="truncate max-w-[110px]">{hName}</span>
                     </span>
                   ))}
                   {selectedData.missedList.map((hName) => (
                     <span
                       key={hName}
-                      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.04] text-[#8c7e70] dark:text-[#a89b8d] text-[10px]"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-200 dark:bg-zinc-800 text-[#1F1B1A]/70 dark:text-[#F8F7F4]/70 border border-[#1F1B1A]/30 text-[10px] font-bold"
                     >
-                      <XCircle size={9} className="opacity-40" />
+                      <XCircle size={10} className="opacity-50" />
                       <span className="truncate max-w-[110px]">{hName}</span>
                     </span>
                   ))}
                 </div>
               ) : (
-                <p className="text-[10.5px] text-[#8c7e70] dark:text-[#a89b8d]">
+                <p className="text-[10.5px] text-[#1F1B1A]/60 dark:text-[#F8F7F4]/60 font-bold">
                   No habits tracked for this day.
                 </p>
               )}
             </div>
 
             {/* Focus time */}
-            <div className="p-2.5 rounded-[14px] bg-white/60 dark:bg-black/20 border border-black/[0.03] dark:border-white/[0.04] flex items-center justify-between">
-              <span className="text-[10.5px] font-bold text-[#8c7e70] dark:text-[#a89b8d]">
+            <div className="p-2.5 rounded-xl bg-[#FFFEF7] dark:bg-[#1D1B18] border-[1.5px] border-[#1F1B1A] dark:border-[#F8F7F4] shadow-[1.5px_1.5px_0px_#1F1B1A] flex items-center justify-between">
+              <span className="text-[10.5px] font-bold text-[#1F1B1A]/80 dark:text-[#F8F7F4]/80">
                 Focus Duration
               </span>
-              <strong className="text-xs font-bold text-[#c28f3a]">
+              <strong className="text-xs font-extrabold text-[#0074DB]">
                 {selectedData.totalFocusMinutes > 0
                   ? `${Math.floor(selectedData.totalFocusMinutes / 60)}h ${selectedData.totalFocusMinutes % 60}m`
                   : '0m'}
