@@ -1,18 +1,18 @@
 {
-  "name": "Croakle Habit & Mood",
+  "name": "Croakle",
   "short_name": "Croakle",
-  "description": "Croakle Habit and Mood Tracker",
-  "start_url": "/Croakle/",
-  "scope": "/Croakle/",
+  "description": "Croakle - Cozy Habit, Project, Focus Timer, and Mood Tracker.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/Croakle/croakle-icon-512.png?v=3",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "src": "./croakle-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }

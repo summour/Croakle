@@ -77,46 +77,46 @@ export const MoodView: React.FC<MoodViewProps> = ({
         />
       )}
 
-      {/* Month Header (Sticky Locked) */}
-      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1">
-        <div className="ios-glass-card p-3.5 sm:p-4 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={onPrevMonth}
-            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
-            aria-label="Previous Month"
-          >
-            <ChevronLeft size={18} />
-          </button>
-          <div className="text-center">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              Mood Check-in
-            </p>
-            <strong id="CroakleMoodMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white block leading-tight">
-              {MONTH_NAMES[monthIndex]} {year}
-            </strong>
-          </div>
-          <button
-            type="button"
-            onClick={onNextMonth}
-            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
-            aria-label="Next Month"
-          >
-            <ChevronRight size={18} />
-          </button>
+      {/* Month Header Card */}
+      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 sm:p-3.5 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onPrevMonth}
+          className="w-7 h-7 sm:w-8 sm:h-8 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+          aria-label="Previous Month"
+          title="Previous Month"
+        >
+          <ChevronLeft size={16} />
+        </button>
+        <div className="text-center">
+          <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+            Daily Mood Log
+          </p>
+          <strong id="CroakleMoodMonth" className="text-lg sm:text-xl font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4] block leading-tight mt-0.5">
+            {MONTH_NAMES[monthIndex]} {year}
+          </strong>
         </div>
+        <button
+          type="button"
+          onClick={onNextMonth}
+          className="w-7 h-7 sm:w-8 sm:h-8 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
+          aria-label="Next Month"
+          title="Next Month"
+        >
+          <ChevronRight size={16} />
+        </button>
       </div>
 
       {/* Clean Calendar Card */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-4 sm:p-6 shadow-xs select-none touch-pan-y space-y-5">
-        {/* Day Headers (Su Mo Tu We Th Fr Sa) */}
-        <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center font-bold text-[11px] sm:text-xs text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
-          {CALENDAR_HEADER_DAYS.map((d) => (
+      <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-3.5 sm:p-4 select-none touch-pan-y space-y-3">
+        {/* Day Headers (SU MO TU WE TH FR SA) */}
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 text-center font-bold font-mono text-[10px] sm:text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-wider">
+          {['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'].map((d) => (
             <span key={d}>{d}</span>
           ))}
         </div>
 
-        {/* Calendar Squircle Grid (Square Cells) */}
+        {/* Calendar Grid */}
         <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
           {/* Empty spacer cells before day 1 */}
           {Array.from({ length: firstDayIndex }).map((_, i) => (
@@ -130,62 +130,59 @@ export const MoodView: React.FC<MoodViewProps> = ({
             const moodObj = MOOD_LEVELS.find((m) => m.value === moodValue);
             const isToday = isCurrentMonth && today.getDate() === dayNum;
             const isChosen = selectedDay === dayNum;
+            const hasMood = Boolean(moodValue && moodObj);
 
             return (
               <button
                 key={`day-${dayNum}`}
                 type="button"
                 onClick={() => setSelectedDay(dayNum)}
-                className={`relative aspect-square w-full rounded-[14px] sm:rounded-[18px] flex flex-col justify-between p-1 sm:p-1.5 transition-all duration-150 ios-tap ${
-                  isToday || isChosen
-                    ? 'border-2 border-zinc-950 dark:border-white bg-zinc-50 dark:bg-zinc-800/80 shadow-xs'
-                    : 'border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/60 hover:bg-zinc-50 dark:hover:bg-zinc-850 hover:border-zinc-300'
+                className={`relative aspect-square w-full flex flex-col items-center justify-center p-1 transition-all duration-100 cursor-pointer border ${
+                  isToday
+                    ? 'border border-[#E63946] bg-white dark:bg-[#1D1B18]'
+                    : isChosen
+                    ? 'border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320]'
+                    : 'border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-white dark:bg-[#1D1B18] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
                 }`}
               >
-                {/* Day Number in Top-Left Corner */}
+                {/* Day Number */}
                 <span
-                  className={`text-[10px] sm:text-xs font-bold leading-none pl-0.5 pt-0.5 ${
-                    isToday || isChosen
-                      ? 'text-zinc-950 dark:text-white'
-                      : 'text-zinc-600 dark:text-zinc-400'
+                  className={`font-mono font-bold leading-none text-[#1D1B18] dark:text-[#F8F7F4] ${
+                    hasMood ? 'text-[9px] sm:text-[10px] mb-0.5' : 'text-xs sm:text-sm'
                   }`}
                 >
                   {dayNum}
                 </span>
 
                 {/* Mood Icon in Center */}
-                <div className="flex-1 flex items-center justify-center -mt-1.5 sm:-mt-1">
-                  {moodValue && moodObj ? (
-                    <FrogMoodIcon value={moodValue} size={32} className="w-7 h-7 sm:w-8.5 sm:h-8.5 transition-transform drop-shadow-xs" />
-                  ) : null}
-                </div>
+                {hasMood && moodObj && (
+                  <div className="flex items-center justify-center">
+                    <FrogMoodIcon
+                      value={moodValue!}
+                      size={20}
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                    />
+                  </div>
+                )}
               </button>
             );
           })}
         </div>
 
         {/* Divider */}
-        <hr className="border-zinc-200 dark:border-zinc-800 my-2" />
+        <hr className="border-[#1D1B18]/15 dark:border-[#F8F7F4]/20 my-2" />
 
-        {/* Bottom 5 Mood Count Cards (Compact & Neat Design) */}
+        {/* Bottom 5 Mood Count Cards */}
         <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
           {MOOD_LEVELS.map((m) => (
             <div
               key={m.value}
-              className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-[14px] sm:rounded-[18px] border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/80 text-center flex flex-col items-center justify-center shadow-2xs transition-all hover:bg-zinc-50 dark:hover:bg-zinc-850"
+              className="py-2 px-1 sm:py-2 sm:px-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-center flex flex-col items-center justify-center transition-all hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             >
-              {/* Direct Frog Icon */}
-              <div className="mb-1 flex items-center justify-center">
-                <FrogMoodIcon value={m.value} size={22} className="w-5 h-5 sm:w-6 sm:h-6 transition-transform" />
-              </div>
-              {/* Label */}
-              <span className="text-[10px] sm:text-[11px] font-bold block tracking-tight text-zinc-500 dark:text-zinc-400 leading-none">
-                {m.label}
-              </span>
-              {/* Count */}
-              <strong className="text-xs sm:text-sm font-black block mt-1 text-zinc-950 dark:text-white leading-none">
+              <FrogMoodIcon value={m.value} size={20} className="w-5 h-5 mb-1" />
+              <span className="font-mono text-[9px] font-bold text-[#1D1B18]/70 dark:text-[#F8F7F4]/70">
                 {moodCounts[m.value] || 0}
-              </strong>
+              </span>
             </div>
           ))}
         </div>
@@ -193,18 +190,18 @@ export const MoodView: React.FC<MoodViewProps> = ({
 
       {/* Select Mood Modal */}
       {selectedDay !== null && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-sm shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 sm:p-6 w-full max-w-sm space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white">
+              <h2 className="text-base sm:text-lg font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
                 Mood for {MONTH_NAMES[monthIndex]} {selectedDay}, {year}
               </h2>
               <button
                 type="button"
                 onClick={() => setSelectedDay(null)}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300"
+                className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] cursor-pointer"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
@@ -216,14 +213,14 @@ export const MoodView: React.FC<MoodViewProps> = ({
                     key={mood.value}
                     type="button"
                     onClick={() => handleSelectMood(mood.value)}
-                    className={`py-3.5 px-1 rounded-2xl border flex flex-col items-center justify-center gap-1.5 transition-all ios-tap bg-white dark:bg-zinc-850 ${
+                    className={`py-3 px-1 border flex flex-col items-center justify-center gap-1.5 transition cursor-pointer ${
                       isSelected
-                        ? 'border-zinc-950 dark:border-white ring-2 ring-zinc-950/20 dark:ring-white/20 scale-105 shadow-md'
-                        : 'border-zinc-200 dark:border-zinc-750 hover:border-zinc-300 dark:hover:border-zinc-600 hover:scale-102'
+                        ? 'border-[#E63946] bg-[#E63946] text-[#F8F7F4]'
+                        : 'border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
                     }`}
                   >
-                    <FrogMoodIcon value={mood.value} size={30} />
-                    <span className="text-[10.5px] font-bold text-zinc-700 dark:text-zinc-300">
+                    <FrogMoodIcon value={mood.value} size={28} />
+                    <span className="text-[10px] font-bold font-oswald uppercase">
                       {mood.label}
                     </span>
                   </button>
@@ -234,7 +231,7 @@ export const MoodView: React.FC<MoodViewProps> = ({
             <button
               type="button"
               onClick={() => handleSelectMood(null)}
-              className="w-full py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition ios-tap"
+              className="w-full py-2 border border-[#1D1B18] dark:border-[#F8F7F4] text-xs font-bold font-oswald uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 bg-[#F8F7F4] dark:bg-[#252320] hover:bg-white dark:hover:bg-[#1D1B18] transition cursor-pointer"
             >
               Clear Mood
             </button>

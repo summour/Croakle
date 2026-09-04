@@ -229,36 +229,36 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
         />
       )}
 
-      {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
-      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
-        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      {/* Sticky Header with integrated Month & Week navigation */}
+      <div className="sticky top-0 z-20 bg-[#F8F7F4]/95 dark:bg-[#1D1B18]/95 backdrop-blur-md pt-1 pb-1 space-y-2">
+        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 space-y-2.5 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
               id="habit-prev-week"
               type="button"
               onClick={handleGoPrevWeek}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               aria-label="Previous Week"
               title="Previous Week"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={16} />
             </button>
 
             <button
               type="button"
               onClick={() => setIsCalendarOpen(true)}
-              className="flex flex-col items-center px-2.5 py-0.5 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+              className="flex flex-col items-center px-2 py-0.5 border border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition cursor-pointer group"
               title="Click to open calendar"
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
                 Habit Tracker
               </p>
               <div className="flex items-center gap-2">
-                <strong id="CroakleTrackMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+                <strong id="CroakleTrackMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
                   {MONTH_NAMES[monthIndex]} {year}
                 </strong>
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                   {currentWeek?.label}
                 </span>
               </div>
@@ -268,16 +268,16 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
               id="habit-next-week"
               type="button"
               onClick={handleGoNextWeek}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               aria-label="Next Week"
               title="Next Week"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={16} />
             </button>
           </div>
 
           {/* 7-Day Interactive Strip */}
-          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+          <div className="grid grid-cols-7 gap-1 pt-1 border-t border-[#1D1B18] dark:border-[#F8F7F4]">
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
@@ -294,24 +294,22 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                   key={wd.iso}
                   type="button"
                   onClick={() => onSelectDate(wd.date)}
-                  className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
+                  className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono transition-all duration-100 cursor-pointer border ${
                     !wd.inMonth
-                      ? 'opacity-25 text-zinc-400'
+                      ? 'opacity-30 border-dashed border-[#1D1B18] dark:border-[#F8F7F4]'
                       : isSelected
-                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
+                      ? 'bg-[#E63946] text-white font-bold border-[#1D1B18] dark:border-[#F8F7F4]'
                       : wd.isCurrentDay
-                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
+                      ? 'bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold border-[#1D1B18] dark:border-[#F8F7F4]'
+                      : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-[#1D1B18] dark:border-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
                   }`}
                 >
-                  <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
-                  <span className="text-sm font-black">{dayOfMonth}</span>
+                  <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
+                  <span className="text-sm font-bold">{dayOfMonth}</span>
                   {hasActivity && (
                     <span
-                      className={`w-1 h-1 rounded-full ${
-                        isSelected
-                          ? 'bg-white dark:bg-zinc-950'
-                          : 'bg-zinc-950 dark:bg-white'
+                      className={`w-1.5 h-1.5 mt-0.5 ${
+                        isSelected ? 'bg-white' : 'bg-[#E63946]'
                       }`}
                     />
                   )}
@@ -321,60 +319,62 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           </div>
         </div>
 
-        {/* Action Bar: Add Habit, Done & Reorder (Locked on a single line) */}
+        {/* Action Bar: Add Habit, Done & Reorder */}
         <div className="flex items-center gap-2">
           <button
             id="CroakleOpenAddHabit"
             type="button"
             onClick={handleOpenAdd}
-            className="flex-1 py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
+            className="add-btn flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
           >
-            <Plus size={16} className="shrink-0" />
-            <span>Add Habit</span>
+            <Plus size={14} className="shrink-0" />
+            <span>ADD</span>
           </button>
           <button
             type="button"
             onClick={() => setShowArchived(!showArchived)}
-            className={`py-2.5 px-3 rounded-[20px] border font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-all shrink-0 whitespace-nowrap ios-tap ${
+            className={`py-2 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1 transition-all shrink-0 whitespace-nowrap cursor-pointer ${
               showArchived
-                ? 'bg-zinc-900 text-white border-zinc-800'
-                : 'bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                ? 'bg-[#E63946] text-white'
+                : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
             }`}
           >
-            <Archive size={14} className="shrink-0" />
+            <Archive size={13} className="shrink-0" />
             <span>{showArchived ? 'Active' : `Done (${archivedHabits.length})`}</span>
           </button>
           <button
             id="CroakleOpenReorderHabit"
             type="button"
             onClick={() => setIsReorderOpen(true)}
-            className="py-2.5 px-3 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
+            className="py-2 px-2.5 bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border border-[#1D1B18] dark:border-[#F8F7F4] font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer shrink-0 hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             title="Reorder Habits"
           >
-            <ArrowUpDown size={14} />
-            <span>Reorder</span>
+            <ArrowUpDown size={13} />
+            <span>Order</span>
           </button>
         </div>
       </div>
 
       {/* Main Habits List Container */}
-      <div className="ios-glass-card p-4 sm:p-5 space-y-4">
+      <div className="space-y-4">
         {displayedHabits.length === 0 ? (
-          <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-[24px] bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-2 shadow-2xs text-zinc-500 dark:text-zinc-400">
-              <CloverIcon size={36} />
-            </div>
-            <div>
-              <p className="font-bold text-sm text-zinc-950 dark:text-white">
-                {showArchived ? 'No completed habits yet' : 'No active habits right now'}
-              </p>
-              <p className="text-xs mt-0.5">
-                {showArchived ? 'Finished habits will be archived here' : 'Tap "+ Add Habit" to begin your daily rhythm'}
-              </p>
-            </div>
+          <div className="text-center py-10 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-6 space-y-3">
+            <p className="font-oswald text-lg uppercase font-bold text-[#1D1B18] dark:text-[#F8F7F4]">
+              {showArchived ? 'No completed habits yet' : 'No active habits right now'}
+            </p>
+            <p className="text-xs font-mono text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+              {showArchived ? 'Finished habits will be archived here' : 'Tap "Add New Habit" to begin your daily rhythm'}
+            </p>
+            <button
+              type="button"
+              onClick={handleOpenAdd}
+              className="add-btn mt-2 inline-block"
+            >
+              Add New Habit
+            </button>
           </div>
         ) : (
-          <div className="space-y-3.5">
+          <div className="space-y-4">
             {displayedHabits.map((habit) => {
               const originalIndex = habits.findIndex((h) => h.id === habit.id);
               const monthHabit = monthData.habits[originalIndex];
@@ -386,50 +386,45 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                 return acc;
               }, 0);
 
-              // calculate month completed count
-              const monthCompletedCount = (monthHabit?.days || []).slice(0, daysInCurrentMonth).filter(Boolean).length;
               const isGoalMet = completedThisWeek >= habit.goal;
 
               return (
                 <div
                   key={habit.id || originalIndex}
-                  className={`p-4 rounded-[24px] border ${
-                    habit.completed
-                      ? 'border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 opacity-70'
-                      : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)]'
-                  } space-y-3`}
+                  className="habit-card"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="habit-title">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(originalIndex)}
-                      className="text-left group flex items-center gap-2 min-w-0"
+                      className="text-left font-bold truncate hover:opacity-80 transition cursor-pointer flex-1 mr-2 flex items-center gap-2"
                     >
-                      <span className={`font-black text-sm text-zinc-950 dark:text-white group-hover:underline truncate ${habit.completed ? 'line-through text-zinc-400' : ''}`}>
+                      <span className={habit.completed ? 'line-through opacity-50' : ''}>
                         {habit.name}
                       </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-                        {completedThisWeek}/{habit.goal} days
-                      </span>
+                      {isGoalMet && (
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 bg-[#E63946] text-white">
+                          Met
+                        </span>
+                      )}
                     </button>
-
-                    {isGoalMet && (
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-2xs">
-                        Goal Met
-                      </span>
-                    )}
+                    <span style={{ fontSize: '0.8rem', opacity: 0.6 }} className="font-mono shrink-0">
+                      {completedThisWeek}/{habit.goal}
+                    </span>
                   </div>
 
                   {habit.description && (
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">{habit.description}</p>
+                    <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 font-mono mb-2 line-clamp-1">
+                      {habit.description}
+                    </p>
                   )}
 
-                  {/* 7-Day Habit Tracker Buttons */}
-                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                  <div className="day-grid">
                     {weekDays.map((wd) => {
                       const isCurrentMonthDay = wd.inMonth;
                       const dayNumber = wd.date.getDate();
                       const isDone = isCurrentMonthDay && Boolean(monthHabit?.days[dayNumber - 1]);
+                      const dayLetter = ['M', 'T', 'W', 'T', 'F', 'S', 'S'][(wd.dayIndex + 6) % 7];
 
                       return (
                         <button
@@ -438,15 +433,13 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                           disabled={!isCurrentMonthDay || habit.completed}
                           onClick={() => handleToggleDay(originalIndex, wd.date)}
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
-                          className={`aspect-square w-full rounded-[14px] sm:rounded-[16px] flex items-center justify-center transition-all duration-200 ios-tap ${
+                          className={`day-cell ${isDone ? 'active' : ''} ${
                             !isCurrentMonthDay || habit.completed
-                              ? 'opacity-25 cursor-not-allowed bg-transparent border border-dashed border-zinc-200 dark:border-zinc-800'
-                              : isDone
-                              ? 'bg-transparent border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 active:scale-95'
-                              : 'bg-transparent border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 active:scale-95'
+                              ? 'opacity-25 cursor-not-allowed border-dashed'
+                              : ''
                           }`}
                         >
-                          {isDone ? <PixelFrogCrownIcon size={34} className="w-7 h-7 sm:w-8 sm:h-8 animate-in zoom-in-75 duration-150" /> : null}
+                          {dayLetter}
                         </button>
                       );
                     })}
@@ -454,6 +447,15 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                 </div>
               );
             })}
+
+            <button
+              id="CroakleBottomAddHabit"
+              type="button"
+              onClick={handleOpenAdd}
+              className="add-btn w-full text-center py-3"
+            >
+              Add New Habit
+            </button>
           </div>
         )}
       </div>
@@ -716,58 +718,58 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
           }}
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
         >
-          <div className="bg-white dark:bg-zinc-900 border border-black/10 dark:border-white/15 rounded-[32px] p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-start justify-between">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-4 sm:p-5 w-full max-w-lg space-y-3 font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">
               <div>
-                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white flex items-center gap-2">
-                  <ArrowUpDown size={20} className="text-[#007AFF]" />
+                <h2 className="text-base font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4] flex items-center gap-2">
+                  <ArrowUpDown size={16} className="text-[#E63946]" />
                   Reorder Habits
                 </h2>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  Drag items or use the quick buttons to customize order
+                <p className="text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mt-0.5">
+                  Drag items or use the buttons to reorder
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsReorderOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-600 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white transition"
+                className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition cursor-pointer"
               >
-                <X size={18} />
+                <X size={14} />
               </button>
             </div>
 
             {/* Quick Sort Helpers */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] font-bold">
-              <span className="text-zinc-400 uppercase tracking-wider text-[10px] font-extrabold shrink-0 mr-1">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[10px] font-bold">
+              <span className="text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 uppercase tracking-wider font-extrabold shrink-0 mr-1">
                 Quick Sort:
               </span>
               <button
                 type="button"
                 onClick={handleSortHabitsAZ}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:border-zinc-400 transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition flex items-center gap-1 shrink-0 uppercase cursor-pointer"
               >
-                <ArrowDownAZ size={12} />
+                <ArrowDownAZ size={11} />
                 <span>A → Z</span>
               </button>
               <button
                 type="button"
                 onClick={handleSortHabitsByPriority}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:border-zinc-400 transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition flex items-center gap-1 shrink-0 uppercase cursor-pointer"
               >
-                <Sparkles size={12} className="text-[#FF9500]" />
+                <Sparkles size={11} className="text-[#E63946]" />
                 <span>By Priority</span>
               </button>
               <button
                 type="button"
                 onClick={() => onReorderHabits([...habits].reverse())}
-                className="px-2.5 py-1 rounded-xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-200 hover:border-zinc-400 transition shrink-0 ios-tap"
+                className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition shrink-0 uppercase cursor-pointer"
               >
                 Reverse
               </button>
             </div>
 
             {/* Habits Reorder List with Drag and Drop */}
-            <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+            <div className="space-y-1.5 max-h-[50vh] overflow-y-auto pr-1">
               {habits.map((habit, idx) => {
                 const isDragging = draggedHabitIdx === idx;
                 const isDragOver = dragOverHabitIdx === idx && draggedHabitIdx !== idx;
@@ -796,45 +798,45 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
                       setDraggedHabitIdx(null);
                       setDragOverHabitIdx(null);
                     }}
-                    className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border transition-all duration-150 select-none ${
+                    className={`flex items-center justify-between p-2 border transition-all duration-100 select-none ${
                       isDragging
-                        ? 'opacity-40 scale-[0.98] border-[#007AFF] bg-[#007AFF]/10'
+                        ? 'opacity-40 border-[#E63946] bg-[#E63946]/10'
                         : isDragOver
-                        ? 'border-2 border-[#007AFF] bg-[#007AFF]/5 shadow-md'
-                        : 'bg-white dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700/80 shadow-2xs'
+                        ? 'border border-[#E63946] bg-[#E63946]/5'
+                        : 'bg-white dark:bg-[#1D1B18] border-[#1D1B18]/30 dark:border-[#F8F7F4]/30'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
                       {/* Drag Handle */}
                       <div 
-                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition"
+                        className="cursor-grab active:cursor-grabbing p-1 text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4] transition"
                         title="Drag to reorder"
                       >
-                        <GripVertical size={16} />
+                        <GripVertical size={14} />
                       </div>
 
                       {/* Number Position Badge */}
-                      <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black text-[11px] flex items-center justify-center shrink-0">
+                      <span className="w-5 h-5 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-[10px] flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
 
                       <div className="min-w-0">
-                        <p className={`font-bold text-sm text-zinc-950 dark:text-white truncate ${habit.completed ? 'line-through text-zinc-400' : ''}`}>
+                        <p className={`font-bold text-xs truncate ${habit.completed ? 'line-through text-[#1D1B18]/40 dark:text-[#F8F7F4]/40' : 'text-[#1D1B18] dark:text-[#F8F7F4]'}`}>
                           {habit.name}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <span
-                            className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-md ${
+                            className={`text-[8.5px] font-bold uppercase px-1 border ${
                               habit.priority === 'high'
-                                ? 'bg-red-50 text-[#FF3B30] border border-red-200 dark:bg-red-950/40 dark:border-red-900'
+                                ? 'bg-[#E63946] text-[#F8F7F4] border-[#E63946]'
                                 : habit.priority === 'medium'
-                                ? 'bg-amber-50 text-[#FF9500] border border-amber-200 dark:bg-amber-950/40 dark:border-amber-900'
-                                : 'bg-blue-50 text-[#007AFF] border border-blue-200 dark:bg-blue-950/40 dark:border-blue-900'
+                                ? 'bg-[#F8F7F4] text-[#1D1B18] border-[#1D1B18]/40 dark:bg-[#252320] dark:text-[#F8F7F4]'
+                                : 'bg-transparent text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 border-[#1D1B18]/20 dark:border-[#F8F7F4]/20'
                             }`}
                           >
                             {habit.priority}
                           </span>
-                          <span className="text-[10px] text-zinc-400">
+                          <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50">
                             {habit.goal || 7}d/wk
                           </span>
                         </div>
@@ -843,48 +845,44 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
 
                     {/* Quick Move Buttons */}
                     <div className="flex items-center gap-1 shrink-0">
-                      {/* Send to Top */}
                       <button
                         type="button"
                         disabled={idx === 0}
                         onClick={() => handleMoveHabitToTop(idx)}
                         title="Move to top"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronsUp size={13} />
+                        <ChevronsUp size={12} />
                       </button>
 
-                      {/* Move Up 1 */}
                       <button
                         type="button"
                         disabled={idx === 0}
                         onClick={() => handleMoveHabit(idx, idx - 1)}
                         title="Move up"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronUp size={14} />
+                        <ChevronUp size={12} />
                       </button>
 
-                      {/* Move Down 1 */}
                       <button
                         type="button"
                         disabled={idx === habits.length - 1}
                         onClick={() => handleMoveHabit(idx, idx + 1)}
                         title="Move down"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronDown size={14} />
+                        <ChevronDown size={12} />
                       </button>
 
-                      {/* Send to Bottom */}
                       <button
                         type="button"
                         disabled={idx === habits.length - 1}
                         onClick={() => handleMoveHabitToBottom(idx)}
                         title="Move to bottom"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-200 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronsDown size={13} />
+                        <ChevronsDown size={12} />
                       </button>
                     </div>
                   </div>
@@ -895,7 +893,7 @@ export const HabitsView: React.FC<HabitsViewProps> = ({
             <button
               type="button"
               onClick={() => setIsReorderOpen(false)}
-              className="w-full py-3 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-sm shadow-md transition ios-tap"
+              className="w-full py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider transition cursor-pointer"
             >
               Done
             </button>

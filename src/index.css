@@ -9,62 +9,94 @@
   font-family: 'Silkscreen', 'Press Start 2P', monospace, monospace;
 }
 
+.font-display {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.font-body {
+  font-family: 'Space Mono', monospace;
+}
+
+.font-oswald {
+  font-family: 'Oswald', sans-serif;
+}
+
+.font-mono {
+  font-family: 'Space Mono', monospace;
+}
+
 .pixel-art-rendering {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
 
+::selection {
+  background: #E63946;
+  color: #F8F7F4;
+}
+
 @layer base {
   :root {
     color-scheme: light;
-    --bg-color: #ffffff;
-    --bg-pattern-color: #f4f4f6;
-    --card-bg: #ffffff;
-    --card-warm: #fcfcfd;
-    --text-color: #09090b;
-    --text-muted: #71717a;
-    --border-color: #e4e4e7;
-    --primary-blue: #007aff;
-    --primary-red: #ff3b30;
-    --primary-green: #34c759;
-    --primary-yellow: #ffcc00;
+    --bg: #F8F7F4;
+    --ink: #1D1B18;
+    --accent: #E63946;
+    --bg-color: #F8F7F4;
+    --bg-pattern-color: #ECEAE4;
+    --card-bg: #FFFFFF;
+    --card-warm: #F8F7F4;
+    --text-color: #1D1B18;
+    --text-muted: #555558;
+    --border-color: #1D1B18;
+    --primary-blue: #1D1B18;
+    --primary-red: #E63946;
+    --primary-green: #2A9D8F;
+    --primary-yellow: #E9C46A;
   }
 
   .dark {
     color-scheme: dark;
-    --bg-color: #000000;
-    --bg-pattern-color: #09090b;
-    --card-bg: #121215;
-    --card-warm: #18181b;
-    --text-color: #fafafa;
-    --text-muted: #a1a1aa;
-    --border-color: #27272a;
-    --primary-blue: #0a84ff;
-    --primary-red: #ff453a;
-    --primary-green: #30d158;
-    --primary-yellow: #ffd60a;
+    --bg: #141312;
+    --ink: #F8F7F4;
+    --accent: #E63946;
+    --bg-color: #141312;
+    --bg-pattern-color: #1D1B18;
+    --card-bg: #1D1B18;
+    --card-warm: #23211E;
+    --text-color: #F8F7F4;
+    --text-muted: #A09D98;
+    --border-color: #F8F7F4;
+    --primary-blue: #F8F7F4;
+    --primary-red: #FF4D5A;
+    --primary-green: #2A9D8F;
+    --primary-yellow: #E9C46A;
   }
 
   .dim {
     color-scheme: dark;
-    --bg-color: #0a0a0c;
-    --bg-pattern-color: #131317;
-    --card-bg: #16161b;
-    --card-warm: #1c1c22;
-    --text-color: #f4f4f7;
-    --text-muted: #9a9ab0;
-    --border-color: #282832;
-    --primary-blue: #0a84ff;
-    --primary-red: #ff453a;
-    --primary-green: #30d158;
-    --primary-yellow: #ffd60a;
+    --bg: #141312;
+    --ink: #F8F7F4;
+    --accent: #E63946;
+    --bg-color: #141312;
+    --bg-pattern-color: #1D1B18;
+    --card-bg: #1D1B18;
+    --card-warm: #23211E;
+    --text-color: #F8F7F4;
+    --text-muted: #A09D98;
+    --border-color: #F8F7F4;
+    --primary-blue: #F8F7F4;
+    --primary-red: #FF4D5A;
+    --primary-green: #2A9D8F;
+    --primary-yellow: #E9C46A;
   }
 
   body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+    font-family: 'Space Mono', monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
@@ -76,7 +108,13 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Custom scrollbar hiding for slick iOS feel */
+  h1, h2, h3, h4, h5, h6, strong, b, [role="heading"] {
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+
+  /* Custom scrollbar hiding */
   ::-webkit-scrollbar {
     display: none;
   }
@@ -87,87 +125,294 @@
   }
 }
 
-/* Instant touch response & iOS spring performance optimizations */
+/* Instant touch response & tactile press mechanics */
 button, input, select, a, [role="button"] {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
 
-/* iOS 26 Ultra-Fluid Glassmorphic Utilities - Pure B&W Canvas with Crisp Lighting */
+/* Variation 12: Minimalist Master Container */
+.variation-container {
+  border: 1px solid var(--ink);
+  background: #FFFFFF;
+}
+.dark .variation-container {
+  border: 1px solid var(--ink);
+  background: #1D1B18;
+}
+
+/* Variation 12: Minimalist Clean Cards (1px solid ink, no heavy drop-shadows) */
 .ios-glass-card {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 
-    0 12px 36px -8px rgba(0, 0, 0, 0.04),
-    0 4px 12px -2px rgba(0, 0, 0, 0.02),
-    inset 0 1px 1px rgba(255, 255, 255, 1);
-  border-radius: 28px;
-  will-change: transform, opacity;
-  transition: box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease;
+  background: #FFFFFF;
+  border: 1px solid var(--ink);
+  border-radius: 0px;
+  will-change: transform;
 }
 
 .dark .ios-glass-card {
-  background: rgba(18, 18, 22, 0.88);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    0 20px 48px -10px rgba(0, 0, 0, 0.8),
-    0 6px 18px -2px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  background: #1D1B18;
+  border: 1px solid var(--ink);
 }
 
+/* Variation 12: Habit Cards */
+.habit-card {
+  border: 1px solid var(--ink);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  background: #FFFFFF;
+}
+
+.dark .habit-card {
+  background: #1D1B18;
+  border: 1px solid var(--ink);
+}
+
+.habit-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: -0.02em;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  background: #FFFFFF;
+  color: var(--ink);
+  transition: all 0.1s ease;
+}
+
+.dark .day-cell {
+  background: #1D1B18;
+  color: var(--ink);
+}
+
+.day-cell.active {
+  background: var(--accent) !important;
+  color: #FFFFFF !important;
+  border-color: var(--ink) !important;
+}
+
+/* Variation 12: Add button */
+.add-btn {
+  background: var(--ink);
+  color: var(--bg);
+  border: 1px solid var(--ink);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: opacity 0.1s ease;
+}
+.add-btn:hover {
+  opacity: 0.9;
+}
+.add-btn:active {
+  transform: scale(0.99);
+}
+
+/* Variation 12: Timer Display */
+.timer-display {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3.5rem;
+  text-align: center;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 1rem 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Variation 12: Primary Action Button (.btn) */
+.btn {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: var(--ink);
+  color: var(--bg);
+  border: 1px solid var(--ink);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.12s ease, transform 0.1s ease;
+}
+.btn:hover {
+  opacity: 0.9;
+}
+.btn:active {
+  transform: scale(0.99);
+}
+
+/* Variation 12: Day Cell */
+.variation-day {
+  border: 1px solid var(--ink);
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-family: 'Space Mono', monospace;
+  background: #FFFFFF;
+  color: var(--ink);
+  transition: all 0.1s ease;
+}
+.variation-day.active {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: bold;
+  border-color: var(--ink);
+}
+
+/* Variation 12: Footer Nav */
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--ink);
+  padding: 1rem 1.5rem;
+  font-family: 'Space Mono', monospace;
+}
+.nav-item {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Bottom Dock Tray (Variation 12 Minimalist: 1px solid ink, flat, no thick shadow) */
 .ios-glass-dock {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid rgba(0, 0, 0, 0.09);
-  box-shadow: 
-    0 24px 54px -10px rgba(0, 0, 0, 0.12),
-    0 8px 24px -4px rgba(0, 0, 0, 0.05),
-    inset 0 1.5px 2px rgba(255, 255, 255, 1);
-  border-radius: 40px;
+  background: #FFFFFF;
+  border: 1px solid var(--ink);
+  border-radius: 0px;
   will-change: transform;
 }
 
 .dark .ios-glass-dock {
-  background: rgba(14, 14, 17, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 
-    0 28px 60px -10px rgba(0, 0, 0, 0.85),
-    0 10px 28px -4px rgba(0, 0, 0, 0.6),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.15);
+  background: #161619;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0px 0px var(--ink);
 }
 
-/* iOS 26 Spring Micro-Haptics Animation */
-.ios-tap {
+/* Tactile Stamp Cushion Micro-Interactions */
+.ios-tap, .kissa-tap {
   transform: translateZ(0);
-  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease, background-color 0.15s ease;
-  will-change: transform, opacity;
+  transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+  will-change: transform, box-shadow;
 }
 
-.ios-tap:active {
-  transform: scale(0.95) translateZ(0);
-  opacity: 0.85;
+.ios-tap:active, .kissa-tap:active {
+  transform: translate(2px, 2px) translateZ(0);
 }
 
-/* Fluid Pill Glass */
+/* Tactile Pill & Sticker */
 .ios-glass-pill {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 1);
-  border-radius: 9999px;
+  background: #FFFFFF;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0px 0px var(--ink);
+  border-radius: 0px;
 }
 
 .dark .ios-glass-pill {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  background: #1F1F23;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0px 0px var(--ink);
+}
+
+/* Variation 1 Styled Action Buttons */
+.kissa-btn-primary {
+  background-color: var(--accent);
+  color: #FFFFFF;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0px 0px var(--ink);
+  border-radius: 0px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.kissa-btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px var(--ink);
+}
+
+.kissa-btn-secondary {
+  background-color: var(--ink);
+  color: var(--bg);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0px 0px var(--accent);
+  border-radius: 0px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.kissa-btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px var(--accent);
+}
+
+.kissa-btn-honey {
+  background-color: #E9C46A;
+  color: var(--ink);
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0px 0px var(--ink);
+  border-radius: 0px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.kissa-btn-honey:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px var(--ink);
+}
+
+.kissa-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px solid var(--ink);
+  border-radius: 0px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 2px 2px 0px 0px var(--ink);
+}
+
+.kissa-stamp {
+  border: 2px dashed var(--ink);
+  border-radius: 0px;
 }
 
 /* Smooth modal zoom & fade */

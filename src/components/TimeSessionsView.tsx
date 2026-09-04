@@ -270,35 +270,35 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
   return (
     <div className="space-y-3.5 pb-24 max-w-lg mx-auto" {...swipeHandlers}>
-      {/* 1. TOP: DATE / WEEK NAVIGATOR (Unified iOS 26 Glass UI) */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      {/* 1. TOP: DATE / WEEK NAVIGATOR */}
+      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
         {/* Top Row: Week Navigation */}
         <div className="flex items-center justify-between">
           <button
             id="timer-prev-week"
             type="button"
             onClick={handleGoPrevWeek}
-            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             aria-label="Previous Week"
             title="Previous Week"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
 
           <button
             type="button"
             onClick={() => setIsCalendarOpen(true)}
-            className="flex flex-col items-center px-2.5 py-0.5 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+            className="flex flex-col items-center px-2.5 py-0.5 border border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition cursor-pointer group"
             title="Click to open calendar"
           >
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+            <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
               Focus Sessions
             </p>
             <div className="flex items-center gap-2">
-              <strong className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+              <strong className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
                 {MONTH_NAMES[monthIndex]} {year}
               </strong>
-              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+              <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                 {currentWeek?.label}
               </span>
             </div>
@@ -308,16 +308,16 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
             id="timer-next-week"
             type="button"
             onClick={handleGoNextWeek}
-            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             aria-label="Next Week"
             title="Next Week"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
         </div>
 
         {/* 7-Day Interactive Strip */}
-        <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="grid grid-cols-7 gap-1 pt-1 border-t border-[#1D1B18] dark:border-[#F8F7F4]">
           {weekDays.map((wd) => {
             const isSelected = formatIsoDate(wd.date) === selectedDate;
             const dayName = DAY_SHORT_NAMES[wd.dayIndex];
@@ -328,24 +328,24 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                 key={wd.iso}
                 type="button"
                 onClick={() => setSelectedDate(formatIsoDate(wd.date))}
-                className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
+                className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center border font-mono transition-all duration-100 cursor-pointer ${
                   !wd.inMonth
-                    ? 'opacity-25 text-zinc-400'
+                    ? 'opacity-30 border-dashed border-[#1D1B18] dark:border-[#F8F7F4]'
                     : isSelected
-                    ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
+                    ? 'bg-[#E63946] text-[#F8F7F4] font-bold border border-[#1D1B18] dark:border-[#F8F7F4]'
                     : wd.isCurrentDay
-                    ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
-                    : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
+                    ? 'bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold border border-[#1D1B18] dark:border-[#F8F7F4]'
+                    : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
                 }`}
               >
-                <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
-                <span className="text-sm font-black">{wd.date.getDate()}</span>
+                <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
+                <span className="text-sm font-extrabold">{wd.date.getDate()}</span>
                 {hasActivity && (
                   <span
-                    className={`w-1 h-1 rounded-full ${
+                    className={`w-1.5 h-1.5 mt-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] ${
                       isSelected
-                        ? 'bg-white dark:bg-zinc-950'
-                        : 'bg-zinc-950 dark:bg-white'
+                        ? 'bg-[#F8F7F4]'
+                        : 'bg-[#E63946]'
                     }`}
                   />
                 )}
@@ -355,21 +355,21 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
         </div>
       </div>
 
-      {/* 2. MIDDLE: COMPACT FOCUS TIMER CARD */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
+      {/* 2. MIDDLE: FOCUS TIMER CARD (Variation 12 Minimalist) */}
+      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 space-y-3">
         {/* Top: Name Input */}
-        <div className="flex items-center justify-between gap-2 border-b border-zinc-200/70 dark:border-zinc-800 pb-2">
+        <div className="flex items-center justify-between gap-2 border-b border-[#1D1B18] dark:border-[#F8F7F4] pb-2">
           <input
             type="text"
-            placeholder="Session Name (e.g. Deep Work)"
+            placeholder="SESSION NAME (E.G. DEEP WORK)"
             value={activeTimer.subject}
             onChange={(e) => onUpdateTimerConfig({ subject: e.target.value })}
-            className="w-full bg-transparent text-sm font-bold text-zinc-950 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none truncate"
+            className="w-full bg-transparent text-sm font-mono font-bold text-[#1D1B18] dark:text-[#F8F7F4] placeholder-[#1D1B18]/50 dark:placeholder-[#F8F7F4]/50 focus:outline-none uppercase"
           />
           {activeTimer.isRunning && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 shrink-0 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/60">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Focusing
+            <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-[#F8F7F4] bg-[#E63946] border border-[#1D1B18] dark:border-[#F8F7F4] px-2 py-0.5 shrink-0 uppercase">
+              <span className="w-1.5 h-1.5 bg-[#F8F7F4] animate-pulse" />
+              FOCUSING
             </span>
           )}
         </div>
@@ -378,34 +378,34 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
         <div className="grid grid-cols-2 gap-2">
           {/* Category Dropdown */}
           <div className="relative">
-            <label className="block text-[9.5px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">
+            <label className="block text-[9px] font-mono font-bold text-[#555558] dark:text-[#9E9EA4] uppercase tracking-wider mb-1">
               Category
             </label>
             <div className="relative">
               <select
                 value={activeTimer.type}
                 onChange={(e) => onUpdateTimerConfig({ type: e.target.value as any })}
-                className="w-full appearance-none bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/70 dark:hover:bg-zinc-700/80 border border-zinc-200/70 dark:border-zinc-700/70 text-zinc-900 dark:text-zinc-100 font-bold text-xs rounded-xl px-2.5 py-1.5 pr-7 transition cursor-pointer focus:outline-none"
+                className="w-full appearance-none bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] font-mono font-bold text-xs rounded-none px-2.5 py-1.5 pr-7 cursor-pointer focus:outline-none"
               >
                 <option value="focus">Focus</option>
                 <option value="study">Study</option>
                 <option value="work">Work</option>
                 <option value="break">Break</option>
               </select>
-              <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+              <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#1D1B18] dark:text-[#F8F7F4] pointer-events-none" />
             </div>
           </div>
 
           {/* Duration Dropdown */}
           <div className="relative">
-            <label className="block text-[9.5px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">
+            <label className="block text-[9px] font-mono font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-wider mb-1">
               Duration
             </label>
             <div className="relative">
               <select
                 value={activeTimer.targetDurationMinutes}
                 onChange={(e) => onUpdateTimerConfig({ targetDurationMinutes: Number(e.target.value) })}
-                className="w-full appearance-none bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200/70 dark:hover:bg-zinc-700/80 border border-zinc-200/70 dark:border-zinc-700/70 text-zinc-900 dark:text-zinc-100 font-bold text-xs rounded-xl px-2.5 py-1.5 pr-7 transition cursor-pointer focus:outline-none"
+                className="w-full appearance-none bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] font-mono font-bold text-xs rounded-none px-2.5 py-1.5 pr-7 cursor-pointer focus:outline-none"
               >
                 <option value={15}>15 mins</option>
                 <option value={25}>25 mins (Pomodoro)</option>
@@ -416,94 +416,94 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                 <option value={120}>120 mins (2 hrs)</option>
                 <option value={0}>Stopwatch (Count up)</option>
               </select>
-              <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+              <ChevronDown size={13} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#1D1B18] dark:text-[#F8F7F4] pointer-events-none" />
             </div>
           </div>
         </div>
 
-        {/* Main Digits Display (Compact) */}
-        <div className="text-center py-1 space-y-1">
-          <div className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-zinc-950 dark:text-white tabular-nums">
+        {/* Main Digits Display (Variation 12 .timer-display) */}
+        <div className="text-center py-1">
+          <div className="timer-display text-4xl sm:text-5xl font-bold font-oswald tracking-tight text-[#1D1B18] dark:text-[#F8F7F4] tabular-nums">
             {formatTimerDisplay(elapsedSeconds)}
           </div>
 
           {/* Target Progress */}
           {targetSecs > 0 ? (
-            <div className="w-full max-w-xs mx-auto pt-0.5 space-y-1">
-              <div className="h-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="w-full max-w-xs mx-auto pt-2 space-y-1">
+              <div className="h-2 bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4] overflow-hidden">
                 <div
-                  className="h-full bg-zinc-900 dark:bg-zinc-100 rounded-full transition-all duration-300"
+                  className="h-full bg-[#E63946] transition-all duration-300"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold">
-                Target: {activeTimer.targetDurationMinutes}m ({progressPercent}%)
+              <p className="text-[10px] font-mono text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 font-bold">
+                TARGET: {activeTimer.targetDurationMinutes}M ({progressPercent}%)
               </p>
             </div>
           ) : (
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 font-bold">
-              {formattedStartInfo ? `Started: ${formattedStartInfo}` : 'Ready to focus'}
+            <p className="text-[10px] font-mono text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 font-bold pt-1">
+              {formattedStartInfo ? `STARTED: ${formattedStartInfo}` : 'READY TO FOCUS'}
             </p>
           )}
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center justify-center gap-2 pt-0.5">
+        {/* Action Controls (Variation 12 .btn) */}
+        <div className="space-y-2 pt-1">
           {!activeTimer.isRunning ? (
             <button
               type="button"
               onClick={elapsedSeconds > 0 ? onResumeTimer : onStartTimer}
-              className="flex-1 max-w-[170px] py-2 rounded-xl bg-zinc-950 dark:bg-white hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98"
+              className="btn flex items-center justify-center gap-2"
             >
-              <Play size={13} className="fill-current ml-0.5" />
-              <span>{elapsedSeconds > 0 ? 'Resume' : 'Start Focus'}</span>
+              <Play size={16} className="fill-current ml-0.5" />
+              <span>{elapsedSeconds > 0 ? 'RESUME FOCUS' : 'START FOCUS'}</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={onPauseTimer}
-              className="flex-1 max-w-[170px] py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98"
+              className="btn flex items-center justify-center gap-2 bg-[#E63946] text-white border-[#1D1B18]"
             >
-              <Pause size={13} className="fill-current" />
-              <span>Pause</span>
+              <Pause size={16} className="fill-current" />
+              <span>PAUSE FOCUS</span>
             </button>
           )}
 
           {elapsedSeconds > 0 && (
-            <>
+            <div className="flex items-center gap-2 pt-1">
               <button
                 type="button"
                 onClick={onFinishTimer}
-                className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1 transition shadow-xs active:scale-98"
+                className="flex-1 py-2 px-3 bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] font-oswald font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer hover:opacity-90"
                 title="Save Session"
               >
-                <CheckCircle2 size={13} /> <span>Save</span>
+                <CheckCircle2 size={15} /> <span>SAVE SESSION</span>
               </button>
               <button
                 type="button"
                 onClick={onResetTimer}
-                className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition"
+                className="p-2 bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border border-[#1D1B18] dark:border-[#F8F7F4] cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
                 title="Reset Timer"
               >
-                <RotateCcw size={13} />
+                <RotateCcw size={15} />
               </button>
-            </>
+            </div>
           )}
         </div>
       </div>
 
       {/* 3. BOTTOM: LOGGED SESSIONS LIST */}
-      <div className="ios-glass-card p-4 sm:p-5 space-y-3">
+      <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-4 sm:p-5 space-y-3">
         {/* Header & Add Button */}
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">
+          <h3 className="text-sm font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">
             Focus History
           </h3>
 
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 text-[11px] font-bold transition active:scale-95"
+            className="add-btn text-[10px] py-1 px-2.5 flex items-center gap-1"
           >
             <Plus size={12} />
             <span>Add Manual</span>
@@ -511,11 +511,11 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
         </div>
 
         {/* Total Time Summary */}
-        <div className="px-3 py-2 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center justify-between text-xs">
-          <span className="text-zinc-500 dark:text-zinc-400 font-medium">
+        <div className="px-3 py-2 bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-between text-xs font-mono">
+          <span className="text-[#1D1B18]/70 dark:text-[#F8F7F4]/70">
             Total Focus ({daySessions.length} {daySessions.length === 1 ? 'session' : 'sessions'}):
           </span>
-          <strong className="text-zinc-950 dark:text-white font-bold">
+          <strong className="text-[#1D1B18] dark:text-[#F8F7F4] font-bold">
             {Math.floor(totalMinutes / 60) > 0 ? `${Math.floor(totalMinutes / 60)}h ` : ''}{totalMinutes % 60}m
           </strong>
         </div>
@@ -539,28 +539,28 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               return (
                 <div
                   key={session.id}
-                  className="p-3 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex items-start justify-between gap-2.5 shadow-2xs hover:border-zinc-300 dark:hover:border-zinc-700 transition"
+                  className="p-3 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-start justify-between gap-2.5"
                 >
-                  <div className="min-w-0 space-y-1 flex-1">
+                  <div className="min-w-0 space-y-1 flex-1 font-mono">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-xs text-zinc-950 dark:text-white truncate">
+                      <span className="font-bold text-xs font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4] truncate">
                         {session.subject}
                       </span>
-                      <span className="text-[9.5px] font-bold uppercase px-1.5 py-0.2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+                      <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                         {typeLabels[session.type] || session.type}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-zinc-600 dark:text-zinc-300 font-medium">
-                      <Clock size={11} className="text-zinc-400 shrink-0" />
+                    <div className="flex items-center gap-1.5 text-[10px] text-[#1D1B18]/70 dark:text-[#F8F7F4]/70">
+                      <Clock size={11} className="text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 shrink-0" />
                       <span>{startFormatted}</span>
                       {session.endTimeStr && (
-                        <span className="text-zinc-400">➔ {session.endTimeStr}</span>
+                        <span className="text-[#1D1B18]/50 dark:text-[#F8F7F4]/50">➔ {session.endTimeStr}</span>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-2 text-[11px] text-zinc-400 dark:text-zinc-500">
-                      <span>Duration: <strong className="text-zinc-700 dark:text-zinc-300 font-semibold">{session.duration}m</strong></span>
+                    <div className="flex items-center gap-2 text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+                      <span>Duration: <strong className="text-[#1D1B18] dark:text-[#F8F7F4] font-bold">{session.duration}m</strong></span>
                       {session.notes && <span>• {session.notes}</span>}
                     </div>
                   </div>
@@ -570,10 +570,10 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(session)}
-                      className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition"
+                      className="p-1 border border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 text-[#1D1B18]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4] transition cursor-pointer"
                       title="Edit"
                     >
-                      <Edit3 size={13} />
+                      <Edit3 size={12} />
                     </button>
                     {deletingSessionId === session.id ? (
                       <div className="flex items-center gap-1">
@@ -583,14 +583,14 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                             onDeleteSession(session.id);
                             setDeletingSessionId(null);
                           }}
-                          className="px-2 py-0.5 rounded-md bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold"
+                          className="px-2 py-0.5 border border-[#E63946] bg-[#E63946] text-[#F8F7F4] text-[9px] font-bold uppercase cursor-pointer"
                         >
                           Delete
                         </button>
                         <button
                           type="button"
                           onClick={() => setDeletingSessionId(null)}
-                          className="px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-[10px]"
+                          className="px-1.5 py-0.5 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] text-[9px] uppercase cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -599,10 +599,10 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                       <button
                         type="button"
                         onClick={() => setDeletingSessionId(session.id)}
-                        className="p-1 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+                        className="p-1 border border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 text-[#1D1B18]/60 hover:text-[#E63946] transition cursor-pointer"
                         title="Delete"
                       >
-                        <Trash2 size={13} />
+                        <Trash2 size={12} />
                       </button>
                     )}
                   </div>
@@ -615,10 +615,10 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
 
       {/* 3. ADD / EDIT SESSION MODAL */}
       {(isAddOpen || editingSession) && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-5 w-full max-w-md shadow-2xl space-y-3.5 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-zinc-950 dark:text-white">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-4 sm:p-5 w-full max-w-md space-y-3 font-mono">
+            <div className="flex items-center justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2.5">
+              <h2 className="text-sm font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
                 {editingSession ? 'Edit Session' : 'Log Focus Session'}
               </h2>
               <button
@@ -627,15 +627,15 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   setIsAddOpen(false);
                   setEditingSession(null);
                 }}
-                className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:text-zinc-950 dark:hover:text-white"
+                className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] cursor-pointer hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]"
               >
-                <X size={14} />
+                <X size={13} />
               </button>
             </div>
 
             <form onSubmit={editingSession ? handleEditSubmit : handleAddSubmit} className="space-y-3">
               <div>
-                <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                   Subject / Activity
                 </label>
                 <input
@@ -644,13 +644,13 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   placeholder="e.g. Deep Work, Reading"
                   value={formSubject}
                   onChange={(e) => setFormSubject(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white focus:outline-none focus:border-zinc-950 dark:focus:border-white"
+                  className="w-full px-2.5 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none uppercase"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                  <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                     Date
                   </label>
                   <input
@@ -658,11 +658,11 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                     required
                     value={formDate}
                     onChange={(e) => setFormDate(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                    className="w-full px-2 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                  <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                     Start Time
                   </label>
                   <input
@@ -670,14 +670,14 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                     required
                     value={formStartTime}
                     onChange={(e) => setFormStartTime(e.target.value)}
-                    className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                    className="w-full px-2 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                  <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                     Duration (mins)
                   </label>
                   <input
@@ -687,17 +687,17 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                     required
                     value={formDuration}
                     onChange={(e) => setFormDuration(Number(e.target.value))}
-                    className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                    className="w-full px-2 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                  <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                     Type
                   </label>
                   <select
                     value={formType}
                     onChange={(e) => setFormType(e.target.value as any)}
-                    className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white capitalize"
+                    className="w-full px-2 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] uppercase focus:outline-none cursor-pointer"
                   >
                     <option value="focus">Focus</option>
                     <option value="study">Study</option>
@@ -708,9 +708,9 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               </div>
 
               {/* Link to habit or project */}
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                  <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                     Link To
                   </label>
                   <select
@@ -719,7 +719,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                       setFormSourceType(e.target.value as any);
                       setFormSourceId('');
                     }}
-                    className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white"
+                    className="w-full px-2 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] uppercase focus:outline-none cursor-pointer"
                   >
                     <option value="">None (Custom)</option>
                     <option value="habit">Habit</option>
@@ -727,7 +727,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                  <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                     Select Item
                   </label>
                   <select
@@ -743,7 +743,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                         if (p && !formSubject) setFormSubject(p.name);
                       }
                     }}
-                    className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white disabled:opacity-40"
+                    className="w-full px-2 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] disabled:opacity-30 focus:outline-none cursor-pointer"
                   >
                     <option value="">Select...</option>
                     {formSourceType === 'habit' &&
@@ -763,7 +763,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                <label className="block text-[10px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
                   Notes (Optional)
                 </label>
                 <textarea
@@ -771,13 +771,13 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
                   placeholder="Notes or milestones..."
                   value={formNotes}
                   onChange={(e) => setFormNotes(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-xs text-zinc-950 dark:text-white focus:outline-none focus:border-zinc-950 dark:focus:border-white resize-none"
+                  className="w-full px-2.5 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-xs text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none resize-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-zinc-950 font-bold text-xs shadow-xs transition"
+                className="w-full py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider cursor-pointer transition"
               >
                 {editingSession ? 'Update Session' : 'Save Session'}
               </button>

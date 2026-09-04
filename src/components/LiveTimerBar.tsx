@@ -37,43 +37,37 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
   return (
     <div
       id="croakle-live-timer-activity"
-      className="absolute bottom-22 left-1/2 -translate-x-1/2 z-35 w-[92%] max-w-md animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto"
+      className="absolute bottom-16 left-1/2 -translate-x-1/2 z-35 w-[94%] max-w-[470px] pointer-events-auto"
     >
       <div 
         onClick={onOpenTimer}
-        className="cursor-pointer bg-white/85 dark:bg-zinc-900/90 text-zinc-900 dark:text-white backdrop-blur-2xl border border-white/80 dark:border-white/15 rounded-[28px] p-2.5 sm:p-3 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.04),inset_0_1.5px_2px_rgba(255,255,255,0.9)] dark:shadow-[0_20px_48px_rgba(0,0,0,0.7)] flex items-center justify-between gap-2.5 transition-all hover:scale-[1.01] active:scale-[0.99] ios-tap group"
+        className="cursor-pointer bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border border-[#1D1B18] dark:border-[#F8F7F4] p-2 sm:p-2.5 flex items-center justify-between gap-2 transition-all group"
       >
         {/* Left: Pulsing Icon & Subject Info */}
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <div className="relative w-9 h-9 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/15 flex items-center justify-center shrink-0 shadow-2xs">
-            <Timer size={18} className="text-[#007AFF] dark:text-[#0A84FF]" />
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="relative w-8 h-8 bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center shrink-0">
+            <Timer size={16} className="text-[#E63946]" />
             {activeTimer.isRunning && (
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white dark:border-zinc-900 animate-ping opacity-75" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#E63946] animate-ping opacity-75" />
             )}
-            <span className={`absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-zinc-900 ${
-              activeTimer.isRunning ? 'bg-emerald-500' : 'bg-amber-400'
+            <span className={`absolute -top-1 -right-1 w-1.5 h-1.5 ${
+              activeTimer.isRunning ? 'bg-[#2A9D8F]' : 'bg-[#E9C46A]'
             }`} />
           </div>
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <span className="font-bold text-xs text-zinc-900 dark:text-white truncate max-w-[120px] sm:max-w-[160px]">
+              <span className="font-mono font-bold text-xs text-[#1D1B18] dark:text-[#F8F7F4] truncate max-w-[120px] sm:max-w-[160px] uppercase">
                 {activeTimer.subject || 'Focus Session'}
               </span>
-              <span className={`text-[9px] font-bold uppercase px-1.5 py-0.2 rounded-md border ${typeColorMap[activeTimer.type] || typeColorMap.focus}`}>
+              <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                 {activeTimer.type}
               </span>
             </div>
-            <p className="text-[10px] text-zinc-500 dark:text-zinc-400 flex items-center gap-1 mt-0.5">
+            <p className="text-[9px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 flex items-center gap-1 mt-0.5 font-mono uppercase">
               <span>{activeTimer.isRunning ? 'Focusing' : 'Paused'}</span>
-              {activeTimer.initialStartedAt && (
-                <>
-                  <span>•</span>
-                  <span>Started {new Date(activeTimer.initialStartedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                </>
-              )}
               <span>•</span>
-              <span className="text-[#007AFF] dark:text-[#0A84FF] group-hover:underline flex items-center gap-0.5 font-medium">
+              <span className="text-[#E63946] group-hover:underline flex items-center gap-0.5 font-bold">
                 Open <ChevronRight size={10} />
               </span>
             </p>
@@ -81,7 +75,7 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
         </div>
 
         {/* Center/Right: Live Timer Digits */}
-        <div className="font-mono font-bold text-lg tracking-tight text-zinc-900 dark:text-white px-2 tabular-nums">
+        <div className="font-oswald font-bold text-base sm:text-lg tracking-tight text-[#1D1B18] dark:text-[#F8F7F4] px-1.5 tabular-nums">
           {formattedTime}
         </div>
 
@@ -92,9 +86,9 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
             type="button"
             onClick={onTogglePlayPause}
             title={activeTimer.isRunning ? 'Pause Timer' : 'Resume Timer'}
-            className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 flex items-center justify-center transition ios-tap"
+            className="w-7 h-7 bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
           >
-            {activeTimer.isRunning ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
+            {activeTimer.isRunning ? <Pause size={12} /> : <Play size={12} className="ml-0.5 fill-current" />}
           </button>
 
           {/* Quick Save / Finish */}
@@ -103,9 +97,9 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
               type="button"
               onClick={onFinishSession}
               title="Finish & Save Session"
-              className="w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-xs transition ios-tap"
+              className="w-7 h-7 bg-[#2A9D8F] text-white border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center transition font-bold cursor-pointer"
             >
-              <Check size={14} strokeWidth={2.5} />
+              <Check size={12} strokeWidth={2.5} />
             </button>
           )}
         </div>

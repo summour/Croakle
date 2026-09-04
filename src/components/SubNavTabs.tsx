@@ -9,7 +9,7 @@ interface SubNavTabsProps {
 
 export const SubNavTabs: React.FC<SubNavTabsProps> = ({ activePage, onNavigate, tabs }) => {
   return (
-    <nav className="flex items-center p-1 bg-zinc-200/60 dark:bg-zinc-800/60 backdrop-blur-2xl rounded-full border border-black/[0.04] dark:border-white/[0.08] shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] select-none">
+    <nav className="flex items-center p-1 bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] select-none gap-1">
       {tabs.map((tab) => {
         const isActive = activePage === tab.id;
         return (
@@ -18,13 +18,13 @@ export const SubNavTabs: React.FC<SubNavTabsProps> = ({ activePage, onNavigate, 
             id={`subnav-${tab.id}`}
             type="button"
             onClick={() => onNavigate(tab.id)}
-            className={`flex-1 py-1.5 px-3 rounded-full text-xs font-bold transition-all duration-200 flex items-center justify-center ios-tap relative ${
+            className={`flex-1 py-1 px-2 text-xs font-oswald font-bold tracking-wider uppercase transition-all duration-100 cursor-pointer border ${
               isActive
-                ? 'bg-white dark:bg-zinc-700/90 text-zinc-900 dark:text-white shadow-[0_2px_8px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,1)] scale-[1.01] z-10'
-                : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-white/30 dark:hover:bg-zinc-700/40 font-semibold'
+                ? 'bg-[#E63946] text-white border-[#1D1B18] dark:border-[#F8F7F4]'
+                : 'border-transparent text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
             }`}
           >
-            <span className="truncate tracking-tight">{tab.label}</span>
+            <span className="truncate">{tab.label}</span>
           </button>
         );
       })}

@@ -95,14 +95,14 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
   const selectedPoint = selectedDay ? points[selectedDay - 1] : null;
 
   return (
-    <div className="space-y-3 select-none">
+    <div className="space-y-3 select-none font-mono">
       {/* Minimalist Summary & Filter Row */}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <div className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/[0.03] dark:bg-white/[0.04] text-[#2d2823] dark:text-[#f4efe8]">
-            Avg <strong className="text-[#d98236]">{avgScore}</strong> / 5
+        <div className="flex items-center gap-1 flex-wrap">
+          <div className="px-2 py-0.5 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 text-[10px] font-bold uppercase bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4]">
+            Avg <strong className="text-[#E63946]">{avgScore}</strong> / 5
           </div>
-          <div className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/[0.03] dark:bg-white/[0.04] text-[#8c7e70] dark:text-[#a89b8d]">
+          <div className="px-2 py-0.5 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 text-[10px] font-bold uppercase bg-white dark:bg-[#1D1B18] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
             {positivityRate}% Positive
           </div>
         </div>
@@ -118,29 +118,19 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
                 key={ml.value}
                 type="button"
                 onClick={() => handleMoodFilterToggle(ml.value)}
-                className={`px-2.5 py-1 rounded-full text-[10.5px] font-bold flex items-center gap-1.5 transition-all ios-tap border ${
+                className={`px-2 py-0.5 text-[9px] font-bold uppercase flex items-center gap-1 transition cursor-pointer border ${
                   isFilterActive
-                    ? 'border-current shadow-xs scale-102'
-                    : 'bg-black/[0.02] dark:bg-white/[0.03] border-transparent text-[#8c7e70] dark:text-[#a89b8d] opacity-65 hover:opacity-100'
+                    ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18] border-[#1D1B18] dark:border-[#F8F7F4]'
+                    : 'bg-white dark:bg-[#1D1B18] border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
                 }`}
-                style={
-                  isFilterActive
-                    ? {
-                        backgroundColor: `${ml.color}15`,
-                        borderColor: `${ml.color}50`,
-                        color: ml.color,
-                        boxShadow: `0 0 10px ${ml.color}20`,
-                      }
-                    : undefined
-                }
                 title={`Filter by ${ml.label}`}
               >
                 <span
-                  className="w-2 h-2 rounded-full shrink-0"
-                  style={{ backgroundColor: ml.color, boxShadow: `0 0 6px ${ml.color}` }}
+                  className="w-1.5 h-1.5 shrink-0"
+                  style={{ backgroundColor: ml.color }}
                 />
                 <span className="truncate">{ml.label}</span>
-                <span className="opacity-65 text-[9px]">({count})</span>
+                <span className="opacity-60">({count})</span>
               </button>
             );
           })}
@@ -148,39 +138,21 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
             <button
               type="button"
               onClick={() => setActiveMoodFilter(null)}
-              className="p-1 rounded-full text-[#8c7e70] hover:text-[#2d2823] dark:hover:text-white"
+              className="p-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 text-[#1D1B18]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4] bg-white dark:bg-[#1D1B18]"
               title="Clear Filter"
             >
-              <X size={12} />
+              <X size={10} />
             </button>
           )}
         </div>
       </div>
 
       {/* Main SVG Mood Canvas */}
-      <div className="w-full rounded-[22px] bg-black/[0.02] dark:bg-white/[0.02] p-2.5 sm:p-3 border border-black/[0.04] dark:border-white/[0.05] overflow-hidden relative">
+      <div className="w-full bg-white dark:bg-[#1D1B18] p-2 sm:p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] overflow-hidden relative">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           className={`w-full h-auto ${compact ? 'aspect-[720/160]' : 'aspect-[720/210]'} overflow-visible`}
         >
-          <defs>
-            <filter id="neonTrendGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-
-            <linearGradient id="neonTrendLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#B026FF" />
-              <stop offset="25%" stopColor="#00E5FF" />
-              <stop offset="50%" stopColor="#00E676" />
-              <stop offset="75%" stopColor="#FF2A85" />
-              <stop offset="100%" stopColor="#FFE500" />
-            </linearGradient>
-          </defs>
-
           {/* Level Grid Lines */}
           {[5, 4, 3, 2, 1].map((lvl) => {
             const y = padTop + innerH - ((lvl - 1) / 4) * innerH;
@@ -194,7 +166,7 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
                   x2={svgWidth - padRight}
                   y2={y}
                   stroke="currentColor"
-                  className="text-black/[0.04] dark:text-white/[0.05]"
+                  className="text-black/[0.08] dark:text-white/[0.08]"
                   strokeDasharray="2 3"
                   strokeWidth="1"
                 />
@@ -202,39 +174,27 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
                   x={padLeft - 6}
                   y={y + 3}
                   textAnchor="end"
-                  className="text-[8px] font-semibold fill-[#8c7e70] dark:fill-[#a89b8d]"
+                  className="text-[8px] font-bold fill-[#1D1B18]/60 dark:fill-[#F8F7F4]/60"
                 >
-                  {moodObj?.label.slice(0, 3)}
+                  {moodObj?.label.slice(0, 3).toUpperCase()}
                 </text>
               </g>
             );
           })}
 
-          {/* Connected Neon Mood Line */}
+          {/* Connected Mood Line */}
           {moodLinePath && (
-            <>
-              <path
-                d={moodLinePath}
-                fill="none"
-                stroke="url(#neonTrendLineGrad)"
-                strokeWidth="3.5"
-                strokeOpacity="0.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                filter="url(#neonTrendGlow)"
-              />
-              <path
-                d={moodLinePath}
-                fill="none"
-                stroke="url(#neonTrendLineGrad)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </>
+            <path
+              d={moodLinePath}
+              fill="none"
+              stroke="#E63946"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           )}
 
-          {/* Interactive Neon Mood Points */}
+          {/* Interactive Mood Points */}
           {points.map((p) => {
             if (!p.moodValue || p.y === null || !p.moodObj) return null;
             const isSelected = selectedDay === p.day;
@@ -246,25 +206,15 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
                 onClick={() => handlePointTap(p.day)}
                 className="cursor-pointer"
               >
-                {/* Glow Halo */}
-                <circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={isSelected ? 9 : 5.5}
-                  fill={p.moodObj.color}
-                  fillOpacity={isSelected ? 0.45 : isDimmed ? 0.1 : 0.25}
-                  filter="url(#neonTrendGlow)"
-                  className="transition-all duration-150"
-                />
-
                 {/* Core point */}
-                <circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={isSelected ? 5.5 : isDimmed ? 2.5 : 3.8}
-                  fill={p.moodObj.color}
-                  stroke="#ffffff"
-                  strokeWidth={isSelected ? 2.2 : 1.2}
+                <rect
+                  x={p.x - (isSelected ? 4 : 2.5)}
+                  y={p.y - (isSelected ? 4 : 2.5)}
+                  width={isSelected ? 8 : 5}
+                  height={isSelected ? 8 : 5}
+                  fill={isSelected ? '#E63946' : p.moodObj.color}
+                  stroke="#1D1B18"
+                  strokeWidth="1"
                   className={`transition-all duration-150 ${isDimmed ? 'opacity-30' : 'opacity-100'}`}
                 />
               </g>
@@ -280,7 +230,7 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
                 x={p.x}
                 y={padTop + innerH + 13}
                 textAnchor="middle"
-                className="text-[8.5px] font-medium fill-[#8c7e70] dark:fill-[#a89b8d]"
+                className="text-[8.5px] font-bold font-mono fill-[#1D1B18]/60 dark:fill-[#F8F7F4]/60"
               >
                 {p.day}
               </text>
@@ -291,35 +241,28 @@ export const InteractiveMoodTrendChart: React.FC<InteractiveMoodTrendChartProps>
 
       {/* Selected Day Inspector Card */}
       {selectedPoint && selectedPoint.moodObj && (
-        <div className="rounded-[20px] bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.06] p-3.5 flex items-center justify-between animate-in fade-in duration-150">
+        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3 flex items-center justify-between animate-in fade-in duration-150">
           <div className="flex items-center gap-2.5">
             <div
-              className="w-7 h-7 rounded-[10px] flex items-center justify-center border"
+              className="w-6 h-6 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center"
               style={{
-                backgroundColor: `${selectedPoint.moodObj.color}15`,
-                borderColor: `${selectedPoint.moodObj.color}35`,
+                backgroundColor: `${selectedPoint.moodObj.color}20`,
               }}
             >
-              <FrogMoodIcon value={selectedPoint.moodObj.value} size={18} />
+              <FrogMoodIcon value={selectedPoint.moodObj.value} size={16} />
             </div>
             <div>
-              <strong className="text-xs font-bold text-[#2d2823] dark:text-[#f4efe8] block leading-tight">
+              <strong className="text-xs font-bold font-oswald uppercase text-[#1D1B18] dark:text-[#F8F7F4] block leading-tight">
                 Day {selectedPoint.day} — {selectedPoint.moodObj.label} ({selectedPoint.moodValue}/5)
               </strong>
-              <span className="text-[10px] text-[#8c7e70] dark:text-[#a89b8d]">
+              <span className="text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
                 {MONTH_NAMES[monthIndex]} {selectedPoint.day}, {year}
               </span>
             </div>
           </div>
 
           <div
-            className="px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all"
-            style={{
-              backgroundColor: `${selectedPoint.moodObj.color}15`,
-              borderColor: `${selectedPoint.moodObj.color}40`,
-              color: selectedPoint.moodObj.color,
-              boxShadow: `0 0 10px ${selectedPoint.moodObj.color}25`,
-            }}
+            className="px-2 py-0.5 text-[10px] font-bold font-oswald uppercase border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]"
           >
             {selectedPoint.moodObj.label}
           </div>

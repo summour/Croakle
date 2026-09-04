@@ -302,35 +302,36 @@ export const NotesView: React.FC<NotesViewProps> = ({
   return (
     <div className="space-y-4 pb-28" {...swipeHandlers}>
       {/* Sticky iOS Glass Header with Week Navigation & 7-Day Strip */}
-      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
-        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      {/* Sticky Header with Week Navigation & 7-Day Strip */}
+      <div className="sticky top-0 z-20 bg-[#F8F7F4] dark:bg-[#1D1B18] pt-1 pb-1 space-y-2.5">
+        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
               id="notes-prev-week"
               type="button"
               onClick={handleGoPrevWeek}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               aria-label="Previous Week"
               title="Previous Week"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={16} />
             </button>
 
             <button
               type="button"
               onClick={() => setIsCalendarOpen(true)}
-              className="flex flex-col items-center px-2.5 py-0.5 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+              className="flex flex-col items-center px-2.5 py-0.5 border border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition cursor-pointer group"
               title="Click to open calendar"
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
                 Daily Journal
               </p>
               <div className="flex items-center gap-2">
-                <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+                <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
                   {MONTH_NAMES[monthIndex]} {year}
                 </strong>
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                   {currentWeek?.label}
                 </span>
               </div>
@@ -340,16 +341,16 @@ export const NotesView: React.FC<NotesViewProps> = ({
               id="notes-next-week"
               type="button"
               onClick={handleGoNextWeek}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               aria-label="Next Week"
               title="Next Week"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={16} />
             </button>
           </div>
 
           {/* 7-Day Interactive Strip */}
-          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+          <div className="grid grid-cols-7 gap-1 pt-1 border-t border-[#1D1B18] dark:border-[#F8F7F4]">
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === selectedDateIso;
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
@@ -362,24 +363,24 @@ export const NotesView: React.FC<NotesViewProps> = ({
                   onClick={() => {
                     if (onSelectDate) onSelectDate(wd.date);
                   }}
-                  className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
+                  className={`py-1.5 text-center flex flex-col items-center gap-0.5 border transition-all duration-100 font-mono text-xs cursor-pointer ${
                     !wd.inMonth
-                      ? 'opacity-25 text-zinc-400'
+                      ? 'opacity-25 border-transparent text-[#1D1B18]/40 dark:text-[#F8F7F4]/40'
                       : isSelected
-                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
+                      ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18] border-[#1D1B18] dark:border-[#F8F7F4] font-bold'
                       : wd.isCurrentDay
-                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
+                      ? 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-[#E63946] font-bold'
+                      : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
                   }`}
                 >
-                  <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
-                  <span className="text-sm font-black">{wd.date.getDate()}</span>
+                  <span className="text-[9px] uppercase opacity-70">{dayName}</span>
+                  <span className="font-bold">{wd.date.getDate()}</span>
                   {noteCount > 0 && (
                     <span
-                      className={`w-1 h-1 rounded-full ${
+                      className={`w-1 h-1 ${
                         isSelected
-                          ? 'bg-white dark:bg-zinc-950'
-                          : 'bg-zinc-950 dark:bg-white'
+                          ? 'bg-[#F8F7F4] dark:bg-[#1D1B18]'
+                          : 'bg-[#E63946]'
                       }`}
                     />
                   )}
@@ -395,33 +396,33 @@ export const NotesView: React.FC<NotesViewProps> = ({
             id="CroakleOpenAddNote"
             type="button"
             onClick={handleOpenAdd}
-            className="flex-1 py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
+            className="add-btn flex-1 py-2 text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 font-bold"
           >
-            <Plus size={16} className="shrink-0" />
+            <Plus size={14} className="shrink-0" />
             <span>New Entry</span>
           </button>
 
           {/* Scope Segment: Day / Week / Month / All */}
-          <div className="flex items-center p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[20px] border border-black/[0.04] dark:border-white/[0.06] shrink-0">
+          <div className="flex items-center p-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] shrink-0 font-mono">
             {(['day', 'week', 'month', 'all'] as const).map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setScopeMode(s)}
-                className={`px-2.5 py-1 rounded-[16px] text-[11px] font-black capitalize transition-all ios-tap ${
+                className={`px-2 py-1 text-[10px] font-bold uppercase transition-all cursor-pointer ${
                   scopeMode === s
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                    ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                    : 'text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
                 }`}
               >
-                {s === 'day' ? 'Day' : s === 'week' ? 'Week' : s === 'month' ? 'Month' : 'All'}
+                {s === 'day' ? 'Day' : s === 'week' ? 'Week' : s === 'month' ? 'Mon' : 'All'}
               </button>
             ))}
           </div>
         </div>
 
         {/* Category Filter Tabs */}
-        <div className="grid grid-cols-4 gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 rounded-[18px] border border-black/[0.04] dark:border-white/[0.06]">
+        <div className="grid grid-cols-4 gap-1 p-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18]">
           {(['all', 'mood', 'habit', 'project'] as const).map((tab) => {
             const tabConfig: Record<string, { label: string }> = {
               all: { label: 'All' },
@@ -436,10 +437,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 key={tab}
                 type="button"
                 onClick={() => setFilterType(tab)}
-                className={`min-w-0 py-2 px-1 sm:px-2 rounded-[14px] text-[11px] sm:text-xs font-black capitalize transition-all duration-150 ios-tap flex items-center justify-center ${
+                className={`min-w-0 py-1.5 px-1 font-mono text-[10px] font-bold uppercase transition-all cursor-pointer flex items-center justify-center ${
                   isActive
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-[0_2px_6px_rgba(0,0,0,0.08)] z-10'
-                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+                    ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                    : 'text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]'
                 }`}
               >
                 <span className="truncate">{config.label}</span>
@@ -451,19 +452,19 @@ export const NotesView: React.FC<NotesViewProps> = ({
         {/* Search & Layout Density Toggle Bar */}
         <div className="flex items-center justify-between gap-2">
           <div className="relative flex-1">
-            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 pointer-events-none" />
             <input
               type="text"
-              placeholder="Search notes, habits, moods..."
+              placeholder="Search entries..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 rounded-[14px] bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs text-zinc-950 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:border-zinc-950 dark:focus:border-white"
+              className="w-full pl-8 pr-3 py-1.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] font-mono text-xs text-[#1D1B18] dark:text-[#F8F7F4] placeholder:text-[#1D1B18]/40 dark:placeholder:text-[#F8F7F4]/40 focus:outline-none"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4]"
               >
                 <X size={12} />
               </button>
@@ -471,15 +472,15 @@ export const NotesView: React.FC<NotesViewProps> = ({
           </div>
 
           {/* Density switch: Comfortable vs Compact */}
-          <div className="flex items-center p-0.5 bg-zinc-100 dark:bg-zinc-900 rounded-[12px] shrink-0 border border-black/[0.04] dark:border-white/[0.06]">
+          <div className="flex items-center border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] shrink-0 p-0.5">
             <button
               type="button"
               onClick={() => setViewDensity('comfortable')}
               title="Comfortable Reading Mode"
-              className={`p-1.5 rounded-[10px] transition-all ios-tap ${
+              className={`p-1.5 transition-all cursor-pointer ${
                 viewDensity === 'comfortable'
-                  ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                  : 'text-zinc-400 hover:text-zinc-900'
+                  ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                  : 'text-[#1D1B18]/40 hover:text-[#1D1B18]'
               }`}
             >
               <Layers size={14} />
@@ -488,10 +489,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
               type="button"
               onClick={() => setViewDensity('compact')}
               title="Compact List Mode"
-              className={`p-1.5 rounded-[10px] transition-all ios-tap ${
+              className={`p-1.5 transition-all cursor-pointer ${
                 viewDensity === 'compact'
-                  ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-2xs'
-                  : 'text-zinc-400 hover:text-zinc-900'
+                  ? 'bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                  : 'text-[#1D1B18]/40 hover:text-[#1D1B18]'
               }`}
             >
               <LayoutList size={14} />
@@ -503,10 +504,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
       {/* Date-Grouped Notes Timeline */}
       <div className="space-y-4 pt-1">
         {filteredNotes.length === 0 ? (
-          <div className="ios-glass-card p-8 text-center text-zinc-400 dark:text-zinc-500 space-y-2">
+          <div className="border border-dashed border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 p-8 text-center text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 space-y-2">
             <div>
-              <p className="font-bold text-sm text-zinc-950 dark:text-white">No entries found</p>
-              <p className="text-xs mt-0.5 text-zinc-500 dark:text-zinc-400">
+              <p className="font-bold font-oswald text-sm text-[#1D1B18] dark:text-[#F8F7F4] uppercase">No entries found</p>
+              <p className="text-xs font-mono mt-0.5 text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
                 {scopeMode === 'month'
                   ? `No journal entries matching filter for ${MONTH_NAMES[monthIndex]} ${year}.`
                   : 'Begin writing your thoughts, daily observations, or reflections.'}
@@ -521,37 +522,37 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 {/* Date Group Header */}
                 <div className="flex items-center justify-between px-1 pt-2">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-zinc-950 dark:bg-white" />
-                    <strong className="text-sm sm:text-base font-black text-zinc-950 dark:text-white tracking-tight">
+                    <span className="w-1.5 h-1.5 bg-[#E63946]" />
+                    <strong className="text-sm sm:text-base font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-tight">
                       {friendlyHeader}
                     </strong>
                   </div>
-                  <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60">
+                  <span className="text-[10px] font-mono font-bold text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 px-2 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18]">
                     {group.items.length} {group.items.length === 1 ? 'entry' : 'entries'}
                   </span>
                 </div>
 
                 {/* Group Items */}
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {group.items.map((note) => {
                     const content = getResolvedContent(note);
 
                     return (
                       <div
                         key={note.id}
-                        className={`rounded-[22px] sm:rounded-[24px] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 shadow-[0_2px_12px_rgba(0,0,0,0.03)] dark:shadow-none transition-all duration-200 hover:border-zinc-300 dark:hover:border-zinc-700 ${
-                          viewDensity === 'compact' ? 'p-3.5 space-y-2' : 'p-4 sm:p-5 space-y-3'
+                        className={`card bg-white dark:bg-[#1D1B18] ${
+                          viewDensity === 'compact' ? 'p-3 space-y-2' : 'p-4 space-y-2.5'
                         }`}
                       >
                         {/* Header info row */}
-                        <div className="flex items-center justify-between gap-2 pb-1 border-b border-zinc-100 dark:border-zinc-800/80">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-[11px] sm:text-xs font-black uppercase px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700/80">
+                        <div className="flex items-center justify-between gap-2 pb-1 border-b border-[#1D1B18]/15 dark:border-[#F8F7F4]/20">
+                          <div className="flex flex-wrap items-center gap-1.5 font-mono">
+                            <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                               {note.type}
                             </span>
 
                             {note.sourceName && (
-                              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-[#007AFF] dark:bg-blue-950/40 dark:text-[#3894FF] border border-blue-200/80 dark:border-blue-800/40 truncate max-w-[180px]">
+                              <span className="text-[9px] font-bold px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] truncate max-w-[180px]">
                                 {note.sourceName}
                               </span>
                             )}
@@ -560,8 +561,8 @@ export const NotesView: React.FC<NotesViewProps> = ({
                               const moodObj = MOOD_LEVELS.find((m) => m.value === note.moodValue);
                               if (!moodObj) return null;
                               return (
-                                <span className={`text-xs font-black px-2.5 py-1 rounded-full border flex items-center gap-1.5 shadow-2xs ${moodObj.bgLight} ${moodObj.bgDark} ${moodObj.borderLight} ${moodObj.borderDark} ${moodObj.textColorLight} ${moodObj.textColorDark}`}>
-                                  <FrogMoodIcon value={moodObj.value} size={15} />
+                                <span className="text-[9px] font-bold px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center gap-1 text-[#1D1B18] dark:text-[#F8F7F4]">
+                                  <FrogMoodIcon value={moodObj.value} size={13} />
                                   <span>{moodObj.label}</span>
                                 </span>
                               );
@@ -573,10 +574,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
                             <button
                               type="button"
                               onClick={() => handleOpenEdit(note)}
-                              className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all ios-tap"
+                              className="p-1 text-[#1D1B18]/50 hover:text-[#1D1B18] dark:text-[#F8F7F4]/50 dark:hover:text-[#F8F7F4] cursor-pointer"
                               title="Edit"
                             >
-                              <Edit3 size={15} />
+                              <Edit3 size={14} />
                             </button>
                             {deletingNoteId === note.id ? (
                               <div className="flex items-center gap-1">
@@ -586,14 +587,14 @@ export const NotesView: React.FC<NotesViewProps> = ({
                                     onDeleteNote(note.id);
                                     setDeletingNoteId(null);
                                   }}
-                                  className="px-2.5 py-1 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black transition-all ios-tap"
+                                  className="px-2 py-0.5 bg-[#E63946] text-white text-[10px] font-mono font-bold uppercase cursor-pointer"
                                 >
                                   Delete
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => setDeletingNoteId(null)}
-                                  className="px-2 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all ios-tap"
+                                  className="px-2 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] text-[10px] font-mono font-bold uppercase cursor-pointer"
                                 >
                                   Cancel
                                 </button>
@@ -602,10 +603,10 @@ export const NotesView: React.FC<NotesViewProps> = ({
                               <button
                                 type="button"
                                 onClick={() => setDeletingNoteId(note.id)}
-                                className="p-1.5 rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all ios-tap"
+                                className="p-1 text-[#1D1B18]/50 hover:text-[#E63946] dark:text-[#F8F7F4]/50 dark:hover:text-[#E63946] cursor-pointer"
                                 title="Delete"
                               >
-                                <Trash2 size={15} />
+                                <Trash2 size={14} />
                               </button>
                             )}
                           </div>
@@ -613,17 +614,15 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
                         {/* Title if present */}
                         {note.title && (
-                          <h3 className="font-black text-base sm:text-lg text-zinc-950 dark:text-white tracking-tight leading-snug">
+                          <h4 className="font-bold font-oswald text-base text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-tight">
                             {note.title}
-                          </h3>
+                          </h4>
                         )}
 
-                        {/* Body Text / Content */}
-                        <div className="pt-0.5">
-                          <p className="text-sm sm:text-base leading-relaxed sm:leading-relaxed text-zinc-850 dark:text-zinc-100 font-normal whitespace-pre-wrap break-words">
-                            {content}
-                          </p>
-                        </div>
+                        {/* Note text content */}
+                        <p className="text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] leading-relaxed whitespace-pre-wrap">
+                          {content}
+                        </p>
                       </div>
                     );
                   })}
@@ -639,9 +638,9 @@ export const NotesView: React.FC<NotesViewProps> = ({
             <button
               type="button"
               onClick={() => setVisibleLimit((prev) => prev + 35)}
-              className="py-2.5 px-6 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-black text-zinc-800 dark:text-zinc-200 hover:border-black dark:hover:border-white shadow-xs transition-all ios-tap"
+              className="py-2 px-4 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] font-mono text-xs font-bold uppercase tracking-wider text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#1D1B18] hover:text-[#F8F7F4] dark:hover:bg-[#F8F7F4] dark:hover:text-[#1D1B18] transition-all cursor-pointer"
             >
-              Load More Entries ({visibleLimit} of {filteredNotes.length})
+              Load More ({visibleLimit} of {filteredNotes.length})
             </button>
           </div>
         )}
@@ -649,12 +648,12 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
       {/* Add / Edit Note Modal */}
       {(isAddOpen || editingNote) && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
+        <div className="fixed inset-0 z-50 bg-[#1D1B18]/50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-6 w-full max-w-md space-y-4">
+            <div className="flex items-center justify-between border-b border-[#1D1B18] dark:border-[#F8F7F4] pb-3">
               <div className="flex items-center gap-2">
-                <WashiJournalDockIcon size={22} className="text-zinc-950 dark:text-white" />
-                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">
+                <WashiJournalDockIcon size={20} className="text-[#1D1B18] dark:text-[#F8F7F4]" />
+                <h2 className="text-xl font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">
                   {editingNote ? 'Edit Entry' : 'New Journal Entry'}
                 </h2>
               </div>
@@ -664,26 +663,26 @@ export const NotesView: React.FC<NotesViewProps> = ({
                   setIsAddOpen(false);
                   setEditingNote(null);
                 }}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300"
+                className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
 
             <form onSubmit={editingNote ? handleEditSubmit : handleAddSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Date</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1">Date</label>
                   <input
                     type="date"
                     required
                     value={formDate}
                     onChange={(e) => setFormDate(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-950 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    className="w-full px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Category</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1">Category</label>
                   <select
                     value={formType}
                     onChange={(e) => {
@@ -693,7 +692,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                       setFormSourceName('');
                       if (val !== 'mood') setFormMoodValue(undefined);
                     }}
-                    className="w-full px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-950 dark:text-white font-bold focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    className="w-full px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   >
                     <option value="habit">Habit Note</option>
                     <option value="project">Project Note</option>
@@ -706,7 +705,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
               {/* Dynamic Target Picker based on category */}
               {formType === 'habit' && habits.length > 0 && (
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Related Habit</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1">Related Habit</label>
                   <select
                     value={formSourceId}
                     onChange={(e) => {
@@ -715,7 +714,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                       const found = habits.find((h) => h.id === id);
                       setFormSourceName(found ? found.name : '');
                     }}
-                    className="w-full px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    className="w-full px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   >
                     <option value="">-- Select Habit (Optional) --</option>
                     {habits.map((h) => (
@@ -729,7 +728,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
               {formType === 'project' && projects.length > 0 && (
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Related Project</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1">Related Project</label>
                   <select
                     value={formSourceId}
                     onChange={(e) => {
@@ -738,7 +737,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                       const found = projects.find((p) => p.id === id);
                       setFormSourceName(found ? found.name : '');
                     }}
-                    className="w-full px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    className="w-full px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                   >
                     <option value="">-- Select Project (Optional) --</option>
                     {projects.map((p) => (
@@ -752,7 +751,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
 
               {formType === 'mood' && (
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Mood Rating</label>
+                  <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1.5">Mood Rating</label>
                   <div className="grid grid-cols-5 gap-1.5">
                     {MOOD_LEVELS.map((m) => {
                       const isSelected = formMoodValue === m.value;
@@ -761,16 +760,16 @@ export const NotesView: React.FC<NotesViewProps> = ({
                           key={m.value}
                           type="button"
                           onClick={() => setFormMoodValue(m.value)}
-                          className={`py-2 px-1 rounded-xl border flex flex-col items-center gap-1 transition-all ios-tap bg-white dark:bg-zinc-800 ${
+                          className={`py-2 px-1 border flex flex-col items-center gap-1 transition-all cursor-pointer ${
                             isSelected
-                              ? 'border-zinc-950 dark:border-white ring-2 ring-zinc-950/20 dark:ring-white/20 scale-105 shadow-xs'
-                              : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 hover:scale-102'
+                              ? 'border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18]'
+                              : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4]'
                           }`}
                         >
-                          <div className="w-7 h-7 rounded-full flex items-center justify-center">
-                            <FrogMoodIcon value={m.value} size={22} />
+                          <div className="w-6 h-6 flex items-center justify-center">
+                            <FrogMoodIcon value={m.value} size={20} />
                           </div>
-                          <span className="text-[10px] font-bold text-zinc-700 dark:text-zinc-300">{m.label}</span>
+                          <span className="text-[9px] font-mono font-bold uppercase">{m.label}</span>
                         </button>
                       );
                     })}
@@ -779,46 +778,46 @@ export const NotesView: React.FC<NotesViewProps> = ({
               )}
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1">
                   Title (Optional)
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. Morning Reflection, Breakthrough on project..."
+                  placeholder="e.g. Morning Reflection..."
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                  className="w-full px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
+                <label className="block text-xs font-mono font-bold uppercase text-[#1D1B18]/70 dark:text-[#F8F7F4]/70 mb-1">
                   Journal Content
                 </label>
                 <textarea
                   rows={4}
                   required
-                  placeholder="What's on your mind today? Write notes, lessons, or reflections..."
+                  placeholder="What's on your mind today?..."
                   value={formText}
                   onChange={(e) => setFormText(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-sm text-zinc-950 dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                  className="w-full px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-mono text-[#1D1B18] dark:text-[#F8F7F4] focus:outline-none resize-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#1D1B18] dark:border-[#F8F7F4]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddOpen(false);
                     setEditingNote(null);
                   }}
-                  className="px-4 py-2.5 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-xs font-bold text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white transition"
+                  className="px-3 py-2 border border-[#1D1B18] dark:border-[#F8F7F4] text-xs font-mono font-bold uppercase text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-black shadow-md transition"
+                  className="px-4 py-2 bg-[#1D1B18] text-[#F8F7F4] dark:bg-[#F8F7F4] dark:text-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] text-xs font-mono font-bold uppercase hover:bg-black dark:hover:bg-white transition cursor-pointer"
                 >
                   {editingNote ? 'Save Changes' : 'Create Entry'}
                 </button>

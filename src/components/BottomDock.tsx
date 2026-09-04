@@ -1,6 +1,5 @@
 import React from 'react';
 import { PageType } from '../types';
-import { CheckSquare, FileText, Timer, BarChart3, Settings } from 'lucide-react';
 
 interface BottomDockProps {
   activePage: PageType;
@@ -13,47 +12,45 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
     id: PageType;
     activeKeys: PageType[];
     label: string;
-    icon: React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>;
   }[] = [
     {
       id: 'mood',
-      activeKeys: ['mood', 'track', 'project', 'best'],
-      label: 'Trackers',
-      icon: CheckSquare,
+      activeKeys: ['mood'],
+      label: 'Mood',
     },
     {
-      id: 'notes',
-      activeKeys: ['notes'],
-      label: 'Journal',
-      icon: FileText,
+      id: 'track',
+      activeKeys: ['track', 'best'],
+      label: 'Habits',
+    },
+    {
+      id: 'project',
+      activeKeys: ['project'],
+      label: 'Projects',
     },
     {
       id: 'time',
       activeKeys: ['time'],
       label: 'Focus',
-      icon: Timer,
     },
     {
-      id: 'analysis',
-      activeKeys: ['analysis'],
-      label: 'Analytics',
-      icon: BarChart3,
+      id: 'notes',
+      activeKeys: ['notes', 'analysis'],
+      label: 'Journal',
     },
     {
       id: 'settings',
       activeKeys: ['settings'],
       label: 'Settings',
-      icon: Settings,
     },
   ];
 
   return (
     <footer
       id="croakle-bottom-dock"
-      className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[260px] max-w-sm bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl border border-zinc-200/80 dark:border-zinc-800 rounded-full p-1.5 shadow-lg shadow-zinc-950/5 flex items-center justify-center gap-1 transition-all duration-200"
+      className="shrink-0 w-full bg-white dark:bg-[#1D1B18] border-t border-[#1D1B18] dark:border-[#F8F7F4] px-4 sm:px-6 py-3.5 flex items-center justify-between z-30 transition-colors"
     >
       {groups.map((group) => {
-        const Icon = group.icon;
         const isActive = group.activeKeys.includes(activePage);
 
         return (
@@ -61,31 +58,17 @@ export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage
             key={group.id}
             id={`dock-nav-${group.id}`}
             type="button"
-            onClick={() => {
-              if (!group.activeKeys.includes(activePage)) {
-                onSelectPage(group.id);
-              }
-            }}
-            title={group.label}
-            aria-label={group.label}
-            className={`flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full transition-all duration-150 ios-tap relative ${
+            onClick={() => onSelectPage(group.id)}
+            className={`nav-item text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.1em] font-bold py-1 transition-all cursor-pointer relative ${
               isActive
-                ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold'
-                : 'text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                ? 'text-[#1D1B18] dark:text-[#F8F7F4] border-b-2 border-[#E63946]'
+                : 'text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4] border-b-2 border-transparent'
             }`}
           >
-            <div className="relative flex items-center justify-center">
-              <Icon
-                size={20}
-                strokeWidth={isActive ? 2.2 : 1.7}
-              />
-              {group.id === 'time' && isTimerRunning && (
-                <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-950 dark:bg-white opacity-60" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-950 dark:bg-white border border-white dark:border-zinc-900" />
-                </span>
-              )}
-            </div>
+            <span>{group.label}</span>
+            {group.id === 'time' && isTimerRunning && (
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E63946] ml-1 align-middle animate-pulse" />
+            )}
           </button>
         );
       })}

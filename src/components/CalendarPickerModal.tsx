@@ -131,37 +131,37 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1D1B18]/50 select-none"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-5 shadow-2xl space-y-4 animate-scale-in select-none"
+        className="w-full max-w-sm bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 space-y-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between pb-2 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="flex items-center justify-between pb-2 border-b border-[#1D1B18] dark:border-[#F8F7F4]">
           <div className="flex items-center gap-2">
-            <CalendarIcon size={16} className="text-zinc-700 dark:text-zinc-300" />
-            <h3 className="text-sm font-black text-zinc-950 dark:text-white uppercase tracking-wider">
+            <CalendarIcon size={16} className="text-[#1D1B18] dark:text-[#F8F7F4]" />
+            <h3 className="text-base font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">
               {title}
             </h3>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 font-mono">
             <button
               type="button"
               onClick={handleJumpToday}
-              className="px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition"
+              className="px-2.5 py-1 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] text-[10px] font-bold uppercase transition hover:bg-[#F8F7F4] dark:hover:bg-[#252320] cursor-pointer"
             >
               Today
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition"
+              className="p-1 border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] transition cursor-pointer"
               aria-label="Close"
             >
-              <X size={16} />
+              <X size={14} />
             </button>
           </div>
         </div>
@@ -171,21 +171,21 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
           <button
             type="button"
             onClick={handlePrevMonth}
-            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-800 dark:text-zinc-200 transition active:scale-95"
+            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             aria-label="Previous Month"
           >
             <ChevronLeft size={16} />
           </button>
 
-          <div className="flex items-center gap-1.5 font-black text-base text-zinc-950 dark:text-white">
+          <div className="flex items-center gap-1.5 font-bold font-oswald text-base text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-tight">
             <span>{MONTH_NAMES[viewMonth]}</span>
-            <span className="text-zinc-400 dark:text-zinc-500">{viewYear}</span>
+            <span className="text-[#1D1B18]/50 dark:text-[#F8F7F4]/50">{viewYear}</span>
           </div>
 
           <button
             type="button"
             onClick={handleNextMonth}
-            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-800 dark:text-zinc-200 transition active:scale-95"
+            className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             aria-label="Next Month"
           >
             <ChevronRight size={16} />
@@ -193,7 +193,7 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
         </div>
 
         {/* Days of Week Header (Mo Tu We Th Fr Sa Su) */}
-        <div className="grid grid-cols-7 gap-1 text-center font-bold text-[11px] text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+        <div className="grid grid-cols-7 gap-1 text-center font-mono font-bold text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase tracking-wider">
           {DAY_SHORT_NAMES.map((d) => (
             <div key={d} className="py-1">
               {d}
@@ -202,7 +202,7 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
         </div>
 
         {/* Days Grid */}
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1 font-mono text-xs">
           {cells.map((cell) => {
             const isCurrent = cell.inCurrentMonth;
             return (
@@ -210,17 +210,19 @@ export const CalendarPickerModal: React.FC<CalendarPickerModalProps> = ({
                 key={cell.iso}
                 type="button"
                 onClick={() => handleSelectDay(cell.date)}
-                className={`aspect-square w-full rounded-xl flex flex-col items-center justify-center font-bold text-xs transition-all relative ${
+                className={`aspect-square w-full border flex flex-col items-center justify-center font-bold text-xs transition-all relative cursor-pointer ${
                   cell.isSelected
-                    ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 shadow-md scale-105 z-10'
+                    ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18] border-[#1D1B18] dark:border-[#F8F7F4]'
+                    : cell.isToday
+                    ? 'border-[#E63946] text-[#1D1B18] dark:text-[#F8F7F4] bg-white dark:bg-[#1D1B18]'
                     : isCurrent
-                    ? 'text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800'
-                    : 'text-zinc-300 dark:text-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-800/40'
+                    ? 'border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4]'
+                    : 'border-transparent text-[#1D1B18]/25 dark:text-[#F8F7F4]/25'
                 }`}
               >
                 <span>{cell.dayNum}</span>
                 {cell.isToday && !cell.isSelected && (
-                  <span className="w-1 h-1 rounded-full bg-zinc-950 dark:bg-white absolute bottom-1" />
+                  <span className="w-1 h-1 bg-[#E63946] absolute bottom-1" />
                 )}
               </button>
             );

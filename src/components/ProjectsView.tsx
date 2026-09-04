@@ -217,35 +217,36 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       )}
 
       {/* Sticky iOS 26 Glass Header with integrated Month & Week navigation */}
-      <div className="sticky top-0 z-20 bg-white/85 dark:bg-black/85 backdrop-blur-2xl pt-1 pb-1 space-y-2.5">
-        <div className="ios-glass-card p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
+      {/* TOP: DATE / WEEK NAVIGATOR (Minimalist Variation 12) */}
+      <div className="sticky top-0 z-20 bg-[#F8F7F4] dark:bg-[#1D1B18] pt-1 pb-1 space-y-2.5">
+        <div className="border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-3.5 sm:p-4 space-y-3 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">
             <button
               id="project-prev-week"
               type="button"
               onClick={handleGoPrevWeek}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               aria-label="Previous Week"
               title="Previous Week"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={16} />
             </button>
 
             <button
               type="button"
               onClick={() => setIsCalendarOpen(true)}
-              className="flex flex-col items-center px-2.5 py-0.5 -my-1 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition active:scale-95 cursor-pointer group"
+              className="flex flex-col items-center px-2.5 py-0.5 border border-transparent hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition cursor-pointer group"
               title="Click to open calendar"
             >
-              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                Projects
+              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+                Project Tracker
               </p>
               <div className="flex items-center gap-2">
-                <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-black tracking-tight text-zinc-950 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
+                <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">
                   {MONTH_NAMES[monthIndex]} {year}
                 </strong>
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]">
                   {currentWeek?.label}
                 </span>
               </div>
@@ -255,47 +256,48 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               id="project-next-week"
               type="button"
               onClick={handleGoNextWeek}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center font-bold text-zinc-800 dark:text-zinc-200 transition-all ios-tap"
+              className="w-7 h-7 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] flex items-center justify-center font-bold text-[#1D1B18] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
               aria-label="Next Week"
               title="Next Week"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={16} />
             </button>
           </div>
 
           {/* 7-Day Interactive Strip */}
-          <div className="grid grid-cols-7 gap-1.5 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+          <div className="grid grid-cols-7 gap-1 pt-1 border-t border-[#1D1B18] dark:border-[#F8F7F4]">
             {weekDays.map((wd) => {
               const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
               const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+              const dayOfMonth = wd.date.getDate();
               const weekKeyForDay = getWeekKey(wd.date);
-              const hasActivity = projects.some(
-                (p) => p.weeklyDays?.[weekKeyForDay]?.[wd.dayIndex] === true
-              );
+              const hasActivity =
+                wd.inMonth &&
+                projects.some(
+                  (p) => p.weeklyDays?.[weekKeyForDay]?.[wd.dayIndex] === true
+                );
 
               return (
                 <button
                   key={wd.iso}
                   type="button"
                   onClick={() => onSelectDate(wd.date)}
-                  className={`py-1.5 rounded-[16px] text-center flex flex-col items-center gap-0.5 transition-all duration-200 ios-tap ${
+                  className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono transition-all duration-100 cursor-pointer border ${
                     !wd.inMonth
-                      ? 'opacity-25 text-zinc-400'
+                      ? 'opacity-30 border-dashed border-[#1D1B18] dark:border-[#F8F7F4]'
                       : isSelected
-                      ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 font-black shadow-[0_4px_12px_rgba(0,0,0,0.25)] scale-[1.05]'
+                      ? 'bg-[#E63946] text-white font-bold border-[#1D1B18] dark:border-[#F8F7F4]'
                       : wd.isCurrentDay
-                      ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-white font-bold border border-zinc-300 dark:border-zinc-700'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 font-semibold'
+                      ? 'bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold border-[#1D1B18] dark:border-[#F8F7F4]'
+                      : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border-[#1D1B18] dark:border-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
                   }`}
                 >
-                  <span className="text-[10px] uppercase font-bold opacity-75">{dayName}</span>
-                  <span className="text-sm font-black">{wd.date.getDate()}</span>
+                  <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
+                  <span className="text-sm font-bold">{dayOfMonth}</span>
                   {hasActivity && (
                     <span
-                      className={`w-1 h-1 rounded-full ${
-                        isSelected
-                          ? 'bg-white dark:bg-zinc-950'
-                          : 'bg-zinc-950 dark:bg-white'
+                      className={`w-1.5 h-1.5 mt-0.5 ${
+                        isSelected ? 'bg-white' : 'bg-[#E63946]'
                       }`}
                     />
                   )}
@@ -305,60 +307,62 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           </div>
         </div>
 
-        {/* Action Buttons: Add Project, Completed Toggle & Reorder (Locked on a single line) */}
+        {/* Action Bar: Add Project, Done & Order */}
         <div className="flex items-center gap-2">
           <button
             id="CroakleOpenAddProject"
             type="button"
             onClick={handleOpenAdd}
-            className="flex-1 py-2.5 px-4 rounded-[20px] bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-[0_4px_14px_rgba(0,0,0,0.15)] transition-all ios-tap"
+            className="add-btn flex-1 py-2 px-3 flex items-center justify-center gap-1.5 transition-all cursor-pointer text-center"
           >
-            <Plus size={16} className="shrink-0" />
-            <span>Add Project</span>
+            <Plus size={14} className="shrink-0" />
+            <span>ADD</span>
           </button>
           <button
             type="button"
             onClick={() => setShowArchived(!showArchived)}
-            className={`py-2.5 px-3 rounded-[20px] border font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-all shrink-0 whitespace-nowrap ios-tap ${
+            className={`py-2 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] font-mono font-bold text-xs uppercase tracking-wider flex items-center gap-1 transition-all shrink-0 whitespace-nowrap cursor-pointer ${
               showArchived
-                ? 'bg-zinc-900 text-white border-zinc-800'
-                : 'bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                ? 'bg-[#E63946] text-white'
+                : 'bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] hover:bg-[#F8F7F4] dark:hover:bg-[#252320]'
             }`}
           >
-            <Archive size={14} className="shrink-0" />
+            <Archive size={13} className="shrink-0" />
             <span>{showArchived ? 'Active' : `Done (${archivedProjects.length})`}</span>
           </button>
           <button
             id="CroakleOpenReorderProject"
             type="button"
             onClick={() => setIsReorderOpen(true)}
-            className="py-2.5 px-3 rounded-[20px] bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 font-bold text-xs flex items-center justify-center gap-1 shadow-2xs transition-all ios-tap shrink-0"
+            className="py-2 px-2.5 bg-white dark:bg-[#1D1B18] text-[#1D1B18] dark:text-[#F8F7F4] border border-[#1D1B18] dark:border-[#F8F7F4] font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer shrink-0 hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             title="Reorder Projects"
           >
-            <ArrowUpDown size={14} />
-            <span>Reorder</span>
+            <ArrowUpDown size={13} />
+            <span>Order</span>
           </button>
         </div>
       </div>
 
-      {/* Project List */}
-      <div className="ios-glass-card p-4 sm:p-5 space-y-4">
+      {/* Main Projects List Container */}
+      <div className="space-y-4">
         {displayedProjects.length === 0 ? (
-          <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-3xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center p-2 shadow-xs text-zinc-500 dark:text-zinc-400">
-              <BambooScrollDockIcon size={36} />
-            </div>
-            <div>
-              <p className="font-bold text-sm text-zinc-950 dark:text-white">
-                {showArchived ? 'No completed projects yet' : 'No active projects right now'}
-              </p>
-              <p className="text-xs mt-0.5">
-                {showArchived ? 'Finished projects will be archived here' : 'Tap "+ Add Project" to get started'}
-              </p>
-            </div>
+          <div className="text-center py-10 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] p-6 space-y-3">
+            <p className="font-oswald text-lg uppercase font-bold text-[#1D1B18] dark:text-[#F8F7F4]">
+              {showArchived ? 'No completed projects yet' : 'No active projects right now'}
+            </p>
+            <p className="text-xs font-mono text-[#1D1B18]/60 dark:text-[#F8F7F4]/60">
+              {showArchived ? 'Finished projects will be archived here' : 'Tap "Add New Project" to begin tracking your rhythm'}
+            </p>
+            <button
+              type="button"
+              onClick={handleOpenAdd}
+              className="add-btn mt-2 inline-block"
+            >
+              Add New Project
+            </button>
           </div>
         ) : (
-          <div className="space-y-3.5">
+          <div className="space-y-4">
             {displayedProjects.map((project) => {
               const originalIndex = projects.findIndex((p) => p.id === project.id);
               const weekChecks = project.weeklyDays?.[currentWeekKey] || new Array(7).fill(false);
@@ -367,59 +371,55 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
               return (
                 <div
-                  key={project.id}
-                  className={`p-4 rounded-[24px] border ${
-                    project.completed
-                      ? 'border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 opacity-70'
-                      : 'border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)]'
-                  } space-y-3`}
+                  key={project.id || originalIndex}
+                  className="habit-card"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="habit-title">
                     <button
                       type="button"
                       onClick={() => handleOpenEdit(originalIndex)}
-                      className="text-left group flex items-center gap-2 min-w-0"
+                      className="text-left font-bold truncate hover:opacity-80 transition cursor-pointer flex-1 mr-2 flex items-center gap-2"
                     >
-                      <span className={`font-black text-sm text-zinc-950 dark:text-white group-hover:underline truncate ${project.completed ? 'line-through text-zinc-400' : ''}`}>
+                      <span className={project.completed ? 'line-through opacity-50' : ''}>
                         {project.name}
                       </span>
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
-                        {completedCount}/{project.goal} days/week
-                      </span>
+                      {isGoalMet && (
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 bg-[#E63946] text-white">
+                          Met
+                        </span>
+                      )}
                     </button>
-
-                    {isGoalMet && (
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-zinc-950 text-white dark:bg-white dark:text-zinc-950 shadow-2xs">
-                        Goal Met
-                      </span>
-                    )}
+                    <span style={{ fontSize: '0.8rem', opacity: 0.6 }} className="font-mono shrink-0">
+                      {completedCount}/{project.goal}
+                    </span>
                   </div>
 
                   {project.description && (
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">{project.description}</p>
+                    <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 font-mono mb-2 line-clamp-1">
+                      {project.description}
+                    </p>
                   )}
 
-                  {/* 7 Days Checkbox squircle buttons */}
-                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                  <div className="day-grid">
                     {weekDays.map((wd, dayIdx) => {
+                      const isCurrentMonthDay = wd.inMonth;
                       const isDone = Boolean(weekChecks[dayIdx]);
+                      const dayLetter = ['M', 'T', 'W', 'T', 'F', 'S', 'S'][(wd.dayIndex + 6) % 7];
 
                       return (
                         <button
                           key={`${project.id}-${wd.iso}`}
                           type="button"
-                          disabled={project.completed}
+                          disabled={!isCurrentMonthDay || project.completed}
                           onClick={() => handleToggleDay(originalIndex, dayIdx)}
                           title={`${wd.iso}: ${isDone ? 'Completed' : 'Not done'}`}
-                          className={`aspect-square w-full rounded-[14px] sm:rounded-[16px] flex items-center justify-center transition-all ios-tap ${
-                            project.completed
-                              ? 'opacity-30 cursor-not-allowed bg-transparent border border-dashed border-zinc-200 dark:border-zinc-800'
-                              : isDone
-                              ? 'bg-transparent border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 active:scale-95'
-                              : 'bg-transparent border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 active:scale-95'
+                          className={`day-cell ${isDone ? 'active' : ''} ${
+                            !isCurrentMonthDay || project.completed
+                              ? 'opacity-25 cursor-not-allowed border-dashed'
+                              : ''
                           }`}
                         >
-                          {isDone ? <PixelFrogCrownIcon size={34} className="w-7 h-7 sm:w-8 sm:h-8 animate-in zoom-in-75 duration-150" /> : null}
+                          {dayLetter}
                         </button>
                       );
                     })}
@@ -427,41 +427,50 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 </div>
               );
             })}
+
+            <button
+              id="CroakleBottomAddProject"
+              type="button"
+              onClick={handleOpenAdd}
+              className="add-btn w-full text-center py-3 cursor-pointer"
+            >
+              Add New Project
+            </button>
           </div>
         )}
       </div>
 
       {/* Add Project Dialog */}
       {isAddOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Add Project</h2>
+        <div className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 sm:p-6 w-full max-w-md space-y-4 font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">
+              <h2 className="text-base font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">Add Project</h2>
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300"
+                className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] cursor-pointer"
               >
-                <X size={18} />
+                <X size={14} />
               </button>
             </div>
 
-            <form onSubmit={handleAddSubmit} className="space-y-4">
+            <form onSubmit={handleAddSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Project Name</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Project Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Mobile App MVP"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
-                  Goal Per Week: {newGoal} sessions/days
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
+                  Goal Per Week: {newGoal} days
                 </label>
                 <input
                   type="range"
@@ -469,33 +478,33 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   max="7"
                   value={newGoal}
                   onChange={(e) => setNewGoal(Number(e.target.value))}
-                  className="w-full accent-black dark:accent-white cursor-pointer"
+                  className="w-full accent-[#E63946] cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Description</label>
                 <textarea
                   rows={2}
-                  placeholder="e.g. Design wireframes and code core endpoints"
+                  placeholder="e.g. Wireframes and core features"
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
-                <div className="grid grid-cols-3 gap-2">
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Priority</label>
+                <div className="grid grid-cols-3 gap-1.5">
                   {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
                     <button
                       key={p}
                       type="button"
                       onClick={() => setNewPriority(p)}
-                      className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${
+                      className={`py-1.5 border text-[10px] font-bold uppercase transition cursor-pointer ${
                         newPriority === p
-                          ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black shadow-xs'
-                          : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300'
+                          ? 'border-[#E63946] bg-[#E63946] text-white'
+                          : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]'
                       }`}
                     >
                       {p}
@@ -506,7 +515,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-sm shadow-md transition"
+                className="w-full py-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider transition cursor-pointer"
               >
                 Confirm
               </button>
@@ -524,68 +533,70 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               setDeleteConfirm(false);
             }
           }}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#1D1B18]/60 backdrop-blur-xs flex items-center justify-center p-4"
         >
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-6 w-full max-w-md shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between">
-              {deleteConfirm ? (
-                <div className="flex items-center gap-1.5">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-5 sm:p-6 w-full max-w-md space-y-4 font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">
+              <h2 className="text-base font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4]">Project Details</h2>
+              <div className="flex items-center gap-1.5">
+                {deleteConfirm ? (
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onDeleteProject(editingIndex);
+                        setEditingIndex(null);
+                        setDeleteConfirm(false);
+                      }}
+                      className="px-2 py-1 border border-[#E63946] bg-[#E63946] text-white font-bold text-[10px] uppercase flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 size={11} /> Confirm
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteConfirm(false)}
+                      className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-[10px] uppercase cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
                   <button
                     type="button"
-                    onClick={() => {
-                      onDeleteProject(editingIndex);
-                      setEditingIndex(null);
-                      setDeleteConfirm(false);
-                    }}
-                    className="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs flex items-center gap-1.5 shadow-xs transition"
+                    onClick={() => setDeleteConfirm(true)}
+                    className="px-2 py-1 border border-[#E63946]/40 text-[#E63946] hover:border-[#E63946] font-bold text-[10px] uppercase flex items-center gap-1 transition cursor-pointer"
                   >
-                    <Trash2 size={13} /> Confirm Delete
+                    <Trash2 size={11} /> Delete
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setDeleteConfirm(false)}
-                    className="px-2 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
+                )}
                 <button
                   type="button"
-                  onClick={() => setDeleteConfirm(true)}
-                  className="px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-bold text-xs flex items-center gap-1.5 transition"
+                  onClick={() => {
+                    setEditingIndex(null);
+                    setDeleteConfirm(false);
+                  }}
+                  className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] cursor-pointer"
                 >
-                  <Trash2 size={14} /> Delete
+                  <X size={14} />
                 </button>
-              )}
-              <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white">Project Details</h2>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingIndex(null);
-                  setDeleteConfirm(false);
-                }}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300 transition"
-              >
-                <X size={18} />
-              </button>
+              </div>
             </div>
 
-            <form onSubmit={handleEditSubmit} className="space-y-4">
+            <form onSubmit={handleEditSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Project Name</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Project Name</label>
                 <input
                   type="text"
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white font-medium focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">
-                  Goal Per Week: {editGoal} sessions/days
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">
+                  Goal Per Week: {editGoal} days
                 </label>
                 <input
                   type="range"
@@ -593,32 +604,32 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   max="7"
                   value={editGoal}
                   onChange={(e) => setEditGoal(Number(e.target.value))}
-                  className="w-full accent-black dark:accent-white cursor-pointer"
+                  className="w-full accent-[#E63946] cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Description</label>
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Description</label>
                 <textarea
                   rows={2}
                   value={editDesc}
                   onChange={(e) => setEditDesc(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-950 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                  className="w-full px-3 py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 bg-white dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-mono text-xs focus:outline-none focus:border-[#1D1B18] dark:focus:border-[#F8F7F4] resize-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1">Priority</label>
-                <div className="grid grid-cols-3 gap-2">
+                <label className="block text-[11px] font-bold uppercase text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mb-1">Priority</label>
+                <div className="grid grid-cols-3 gap-1.5">
                   {(['high', 'medium', 'low'] as PriorityType[]).map((p) => (
                     <button
                       key={p}
                       type="button"
                       onClick={() => setEditPriority(p)}
-                      className={`py-2 rounded-xl text-xs font-bold capitalize border transition ${
+                      className={`py-1.5 border text-[10px] font-bold uppercase transition cursor-pointer ${
                         editPriority === p
-                          ? 'border-black bg-black text-white dark:border-white dark:bg-white dark:text-black shadow-xs'
-                          : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300'
+                          ? 'border-[#E63946] bg-[#E63946] text-white'
+                          : 'border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4]'
                       }`}
                     >
                       {p}
@@ -627,10 +638,10 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
+              <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   type="submit"
-                  className="py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-extrabold text-sm shadow-md transition"
+                  className="py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider transition cursor-pointer"
                 >
                   Update
                 </button>
@@ -641,9 +652,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     setEditingIndex(null);
                     setDeleteConfirm(false);
                   }}
-                  className="py-3.5 rounded-2xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-sm transition flex items-center justify-center gap-1.5"
+                  className="py-2 border border-[#1D1B18]/40 dark:border-[#F8F7F4]/40 hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold font-oswald uppercase text-xs tracking-wider transition flex items-center justify-center gap-1 cursor-pointer"
                 >
-                  <PixelCheckCircleIcon size={16} />
+                  <PixelCheckCircleIcon size={14} />
                   {projects[editingIndex]?.completed ? 'Mark Active' : 'Finished'}
                 </button>
               </div>
@@ -660,58 +671,58 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
           }}
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
         >
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[32px] p-5 sm:p-6 w-full max-w-lg shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-start justify-between">
+          <div className="bg-white dark:bg-[#1D1B18] border border-[#1D1B18] dark:border-[#F8F7F4] p-4 sm:p-5 w-full max-w-lg space-y-3 font-mono animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between border-b border-[#1D1B18]/20 dark:border-[#F8F7F4]/20 pb-2">
               <div>
-                <h2 className="text-xl font-black tracking-tight text-zinc-950 dark:text-white flex items-center gap-2">
-                  <ArrowUpDown size={20} className="text-[#007AFF]" />
+                <h2 className="text-base font-bold font-oswald uppercase tracking-tight text-[#1D1B18] dark:text-[#F8F7F4] flex items-center gap-2">
+                  <ArrowUpDown size={16} className="text-[#E63946]" />
                   Reorder Projects
                 </h2>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  Drag items or use the quick buttons to customize order
+                <p className="text-[10px] text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 mt-0.5">
+                  Drag items or use the buttons to reorder
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsReorderOpen(false)}
-                className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 flex items-center justify-center text-zinc-600 dark:text-zinc-300 transition"
+                className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 flex items-center justify-center text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition cursor-pointer"
               >
-                <X size={18} />
+                <X size={14} />
               </button>
             </div>
 
             {/* Quick Sort Helpers */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] font-bold">
-              <span className="text-zinc-400 uppercase tracking-wider font-extrabold shrink-0 mr-1 text-[10px]">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-[10px] font-bold">
+              <span className="text-[#1D1B18]/50 dark:text-[#F8F7F4]/50 uppercase tracking-wider font-extrabold shrink-0 mr-1">
                 Quick Sort:
               </span>
               <button
                 type="button"
                 onClick={handleSortProjectsAZ}
-                className="px-2.5 py-1 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-black dark:hover:border-white transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition flex items-center gap-1 shrink-0 uppercase cursor-pointer"
               >
-                <ArrowDownAZ size={12} />
+                <ArrowDownAZ size={11} />
                 <span>A → Z</span>
               </button>
               <button
                 type="button"
                 onClick={handleSortProjectsByPriority}
-                className="px-2.5 py-1 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-black dark:hover:border-white transition flex items-center gap-1 shrink-0 ios-tap"
+                className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition flex items-center gap-1 shrink-0 uppercase cursor-pointer"
               >
-                <Sparkles size={12} className="text-[#FFCC00]" />
+                <Sparkles size={11} className="text-[#E63946]" />
                 <span>By Priority</span>
               </button>
               <button
                 type="button"
                 onClick={() => onReorderProjects([...projects].reverse())}
-                className="px-2.5 py-1 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-black dark:hover:border-white transition shrink-0 ios-tap"
+                className="px-2 py-1 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] hover:border-[#1D1B18] dark:hover:border-[#F8F7F4] transition shrink-0 uppercase cursor-pointer"
               >
                 Reverse
               </button>
             </div>
 
             {/* Projects Reorder List with Drag and Drop */}
-            <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+            <div className="space-y-1.5 max-h-[50vh] overflow-y-auto pr-1">
               {projects.map((proj, idx) => {
                 const isDragging = draggedProjectIdx === idx;
                 const isDragOver = dragOverProjectIdx === idx && draggedProjectIdx !== idx;
@@ -740,45 +751,45 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       setDraggedProjectIdx(null);
                       setDragOverProjectIdx(null);
                     }}
-                    className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border transition-all duration-150 select-none ${
+                    className={`flex items-center justify-between p-2 border transition-all duration-100 select-none ${
                       isDragging
-                        ? 'opacity-40 scale-[0.98] border-black dark:border-white bg-zinc-100 dark:bg-zinc-800'
+                        ? 'opacity-40 border-[#E63946] bg-[#E63946]/10'
                         : isDragOver
-                        ? 'border-2 border-[#007AFF] bg-blue-50 dark:bg-blue-950/20 shadow-md'
-                        : 'bg-zinc-50/50 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 shadow-2xs'
+                        ? 'border border-[#E63946] bg-[#E63946]/5'
+                        : 'bg-white dark:bg-[#1D1B18] border-[#1D1B18]/30 dark:border-[#F8F7F4]/30'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
                       {/* Drag Handle */}
                       <div 
-                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition"
+                        className="cursor-grab active:cursor-grabbing p-1 text-[#1D1B18]/40 dark:text-[#F8F7F4]/40 hover:text-[#1D1B18] dark:hover:text-[#F8F7F4] transition"
                         title="Drag to reorder"
                       >
-                        <GripVertical size={16} />
+                        <GripVertical size={14} />
                       </div>
 
                       {/* Number Position Badge */}
-                      <span className="w-6 h-6 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-black text-[11px] flex items-center justify-center shrink-0">
+                      <span className="w-5 h-5 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-[10px] flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
 
                       <div className="min-w-0">
-                        <p className={`font-bold text-sm text-zinc-950 dark:text-white truncate ${proj.completed ? 'line-through text-zinc-400' : ''}`}>
+                        <p className={`font-bold text-xs truncate ${proj.completed ? 'line-through text-[#1D1B18]/40 dark:text-[#F8F7F4]/40' : 'text-[#1D1B18] dark:text-[#F8F7F4]'}`}>
                           {proj.name}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <span
-                            className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded-md ${
+                            className={`text-[8.5px] font-bold uppercase px-1 border ${
                               proj.priority === 'high'
-                                ? 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300'
+                                ? 'bg-[#E63946] text-[#F8F7F4] border-[#E63946]'
                                 : proj.priority === 'medium'
-                                ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300'
-                                : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300'
+                                ? 'bg-[#F8F7F4] text-[#1D1B18] border-[#1D1B18]/40 dark:bg-[#252320] dark:text-[#F8F7F4]'
+                                : 'bg-transparent text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 border-[#1D1B18]/20 dark:border-[#F8F7F4]/20'
                             }`}
                           >
                             {proj.priority}
                           </span>
-                          <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                          <span className="text-[9px] text-[#1D1B18]/50 dark:text-[#F8F7F4]/50">
                             {proj.targetWeeklyDays}d/wk
                           </span>
                         </div>
@@ -787,48 +798,44 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
 
                     {/* Quick Move Buttons */}
                     <div className="flex items-center gap-1 shrink-0">
-                      {/* Send to Top */}
                       <button
                         type="button"
                         disabled={idx === 0}
                         onClick={() => handleMoveProjectToTop(idx)}
                         title="Move to top"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronsUp size={13} />
+                        <ChevronsUp size={12} />
                       </button>
 
-                      {/* Move Up 1 */}
                       <button
                         type="button"
                         disabled={idx === 0}
                         onClick={() => handleMoveProject(idx, idx - 1)}
                         title="Move up"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronUp size={14} />
+                        <ChevronUp size={12} />
                       </button>
 
-                      {/* Move Down 1 */}
                       <button
                         type="button"
                         disabled={idx === projects.length - 1}
                         onClick={() => handleMoveProject(idx, idx + 1)}
                         title="Move down"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronDown size={14} />
+                        <ChevronDown size={12} />
                       </button>
 
-                      {/* Send to Bottom */}
                       <button
                         type="button"
                         disabled={idx === projects.length - 1}
                         onClick={() => handleMoveProjectToBottom(idx)}
                         title="Move to bottom"
-                        className="w-7 h-7 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 disabled:opacity-20 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition"
+                        className="w-6 h-6 border border-[#1D1B18]/30 dark:border-[#F8F7F4]/30 bg-[#F8F7F4] dark:bg-[#252320] disabled:opacity-20 text-[#1D1B18] dark:text-[#F8F7F4] flex items-center justify-center transition cursor-pointer"
                       >
-                        <ChevronsDown size={13} />
+                        <ChevronsDown size={12} />
                       </button>
                     </div>
                   </div>
@@ -839,7 +846,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             <button
               type="button"
               onClick={() => setIsReorderOpen(false)}
-              className="w-full py-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-zinc-950 font-black text-sm shadow-md transition ios-tap"
+              className="w-full py-2 border border-[#1D1B18] dark:border-[#F8F7F4] bg-[#1D1B18] hover:bg-[#1D1B18]/90 dark:bg-[#F8F7F4] dark:hover:bg-[#F8F7F4]/90 text-[#F8F7F4] dark:text-[#1D1B18] font-bold font-oswald uppercase text-xs tracking-wider transition cursor-pointer"
             >
               Done
             </button>

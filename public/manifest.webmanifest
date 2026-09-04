@@ -1,8 +1,9 @@
 {
-  "name": "Croakle Habit & Mood",
+  "name": "Croakle",
   "short_name": "Croakle",
-  "description": "Croakle Habit and Mood Tracker",
+  "description": "Croakle - Cozy Habit, Project, Focus Timer, and Mood Tracker.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",

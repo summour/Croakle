@@ -91,29 +91,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   return (
-    <div className="space-y-3.5 pb-24">
+    <div className="space-y-3 pb-24 font-mono">
       {/* Header */}
-      <div className="ios-glass-card p-3.5 sm:p-4 flex items-center justify-between">
+      <div className="card p-3.5 sm:p-4 flex items-center justify-between bg-white dark:bg-[#1D1B18]">
         <div>
-          <h1 className="text-lg font-black tracking-tight text-zinc-950 dark:text-white">Settings</h1>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Preferences & Data</p>
+          <h1 className="text-xl font-bold font-oswald tracking-tight uppercase text-[#1D1B18] dark:text-[#F8F7F4]">Settings</h1>
+          <p className="text-xs text-[#1D1B18]/60 dark:text-[#F8F7F4]/60 uppercase">Preferences & Data</p>
         </div>
       </div>
 
       {/* Preferences & Toggles */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-3">
-        <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Preferences</h2>
+      <div className="card p-3.5 sm:p-4 space-y-3 bg-white dark:bg-[#1D1B18]">
+        <h2 className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">Preferences</h2>
 
         <div className="grid grid-cols-2 gap-2">
           {/* Sound */}
           <button
             type="button"
             onClick={() => onUpdateSettings({ ...settings, soundEnabled: !settings.soundEnabled })}
-            className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
+            className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
           >
-            <span>Sound Effects</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-              settings.soundEnabled ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
+            <span className="text-[11px] uppercase">Sound</span>
+            <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
+              settings.soundEnabled ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
             }`}>
               {settings.soundEnabled ? 'ON' : 'OFF'}
             </span>
@@ -123,11 +123,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <button
             type="button"
             onClick={() => onUpdateSettings({ ...settings, hapticEnabled: !settings.hapticEnabled })}
-            className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
+            className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
           >
-            <span>Haptics</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-              settings.hapticEnabled ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
+            <span className="text-[11px] uppercase">Haptics</span>
+            <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
+              settings.hapticEnabled ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
             }`}>
               {settings.hapticEnabled ? 'ON' : 'OFF'}
             </span>
@@ -138,11 +138,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => onUpdatePixelScene({ isAnimated: !pixelScene.isAnimated })}
-              className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
+              className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             >
-              <span>Animations</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-                pixelScene.isAnimated ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
+              <span className="text-[11px] uppercase">Animate</span>
+              <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
+                pixelScene.isAnimated ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
               }`}>
                 {pixelScene.isAnimated ? 'ON' : 'OFF'}
               </span>
@@ -154,11 +154,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => onUpdatePixelScene({ syncWithMood: !pixelScene.syncWithMood })}
-              className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80 bg-zinc-50/50 dark:bg-zinc-800/40 text-xs font-bold flex items-center justify-between transition"
+              className="p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] text-xs font-bold flex items-center justify-between transition cursor-pointer hover:bg-[#F8F7F4] dark:hover:bg-[#252320]"
             >
-              <span>Mood Sync</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-                pixelScene.syncWithMood ? 'bg-zinc-950 dark:bg-white text-white dark:text-zinc-950' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'
+              <span className="text-[11px] uppercase">Mood Sync</span>
+              <span className={`text-[9px] px-1.5 py-0.5 border border-[#1D1B18] dark:border-[#F8F7F4] font-bold uppercase ${
+                pixelScene.syncWithMood ? 'bg-[#1D1B18] dark:bg-[#F8F7F4] text-[#F8F7F4] dark:text-[#1D1B18]' : 'bg-transparent text-[#1D1B18]/50 dark:text-[#F8F7F4]/50'
               }`}>
                 {pixelScene.syncWithMood ? 'ON' : 'OFF'}
               </span>
@@ -168,35 +168,35 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       </div>
 
       {/* Habit Insights */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-2.5">
+      <div className="card p-3.5 sm:p-4 space-y-2.5 bg-white dark:bg-[#1D1B18]">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Mindful Coach</h2>
+          <h2 className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">Coach Insights</h2>
           <button
             type="button"
             onClick={generateAIInsights}
-            className="px-2.5 py-1 rounded-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-[11px] flex items-center gap-1 transition"
+            className="px-2.5 py-1 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-[10px] uppercase flex items-center gap-1 transition cursor-pointer"
           >
-            <RefreshCw size={11} />
+            <RefreshCw size={10} />
             Analyze
           </button>
         </div>
 
         {aiInsight && (
-          <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed bg-zinc-50 dark:bg-zinc-800/60 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700">
+          <p className="text-xs text-[#1D1B18] dark:text-[#F8F7F4] leading-relaxed bg-[#F8F7F4] dark:bg-[#252320] p-2.5 border border-[#1D1B18] dark:border-[#F8F7F4]">
             {aiInsight}
           </p>
         )}
       </div>
 
       {/* Data Management */}
-      <div className="ios-glass-card p-3.5 sm:p-4 space-y-2.5">
-        <h2 className="text-xs font-black text-zinc-950 dark:text-white uppercase tracking-wider">Data & Backup</h2>
+      <div className="card p-3.5 sm:p-4 space-y-2.5 bg-white dark:bg-[#1D1B18]">
+        <h2 className="text-xs font-bold font-oswald text-[#1D1B18] dark:text-[#F8F7F4] uppercase tracking-wider">Data & Backup</h2>
 
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={handleExport}
-            className="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition border border-zinc-200 dark:border-zinc-700"
+            className="py-2 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
           >
             <Download size={13} /> Export JSON
           </button>
@@ -204,7 +204,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="py-2.5 px-3 rounded-xl bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition border border-zinc-200 dark:border-zinc-700"
+            className="py-2 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] bg-white dark:bg-[#1D1B18] hover:bg-[#F8F7F4] dark:hover:bg-[#252320] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
           >
             <Upload size={13} /> Import JSON
           </button>
@@ -218,7 +218,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {importStatus && (
-          <p className="text-[11px] font-bold text-zinc-900 dark:text-white p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-center">
+          <p className="text-[10px] font-bold text-[#1D1B18] dark:text-[#F8F7F4] p-2 bg-[#F8F7F4] dark:bg-[#252320] border border-[#1D1B18] dark:border-[#F8F7F4] text-center uppercase">
             {importStatus}
           </p>
         )}
@@ -233,14 +233,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   onResetData();
                   setResetConfirm(false);
                 }}
-                className="flex-1 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs flex items-center justify-center gap-1.5 transition"
+                className="flex-1 py-1.5 border border-[#E63946] bg-[#E63946] text-white font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
               >
                 <Trash2 size={13} /> Confirm Reset
               </button>
               <button
                 type="button"
                 onClick={() => setResetConfirm(false)}
-                className="py-2 px-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-bold text-xs hover:bg-zinc-200 transition"
+                className="py-1.5 px-3 border border-[#1D1B18] dark:border-[#F8F7F4] text-[#1D1B18] dark:text-[#F8F7F4] font-bold text-xs hover:bg-[#F8F7F4] dark:hover:bg-[#252320] transition cursor-pointer uppercase"
               >
                 Cancel
               </button>
@@ -249,7 +249,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             <button
               type="button"
               onClick={() => setResetConfirm(true)}
-              className="w-full py-2 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 text-xs font-bold flex items-center justify-center gap-1.5 transition"
+              className="w-full py-1.5 border border-[#E63946] text-[#E63946] hover:bg-[#E63946]/10 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer uppercase"
             >
               <Trash2 size={13} /> Reset to Defaults
             </button>
