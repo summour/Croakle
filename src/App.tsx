@@ -631,10 +631,10 @@ export function App() {
         backgroundSize: '24px 24px',
       }}
     >
-      {/* Sticky Top Navigation Bar (Japanese Website Style) */}
+      {/* Fixed Top Navigation Bar Locked In Place ("ล็อกอันนี้ให้อยู่นิ่ง ๆ ไปเลย") */}
       <header
         id="croakle-top-bar"
-        className="sticky top-0 z-40 w-full flex justify-center px-2.5 sm:px-4 pt-2.5 pb-2 pointer-events-none select-none"
+        className="fixed top-2 sm:top-3.5 left-0 right-0 z-50 w-full flex justify-center px-2.5 sm:px-4 pointer-events-none select-none"
       >
         <div className="w-full max-w-[540px] md:max-w-[580px] bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-2xl sm:rounded-[24px] shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] px-3 sm:px-4 py-2 flex items-center justify-between gap-2 pointer-events-auto transition-colors">
           {/* Logo */}
@@ -657,9 +657,9 @@ export function App() {
                   type="button"
                   onClick={() => scrollToSection(group.id)}
                   title={group.title}
-                  className={`h-[28px] sm:h-[32px] px-2 sm:px-2.5 flex items-center justify-center text-center text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-wider transition-all cursor-pointer rounded-lg sm:rounded-xl whitespace-nowrap select-none touch-manipulation active:scale-95 ${
+                  className={`h-[28px] sm:h-[32px] px-2 sm:px-2.5 flex items-center justify-center text-center text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-wider transition-colors cursor-pointer rounded-lg sm:rounded-xl whitespace-nowrap select-none touch-manipulation ${
                     isActive
-                      ? 'bg-[#FEF08A] text-[#1F1B1A] border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
+                      ? 'bg-[#FEF08A] text-[#1F1B1A] border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A]'
                       : 'text-white/85 hover:text-white hover:bg-black/20 border-[2px] border-transparent active:bg-black/30'
                   }`}
                 >
@@ -674,10 +674,10 @@ export function App() {
       {/* Main Flow Container: each page wrapped in its own framed box, fixed without internal scrolling */}
       <div
         id="croakle-sections-container"
-        className="w-full flex flex-col items-center gap-8 sm:gap-12 px-2.5 sm:px-4 pt-2 pb-24"
+        className="w-full flex flex-col items-center gap-8 sm:gap-12 px-2.5 sm:px-4 pt-16 sm:pt-20 pb-24"
       >
         {/* Box 1: Mood Tracker */}
-        <section id="section-mood" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+        <section id="section-mood" className="scroll-mt-24 sm:scroll-mt-28 w-full max-w-[540px] md:max-w-[580px]">
           <div
             id="box-mood"
             className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
@@ -714,7 +714,7 @@ export function App() {
         </section>
 
         {/* Box 2: Habit Tracker */}
-        <section id="section-track" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+        <section id="section-track" className="scroll-mt-24 sm:scroll-mt-28 w-full max-w-[540px] md:max-w-[580px]">
           <div
             id="box-track"
             className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
@@ -761,7 +761,7 @@ export function App() {
         </section>
 
         {/* Box 3: Projects */}
-        <section id="section-project" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+        <section id="section-project" className="scroll-mt-24 sm:scroll-mt-28 w-full max-w-[540px] md:max-w-[580px]">
           <div
             id="box-project"
             className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
@@ -807,7 +807,7 @@ export function App() {
         </section>
 
         {/* Box 4: Focus Timer & Sessions */}
-        <section id="section-time" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+        <section id="section-time" className="scroll-mt-24 sm:scroll-mt-28 w-full max-w-[540px] md:max-w-[580px]">
           <div
             id="box-time"
             className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
@@ -851,7 +851,7 @@ export function App() {
         </section>
 
         {/* Box 5: Journal & Notes */}
-        <section id="section-notes" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+        <section id="section-notes" className="scroll-mt-24 sm:scroll-mt-28 w-full max-w-[540px] md:max-w-[580px]">
           <div
             id="box-notes"
             className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
@@ -896,7 +896,7 @@ export function App() {
         </section>
 
         {/* Box 6: Settings */}
-        <section id="section-settings" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+        <section id="section-settings" className="scroll-mt-24 sm:scroll-mt-28 w-full max-w-[540px] md:max-w-[580px]">
           <div
             id="box-settings"
             className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
