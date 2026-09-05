@@ -878,7 +878,7 @@ export function App() {
         /* DESKTOP / COMPUTER VERSION (>= 768px): Japanese Continuous Flow of Boxes  */
         /* ========================================================================= */
         <>
-          {/* Fixed Top Navigation Bar Locked In Place ("ล็อกอันนี้ให้อยู่นิ่ง ๆ ไปเลย") */}
+          {/* Fixed Top Navigation Bar Locked In Place */}
           <header
             id="croakle-top-bar"
             className="fixed top-2 sm:top-3.5 left-0 right-0 z-50 w-full flex justify-center px-2.5 sm:px-4 pointer-events-none select-none"

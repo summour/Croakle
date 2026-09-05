@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { User } from 'firebase/auth';
 import {
   Cloud,
@@ -9,23 +9,8 @@ import {
   CheckCircle2,
   AlertTriangle,
   ShieldCheck,
-  Globe,
-  Copy,
-  Check,
-  ExternalLink,
-  ChevronDown,
-  ChevronUp,
-  Database,
-  Eye,
-  FileJson,
 } from 'lucide-react';
 import { SyncStatus } from '../hooks/useFirebaseAuth';
-import {
-  firebaseProjectId,
-  firestoreDatabaseId,
-  fetchServerAppState,
-  UserAppStatePayload,
-} from '../lib/firebase';
 
 interface FirebaseSyncSectionProps {
   user: User | null;
@@ -48,43 +33,6 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
   onSignOut,
   onSyncNow,
 }) => {
-  const [copied, setCopied] = useState(false);
-  const [showDomainGuide, setShowDomainGuide] = useState(false);
-  const [showDataInspector, setShowDataInspector] = useState(false);
-  const [inspectingData, setInspectingData] = useState(false);
-  const [serverData, setServerData] = useState<UserAppStatePayload | null>(null);
-  const [inspectError, setInspectError] = useState<string | null>(null);
-  const [showJson, setShowJson] = useState(false);
-
-  const targetDomain = 'summour.github.io';
-  const currentHostname = typeof window !== 'undefined' ? window.location.hostname : targetDomain;
-  const isUnauthorized =
-    errorMessage?.toLowerCase().includes('unauthorized domain') ||
-    errorMessage?.toLowerCase().includes('unauthorized-domain');
-
-  const handleCopyDomain = (domainToCopy: string) => {
-    navigator.clipboard.writeText(domainToCopy);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleInspectCloudData = async () => {
-    if (!user) return;
-    setInspectingData(true);
-    setInspectError(null);
-    setShowDataInspector(true);
-    try {
-      const data = await fetchServerAppState(user.uid);
-      setServerData(data);
-    } catch (err: any) {
-      setInspectError(err?.message || 'Failed to fetch direct document from Firestore server');
-    } finally {
-      setInspectingData(false);
-    }
-  };
-
-  const consoleUrl = `https://console.firebase.google.com/project/${firebaseProjectId}/firestore/databases/${firestoreDatabaseId}/data`;
-
   return (
     <div
       id="firebase-cloud-sync-card"
@@ -137,70 +85,6 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
           </span>
         )}
       </div>
-
-      {/* Domain Badge & Info */}
-      <div className="flex items-center justify-between px-3 py-1.5 bg-white/70 rounded-xl border-[1.5px] border-[#1F1B1A] text-[10px] font-mono">
-        <div className="flex items-center gap-1.5 truncate">
-          <Globe size={12} className="text-[#D32018] shrink-0" />
-          <span className="font-bold text-[#1F1B1A] truncate">
-            {currentHostname === 'localhost' ? `${targetDomain} (Production)` : currentHostname}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={() => setShowDomainGuide(!showDomainGuide)}
-          className="text-[9px] font-bold text-[#D32018] uppercase flex items-center gap-0.5 hover:underline cursor-pointer ml-2 shrink-0"
-        >
-          <span>Firebase Setup</span>
-          {showDomainGuide ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
-        </button>
-      </div>
-
-      {/* Domain Authorization Guide Card */}
-      {(showDomainGuide || isUnauthorized) && (
-        <div className="p-3 bg-white rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] space-y-2 text-[10px] font-mono">
-          <div className="flex items-center justify-between pb-1 border-b border-gray-200">
-            <span className="font-bold text-[#1F1B1A] uppercase flex items-center gap-1">
-              <ShieldCheck size={12} className="text-[#15803D]" />
-              Authorized Domain Guide
-            </span>
-            <span className="text-[9px] text-gray-500">Firebase Auth</span>
-          </div>
-
-          <p className="text-gray-700 leading-snug">
-            สำหรับการล็อกอิน Google บน <strong>https://summour.github.io/Croakle/</strong> ต้องเพิ่มโดเมนใน Firebase Console:
-          </p>
-
-          <div className="bg-amber-50 p-2 rounded-lg border border-amber-300 flex items-center justify-between gap-2">
-            <code className="text-[11px] font-bold text-[#1F1B1A]">{targetDomain}</code>
-            <button
-              type="button"
-              onClick={() => handleCopyDomain(targetDomain)}
-              className="px-2 py-1 bg-white border border-[#1F1B1A] rounded text-[9px] font-bold uppercase hover:bg-gray-100 flex items-center gap-1 cursor-pointer"
-            >
-              {copied ? <Check size={10} className="text-green-600" /> : <Copy size={10} />}
-              {copied ? 'Copied' : 'Copy'}
-            </button>
-          </div>
-
-          <ol className="list-decimal list-inside space-y-1 text-gray-700 text-[9.5px]">
-            <li>เปิด <strong>Firebase Console</strong> ({firebaseProjectId})</li>
-            <li>ไปที่ <strong>Authentication</strong> &gt; แท็บ <strong>Settings</strong></li>
-            <li>เลื่อนลงไปที่ <strong>Authorized domains</strong> &gt; กด <strong>Add domain</strong></li>
-            <li>วาง <strong className="text-black">{targetDomain}</strong> แล้วกด <strong>Save</strong></li>
-          </ol>
-
-          <a
-            href={`https://console.firebase.google.com/project/${firebaseProjectId}/authentication/settings`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full mt-1 py-1.5 px-2.5 bg-gray-100 hover:bg-gray-200 rounded-lg border border-gray-300 font-bold text-[9px] uppercase flex items-center justify-center gap-1 text-gray-800"
-          >
-            <ExternalLink size={10} />
-            เปิด Firebase Auth Settings Console
-          </a>
-        </div>
-      )}
 
       {/* User Info / Sign In Options */}
       {authLoading ? (
@@ -267,144 +151,9 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
                 : 'Pending sync'}
             </span>
           </div>
-
-          {/* Cloud Data Inspector & Console Access */}
-          <div className="pt-1 space-y-2 border-t border-[#1F1B1A]/20">
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleInspectCloudData}
-                disabled={inspectingData}
-                className="flex-1 py-1.5 px-2 bg-white hover:bg-gray-50 border-[1.5px] border-[#1F1B1A] rounded-xl text-[10px] font-mono font-bold uppercase flex items-center justify-center gap-1.5 cursor-pointer shadow-[1.5px_1.5px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
-              >
-                {inspectingData ? (
-                  <RefreshCw size={11} className="animate-spin text-[#D32018]" />
-                ) : (
-                  <Database size={11} className="text-[#D32018]" />
-                )}
-                {inspectingData ? 'Checking Server...' : 'ตรวจดูข้อมูลสดบน Cloud'}
-              </button>
-
-              <a
-                href={consoleUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="เปิด Firestore Database ใน Firebase Console"
-                className="py-1.5 px-2.5 bg-white hover:bg-gray-50 border-[1.5px] border-[#1F1B1A] rounded-xl text-[10px] font-mono font-bold uppercase flex items-center gap-1 text-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
-              >
-                <ExternalLink size={11} />
-                Console
-              </a>
-            </div>
-
-            {/* Cloud Data Modal / Drawer Details */}
-            {showDataInspector && (
-              <div className="p-3 bg-white rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] space-y-2.5 text-[10px] font-mono">
-                <div className="flex items-center justify-between pb-1.5 border-b border-gray-200">
-                  <span className="font-bold text-[#1F1B1A] uppercase flex items-center gap-1.5">
-                    <Database size={12} className="text-[#15803D]" />
-                    Firestore Live Data
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowDataInspector(false)}
-                    className="text-gray-400 hover:text-black text-xs font-bold px-1"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                {inspectError ? (
-                  <div className="p-2 bg-red-50 border border-red-200 rounded text-red-700">
-                    <p className="font-bold">Error fetching live document:</p>
-                    <p className="text-[9px]">{inspectError}</p>
-                  </div>
-                ) : serverData ? (
-                  <div className="space-y-2">
-                    <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 space-y-1">
-                      <p className="text-[9px] text-gray-500 font-mono truncate">
-                        Path: <code className="text-[#1F1B1A] font-bold">users/{user.uid}/data/appState</code>
-                      </p>
-                      <p className="text-[9px] text-gray-500 font-mono">
-                        Server Updated:{' '}
-                        <strong className="text-[#1F1B1A]">
-                          {new Date(serverData.updatedAt).toLocaleString()}
-                        </strong>
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-1.5">
-                      <div className="p-1.5 bg-green-50 border border-green-200 rounded text-center">
-                        <span className="text-gray-600 block text-[9px]">Habits Saved</span>
-                        <strong className="text-xs text-green-800">
-                          {serverData.habits?.habitTemplates?.length || 0} รายการ
-                        </strong>
-                      </div>
-                      <div className="p-1.5 bg-blue-50 border border-blue-200 rounded text-center">
-                        <span className="text-gray-600 block text-[9px]">Projects</span>
-                        <strong className="text-xs text-blue-800">
-                          {serverData.projects?.length || 0} โปรเจกต์
-                        </strong>
-                      </div>
-                      <div className="p-1.5 bg-purple-50 border border-purple-200 rounded text-center">
-                        <span className="text-gray-600 block text-[9px]">Daily Notes</span>
-                        <strong className="text-xs text-purple-800">
-                          {serverData.notes?.length || 0} บันทึก
-                        </strong>
-                      </div>
-                      <div className="p-1.5 bg-amber-50 border border-amber-200 rounded text-center">
-                        <span className="text-gray-600 block text-[9px]">Focus Sessions</span>
-                        <strong className="text-xs text-amber-800">
-                          {serverData.sessions?.length || 0} รอบ
-                        </strong>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-1">
-                      <button
-                        type="button"
-                        onClick={() => setShowJson(!showJson)}
-                        className="text-[9px] font-bold uppercase text-gray-600 hover:text-black flex items-center gap-1 cursor-pointer"
-                      >
-                        <FileJson size={11} />
-                        {showJson ? 'ซ่อน Raw JSON' : 'ดู Raw JSON จาก Cloud'}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          navigator.clipboard.writeText(JSON.stringify(serverData, null, 2));
-                          setCopied(true);
-                          setTimeout(() => setCopied(false), 2000);
-                        }}
-                        className="text-[9px] font-bold uppercase text-gray-600 hover:text-black flex items-center gap-1 cursor-pointer"
-                      >
-                        {copied ? <Check size={10} className="text-green-600" /> : <Copy size={10} />}
-                        {copied ? 'Copied JSON' : 'Copy JSON'}
-                      </button>
-                    </div>
-
-                    {showJson && (
-                      <pre className="p-2 bg-gray-900 text-green-400 rounded-lg text-[9px] max-h-48 overflow-auto font-mono whitespace-pre-wrap">
-                        {JSON.stringify(serverData, null, 2)}
-                      </pre>
-                    )}
-                  </div>
-                ) : (
-                  <div className="p-2 text-center text-gray-500">
-                    ยังไม่มีข้อมูลบันทึกใน Firestore กดปุ่ม "Sync" ด้านบนเพื่ออัปโหลดทันที
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
         </div>
       ) : (
-        <div className="p-3 bg-white rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] space-y-2.5">
-          <p className="text-[11px] font-mono leading-relaxed text-[#1F1B1A]">
-            Log in with Google to sync all habits, projects, notes, mood, and pixel frog habitat securely to Firebase Firestore across multiple phones and computers.
-          </p>
-
+        <div className="p-3 bg-white rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A]">
           <button
             type="button"
             onClick={onSignIn}
@@ -413,18 +162,6 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
             <LogIn size={14} className="text-[#FEF08A]" />
             Sign In with Google
           </button>
-
-          <div className="pt-1 text-center">
-            <a
-              href={consoleUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[9.5px] font-mono font-bold text-[#1F1B1A]/70 hover:text-[#1F1B1A] underline inline-flex items-center gap-1"
-            >
-              <ExternalLink size={10} />
-              เปิดดูโครงสร้างใน Firebase Console
-            </a>
-          </div>
         </div>
       )}
 
