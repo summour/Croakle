@@ -110,7 +110,11 @@ export async function signInWithGoogle(): Promise<User | null> {
       return result.user;
     }
     return null;
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.code === 'auth/popup-closed-by-user' || error?.code === 'auth/cancelled-popup-request') {
+      // Benign user action: closed popup window without selecting an account
+      return null;
+    }
     console.error('Sign in error', error);
     throw error;
   }

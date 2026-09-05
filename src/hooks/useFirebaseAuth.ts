@@ -168,15 +168,20 @@ export function useFirebaseAuth({
   const handleSignIn = useCallback(async () => {
     setErrorMessage(null);
     try {
-      await signInWithGoogle();
+      const user = await signInWithGoogle();
+      if (!user) {
+        // Closed or cancelled by user
+        setErrorMessage(null);
+      }
     } catch (err: any) {
       if (err?.code === 'auth/unauthorized-domain') {
         const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'summour.github.io';
         setErrorMessage(
           `Unauthorized Domain: "${currentDomain}" needs to be authorized in Firebase Console (Authentication > Settings > Authorized domains).`
         );
-      } else if (err?.code === 'auth/popup-closed-by-user') {
-        setErrorMessage('Sign-in popup was closed before completing.');
+      } else if (err?.code === 'auth/popup-closed-by-user' || err?.code === 'auth/cancelled-popup-request') {
+        // Popup was dismissed
+        setErrorMessage(null);
       } else if (err?.code === 'auth/popup-blocked') {
         setErrorMessage('Sign-in popup was blocked by your browser. Please allow popups for this site.');
       } else {

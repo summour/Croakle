@@ -1,34 +1,43 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "SF Pro Rounded", ui-sans-serif, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 :root {
-  --font-standard: 'Plus Jakarta Sans', 'Prompt', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Apple iOS Typography Ecosystem */
+  --font-ios: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "SF Pro Rounded", ui-sans-serif, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-ios-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-standard: var(--font-ios);
 }
 
 html, body, button, input, select, textarea {
-  font-family: var(--font-standard);
+  font-family: var(--font-ios);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+.font-sans,
+.font-standard,
+.font-body,
+.font-oswald,
 .font-pixel,
 .font-silkscreen {
-  font-family: var(--font-standard) !important;
+  font-family: var(--font-ios) !important;
 }
 
 .font-display {
-  font-family: var(--font-standard) !important;
+  font-family: var(--font-ios) !important;
   font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.font-body {
-  font-family: var(--font-standard) !important;
-}
-
-.font-oswald {
-  font-family: var(--font-standard) !important;
+  letter-spacing: -0.02em;
 }
 
 .font-mono {
-  font-family: var(--font-standard) !important;
+  font-family: var(--font-ios-mono) !important;
+  font-feature-settings: "tnum" on, "lnum" on;
+  font-variant-numeric: tabular-nums;
 }
 
 .pixel-art-rendering {
