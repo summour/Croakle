@@ -108,6 +108,9 @@ html, body, button, input, select, textarea {
 
   html {
     scroll-behavior: smooth;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
   }
 
   body {
@@ -123,7 +126,20 @@ html, body, button, input, select, textarea {
     overflow-x: hidden;
     overflow-y: auto;
     user-select: none;
+    -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
   }
 
   h1, h2, h3, h4, h5, h6, strong, b, [role="heading"] {
