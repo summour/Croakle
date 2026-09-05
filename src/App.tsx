@@ -642,22 +642,29 @@ export function App() {
   return (
     <main
       id="croakle-app"
-      className="min-h-screen w-full transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative flex flex-col items-center justify-start p-0 sm:py-6 sm:px-4"
-      style={{
-        backgroundColor: settings.theme === 'dark' ? '#2B0A08' : '#D32018',
-        backgroundImage: settings.theme === 'dark'
-          ? 'radial-gradient(#1A0605 1.5px, transparent 1.5px)'
-          : 'radial-gradient(#BB1912 1.5px, transparent 1.5px)',
-        backgroundSize: '24px 24px',
-      }}
+      className="min-h-screen w-full transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative flex flex-col items-center justify-start p-0 sm:py-6 sm:px-4 bg-transparent"
     >
+      {/* Pinned Fixed Background: Stays completely static and does not scroll on any screen size */}
+      <div
+        id="croakle-pinned-background"
+        className="fixed inset-0 pointer-events-none -z-10 transition-colors"
+        style={{
+          backgroundColor: settings.theme === 'dark' ? '#2B0A08' : '#D32018',
+          backgroundImage: settings.theme === 'dark'
+            ? 'radial-gradient(#1A0605 1.5px, transparent 1.5px)'
+            : 'radial-gradient(#BB1912 1.5px, transparent 1.5px)',
+          backgroundSize: '24px 24px',
+          backgroundAttachment: 'fixed',
+        }}
+      />
+
       {/* ========================================================================= */}
       {/* MOBILE VERSION (< 768px): Original layout, single view per tab, NO flow   */}
       {/* ========================================================================= */}
       {!isDesktop ? (
         <div
           id="croakle-mobile-frame"
-          className="relative z-10 w-full max-w-[540px] min-h-screen flex flex-col bg-[#D32018] dark:bg-[#2B0A08] transition-colors pb-24"
+          className="relative z-10 w-full max-w-[540px] min-h-screen flex flex-col bg-transparent transition-colors pb-24"
         >
           {/* Mobile Sticky Header */}
           <header
