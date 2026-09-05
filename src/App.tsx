@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Cloud } from 'lucide-react';
 import {
   PageType,
   HabitTemplate,
@@ -722,24 +721,8 @@ export function App() {
                 CROAKLE
               </h1>
             </div>
-            {/* Active section badge & Cloud status on mobile */}
+            {/* Active section badge on mobile */}
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handleNavigate('settings')}
-                title={firebaseAuth.user ? `Firebase Cloud Synced: ${firebaseAuth.user.displayName || 'Google Account'}` : 'Tap to sign in with Google & sync data to Cloud'}
-                className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border-[1.5px] border-[#1F1B1A] flex items-center gap-1 shadow-[1.5px_1.5px_0px_#1F1B1A] uppercase cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5 ${
-                  firebaseAuth.user
-                    ? firebaseAuth.syncStatus === 'syncing'
-                      ? 'bg-[#FEF08A] text-[#854D0E]'
-                      : 'bg-[#86EFAC] text-[#14532D]'
-                    : 'bg-white text-[#1F1B1A]/80'
-                }`}
-              >
-                <Cloud size={10} className={firebaseAuth.syncStatus === 'syncing' ? 'animate-spin' : ''} />
-                {firebaseAuth.user ? 'SYNCED' : 'CLOUD'}
-              </button>
-
               <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2.5 py-1 rounded-full shadow-[2px_2px_0px_#1F1B1A] uppercase">
                 {NAV_GROUPS.find((g) => g.activeKeys.includes(activePage))?.label || activePage}
               </span>
@@ -931,23 +914,6 @@ export function App() {
                     </button>
                   );
                 })}
-
-                {/* Cloud Sync Status Indicator */}
-                <button
-                  type="button"
-                  onClick={() => handleNavigate('settings')}
-                  title={firebaseAuth.user ? `Firebase Cloud Synced: ${firebaseAuth.user.displayName || 'Google Account'}` : 'Tap to sign in with Google & sync data to Cloud'}
-                  className={`h-[28px] sm:h-[32px] px-2 sm:px-2.5 flex items-center justify-center gap-1 text-center text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-wider transition-colors cursor-pointer rounded-lg sm:rounded-xl whitespace-nowrap select-none shrink-0 border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5 ${
-                    firebaseAuth.user
-                      ? firebaseAuth.syncStatus === 'syncing'
-                        ? 'bg-[#FEF08A] text-[#854D0E]'
-                        : 'bg-[#86EFAC] text-[#14532D]'
-                      : 'bg-white text-[#1F1B1A] hover:bg-white/90'
-                  }`}
-                >
-                  <Cloud size={12} className={firebaseAuth.syncStatus === 'syncing' ? 'animate-spin' : ''} />
-                  <span className="hidden sm:inline">{firebaseAuth.user ? 'SYNCED' : 'CLOUD'}</span>
-                </button>
               </nav>
             </div>
           </header>
