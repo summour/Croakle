@@ -602,8 +602,7 @@ export function App() {
       >
         {/* Header */}
         <header
-          style={{ paddingTop: 'max(0.875rem, calc(0.75rem + env(safe-area-inset-top, 0px)))' }}
-          className="shrink-0 px-5 sm:px-6 pb-3.5 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center transition-colors select-none"
+          className="shrink-0 h-14 sm:h-16 px-5 sm:px-6 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center transition-colors select-none"
         >
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight font-display text-white uppercase leading-none">
             CROAKLE
