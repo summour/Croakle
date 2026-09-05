@@ -37,7 +37,10 @@ export const LiveTimerBar: React.FC<LiveTimerBarProps> = ({
   return (
     <div
       id="croakle-live-timer-activity"
-      className="absolute bottom-16 left-1/2 -translate-x-1/2 z-35 w-[92%] max-w-[460px] pointer-events-auto animate-in fade-in slide-in-from-bottom-3 duration-200"
+      style={{
+        bottom: 'calc(3.75rem + max(1.25rem, calc(0.85rem + env(safe-area-inset-bottom, 0px))))',
+      }}
+      className="absolute left-1/2 -translate-x-1/2 z-35 w-[92%] max-w-[460px] pointer-events-auto animate-in fade-in slide-in-from-bottom-3 duration-200"
     >
       <div 
         onClick={onOpenTimer}
