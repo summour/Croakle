@@ -586,7 +586,7 @@ export function App() {
   return (
     <main
       id="croakle-app"
-      className="h-[100dvh] h-screen w-screen transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative overflow-hidden flex flex-col items-center justify-center p-0 sm:p-4"
+      className="h-[100dvh] w-full transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative overflow-hidden flex flex-col items-center justify-start sm:justify-center p-0 sm:p-4"
       style={{
         backgroundColor: settings.theme === 'dark' ? '#2B0A08' : '#D32018',
         backgroundImage: settings.theme === 'dark'
@@ -598,11 +598,12 @@ export function App() {
       {/* MASTER UNIFIED CONTAINER: Neo-Pop 500px, 2.5px solid dark border, rounded corners & sticker shadow */}
       <div
         id="croakle-master-frame"
-        className="relative z-10 w-full max-w-[500px] h-full sm:h-[900px] max-h-[100dvh] sm:max-h-[96vh] flex flex-col bg-[#D32018] dark:bg-[#2B0A08] border-0 sm:border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] sm:rounded-[28px] sm:shadow-[6px_6px_0px_#1F1B1A] dark:sm:shadow-[6px_6px_0px_#000000] overflow-hidden transition-all duration-300"
+        className="relative z-10 w-full max-w-[500px] h-[100dvh] sm:h-[900px] sm:max-h-[96vh] flex flex-col bg-[#D32018] dark:bg-[#2B0A08] border-0 sm:border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] sm:rounded-[28px] sm:shadow-[6px_6px_0px_#1F1B1A] dark:sm:shadow-[6px_6px_0px_#000000] overflow-hidden transition-all duration-300"
       >
-        {/* Header */}
+        {/* Header - Compact and snug against mobile status bar */}
         <header
-          className="shrink-0 h-14 sm:h-16 px-5 sm:px-6 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center transition-colors select-none"
+          style={{ paddingTop: 'max(0.625rem, calc(0.2rem + env(safe-area-inset-top, 0px)))' }}
+          className="shrink-0 px-5 sm:px-6 pb-2.5 sm:pb-3.5 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center transition-colors select-none"
         >
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight font-display text-white uppercase leading-none">
             CROAKLE
