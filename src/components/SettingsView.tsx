@@ -110,7 +110,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   };
 
   return (
-    <div className="space-y-4 pb-1 font-mono">
+    <div className="flex flex-col gap-3.5 pb-2 font-mono">
       {/* Header */}
       <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] p-4 flex items-center justify-between bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A]">
         <div>

@@ -305,113 +305,111 @@ export const NotesView: React.FC<NotesViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-1" {...swipeHandlers}>
+    <div className="flex flex-col gap-3.5 pb-2" {...swipeHandlers}>
       {/* Header with Week Navigation */}
-      <div className="pt-1 pb-1.5 space-y-2">
-        <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3 space-y-2 touch-pan-y" {...swipeHandlers}>
-          {/* Top Row: Week Navigation */}
-          <div className="flex items-center justify-between">
+      <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3 space-y-2 touch-pan-y" {...swipeHandlers}>
+        {/* Top Row: Week Navigation */}
+        <div className="flex items-center justify-between">
+          <button
+            id="notes-prev-week"
+            type="button"
+            onClick={handleGoPrevWeek}
+            className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
+            aria-label="Previous Week"
+            title="Previous Week"
+          >
+            <ChevronLeft size={16} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsCalendarOpen(true)}
+            className="flex flex-col items-center px-2.5 py-1 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer group"
+            title="Click to open calendar"
+          >
+            <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/80">
+              Daily Journal
+            </p>
+            <div className="flex items-center gap-2">
+              <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-white">
+                {MONTH_NAMES[monthIndex]} {year}
+              </strong>
+              <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border-[1.5px] border-[#1F1B1A] bg-[#FEF08A] text-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]">
+                {currentWeek?.label}
+              </span>
+            </div>
+          </button>
+
+          <div className="flex items-center gap-1.5">
             <button
-              id="notes-prev-week"
+              id="notes-next-week"
               type="button"
-              onClick={handleGoPrevWeek}
+              onClick={handleGoNextWeek}
               className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
-              aria-label="Previous Week"
-              title="Previous Week"
+              aria-label="Next Week"
+              title="Next Week"
             >
-              <ChevronLeft size={16} />
+              <ChevronRight size={16} />
             </button>
 
             <button
               type="button"
-              onClick={() => setIsCalendarOpen(true)}
-              className="flex flex-col items-center px-2.5 py-1 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer group"
-              title="Click to open calendar"
+              onClick={() => setIsWeekStripOpen(!isWeekStripOpen)}
+              className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
+              aria-label={isWeekStripOpen ? 'Collapse Week Strip' : 'Expand Week Strip'}
+              title={isWeekStripOpen ? 'Collapse Week Strip' : 'Expand Week Strip'}
             >
-              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/80">
-                Daily Journal
-              </p>
-              <div className="flex items-center gap-2">
-                <strong id="CroakleNotesMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-white">
-                  {MONTH_NAMES[monthIndex]} {year}
-                </strong>
-                <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border-[1.5px] border-[#1F1B1A] bg-[#FEF08A] text-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]">
-                  {currentWeek?.label}
-                </span>
-              </div>
+              {isWeekStripOpen ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
             </button>
-
-            <div className="flex items-center gap-1.5">
-              <button
-                id="notes-next-week"
-                type="button"
-                onClick={handleGoNextWeek}
-                className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
-                aria-label="Next Week"
-                title="Next Week"
-              >
-                <ChevronRight size={16} />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsWeekStripOpen(!isWeekStripOpen)}
-                className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
-                aria-label={isWeekStripOpen ? 'Collapse Week Strip' : 'Expand Week Strip'}
-                title={isWeekStripOpen ? 'Collapse Week Strip' : 'Expand Week Strip'}
-              >
-                {isWeekStripOpen ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-              </button>
-            </div>
           </div>
-
-          {/* 7-Day Interactive Strip */}
-          {isWeekStripOpen && (
-            <div className="grid grid-cols-7 gap-1 pt-1.5 border-t-[2px] border-[#1F1B1A]/40 dark:border-white/30 animate-in fade-in duration-150">
-              {weekDays.map((wd) => {
-                const isSelected = formatIsoDate(wd.date) === selectedDateIso;
-                const dayName = DAY_SHORT_NAMES[wd.dayIndex];
-                const dayOfMonth = wd.date.getDate();
-                const noteCount = notesCountByDate[wd.iso] || 0;
-
-                return (
-                  <button
-                    key={wd.iso}
-                    type="button"
-                    onClick={() => {
-                      if (onSelectDate) onSelectDate(wd.date);
-                    }}
-                    className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono rounded-xl border-[2px] transition-all duration-100 cursor-pointer ${
-                      !wd.inMonth
-                        ? 'opacity-35 bg-white/20 border-dashed border-[#1F1B1A]/40 text-white'
-                        : isSelected
-                        ? 'bg-[#E02921] text-white font-bold border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
-                        : wd.isCurrentDay
-                        ? 'bg-[#FEF08A] text-[#1F1B1A] font-bold border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A]'
-                        : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A] hover:bg-[#FEF08A]/80'
-                    }`}
-                  >
-                    <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
-                    <span className="text-sm font-extrabold">{dayOfMonth}</span>
-                    <span
-                      className={`w-1.5 h-1.5 mt-0.5 rounded-full ${
-                        noteCount > 0
-                          ? isSelected
-                            ? 'bg-white'
-                            : 'bg-[#FEF08A]'
-                          : 'invisible'
-                      }`}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          )}
         </div>
+
+        {/* 7-Day Interactive Strip */}
+        {isWeekStripOpen && (
+          <div className="grid grid-cols-7 gap-1 pt-1.5 border-t-[2px] border-[#1F1B1A]/40 dark:border-white/30 animate-in fade-in duration-150">
+            {weekDays.map((wd) => {
+              const isSelected = formatIsoDate(wd.date) === selectedDateIso;
+              const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+              const dayOfMonth = wd.date.getDate();
+              const noteCount = notesCountByDate[wd.iso] || 0;
+
+              return (
+                <button
+                  key={wd.iso}
+                  type="button"
+                  onClick={() => {
+                    if (onSelectDate) onSelectDate(wd.date);
+                  }}
+                  className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono rounded-xl border-[2px] transition-all duration-100 cursor-pointer ${
+                    !wd.inMonth
+                      ? 'opacity-35 bg-white/20 border-dashed border-[#1F1B1A]/40 text-white'
+                      : isSelected
+                      ? 'bg-[#E02921] text-white font-bold border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
+                      : wd.isCurrentDay
+                      ? 'bg-[#FEF08A] text-[#1F1B1A] font-bold border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A]'
+                      : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A] hover:bg-[#FEF08A]/80'
+                  }`}
+                >
+                  <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
+                  <span className="text-sm font-extrabold">{dayOfMonth}</span>
+                  <span
+                    className={`w-1.5 h-1.5 mt-0.5 rounded-full ${
+                      noteCount > 0
+                        ? isSelected
+                          ? 'bg-white'
+                          : 'bg-[#FEF08A]'
+                        : 'invisible'
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Main Controls: Action Bar (Always visible in normal document flow) */}
-      <div className="space-y-2.5">
+      <div className="flex flex-col gap-2.5">
         <div className="flex items-center gap-2">
           <button
             id="CroakleOpenAddNote"
@@ -570,7 +568,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
       </div>
 
       {/* Date-Grouped Notes Timeline */}
-      <div className="space-y-5 pt-1">
+      <div className="flex flex-col gap-3.5">
         {filteredNotes.length === 0 ? (
           <div className="rounded-2xl border-[2.5px] border-dashed border-[#1F1B1A]/50 bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A] p-8 text-center space-y-2">
             <div>
@@ -586,9 +584,9 @@ export const NotesView: React.FC<NotesViewProps> = ({
           groupedNotes.map((group) => {
             const friendlyHeader = formatFriendlyDate(group.date);
             return (
-              <div key={group.date} className="space-y-2.5">
+              <div key={group.date} className="flex flex-col gap-2.5">
                 {/* Date Group Header */}
-                <div className="flex items-center justify-between px-1 pt-2">
+                <div className="flex items-center justify-between px-1 pt-1">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full bg-[#FEF08A] border-[1.5px] border-[#1F1B1A]" />
                     <strong className="text-base sm:text-lg font-bold font-oswald text-white uppercase tracking-tight drop-shadow-[1px_1px_0px_#1F1B1A]">
@@ -601,7 +599,7 @@ export const NotesView: React.FC<NotesViewProps> = ({
                 </div>
 
                 {/* Group Items */}
-                <div className="space-y-3">
+                <div className="flex flex-col gap-3">
                   {group.items.map((note) => {
                     const content = getResolvedContent(note);
 

@@ -61,7 +61,7 @@ export const MoodView: React.FC<MoodViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-1" {...swipeHandlers}>
+    <div className="flex flex-col gap-3.5 pb-2" {...swipeHandlers}>
       {/* Month Header Card (Blue like the other views) */}
       <div className="border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3.5 sm:p-4 flex items-center justify-between">
         <button

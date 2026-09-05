@@ -201,137 +201,135 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-1" {...swipeHandlers}>
+    <div className="flex flex-col gap-3.5 pb-2" {...swipeHandlers}>
       {/* Header with integrated Month & Week navigation */}
-      <div className="pt-1 pb-1 space-y-2">
-        <div className="border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white p-3 space-y-2.5 rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] touch-pan-y" {...swipeHandlers}>
-          {/* Top Row: Week Navigation */}
-          <div className="flex items-center justify-between">
-            <button
-              id="project-prev-week"
-              type="button"
-              onClick={handleGoPrevWeek}
-              className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
-              aria-label="Previous Week"
-              title="Previous Week"
-            >
-              <ChevronLeft size={16} />
-            </button>
+      <div className="border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white p-3 space-y-2.5 rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] touch-pan-y" {...swipeHandlers}>
+        {/* Top Row: Week Navigation */}
+        <div className="flex items-center justify-between">
+          <button
+            id="project-prev-week"
+            type="button"
+            onClick={handleGoPrevWeek}
+            className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
+            aria-label="Previous Week"
+            title="Previous Week"
+          >
+            <ChevronLeft size={16} />
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setIsCalendarOpen(true)}
-              className="flex flex-col items-center px-2.5 py-1 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer group"
-              title="Click to open calendar"
-            >
-              <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/80">
-                Project Tracker
-              </p>
-              <div className="flex items-center gap-2">
-                <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-white">
-                  {MONTH_NAMES[monthIndex]} {year}
-                </strong>
-                <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border-[1.5px] border-[#1F1B1A] bg-[#FEF08A] text-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]">
-                  {currentWeek?.label}
-                </span>
-              </div>
-            </button>
+          <button
+            type="button"
+            onClick={() => setIsCalendarOpen(true)}
+            className="flex flex-col items-center px-2.5 py-1 rounded-xl hover:bg-black/10 dark:hover:bg-white/10 transition cursor-pointer group"
+            title="Click to open calendar"
+          >
+            <p className="text-[9px] font-mono font-bold uppercase tracking-widest text-white/80">
+              Project Tracker
+            </p>
+            <div className="flex items-center gap-2">
+              <strong id="CroakleProjectMonth" className="text-base sm:text-lg font-bold font-oswald tracking-tight uppercase text-white">
+                {MONTH_NAMES[monthIndex]} {year}
+              </strong>
+              <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full border-[1.5px] border-[#1F1B1A] bg-[#FEF08A] text-[#1F1B1A] shadow-[1px_1px_0px_#1F1B1A]">
+                {currentWeek?.label}
+              </span>
+            </div>
+          </button>
 
-            <button
-              id="project-next-week"
-              type="button"
-              onClick={handleGoNextWeek}
-              className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
-              aria-label="Next Week"
-              title="Next Week"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-          {/* 7-Day Interactive Strip */}
-          <div className="grid grid-cols-7 gap-1 pt-1.5 border-t-[2px] border-[#1F1B1A]/40 dark:border-white/30">
-            {weekDays.map((wd) => {
-              const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
-              const dayName = DAY_SHORT_NAMES[wd.dayIndex];
-              const dayOfMonth = wd.date.getDate();
-              const weekKeyForDay = getWeekKey(wd.date);
-              const hasActivity =
-                wd.inMonth &&
-                projects.some(
-                  (p) => p.weeklyDays?.[weekKeyForDay]?.[wd.dayIndex] === true
-                );
-
-              return (
-                <button
-                  key={wd.iso}
-                  type="button"
-                  onClick={() => onSelectDate(wd.date)}
-                  className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono transition-all duration-100 cursor-pointer rounded-xl border-[2px] ${
-                    !wd.inMonth
-                      ? 'opacity-35 bg-white/20 border-dashed border-[#1F1B1A]/40 text-white'
-                      : isSelected
-                      ? 'bg-[#E02921] text-white font-bold border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
-                      : wd.isCurrentDay
-                      ? 'bg-[#FEF08A] text-[#1F1B1A] font-bold border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A]'
-                      : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A] hover:bg-[#FEF08A]/80'
-                  }`}
-                >
-                  <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
-                  <span className="text-sm font-bold">{dayOfMonth}</span>
-                  <span
-                    className={`w-1.5 h-1.5 mt-0.5 rounded-full ${
-                      hasActivity
-                        ? isSelected
-                          ? 'bg-white'
-                          : 'bg-[#E02921]'
-                        : 'invisible'
-                    }`}
-                  />
-                </button>
-              );
-            })}
-          </div>
+          <button
+            id="project-next-week"
+            type="button"
+            onClick={handleGoNextWeek}
+            className="w-8 h-8 rounded-xl border-[2px] border-[#1F1B1A] bg-white dark:bg-[#252320] flex items-center justify-center font-bold text-[#1F1B1A] dark:text-[#F8F7F4] transition-all cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5"
+            aria-label="Next Week"
+            title="Next Week"
+          >
+            <ChevronRight size={16} />
+          </button>
         </div>
 
-        {/* Action Bar: Add Project, Done & Order */}
-        <div className="grid grid-cols-3 gap-2">
-          <button
-            id="CroakleOpenAddProject"
-            type="button"
-            onClick={handleOpenAdd}
-            className="py-2 px-2.5 rounded-xl border-[2px] border-[#1F1B1A] bg-[#FEF08A] hover:bg-[#FED843] text-[#1F1B1A] font-mono font-bold text-xs uppercase tracking-wider shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center gap-1.5 transition-all cursor-pointer active:translate-x-0.5 active:translate-y-0.5 whitespace-nowrap"
-          >
-            <Plus size={14} className="shrink-0" />
-            <span>ADD</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowArchived(!showArchived)}
-            className={`py-2 px-2.5 rounded-xl border-[2px] border-[#1F1B1A] font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all whitespace-nowrap cursor-pointer shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5 ${
-              showArchived
-                ? 'bg-[#FEF08A] text-[#1F1B1A]'
-                : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] hover:bg-[#FEF08A]'
-            }`}
-          >
-            <Archive size={13} className="shrink-0" />
-            <span>{showArchived ? 'Active' : `Done (${archivedProjects.length})`}</span>
-          </button>
-          <button
-            id="CroakleOpenReorderProject"
-            type="button"
-            onClick={() => setIsReorderOpen(true)}
-            className="py-2 px-2.5 rounded-xl bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] border-[2px] border-[#1F1B1A] font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5 whitespace-nowrap"
-            title="Reorder Projects"
-          >
-            <ArrowUpDown size={13} />
-            <span>Order</span>
-          </button>
+        {/* 7-Day Interactive Strip */}
+        <div className="grid grid-cols-7 gap-1 pt-1.5 border-t-[2px] border-[#1F1B1A]/40 dark:border-white/30">
+          {weekDays.map((wd) => {
+            const isSelected = formatIsoDate(wd.date) === formatIsoDate(selectedDate);
+            const dayName = DAY_SHORT_NAMES[wd.dayIndex];
+            const dayOfMonth = wd.date.getDate();
+            const weekKeyForDay = getWeekKey(wd.date);
+            const hasActivity =
+              wd.inMonth &&
+              projects.some(
+                (p) => p.weeklyDays?.[weekKeyForDay]?.[wd.dayIndex] === true
+              );
+
+            return (
+              <button
+                key={wd.iso}
+                type="button"
+                onClick={() => onSelectDate(wd.date)}
+                className={`py-1.5 px-0.5 text-center flex flex-col items-center justify-center font-mono transition-all duration-100 cursor-pointer rounded-xl border-[2px] ${
+                  !wd.inMonth
+                    ? 'opacity-35 bg-white/20 border-dashed border-[#1F1B1A]/40 text-white'
+                    : isSelected
+                    ? 'bg-[#E02921] text-white font-bold border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
+                    : wd.isCurrentDay
+                    ? 'bg-[#FEF08A] text-[#1F1B1A] font-bold border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A]'
+                    : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] border-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A] hover:bg-[#FEF08A]/80'
+                }`}
+              >
+                <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
+                <span className="text-sm font-bold">{dayOfMonth}</span>
+                <span
+                  className={`w-1.5 h-1.5 mt-0.5 rounded-full ${
+                    hasActivity
+                      ? isSelected
+                        ? 'bg-white'
+                        : 'bg-[#E02921]'
+                      : 'invisible'
+                  }`}
+                />
+              </button>
+            );
+          })}
         </div>
       </div>
 
+      {/* Action Bar: Add Project, Done & Order */}
+      <div className="grid grid-cols-3 gap-2.5">
+        <button
+          id="CroakleOpenAddProject"
+          type="button"
+          onClick={handleOpenAdd}
+          className="py-2 px-2.5 rounded-xl border-[2px] border-[#1F1B1A] bg-[#FEF08A] hover:bg-[#FED843] text-[#1F1B1A] font-mono font-bold text-xs uppercase tracking-wider shadow-[2px_2px_0px_#1F1B1A] flex items-center justify-center gap-1.5 transition-all cursor-pointer active:translate-x-0.5 active:translate-y-0.5 whitespace-nowrap"
+        >
+          <Plus size={14} className="shrink-0" />
+          <span>ADD</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowArchived(!showArchived)}
+          className={`py-2 px-2.5 rounded-xl border-[2px] border-[#1F1B1A] font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all whitespace-nowrap cursor-pointer shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5 ${
+            showArchived
+              ? 'bg-[#FEF08A] text-[#1F1B1A]'
+              : 'bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] hover:bg-[#FEF08A]'
+          }`}
+        >
+          <Archive size={13} className="shrink-0" />
+          <span>{showArchived ? 'Active' : `Done (${archivedProjects.length})`}</span>
+        </button>
+        <button
+          id="CroakleOpenReorderProject"
+          type="button"
+          onClick={() => setIsReorderOpen(true)}
+          className="py-2 px-2.5 rounded-xl bg-white dark:bg-[#1D1B18] text-[#1F1B1A] dark:text-[#F8F7F4] border-[2px] border-[#1F1B1A] font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-[2px_2px_0px_#1F1B1A] hover:bg-[#FEF08A] active:translate-x-0.5 active:translate-y-0.5 whitespace-nowrap"
+          title="Reorder Projects"
+        >
+          <ArrowUpDown size={13} />
+          <span>Order</span>
+        </button>
+      </div>
+
       {/* Main Projects List Container */}
-      <div className="space-y-4">
+      <div className="flex flex-col gap-3.5">
         {displayedProjects.length === 0 ? (
           <div className="text-center py-10 rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A] p-6 space-y-3">
             <p className="font-oswald text-lg uppercase font-bold text-[#1F1B1A]">
@@ -349,7 +347,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
             </button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="flex flex-col gap-3.5">
             {displayedProjects.map((project) => {
               const originalIndex = projects.findIndex((p) => p.id === project.id);
               const weekChecks = project.weeklyDays?.[currentWeekKey] || new Array(7).fill(false);

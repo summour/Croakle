@@ -182,10 +182,10 @@ button, input, select, a, [role="button"] {
 /* Neo-Pop Habit Cards */
 .habit-card {
   border: 2.5px solid var(--ink);
-  border-radius: 1.25rem;
+  border-radius: 1rem;
   box-shadow: 4px 4px 0px 0px var(--ink);
   padding: 1.15rem 1.25rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   background: #FED843;
   color: #1F1B1A;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
