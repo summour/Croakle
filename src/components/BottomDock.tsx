@@ -7,60 +7,62 @@ interface BottomDockProps {
   isTimerRunning?: boolean;
 }
 
-export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage, isTimerRunning }) => {
-  const groups: {
-    id: PageType;
-    activeKeys: PageType[];
-    label: string;
-    title: string;
-  }[] = [
-    {
-      id: 'mood',
-      activeKeys: ['mood'],
-      label: 'MOOD',
-      title: 'Mood Tracker',
-    },
-    {
-      id: 'track',
-      activeKeys: ['track', 'best'],
-      label: 'HAB',
-      title: 'Habits Tracker',
-    },
-    {
-      id: 'project',
-      activeKeys: ['project'],
-      label: 'PROJ',
-      title: 'Projects',
-    },
-    {
-      id: 'time',
-      activeKeys: ['time'],
-      label: 'FOC',
-      title: 'Focus Timer',
-    },
-    {
-      id: 'notes',
-      activeKeys: ['notes', 'analysis'],
-      label: 'JRNL',
-      title: 'Journal & Notes',
-    },
-    {
-      id: 'settings',
-      activeKeys: ['settings'],
-      label: 'SET',
-      title: 'Settings',
-    },
-  ];
+export interface NavGroup {
+  id: PageType;
+  activeKeys: PageType[];
+  label: string;
+  title: string;
+}
 
+export const NAV_GROUPS: NavGroup[] = [
+  {
+    id: 'mood',
+    activeKeys: ['mood'],
+    label: 'MOOD',
+    title: 'Mood Tracker',
+  },
+  {
+    id: 'track',
+    activeKeys: ['track', 'best'],
+    label: 'HAB',
+    title: 'Habits Tracker',
+  },
+  {
+    id: 'project',
+    activeKeys: ['project'],
+    label: 'PROJ',
+    title: 'Projects',
+  },
+  {
+    id: 'time',
+    activeKeys: ['time'],
+    label: 'FOC',
+    title: 'Focus Timer',
+  },
+  {
+    id: 'notes',
+    activeKeys: ['notes', 'analysis'],
+    label: 'JRNL',
+    title: 'Journal & Notes',
+  },
+  {
+    id: 'settings',
+    activeKeys: ['settings'],
+    label: 'SET',
+    title: 'Settings',
+  },
+];
+
+export const BottomDock: React.FC<BottomDockProps> = ({ activePage, onSelectPage, isTimerRunning }) => {
   return (
     <footer
       id="croakle-bottom-dock"
       style={{
         paddingBottom: 'max(0.625rem, calc(0.25rem + env(safe-area-inset-bottom, 0px)))',
       }}
-      className="shrink-0 w-full bg-[#D32018] dark:bg-[#2B0A08] border-t-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] px-1.5 sm:px-3 pt-1.5 sm:pt-2 flex items-center justify-around gap-1 sm:gap-1.5 z-30 transition-colors"
+      className="md:hidden fixed bottom-0 left-0 right-0 max-w-[540px] mx-auto w-full bg-[#D32018] dark:bg-[#2B0A08] border-t-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] px-1.5 sm:px-3 pt-1.5 sm:pt-2 flex items-center justify-around gap-1 sm:gap-1.5 z-30 transition-colors"
     >
-      {groups.map((group) => {
+      {NAV_GROUPS.map((group) => {
         const isActive = group.activeKeys.includes(activePage);
 
         return (

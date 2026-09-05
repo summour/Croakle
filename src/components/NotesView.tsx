@@ -305,9 +305,9 @@ export const NotesView: React.FC<NotesViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-28" {...swipeHandlers}>
-      {/* Sticky Header with Week Navigation */}
-      <div className="sticky top-0 z-20 bg-transparent pt-1 pb-1.5 space-y-2">
+    <div className="space-y-4 pb-1" {...swipeHandlers}>
+      {/* Header with Week Navigation */}
+      <div className="pt-1 pb-1.5 space-y-2">
         <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3 space-y-2 touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">

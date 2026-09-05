@@ -97,6 +97,10 @@ html, body, button, input, select, textarea {
     --primary-yellow: #FEF08A;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -105,9 +109,10 @@ html, body, button, input, select, textarea {
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
     padding: 0;
-    height: 100vh;
-    height: 100dvh;
-    overflow: hidden;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
   }

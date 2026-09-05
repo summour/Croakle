@@ -38,7 +38,7 @@ import {
   formatTimeWithSeconds,
   formatDateTimeWithSeconds,
 } from './utils/dateUtils';
-import { BottomDock } from './components/BottomDock';
+import { BottomDock, NAV_GROUPS } from './components/BottomDock';
 import { HabitsView } from './components/HabitsView';
 import { ProjectsView } from './components/ProjectsView';
 import { MoodView } from './components/MoodView';
@@ -583,10 +583,46 @@ export function App() {
     setPixelScene({ ...DEFAULT_PIXEL_SCENE });
   };
 
+  // Smooth scroll handler ("เวลากดก็ไหลไปแท็บนั้น แบบเว็บญี่ปุ่น")
+  const scrollToSection = (pageId: PageType) => {
+    setActivePage(pageId);
+    const targetKey = pageId === 'best' ? 'track' : pageId === 'analysis' ? 'notes' : pageId;
+    const element = document.getElementById(`section-${targetKey}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // ScrollSpy to update activePage as user scrolls continuously
+  useEffect(() => {
+    const sectionIds: PageType[] = ['mood', 'track', 'project', 'time', 'notes', 'settings'];
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const threshold = 180;
+
+      let currentSection: PageType = 'mood';
+      for (const id of sectionIds) {
+        const el = document.getElementById(`section-${id}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const top = rect.top + window.scrollY;
+          if (scrollY + threshold >= top) {
+            currentSection = id;
+          }
+        }
+      }
+      setActivePage((prev) => (prev !== currentSection ? currentSection : prev));
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <main
       id="croakle-app"
-      className="h-[100dvh] w-full transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative overflow-hidden flex flex-col items-center justify-start sm:justify-center p-0 sm:p-4"
+      className="min-h-screen w-full transition-colors font-mono selection:bg-[#1F1B1A] selection:text-white relative flex flex-col items-center justify-start p-0 sm:py-6 sm:px-4"
       style={{
         backgroundColor: settings.theme === 'dark' ? '#2B0A08' : '#D32018',
         backgroundImage: settings.theme === 'dark'
@@ -595,194 +631,333 @@ export function App() {
         backgroundSize: '24px 24px',
       }}
     >
-      {/* MASTER UNIFIED CONTAINER: Neo-Pop 500px, 2.5px solid dark border, rounded corners & sticker shadow */}
-      <div
-        id="croakle-master-frame"
-        className="relative z-10 w-full max-w-[500px] h-[100dvh] sm:h-[900px] sm:max-h-[96vh] flex flex-col bg-[#D32018] dark:bg-[#2B0A08] border-0 sm:border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] sm:rounded-[28px] sm:shadow-[6px_6px_0px_#1F1B1A] dark:sm:shadow-[6px_6px_0px_#000000] overflow-hidden transition-all duration-300"
+      {/* Sticky Top Navigation Bar (Japanese Website Style) */}
+      <header
+        id="croakle-top-bar"
+        className="sticky top-0 z-40 w-full flex justify-center px-2.5 sm:px-4 pt-2.5 pb-2 pointer-events-none select-none"
       >
-        {/* Header - Compact and snug against mobile status bar */}
-        <header
-          style={{ paddingTop: 'max(0.625rem, calc(0.2rem + env(safe-area-inset-top, 0px)))' }}
-          className="shrink-0 px-5 sm:px-6 pb-2.5 sm:pb-3.5 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center transition-colors select-none"
-        >
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight font-display text-white uppercase leading-none">
+        <div className="w-full max-w-[540px] md:max-w-[580px] bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-2xl sm:rounded-[24px] shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] px-3 sm:px-4 py-2 flex items-center justify-between gap-2 pointer-events-auto transition-colors">
+          {/* Logo */}
+          <button
+            type="button"
+            onClick={() => scrollToSection('mood')}
+            className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none hover:opacity-90 transition-opacity cursor-pointer text-left"
+          >
             CROAKLE
-          </h1>
-        </header>
+          </button>
 
-        {/* Scrollable Viewport Container */}
-        <div
-          id="croakle-scroll-area"
-          className="scroll-area flex-1 w-full px-4 sm:px-5 pt-4 pb-6 overflow-y-auto overscroll-y-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-[#D32018] dark:bg-[#2B0A08]"
-        >
-          {activePage === 'best' && (
-            <HabitsView
-              habits={habitStore.habitTemplates}
-              monthData={currentMonthData}
-              year={trackYear}
-              monthIndex={trackMonth}
-              selectedDate={selectedDate}
-              onSelectDate={handleSelectDate}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onPrevWeek={handlePrevWeek}
-              onNextWeek={handleNextWeek}
-              onToggleHabitDay={handleToggleHabitDay}
-              onAddHabit={handleAddHabit}
-              onUpdateHabit={handleUpdateHabit}
-              onDeleteHabit={handleDeleteHabit}
-              onToggleCompleteHabit={handleToggleCompleteHabit}
-              onReorderHabits={handleReorderHabits}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'track' && (
-            <HabitsView
-              habits={habitStore.habitTemplates}
-              monthData={currentMonthData}
-              year={trackYear}
-              monthIndex={trackMonth}
-              selectedDate={selectedDate}
-              onSelectDate={handleSelectDate}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onPrevWeek={handlePrevWeek}
-              onNextWeek={handleNextWeek}
-              onToggleHabitDay={handleToggleHabitDay}
-              onAddHabit={handleAddHabit}
-              onUpdateHabit={handleUpdateHabit}
-              onDeleteHabit={handleDeleteHabit}
-              onToggleCompleteHabit={handleToggleCompleteHabit}
-              onReorderHabits={handleReorderHabits}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'project' && (
-            <ProjectsView
-              projects={projects}
-              year={trackYear}
-              monthIndex={trackMonth}
-              selectedDate={selectedDate}
-              onSelectDate={handleSelectDate}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onPrevWeek={handlePrevWeek}
-              onNextWeek={handleNextWeek}
-              onToggleProjectDay={handleToggleProjectDay}
-              onAddProject={handleAddProject}
-              onUpdateProject={handleUpdateProject}
-              onDeleteProject={handleDeleteProject}
-              onToggleCompleteProject={handleToggleCompleteProject}
-              onReorderProjects={handleReorderProjects}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'mood' && (
-            <MoodView
-              monthData={currentMonthData}
-              year={trackYear}
-              monthIndex={trackMonth}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onSetMoodDay={handleSetMoodDay}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'notes' && (
-            <NotesView
-              notes={notes}
-              habits={habitStore.habitTemplates}
-              projects={projects}
-              year={trackYear}
-              monthIndex={trackMonth}
-              selectedDate={selectedDate}
-              onSelectDate={handleSelectDate}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onPrevWeek={handlePrevWeek}
-              onNextWeek={handleNextWeek}
-              onAddNote={handleAddNote}
-              onUpdateNote={handleUpdateNote}
-              onDeleteNote={handleDeleteNote}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'time' && (
-            <TimeSessionsView
-              sessions={sessions}
-              habits={habitStore.habitTemplates}
-              projects={projects}
-              activeTimer={activeTimer}
-              elapsedSeconds={elapsedSeconds}
-              onStartTimer={handleStartTimer}
-              onPauseTimer={handlePauseTimer}
-              onResumeTimer={handleResumeTimer}
-              onResetTimer={handleResetTimer}
-              onFinishTimer={handleFinishTimer}
-              onUpdateTimerConfig={handleUpdateTimerConfig}
-              onAddSession={handleAddSession}
-              onUpdateSession={handleUpdateSession}
-              onDeleteSession={handleDeleteSession}
-            />
-          )}
-
-          {activePage === 'analysis' && (
-            <AnalyticsView
-              habits={habitStore.habitTemplates}
-              monthData={currentMonthData}
-              projects={projects}
-              notes={notes}
-              sessions={sessions}
-              year={trackYear}
-              monthIndex={trackMonth}
-              onPrevMonth={handlePrevMonth}
-              onNextMonth={handleNextMonth}
-              onNavigate={setActivePage}
-            />
-          )}
-
-          {activePage === 'settings' && (
-            <SettingsView
-              settings={settings}
-              onUpdateSettings={setSettings}
-              habits={habitStore.habitTemplates}
-              monthData={currentMonthData}
-              projects={projects}
-              pixelScene={pixelScene}
-              onUpdatePixelScene={handleUpdatePixelScene}
-              onDataImported={handleDataImported}
-              onResetData={handleResetData}
-              onNavigate={setActivePage}
-            />
-          )}
+          {/* Top Navigation Tabs */}
+          <nav className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {NAV_GROUPS.map((group) => {
+              const isActive = group.activeKeys.includes(activePage);
+              return (
+                <button
+                  key={group.id}
+                  id={`top-nav-${group.id}`}
+                  type="button"
+                  onClick={() => scrollToSection(group.id)}
+                  title={group.title}
+                  className={`h-[28px] sm:h-[32px] px-2 sm:px-2.5 flex items-center justify-center text-center text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-wider transition-all cursor-pointer rounded-lg sm:rounded-xl whitespace-nowrap select-none touch-manipulation active:scale-95 ${
+                    isActive
+                      ? 'bg-[#FEF08A] text-[#1F1B1A] border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] -translate-y-0.5'
+                      : 'text-white/85 hover:text-white hover:bg-black/20 border-[2px] border-transparent active:bg-black/30'
+                  }`}
+                >
+                  <span>{group.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
+      </header>
 
-        {/* Floating Continuous Live Activity Island (Visible on all tabs when timer is running/paused, except when inside Focus tab) */}
-        {activePage !== 'time' && (
-          <LiveTimerBar
-            activeTimer={activeTimer}
-            elapsedSeconds={elapsedSeconds}
-            onTogglePlayPause={() => {
-              if (activeTimer.isRunning) {
-                handlePauseTimer();
-              } else {
-                handleResumeTimer();
-              }
-            }}
-            onFinishSession={handleFinishTimer}
-            onOpenTimer={() => setActivePage('time')}
-          />
-        )}
+      {/* Main Flow Container: each page wrapped in its own framed box, fixed without internal scrolling */}
+      <div
+        id="croakle-sections-container"
+        className="w-full flex flex-col items-center gap-8 sm:gap-12 px-2.5 sm:px-4 pt-2 pb-24"
+      >
+        {/* Box 1: Mood Tracker */}
+        <section id="section-mood" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+          <div
+            id="box-mood"
+            className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
+          >
+            {/* Box Header Strip */}
+            <div className="px-4 sm:px-5 py-2.5 sm:py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] rounded-t-[21px] sm:rounded-t-[25px] flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none">
+                  CROAKLE
+                </span>
+                <span className="text-white/40 font-bold">/</span>
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#FEF08A] uppercase">
+                  MOOD TRACKER
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2 py-0.5 rounded-full shadow-[2px_2px_0px_#1F1B1A]">
+                01 // MOOD
+              </span>
+            </div>
 
-        {/* Floating Modern Bottom Navigation Dock anchored inside master frame */}
+            {/* Box Content: Fully fixed, no internal scroll */}
+            <div className="p-3.5 sm:p-5 overflow-visible">
+              <MoodView
+                monthData={currentMonthData}
+                year={trackYear}
+                monthIndex={trackMonth}
+                onPrevMonth={handlePrevMonth}
+                onNextMonth={handleNextMonth}
+                onSetMoodDay={handleSetMoodDay}
+                onNavigate={scrollToSection}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Box 2: Habit Tracker */}
+        <section id="section-track" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+          <div
+            id="box-track"
+            className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
+          >
+            {/* Box Header Strip */}
+            <div className="px-4 sm:px-5 py-2.5 sm:py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] rounded-t-[21px] sm:rounded-t-[25px] flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none">
+                  CROAKLE
+                </span>
+                <span className="text-white/40 font-bold">/</span>
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#FEF08A] uppercase">
+                  HABITS TRACKER
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2 py-0.5 rounded-full shadow-[2px_2px_0px_#1F1B1A]">
+                02 // HABITS
+              </span>
+            </div>
+
+            {/* Box Content: Fully fixed, no internal scroll */}
+            <div className="p-3.5 sm:p-5 overflow-visible">
+              <HabitsView
+                habits={habitStore.habitTemplates}
+                monthData={currentMonthData}
+                year={trackYear}
+                monthIndex={trackMonth}
+                selectedDate={selectedDate}
+                onSelectDate={handleSelectDate}
+                onPrevMonth={handlePrevMonth}
+                onNextMonth={handleNextMonth}
+                onPrevWeek={handlePrevWeek}
+                onNextWeek={handleNextWeek}
+                onToggleHabitDay={handleToggleHabitDay}
+                onAddHabit={handleAddHabit}
+                onUpdateHabit={handleUpdateHabit}
+                onDeleteHabit={handleDeleteHabit}
+                onToggleCompleteHabit={handleToggleCompleteHabit}
+                onReorderHabits={handleReorderHabits}
+                onNavigate={scrollToSection}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Box 3: Projects */}
+        <section id="section-project" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+          <div
+            id="box-project"
+            className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
+          >
+            {/* Box Header Strip */}
+            <div className="px-4 sm:px-5 py-2.5 sm:py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] rounded-t-[21px] sm:rounded-t-[25px] flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none">
+                  CROAKLE
+                </span>
+                <span className="text-white/40 font-bold">/</span>
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#FEF08A] uppercase">
+                  PROJECTS
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2 py-0.5 rounded-full shadow-[2px_2px_0px_#1F1B1A]">
+                03 // PROJECTS
+              </span>
+            </div>
+
+            {/* Box Content: Fully fixed, no internal scroll */}
+            <div className="p-3.5 sm:p-5 overflow-visible">
+              <ProjectsView
+                projects={projects}
+                year={trackYear}
+                monthIndex={trackMonth}
+                selectedDate={selectedDate}
+                onSelectDate={handleSelectDate}
+                onPrevMonth={handlePrevMonth}
+                onNextMonth={handleNextMonth}
+                onPrevWeek={handlePrevWeek}
+                onNextWeek={handleNextWeek}
+                onToggleProjectDay={handleToggleProjectDay}
+                onAddProject={handleAddProject}
+                onUpdateProject={handleUpdateProject}
+                onDeleteProject={handleDeleteProject}
+                onToggleCompleteProject={handleToggleCompleteProject}
+                onReorderProjects={handleReorderProjects}
+                onNavigate={scrollToSection}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Box 4: Focus Timer & Sessions */}
+        <section id="section-time" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+          <div
+            id="box-time"
+            className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
+          >
+            {/* Box Header Strip */}
+            <div className="px-4 sm:px-5 py-2.5 sm:py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] rounded-t-[21px] sm:rounded-t-[25px] flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none">
+                  CROAKLE
+                </span>
+                <span className="text-white/40 font-bold">/</span>
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#FEF08A] uppercase">
+                  FOCUS TIMER
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2 py-0.5 rounded-full shadow-[2px_2px_0px_#1F1B1A]">
+                04 // FOCUS
+              </span>
+            </div>
+
+            {/* Box Content: Fully fixed, no internal scroll */}
+            <div className="p-3.5 sm:p-5 overflow-visible">
+              <TimeSessionsView
+                sessions={sessions}
+                habits={habitStore.habitTemplates}
+                projects={projects}
+                activeTimer={activeTimer}
+                elapsedSeconds={elapsedSeconds}
+                onStartTimer={handleStartTimer}
+                onPauseTimer={handlePauseTimer}
+                onResumeTimer={handleResumeTimer}
+                onResetTimer={handleResetTimer}
+                onFinishTimer={handleFinishTimer}
+                onUpdateTimerConfig={handleUpdateTimerConfig}
+                onAddSession={handleAddSession}
+                onUpdateSession={handleUpdateSession}
+                onDeleteSession={handleDeleteSession}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Box 5: Journal & Notes */}
+        <section id="section-notes" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+          <div
+            id="box-notes"
+            className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
+          >
+            {/* Box Header Strip */}
+            <div className="px-4 sm:px-5 py-2.5 sm:py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] rounded-t-[21px] sm:rounded-t-[25px] flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none">
+                  CROAKLE
+                </span>
+                <span className="text-white/40 font-bold">/</span>
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#FEF08A] uppercase">
+                  JOURNAL & NOTES
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2 py-0.5 rounded-full shadow-[2px_2px_0px_#1F1B1A]">
+                05 // NOTES
+              </span>
+            </div>
+
+            {/* Box Content: Fully fixed, no internal scroll */}
+            <div className="p-3.5 sm:p-5 overflow-visible">
+              <NotesView
+                notes={notes}
+                habits={habitStore.habitTemplates}
+                projects={projects}
+                year={trackYear}
+                monthIndex={trackMonth}
+                selectedDate={selectedDate}
+                onSelectDate={handleSelectDate}
+                onPrevMonth={handlePrevMonth}
+                onNextMonth={handleNextMonth}
+                onPrevWeek={handlePrevWeek}
+                onNextWeek={handleNextWeek}
+                onAddNote={handleAddNote}
+                onUpdateNote={handleUpdateNote}
+                onDeleteNote={handleDeleteNote}
+                onNavigate={scrollToSection}
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Box 6: Settings */}
+        <section id="section-settings" className="scroll-mt-20 sm:scroll-mt-24 w-full max-w-[540px] md:max-w-[580px]">
+          <div
+            id="box-settings"
+            className="w-full bg-[#D32018] dark:bg-[#2B0A08] border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] rounded-[24px] sm:rounded-[28px] shadow-[6px_6px_0px_#1F1B1A] dark:shadow-[6px_6px_0px_#000000] overflow-visible transition-colors"
+          >
+            {/* Box Header Strip */}
+            <div className="px-4 sm:px-5 py-2.5 sm:py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] rounded-t-[21px] sm:rounded-t-[25px] flex items-center justify-between select-none">
+              <div className="flex items-center gap-2">
+                <span className="text-xl sm:text-2xl font-black tracking-tight font-display text-white uppercase leading-none">
+                  CROAKLE
+                </span>
+                <span className="text-white/40 font-bold">/</span>
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#FEF08A] uppercase">
+                  SETTINGS
+                </span>
+              </div>
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2 py-0.5 rounded-full shadow-[2px_2px_0px_#1F1B1A]">
+                06 // SETTINGS
+              </span>
+            </div>
+
+            {/* Box Content: Fully fixed, no internal scroll */}
+            <div className="p-3.5 sm:p-5 overflow-visible">
+              <SettingsView
+                settings={settings}
+                onUpdateSettings={setSettings}
+                habits={habitStore.habitTemplates}
+                monthData={currentMonthData}
+                projects={projects}
+                pixelScene={pixelScene}
+                onUpdatePixelScene={handleUpdatePixelScene}
+                onDataImported={handleDataImported}
+                onResetData={handleResetData}
+                onNavigate={scrollToSection}
+              />
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* Floating Continuous Live Activity Island (Visible on all sections when timer is running/paused, except when inside Focus section) */}
+      {activeTimer.isRunning && (
+        <LiveTimerBar
+          activeTimer={activeTimer}
+          elapsedSeconds={elapsedSeconds}
+          onTogglePlayPause={() => {
+            if (activeTimer.isRunning) {
+              handlePauseTimer();
+            } else {
+              handleResumeTimer();
+            }
+          }}
+          onFinishSession={handleFinishTimer}
+          onOpenTimer={() => scrollToSection('time')}
+        />
+      )}
+
+      {/* Mobile Bottom Navigation Dock (Hidden on md+ desktop, quick access on mobile) */}
+      <div className="md:hidden">
         <BottomDock
           activePage={activePage}
-          onSelectPage={setActivePage}
+          onSelectPage={scrollToSection}
           isTimerRunning={activeTimer.isRunning}
         />
       </div>

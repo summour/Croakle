@@ -201,9 +201,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   });
 
   return (
-    <div className="space-y-4 pb-28" {...swipeHandlers}>
-      {/* Sticky Header with integrated Month & Week navigation */}
-      <div className="sticky top-0 z-20 bg-transparent pt-1 pb-1 space-y-2">
+    <div className="space-y-4 pb-1" {...swipeHandlers}>
+      {/* Header with integrated Month & Week navigation */}
+      <div className="pt-1 pb-1 space-y-2">
         <div className="border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white p-3 space-y-2.5 rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] touch-pan-y" {...swipeHandlers}>
           {/* Top Row: Week Navigation */}
           <div className="flex items-center justify-between">

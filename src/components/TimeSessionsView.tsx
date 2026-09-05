@@ -269,7 +269,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
   };
 
   return (
-    <div className="space-y-3.5 pb-24 max-w-lg mx-auto" {...swipeHandlers}>
+    <div className="space-y-3.5 pb-1 max-w-lg mx-auto" {...swipeHandlers}>
       {/* 1. TOP: DATE / WEEK NAVIGATOR */}
       <div className="border-[2.5px] border-[#1F1B1A] bg-[#0074DB] dark:bg-[#1D4ED8] text-white rounded-2xl shadow-[4px_4px_0px_#1F1B1A] dark:shadow-[4px_4px_0px_#000000] p-3 space-y-2.5 touch-pan-y" {...swipeHandlers}>
         {/* Top Row: Week Navigation */}
