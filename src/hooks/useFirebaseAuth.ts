@@ -29,6 +29,18 @@ interface UseFirebaseAuthProps {
   onCloudStateLoaded: (data: UserAppStatePayload) => void;
 }
 
+function formatFriendlyError(err: any): string {
+  if (!err) return 'Sync failed';
+  const raw = err?.message || String(err);
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.error) return parsed.error;
+  } catch {
+    // not JSON
+  }
+  return raw;
+}
+
 export function useFirebaseAuth({
   habitStore,
   projects,
@@ -119,7 +131,7 @@ export function useFirebaseAuth({
       } catch (err: any) {
         console.warn('Sync failed:', err);
         setSyncStatus('error');
-        setErrorMessage(err?.message || 'Failed to sync to cloud');
+        setErrorMessage(formatFriendlyError(err));
       }
     }, 1200);
 
@@ -149,7 +161,7 @@ export function useFirebaseAuth({
       setErrorMessage(null);
     } catch (err: any) {
       setSyncStatus('error');
-      setErrorMessage(err?.message || 'Sync failed');
+      setErrorMessage(formatFriendlyError(err));
     }
   }, [user, habitStore, projects, notes, sessions, settings, pixelScene]);
 

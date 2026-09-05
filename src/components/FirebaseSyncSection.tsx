@@ -1,8 +1,31 @@
 import React, { useState } from 'react';
 import { User } from 'firebase/auth';
-import { Cloud, CloudOff, RefreshCw, LogIn, LogOut, CheckCircle2, AlertTriangle, ShieldCheck, Globe, Copy, Check, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import {
+  Cloud,
+  CloudOff,
+  RefreshCw,
+  LogIn,
+  LogOut,
+  CheckCircle2,
+  AlertTriangle,
+  ShieldCheck,
+  Globe,
+  Copy,
+  Check,
+  ExternalLink,
+  ChevronDown,
+  ChevronUp,
+  Database,
+  Eye,
+  FileJson,
+} from 'lucide-react';
 import { SyncStatus } from '../hooks/useFirebaseAuth';
-import { firebaseProjectId } from '../lib/firebase';
+import {
+  firebaseProjectId,
+  firestoreDatabaseId,
+  fetchServerAppState,
+  UserAppStatePayload,
+} from '../lib/firebase';
 
 interface FirebaseSyncSectionProps {
   user: User | null;
@@ -27,16 +50,40 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [showDomainGuide, setShowDomainGuide] = useState(false);
+  const [showDataInspector, setShowDataInspector] = useState(false);
+  const [inspectingData, setInspectingData] = useState(false);
+  const [serverData, setServerData] = useState<UserAppStatePayload | null>(null);
+  const [inspectError, setInspectError] = useState<string | null>(null);
+  const [showJson, setShowJson] = useState(false);
 
   const targetDomain = 'summour.github.io';
   const currentHostname = typeof window !== 'undefined' ? window.location.hostname : targetDomain;
-  const isUnauthorized = errorMessage?.toLowerCase().includes('unauthorized domain') || errorMessage?.toLowerCase().includes('unauthorized-domain');
+  const isUnauthorized =
+    errorMessage?.toLowerCase().includes('unauthorized domain') ||
+    errorMessage?.toLowerCase().includes('unauthorized-domain');
 
   const handleCopyDomain = (domainToCopy: string) => {
     navigator.clipboard.writeText(domainToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const handleInspectCloudData = async () => {
+    if (!user) return;
+    setInspectingData(true);
+    setInspectError(null);
+    setShowDataInspector(true);
+    try {
+      const data = await fetchServerAppState(user.uid);
+      setServerData(data);
+    } catch (err: any) {
+      setInspectError(err?.message || 'Failed to fetch direct document from Firestore server');
+    } finally {
+      setInspectingData(false);
+    }
+  };
+
+  const consoleUrl = `https://console.firebase.google.com/project/${firebaseProjectId}/firestore/databases/${firestoreDatabaseId}/data`;
 
   return (
     <div
@@ -220,6 +267,137 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
                 : 'Pending sync'}
             </span>
           </div>
+
+          {/* Cloud Data Inspector & Console Access */}
+          <div className="pt-1 space-y-2 border-t border-[#1F1B1A]/20">
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleInspectCloudData}
+                disabled={inspectingData}
+                className="flex-1 py-1.5 px-2 bg-white hover:bg-gray-50 border-[1.5px] border-[#1F1B1A] rounded-xl text-[10px] font-mono font-bold uppercase flex items-center justify-center gap-1.5 cursor-pointer shadow-[1.5px_1.5px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
+              >
+                {inspectingData ? (
+                  <RefreshCw size={11} className="animate-spin text-[#D32018]" />
+                ) : (
+                  <Database size={11} className="text-[#D32018]" />
+                )}
+                {inspectingData ? 'Checking Server...' : 'ตรวจดูข้อมูลสดบน Cloud'}
+              </button>
+
+              <a
+                href={consoleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="เปิด Firestore Database ใน Firebase Console"
+                className="py-1.5 px-2.5 bg-white hover:bg-gray-50 border-[1.5px] border-[#1F1B1A] rounded-xl text-[10px] font-mono font-bold uppercase flex items-center gap-1 text-[#1F1B1A] shadow-[1.5px_1.5px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5"
+              >
+                <ExternalLink size={11} />
+                Console
+              </a>
+            </div>
+
+            {/* Cloud Data Modal / Drawer Details */}
+            {showDataInspector && (
+              <div className="p-3 bg-white rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] space-y-2.5 text-[10px] font-mono">
+                <div className="flex items-center justify-between pb-1.5 border-b border-gray-200">
+                  <span className="font-bold text-[#1F1B1A] uppercase flex items-center gap-1.5">
+                    <Database size={12} className="text-[#15803D]" />
+                    Firestore Live Data
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowDataInspector(false)}
+                    className="text-gray-400 hover:text-black text-xs font-bold px-1"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {inspectError ? (
+                  <div className="p-2 bg-red-50 border border-red-200 rounded text-red-700">
+                    <p className="font-bold">Error fetching live document:</p>
+                    <p className="text-[9px]">{inspectError}</p>
+                  </div>
+                ) : serverData ? (
+                  <div className="space-y-2">
+                    <div className="bg-gray-50 p-2 rounded-lg border border-gray-200 space-y-1">
+                      <p className="text-[9px] text-gray-500 font-mono truncate">
+                        Path: <code className="text-[#1F1B1A] font-bold">users/{user.uid}/data/appState</code>
+                      </p>
+                      <p className="text-[9px] text-gray-500 font-mono">
+                        Server Updated:{' '}
+                        <strong className="text-[#1F1B1A]">
+                          {new Date(serverData.updatedAt).toLocaleString()}
+                        </strong>
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <div className="p-1.5 bg-green-50 border border-green-200 rounded text-center">
+                        <span className="text-gray-600 block text-[9px]">Habits Saved</span>
+                        <strong className="text-xs text-green-800">
+                          {serverData.habits?.habitTemplates?.length || 0} รายการ
+                        </strong>
+                      </div>
+                      <div className="p-1.5 bg-blue-50 border border-blue-200 rounded text-center">
+                        <span className="text-gray-600 block text-[9px]">Projects</span>
+                        <strong className="text-xs text-blue-800">
+                          {serverData.projects?.length || 0} โปรเจกต์
+                        </strong>
+                      </div>
+                      <div className="p-1.5 bg-purple-50 border border-purple-200 rounded text-center">
+                        <span className="text-gray-600 block text-[9px]">Daily Notes</span>
+                        <strong className="text-xs text-purple-800">
+                          {serverData.notes?.length || 0} บันทึก
+                        </strong>
+                      </div>
+                      <div className="p-1.5 bg-amber-50 border border-amber-200 rounded text-center">
+                        <span className="text-gray-600 block text-[9px]">Focus Sessions</span>
+                        <strong className="text-xs text-amber-800">
+                          {serverData.sessions?.length || 0} รอบ
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setShowJson(!showJson)}
+                        className="text-[9px] font-bold uppercase text-gray-600 hover:text-black flex items-center gap-1 cursor-pointer"
+                      >
+                        <FileJson size={11} />
+                        {showJson ? 'ซ่อน Raw JSON' : 'ดู Raw JSON จาก Cloud'}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(JSON.stringify(serverData, null, 2));
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        }}
+                        className="text-[9px] font-bold uppercase text-gray-600 hover:text-black flex items-center gap-1 cursor-pointer"
+                      >
+                        {copied ? <Check size={10} className="text-green-600" /> : <Copy size={10} />}
+                        {copied ? 'Copied JSON' : 'Copy JSON'}
+                      </button>
+                    </div>
+
+                    {showJson && (
+                      <pre className="p-2 bg-gray-900 text-green-400 rounded-lg text-[9px] max-h-48 overflow-auto font-mono whitespace-pre-wrap">
+                        {JSON.stringify(serverData, null, 2)}
+                      </pre>
+                    )}
+                  </div>
+                ) : (
+                  <div className="p-2 text-center text-gray-500">
+                    ยังไม่มีข้อมูลบันทึกใน Firestore กดปุ่ม "Sync" ด้านบนเพื่ออัปโหลดทันที
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <div className="p-3 bg-white rounded-xl border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] space-y-2.5">
@@ -235,6 +413,18 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
             <LogIn size={14} className="text-[#FEF08A]" />
             Sign In with Google
           </button>
+
+          <div className="pt-1 text-center">
+            <a
+              href={consoleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[9.5px] font-mono font-bold text-[#1F1B1A]/70 hover:text-[#1F1B1A] underline inline-flex items-center gap-1"
+            >
+              <ExternalLink size={10} />
+              เปิดดูโครงสร้างใน Firebase Console
+            </a>
+          </div>
         </div>
       )}
 
@@ -244,7 +434,16 @@ export const FirebaseSyncSection: React.FC<FirebaseSyncSectionProps> = ({
           <AlertTriangle size={14} className="shrink-0 mt-0.5" />
           <div className="flex-1">
             <p className="font-bold">Sync notice:</p>
-            <p className="text-[10px] opacity-90 leading-relaxed">{errorMessage}</p>
+            <p className="text-[10px] opacity-90 leading-relaxed">
+              {(() => {
+                try {
+                  const parsed = JSON.parse(errorMessage);
+                  return parsed.error || errorMessage;
+                } catch {
+                  return errorMessage;
+                }
+              })()}
+            </p>
           </div>
           <button
             type="button"

@@ -21,6 +21,7 @@ import { HabitStoreState } from '../utils/storage';
 
 const app = initializeApp(firebaseConfig);
 export const firebaseProjectId = firebaseConfig.projectId;
+export const firestoreDatabaseId = firebaseConfig.firestoreDatabaseId;
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
@@ -130,17 +131,38 @@ export interface UserAppStatePayload {
   updatedAt: string;
 }
 
+// Recursively removes undefined fields from objects/arrays so Firestore setDoc does not throw "Unsupported field value: undefined"
+export function sanitizeForFirestore<T>(data: T): T {
+  if (data === undefined) {
+    return null as any;
+  }
+  if (data === null || typeof data !== 'object') {
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return data.map((item) => (item === undefined ? null : sanitizeForFirestore(item))) as any;
+  }
+  const cleaned: Record<string, any> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value !== undefined) {
+      cleaned[key] = sanitizeForFirestore(value);
+    }
+  }
+  return cleaned as T;
+}
+
 // Save complete app state to Firestore
 export async function syncAppStateToFirestore(userId: string, payload: Omit<UserAppStatePayload, 'userId' | 'updatedAt'>) {
   if (!userId) return;
   const path = `users/${userId}/data/appState`;
   try {
     const docRef = doc(db, 'users', userId, 'data', 'appState');
-    await setDoc(docRef, {
+    const cleanedPayload = sanitizeForFirestore({
       ...payload,
       userId,
       updatedAt: new Date().toISOString(),
     });
+    await setDoc(docRef, cleanedPayload);
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, path);
   }
@@ -167,4 +189,21 @@ export function subscribeToAppState(
       handleFirestoreError(error, OperationType.GET, path);
     }
   );
+}
+
+// Direct fetch from server to verify cloud data
+export async function fetchServerAppState(userId: string): Promise<UserAppStatePayload | null> {
+  if (!userId) return null;
+  const path = `users/${userId}/data/appState`;
+  try {
+    const docRef = doc(db, 'users', userId, 'data', 'appState');
+    const snapshot = await getDocFromServer(docRef);
+    if (snapshot.exists()) {
+      return snapshot.data() as UserAppStatePayload;
+    }
+    return null;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.GET, path);
+    throw error;
+  }
 }
