@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Cloud } from 'lucide-react';
 import {
   PageType,
   HabitTemplate,
@@ -49,6 +50,8 @@ import { SettingsView } from './components/SettingsView';
 import { LiveTimerBar } from './components/LiveTimerBar';
 import { soundEngine, triggerHaptic } from './utils/audioUtils';
 import confetti from 'canvas-confetti';
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+import { UserAppStatePayload } from './lib/firebase';
 
 export function App() {
   const [activePage, setActivePage] = useState<PageType>('mood');
@@ -71,6 +74,45 @@ export function App() {
   useEffect(() => {
     savePixelSceneState(pixelScene);
   }, [pixelScene]);
+
+  // Synchronize remote data received from Firebase Cloud
+  const handleCloudStateLoaded = useCallback((data: UserAppStatePayload) => {
+    if (data.habits) {
+      setHabitStore(data.habits);
+      saveHabitsState(data.habits);
+    }
+    if (data.projects) {
+      setProjects(data.projects);
+      saveProjectsState(data.projects);
+    }
+    if (data.notes) {
+      setNotes(data.notes);
+      saveNotesState(data.notes);
+    }
+    if (data.sessions) {
+      setSessions(data.sessions);
+      saveSessionsState(data.sessions);
+    }
+    if (data.settings) {
+      setSettings(data.settings);
+      saveSettingsState(data.settings);
+    }
+    if (data.pixelScene) {
+      setPixelScene(data.pixelScene);
+      savePixelSceneState(data.pixelScene);
+    }
+  }, []);
+
+  // Firebase Real-time Cloud Sync Hook
+  const firebaseAuth = useFirebaseAuth({
+    habitStore,
+    projects,
+    notes,
+    sessions,
+    settings,
+    pixelScene,
+    onCloudStateLoaded: handleCloudStateLoaded,
+  });
 
   const handleUpdatePixelScene = (patch: Partial<PixelSceneConfig>) => {
     setPixelScene((prev) => ({
@@ -672,7 +714,7 @@ export function App() {
             style={{ paddingTop: 'max(0.625rem, calc(0.2rem + env(safe-area-inset-top, 0px)))' }}
             className="sticky top-0 z-40 px-4 py-3 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center justify-between transition-colors select-none shadow-[0_3px_0px_rgba(0,0,0,0.15)]"
           >
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <h1
                 onClick={() => handleNavigate('mood')}
                 className="text-2xl font-black tracking-tight font-display text-white uppercase leading-none cursor-pointer hover:opacity-90 transition-opacity"
@@ -680,10 +722,28 @@ export function App() {
                 CROAKLE
               </h1>
             </div>
-            {/* Active section badge on mobile */}
-            <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2.5 py-1 rounded-full shadow-[2px_2px_0px_#1F1B1A] uppercase">
-              {NAV_GROUPS.find((g) => g.activeKeys.includes(activePage))?.label || activePage}
-            </span>
+            {/* Active section badge & Cloud status on mobile */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleNavigate('settings')}
+                title={firebaseAuth.user ? `Firebase Cloud Synced: ${firebaseAuth.user.displayName || 'Google Account'}` : 'Tap to sign in with Google & sync data to Cloud'}
+                className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full border-[1.5px] border-[#1F1B1A] flex items-center gap-1 shadow-[1.5px_1.5px_0px_#1F1B1A] uppercase cursor-pointer transition active:translate-x-0.5 active:translate-y-0.5 ${
+                  firebaseAuth.user
+                    ? firebaseAuth.syncStatus === 'syncing'
+                      ? 'bg-[#FEF08A] text-[#854D0E]'
+                      : 'bg-[#86EFAC] text-[#14532D]'
+                    : 'bg-white text-[#1F1B1A]/80'
+                }`}
+              >
+                <Cloud size={10} className={firebaseAuth.syncStatus === 'syncing' ? 'animate-spin' : ''} />
+                {firebaseAuth.user ? 'SYNCED' : 'CLOUD'}
+              </button>
+
+              <span className="text-[10px] font-mono font-black tracking-widest text-[#1F1B1A] bg-[#FEF08A] border-[1.5px] border-[#1F1B1A] px-2.5 py-1 rounded-full shadow-[2px_2px_0px_#1F1B1A] uppercase">
+                {NAV_GROUPS.find((g) => g.activeKeys.includes(activePage))?.label || activePage}
+              </span>
+            </div>
           </header>
 
           {/* Mobile Content: ONLY the active page is displayed! */}
@@ -794,6 +854,14 @@ export function App() {
                 onDataImported={handleDataImported}
                 onResetData={handleResetData}
                 onNavigate={handleNavigate}
+                firebaseUser={firebaseAuth.user}
+                firebaseAuthLoading={firebaseAuth.authLoading}
+                firebaseSyncStatus={firebaseAuth.syncStatus}
+                firebaseLastSyncedAt={firebaseAuth.lastSyncedAt}
+                firebaseErrorMessage={firebaseAuth.errorMessage}
+                onFirebaseSignIn={firebaseAuth.signIn}
+                onFirebaseSignOut={firebaseAuth.signOut}
+                onFirebaseSyncNow={firebaseAuth.syncNow}
               />
             )}
           </div>
@@ -863,6 +931,23 @@ export function App() {
                     </button>
                   );
                 })}
+
+                {/* Cloud Sync Status Indicator */}
+                <button
+                  type="button"
+                  onClick={() => handleNavigate('settings')}
+                  title={firebaseAuth.user ? `Firebase Cloud Synced: ${firebaseAuth.user.displayName || 'Google Account'}` : 'Tap to sign in with Google & sync data to Cloud'}
+                  className={`h-[28px] sm:h-[32px] px-2 sm:px-2.5 flex items-center justify-center gap-1 text-center text-[10px] sm:text-[11px] font-mono uppercase font-bold tracking-wider transition-colors cursor-pointer rounded-lg sm:rounded-xl whitespace-nowrap select-none shrink-0 border-[2px] border-[#1F1B1A] shadow-[2px_2px_0px_#1F1B1A] active:translate-x-0.5 active:translate-y-0.5 ${
+                    firebaseAuth.user
+                      ? firebaseAuth.syncStatus === 'syncing'
+                        ? 'bg-[#FEF08A] text-[#854D0E]'
+                        : 'bg-[#86EFAC] text-[#14532D]'
+                      : 'bg-white text-[#1F1B1A] hover:bg-white/90'
+                  }`}
+                >
+                  <Cloud size={12} className={firebaseAuth.syncStatus === 'syncing' ? 'animate-spin' : ''} />
+                  <span className="hidden sm:inline">{firebaseAuth.user ? 'SYNCED' : 'CLOUD'}</span>
+                </button>
               </nav>
             </div>
           </header>
@@ -1126,6 +1211,14 @@ export function App() {
                     onDataImported={handleDataImported}
                     onResetData={handleResetData}
                     onNavigate={handleNavigate}
+                    firebaseUser={firebaseAuth.user}
+                    firebaseAuthLoading={firebaseAuth.authLoading}
+                    firebaseSyncStatus={firebaseAuth.syncStatus}
+                    firebaseLastSyncedAt={firebaseAuth.lastSyncedAt}
+                    firebaseErrorMessage={firebaseAuth.errorMessage}
+                    onFirebaseSignIn={firebaseAuth.signIn}
+                    onFirebaseSignOut={firebaseAuth.signOut}
+                    onFirebaseSyncNow={firebaseAuth.syncNow}
                   />
                 </div>
               </div>

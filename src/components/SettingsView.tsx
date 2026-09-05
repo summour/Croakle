@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { User } from 'firebase/auth';
 import {
   PageType,
   AppSettings,
@@ -9,6 +10,8 @@ import {
 } from '../types';
 import { exportFullBackup, importFullBackup } from '../utils/storage';
 import { Download, Upload, Trash2, Moon, Sun, RefreshCw, Volume2, VolumeX, Sparkles, BarChart3, Settings, Check, AlertCircle } from 'lucide-react';
+import { FirebaseSyncSection } from './FirebaseSyncSection';
+import { SyncStatus } from '../hooks/useFirebaseAuth';
 
 interface SettingsViewProps {
   settings: AppSettings;
@@ -21,6 +24,15 @@ interface SettingsViewProps {
   onDataImported: () => void;
   onResetData: () => void;
   onNavigate?: (page: PageType) => void;
+  // Firebase Auth & Sync
+  firebaseUser?: User | null;
+  firebaseAuthLoading?: boolean;
+  firebaseSyncStatus?: SyncStatus;
+  firebaseLastSyncedAt?: Date | null;
+  firebaseErrorMessage?: string | null;
+  onFirebaseSignIn?: () => void;
+  onFirebaseSignOut?: () => void;
+  onFirebaseSyncNow?: () => void;
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
@@ -34,6 +46,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onDataImported,
   onResetData,
   onNavigate,
+  firebaseUser = null,
+  firebaseAuthLoading = false,
+  firebaseSyncStatus = 'unauthenticated',
+  firebaseLastSyncedAt = null,
+  firebaseErrorMessage = null,
+  onFirebaseSignIn,
+  onFirebaseSignOut,
+  onFirebaseSyncNow,
 }) => {
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [resetConfirm, setResetConfirm] = useState(false);
@@ -98,6 +118,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <p className="text-xs text-[#1F1B1A]/70 uppercase">Preferences & Data</p>
         </div>
       </div>
+
+      {/* Firebase Cloud Sync */}
+      {onFirebaseSignIn && onFirebaseSignOut && onFirebaseSyncNow && (
+        <FirebaseSyncSection
+          user={firebaseUser}
+          authLoading={firebaseAuthLoading}
+          syncStatus={firebaseSyncStatus}
+          lastSyncedAt={firebaseLastSyncedAt}
+          errorMessage={firebaseErrorMessage}
+          onSignIn={onFirebaseSignIn}
+          onSignOut={onFirebaseSignOut}
+          onSyncNow={onFirebaseSyncNow}
+        />
+      )}
 
       {/* Preferences & Toggles */}
       <div className="rounded-2xl border-[2.5px] border-[#1F1B1A] p-4 space-y-3.5 bg-[#FED843] text-[#1F1B1A] shadow-[4px_4px_0px_#1F1B1A]">

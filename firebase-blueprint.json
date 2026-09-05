@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "UserAppState": {
+      "title": "User App State",
+      "description": "Consolidated Croakle application state for habits, projects, notes, sessions, settings, and pixel scene.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID matching request.auth.uid",
+          "maxLength": 128
+        },
+        "habits": {
+          "type": "object",
+          "description": "Habit templates and monthly check-in tracking records"
+        },
+        "projects": {
+          "type": "array",
+          "description": "List of user projects"
+        },
+        "notes": {
+          "type": "array",
+          "description": "List of journal notes and logs"
+        },
+        "sessions": {
+          "type": "array",
+          "description": "List of focus time sessions"
+        },
+        "settings": {
+          "type": "object",
+          "description": "User app settings such as theme and audio"
+        },
+        "pixelScene": {
+          "type": "object",
+          "description": "Pixel frog custom scene configuration"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp when state was last updated"
+        }
+      },
+      "required": ["userId", "updatedAt"]
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "User ID matching auth UID",
+          "maxLength": 128
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name",
+          "maxLength": 100
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "User avatar photo URL",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO string date when user profile was created"
+        },
+        "lastLoginAt": {
+          "type": "string",
+          "description": "ISO string date of latest login"
+        }
+      },
+      "required": ["userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/profile/info": {
+      "schema": "UserProfile",
+      "description": "Public profile info for the user"
+    },
+    "/users/{userId}/data/appState": {
+      "schema": "UserAppState",
+      "description": "Main application synchronized data for habits, mood, projects, notes, sessions, and scene"
+    }
+  }
+}

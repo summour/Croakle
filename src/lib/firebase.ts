@@ -1,0 +1,170 @@
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
+import {
+  getFirestore,
+  doc,
+  getDocFromServer,
+  setDoc,
+  onSnapshot,
+} from 'firebase/firestore';
+import firebaseConfig from '../../firebase-applet-config.json';
+import {
+  HabitTemplate,
+  MonthData,
+  Project,
+  NoteItem,
+  TimeSession,
+  AppSettings,
+  PixelSceneConfig,
+} from '../types';
+import { HabitStoreState } from '../utils/storage';
+
+const app = initializeApp(firebaseConfig);
+export const firebaseProjectId = firebaseConfig.projectId;
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+
+export enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+export interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+    emailVerified?: boolean | null;
+    isAnonymous?: boolean | null;
+    tenantId?: string | null;
+    providerInfo?: {
+      providerId?: string | null;
+      email?: string | null;
+    }[];
+  };
+}
+
+export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth.currentUser?.uid,
+      email: auth.currentUser?.email,
+      emailVerified: auth.currentUser?.emailVerified,
+      isAnonymous: auth.currentUser?.isAnonymous,
+      tenantId: auth.currentUser?.tenantId,
+      providerInfo:
+        auth.currentUser?.providerData?.map((provider) => ({
+          providerId: provider.providerId,
+          email: provider.email,
+        })) || [],
+    },
+    operationType,
+    path,
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
+
+// Connectivity test
+export async function testConnection() {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.error('Please check your Firebase configuration.');
+    }
+  }
+}
+testConnection();
+
+// Authentication helpers
+export async function signInWithGoogle(): Promise<User | null> {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    if (result.user) {
+      // Save profile metadata
+      const profilePath = `users/${result.user.uid}/profile/info`;
+      try {
+        await setDoc(
+          doc(db, 'users', result.user.uid, 'profile', 'info'),
+          {
+            userId: result.user.uid,
+            displayName: result.user.displayName || 'Croakle Explorer',
+            photoURL: result.user.photoURL || '',
+            lastLoginAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch (err) {
+        handleFirestoreError(err, OperationType.WRITE, profilePath);
+      }
+      return result.user;
+    }
+    return null;
+  } catch (error) {
+    console.error('Sign in error', error);
+    throw error;
+  }
+}
+
+export async function logOut(): Promise<void> {
+  await signOut(auth);
+}
+
+export interface UserAppStatePayload {
+  userId: string;
+  habits: HabitStoreState;
+  projects: Project[];
+  notes: NoteItem[];
+  sessions: TimeSession[];
+  settings: AppSettings;
+  pixelScene: PixelSceneConfig;
+  updatedAt: string;
+}
+
+// Save complete app state to Firestore
+export async function syncAppStateToFirestore(userId: string, payload: Omit<UserAppStatePayload, 'userId' | 'updatedAt'>) {
+  if (!userId) return;
+  const path = `users/${userId}/data/appState`;
+  try {
+    const docRef = doc(db, 'users', userId, 'data', 'appState');
+    await setDoc(docRef, {
+      ...payload,
+      userId,
+      updatedAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    handleFirestoreError(error, OperationType.WRITE, path);
+  }
+}
+
+// Listen to app state in Firestore
+export function subscribeToAppState(
+  userId: string,
+  onData: (data: UserAppStatePayload) => void,
+  onError?: (error: unknown) => void
+) {
+  const path = `users/${userId}/data/appState`;
+  const docRef = doc(db, 'users', userId, 'data', 'appState');
+  return onSnapshot(
+    docRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        onData(snapshot.data() as UserAppStatePayload);
+      }
+    },
+    (error) => {
+      console.warn('Subscription error on', path, error);
+      if (onError) onError(error);
+      handleFirestoreError(error, OperationType.GET, path);
+    }
+  );
+}

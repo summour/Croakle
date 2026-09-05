@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Default-deny catch-all (Phase 4 requirement)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation for UserProfile
+    function isValidUserProfile(data, userId) {
+      return data.userId == userId &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100)) &&
+             (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500));
+    }
+
+    // Validation for UserAppState
+    function isValidUserAppState(data, userId) {
+      return data.userId == userId &&
+             ('updatedAt' in data) &&
+             data.userId == request.auth.uid;
+    }
+
+    // Connectivity test probe
+    match /test/{docId} {
+      allow get: if true;
+    }
+
+    // User data hierarchy
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+
+      match /profile/{docId} {
+        allow get: if isOwner(userId) && isValidId(docId);
+        allow create: if isOwner(userId) && isValidId(docId) && isValidUserProfile(incoming(), userId);
+        allow update: if isOwner(userId) && isValidId(docId) && isValidUserProfile(incoming(), userId) &&
+                         incoming().userId == existing().userId;
+        allow delete: if isOwner(userId) && isValidId(docId);
+      }
+
+      match /data/{docId} {
+        allow get: if isOwner(userId) && isValidId(docId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(docId) && isValidUserAppState(incoming(), userId);
+        allow update: if isOwner(userId) && isValidId(docId) && isValidUserAppState(incoming(), userId) &&
+                         incoming().userId == existing().userId;
+        allow delete: if isOwner(userId) && isValidId(docId);
+      }
+    }
+  }
+}
