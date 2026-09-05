@@ -166,6 +166,17 @@ button, input, select, a, [role="button"] {
   user-select: none;
 }
 
+/* Position floating live timer bar cleanly above mobile bottom navigation bar */
+.croakle-live-timer-position {
+  bottom: calc(3.75rem + max(0.625rem, calc(0.25rem + env(safe-area-inset-bottom, 0px))));
+}
+
+@media (min-width: 768px) {
+  .croakle-live-timer-position {
+    bottom: max(1.5rem, calc(0.5rem + env(safe-area-inset-bottom, 0px)));
+  }
+}
+
 /* Master Frame container */
 .variation-container {
   border: 2.5px solid var(--ink);

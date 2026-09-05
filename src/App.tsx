@@ -705,7 +705,9 @@ export function App() {
       {!isDesktop ? (
         <div
           id="croakle-mobile-frame"
-          className="relative z-10 w-full max-w-[540px] min-h-screen flex flex-col bg-transparent transition-colors pb-24"
+          className={`relative z-10 w-full max-w-[540px] min-h-screen flex flex-col bg-transparent transition-colors ${
+            activeTimer.isRunning && activePage !== 'time' ? 'pb-36' : 'pb-24'
+          }`}
         >
           {/* Mobile Sticky Header */}
           <header
