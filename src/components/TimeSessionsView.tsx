@@ -531,7 +531,7 @@ export const TimeSessionsView: React.FC<TimeSessionsViewProps> = ({
             className="add-btn text-[10px] py-1 px-2.5 flex items-center gap-1"
           >
             <Plus size={12} />
-            <span>Add Manual</span>
+            <span>Add</span>
           </button>
         </div>
 
