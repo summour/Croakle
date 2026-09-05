@@ -598,14 +598,14 @@ export function App() {
       {/* MASTER UNIFIED CONTAINER: Neo-Pop 500px, 2.5px solid dark border, rounded corners & sticker shadow */}
       <div
         id="croakle-master-frame"
-        className="relative z-10 w-full max-w-[500px] h-full sm:h-[900px] max-h-[100dvh] sm:max-h-[96vh] flex flex-col bg-[#D32018] dark:bg-[#2B0A08] border-x-0 sm:border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] sm:rounded-[28px] sm:shadow-[6px_6px_0px_#1F1B1A] dark:sm:shadow-[6px_6px_0px_#000000] overflow-hidden transition-all duration-300"
+        className="relative z-10 w-full max-w-[500px] h-full sm:h-[900px] max-h-[100dvh] sm:max-h-[96vh] flex flex-col bg-[#D32018] dark:bg-[#2B0A08] border-0 sm:border-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] sm:rounded-[28px] sm:shadow-[6px_6px_0px_#1F1B1A] dark:sm:shadow-[6px_6px_0px_#000000] overflow-hidden transition-all duration-300"
       >
-        {/* Neo-Pop Header */}
+        {/* Header */}
         <header
           style={{ paddingTop: 'max(0.875rem, calc(0.75rem + env(safe-area-inset-top, 0px)))' }}
-          className="shrink-0 px-5 sm:px-6 pb-3.5 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center"
+          className="shrink-0 px-5 sm:px-6 pb-3.5 border-b-[2.5px] border-[#1F1B1A] dark:border-[#F8F7F4] bg-[#D32018] dark:bg-[#2B0A08] flex items-center transition-colors select-none"
         >
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white drop-shadow-[2px_2px_0px_#1F1B1A] uppercase leading-none">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight font-display text-white uppercase leading-none">
             CROAKLE
           </h1>
         </header>

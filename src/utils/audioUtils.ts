@@ -44,6 +44,31 @@ class SoundEngine {
     } catch {}
   }
 
+  // Playful frog ribbit croak sound
+  playFrogRibbit() {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      [0, 0.08].forEach((delay, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(idx === 0 ? 190 : 250, now + delay);
+        osc.frequency.exponentialRampToValueAtTime(idx === 0 ? 120 : 160, now + delay + 0.07);
+
+        gain.gain.setValueAtTime(0.09, now + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.07);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.08);
+      });
+    } catch {}
+  }
+
   // Whimsical magical spinning chime for Gacha summoning
   playGachaSpinSound() {
     const ctx = this.getContext();
